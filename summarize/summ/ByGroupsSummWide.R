@@ -44,9 +44,9 @@ if (display){
 #######################################
 
 # We already have the averages, but we want them to show up as variables, mean for each group of each variable.
+# drop_na() %>%
 df.avg.allvars.wide <- df.avg.long %>%
    ungroup() %>%
-   drop_na() %>%
    mutate(all_m_cate = paste0(variable, '_c', value)) %>%
    select(all_m_cate, everything(), -variable, -value) %>%
    gather(variable, value, -one_of(vars.indi.grp), -all_m_cate) %>%
@@ -56,7 +56,7 @@ df.avg.allvars.wide <- df.avg.long %>%
 if (display){
   dim(df.avg.allvars.wide)
   options(repr.matrix.max.rows=10, repr.matrix.max.cols=10)
-  print(avg.allvars.wide.df)
+  print(df.avg.allvars.wide)
 }
 
 return(df.avg.allvars.wide)

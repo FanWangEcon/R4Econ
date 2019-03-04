@@ -5,3 +5,7 @@ source("ByGroupCountUniqueIndi.R")
 
 setwd("C:/Users/fan/R4Econ/summarize/summ/")
 source("ByGroupsSummWide.R")
+source("ByGroupSumm.R")
+
+setwd("C:/Users/fan/R4Econ/summarize/tabulate/")
+source("ListUniqueCateNAsMat.R")
