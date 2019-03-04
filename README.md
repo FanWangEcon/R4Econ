@@ -13,3 +13,8 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
   + **core**: *group_by + summarise_if(is.numeric, funs(sum(is.na(.)==0)))*
 2. [By Groups, Count Unique Individuals and non-NA observations of other Variables](summarize/count/ByGroupCountUniqueIndi.html)
   + **core**: *group_by + mutate_if + mutate + n_distinct + slice(1L)*
+
+## 1.2 Averaging
+
+1. [By Multiple within Individual Groups Variables, Averages for All Numeric Variables within All Groups of All Group Variables (Long to very Wide)](summarize/summ/ByGroupsSummWide.html)
+  + **core**: *gather + group_by + summarise_if(is.numeric, funs(mean(., na.rm = TRUE))) + drop_na() + mutate(all_m_cate = paste0(variable, '_c', value)) + gather + unite + spread (note: gather twice, spread at end)*

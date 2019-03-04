@@ -11,9 +11,9 @@ f.by.group.unique.obs <- function(df,
           mutate_if(is.numeric, funs(n=sum(is.na(.)==0))) %>%
           mutate(unique_indi = n_distinct(!!sym(var.unique.identifier))) %>%
           slice(1L) %>%
-          select(!!!syms(vars.group), unique_indi, everything(), -!!var.unique.identifier, 
+          select(!!!syms(vars.group), unique_indi, everything(), -!!var.unique.identifier,
                 -one_of(vars.all))
-    
+
     if (graph){
         graph <- graphf.by.group.unique.obs(df.group.unique, vars.group)
         return(list(df=df.group.unique, graph=graph))
@@ -36,7 +36,7 @@ graphf.by.group.unique.obs <- function(df.by.group,
     options(repr.plot.width = 8, repr.plot.height = 4)
 
     # Titling
-    graph.title <- sprintf('Number of Unique %s By (%s and %s) Groups', 
+    graph.title <- sprintf('Number of Unique %s By (%s and %s) Groups',
                            var.unique.identifier, color.var, x.var)
     graph.caption <- sprintf(
         paste0('Jitter/Random Hgt/Wgt Guat/Cebu Data\n',
@@ -46,16 +46,16 @@ graphf.by.group.unique.obs <- function(df.by.group,
 
 
     # Graphing (unique_indi used earlier as name)
-    graph <- df.by.group %>% 
-        select(one_of(vars.group), unique_indi) %>% 
-        gather(variable, value, -one_of(vars.group)) %>% 
-        ggplot(aes(x=!!sym(x.var), y=value))  + 
-        geom_bar(stat = 'identity', position="dodge")  + 
-        facet_wrap(as.formula(paste0('~', color.var)), ncol=2, scales = "free")  + 
+    graph <- df.by.group %>%
+        select(one_of(vars.group), unique_indi) %>%
+        gather(variable, value, -one_of(vars.group)) %>%
+        ggplot(aes(x=!!sym(x.var), y=value))  +
+        geom_bar(stat = 'identity', position="dodge")  +
+        facet_wrap(as.formula(paste0('~', color.var)), ncol=2, scales = "free")  +
         labs(title = graph.title,
              x = graph.title.x, y = graph.title.y,
              caption = graph.caption) +
         theme(axis.text.x = element_text(angle = 90))
-    
+
     return(graph)
 }
