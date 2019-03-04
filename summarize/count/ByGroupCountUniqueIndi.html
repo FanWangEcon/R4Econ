@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>ByGroupCountAllVarNonNA</title>
+<title>ByGroupCountUniqueIndi</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13117,10 +13117,8 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Back to <strong><a href="https://fanwangecon.github.io/">Fan</a></strong>'s R4Econ Homepage <strong><a href="https://fanwangecon.github.io/R4Econ/">Table of Content</a></strong></p>
-<h1 id="By-Group,-Count-non-NA-observations-of-All-Variables">By Group, Count non-NA observations of All Variables<a class="anchor-link" href="#By-Group,-Count-non-NA-observations-of-All-Variables">&#182;</a></h1><p>Within groups, the number of non-NA observations for some list of variables.</p>
-<p>In some dataset, not all variables are observed at all observations.</p>
-<p>It is often important to check on the number of non-NA values across observations/variables, especially if these variables are to enter some regression together.</p>
-<p>If we see that some variables are not observed much within some groups, we have to consider perhaps not including that variable in regression.</p>
+<h1 id="By-Multiple-Groups,-Count-the-Number-of-Unique-Observations-(Individuals)-within-Group">By Multiple Groups, Count the Number of Unique Observations (Individuals) within Group<a class="anchor-link" href="#By-Multiple-Groups,-Count-the-Number-of-Unique-Observations-(Individuals)-within-Group">&#182;</a></h1><p>We have multiple groups (country, village), we want to know the number of unique observations within these groups.</p>
+<p>In addition, we also want to generate the total number of observations for each variable within these country/village groups, these total observations includes multiple values for each unique individual.</p>
 
 </div>
 </div>
@@ -13135,22 +13133,30 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Data Function</span>
-<span class="c1"># https://fanwangecon.github.io/R4Econ/summarize/count/ByGroupCountAllVarNonNA.html</span>
-<span class="n">f.by.group.vars.obs</span> <span class="o">&lt;-</span> <span class="nf">function </span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">vars.group</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#39;S.country&#39;</span><span class="p">,</span> <span class="s">&#39;svymthRound&#39;</span><span class="p">),</span> <span class="n">graph</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span> <span class="p">{</span>
+<span class="c1"># https://fanwangecon.github.io/R4Econ/summarize/count/ByGroupCountUniqueIndi.html</span>
+<span class="n">f.by.group.unique.obs</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">df</span><span class="p">,</span>
+                                  <span class="n">vars.group</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#39;S.country&#39;</span><span class="p">,</span> <span class="s">&#39;vil.id&#39;</span><span class="p">),</span>
+                                  <span class="n">var.unique.identifier</span> <span class="o">=</span> <span class="s">&#39;indi.id&#39;</span><span class="p">,</span>
+                                  <span class="n">graph</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span> <span class="p">{</span>
     
-    <span class="n">df.group</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">%&gt;%</span> <span class="nf">group_by</span><span class="p">(</span><span class="o">!!!</span><span class="nf">syms</span><span class="p">(</span><span class="n">vars.group</span><span class="p">))</span> <span class="o">%&gt;%</span>
-            <span class="nf">arrange</span><span class="p">(</span><span class="o">!!!</span><span class="nf">syms</span><span class="p">(</span><span class="n">vars.group</span><span class="p">))</span> <span class="o">%&gt;%</span>
-            <span class="nf">summarise_if</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">,</span> <span class="nf">funs</span><span class="p">(</span><span class="nf">sum</span><span class="p">(</span><span class="nf">is.na</span><span class="p">(</span><span class="n">.)</span><span class="o">==</span><span class="m">0</span><span class="p">)))</span>
+    <span class="n">vars.all</span> <span class="o">&lt;-</span> <span class="nf">names</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">df.group.unique</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">%&gt;%</span> <span class="nf">group_by</span><span class="p">(</span><span class="o">!!!</span><span class="nf">syms</span><span class="p">(</span><span class="n">vars.group</span><span class="p">))</span> <span class="o">%&gt;%</span>
+          <span class="nf">arrange</span><span class="p">(</span><span class="o">!!!</span><span class="nf">syms</span><span class="p">(</span><span class="n">vars.group</span><span class="p">))</span> <span class="o">%&gt;%</span>
+          <span class="nf">mutate_if</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">,</span> <span class="nf">funs</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="nf">sum</span><span class="p">(</span><span class="nf">is.na</span><span class="p">(</span><span class="n">.)</span><span class="o">==</span><span class="m">0</span><span class="p">)))</span> <span class="o">%&gt;%</span>
+          <span class="nf">mutate</span><span class="p">(</span><span class="n">unique_indi</span> <span class="o">=</span> <span class="nf">n_distinct</span><span class="p">(</span><span class="o">!!</span><span class="nf">sym</span><span class="p">(</span><span class="n">var.unique.identifier</span><span class="p">)))</span> <span class="o">%&gt;%</span>
+          <span class="nf">slice</span><span class="p">(</span><span class="m">1L</span><span class="p">)</span> <span class="o">%&gt;%</span>
+          <span class="nf">select</span><span class="p">(</span><span class="o">!!!</span><span class="nf">syms</span><span class="p">(</span><span class="n">vars.group</span><span class="p">),</span> <span class="n">unique_indi</span><span class="p">,</span> <span class="nf">everything</span><span class="p">(),</span> <span class="o">-!!</span><span class="n">var.unique.identifier</span><span class="p">,</span> 
+                <span class="o">-</span><span class="nf">one_of</span><span class="p">(</span><span class="n">vars.all</span><span class="p">))</span>
     
     <span class="nf">if </span><span class="p">(</span><span class="n">graph</span><span class="p">){</span>
-        <span class="n">graph</span> <span class="o">&lt;-</span> <span class="nf">graphf.by.group.vars.obs</span><span class="p">(</span><span class="n">df.group</span><span class="p">,</span> <span class="n">vars.group</span><span class="p">)</span>
-        <span class="nf">return</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df.group</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">))</span>
+        <span class="n">graph</span> <span class="o">&lt;-</span> <span class="nf">graphf.by.group.unique.obs</span><span class="p">(</span><span class="n">df.group.unique</span><span class="p">,</span> <span class="n">vars.group</span><span class="p">)</span>
+        <span class="nf">return</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df.group.unique</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">))</span>
     <span class="p">}</span> <span class="n">else</span> <span class="p">{</span>
-        <span class="nf">return</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df.group</span><span class="p">))</span>
+        <span class="nf">return</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df.group.unique</span><span class="p">))</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
@@ -13162,12 +13168,13 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Graphing Function</span>
-<span class="c1"># https://fanwangecon.github.io/R4Econ/summarize/count/ByGroupCountAllVarNonNA.html</span>
-<span class="n">graphf.by.group.vars.obs</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">df.by.group</span><span class="p">,</span> <span class="n">vars.group</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#39;S.country&#39;</span><span class="p">,</span> <span class="s">&#39;svymthRound&#39;</span><span class="p">))</span> <span class="p">{</span>
+<span class="c1"># https://fanwangecon.github.io/R4Econ/summarize/count/ByGroupCountUniqueIndi.html</span>
+<span class="n">graphf.by.group.unique.obs</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">df.by.group</span><span class="p">,</span>
+                                       <span class="n">vars.group</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#39;S.country&#39;</span><span class="p">,</span> <span class="s">&#39;vil.id&#39;</span><span class="p">))</span> <span class="p">{</span>
     <span class="n">color.var</span> <span class="o">&lt;-</span> <span class="n">vars.group[1]</span>
     <span class="n">x.var</span> <span class="o">&lt;-</span> <span class="n">vars.group[2]</span>
 
@@ -13175,23 +13182,25 @@ div#notebook {
     <span class="n">df.by.group[[x.var]]</span> <span class="o">&lt;-</span> <span class="nf">factor</span><span class="p">(</span><span class="n">df.by.group[[x.var]]</span><span class="p">)</span>
 
     <span class="c1"># Graph Size</span>
-    <span class="nf">options</span><span class="p">(</span><span class="n">repr.plot.width</span> <span class="o">=</span> <span class="m">9</span><span class="p">,</span> <span class="n">repr.plot.height</span> <span class="o">=</span> <span class="m">10</span><span class="p">)</span>
+    <span class="nf">options</span><span class="p">(</span><span class="n">repr.plot.width</span> <span class="o">=</span> <span class="m">8</span><span class="p">,</span> <span class="n">repr.plot.height</span> <span class="o">=</span> <span class="m">4</span><span class="p">)</span>
 
     <span class="c1"># Titling</span>
-    <span class="n">graph.title</span> <span class="o">&lt;-</span> <span class="nf">sprintf</span><span class="p">(</span><span class="s">&#39;Number of Observations Each Variable By (%s and %s) Groups&#39;</span><span class="p">,</span> 
-                           <span class="n">color.var</span><span class="p">,</span> <span class="n">x.var</span><span class="p">)</span>
+    <span class="n">graph.title</span> <span class="o">&lt;-</span> <span class="nf">sprintf</span><span class="p">(</span><span class="s">&#39;Number of Unique %s By (%s and %s) Groups&#39;</span><span class="p">,</span> 
+                           <span class="n">var.unique.identifier</span><span class="p">,</span> <span class="n">color.var</span><span class="p">,</span> <span class="n">x.var</span><span class="p">)</span>
     <span class="n">graph.caption</span> <span class="o">&lt;-</span> <span class="nf">sprintf</span><span class="p">(</span>
         <span class="nf">paste0</span><span class="p">(</span><span class="s">&#39;Jitter/Random Hgt/Wgt Guat/Cebu Data\n&#39;</span><span class="p">,</span>
                <span class="s">&#39;see:https://fanwangecon.github.io/HeightProfile/&#39;</span><span class="p">))</span>
-    <span class="n">graph.title.x</span> <span class="o">&lt;-</span> <span class="s">&#39;Month Groups&#39;</span>
-    <span class="n">graph.title.y</span> <span class="o">&lt;-</span> <span class="s">&#39;Number of Observations&#39;</span>
+    <span class="n">graph.title.x</span> <span class="o">&lt;-</span> <span class="nf">sprintf</span><span class="p">(</span><span class="s">&#39;%s Groups&#39;</span><span class="p">,</span> <span class="n">x.var</span><span class="p">)</span>
+    <span class="n">graph.title.y</span> <span class="o">&lt;-</span> <span class="nf">sprintf</span><span class="p">(</span><span class="s">&#39;Number of Unique %s&#39;</span><span class="p">,</span> <span class="n">var.unique.identifier</span><span class="p">)</span>
 
-    <span class="c1"># Graphing</span>
+
+    <span class="c1"># Graphing (unique_indi used earlier as name)</span>
     <span class="n">graph</span> <span class="o">&lt;-</span> <span class="n">df.by.group</span> <span class="o">%&gt;%</span> 
+        <span class="nf">select</span><span class="p">(</span><span class="nf">one_of</span><span class="p">(</span><span class="n">vars.group</span><span class="p">),</span> <span class="n">unique_indi</span><span class="p">)</span> <span class="o">%&gt;%</span> 
         <span class="nf">gather</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="o">-</span><span class="nf">one_of</span><span class="p">(</span><span class="n">vars.group</span><span class="p">))</span> <span class="o">%&gt;%</span> 
-        <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=!!</span><span class="nf">sym</span><span class="p">(</span><span class="n">x.var</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">fill</span><span class="o">=!!</span><span class="nf">sym</span><span class="p">(</span><span class="n">color.var</span><span class="p">)))</span> <span class="o">+</span> 
-        <span class="nf">geom_bar</span><span class="p">(</span><span class="n">stat</span> <span class="o">=</span> <span class="s">&#39;identity&#39;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s">&quot;dodge&quot;</span><span class="p">)</span> <span class="o">+</span> 
-        <span class="nf">facet_wrap</span><span class="p">(</span> <span class="o">~</span> <span class="n">variable</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="m">2</span><span class="p">)</span> <span class="o">+</span> 
+        <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=!!</span><span class="nf">sym</span><span class="p">(</span><span class="n">x.var</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">value</span><span class="p">))</span>  <span class="o">+</span> 
+        <span class="nf">geom_bar</span><span class="p">(</span><span class="n">stat</span> <span class="o">=</span> <span class="s">&#39;identity&#39;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s">&quot;dodge&quot;</span><span class="p">)</span>  <span class="o">+</span> 
+        <span class="nf">facet_wrap</span><span class="p">(</span><span class="nf">as.formula</span><span class="p">(</span><span class="nf">paste0</span><span class="p">(</span><span class="s">&#39;~&#39;</span><span class="p">,</span> <span class="n">color.var</span><span class="p">)),</span> <span class="n">ncol</span><span class="o">=</span><span class="m">2</span><span class="p">,</span> <span class="n">scales</span> <span class="o">=</span> <span class="s">&quot;free&quot;</span><span class="p">)</span>  <span class="o">+</span> 
         <span class="nf">labs</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="n">graph.title</span><span class="p">,</span>
              <span class="n">x</span> <span class="o">=</span> <span class="n">graph.title.x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">graph.title.y</span><span class="p">,</span>
              <span class="n">caption</span> <span class="o">=</span> <span class="n">graph.caption</span><span class="p">)</span> <span class="o">+</span>
@@ -13209,22 +13218,20 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Data">Data<a class="anchor-link" href="#Data">&#182;</a></h2><p>In our sample dataset, the number of nutrition/height/income etc information observed within each country and month of age group are different.</p>
-<p>We have a panel dataset for children observed over different months of age.</p>
+<h2 id="Data">Data<a class="anchor-link" href="#Data">&#182;</a></h2><p>In our sample dataset, there are different numbers of children within each country and village.</p>
 <p>We have two key grouping variables:</p>
 <ol>
-<li>country: data are observed for guatemala and cebu</li>
-<li>month-age (survey month round=svymthRound): different months of age at which each individual child is observed</li>
+<li>Country</li>
+<li>4 villages in guatemala and dozens in Cebu. </li>
 </ol>
-<p>A child could be observed for many months, or just a few months. A child's height information could be observed for more months-of-age than nutritional intake information.</p>
-<p>We eventually want to run regressions where the outcome is height/weight and the input is nutrition. The regressions will be at the month-of-age level. We need to know how many times different variables are observed at the month-of-age level.</p>
+<p>A child in a village could be observed for many times, so we will also show the number of times all the children in each village is observed by for each of the variables.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Library</span>
@@ -13280,8 +13287,8 @@ cols(
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Use-Function-with-Data">Use Function with Data<a class="anchor-link" href="#Use-Function-with-Data">&#182;</a></h2><p>The results below show that:</p>
 <ol>
-<li>data in guatemala and cebu are observed at different months. </li>
-<li>there are some age-months in which data is observed in both Guatemala and Cebu</li>
+<li>Each village has different numbers of unique individuals</li>
+<li>Each individual is observed for multiple times</li>
 </ol>
 
 </div>
@@ -13289,14 +13296,33 @@ cols(
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span><span class="n">vars.group</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#39;S.country&#39;</span><span class="p">,</span> <span class="s">&#39;svymthRound&#39;</span><span class="p">)</span>
-<span class="n">group.vars.obs.df</span> <span class="o">&lt;-</span> <span class="nf">f.by.group.vars.obs</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">vars.group</span><span class="p">)</span>
+<div class=" highlight hl-r"><pre><span></span><span class="n">vars.group</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#39;S.country&#39;</span><span class="p">,</span> <span class="s">&#39;vil.id&#39;</span><span class="p">)</span>
+<span class="n">var.unique.identifier</span> <span class="o">=</span> <span class="s">&#39;indi.id&#39;</span>
+<span class="n">group.unique.obs.df</span> <span class="o">&lt;-</span> <span class="nf">f.by.group.unique.obs</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">vars.group</span><span class="p">,</span> <span class="n">var.unique.identifier</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Adding missing grouping variables: `S.country`, `vil.id`
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -13311,10 +13337,40 @@ cols(
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span><span class="n">group.vars.obs.df</span><span class="o">$</span><span class="n">df</span>
+<div class=" highlight hl-r"><pre><span></span><span class="n">group.unique.obs.df</span><span class="o">$</span><span class="n">df</span>
+<span class="c1"># color.var &lt;- vars.group[1]</span>
+<span class="c1">#     x.var &lt;- vars.group[2]</span>
+
+<span class="c1"># # x-var as factor</span>
+<span class="c1"># df.by.group[[x.var]] &lt;- factor(df.by.group[[x.var]])</span>
+
+<span class="c1"># # Graph Size</span>
+<span class="c1"># options(repr.plot.width = 8, repr.plot.height = 4)</span>
+
+<span class="c1"># # Titling</span>
+<span class="c1"># graph.title &lt;- sprintf(&#39;Number of Unique %s By (%s and %s) Groups&#39;, </span>
+<span class="c1">#                        var.unique.identifier, color.var, x.var)</span>
+<span class="c1"># graph.caption &lt;- sprintf(</span>
+<span class="c1">#     paste0(&#39;Jitter/Random Hgt/Wgt Guat/Cebu Data\n&#39;,</span>
+<span class="c1">#            &#39;see:https://fanwangecon.github.io/HeightProfile/&#39;))</span>
+<span class="c1"># graph.title.x &lt;- sprintf(&#39;%s Groups&#39;, x.var)</span>
+<span class="c1"># graph.title.y &lt;- sprintf(&#39;Number of Unique %s&#39;, var.unique.identifier)</span>
+
+
+<span class="c1"># # Graphing (unique_indi used earlier as name)</span>
+<span class="c1"># df.by.group %&gt;% </span>
+<span class="c1">#     select(one_of(vars.group), unique_indi) %&gt;% </span>
+<span class="c1">#     gather(variable, value, -one_of(vars.group)) %&gt;% </span>
+<span class="c1">#     ggplot(aes(x=!!sym(x.var), y=value))  + </span>
+<span class="c1">#     geom_bar(stat = &#39;identity&#39;, position=&quot;dodge&quot;)  + </span>
+<span class="c1">#     facet_wrap(as.formula(paste0(&#39;~&#39;, color.var)), ncol=2, scales = &quot;free&quot;)  + </span>
+<span class="c1">#     labs(title = graph.title,</span>
+<span class="c1">#          x = graph.title.x, y = graph.title.y,</span>
+<span class="c1">#          caption = graph.caption) +</span>
+<span class="c1">#     theme(axis.text.x = element_text(angle = 90, hjust = 1))</span>
 </pre></div>
 
     </div>
@@ -13333,42 +13389,45 @@ cols(
 
 <div class="output_html rendered_html output_subarea ">
 <table>
-<thead><tr><th scope=col>S.country</th><th scope=col>svymthRound</th><th scope=col>vil.id</th><th scope=col>indi.id</th><th scope=col>momEdu</th><th scope=col>wealthIdx</th><th scope=col>hgt</th><th scope=col>wgt</th><th scope=col>hgt0</th><th scope=col>wgt0</th><th scope=col>prot</th><th scope=col>cal</th><th scope=col>p.A.prot</th><th scope=col>p.A.nProt</th></tr></thead>
+<thead><tr><th scope=col>S.country</th><th scope=col>vil.id</th><th scope=col>unique_indi</th><th scope=col>indi.id_n</th><th scope=col>svymthRound_n</th><th scope=col>momEdu_n</th><th scope=col>wealthIdx_n</th><th scope=col>hgt_n</th><th scope=col>wgt_n</th><th scope=col>hgt0_n</th><th scope=col>wgt0_n</th><th scope=col>prot_n</th><th scope=col>cal_n</th><th scope=col>p.A.prot_n</th><th scope=col>p.A.nProt_n</th></tr></thead>
 <tbody>
-	<tr><td>Cebu     </td><td>  0      </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1341     </td><td>1341     </td><td>1341     </td><td>1341     </td><td>1343     </td><td>1343     </td><td>1238     </td><td>1238     </td></tr>
-	<tr><td>Cebu     </td><td>  2      </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1319     </td><td>1319     </td><td>1341     </td><td>1341     </td><td>1320     </td><td>1320     </td><td>1205     </td><td>1205     </td></tr>
-	<tr><td>Cebu     </td><td>  4      </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1326     </td><td>1328     </td><td>1341     </td><td>1341     </td><td>1328     </td><td>1328     </td><td>1218     </td><td>1218     </td></tr>
-	<tr><td>Cebu     </td><td>  6      </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1341     </td><td>1341     </td><td>1342     </td><td>1342     </td><td>1243     </td><td>1243     </td></tr>
-	<tr><td>Cebu     </td><td>  8      </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1293     </td><td>1292     </td><td>1341     </td><td>1341     </td><td>1294     </td><td>1294     </td><td>1195     </td><td>1195     </td></tr>
-	<tr><td>Cebu     </td><td> 10      </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1274     </td><td>1276     </td><td>1341     </td><td>1341     </td><td>1277     </td><td>1277     </td><td>1167     </td><td>1167     </td></tr>
-	<tr><td>Cebu     </td><td> 12      </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1259     </td><td>1259     </td><td>1341     </td><td>1341     </td><td>1260     </td><td>1260     </td><td>1142     </td><td>1142     </td></tr>
-	<tr><td>Cebu     </td><td> 14      </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1238     </td><td>1238     </td><td>1341     </td><td>1341     </td><td>1239     </td><td>1239     </td><td>1133     </td><td>1133     </td></tr>
-	<tr><td>Cebu     </td><td> 16      </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1213     </td><td>1214     </td><td>1341     </td><td>1341     </td><td>1215     </td><td>1215     </td><td>1123     </td><td>1123     </td></tr>
-	<tr><td>Cebu     </td><td> 18      </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1203     </td><td>1205     </td><td>1341     </td><td>1341     </td><td>1205     </td><td>1205     </td><td>1118     </td><td>1118     </td></tr>
-	<tr><td>Cebu     </td><td> 20      </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1207     </td><td>1207     </td><td>1341     </td><td>1341     </td><td>1210     </td><td>1210     </td><td>1126     </td><td>1126     </td></tr>
-	<tr><td>Cebu     </td><td> 22      </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1185     </td><td>1186     </td><td>1341     </td><td>1341     </td><td>1191     </td><td>1191     </td><td>1099     </td><td>1099     </td></tr>
-	<tr><td>Cebu     </td><td> 24      </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1174     </td><td>1176     </td><td>1341     </td><td>1341     </td><td>1181     </td><td>1181     </td><td>1086     </td><td>1086     </td></tr>
-	<tr><td>Cebu     </td><td>102      </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1067     </td><td>1067     </td><td>1341     </td><td>1341     </td><td>   0     </td><td>   0     </td><td>   0     </td><td>   0     </td></tr>
-	<tr><td>Cebu     </td><td>138      </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1343     </td><td>1033     </td><td>1034     </td><td>1341     </td><td>1341     </td><td>   0     </td><td>   0     </td><td>   0     </td><td>   0     </td></tr>
-	<tr><td>Cebu     </td><td>187      </td><td>1342     </td><td>1342     </td><td>1342     </td><td>1342     </td><td>1001     </td><td>1001     </td><td>1340     </td><td>1340     </td><td>   0     </td><td>   0     </td><td>   0     </td><td>   0     </td></tr>
-	<tr><td>Cebu     </td><td>224      </td><td>1341     </td><td>1341     </td><td>1341     </td><td>1341     </td><td> 964     </td><td> 964     </td><td>1339     </td><td>1339     </td><td>   0     </td><td>   0     </td><td>   0     </td><td>   0     </td></tr>
-	<tr><td>Cebu     </td><td>258      </td><td>1341     </td><td>1341     </td><td>1341     </td><td>1341     </td><td> 911     </td><td> 911     </td><td>1339     </td><td>1339     </td><td>   0     </td><td>   0     </td><td>   0     </td><td>   0     </td></tr>
-	<tr><td>Guatemala</td><td>  0      </td><td> 680     </td><td> 680     </td><td>   0     </td><td> 680     </td><td> 354     </td><td> 353     </td><td> 354     </td><td> 353     </td><td>   0     </td><td>   0     </td><td> 356     </td><td> 356     </td></tr>
-	<tr><td>Guatemala</td><td>  3      </td><td> 680     </td><td> 680     </td><td>   0     </td><td> 680     </td><td> 422     </td><td> 422     </td><td> 354     </td><td> 353     </td><td> 183     </td><td> 183     </td><td> 423     </td><td> 423     </td></tr>
-	<tr><td>Guatemala</td><td>  6      </td><td> 680     </td><td> 680     </td><td>   0     </td><td> 680     </td><td> 446     </td><td> 448     </td><td> 354     </td><td> 353     </td><td> 200     </td><td> 200     </td><td> 448     </td><td> 448     </td></tr>
-	<tr><td>Guatemala</td><td>  9      </td><td> 680     </td><td> 680     </td><td>   0     </td><td> 680     </td><td> 466     </td><td> 466     </td><td> 354     </td><td> 353     </td><td> 211     </td><td> 211     </td><td> 468     </td><td> 468     </td></tr>
-	<tr><td>Guatemala</td><td> 12      </td><td> 680     </td><td> 680     </td><td>   0     </td><td> 680     </td><td> 475     </td><td> 479     </td><td> 354     </td><td> 353     </td><td> 214     </td><td> 214     </td><td> 479     </td><td> 479     </td></tr>
-	<tr><td>Guatemala</td><td> 15      </td><td> 680     </td><td> 680     </td><td>   0     </td><td> 680     </td><td> 463     </td><td> 464     </td><td> 354     </td><td> 353     </td><td> 414     </td><td> 414     </td><td> 464     </td><td> 464     </td></tr>
-	<tr><td>Guatemala</td><td> 18      </td><td> 680     </td><td> 680     </td><td>   0     </td><td> 680     </td><td> 467     </td><td> 468     </td><td> 354     </td><td> 353     </td><td> 410     </td><td> 410     </td><td> 468     </td><td> 468     </td></tr>
-	<tr><td>Guatemala</td><td> 21      </td><td> 680     </td><td> 680     </td><td>   0     </td><td> 680     </td><td> 442     </td><td> 444     </td><td> 354     </td><td> 353     </td><td> 409     </td><td> 409     </td><td> 444     </td><td> 444     </td></tr>
-	<tr><td>Guatemala</td><td> 24      </td><td> 680     </td><td> 680     </td><td>   0     </td><td> 680     </td><td> 463     </td><td> 465     </td><td> 354     </td><td> 353     </td><td> 408     </td><td> 408     </td><td> 465     </td><td> 465     </td></tr>
-	<tr><td>Guatemala</td><td> 30      </td><td> 680     </td><td> 680     </td><td>   0     </td><td> 680     </td><td> 437     </td><td> 436     </td><td> 354     </td><td> 353     </td><td> 400     </td><td> 400     </td><td> 438     </td><td> 438     </td></tr>
-	<tr><td>Guatemala</td><td> 36      </td><td> 680     </td><td> 680     </td><td>   0     </td><td> 680     </td><td> 436     </td><td> 435     </td><td> 354     </td><td> 353     </td><td> 382     </td><td> 382     </td><td> 436     </td><td> 436     </td></tr>
-	<tr><td>Guatemala</td><td> 42      </td><td> 680     </td><td> 680     </td><td>   0     </td><td> 680     </td><td> 423     </td><td> 422     </td><td> 354     </td><td> 353     </td><td> 383     </td><td> 383     </td><td> 424     </td><td> 424     </td></tr>
-	<tr><td>Guatemala</td><td> 48      </td><td> 680     </td><td> 680     </td><td>   0     </td><td> 680     </td><td> 396     </td><td> 397     </td><td> 354     </td><td> 353     </td><td> 360     </td><td> 360     </td><td> 398     </td><td> 398     </td></tr>
-	<tr><td>Guatemala</td><td> 60      </td><td> 680     </td><td> 680     </td><td>   0     </td><td> 680     </td><td> 336     </td><td> 336     </td><td> 354     </td><td> 353     </td><td> 324     </td><td> 324     </td><td> 336     </td><td> 336     </td></tr>
-	<tr><td>Guatemala</td><td> 72      </td><td> 680     </td><td> 680     </td><td>   0     </td><td> 680     </td><td> 276     </td><td> 276     </td><td> 354     </td><td> 353     </td><td>  88     </td><td>  88     </td><td> 277     </td><td> 277     </td></tr>
-	<tr><td>Guatemala</td><td> 84      </td><td> 680     </td><td> 680     </td><td>   0     </td><td> 680     </td><td> 219     </td><td> 219     </td><td> 354     </td><td> 353     </td><td>  80     </td><td>  80     </td><td> 220     </td><td> 220     </td></tr>
+	<tr><td>Cebu     </td><td> 1       </td><td> 60      </td><td>1080     </td><td>1080     </td><td>1080     </td><td>1080     </td><td> 971     </td><td> 971     </td><td>1080     </td><td>1080     </td><td> 726     </td><td> 726     </td><td> 733     </td><td> 733     </td></tr>
+	<tr><td>Cebu     </td><td> 2       </td><td> 31      </td><td> 558     </td><td> 558     </td><td> 558     </td><td> 558     </td><td> 467     </td><td> 467     </td><td> 558     </td><td> 558     </td><td> 373     </td><td> 373     </td><td> 320     </td><td> 320     </td></tr>
+	<tr><td>Cebu     </td><td> 3       </td><td> 91      </td><td>1638     </td><td>1638     </td><td>1638     </td><td>1638     </td><td>1387     </td><td>1388     </td><td>1620     </td><td>1620     </td><td>1075     </td><td>1075     </td><td>1083     </td><td>1083     </td></tr>
+	<tr><td>Cebu     </td><td> 4       </td><td> 62      </td><td>1116     </td><td>1116     </td><td>1116     </td><td>1116     </td><td>1004     </td><td>1003     </td><td>1116     </td><td>1116     </td><td> 771     </td><td> 771     </td><td> 782     </td><td> 782     </td></tr>
+	<tr><td>Cebu     </td><td> 5       </td><td>  8      </td><td> 144     </td><td> 144     </td><td> 144     </td><td> 144     </td><td> 127     </td><td> 127     </td><td> 144     </td><td> 144     </td><td>  93     </td><td>  93     </td><td>  93     </td><td>  93     </td></tr>
+	<tr><td>Cebu     </td><td> 6       </td><td> 46      </td><td> 828     </td><td> 828     </td><td> 828     </td><td> 828     </td><td> 749     </td><td> 749     </td><td> 828     </td><td> 828     </td><td> 566     </td><td> 566     </td><td> 566     </td><td> 566     </td></tr>
+	<tr><td>Cebu     </td><td> 7       </td><td> 64      </td><td>1152     </td><td>1152     </td><td>1152     </td><td>1152     </td><td> 976     </td><td> 976     </td><td>1152     </td><td>1152     </td><td> 763     </td><td> 763     </td><td> 783     </td><td> 783     </td></tr>
+	<tr><td>Cebu     </td><td> 8       </td><td> 39      </td><td> 699     </td><td> 699     </td><td> 699     </td><td> 699     </td><td> 600     </td><td> 601     </td><td> 699     </td><td> 699     </td><td> 475     </td><td> 475     </td><td> 416     </td><td> 416     </td></tr>
+	<tr><td>Cebu     </td><td> 9       </td><td> 81      </td><td>1458     </td><td>1458     </td><td>1458     </td><td>1458     </td><td>1363     </td><td>1363     </td><td>1458     </td><td>1458     </td><td>1025     </td><td>1025     </td><td>1034     </td><td>1034     </td></tr>
+	<tr><td>Cebu     </td><td>10       </td><td> 84      </td><td>1512     </td><td>1512     </td><td>1512     </td><td>1512     </td><td>1271     </td><td>1270     </td><td>1512     </td><td>1512     </td><td>1002     </td><td>1002     </td><td> 973     </td><td> 973     </td></tr>
+	<tr><td>Cebu     </td><td>11       </td><td> 65      </td><td>1170     </td><td>1170     </td><td>1170     </td><td>1170     </td><td>1013     </td><td>1013     </td><td>1170     </td><td>1170     </td><td> 787     </td><td> 787     </td><td> 805     </td><td> 805     </td></tr>
+	<tr><td>Cebu     </td><td>12       </td><td> 41      </td><td> 738     </td><td> 738     </td><td> 738     </td><td> 738     </td><td> 646     </td><td> 646     </td><td> 738     </td><td> 738     </td><td> 487     </td><td> 487     </td><td> 499     </td><td> 499     </td></tr>
+	<tr><td>Cebu     </td><td>13       </td><td>138      </td><td>2484     </td><td>2484     </td><td>2484     </td><td>2484     </td><td>2156     </td><td>2158     </td><td>2484     </td><td>2484     </td><td>1687     </td><td>1687     </td><td>1694     </td><td>1694     </td></tr>
+	<tr><td>Cebu     </td><td>14       </td><td> 43      </td><td> 774     </td><td> 774     </td><td> 774     </td><td> 774     </td><td> 661     </td><td> 661     </td><td> 774     </td><td> 774     </td><td> 508     </td><td> 508     </td><td> 519     </td><td> 519     </td></tr>
+	<tr><td>Cebu     </td><td>15       </td><td> 34      </td><td> 612     </td><td> 612     </td><td> 612     </td><td> 612     </td><td> 572     </td><td> 572     </td><td> 612     </td><td> 612     </td><td> 428     </td><td> 428     </td><td> 430     </td><td> 430     </td></tr>
+	<tr><td>Cebu     </td><td>16       </td><td> 48      </td><td> 864     </td><td> 864     </td><td> 864     </td><td> 864     </td><td> 701     </td><td> 703     </td><td> 864     </td><td> 864     </td><td> 561     </td><td> 561     </td><td> 516     </td><td> 516     </td></tr>
+	<tr><td>Cebu     </td><td>17       </td><td> 85      </td><td>1530     </td><td>1530     </td><td>1530     </td><td>1530     </td><td>1359     </td><td>1359     </td><td>1512     </td><td>1512     </td><td>1039     </td><td>1039     </td><td>1060     </td><td>1060     </td></tr>
+	<tr><td>Cebu     </td><td>18       </td><td> 18      </td><td> 324     </td><td> 324     </td><td> 324     </td><td> 324     </td><td> 320     </td><td> 323     </td><td> 324     </td><td> 324     </td><td> 234     </td><td> 234     </td><td>   0     </td><td>   0     </td></tr>
+	<tr><td>Cebu     </td><td>19       </td><td> 10      </td><td> 180     </td><td> 180     </td><td> 180     </td><td> 180     </td><td> 169     </td><td> 169     </td><td> 180     </td><td> 180     </td><td> 126     </td><td> 126     </td><td> 129     </td><td> 129     </td></tr>
+	<tr><td>Cebu     </td><td>20       </td><td> 28      </td><td> 504     </td><td> 504     </td><td> 504     </td><td> 504     </td><td> 483     </td><td> 483     </td><td> 504     </td><td> 504     </td><td> 355     </td><td> 355     </td><td> 355     </td><td> 355     </td></tr>
+	<tr><td>Cebu     </td><td>21       </td><td>  8      </td><td> 144     </td><td> 144     </td><td> 144     </td><td> 144     </td><td> 137     </td><td> 137     </td><td> 144     </td><td> 144     </td><td> 104     </td><td> 104     </td><td>   2     </td><td>   2     </td></tr>
+	<tr><td>Cebu     </td><td>22       </td><td>  7      </td><td> 126     </td><td> 126     </td><td> 126     </td><td> 126     </td><td> 111     </td><td> 111     </td><td> 126     </td><td> 126     </td><td>  85     </td><td>  85     </td><td>  68     </td><td>  68     </td></tr>
+	<tr><td>Cebu     </td><td>23       </td><td> 10      </td><td> 180     </td><td> 180     </td><td> 180     </td><td> 180     </td><td> 163     </td><td> 163     </td><td> 180     </td><td> 180     </td><td> 124     </td><td> 124     </td><td>  27     </td><td>  27     </td></tr>
+	<tr><td>Cebu     </td><td>24       </td><td>  6      </td><td> 108     </td><td> 108     </td><td> 108     </td><td> 108     </td><td> 107     </td><td> 107     </td><td> 108     </td><td> 108     </td><td>  78     </td><td>  78     </td><td>   8     </td><td>   8     </td></tr>
+	<tr><td>Cebu     </td><td>25       </td><td> 13      </td><td> 234     </td><td> 234     </td><td> 234     </td><td> 234     </td><td> 232     </td><td> 231     </td><td> 234     </td><td> 234     </td><td> 169     </td><td> 169     </td><td>  88     </td><td>  88     </td></tr>
+	<tr><td>Cebu     </td><td>26       </td><td> 29      </td><td> 522     </td><td> 522     </td><td> 522     </td><td> 522     </td><td> 459     </td><td> 459     </td><td> 522     </td><td> 522     </td><td> 357     </td><td> 357     </td><td> 170     </td><td> 170     </td></tr>
+	<tr><td>Cebu     </td><td>27       </td><td> 37      </td><td> 666     </td><td> 666     </td><td> 666     </td><td> 666     </td><td> 572     </td><td> 576     </td><td> 666     </td><td> 666     </td><td> 441     </td><td> 441     </td><td> 181     </td><td> 181     </td></tr>
+	<tr><td>Cebu     </td><td>28       </td><td> 72      </td><td>1294     </td><td>1294     </td><td>1294     </td><td>1294     </td><td>1149     </td><td>1149     </td><td>1294     </td><td>1294     </td><td> 896     </td><td> 896     </td><td> 898     </td><td> 898     </td></tr>
+	<tr><td>Cebu     </td><td>29       </td><td> 26      </td><td> 468     </td><td> 468     </td><td> 468     </td><td> 468     </td><td> 416     </td><td> 416     </td><td> 468     </td><td> 468     </td><td> 313     </td><td> 313     </td><td> 322     </td><td> 322     </td></tr>
+	<tr><td>Cebu     </td><td>30       </td><td> 22      </td><td> 396     </td><td> 396     </td><td> 396     </td><td> 396     </td><td> 385     </td><td> 385     </td><td> 396     </td><td> 396     </td><td> 284     </td><td> 284     </td><td> 284     </td><td> 284     </td></tr>
+	<tr><td>Cebu     </td><td>31       </td><td> 21      </td><td> 378     </td><td> 378     </td><td> 378     </td><td> 378     </td><td> 340     </td><td> 340     </td><td> 378     </td><td> 378     </td><td> 267     </td><td> 267     </td><td>  51     </td><td>  51     </td></tr>
+	<tr><td>Cebu     </td><td>32       </td><td> 12      </td><td> 216     </td><td> 216     </td><td> 216     </td><td> 216     </td><td> 214     </td><td> 214     </td><td> 216     </td><td> 216     </td><td> 155     </td><td> 155     </td><td> 155     </td><td> 155     </td></tr>
+	<tr><td>Cebu     </td><td>33       </td><td>  4      </td><td>  72     </td><td>  72     </td><td>  72     </td><td>  72     </td><td>  71     </td><td>  71     </td><td>  72     </td><td>  72     </td><td>  51     </td><td>  51     </td><td>  49     </td><td>  49     </td></tr>
+	<tr><td>Guatemala</td><td> 3       </td><td>190      </td><td>3040     </td><td>3040     </td><td>   0     </td><td>3040     </td><td>1778     </td><td>1779     </td><td>1440     </td><td>1424     </td><td>1193     </td><td>1193     </td><td>1783     </td><td>1783     </td></tr>
+	<tr><td>Guatemala</td><td> 6       </td><td>211      </td><td>3376     </td><td>3376     </td><td>   0     </td><td>3376     </td><td>2033     </td><td>2033     </td><td>1744     </td><td>1744     </td><td>1387     </td><td>1387     </td><td>2035     </td><td>2035     </td></tr>
+	<tr><td>Guatemala</td><td> 8       </td><td>148      </td><td>2368     </td><td>2368     </td><td>   0     </td><td>2368     </td><td>1415     </td><td>1418     </td><td>1232     </td><td>1232     </td><td> 975     </td><td> 975     </td><td>1421     </td><td>1421     </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>131      </td><td>2096     </td><td>2096     </td><td>   0     </td><td>2096     </td><td>1295     </td><td>1300     </td><td>1248     </td><td>1248     </td><td> 911     </td><td> 911     </td><td>1305     </td><td>1305     </td></tr>
 </tbody>
 </table>
 
@@ -13390,10 +13449,10 @@ cols(
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span><span class="n">group.vars.obs.df</span><span class="o">$</span><span class="n">graph</span>
+<div class=" highlight hl-r"><pre><span></span><span class="n">group.unique.obs.df</span><span class="o">$</span><span class="n">graph</span>
 </pre></div>
 
     </div>
@@ -13412,484 +13471,193 @@ cols(
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABDgAAASwCAMAAAApLQoIAAAAQlBMVEUAAAAAv8QaGhozMzNN
-TU1oaGh8fHyMjIyampqnp6eysrK9vb3Hx8fQ0NDZ2dnh4eHp6enr6+vw8PDy8vL4dm3///+J
-MuS0AAAACXBIWXMAABJ0AAASdAHeZh94AAAgAElEQVR4nO2di5riuK5GMzXUravrMnU27/+q
-h0sAWYhgWQ5xkvV/MwUmsqVY8iIJaei2CCHkVDd1AAih+QlwIITcAhwIIbcAB0LILcCBEHIL
-cCCE3AIcCCG3AAdCyC3AgRByC3AghNyqCI6u+3t+dt/WPfzvW9c9i/bf167rXv8Wj6dHLxim
-ExowStub7uf8/Kfb5HRJXrjhqg/j+c/NQD5fjw9vm53Z++9Nuzs6zlShQnm6ztFp8v27sx/l
-9VO9+Pn23HWbN/0yMlQVHJvzs/u27uH3nHg5t342p5r5KRzPCugR4PjTvZ+fv3fmOg+AQ85R
-qp/NYaZeT3alyyM01RU6W+DYlZ6THPtR+hk56efl3hSii6qCo3s7PbtvWzD896Wx48bLvvI/
-X7pD9iuBY4xO2kgeZcijj9wxboLj8PD9IriU6PXw+ke32c/bz0cynR61BY7j49fNvR4c6/1V
-vLIrqefPHX5+/26611vd0ElVwfHaF+NI4BCN53OhvB/OX2YEju3L+c3+M/e9LR8ct85+dr4O
-uTmj6qMrPOVoERzb7xt7PTzWtzzsEuzZFB+OrUdVwfHbX4Q4ZKVP6v5h9/+fPc935bp7+Nie
-Xnnp87N7w+if78Z4Frz/3p2Pb96+t6eD0tPrn8LmeZ/lZLzvt/2Z6pc59PkyyXO3e3d5353T
-vnydhr+8bZ/d7l95P4aejnvZT6HzcNvDsVD39ns02u31y6XbJfjXY4FeuvW7348rX7/s3nHj
-Zb90LLsnpzxcnuzWxXNqlgR/Dlbv++nhMg3nmZKzKfykUZ/n7nBs+Ec6Pc3mr0iJHO+qaC45
-Os/n1d7ci14F8nwB95fYhc89Q86leHPMD7PiVqKq4Ni9jX30z9Qk/zlk/evt8HAogvfD0wPk
-/3bn5/ujlgv5Py+n4yk43sRbwuf+rVOO9yVO4q+Gfut6oOx7bdLhTzELt7tXXk7P5bjnPZba
-iO3HcDYHo+Nefwm74xr9Pb5NbqS3w+4fx01ev+zeYaPYLxXLYR2+90H+PV9D+emfmcf0l2DV
-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"
+<img src="data:image/png;base64,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
+MQA4y4zjOQbgJANJFgOAs8w4nmMATjKQZDEAOMuM4zkG4CQDSRYDgLPMOJ5jAE4ykGQxADjL
+jOM5BuAkA0kWA4CzzDieYwBOMpBkMQA4y4zjOQbgJANJFgOAs8w4nmMATjKQZDEAOMuM4zmW
+K9bcZXoF4N0DSRYDgLPMOJ5jmd/hP/0VgPcPJFkMAM4y43iOATjJQJLFAOAsM47nWK8aAEcZ
+SLIYAJxlxvEcuwH8311758MWxQP4FaNJKwDOKON4jrWiNS174BgDSRYDgLPMOJ5jAE4ykGQx
+ADjLjOM5XvILwBEGkiwGAGeZcTzHS34BOMJAksUA4Cwzjud4yS8ARxhIshgAnGXG8RzL/DbD
+o1c8iRV8IMliAHCWGcdz7F3PbQLgRDEAOMuM4zkG4CQDSRYDgLPMOJ5jAE4ykGQxADjLjOM5
+BuAkA0kWA4CzzDieYwBOMpBkMQICnK/kQr46l3L0ijkJwN62k9gDZ5RxPMebAY7H1keKIP/b
+KAB2aABwOscA7CcAdmgAcDrHAOwnAHZoAHA6xwDsJwB2aABwOscA7CcAdmgAcDrHAOwnAHZo
+AHA6xwDsJwB2aABwOscA7CcAdmgAcDrHAOwnAHZoAHA6xwDsJwB2aABwOscA7CcAdmgAcDrH
+AOwnAHZoAHA6xwDsJwB2aABwOscA7CcAdmgAcDrHAOwnAHZoAHA6xwDspzIBFrIAOH3G8RwD
+sJ8A2KEBwOkcA7CfygS40+l4bdvr8eRb8AxnraGQuXMWzTEA+6lYgE/i1i92JtiUTR6z1lDI
+3DmL5hiA/VQswMOh841D6FdkHM+xO8Ca4rH1kSLI5nEXIw3Uo+gPodkDvyLjeI7dJ8T/VMVj
+iz3wHlsbwNemv4TVXAE4fcbxHAOwn4oFuL1dDkIcPm++Bc9w1hoKmTtn0RwDsJ/KBdhbpmzy
+mLWGQubOWTTHAOwnAHZoAHA6xwDspzIBFqLlQY5XZhzPMQD7CYAdGgCczjEA+6lMgDfJlE0e
+s9ZQyNw5i+YYgP0EwA4NAE7nGID9VDzAHEK/IuN4jgHYTwDs0ADgdI4B2E/FA+xd8AxnraGQ
+uXMWzTEA+wmAHRoAnM4xAPsJgB0aAJzOMQD7qUyAuQ/84ozjOQZgPwGwQwOA0zkGYD+VCfAm
+mbLJY9YaCpk7Z9EcA7CfANihAcDpHAOwn8oEmF+lfHHG8RwDsJ8A2KEBwOkcA7CfygS4Ez8r
+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"
 >
 </div>
 

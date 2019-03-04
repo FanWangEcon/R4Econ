@@ -9,5 +9,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 ## 1.1 Counting
 
-1. [By Group, Count non-NA observations of All Variables](summarize/count/ByGroupCountAllVarNonNA.html)
-  + **core**: *group_by+summarise_if(is.numeric, funs(sum(is.na(.)==0)))*
+1. [By Groups, Count non-NA observations of All Variables](summarize/count/ByGroupCountAllVarNonNA.html)
+  + **core**: *group_by + summarise_if(is.numeric, funs(sum(is.na(.)==0)))*
+2. [By Groups, Count Unique Individuals and non-NA observations of other Variables](summarize/count/ByGroupCountUniqueIndi.html)
+  + **core**: *group_by + mutate_if + mutate + n_distinct + slice(1L)*
