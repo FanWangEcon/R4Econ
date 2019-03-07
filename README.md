@@ -24,3 +24,10 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
   + **core**: *group_by + summarise_if(is.numeric(fun)) + gather + separate + spread + mutate + select + spread + unite*
 3. [By Multiple within Individual Groups Variables, Averages for All Numeric Variables within All Groups of All Group Variables (Long to very Wide)](summarize/summ/ByGroupsSummWide.html) **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummWide.R)**
   + **core**: *gather + group_by + summarise_if(is.numeric, funs(mean(., na.rm = TRUE))) + mutate(all_m_cate = paste0(variable, '_c', value)) + gather + unite + spread (note: gather twice, spread at end)*
+
+# 2. Linear Regressions
+
+## 2.1 Instrumental Variables
+
+1. IV Regression store all Coefficients and Diagnostics as Dataframe Row **[.R]**(https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/ivregdfrow.R)
+  + **core**: *library(aer) + ivreg(as.formula, diagnostics = TRUE) + gather + drop_na + unite*
