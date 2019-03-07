@@ -29,5 +29,5 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 ## 2.1 Instrumental Variables
 
-1. IV Regression store all Coefficients and Diagnostics as Dataframe Row **[.R]**(https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/ivregdfrow.R)
+1. IV Regression store all Coefficients and Diagnostics as Dataframe Row **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/ivregdfrow.R)**
   + **core**: *library(aer) + ivreg(as.formula, diagnostics = TRUE) + gather + drop_na + unite*
