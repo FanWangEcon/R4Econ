@@ -19,7 +19,7 @@ regf.iv <- function(var.y, vars.x, vars.c, vars.z, df, transpose=TRUE) {
 #     print(equa.iv)
 
     # B. IV Regression
-    ivreg.summ <- summary(ivreg(as.formula(equa.iv), data=df_reg),
+    ivreg.summ <- summary(ivreg(as.formula(equa.iv), data=df),
                           vcov = sandwich, df = Inf, diagnostics = TRUE)
 
     # C. Statistics from IV Regression
