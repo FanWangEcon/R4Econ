@@ -1,7 +1,7 @@
 
-This is a work-in-progress [website](https://fanwangecon.github.io/R4Econ/) for Panel Data Statistics/Econometrics Analyasis, produced by [Fan](https://fanwangecon.github.io/). Materials gathered from various [projects](https://fanwangecon.github.io/research) in which R codes are used. The goal of this repository is to make it easier to re-use codes produced for various projects.
+This is a work-in-progress [website](https://fanwangecon.github.io/R4Econ/) of support files for doing Panel Data Statistics/Econometrics Analyasis, produced by [Fan](https://fanwangecon.github.io/). Materials gathered from various [projects](https://fanwangecon.github.io/research) in which R codes are used. The goal of this repository is to make it easier to find/re-use codes produced for various projects.
 
-R is used. Packages from [Tidyverse](https://www.tidyverse.org/) are used. Materials are written in R using Jupyter notebook and shown as HTML files. To obtain codes and raw files, see [here](docs/gitsetup.md) for github set up. For HTML files, click on the links below.
+R files are linked below by section. Some files have examples/instructions created using Jupyter notebooks and are shown as HTML files. To obtain codes and raw files, see [here](docs/gitsetup.md) for github set up. For HTML files, click on the links below.
 
 Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or problems.
 
@@ -34,4 +34,5 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 # 3. Support
 
-1. Controls for: graph sizing, warning show, table col/row display **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/controls.R)**
+1. Conda R Package Installations **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/condainstalls.R)**
+2. Controls for: Graph Sizing, Warnings, Table Col/Row Max Display **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/controls.R)**
