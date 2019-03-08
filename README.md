@@ -34,4 +34,4 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 # 3. Support
 
-1. Controls for: graph sizing, warning show, table col/row display **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/supportpreamble.R)**
+1. Controls for: graph sizing, warning show, table col/row display **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/controls.R)**
