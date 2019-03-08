@@ -31,3 +31,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 1. IV Regression store all Coefficients and Diagnostics as Dataframe Row **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/ivregdfrow.R)**
   + **core**: *library(aer) + ivreg(as.formula, diagnostics = TRUE) + gather + drop_na + unite*
+
+# 3. Support
+
+1. Controls for: graph sizing, warning show, table col/row display **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/supportpreamble.R)**
