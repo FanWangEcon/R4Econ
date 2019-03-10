@@ -22,7 +22,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
   + **core**: *summarise_if(is.numeric) + gather + separate + spread  + select*
 2. All Numeric Variables Mean + SD + N by Groups **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupSumm.R)**
   + **core**: *group_by + summarise_if(is.numeric(fun)) + gather + separate + spread + mutate + select + spread + unite*
-3. [Average By Multiple within Individual Groups Variables](summarize/summ/ByGroupsSummWide.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummWide.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummWide.R) \|  [**html**](generate/quantile/ByGroupsSummWide.html) \| pdf
+3. [Average By Multiple within Individual Groups Variables](summarize/summ/ByGroupsSummWide.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummWide.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummWide.R) \|  [**html**](summarize/summ/ByGroupsSummWide.html) \| pdf
   + By Multiple within Individual Groups Variables
   + Averages for All Numeric Variables within All Groups of All Group Variables
   + Long to Wide to very Wide
