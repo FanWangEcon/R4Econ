@@ -25,14 +25,20 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 3. [By Multiple within Individual Groups Variables, Averages for All Numeric Variables within All Groups of All Group Variables (Long to very Wide)](summarize/summ/ByGroupsSummWide.html) **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummWide.R)**
   + **core**: *gather + group_by + summarise_if(is.numeric, funs(mean(., na.rm = TRUE))) + mutate(all_m_cate = paste0(variable, '_c', value)) + gather + unite + spread (note: gather twice, spread at end)*
 
-# 2. Linear Regressions
 
-## 2.1 Instrumental Variables
+# 2. Data/Variable Generation
+1. [Quantiles from Multiple Continuous Variables: Dataframe of Variables' Quantiles by Panel Groups, Quantile Categorical Variables for Panel within Group Observations (with quantile cut variable suffix and quantile labeling), Joint Quantile Categorical Variable with Linear Index](generate/quantile/VarCateIdxVarsQuantiles.html): [**ipynb**](generate/quantile/VarCateIdxVarsQuantiles.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quanntile/VarCateIdxVarsQuantiles.R) \|  [**html**](generate/quantile/VarCateIdxVarsQuantiles.html) \| [**pdf**](generate/quantile/VarCateIdxVarsQuantiles.pdf)
+  + **core**: *summarise_if(is.numeric) + gather + separate + spread  + select*
+
+
+# 3. Linear Regressions
+
+## 3.1 Instrumental Variables
 
 1. IV Regression store all Coefficients and Diagnostics as Dataframe Row **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/ivregdfrow.R)**
   + **core**: *library(aer) + ivreg(as.formula, diagnostics = TRUE) + gather + drop_na + unite*
 
-# 3. Support
+# 4. Support
 
 1. Conda R Package Installations **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/condainstalls.R)**
 2. Controls for: Graph Sizing, Warnings, Table Col/Row Max Display **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/controls.R)**
