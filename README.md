@@ -22,17 +22,20 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
   + **core**: *summarise_if(is.numeric) + gather + separate + spread  + select*
 2. All Numeric Variables Mean + SD + N by Groups **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupSumm.R)**
   + **core**: *group_by + summarise_if(is.numeric(fun)) + gather + separate + spread + mutate + select + spread + unite*
-3. [By Multiple within Individual Groups Variables, Averages for All Numeric Variables within All Groups of All Group Variables (Long to very Wide)](summarize/summ/ByGroupsSummWide.html) **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummWide.R)**
+3. [Average By Multiple within Individual Groups Variables](summarize/summ/ByGroupsSummWide.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummWide.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummWide.R) \|  [**html**](generate/quantile/ByGroupsSummWide.html) \| pdf
+  + By Multiple within Individual Groups Variables
+  + Averages for All Numeric Variables within All Groups of All Group Variables
+  + Long to Wide to very Wide
   + **core**: *gather + group_by + summarise_if(is.numeric, funs(mean(., na.rm = TRUE))) + mutate(all_m_cate = paste0(variable, '_c', value)) + gather + unite + spread (note: gather twice, spread at end)*
 
 
 # 2. Data/Variable Generation
-1. [Quantiles from Multiple Continuous Variables](generate/quantile/VarCateIdxVarsQuantiles.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quanntile/VarCateIdxVarsQuantiles.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quantile/VarCateIdxVarsQuantiles.R) \|  [**html**](generate/quantile/VarCateIdxVarsQuantiles.html) \| [**pdf**](generate/quantile/VarCateIdxVarsQuantiles.pdf)
+1. [Quantiles from Multiple Variables](generate/quantile/VarCateIdxVarsQuantiles.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quantile/VarCateIdxVarsQuantiles.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quantile/VarCateIdxVarsQuantiles.R) \|  [**html**](generate/quantile/VarCateIdxVarsQuantiles.html) \| pdf
   + Dataframe of Variables' Quantiles by Panel Groups
   + Quantile Categorical Variables for Panel within Group Observations
   + Quantile cut variable suffix and quantile labeling
   + Joint Quantile Categorical Variable with Linear Index
-  + **core**: *summarise_if(is.numeric) + gather + separate + spread  + select*
+  + **core**: *group_by + slicke(1L) + lapply(quantiles()) + reduce(full_join) + mutate_at(funs(q=f_cut(.,cut)))) + levels() + rename_at*
 
 
 # 3. Linear Regressions
