@@ -27,7 +27,11 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 
 # 2. Data/Variable Generation
-1. [Quantiles from Multiple Continuous Variables: Dataframe of Variables' Quantiles by Panel Groups, Quantile Categorical Variables for Panel within Group Observations (with quantile cut variable suffix and quantile labeling), Joint Quantile Categorical Variable with Linear Index](generate/quantile/VarCateIdxVarsQuantiles.html): [**ipynb**](generate/quantile/VarCateIdxVarsQuantiles.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quanntile/VarCateIdxVarsQuantiles.R) \|  [**html**](generate/quantile/VarCateIdxVarsQuantiles.html) \| [**pdf**](generate/quantile/VarCateIdxVarsQuantiles.pdf)
+1. [Quantiles from Multiple Continuous Variables](generate/quantile/VarCateIdxVarsQuantiles.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quanntile/VarCateIdxVarsQuantiles.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quantile/VarCateIdxVarsQuantiles.R) \|  [**html**](generate/quantile/VarCateIdxVarsQuantiles.html) \| [**pdf**](generate/quantile/VarCateIdxVarsQuantiles.pdf)
+  + Dataframe of Variables' Quantiles by Panel Groups
+  + Quantile Categorical Variables for Panel within Group Observations
+  + Quantile cut variable suffix and quantile labeling
+  + Joint Quantile Categorical Variable with Linear Index
   + **core**: *summarise_if(is.numeric) + gather + separate + spread  + select*
 
 
