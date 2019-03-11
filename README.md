@@ -35,7 +35,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
   + Quantile Categorical Variables for Panel within Group Observations
   + Quantile cut variable suffix and quantile labeling
   + Joint Quantile Categorical Variable with Linear Index
-  + **core**: *group_by + slicke(1L) + lapply(quantiles()) + reduce(full_join) + mutate_at(funs(q=f_cut(.,cut)))) + levels() + rename_at*
+  + **core**: *group_by + slicke(1L) + lapply(quantiles()) + reduce(full_join) + mutate_at(funs(q=f_cut(.,cut)))) + levels() + rename_at + unlist(lapply) + mutate(!!var.qjnt.grp.idx := group_indices(., !!!syms(vars.quantile.cut.all)))*
 
 
 # 3. Linear Regressions
