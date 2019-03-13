@@ -9,7 +9,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 ## 1.1 Tabulate and Counting
 
-1. Many-Category Categorical Variable, Tabulation shown as Matrix **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/tabulate/ListUniqueCateNAsMat.R)**
+1. Many-Category Categorical Variable, Tabulation shown as Matrix: ipynb \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/tabulate/ListUniqueCateNAsMat.R) \| html \| pdf
   + **core**: *group_by + summarise(freq = n()) + mutate + min(ceiling(sqrt(count))) + substring + dim/reshape*
 2. [By Groups, Count non-NA observations of All Variables](summarize/count/ByGroupCountAllVarNonNA.html) **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/ByGroupCountAllVarNonNA.R)**
   + **core**: *group_by + summarise_if(is.numeric, funs(sum(is.na(.)==0)))*
@@ -18,9 +18,9 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 ## 1.2 Averaging
 
-1. All Variables: N + NAcount + Mean + SD + Percentiles **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/SummPercentiles.R)**
+1. All Variables: N + NAcount + Mean + SD + Percentiles: ipynb \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/SummPercentiles.R) \| html \| pdf
   + **core**: *summarise_if(is.numeric) + gather + separate + spread  + select*
-2. All Numeric Variables Mean + SD + N by Groups **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupSumm.R)**
+2. All Numeric Variables Mean + SD + N by Groups: ipynb \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupSumm.R) \| html \| pdf
   + **core**: *group_by + summarise_if(is.numeric(fun)) + gather + separate + spread + mutate + select + spread + unite*
 3. [Average By Multiple within Individual Groups Variables](summarize/summ/ByGroupsSummWide.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummWide.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummWide.R) \|  [**html**](summarize/summ/ByGroupsSummWide.html) \| pdf
   + By Multiple within Individual Groups Variables
@@ -42,16 +42,18 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 ## 3.1 Instrumental Variables
 
-1. IV Regression store all Coefficients and Diagnostics as Dataframe Row **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/ivregdfrow.R)**
+1. IV Regression store all Coefficients and Diagnostics as Dataframe Row: ipynb \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/ivregdfrow.R) \| html \| pdf
   + **core**: *library(aer) + ivreg(as.formula, diagnostics = TRUE) + gather + drop_na + unite*
 
 # 4. Non-linear Estimations
 
 # 5. Optimization
 
-## 5.1 Planer's Problem
+## 5.1 CES Planer's Problem
 1. [Constant Elasticity of Substitution Planer Welfare Objective Function](optimization/planer/ces/cesplanerobj.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planer/ces/cesplanerobj.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planer/ces/cesplanerobj.R) \|  [**html**](optimization/planer/ces/cesplanerobj.html) \| pdf
   + **core**: *prod/mean/pow, logspace, geom_bar+identity+dodge*
+2. [Constant Elasticity of Substitution Planer Welfare Subsidies Optimizer Over Quantile/Individual Groups](optimization/planer/ces/cesoptimizer.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planer/ces/cesoptimizer.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planer/ces/cesoptimizer.R) \|  [**html**](optimization/planer/ces/cesoptimizer.html) \| pdf
+  + **core**: *optim(x, obj, func.params), do.call(func_str, func.params); setNames+list+append*  
 
 ## 5.2 Optimization Support
 1. [Constrained Share Parameters to Unconstrained Parameters](optimization/support/fraction.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/support/fraction.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/support/fraction.R) \|  [**html**](optimization/support/fraction.html) \| pdf
@@ -59,8 +61,13 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
   + unconstrained maximands of a and b for optimization
   + **core**: *f - f/(1+exp(x)), while, runif + qexp + qnorm/dnorm*
 
+# 6. Small Tools
 
-# 6. Support
+1. List of List to Dataframe: ipynb \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/support/dplyrtricks/nestedlist2df.R) \| html \| pdf
+  + Results stored as nested named list (with different keys in sub-lists)
+  + **core**: *as.data.frame + gather + separate(sep(\\.), extra='merge') + spread + column_to_rownames*
 
-1. Conda R Package Installations **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/condainstalls.R)**
-2. Controls for: Graph Sizing, Warnings, Table Col/Row Max Display **[.R](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/controls.R)**
+# 7. Support
+
+1. Conda R Package Installations: ipynb \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/condainstalls.R) \| html \| pdf
+2. Controls for: Graph Sizing, Warnings, Table Col/Row Max Display, Timer: ipynb \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/controls.R) \| html \| pdf

@@ -13130,7 +13130,7 @@ $$ \Omega\left( Y \right) = \left(  \frac{1}{N \cdot T}\sum_{i=1}^N \sum_{t=1}^T
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[179]:</div>
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
@@ -13151,13 +13151,25 @@ $$ \Omega\left( Y \right) = \left(  \frac{1}{N \cdot T}\sum_{i=1}^N \sum_{t=1}^T
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[180]:</div>
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="n">parmam.ces.min</span> <span class="o">&lt;-</span> <span class="m">-160</span>
 <span class="c1"># Planer&#39;s objective function</span>
 <span class="c1"># Constant Elasticity of Substitution over All Individuals</span>
 <span class="n">f_planer_obj</span>  <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">vec.y</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">80</span><span class="p">,</span> <span class="m">85</span><span class="p">,</span> <span class="m">90</span><span class="p">),</span> <span class="n">param.ces</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">)</span> <span class="p">{</span>
+    
+    <span class="c1"># Can not Process NA Values. Count NA values in vec.y and give alert if there are NAs</span>
+    <span class="n">sca.NA.count</span> <span class="o">&lt;-</span> <span class="nf">sum</span><span class="p">(</span><span class="nf">is.na</span><span class="p">(</span><span class="n">vec.y</span><span class="p">))</span>
+    <span class="nf">if </span><span class="p">(</span><span class="n">sca.NA.count</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="p">)</span> <span class="p">{</span>        
+        <span class="nf">warning</span><span class="p">(</span><span class="nf">sprintf</span><span class="p">(</span><span class="nf">paste0</span><span class="p">(</span><span class="s">&quot;In f_planer_obj, vec.y (len=%s) has NA (len=%s) values\n&quot;</span><span class="p">,</span>
+                               <span class="s">&quot;Ignored NAs for Planer Objective&quot;</span><span class="p">),</span>
+                                <span class="nf">length</span><span class="p">(</span><span class="n">vec.y</span><span class="p">),</span> <span class="n">sca.NA.count</span><span class="p">))</span>
+        <span class="c1"># Remove NA</span>
+        <span class="n">vec.y</span> <span class="o">&lt;-</span> <span class="nf">na.omit</span><span class="p">(</span><span class="n">vec.y</span><span class="p">)</span>
+    <span class="p">}</span>
+    
+    <span class="c1"># CES Objective Function</span>
     <span class="nf">if </span><span class="p">(</span><span class="n">param.ces</span> <span class="o">==</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">obj</span> <span class="o">&lt;-</span> <span class="nf">prod</span><span class="p">(</span><span class="n">vec.y</span><span class="nf">^</span><span class="p">(</span><span class="m">1</span><span class="o">/</span><span class="nf">length</span><span class="p">(</span><span class="n">vec.y</span><span class="p">)))</span>
     <span class="p">}</span> <span class="n">else</span> <span class="nf">if </span><span class="p">(</span><span class="n">param.ces</span> <span class="o">&lt;=</span> <span class="n">parmam.ces.min</span><span class="p">)</span> <span class="p">{</span>
@@ -13165,12 +13177,14 @@ $$ \Omega\left( Y \right) = \left(  \frac{1}{N \cdot T}\sum_{i=1}^N \sum_{t=1}^T
     <span class="p">}</span> <span class="n">else</span> <span class="p">{</span>
         <span class="n">obj</span> <span class="o">&lt;-</span> <span class="p">(</span><span class="nf">mean</span><span class="p">(</span><span class="n">vec.y^param.ces</span><span class="p">))</span><span class="nf">^</span><span class="p">(</span><span class="m">1</span><span class="o">/</span><span class="n">param.ces</span><span class="p">)</span>
     <span class="p">}</span> 
+    
+    <span class="c1"># Return</span>
     <span class="nf">return</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="c1"># Vector of CES Parameters</span>
 <span class="n">f_ces_params_vec</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">sca.len.right</span> <span class="o">=</span> <span class="m">11</span><span class="p">,</span> <span class="n">sca.len.left</span> <span class="o">=</span> <span class="m">9</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">vec.param.ces.right</span> <span class="o">&lt;-</span> <span class="nf">seq</span><span class="p">(</span><span class="m">-1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="n">length.out</span> <span class="o">=</span> <span class="n">sca.len.right</span><span class="p">)</span>
+    <span class="n">vec.param.ces.right</span> <span class="o">&lt;-</span> <span class="nf">round</span><span class="p">(</span><span class="nf">seq</span><span class="p">(</span><span class="m">-1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="n">length.out</span> <span class="o">=</span> <span class="n">sca.len.right</span><span class="p">),</span> <span class="m">2</span><span class="p">)</span>
     <span class="n">vec.param.ces.left</span> <span class="o">&lt;-</span> <span class="p">(</span><span class="m">-1</span><span class="p">)</span><span class="o">*</span><span class="nf">unique</span><span class="p">(</span><span class="nf">round</span><span class="p">(</span><span class="nf">exp</span><span class="p">(</span><span class="nf">log</span><span class="p">(</span><span class="m">10</span><span class="p">)</span><span class="o">*</span><span class="nf">seq</span><span class="p">(</span><span class="nf">log10</span><span class="p">(</span><span class="m">1</span><span class="p">),</span> 
                                                        <span class="nf">log10</span><span class="p">((</span><span class="m">-1</span><span class="p">)</span><span class="o">*</span><span class="n">parmam.ces.min</span><span class="p">),</span>
                                                        <span class="n">length.out</span><span class="o">=</span><span class="n">sca.len.left</span><span class="p">))))</span>
@@ -13186,10 +13200,55 @@ $$ \Omega\left( Y \right) = \left(  \frac{1}{N \cdot T}\sum_{i=1}^N \sum_{t=1}^T
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[181]:</div>
+<div class="prompt input_prompt">In&nbsp;[39]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Single Test</span>
+<span class="nf">f_planer_obj</span><span class="p">(</span><span class="n">vec.y</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">80</span><span class="p">,</span> <span class="m">85</span><span class="p">,</span> <span class="m">90</span><span class="p">,</span> <span class="kc">NA</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Warning message in f_planer_obj(vec.y = c(80, 85, 90, NA)):
+&#34;In f_planer_obj, vec.y (len=4) has NA (len=1) values
+Ignored NAs for Planer Objective&#34;</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+84.9509343727597
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[40]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="c1"># Lapply Test</span>
 <span class="nf">t</span><span class="p">(</span><span class="nf">lapply</span><span class="p">(</span><span class="nf">f_ces_params_vec</span><span class="p">(),</span> <span class="n">f_planer_obj</span><span class="p">,</span> <span class="n">vec.y</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">80</span><span class="p">,</span> <span class="m">85</span><span class="p">,</span> <span class="m">90</span><span class="p">)))</span>
 </pre></div>
 
@@ -13234,7 +13293,7 @@ $$ \Omega\left( Y \right) = \left(  \frac{1}{N \cdot T}\sum_{i=1}^N \sum_{t=1}^T
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[182]:</div>
+<div class="prompt input_prompt">In&nbsp;[41]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Test Planer Objective Function</span>
@@ -13277,7 +13336,7 @@ $$ \Omega\left( Y \right) = \left(  \frac{1}{N \cdot T}\sum_{i=1}^N \sum_{t=1}^T
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[183]:</div>
+<div class="prompt input_prompt">In&nbsp;[42]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Graphically</span>
@@ -13463,7 +13522,7 @@ kgDEApIAxAKSAMQCkuB/HtlCB1ptY2QAAAAASUVORK5CYII="
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[184]:</div>
+<div class="prompt input_prompt">In&nbsp;[43]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Planer Test Function</span>
@@ -13488,7 +13547,7 @@ kgDEApIAxAKSAMQCkuB/HtlCB1ptY2QAAAAASUVORK5CYII="
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[185]:</div>
+<div class="prompt input_prompt">In&nbsp;[44]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Graphing Function</span>
@@ -13514,7 +13573,7 @@ kgDEApIAxAKSAMQCkuB/HtlCB1ptY2QAAAAASUVORK5CYII="
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[186]:</div>
+<div class="prompt input_prompt">In&nbsp;[45]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># a vector of different Ys</span>
@@ -13562,7 +13621,7 @@ kgDEApIAxAKSAMQCkuB/HtlCB1ptY2QAAAAASUVORK5CYII="
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[187]:</div>
+<div class="prompt input_prompt">In&nbsp;[46]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Graphically</span>
@@ -13739,7 +13798,7 @@ SQlAQ0kJQENJCUBDSen/o8aMx/23s9EAAAAASUVORK5CYII="
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[188]:</div>
+<div class="prompt input_prompt">In&nbsp;[47]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># a vector of different Ys</span>
@@ -13787,7 +13846,7 @@ SQlAQ0kJQENJCUBDSen/o8aMx/23s9EAAAAASUVORK5CYII="
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[189]:</div>
+<div class="prompt input_prompt">In&nbsp;[48]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Graphically</span>

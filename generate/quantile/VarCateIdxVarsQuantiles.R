@@ -72,7 +72,7 @@ df_sliced_quantiles <- function(df, vars.cts2quantile, seq.quantiles,
 #################################################
 
 # Cutting Function, Cut Continuous Variables into Quantiles with labeing
-f_cut <- function(var, df.sliced.quantiles, include.lowest=TRUE, fan.labels=TRUE, print=FALSE) {
+f_cut <- function(var, df.sliced.quantiles, seq.quantiles, include.lowest=TRUE, fan.labels=TRUE, print=FALSE) {
 
     # unparsed string variable name
     var.str <- substitute(var)
@@ -127,7 +127,8 @@ df_cut_by_sliced_quantiles <- function(df, vars.cts2quantile, seq.quantiles,
     # Second Step Generate Categorical Variables of Quantiles
     df.with.cut.quant <- df %>% mutate_at(vars.cts2quantile,
                                funs(q=f_cut(., df.sliced$df.sliced.quantiles,
-                                           include.lowest=TRUE, fan.labels=TRUE)))
+                                            seq.quantiles=seq.quantiles,
+                                            include.lowest=TRUE, fan.labels=TRUE)))
 
     if (length(vars.cts2quantile) > 1) {
         df.with.cut.quant <- df.with.cut.quant %>%
@@ -150,7 +151,6 @@ df_cut_by_sliced_quantiles <- function(df, vars.cts2quantile, seq.quantiles,
                 vars.quantile.cut=vars.quantile.cut))
 
 }
-
 
 #################################################
 ### Multiple Quantiles Different Cuts/Probabilities
