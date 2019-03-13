@@ -35,7 +35,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
   + Quantile Categorical Variables for Panel within Group Observations
   + Quantile cut variable suffix and quantile labeling
   + Joint Quantile Categorical Variable with Linear Index
-  + **core**: *group_by + slicke(1L) + lapply(quantiles()) + reduce(full_join) + mutate_at(funs(q=f_cut(.,cut)))) + levels() + rename_at + unlist(lapply) + mutate(!!var.qjnt.grp.idx := group_indices(., !!!syms(vars.quantile.cut.all)))*
+  + **core**: *group_by + slicke(1L) + lapply(enframe(quantiles())) + reduce(full_join) + mutate_at(funs(q=f_cut(.,cut)))) + levels() + rename_at + unlist(lapply) + mutate(!!var.qjnt.grp.idx := group_indices(., !!!syms(vars.quantile.cut.all)))*
 
 
 # 3. Linear Regressions
@@ -47,11 +47,17 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 # 4. Non-linear Estimations
 
-1. Non-linear Least-Square
-
 # 5. Optimization
 
-1. Optimization 
+## 5.1 Planer's Problem
+1. [Constant Elasticity of Substitution Planer Welfare Objective Function](optimization/planer/ces/cesplanerobj.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planer/ces/cesplanerobj.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planer/ces/cesplanerobj.R) \|  [**html**](optimization/planer/ces/cesplanerobj.html) \| pdf
+  + **core**: *prod/mean/pow, logspace, geom_bar+identity+dodge*
+
+## 5.2 Optimization Support
+1. [Constrained Share Parameters to Unconstrained Parameters](optimization/support/fraction.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/support/fraction.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/support/fraction.R) \|  [**html**](optimization/support/fraction.html) \| pdf
+  + constrained: a + b + c = Z, a >= 0, b >= 0, c >= 0
+  + unconstrained maximands of a and b for optimization
+  + **core**: *f - f/(1+exp(x)), while, runif + qexp + qnorm/dnorm*
 
 
 # 6. Support
