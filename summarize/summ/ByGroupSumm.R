@@ -1,5 +1,6 @@
 # By One Group Mean Sd and Count
 # https://fanwangecon.github.io/R4Econ/summarize/summ/ByGroupSumm.html
+# f.by.group.vars.mnsdobs(df.main.guat, vars.group.by=c('S.country', 'svymthRound'))
 f.by.group.vars.mnsdobs <- function(df,
                                     vars.group.by = c('S.country', 'svymthRound'),
                                     transpose = FALSE) {
@@ -8,6 +9,9 @@ f.by.group.vars.mnsdobs <- function(df,
   # -matches(paste0(other.vars.list, collapse='|'))
   # # mean and sd by age
   # # f.by.group.vars.mnsdobs(raw.selected.df)
+
+  # The Code below works when there are no under_scores in variables names
+  names(df) <- gsub(x = names(df), pattern = "_", replacement = "\\.")
 
   df.meansdn <- df %>% group_by(!!!syms(vars.group.by)) %>%
         arrange(!!!syms(vars.group.by)) %>%

@@ -1,7 +1,8 @@
 # Summary stats FuunctionPercentile based summaries
 # https://fanwangecon.github.io/R4Econ/summarize/summ/SummPercentiles.html
-f.summ.percentiles <- function(df, col2varname = FALSE) {
+# f.summ.percentiles(df.main.guat) %>% mutate_if(is.numeric, round, 2)
 
+f.summ.percentiles <- function(df, col2varname = FALSE) {
     names(df) <- gsub("_", ".", names(df))
 
     summ.stats <- df %>%
