@@ -24,23 +24,48 @@ obj_planer <- function(x, param.ces, f.subsidy.y.str, list.subsidy.y.params.othe
     return(obj)
 }
 
-
 # Subsidy Function
 # var.grp.idx: name of index group variable
 # subsidy.total: total subsidy
 # vec.subsidy.frac: fraction of subsidy each group
 # vec.subsidy.grpsize: number of people in each subsidy group.
-f_subsidy_vec <- function(df, var.grp.idx, subsidy.total, vec.subsidy.frac, vec.subsidy.grpsize) {
+f_subsidy_vec <- function(df, var.grp.idx, subsidy.total, vec.subsidy.frac, vec.subsidy.grpsize,
+                          review=FALSE, var.i='i', var.t='t') {
     # var.grp.idx <- 'subsidy.grp'
     # subsidy_total <- 2
     # df.subsidy.frac <- c(0.1, 0.9)
     # vec.subsidy.grpsize <- c(1, 1)
-    return(df %>% mutate(subsidy_grp = paste0(vec.subsidy.frac, collapse=','),
+    df.with.subsidy <- df %>% mutate(subsidy_grp = paste0(vec.subsidy.frac, collapse=','),
                          subsidy = ((subsidy.total*
                                      vec.subsidy.frac[df[[var.grp.idx]]])/
-                                     vec.subsidy.grpsize[df[[var.grp.idx]]])))
-}
+                                     vec.subsidy.grpsize[df[[var.grp.idx]]]))
 
+    if (review) {
+      df.with.subsidy.review <- df.with.subsidy %>%
+                                    select(!!sym(var.i), !!sym(var.t), !!sym(var.grp.idx),
+                                           contains('subsidy'), everything()) %>%
+                                group_by(!!sym(var.grp.idx)) %>%
+                                mutate_at(vars(c('subsidy')), funs(subsidy_mean_it = mean,
+                                                                   subsidy_sd_it = sd,
+                                                                   subsidy_n_it = n()))  %>%
+                 ungroup() %>% group_by(!!sym(var.i)) %>% slice(1L) %>% group_by(!!sym(var.grp.idx)) %>%
+                 mutate_at(vars(c('subsidy')), funs(subsidy_mean_i = mean,
+                                                    subsidy_sd_i = sd,
+                                                    subsidy_n_i = n())) %>%
+                summarize_if(is.numeric, mean) %>%
+                select(!!sym(var.grp.idx), contains('subsidy'), everything()) %>%
+                mutate_if(is.numeric, round, 3)
+
+        print(t(df.with.subsidy.review))
+
+    } else {
+
+        df.with.subsidy.review <- c('')
+    }
+
+    return(list(dfmain=df.with.subsidy,
+                dfreview=df.with.subsidy.review))
+}
 
 # Optimization Wrapper
 # sca.subsidy.frac.init.default <- numeric((sca.subsidy.groups-1))+1
@@ -66,8 +91,10 @@ optim_wrapper <- function(sca.subsidy.frac.init, param.ces, f.subsidy.y.str, lis
     # Number of Individuals Each Subsidy Group, Normalize Relative Subidy Across Groups
     list.vec.subsidy.grpsize <- setNames(list.subsidy.y.params.other$vec.subsidy.grpsize,
                                          paste0('par.frac.grpsize.v', 1:(sca.subsidy.lengthm1+1)))
-    list.vec.frac.norm <- ((f_frac_asymp_vec(res.opti$par))/(list.subsidy.y.params.other$vec.subsidy.grpsize))
-    list.vec.frac.norm <- list.vec.frac.norm/min(list.vec.frac.norm)
+    list.vec.frac.sub.lvl <- ((f_frac_asymp_vec(res.opti$par))/(list.subsidy.y.params.other$vec.subsidy.grpsize))
+    list.vec.frac.norm <- list.vec.frac.sub.lvl/min(list.vec.frac.sub.lvl)
+    list.vec.subsidy.indi.lvl <- setNames(list.vec.frac.sub.lvl*list.subsidy.y.params.other$subsidy.total,
+                                         paste0('par.frac.lvl.v', 1:(sca.subsidy.lengthm1+1)))
     list.vec.subsidy.grpsize.norm <- setNames(list.vec.frac.norm,
                                          paste0('par.frac.norm.v', 1:(sca.subsidy.lengthm1+1)))
 
@@ -84,6 +111,7 @@ optim_wrapper <- function(sca.subsidy.frac.init, param.ces, f.subsidy.y.str, lis
     list.esti.res <- append(list.esti.res, list.par)
     list.esti.res <- append(list.esti.res, list.par.frac)
     list.esti.res <- append(list.esti.res, list.vec.subsidy.grpsize)
+    list.esti.res <- append(list.esti.res, list.vec.subsidy.indi.lvl)
     list.esti.res <- append(list.esti.res, list.vec.subsidy.grpsize.norm)
 
     # Return
@@ -93,12 +121,12 @@ optim_wrapper <- function(sca.subsidy.frac.init, param.ces, f.subsidy.y.str, lis
 
 # Graphically
 graphf.ces.opti.subsidy <- function(df.ces.opti, sca.subsidy.groups, vec.subsidy.grpsize,
-                                    str.title, str.captions) {
+                                    str.title, str.captions, geom_text_format='%.3f') {
     df.ces.opti %>%
         gather(variable, value, -param.ces)  %>%
         ggplot(aes(x=factor(param.ces), y=value,
                    fill=variable,
-                   label=sprintf('%.3f', value))) +
+                   label=sprintf(geom_text_format, value))) +
         geom_bar(stat = 'identity', position='dodge2') +
         geom_text(size=3, hjust=0.5, vjust=0, angle=0,
                   fontface = 'bold', color='black',
