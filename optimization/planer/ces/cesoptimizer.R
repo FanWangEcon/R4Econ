@@ -9,20 +9,24 @@ obj_planer <- function(x, param.ces, f.subsidy.y.str, list.subsidy.y.params.othe
   # 2. param.ces is the ces parameter, not that this parameter does not enter the f.subsidy.y.str function
   # 3. f.subsidy.y.str is the name of the estimation prediction function (Step 3) in string
   # 4. list.subsidy.y.params.other contains a list of parameters needed for f.subsidy.y.str in addition to the
-
+    
     # Input list
     # Convert from Estimation x to Actual Fraction between 0 and 1
     list.subsidy.y.params.maximand <- list(vec.subsidy.frac = f_frac_asymp_vec(x))
     list.subsidy.y.params <- append(list.subsidy.y.params.other, list.subsidy.y.params.maximand)
-
+    
     # Call Function
-    df.y.subsidized <- do.call(f.subsidy.y.str, list.subsidy.y.params)
-
+    list.df.y.subsidized <- do.call(f.subsidy.y.str, list.subsidy.y.params)
+    
+    df.y.subsidized <- list.df.y.subsidized$dfmain
+    var.y.subsidy <- list.df.y.subsidized$ysubsidy
+    
     # C:\Users\fan\R4Econ\optimization\planer\ces\cesplanerobj.R
-    obj <- (-1)*f_planer_obj(vec.y=df.y.subsidized$y_subsidy, param.ces=param.ces)
-
-    return(obj)
+    obj <- (-1)*f_planer_obj(vec.y=df.y.subsidized[[var.y.subsidy]], param.ces=param.ces)
+    
+    return(obj)    
 }
+
 
 # Subsidy Function
 # var.grp.idx: name of index group variable
@@ -30,15 +34,18 @@ obj_planer <- function(x, param.ces, f.subsidy.y.str, list.subsidy.y.params.othe
 # vec.subsidy.frac: fraction of subsidy each group
 # vec.subsidy.grpsize: number of people in each subsidy group.
 f_subsidy_vec <- function(df, var.grp.idx, subsidy.total, vec.subsidy.frac, vec.subsidy.grpsize,
-                          review=FALSE, var.i='i', var.t='t') {
+                          review=FALSE, var.i='i', var.t='t',
+                          var.new.subsidy ='subsidy',
+                          var.new.subsidy.grp ='subsidy_grp') {
+    
     # var.grp.idx <- 'subsidy.grp'
     # subsidy_total <- 2
     # df.subsidy.frac <- c(0.1, 0.9)
     # vec.subsidy.grpsize <- c(1, 1)
-    df.with.subsidy <- df %>% mutate(subsidy_grp = paste0(vec.subsidy.frac, collapse=','),
-                         subsidy = ((subsidy.total*
-                                     vec.subsidy.frac[df[[var.grp.idx]]])/
-                                     vec.subsidy.grpsize[df[[var.grp.idx]]]))
+    df.with.subsidy <- df %>% mutate(!!(var.new.subsidy.grp) := paste0(vec.subsidy.frac, collapse=','),
+                                     !!(var.new.subsidy) := ((subsidy.total*
+                                                 vec.subsidy.frac[df[[var.grp.idx]]])/
+                                                vec.subsidy.grpsize[df[[var.grp.idx]]]))
 
     if (review) {
       df.with.subsidy.review <- df.with.subsidy %>%
@@ -64,8 +71,10 @@ f_subsidy_vec <- function(df, var.grp.idx, subsidy.total, vec.subsidy.frac, vec.
     }
 
     return(list(dfmain=df.with.subsidy,
-                dfreview=df.with.subsidy.review))
+                dfreview=df.with.subsidy.review,
+                varsubsidy=var.new.subsidy))
 }
+
 
 # Optimization Wrapper
 # sca.subsidy.frac.init.default <- numeric((sca.subsidy.groups-1))+1

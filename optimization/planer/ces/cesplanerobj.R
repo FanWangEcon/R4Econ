@@ -27,10 +27,10 @@ f_planer_obj  <- function(vec.y = c(80, 85, 90), param.ces = 0.5) {
 }
 
 # Vector of CES Parameters
-f_ces_params_vec <- function(sca.len.right = 11, sca.len.left = 9) {
-    vec.param.ces.right <- round(seq(-1, 1, length.out = sca.len.right), 2)
+f_ces_params_vec <- function(sca.len.right = 11, sca.len.left = 9, ces.max = 0.99, ces.min = parmam.ces.min) {
+    vec.param.ces.right <- round(seq(-1, ces.max, length.out = sca.len.right), 2)
     vec.param.ces.left <- (-1)*unique(round(exp(log(10)*seq(log10(1),
-                                                       log10((-1)*parmam.ces.min),
+                                                       log10((-1)*ces.min),
                                                        length.out=sca.len.left))))
     vec.param.ces <- sort(unique(c(vec.param.ces.left, vec.param.ces.right)))
     return(vec.param.ces)

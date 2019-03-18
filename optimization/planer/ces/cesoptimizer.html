@@ -13195,7 +13195,7 @@ $$<p>Specifically: there is a finite amount of subsidies, there are N individual
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[572]:</div>
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
@@ -13231,7 +13231,7 @@ $$<p>Specifically: there is a finite amount of subsidies, there are N individual
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[573]:</div>
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Single Parameter Optimization Functions</span>
@@ -13243,10 +13243,13 @@ $$<p>Specifically: there is a finite amount of subsidies, there are N individual
     <span class="n">list.subsidy.y.params</span> <span class="o">&lt;-</span> <span class="nf">append</span><span class="p">(</span><span class="n">list.subsidy.y.params.other</span><span class="p">,</span> <span class="n">list.subsidy.y.params.maximand</span><span class="p">)</span>
     
     <span class="c1"># Call Function</span>
-    <span class="n">df.y.subsidized</span> <span class="o">&lt;-</span> <span class="nf">do.call</span><span class="p">(</span><span class="n">f.subsidy.y.str</span><span class="p">,</span> <span class="n">list.subsidy.y.params</span><span class="p">)</span>
+    <span class="n">list.df.y.subsidized</span> <span class="o">&lt;-</span> <span class="nf">do.call</span><span class="p">(</span><span class="n">f.subsidy.y.str</span><span class="p">,</span> <span class="n">list.subsidy.y.params</span><span class="p">)</span>
+    
+    <span class="n">df.y.subsidized</span> <span class="o">&lt;-</span> <span class="n">list.df.y.subsidized</span><span class="o">$</span><span class="n">dfmain</span>
+    <span class="n">var.y.subsidy</span> <span class="o">&lt;-</span> <span class="n">list.df.y.subsidized</span><span class="o">$</span><span class="n">ysubsidy</span>
     
     <span class="c1"># C:\Users\fan\R4Econ\optimization\planer\ces\cesplanerobj.R</span>
-    <span class="n">obj</span> <span class="o">&lt;-</span> <span class="p">(</span><span class="m">-1</span><span class="p">)</span><span class="o">*</span><span class="nf">f_planer_obj</span><span class="p">(</span><span class="n">vec.y</span><span class="o">=</span><span class="n">df.y.subsidized</span><span class="o">$</span><span class="n">y_subsidy</span><span class="p">,</span> <span class="n">param.ces</span><span class="o">=</span><span class="n">param.ces</span><span class="p">)</span>
+    <span class="n">obj</span> <span class="o">&lt;-</span> <span class="p">(</span><span class="m">-1</span><span class="p">)</span><span class="o">*</span><span class="nf">f_planer_obj</span><span class="p">(</span><span class="n">vec.y</span><span class="o">=</span><span class="n">df.y.subsidized[[var.y.subsidy]]</span><span class="p">,</span> <span class="n">param.ces</span><span class="o">=</span><span class="n">param.ces</span><span class="p">)</span>
     
     <span class="nf">return</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
 <span class="p">}</span>
@@ -13259,7 +13262,7 @@ $$<p>Specifically: there is a finite amount of subsidies, there are N individual
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[574]:</div>
+<div class="prompt input_prompt">In&nbsp;[31]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Subsidy Function</span>
@@ -13268,30 +13271,32 @@ $$<p>Specifically: there is a finite amount of subsidies, there are N individual
 <span class="c1"># vec.subsidy.frac: fraction of subsidy each group</span>
 <span class="c1"># vec.subsidy.grpsize: number of people in each subsidy group.</span>
 <span class="n">f_subsidy_vec</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">var.grp.idx</span><span class="p">,</span> <span class="n">subsidy.total</span><span class="p">,</span> <span class="n">vec.subsidy.frac</span><span class="p">,</span> <span class="n">vec.subsidy.grpsize</span><span class="p">,</span>
-                          <span class="n">review</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> <span class="n">var.i</span><span class="o">=</span><span class="s">&#39;i&#39;</span><span class="p">,</span> <span class="n">var.t</span><span class="o">=</span><span class="s">&#39;t&#39;</span><span class="p">)</span> <span class="p">{</span>
+                          <span class="n">review</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> <span class="n">var.i</span><span class="o">=</span><span class="s">&#39;i&#39;</span><span class="p">,</span> <span class="n">var.t</span><span class="o">=</span><span class="s">&#39;t&#39;</span><span class="p">,</span>
+                          <span class="n">var.new.subsidy</span> <span class="o">=</span><span class="s">&#39;subsidy&#39;</span><span class="p">,</span>
+                          <span class="n">var.new.subsidy.grp</span> <span class="o">=</span><span class="s">&#39;subsidy_grp&#39;</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1"># var.grp.idx &lt;- &#39;subsidy.grp&#39;</span>
     <span class="c1"># subsidy_total &lt;- 2</span>
     <span class="c1"># df.subsidy.frac &lt;- c(0.1, 0.9)</span>
     <span class="c1"># vec.subsidy.grpsize &lt;- c(1, 1)</span>
-    <span class="n">df.with.subsidy</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">%&gt;%</span> <span class="nf">mutate</span><span class="p">(</span><span class="n">subsidy_grp</span> <span class="o">=</span> <span class="nf">paste0</span><span class="p">(</span><span class="n">vec.subsidy.frac</span><span class="p">,</span> <span class="n">collapse</span><span class="o">=</span><span class="s">&#39;,&#39;</span><span class="p">),</span>
-                         <span class="n">subsidy</span> <span class="o">=</span> <span class="p">((</span><span class="n">subsidy.total</span><span class="o">*</span>
-                                     <span class="n">vec.subsidy.frac[df[[var.grp.idx]]]</span><span class="p">)</span><span class="o">/</span>
-                                     <span class="n">vec.subsidy.grpsize[df[[var.grp.idx]]]</span><span class="p">))</span>
+    <span class="n">df.with.subsidy</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">%&gt;%</span> <span class="nf">mutate</span><span class="p">(</span><span class="o">!!</span><span class="p">(</span><span class="n">var.new.subsidy.grp</span><span class="p">)</span> <span class="o">:=</span> <span class="nf">paste0</span><span class="p">(</span><span class="n">vec.subsidy.frac</span><span class="p">,</span> <span class="n">collapse</span><span class="o">=</span><span class="s">&#39;,&#39;</span><span class="p">),</span>
+                                     <span class="o">!!</span><span class="p">(</span><span class="n">var.new.subsidy</span><span class="p">)</span> <span class="o">:=</span> <span class="p">((</span><span class="n">subsidy.total</span><span class="o">*</span>
+                                                              <span class="n">vec.subsidy.frac[df[[var.grp.idx]]]</span><span class="p">)</span><span class="o">/</span>
+                                                             <span class="n">vec.subsidy.grpsize[df[[var.grp.idx]]]</span><span class="p">))</span>
 
     <span class="nf">if </span><span class="p">(</span><span class="n">review</span><span class="p">)</span> <span class="p">{</span>
       <span class="n">df.with.subsidy.review</span> <span class="o">&lt;-</span> <span class="n">df.with.subsidy</span> <span class="o">%&gt;%</span>
                                     <span class="nf">select</span><span class="p">(</span><span class="o">!!</span><span class="nf">sym</span><span class="p">(</span><span class="n">var.i</span><span class="p">),</span> <span class="o">!!</span><span class="nf">sym</span><span class="p">(</span><span class="n">var.t</span><span class="p">),</span> <span class="o">!!</span><span class="nf">sym</span><span class="p">(</span><span class="n">var.grp.idx</span><span class="p">),</span>
-                                           <span class="nf">contains</span><span class="p">(</span><span class="s">&#39;subsidy&#39;</span><span class="p">),</span> <span class="nf">everything</span><span class="p">())</span> <span class="o">%&gt;%</span>
+                                           <span class="nf">contains</span><span class="p">(</span><span class="n">var.new.subsidy</span><span class="p">),</span> <span class="nf">everything</span><span class="p">())</span> <span class="o">%&gt;%</span>
                                 <span class="nf">group_by</span><span class="p">(</span><span class="o">!!</span><span class="nf">sym</span><span class="p">(</span><span class="n">var.grp.idx</span><span class="p">))</span> <span class="o">%&gt;%</span>
-                                <span class="nf">mutate_at</span><span class="p">(</span><span class="nf">vars</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;subsidy&#39;</span><span class="p">)),</span> <span class="nf">funs</span><span class="p">(</span><span class="n">subsidy_mean_it</span> <span class="o">=</span> <span class="n">mean</span><span class="p">,</span>
+                                <span class="nf">mutate_at</span><span class="p">(</span><span class="nf">vars</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="n">var.new.subsidy</span><span class="p">)),</span> <span class="nf">funs</span><span class="p">(</span><span class="n">subsidy_mean_it</span> <span class="o">=</span> <span class="n">mean</span><span class="p">,</span>
                                                                    <span class="n">subsidy_sd_it</span> <span class="o">=</span> <span class="n">sd</span><span class="p">,</span>
                                                                    <span class="n">subsidy_n_it</span> <span class="o">=</span> <span class="nf">n</span><span class="p">()))</span>  <span class="o">%&gt;%</span>
                  <span class="nf">ungroup</span><span class="p">()</span> <span class="o">%&gt;%</span> <span class="nf">group_by</span><span class="p">(</span><span class="o">!!</span><span class="nf">sym</span><span class="p">(</span><span class="n">var.i</span><span class="p">))</span> <span class="o">%&gt;%</span> <span class="nf">slice</span><span class="p">(</span><span class="m">1L</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="nf">group_by</span><span class="p">(</span><span class="o">!!</span><span class="nf">sym</span><span class="p">(</span><span class="n">var.grp.idx</span><span class="p">))</span> <span class="o">%&gt;%</span>
-                 <span class="nf">mutate_at</span><span class="p">(</span><span class="nf">vars</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;subsidy&#39;</span><span class="p">)),</span> <span class="nf">funs</span><span class="p">(</span><span class="n">subsidy_mean_i</span> <span class="o">=</span> <span class="n">mean</span><span class="p">,</span>
+                 <span class="nf">mutate_at</span><span class="p">(</span><span class="nf">vars</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="n">var.new.subsidy</span><span class="p">)),</span> <span class="nf">funs</span><span class="p">(</span><span class="n">subsidy_mean_i</span> <span class="o">=</span> <span class="n">mean</span><span class="p">,</span>
                                                     <span class="n">subsidy_sd_i</span> <span class="o">=</span> <span class="n">sd</span><span class="p">,</span>
                                                     <span class="n">subsidy_n_i</span> <span class="o">=</span> <span class="nf">n</span><span class="p">()))</span> <span class="o">%&gt;%</span>
                 <span class="nf">summarize_if</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">,</span> <span class="n">mean</span><span class="p">)</span> <span class="o">%&gt;%</span>
-                <span class="nf">select</span><span class="p">(</span><span class="o">!!</span><span class="nf">sym</span><span class="p">(</span><span class="n">var.grp.idx</span><span class="p">),</span> <span class="nf">contains</span><span class="p">(</span><span class="s">&#39;subsidy&#39;</span><span class="p">),</span> <span class="nf">everything</span><span class="p">())</span> <span class="o">%&gt;%</span>
+                <span class="nf">select</span><span class="p">(</span><span class="o">!!</span><span class="nf">sym</span><span class="p">(</span><span class="n">var.grp.idx</span><span class="p">),</span> <span class="nf">contains</span><span class="p">(</span><span class="n">var.new.subsidy</span><span class="p">),</span> <span class="nf">everything</span><span class="p">())</span> <span class="o">%&gt;%</span>
                 <span class="nf">mutate_if</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">,</span> <span class="n">round</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span>
 
         <span class="nf">print</span><span class="p">(</span><span class="nf">t</span><span class="p">(</span><span class="n">df.with.subsidy.review</span><span class="p">))</span>
@@ -13302,7 +13307,8 @@ $$<p>Specifically: there is a finite amount of subsidies, there are N individual
     <span class="p">}</span>
 
     <span class="nf">return</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">dfmain</span><span class="o">=</span><span class="n">df.with.subsidy</span><span class="p">,</span>
-                <span class="n">dfreview</span><span class="o">=</span><span class="n">df.with.subsidy.review</span><span class="p">))</span>
+                <span class="n">dfreview</span><span class="o">=</span><span class="n">df.with.subsidy.review</span><span class="p">,</span>
+                <span class="n">varsubsidy</span><span class="o">=</span><span class="n">var.new.subsidy</span><span class="p">))</span>
 <span class="p">}</span>
 </pre></div>
 
@@ -13327,7 +13333,7 @@ $$<p>Specifically: there is a finite amount of subsidies, there are N individual
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[575]:</div>
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Optimization Wrapper</span>
@@ -13397,7 +13403,7 @@ $$<p>Specifically: there is a finite amount of subsidies, there are N individual
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[576]:</div>
+<div class="prompt input_prompt">In&nbsp;[33]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Graphically</span>
@@ -13444,7 +13450,7 @@ $$<p>Specifically: there is a finite amount of subsidies, there are N individual
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[577]:</div>
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Library</span>
@@ -13472,10 +13478,10 @@ $$<p>Specifically: there is a finite amount of subsidies, there are N individual
 <pre>Parsed with column specification:
 cols(
   S.country = col_character(),
-  vil.id = col_integer(),
-  indi.id = col_integer(),
+  vil.id = col_double(),
+  indi.id = col_double(),
   sex = col_character(),
-  svymthRound = col_integer(),
+  svymthRound = col_double(),
   momEdu = col_double(),
   wealthIdx = col_double(),
   hgt = col_double(),
@@ -13524,7 +13530,7 @@ cols(
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[578]:</div>
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># These are the same as in: https://fanwangecon.github.io/HeightProfile/r/planer/paneloptigN.html</span>
@@ -13605,7 +13611,7 @@ Dataframes could bedifferent because some observations are dropped due to not ha
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[579]:</div>
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Base Data</span>
@@ -13698,7 +13704,7 @@ Dataframes could bedifferent because some observations are dropped due to not ha
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[580]:</div>
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Base Data Women Guatemala</span>
@@ -13806,7 +13812,7 @@ Dataframes could bedifferent because some observations are dropped due to not ha
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[581]:</div>
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Regressions</span>
@@ -13820,7 +13826,7 @@ Dataframes could bedifferent because some observations are dropped due to not ha
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[582]:</div>
+<div class="prompt input_prompt">In&nbsp;[39]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Timing</span>
@@ -13860,7 +13866,7 @@ Dataframes could bedifferent because some observations are dropped due to not ha
 
 <div class="output_text output_subarea ">
 <pre>   user  system elapsed 
-   0.02    0.00    0.01 </pre>
+      0       0       0 </pre>
 </div>
 
 </div>
@@ -13874,7 +13880,7 @@ Dataframes could bedifferent because some observations are dropped due to not ha
 
 <div class="output_text output_subarea ">
 <pre>   user  system elapsed 
-   0.27    0.00    0.27 </pre>
+   0.09    0.00    0.10 </pre>
 </div>
 
 </div>
@@ -13885,7 +13891,7 @@ Dataframes could bedifferent because some observations are dropped due to not ha
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[583]:</div>
+<div class="prompt input_prompt">In&nbsp;[40]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># StoreEstimation Results</span>
@@ -13901,7 +13907,7 @@ Dataframes could bedifferent because some observations are dropped due to not ha
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[584]:</div>
+<div class="prompt input_prompt">In&nbsp;[41]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Summaries</span>
@@ -13918,25 +13924,30 @@ Dataframes could bedifferent because some observations are dropped due to not ha
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[585]:</div>
+<div class="prompt input_prompt">In&nbsp;[42]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Function 2</span>
 <span class="n">f_subsidy_y_cd</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">res.linfe</span><span class="p">,</span>
                            <span class="n">var.grp.idx</span><span class="p">,</span> <span class="n">subsidy.total</span><span class="p">,</span>
-                           <span class="n">vec.subsidy.frac</span><span class="p">,</span> <span class="n">vec.subsidy.grpsize</span><span class="p">,</span> <span class="n">review</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span> <span class="p">{</span>
+                           <span class="n">vec.subsidy.frac</span><span class="p">,</span> <span class="n">vec.subsidy.grpsize</span><span class="p">,</span>
+                           <span class="n">var.new.y.subsidy</span> <span class="o">=</span> <span class="s">&#39;y_subsidy&#39;</span><span class="p">,</span>
+                           <span class="n">review</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span> <span class="p">{</span>
     
     <span class="c1"># Invoke Function 1</span>
-    <span class="n">list.df.wth.subsidy</span> <span class="o">&lt;-</span> <span class="nf">f_subsidy_vec</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">var.grp.idx</span><span class="p">,</span> <span class="n">subsidy.total</span><span class="p">,</span>
+    <span class="n">list.df.subsidy</span> <span class="o">&lt;-</span> <span class="nf">f_subsidy_vec</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">var.grp.idx</span><span class="p">,</span> <span class="n">subsidy.total</span><span class="p">,</span>
                                          <span class="n">vec.subsidy.frac</span><span class="p">,</span> <span class="n">vec.subsidy.grpsize</span><span class="p">,</span> <span class="n">review</span><span class="p">)</span>
     
-    <span class="n">df.wth.subsidy</span> <span class="o">&lt;-</span> <span class="n">list.df.wth.subsidy</span><span class="o">$</span><span class="n">dfmain</span>
+    <span class="n">df.subsidy</span> <span class="o">&lt;-</span> <span class="n">list.df.subsidy</span><span class="o">$</span><span class="n">dfmain</span>
     
     <span class="c1"># Y with subsidy for linear regresion model</span>
-    <span class="n">df.wth.subsidy</span> <span class="o">%&gt;%</span> <span class="nf">mutate</span><span class="p">(</span><span class="n">y_subsidy</span> <span class="o">=</span>
-                              <span class="nf">exp</span><span class="p">(</span><span class="nf">predict</span><span class="p">(</span><span class="n">res.linfe</span><span class="p">,</span>
-                                          <span class="p">(</span><span class="n">df.wth.subsidy</span> <span class="o">%&gt;%</span> 
-                                           <span class="nf">mutate</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">subsidy</span><span class="p">)))))</span>
+    <span class="n">df.hgt.adj</span> <span class="o">&lt;-</span> <span class="n">df.subsidy</span> <span class="o">%&gt;%</span> <span class="nf">mutate</span><span class="p">(</span><span class="o">!!</span><span class="p">(</span><span class="n">var.new.y.subsidy</span><span class="p">)</span> <span class="o">:=</span> 
+                                        <span class="nf">exp</span><span class="p">(</span><span class="nf">predict</span><span class="p">(</span><span class="n">res.linfe</span><span class="p">,</span> 
+                                                    <span class="p">(</span><span class="n">df.subsidy</span> <span class="o">%&gt;%</span> 
+                                                     <span class="nf">mutate</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">subsidy</span><span class="p">)))))</span>
+    
+    <span class="nf">return</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">dfmain</span><span class="o">=</span><span class="n">df.hgt.adj</span><span class="p">,</span>
+                <span class="n">ysubsidy</span><span class="o">=</span><span class="n">var.new.y.subsidy</span><span class="p">))</span>
 <span class="p">}</span>
 </pre></div>
 
@@ -13961,7 +13972,7 @@ Dataframes could bedifferent because some observations are dropped due to not ha
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[586]:</div>
+<div class="prompt input_prompt">In&nbsp;[43]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="n">subsidy.total.default.person</span> <span class="o">&lt;-</span> <span class="m">30</span>
@@ -13974,7 +13985,7 @@ Dataframes could bedifferent because some observations are dropped due to not ha
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[587]:</div>
+<div class="prompt input_prompt">In&nbsp;[44]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># These are the same as in: https://fanwangecon.github.io/HeightProfile/r/planer/paneloptigN.html</span>
@@ -13985,6 +13996,7 @@ Dataframes could bedifferent because some observations are dropped due to not ha
 <span class="n">subsidy.total.default.i4xy</span> <span class="o">&lt;-</span> <span class="n">subsidy.total.default.person</span><span class="o">*</span><span class="nf">sum</span><span class="p">(</span><span class="n">vec.subsidy.grpsize.i4xy</span><span class="p">)</span>
 <span class="c1"># lists of Inputs</span>
 <span class="n">df.default.i4xy</span> <span class="o">&lt;-</span> <span class="n">df.i4xy</span> 
+<span class="c1"># NOTE DO NOT INCLUDE in other.default: vec.subsidy.frac, that is set by optim </span>
 <span class="n">list.subsidy.y.params.other.default.i4xy</span> <span class="o">&lt;-</span> <span class="nf">list</span><span class="p">(</span><span class="n">df</span> <span class="o">=</span> <span class="n">df.default.i4xy</span><span class="p">,</span> 
                                             <span class="n">res.linfe</span> <span class="o">=</span> <span class="n">res.linfe.i4xy</span><span class="p">,</span>
                                             <span class="n">var.grp.idx</span> <span class="o">=</span> <span class="n">var.qjnt.grp.idx.i4xy</span><span class="p">,</span>
@@ -14011,7 +14023,7 @@ Dataframes could bedifferent because some observations are dropped due to not ha
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[588]:</div>
+<div class="prompt input_prompt">In&nbsp;[45]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Default Parameters for Estimation Set up</span>
@@ -14022,6 +14034,7 @@ Dataframes could bedifferent because some observations are dropped due to not ha
 <span class="n">df.default.h0</span> <span class="o">&lt;-</span> <span class="n">df.h0</span> <span class="o">%&gt;%</span> <span class="nf">filter</span><span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="n">t.filter.default.h0</span><span class="p">)</span>
 
 <span class="c1"># lists of Inputs</span>
+<span class="c1"># NOTE DO NOT INCLUDE in other.default: vec.subsidy.frac, that is set by optim </span>
 <span class="n">list.subsidy.y.params.other.default.h0</span> <span class="o">&lt;-</span> <span class="nf">list</span><span class="p">(</span><span class="n">df</span> <span class="o">=</span> <span class="n">df.default.h0</span><span class="p">,</span> 
                                                <span class="n">res.linfe</span> <span class="o">=</span> <span class="n">res.linfe.h0</span><span class="p">,</span>
                                                <span class="n">var.grp.idx</span> <span class="o">=</span> <span class="n">var.qjnt.grp.idx.h0</span><span class="p">,</span>
@@ -14049,7 +14062,7 @@ Dataframes could bedifferent because some observations are dropped due to not ha
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[589]:</div>
+<div class="prompt input_prompt">In&nbsp;[46]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Default Parameters for Estimation Set up</span>
@@ -14059,6 +14072,7 @@ Dataframes could bedifferent because some observations are dropped due to not ha
 <span class="n">subsidy.total.default.h0wlt</span> <span class="o">&lt;-</span> <span class="n">subsidy.total.default.person</span><span class="o">*</span><span class="nf">sum</span><span class="p">(</span><span class="n">vec.subsidy.grpsize.h0wlt</span><span class="p">)</span>
 
 <span class="n">df.default.h0wlt</span> <span class="o">&lt;-</span> <span class="n">df.h0wlt</span> <span class="o">%&gt;%</span> <span class="nf">filter</span><span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="n">t.filter.default.h0wlt</span><span class="p">)</span>
+<span class="c1"># NOTE DO NOT INCLUDE in other.default: vec.subsidy.frac, that is set by optim </span>
 <span class="n">list.subsidy.y.params.other.default.h0wlt</span> <span class="o">&lt;-</span> <span class="nf">list</span><span class="p">(</span><span class="n">df</span> <span class="o">=</span> <span class="n">df.default.h0wlt</span><span class="p">,</span> 
                                                   <span class="n">res.linfe</span> <span class="o">=</span> <span class="n">res.linfe.h0wlt</span><span class="p">,</span>
                                                   <span class="n">var.grp.idx</span> <span class="o">=</span> <span class="n">var.qjnt.grp.idx.h0wlt</span><span class="p">,</span>
@@ -14086,7 +14100,7 @@ Dataframes could bedifferent because some observations are dropped due to not ha
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[590]:</div>
+<div class="prompt input_prompt">In&nbsp;[47]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Overall Parameter vector</span>
@@ -14132,7 +14146,9 @@ x                0.50  0.50  0.50
 
 
 <div class="output_html rendered_html output_subarea ">
-<table>
+<dl>
+	<dt>$dfmain</dt>
+		<dd><table>
 <thead><tr><th scope=col>i</th><th scope=col>t</th><th scope=col>y</th><th scope=col>x</th><th scope=col>grp.idx.i4xy</th><th scope=col>subsidy_grp</th><th scope=col>subsidy</th><th scope=col>y_subsidy</th></tr></thead>
 <tbody>
 	<tr><td>4                </td><td>0                </td><td>48.4             </td><td>0.5              </td><td>1                </td><td>0.528,0.183,0.289</td><td>47.52            </td><td>94.32824         </td></tr>
@@ -14143,6 +14159,10 @@ x                0.50  0.50  0.50
 	<tr><td>15               </td><td>24               </td><td>85               </td><td>20.3             </td><td>3                </td><td>0.528,0.183,0.289</td><td>26.01            </td><td>92.74389         </td></tr>
 </tbody>
 </table>
+</dd>
+	<dt>$ysubsidy</dt>
+		<dd>'y_subsidy'</dd>
+</dl>
 
 </div>
 
@@ -14154,7 +14174,7 @@ x                0.50  0.50  0.50
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[591]:</div>
+<div class="prompt input_prompt">In&nbsp;[48]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="nf">options</span><span class="p">(</span><span class="n">repr.matrix.max.rows</span><span class="o">=</span><span class="m">5</span><span class="p">,</span> <span class="n">repr.matrix.max.cols</span><span class="o">=</span><span class="m">20</span><span class="p">)</span>
@@ -14201,7 +14221,9 @@ w                9.297  8.363
 
 
 <div class="output_html rendered_html output_subarea ">
-<table>
+<dl>
+	<dt>$dfmain</dt>
+		<dd><table>
 <thead><tr><th scope=col>i</th><th scope=col>t</th><th scope=col>y</th><th scope=col>x</th><th scope=col>h0</th><th scope=col>w</th><th scope=col>h0_Qs0e1n2</th><th scope=col>cebu.grp.idx.h0</th><th scope=col>subsidy_grp</th><th scope=col>subsidy</th><th scope=col>y_subsidy</th></tr></thead>
 <tbody>
 	<tr><td>2                        </td><td>24                       </td><td>79.2                     </td><td>14.1                     </td><td>49.7                     </td><td> 7.3                     </td><td>(49.4,54]; (2) of Qs0e1n2</td><td>2                        </td><td>0.5,0.5                  </td><td>31.03448                 </td><td>85.70456                 </td></tr>
@@ -14212,6 +14234,10 @@ w                9.297  8.363
 	<tr><td>60                         </td><td>24                         </td><td>79.2                       </td><td>6.9                        </td><td>49.4                       </td><td> 7.3                       </td><td>[44.2,49.4]; (1) of Qs0e1n2</td><td>1                          </td><td>0.5,0.5                    </td><td>29.03226                   </td><td>81.82674                   </td></tr>
 </tbody>
 </table>
+</dd>
+	<dt>$ysubsidy</dt>
+		<dd>'y_subsidy'</dd>
+</dl>
 
 </div>
 
@@ -14223,7 +14249,7 @@ w                9.297  8.363
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[592]:</div>
+<div class="prompt input_prompt">In&nbsp;[49]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="nf">options</span><span class="p">(</span><span class="n">repr.matrix.max.rows</span><span class="o">=</span><span class="m">5</span><span class="p">,</span> <span class="n">repr.matrix.max.cols</span><span class="o">=</span><span class="m">20</span><span class="p">)</span>
@@ -14270,7 +14296,9 @@ w                     1.711    3.187    1.652    3.119
 
 
 <div class="output_html rendered_html output_subarea ">
-<table>
+<dl>
+	<dt>$dfmain</dt>
+		<dd><table>
 <thead><tr><th scope=col>i</th><th scope=col>t</th><th scope=col>y</th><th scope=col>x</th><th scope=col>h0</th><th scope=col>w</th><th scope=col>h0_Qs0e1n2</th><th scope=col>w_Qs0e1n2</th><th scope=col>guat.grp.idx.h0wlt</th><th scope=col>subsidy_grp</th><th scope=col>subsidy</th><th scope=col>y_subsidy</th></tr></thead>
 <tbody>
 	<tr><td>1352                       </td><td>24                         </td><td>75.8                       </td><td>46.3                       </td><td>47.4                       </td><td>3.3                        </td><td>[40.6,49.9]; (1) of Qs0e1n2</td><td>(2.2,5.7]; (2) of Qs0e1n2  </td><td>2                          </td><td>0.25,0.25,0.25,0.25        </td><td>34.17722                   </td><td>77.36775                   </td></tr>
@@ -14281,6 +14309,10 @@ w                     1.711    3.187    1.652    3.119
 	<tr><td>2019                       </td><td>24                         </td><td>76.8                       </td><td>57.8                       </td><td>49.7                       </td><td>2.2                        </td><td>[40.6,49.9]; (1) of Qs0e1n2</td><td>[1,2.2]; (1) of Qs0e1n2    </td><td>1                          </td><td>0.25,0.25,0.25,0.25        </td><td>25.4717                    </td><td>73.5095                    </td></tr>
 </tbody>
 </table>
+</dd>
+	<dt>$ysubsidy</dt>
+		<dd>'y_subsidy'</dd>
+</dl>
 
 </div>
 
@@ -14300,7 +14332,7 @@ w                     1.711    3.187    1.652    3.119
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[593]:</div>
+<div class="prompt input_prompt">In&nbsp;[50]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="nf">options</span><span class="p">(</span><span class="n">warn</span><span class="o">=</span><span class="m">-1</span><span class="p">)</span> <span class="c1"># Suppress Warning Messages</span>
@@ -14327,7 +14359,7 @@ w                     1.711    3.187    1.652    3.119
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[594]:</div>
+<div class="prompt input_prompt">In&nbsp;[51]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># res.opti.test.i4xy</span>
@@ -14340,7 +14372,7 @@ w                     1.711    3.187    1.652    3.119
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[595]:</div>
+<div class="prompt input_prompt">In&nbsp;[52]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Display Test Results</span>
@@ -14427,7 +14459,7 @@ w                     1.711    3.187    1.652    3.119
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[596]:</div>
+<div class="prompt input_prompt">In&nbsp;[53]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Initialize</span>
@@ -14443,7 +14475,7 @@ w                     1.711    3.187    1.652    3.119
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[597]:</div>
+<div class="prompt input_prompt">In&nbsp;[54]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Call i4xy</span>
@@ -14488,16 +14520,6 @@ w                     1.711    3.187    1.652    3.119
 </table>
 
 </div>
-
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-
-
 
 </div>
 
@@ -14764,7 +14786,7 @@ AElFTkSuQmCC"
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[598]:</div>
+<div class="prompt input_prompt">In&nbsp;[55]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># test h0</span>
@@ -14829,26 +14851,6 @@ AElFTkSuQmCC"
 </table>
 
 </div>
-
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-
-
-
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-
-
 
 </div>
 
@@ -15448,7 +15450,7 @@ gCkwaAAAYMr/B/tuygZlsacFAAAAAElFTkSuQmCC"
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[599]:</div>
+<div class="prompt input_prompt">In&nbsp;[56]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># test h0wlt</span>
@@ -15530,26 +15532,6 @@ gCkwaAAAYMr/B/tuygZlsacFAAAAAElFTkSuQmCC"
 </table>
 
 </div>
-
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-
-
-
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-
-
 
 </div>
 
