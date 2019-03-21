@@ -48,12 +48,12 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 # 4. Optimization
 
-## 4.1 Planer's Problem
-1. [CES Objective Function](optimization/planer/ces/cesplanerobj.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planer/ces/cesplanerobj.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planer/ces/cesplanerobj.R) \|  [**html**](optimization/planer/ces/cesplanerobj.html) \| pdf
-  + Constant Elasticity of Substitution Planer Welfare Objective Function
+## 4.1 Planner's Problem
+1. [CES Objective Function](optimization/planner/ces/cesplannerobj.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planner/ces/cesplannerobj.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planner/ces/cesplannerobj.R) \|  [**html**](optimization/planner/ces/cesplannerobj.html) \| pdf
+  + Constant Elasticity of Substitution Planner Welfare Objective Function
   + **core**: *prod/mean/pow, logspace, geom_bar+identity+dodge*
-2. [CES Subsidy Optimization Over Panel Groups](optimization/planer/ces/cesoptimizer.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planer/ces/cesoptimizer.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planer/ces/cesoptimizer.R) \|  [**html**](optimization/planer/ces/cesoptimizer.html) \| pdf
-  + Constant Elasticity of Substitution Planer Welfare Subsidies Optimizer Over Quantile/Individual Groups
+2. [CES Subsidy Optimization Over Panel Groups](optimization/planner/ces/cesoptimizer.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planner/ces/cesoptimizer.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planner/ces/cesoptimizer.R) \|  [**html**](optimization/planner/ces/cesoptimizer.html) \| pdf
+  + Constant Elasticity of Substitution Planner Welfare Subsidies Optimizer Over Quantile/Individual Groups
   + **core**: *optim(x, obj, func.params), do.call(func_str, func.params); setNames+list+append*  
 
 ## 4.2 Optimization Support

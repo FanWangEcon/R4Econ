@@ -9,22 +9,22 @@ obj_planer <- function(x, param.ces, f.subsidy.y.str, list.subsidy.y.params.othe
   # 2. param.ces is the ces parameter, not that this parameter does not enter the f.subsidy.y.str function
   # 3. f.subsidy.y.str is the name of the estimation prediction function (Step 3) in string
   # 4. list.subsidy.y.params.other contains a list of parameters needed for f.subsidy.y.str in addition to the
-    
+
     # Input list
     # Convert from Estimation x to Actual Fraction between 0 and 1
     list.subsidy.y.params.maximand <- list(vec.subsidy.frac = f_frac_asymp_vec(x))
     list.subsidy.y.params <- append(list.subsidy.y.params.other, list.subsidy.y.params.maximand)
-    
+
     # Call Function
     list.df.y.subsidized <- do.call(f.subsidy.y.str, list.subsidy.y.params)
-    
+
     df.y.subsidized <- list.df.y.subsidized$dfmain
     var.y.subsidy <- list.df.y.subsidized$ysubsidy
-    
+
     # C:\Users\fan\R4Econ\optimization\planer\ces\cesplanerobj.R
     obj <- (-1)*f_planer_obj(vec.y=df.y.subsidized[[var.y.subsidy]], param.ces=param.ces)
-    
-    return(obj)    
+
+    return(obj)
 }
 
 
@@ -37,7 +37,7 @@ f_subsidy_vec <- function(df, var.grp.idx, subsidy.total, vec.subsidy.frac, vec.
                           review=FALSE, var.i='i', var.t='t',
                           var.new.subsidy ='subsidy',
                           var.new.subsidy.grp ='subsidy_grp') {
-    
+
     # var.grp.idx <- 'subsidy.grp'
     # subsidy_total <- 2
     # df.subsidy.frac <- c(0.1, 0.9)
@@ -101,7 +101,7 @@ optim_wrapper <- function(sca.subsidy.frac.init, param.ces, f.subsidy.y.str, lis
     list.vec.subsidy.grpsize <- setNames(list.subsidy.y.params.other$vec.subsidy.grpsize,
                                          paste0('par.frac.grpsize.v', 1:(sca.subsidy.lengthm1+1)))
     list.vec.frac.sub.lvl <- ((f_frac_asymp_vec(res.opti$par))/(list.subsidy.y.params.other$vec.subsidy.grpsize))
-    list.vec.frac.norm <- list.vec.frac.sub.lvl/min(list.vec.frac.sub.lvl)
+    list.vec.frac.norm <- list.vec.frac.sub.lvl/sum(list.vec.frac.sub.lvl)
     list.vec.subsidy.indi.lvl <- setNames(list.vec.frac.sub.lvl*list.subsidy.y.params.other$subsidy.total,
                                          paste0('par.frac.lvl.v', 1:(sca.subsidy.lengthm1+1)))
     list.vec.subsidy.grpsize.norm <- setNames(list.vec.frac.norm,
@@ -129,6 +129,7 @@ optim_wrapper <- function(sca.subsidy.frac.init, param.ces, f.subsidy.y.str, lis
 
 
 # Graphically
+# x-axis different CES parameters
 graphf.ces.opti.subsidy <- function(df.ces.opti, sca.subsidy.groups, vec.subsidy.grpsize,
                                     str.title, str.captions, geom_text_format='%.3f') {
     df.ces.opti %>%
@@ -146,6 +147,38 @@ graphf.ces.opti.subsidy <- function(df.ces.opti, sca.subsidy.groups, vec.subsidy
                               ,')\n0=Cobb-Douglas, 1=Perfect Substitutes, -Inf=Leontiff')),
                x = 'CES Parameters',
                y = 'Subsidies',
+               caption = str.captions) +
+        theme(axis.text.x = element_text(angle = 90, vjust=0.3, hjust = 1))
+}
+
+# Generate Graphs in plannerN2cessub:
+# subfigure for different CES Parameters
+# x-axis different subsidy levels
+graphf.ces.totsubsidy.opti.subsidy <- function(df.ces.subsidy.opti,
+                                               sca.subsidy.groups, vec.subsidy.grpsize,
+                                               str.title, str.captions,
+                                               facet_ncol = 2,
+                                               geom_text_format='%.3f') {
+  # df.opti.ces.subsidy.reed.h0 %>%
+  #    select(param.ces, subsidy.total, matches('par.frac.norm.v')) %>%
+  #    arrange(param.ces, subsidy.total)  %>%
+
+  df.ces.subsidy.opti %>%
+    gather(variable, value, -param.ces, -subsidy.total)  %>%
+        ggplot(aes(x=factor(subsidy.total), y=value,
+                   fill=variable,
+                   label=sprintf(geom_text_format, value))) +
+        geom_bar(stat = 'identity', position='dodge2') +
+        geom_text(size=3, hjust=0.5, vjust=0, angle=0,
+                  fontface = 'bold', color='black',
+                  position = position_dodge(width = 1)) +
+        facet_wrap( ~ param.ces, ncol = 2) +
+        labs(title = paste0(paste0(str.title, '\nOptimal Subsidy ',
+                                   sca.subsidy.groups,' Groups, n per group=(',
+                                   paste0(vec.subsidy.grpsize, collapse=',')
+                              ,')\n0=Cobb-Douglas, 1=Perfect Substitutes, -Inf=Leontiff')),
+               x = 'Total Subsidies',
+               y = 'Group Subsidies',
                caption = str.captions) +
         theme(axis.text.x = element_text(angle = 90, vjust=0.3, hjust = 1))
 }
