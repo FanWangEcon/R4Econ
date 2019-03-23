@@ -84,7 +84,7 @@ ff_summ_by_group_summ_one <- function(df, vars.group, var.numeric, str.stats.gro
     if (boo.overall.stats) {
         df.row.stats.all <- c(df.row.grp.stats, df.overall.stats)
         list.return <- append(list.return, list(df_overall_stats = df.overall.stats,
-                                                df_row_stats_all = df.row.stats.all))
+                                                df.row.stats.all = df.row.stats.all))
     }
 
     # Return
