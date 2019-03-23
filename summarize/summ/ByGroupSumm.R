@@ -1,4 +1,4 @@
-# By One Group Mean Sd and Count
+# By One Group Mean Sd and Count, there needs to be multiple variables that we summarize over in df that are not vars.group.by
 # https://fanwangecon.github.io/R4Econ/summarize/summ/ByGroupSumm.html
 # f.by.group.vars.mnsdobs(df.main.guat, vars.group.by=c('S.country', 'svymthRound'))
 f.by.group.vars.mnsdobs <- function(df,
