@@ -26,6 +26,26 @@ obj_planer <- function(x, param.ces, f.subsidy.y.str, list.subsidy.y.params.othe
 
 }
 
+# invoked obj_planer to generate full prediction dataframe with summary statistics
+obj_planer_predict <- function(x, param.ces, f.subsidy.y.str, list.subsidy.y.params.other) {
+
+    # Add Statistics for Outcome Variable With Subsidies
+    # Generate Full Data Prediction frame
+    list.df.y.subsidized <- obj_planer(x, param.ces, f.subsidy.y.str, list.subsidy.y.params.other, boo.out.y = TRUE)
+
+    # FROM: summarize\summ\ByGroupSummOne.R
+    # Summary statistics
+    list.group.stats <- ff_summ_by_group_summ_one(list.df.y.subsidized$dfmain,
+                                                  vars.group = list.subsidy.y.params.other$var.grp.idx,
+                                                  var.numeric = list.df.y.subsidized$ysubsidy,
+                                                  str.stats.specify = c('mean', 'sd', 'min'),
+                                                  boo.overall.stats = TRUE)
+
+    list.optim.predict <- append(list.df.y.subsidized, list.group.stats)
+
+    # Return
+    return(list.optim.predict)
+}
 
 # Subsidy Function
 # var.grp.idx: name of index group variable
@@ -121,6 +141,11 @@ optim_wrapper <- function(sca.subsidy.frac.init, param.ces, f.subsidy.y.str, lis
     list.esti.res <- append(list.esti.res, list.vec.subsidy.grpsize)
     list.esti.res <- append(list.esti.res, list.vec.subsidy.indi.lvl)
     list.esti.res <- append(list.esti.res, list.vec.subsidy.grpsize.norm)
+
+    # Add Statistics for Outcome Variable With Subsidies
+    # FROM: summarize\summ\ByGroupSummOne.R
+    list.optim.predict <- obj_planer_predict(res.opti$par, param.ces, f.subsidy.y.str, list.subsidy.y.params.other)
+    list.esti.res <- append(list.esti.res, list.optim.predict$df_row_stats_all)
 
     # Return
     return(list.esti.res)

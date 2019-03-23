@@ -1,5 +1,6 @@
-# Single Variable Group Statistics
-ff_summ_by_group_summ_one <- function(df, vars.group, var.numeric, str.stats.group = 'main', str.stats.specify = NULL){
+# Single Variable Group Statistics (also generate overall statistics)
+ff_summ_by_group_summ_one <- function(df, vars.group, var.numeric, str.stats.group = 'main',
+                                      str.stats.specify = NULL, boo.overall.stats = TRUE){
 
     # List of statistics
     # https://rdrr.io/cran/dplyr/man/summarise.html
@@ -21,11 +22,23 @@ ff_summ_by_group_summ_one <- function(df, vars.group, var.numeric, str.stats.gro
         strs.all <- str.stats.specify
     }
 
+    # Start Transform
+    df <- df %>% drop_na() %>% mutate(!!(var.numeric) := as.numeric(!!sym(var.numeric)))
+
+    # Overall Statistics
+    if (boo.overall.stats) {
+        df.overall.stats <- df %>% summarize_at(vars(var.numeric), funs(!!!strs.all))
+        if (length(strs.all) == 1) {
+            # give it a name, otherwise if only one stat, name of stat not saved
+            df.overall.stats <- df.overall.stats %>% rename(!!strs.all := !!sym(var.numeric))
+        }
+        names(df.overall.stats) <- paste0(var.numeric, '.', names(df.overall.stats))
+    }
+
     # Group Sort
     df.select <- df %>%
-                    drop_na() %>%
-                    group_by(!!!syms(vars.group)) %>%
-                    arrange(!!!syms(c(vars.group, var.numeric)))
+                  group_by(!!!syms(vars.group)) %>%
+                  arrange(!!!syms(c(vars.group, var.numeric)))
 
     # Table of Statistics
     df.table.grp.stats <- df.select %>% summarize_at(vars(var.numeric), funs(!!!strs.all))
@@ -58,7 +71,6 @@ ff_summ_by_group_summ_one <- function(df, vars.group, var.numeric, str.stats.gro
                 gather(variable, value, -one_of(str.vars.group.combine))  %>%
                 unite(str.vars.group.combine, c(str.vars.group.combine, 'variable')) %>%
                 spread(str.vars.group.combine, value)
-
     }
 
     # Clean up name strings
@@ -66,6 +78,16 @@ ff_summ_by_group_summ_one <- function(df, vars.group, var.numeric, str.stats.gro
     names(df.row.grp.stats) <- gsub(x = names(df.row.grp.stats),pattern = "_", replacement = "\\.")
 
     # Return
-    return(list(df_table_grp_stats = df.table.grp.stats,
-                df_row_grp_stats = df.row.grp.stats))
+    list.return <- list(df_table_grp_stats = df.table.grp.stats, df_row_grp_stats = df.row.grp.stats)
+
+    # Overall Statistics, without grouping
+    if (boo.overall.stats) {
+        df.row.stats.all <- c(df.row.grp.stats, df.overall.stats)
+        list.return <- append(list.return, list(df_overall_stats = df.overall.stats,
+                                                df_row_stats_all = df.row.stats.all))
+    }
+
+    # Return
+    return(list.return)
+
 }

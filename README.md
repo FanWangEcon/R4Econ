@@ -27,7 +27,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
     + All Variables: N + NAcount + Mean + SD + Percentiles
     + **core**: *summarise_if(is.numeric) + gather + separate + spread  + select*
 2. [By Groups, One Variable All Statistics](summarize/summ/ByGroupSummOne.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupSummOne.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupSummOne.R) \| [**html**](summarize/summ/ByGroupSummOne.html) \| pdf
-    + By Multiple Groups, all possible statistics as matrix or wide row, pick stats as list,
+    + Pick stats, overall, and by multiple groups, stats as matrix or wide row with name=(ctsvar + catevar + catelabel)
     + **core**: *group_by + summarize_at(, funs()) + rename(!!var := !!sym(var)) + mutate(!!var := paste0(var,'str',!!!syms(vars))) + gather + unite + spread(varcates, value)*
 3. [By Groups, Multiple Variables Mean + SD + N](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupSummOne.R): ipynb \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupSummOne.R) \| html \| pdf
     + By Groups, All Numeric Variables Mean + SD + N
