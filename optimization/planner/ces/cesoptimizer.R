@@ -3,12 +3,7 @@
 # source('C:/Users/fan/R4Econ/optimization/planer/ces/cesplanerobj.R')
 
 # Single Parameter Optimization Functions
-obj_planer <- function(x, param.ces, f.subsidy.y.str, list.subsidy.y.params.other) {
-
-  # 1. x is the unconstrained transformed fraction from (optimization/support/fraction.R)
-  # 2. param.ces is the ces parameter, not that this parameter does not enter the f.subsidy.y.str function
-  # 3. f.subsidy.y.str is the name of the estimation prediction function (Step 3) in string
-  # 4. list.subsidy.y.params.other contains a list of parameters needed for f.subsidy.y.str in addition to the
+obj_planer <- function(x, param.ces, f.subsidy.y.str, list.subsidy.y.params.other, boo.out.y = FALSE) {
 
     # Input list
     # Convert from Estimation x to Actual Fraction between 0 and 1
@@ -22,9 +17,13 @@ obj_planer <- function(x, param.ces, f.subsidy.y.str, list.subsidy.y.params.othe
     var.y.subsidy <- list.df.y.subsidized$ysubsidy
 
     # C:\Users\fan\R4Econ\optimization\planer\ces\cesplanerobj.R
-    obj <- (-1)*f_planer_obj(vec.y=df.y.subsidized[[var.y.subsidy]], param.ces=param.ces)
+    if (boo.out.y) {
+        return(list.df.y.subsidized)
+    } else {
+        obj <- (-1)*f_planer_obj(vec.y=df.y.subsidized[[var.y.subsidy]], param.ces=param.ces)
+        return(obj)
+    }
 
-    return(obj)
 }
 
 

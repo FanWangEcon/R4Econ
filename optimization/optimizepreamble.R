@@ -1,6 +1,6 @@
 # Own Library
-setwd("C:/Users/fan/R4Econ/optimization/planer/ces/")
-source("cesplanerobj.R")
+setwd("C:/Users/fan/R4Econ/optimization/planner/ces/")
+source("cesplannerobj.R")
 source("cesoptimizer.R")
 
 # Own Library
