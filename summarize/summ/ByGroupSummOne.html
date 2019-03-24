@@ -11792,7 +11792,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[49]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Single Variable Group Statistics (also generate overall statistics)</span>
@@ -11881,7 +11881,7 @@ ff_summ_by_group_summ_one <span class="o">&lt;-</span> <span class="kr">function
     <span class="kr">if</span> <span class="p">(</span>boo.overall.stats<span class="p">)</span> <span class="p">{</span>
         df.row.stats.all <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span>df.row.grp.stats<span class="p">,</span> df.overall.stats<span class="p">)</span>
         list.return <span class="o">&lt;-</span> <span class="kp">append</span><span class="p">(</span>list.return<span class="p">,</span> <span class="kt">list</span><span class="p">(</span>df_overall_stats <span class="o">=</span> df.overall.stats<span class="p">,</span>
-                                                df.row.stats.all <span class="o">=</span> df.row.stats.all<span class="p">))</span>
+                                                df_row_stats_all <span class="o">=</span> df.row.stats.all<span class="p">))</span>
     <span class="p">}</span>
 
     <span class="c1"># Return</span>
@@ -11906,7 +11906,7 @@ ff_summ_by_group_summ_one <span class="o">&lt;-</span> <span class="kr">function
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[50]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Library</span>
@@ -11931,7 +11931,15 @@ df <span class="o">&lt;-</span> read_csv<span class="p">(</span><span class="s">
 
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>Parsed with column specification:
+<pre>-- Attaching packages --------------------------------------- tidyverse 1.2.1 --
+v ggplot2 3.1.0     v purrr   0.2.5
+v tibble  1.4.2     v dplyr   0.7.8
+v tidyr   0.8.2     v stringr 1.3.1
+v readr   1.2.1     v forcats 0.3.0
+-- Conflicts ------------------------------------------ tidyverse_conflicts() --
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()
+Parsed with column specification:
 cols(
   S.country = col_character(),
   vil.id = col_double(),
@@ -11976,7 +11984,7 @@ cols(
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[51]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>vars.group <span class="o">&lt;-</span> <span class="s">&#39;sex&#39;</span>
@@ -11990,7 +11998,7 @@ var.numeric <span class="o">&lt;-</span> <span class="s">&#39;hgt&#39;</span>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[52]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>df.select <span class="o">&lt;-</span> df <span class="o">%&gt;%</span> select<span class="p">(</span>one_of<span class="p">(</span>vars.group<span class="p">,</span> var.numeric<span class="p">))</span> <span class="o">%&gt;%</span> drop_na<span class="p">()</span>
@@ -12011,7 +12019,7 @@ var.numeric <span class="o">&lt;-</span> <span class="s">&#39;hgt&#39;</span>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[53]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Single Variable Group Statistics</span>
@@ -12059,7 +12067,7 @@ ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</spa
 </tbody>
 </table>
 </dd>
-	<dt>$df.row.stats.all</dt>
+	<dt>$df_row_stats_all</dt>
 		<dd><dl>
 	<dt>$hgt.sex.gFemale.max</dt>
 		<dd>170.6</dd>
@@ -12107,7 +12115,7 @@ ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</spa
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[54]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</span> vars.group <span class="o">=</span> vars.group<span class="p">,</span> var.numeric <span class="o">=</span> var.numeric<span class="p">,</span> str.stats.specify <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;mean&#39;</span><span class="p">,</span> <span class="s">&#39;sd&#39;</span><span class="p">))</span>
@@ -12154,7 +12162,7 @@ ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</spa
 </tbody>
 </table>
 </dd>
-	<dt>$df.row.stats.all</dt>
+	<dt>$df_row_stats_all</dt>
 		<dd><dl>
 	<dt>$hgt.sex.gFemale.mean</dt>
 		<dd>82.8119830899308</dd>
@@ -12190,7 +12198,7 @@ ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</spa
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[55]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</span> vars.group <span class="o">=</span> vars.group<span class="p">,</span> var.numeric <span class="o">=</span> var.numeric<span class="p">,</span> str.stats.specify <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;mean&#39;</span><span class="p">))</span>
@@ -12237,7 +12245,7 @@ ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</spa
 </tbody>
 </table>
 </dd>
-	<dt>$df.row.stats.all</dt>
+	<dt>$df_row_stats_all</dt>
 		<dd><dl>
 	<dt>$hgt.sex.gFemale.mean</dt>
 		<dd>82.8119830899308</dd>
@@ -12276,7 +12284,7 @@ ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</spa
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[56]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>vars.group <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;S.country&#39;</span><span class="p">,</span> <span class="s">&#39;sex&#39;</span><span class="p">)</span>
@@ -12290,7 +12298,7 @@ var.numeric <span class="o">&lt;-</span> <span class="s">&#39;hgt&#39;</span>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[57]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>df.select <span class="o">&lt;-</span> df <span class="o">%&gt;%</span> select<span class="p">(</span>one_of<span class="p">(</span>vars.group<span class="p">,</span> var.numeric<span class="p">))</span> <span class="o">%&gt;%</span> drop_na<span class="p">()</span>
@@ -12311,7 +12319,7 @@ var.numeric <span class="o">&lt;-</span> <span class="s">&#39;hgt&#39;</span>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[58]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</span> vars.group <span class="o">=</span> vars.group<span class="p">,</span> var.numeric <span class="o">=</span> var.numeric<span class="p">,</span> str.stats.group <span class="o">=</span> <span class="s">&#39;main&#39;</span><span class="p">)</span>
@@ -12360,7 +12368,7 @@ var.numeric <span class="o">&lt;-</span> <span class="s">&#39;hgt&#39;</span>
 </tbody>
 </table>
 </dd>
-	<dt>$df.row.stats.all</dt>
+	<dt>$df_row_stats_all</dt>
 		<dd><dl>
 	<dt>$hgt.S.country.sex.Cebu.Female.max</dt>
 		<dd>170.6</dd>
@@ -12424,7 +12432,7 @@ var.numeric <span class="o">&lt;-</span> <span class="s">&#39;hgt&#39;</span>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[59]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</span> vars.group <span class="o">=</span> vars.group<span class="p">,</span> var.numeric <span class="o">=</span> var.numeric<span class="p">,</span> str.stats.specify <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;mean&#39;</span><span class="p">,</span> <span class="s">&#39;sd&#39;</span><span class="p">))</span>
@@ -12473,7 +12481,7 @@ var.numeric <span class="o">&lt;-</span> <span class="s">&#39;hgt&#39;</span>
 </tbody>
 </table>
 </dd>
-	<dt>$df.row.stats.all</dt>
+	<dt>$df_row_stats_all</dt>
 		<dd><dl>
 	<dt>$hgt.S.country.sex.Cebu.Female.mean</dt>
 		<dd>84.613260654113</dd>
@@ -12517,7 +12525,7 @@ var.numeric <span class="o">&lt;-</span> <span class="s">&#39;hgt&#39;</span>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[60]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</span> vars.group <span class="o">=</span> vars.group<span class="p">,</span> var.numeric <span class="o">=</span> var.numeric<span class="p">,</span> str.stats.specify <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;mean&#39;</span><span class="p">))</span>
@@ -12566,7 +12574,7 @@ var.numeric <span class="o">&lt;-</span> <span class="s">&#39;hgt&#39;</span>
 </tbody>
 </table>
 </dd>
-	<dt>$df.row.stats.all</dt>
+	<dt>$df_row_stats_all</dt>
 		<dd><dl>
 	<dt>$hgt.S.country.sex.Cebu.Female.mean</dt>
 		<dd>84.613260654113</dd>

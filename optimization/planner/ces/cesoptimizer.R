@@ -43,6 +43,7 @@ obj_planer_predict <- function(x, param.ces, f.subsidy.y.str, list.subsidy.y.par
 
     list.optim.predict <- append(list.df.y.subsidized, list.group.stats)
 
+
     # Return
     return(list.optim.predict)
 }
@@ -145,8 +146,9 @@ optim_wrapper <- function(sca.subsidy.frac.init, param.ces, f.subsidy.y.str, lis
     # Add Statistics for Outcome Variable With Subsidies
     # FROM: summarize\summ\ByGroupSummOne.R
     list.optim.predict <- obj_planer_predict(res.opti$par, param.ces, f.subsidy.y.str, list.subsidy.y.params.other)
-    list.esti.res <- append(list.esti.res, list.optim.predict$df_row_stats_all)
 
+    list.esti.res <- append(list.esti.res, list.optim.predict$df_row_stats_all)
+    
     # Return
     return(list.esti.res)
 }
