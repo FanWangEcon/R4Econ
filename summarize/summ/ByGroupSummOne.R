@@ -1,6 +1,14 @@
+# Df should only contain vars.group and var.numeric data
 # Single Variable Group Statistics (also generate overall statistics)
+# Summarize
 ff_summ_by_group_summ_one <- function(df, vars.group, var.numeric, str.stats.group = 'main',
                                       str.stats.specify = NULL, boo.overall.stats = TRUE){
+    # EXAMPLE:
+    # list.summ.stas <- ff_summ_by_group_summ_one(df %>% select(S.country, svymthRound, hgt.rfrom0.log),
+    #                                             vars.group = c('S.country', 'svymthRound'),
+    #                                             var.numeric = 'hgt.rfrom0.log',
+    #                                             str.stats.group = 'all', boo.overall.stats = TRUE)
+    # list.summ.stas$df_table_grp_stats
 
     # List of statistics
     # https://rdrr.io/cran/dplyr/man/summarise.html
