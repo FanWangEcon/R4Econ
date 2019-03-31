@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>ByGroupSummOne</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>decompose</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 <style type="text/css">
@@ -11776,9 +11776,11 @@ div#notebook {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Back to <strong><a href="https://fanwangecon.github.io/">Fan</a></strong>'s R4Econ Homepage <strong><a href="https://fanwangecon.github.io/R4Econ/">Table of Content</a></strong></p>
-<h1 id="Summary-One-Variable-by-Groups">Summary One Variable by Groups<a class="anchor-link" href="#Summary-One-Variable-by-Groups">&#182;</a></h1><p>There is a categorical variable (based on one or the interaction of multiple variables), there is a continuous variable, obtain statistics for the continuous variable conditional on the categorical variable, but also unconditionally.</p>
-<p>Store results in a matrix, but also flatten results wide to row with appropriate keys/variable-names for all group statistics.</p>
-<p>Pick which statistics to be included in final wide row</p>
+<h1 id="Fraction-of-Variation-Explained-by-Right-Hand-Side-Regression-Terms">Fraction of Variation Explained by Right Hand Side Regression Terms<a class="anchor-link" href="#Fraction-of-Variation-Explained-by-Right-Hand-Side-Regression-Terms">&#182;</a></h1><p>One runs a number of regressions. With different outcomes, and various right hand side variables.</p>
+<p>What is the remaining variation in the left hand side variable if right hand side variable one by one is set to the average of the observed values.</p>
+<p>Dependency: C:\Users\fan\R4Econ\linreg\ivreg\ivregdfrow.R</p>
+<p>The code below does not work with categorical variables (except for dummies).</p>
+<p>Dummy variable inputs need to be converted to zero/one first.</p>
 
 </div>
 </div>
@@ -11793,101 +11795,88 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[151]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span><span class="c1"># Single Variable Group Statistics (also generate overall statistics)</span>
-ff_summ_by_group_summ_one <span class="o">&lt;-</span> <span class="kr">function</span><span class="p">(</span>df<span class="p">,</span> vars.group<span class="p">,</span> var.numeric<span class="p">,</span> str.stats.group <span class="o">=</span> <span class="s">&#39;main&#39;</span><span class="p">,</span>
-                                      str.stats.specify <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> boo.overall.stats <span class="o">=</span> <span class="kc">TRUE</span><span class="p">){</span>
+<div class=" highlight hl-r"><pre><span></span>ff_lr_decompose <span class="o">&lt;-</span> <span class="kr">function</span><span class="p">(</span>df<span class="p">,</span> vars.y<span class="p">,</span> vars.x<span class="p">,</span> vars.c<span class="p">,</span> vars.z<span class="p">,</span> vars.other.keep<span class="p">,</span>
+                            list.vars.tomean<span class="p">,</span> list.vars.tomean.name.suffix<span class="p">,</span>
+                            graph<span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> graph.nrow<span class="o">=</span><span class="m">2</span><span class="p">)</span> <span class="p">{</span>
 
-    <span class="c1"># List of statistics</span>
-    <span class="c1"># https://rdrr.io/cran/dplyr/man/summarise.html</span>
-    strs.center <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;mean&#39;</span><span class="p">,</span> <span class="s">&#39;median&#39;</span><span class="p">)</span>
-    strs.spread <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;sd&#39;</span><span class="p">,</span> <span class="s">&#39;IQR&#39;</span><span class="p">,</span> <span class="s">&#39;mad&#39;</span><span class="p">)</span>
-    strs.range <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;min&#39;</span><span class="p">,</span> <span class="s">&#39;max&#39;</span><span class="p">)</span>
-    strs.pos <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;first&#39;</span><span class="p">,</span> <span class="s">&#39;last&#39;</span><span class="p">)</span>
-    strs.count <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;n_distinct&#39;</span><span class="p">)</span>
+    vars.xc <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span>vars.x<span class="p">,</span> vars.c<span class="p">)</span>
 
-    <span class="c1"># Grouping of Statistics</span>
-    <span class="kr">if</span> <span class="p">(</span><span class="kp">missing</span><span class="p">(</span>str.stats.specify<span class="p">))</span> <span class="p">{</span>
-        <span class="kr">if</span> <span class="p">(</span>str.stats.group <span class="o">==</span> <span class="s">&#39;main&#39;</span><span class="p">)</span> <span class="p">{</span>
-            strs.all <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;mean&#39;</span><span class="p">,</span> <span class="s">&#39;min&#39;</span><span class="p">,</span> <span class="s">&#39;max&#39;</span><span class="p">,</span> <span class="s">&#39;sd&#39;</span><span class="p">)</span>
-        <span class="p">}</span>
-        <span class="kr">if</span> <span class="p">(</span>str.stats.group <span class="o">==</span> <span class="s">&#39;all&#39;</span><span class="p">)</span> <span class="p">{</span>
-            strs.all <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span>strs.center<span class="p">,</span> strs.spread<span class="p">,</span> strs.range<span class="p">,</span> strs.pos<span class="p">,</span> strs.count<span class="p">)</span>
-        <span class="p">}</span>
-    <span class="p">}</span> <span class="kr">else</span> <span class="p">{</span>
-        strs.all <span class="o">&lt;-</span> str.stats.specify
+    <span class="c1"># Regressions</span>
+    <span class="c1"># regf.iv from C:\Users\fan\R4Econ\linreg\ivreg\ivregdfrow.R</span>
+    df.reg.out <span class="o">&lt;-</span> as_tibble<span class="p">(</span>bind_rows<span class="p">(</span><span class="kp">lapply</span><span class="p">(</span>vars.y<span class="p">,</span> regf.iv<span class="p">,</span>
+                                             vars.x<span class="o">=</span>vars.x<span class="p">,</span> vars.c<span class="o">=</span>vars.c<span class="p">,</span> vars.z<span class="o">=</span>vars.z<span class="p">,</span> df<span class="o">=</span>df<span class="p">)))</span>
+
+    <span class="c1"># Select Variables</span>
+    str.esti.suffix <span class="o">&lt;-</span> <span class="s">&#39;_Estimate&#39;</span>
+    arr.esti.name <span class="o">&lt;-</span> <span class="kp">paste0</span><span class="p">(</span>vars.xc<span class="p">,</span> str.esti.suffix<span class="p">)</span>
+    str.outcome.name <span class="o">&lt;-</span> <span class="s">&#39;vars_var.y&#39;</span>
+    arr.columns2select <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span>arr.esti.name<span class="p">,</span> str.outcome.name<span class="p">)</span>
+    <span class="c1"># arr.columns2select</span>
+
+    <span class="c1"># Generate dataframe for coefficients</span>
+    df.coef <span class="o">&lt;-</span> df.reg.out<span class="p">[,</span><span class="kt">c</span><span class="p">(</span>arr.columns2select<span class="p">)]</span> <span class="o">%&gt;%</span> mutate_at<span class="p">(</span>vars<span class="p">(</span>arr.esti.name<span class="p">),</span> <span class="kp">as.numeric</span><span class="p">)</span> <span class="o">%&gt;%</span> column_to_rownames<span class="p">(</span>str.outcome.name<span class="p">)</span>
+    <span class="c1"># df.coef</span>
+    <span class="c1"># str(df.coef)</span>
+
+    <span class="c1"># Decomposition Step 1: gather</span>
+    df.decompose <span class="o">&lt;-</span> df <span class="o">%&gt;%</span>
+                            filter<span class="p">(</span>svymthRound <span class="o">%in%</span> <span class="kt">c</span><span class="p">(</span><span class="m">12</span><span class="p">,</span> <span class="m">18</span><span class="p">,</span> <span class="m">24</span><span class="p">))</span> <span class="o">%&gt;%</span>
+                            select<span class="p">(</span>one_of<span class="p">(</span><span class="kt">c</span><span class="p">(</span>vars.other.keep<span class="p">,</span> vars.xc<span class="p">,</span> vars.y<span class="p">)))</span> <span class="o">%&gt;%</span>
+                            drop_na<span class="p">()</span> <span class="o">%&gt;%</span>
+                            gather<span class="p">(</span>variable<span class="p">,</span> value<span class="p">,</span> <span class="o">-</span>one_of<span class="p">(</span><span class="kt">c</span><span class="p">(</span>vars.other.keep<span class="p">,</span> vars.xc<span class="p">)))</span>
+
+    <span class="c1"># Decomposition Step 2: mutate_at(vars, funs(mean = mean(.)))</span>
+    <span class="c1"># the xc averaging could have taken place earlier, no difference in mean across variables</span>
+    df.decompose <span class="o">&lt;-</span> df.decompose <span class="o">%&gt;%</span>
+                          group_by<span class="p">(</span>variable<span class="p">)</span> <span class="o">%&gt;%</span>
+                          mutate_at<span class="p">(</span>vars<span class="p">(</span><span class="kt">c</span><span class="p">(</span>vars.xc<span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">)),</span> funs<span class="p">(</span>mean <span class="o">=</span> <span class="kp">mean</span><span class="p">(</span><span class="m">.</span><span class="p">)))</span> <span class="o">%&gt;%</span>
+                          ungroup<span class="p">()</span>
+
+    <span class="c1"># Decomposition Step 3 With Loop</span>
+    <span class="kr">for</span> <span class="p">(</span>i <span class="kr">in</span> <span class="m">1</span><span class="o">:</span><span class="kp">length</span><span class="p">(</span>list.vars.tomean<span class="p">))</span> <span class="p">{</span>
+        var.decomp.cur <span class="o">&lt;-</span> <span class="p">(</span><span class="kp">paste0</span><span class="p">(</span><span class="s">&#39;value&#39;</span><span class="p">,</span> list.vars.tomean.name.suffix<span class="p">[[</span>i<span class="p">]]))</span>
+        vars.tomean <span class="o">&lt;-</span> list.vars.tomean<span class="p">[[</span>i<span class="p">]]</span>
+        var.decomp.cur
+        df.decompose <span class="o">&lt;-</span> df.decompose <span class="o">%&gt;%</span> mutate<span class="p">((</span><span class="o">!!</span>var.decomp.cur<span class="p">)</span> <span class="o">:=</span> ff_lr_decompose_valadj<span class="p">(</span><span class="m">.</span><span class="p">,</span> df.coef<span class="p">,</span> vars.tomean<span class="p">,</span> str.esti.suffix<span class="p">))</span>
     <span class="p">}</span>
 
-    <span class="c1"># Start Transform</span>
-    df <span class="o">&lt;-</span> df <span class="o">%&gt;%</span> drop_na<span class="p">()</span> <span class="o">%&gt;%</span> mutate<span class="p">(</span><span class="o">!!</span><span class="p">(</span>var.numeric<span class="p">)</span> <span class="o">:=</span> <span class="kp">as.numeric</span><span class="p">(</span><span class="o">!!</span>sym<span class="p">(</span>var.numeric<span class="p">)))</span>
+    <span class="c1"># Additional Statistics</span>
+    df.decompose.var.frac <span class="o">&lt;-</span> df.decompose <span class="o">%&gt;%</span>
+            select<span class="p">(</span>variable<span class="p">,</span> contains<span class="p">(</span><span class="s">&#39;value&#39;</span><span class="p">))</span> <span class="o">%&gt;%</span>
+            group_by<span class="p">(</span>variable<span class="p">)</span> <span class="o">%&gt;%</span>
+            summarize_all<span class="p">(</span>funs<span class="p">(</span>mean <span class="o">=</span> <span class="kp">mean</span><span class="p">,</span> var <span class="o">=</span> var<span class="p">))</span> <span class="o">%&gt;%</span>
+            select<span class="p">(</span>matches<span class="p">(</span><span class="s">&#39;value&#39;</span><span class="p">))</span> <span class="o">%&gt;%</span> select<span class="p">(</span>ends_with<span class="p">(</span><span class="s">&quot;_var&quot;</span><span class="p">))</span> <span class="o">%&gt;%</span>
+            mutate_if<span class="p">(</span><span class="kp">is.numeric</span><span class="p">,</span> funs<span class="p">(</span> frac <span class="o">=</span> <span class="p">(</span><span class="m">.</span><span class="o">/</span>value_var<span class="p">)))</span> <span class="o">%&gt;%</span>
+            mutate_if<span class="p">(</span><span class="kp">is.numeric</span><span class="p">,</span> <span class="kp">round</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span>
 
-    <span class="c1"># Overall Statistics</span>
-    <span class="kr">if</span> <span class="p">(</span>boo.overall.stats<span class="p">)</span> <span class="p">{</span>
-        df.overall.stats <span class="o">&lt;-</span> df <span class="o">%&gt;%</span> summarize_at<span class="p">(</span>vars<span class="p">(</span>var.numeric<span class="p">),</span> funs<span class="p">(</span><span class="o">!!!</span>strs.all<span class="p">))</span>
-        <span class="kr">if</span> <span class="p">(</span><span class="kp">length</span><span class="p">(</span>strs.all<span class="p">)</span> <span class="o">==</span> <span class="m">1</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1"># give it a name, otherwise if only one stat, name of stat not saved</span>
-            df.overall.stats <span class="o">&lt;-</span> df.overall.stats <span class="o">%&gt;%</span> rename<span class="p">(</span><span class="o">!!</span>strs.all <span class="o">:=</span> <span class="o">!!</span>sym<span class="p">(</span>var.numeric<span class="p">))</span>
-        <span class="p">}</span>
-        <span class="kp">names</span><span class="p">(</span>df.overall.stats<span class="p">)</span> <span class="o">&lt;-</span> <span class="kp">paste0</span><span class="p">(</span>var.numeric<span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="kp">names</span><span class="p">(</span>df.overall.stats<span class="p">))</span>
-    <span class="p">}</span>
-
-    <span class="c1"># Group Sort</span>
-    df.select <span class="o">&lt;-</span> df <span class="o">%&gt;%</span>
-                  group_by<span class="p">(</span><span class="o">!!!</span>syms<span class="p">(</span>vars.group<span class="p">))</span> <span class="o">%&gt;%</span>
-                  arrange<span class="p">(</span><span class="o">!!!</span>syms<span class="p">(</span><span class="kt">c</span><span class="p">(</span>vars.group<span class="p">,</span> var.numeric<span class="p">)))</span>
-
-    <span class="c1"># Table of Statistics</span>
-    df.table.grp.stats <span class="o">&lt;-</span> df.select <span class="o">%&gt;%</span> summarize_at<span class="p">(</span>vars<span class="p">(</span>var.numeric<span class="p">),</span> funs<span class="p">(</span><span class="o">!!!</span>strs.all<span class="p">))</span>
-
-    <span class="c1"># Add Stat Name</span>
-    <span class="kr">if</span> <span class="p">(</span><span class="kp">length</span><span class="p">(</span>strs.all<span class="p">)</span> <span class="o">==</span> <span class="m">1</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1"># give it a name, otherwise if only one stat, name of stat not saved</span>
-        df.table.grp.stats <span class="o">&lt;-</span> df.table.grp.stats <span class="o">%&gt;%</span> rename<span class="p">(</span><span class="o">!!</span>strs.all <span class="o">:=</span> <span class="o">!!</span>sym<span class="p">(</span>var.numeric<span class="p">))</span>
-    <span class="p">}</span>
-
-
-    <span class="c1"># Row of Statistics</span>
-    str.vars.group.combine <span class="o">&lt;-</span> <span class="kp">paste0</span><span class="p">(</span>vars.group<span class="p">,</span> collapse<span class="o">=</span><span class="s">&#39;_&#39;</span><span class="p">)</span>
-    <span class="kr">if</span> <span class="p">(</span><span class="kp">length</span><span class="p">(</span>vars.group<span class="p">)</span> <span class="o">==</span> <span class="m">1</span><span class="p">)</span> <span class="p">{</span>
-        df.row.grp.stats <span class="o">&lt;-</span> df.table.grp.stats <span class="o">%&gt;%</span>
-                mutate<span class="p">(</span><span class="o">!!</span><span class="p">(</span>str.vars.group.combine<span class="p">)</span> <span class="o">:=</span> <span class="kp">paste0</span><span class="p">(</span>var.numeric<span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">,</span>
-                                               vars.group<span class="p">,</span> <span class="s">&#39;.g&#39;</span><span class="p">,</span>
-                                               <span class="p">(</span><span class="o">!!!</span>syms<span class="p">(</span>vars.group<span class="p">))))</span> <span class="o">%&gt;%</span>
-                gather<span class="p">(</span>variable<span class="p">,</span> value<span class="p">,</span> <span class="o">-</span>one_of<span class="p">(</span>vars.group<span class="p">))</span> <span class="o">%&gt;%</span>
-                unite<span class="p">(</span>str.vars.group.combine<span class="p">,</span> <span class="kt">c</span><span class="p">(</span>str.vars.group.combine<span class="p">,</span> <span class="s">&#39;variable&#39;</span><span class="p">))</span> <span class="o">%&gt;%</span>
-                spread<span class="p">(</span>str.vars.group.combine<span class="p">,</span> value<span class="p">)</span>
-    <span class="p">}</span> <span class="kr">else</span> <span class="p">{</span>
-        df.row.grp.stats <span class="o">&lt;-</span> df.table.grp.stats <span class="o">%&gt;%</span>
-                                mutate<span class="p">(</span>vars.groups.combine <span class="o">:=</span> <span class="kp">paste0</span><span class="p">(</span><span class="kp">paste0</span><span class="p">(</span>vars.group<span class="p">,</span> collapse<span class="o">=</span><span class="s">&#39;.&#39;</span><span class="p">)),</span>
-                                       <span class="o">!!</span><span class="p">(</span>str.vars.group.combine<span class="p">)</span> <span class="o">:=</span> <span class="kp">paste0</span><span class="p">(</span><span class="kp">interaction</span><span class="p">(</span><span class="o">!!!</span><span class="p">(</span>syms<span class="p">(</span>vars.group<span class="p">)))))</span> <span class="o">%&gt;%</span>
-                                mutate<span class="p">(</span><span class="o">!!</span><span class="p">(</span>str.vars.group.combine<span class="p">)</span> <span class="o">:=</span> <span class="kp">paste0</span><span class="p">(</span>var.numeric<span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">,</span> vars.groups.combine<span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">,</span>
-                                                                           <span class="p">(</span><span class="o">!!</span>sym<span class="p">(</span>str.vars.group.combine<span class="p">))))</span> <span class="o">%&gt;%</span>
-                                ungroup<span class="p">()</span> <span class="o">%&gt;%</span>
-                                select<span class="p">(</span><span class="o">-</span>vars.groups.combine<span class="p">,</span> <span class="o">-</span>one_of<span class="p">(</span>vars.group<span class="p">))</span> <span class="o">%&gt;%</span>
-                gather<span class="p">(</span>variable<span class="p">,</span> value<span class="p">,</span> <span class="o">-</span>one_of<span class="p">(</span>str.vars.group.combine<span class="p">))</span>  <span class="o">%&gt;%</span>
-                unite<span class="p">(</span>str.vars.group.combine<span class="p">,</span> <span class="kt">c</span><span class="p">(</span>str.vars.group.combine<span class="p">,</span> <span class="s">&#39;variable&#39;</span><span class="p">))</span> <span class="o">%&gt;%</span>
-                spread<span class="p">(</span>str.vars.group.combine<span class="p">,</span> value<span class="p">)</span>
-    <span class="p">}</span>
-
-    <span class="c1"># Clean up name strings</span>
-    <span class="kp">names</span><span class="p">(</span>df.table.grp.stats<span class="p">)</span> <span class="o">&lt;-</span> <span class="kp">gsub</span><span class="p">(</span>x <span class="o">=</span> <span class="kp">names</span><span class="p">(</span>df.table.grp.stats<span class="p">),</span>pattern <span class="o">=</span> <span class="s">&quot;_&quot;</span><span class="p">,</span> replacement <span class="o">=</span> <span class="s">&quot;\\.&quot;</span><span class="p">)</span>
-    <span class="kp">names</span><span class="p">(</span>df.row.grp.stats<span class="p">)</span> <span class="o">&lt;-</span> <span class="kp">gsub</span><span class="p">(</span>x <span class="o">=</span> <span class="kp">names</span><span class="p">(</span>df.row.grp.stats<span class="p">),</span>pattern <span class="o">=</span> <span class="s">&quot;_&quot;</span><span class="p">,</span> replacement <span class="o">=</span> <span class="s">&quot;\\.&quot;</span><span class="p">)</span>
-
-    <span class="c1"># Return</span>
-    list.return <span class="o">&lt;-</span> <span class="kt">list</span><span class="p">(</span>df_table_grp_stats <span class="o">=</span> df.table.grp.stats<span class="p">,</span> df_row_grp_stats <span class="o">=</span> df.row.grp.stats<span class="p">)</span>
-
-    <span class="c1"># Overall Statistics, without grouping</span>
-    <span class="kr">if</span> <span class="p">(</span>boo.overall.stats<span class="p">)</span> <span class="p">{</span>
-        df.row.stats.all <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span>df.row.grp.stats<span class="p">,</span> df.overall.stats<span class="p">)</span>
-        list.return <span class="o">&lt;-</span> <span class="kp">append</span><span class="p">(</span>list.return<span class="p">,</span> <span class="kt">list</span><span class="p">(</span>df_overall_stats <span class="o">=</span> df.overall.stats<span class="p">,</span>
-                                                df_row_stats_all <span class="o">=</span> df.row.stats.all<span class="p">))</span>
+    <span class="c1"># Graph</span>
+    g.graph.dist <span class="o">&lt;-</span> <span class="kc">NULL</span>
+    <span class="kr">if</span> <span class="p">(</span>graph<span class="p">)</span> <span class="p">{</span>
+      g.graph.dist <span class="o">&lt;-</span> df.decompose <span class="o">%&gt;%</span>
+          select<span class="p">(</span>variable<span class="p">,</span> contains<span class="p">(</span><span class="s">&#39;value&#39;</span><span class="p">),</span> <span class="o">-</span>value_mean<span class="p">)</span> <span class="o">%&gt;%</span>
+          rename<span class="p">(</span>outcome <span class="o">=</span> variable<span class="p">)</span> <span class="o">%&gt;%</span>
+          gather<span class="p">(</span>variable<span class="p">,</span> value<span class="p">,</span> <span class="o">-</span>outcome<span class="p">)</span> <span class="o">%&gt;%</span>
+          ggplot<span class="p">(</span>aes<span class="p">(</span>x<span class="o">=</span>value<span class="p">,</span> color <span class="o">=</span> variable<span class="p">,</span> fill <span class="o">=</span> variable<span class="p">))</span> <span class="o">+</span>
+              geom_line<span class="p">(</span>stat <span class="o">=</span> <span class="s">&quot;density&quot;</span><span class="p">)</span> <span class="o">+</span>
+              facet_wrap<span class="p">(</span><span class="o">~</span> outcome<span class="p">,</span> scales<span class="o">=</span><span class="s">&#39;free&#39;</span><span class="p">,</span> nrow<span class="o">=</span>graph.nrow<span class="p">)</span>
     <span class="p">}</span>
 
     <span class="c1"># Return</span>
-    <span class="kr">return</span><span class="p">(</span>list.return<span class="p">)</span>
+    <span class="kr">return</span><span class="p">(</span><span class="kt">list</span><span class="p">(</span>dfmain <span class="o">=</span> df.decompose<span class="p">,</span>
+                dfsumm <span class="o">=</span> df.decompose.var.frac<span class="p">,</span>
+                graph <span class="o">=</span> g.graph.dist<span class="p">))</span>
 
+<span class="p">}</span>
+
+<span class="c1"># Support Function</span>
+ff_lr_decompose_valadj <span class="o">&lt;-</span> <span class="kr">function</span><span class="p">(</span>df<span class="p">,</span> df.coef<span class="p">,</span> vars.tomean<span class="p">,</span> str.esti.suffix<span class="p">)</span> <span class="p">{</span>
+    new_value <span class="o">&lt;-</span> <span class="p">(</span>df<span class="o">$</span>value <span class="o">+</span>
+                  <span class="kp">rowSums</span><span class="p">((</span>df<span class="p">[</span><span class="kp">paste0</span><span class="p">(</span>vars.tomean<span class="p">,</span> <span class="s">&#39;_mean&#39;</span><span class="p">)]</span> <span class="o">-</span> df<span class="p">[</span>vars.tomean<span class="p">])</span>
+                          <span class="o">*</span>df.coef<span class="p">[</span>df<span class="o">$</span>variable<span class="p">,</span> <span class="kp">paste0</span><span class="p">(</span>vars.tomean<span class="p">,</span> str.esti.suffix<span class="p">)]))</span>
+    <span class="kr">return</span><span class="p">(</span>new_value<span class="p">)</span>
 <span class="p">}</span>
 </pre></div>
 
@@ -11900,22 +11889,28 @@ ff_summ_by_group_summ_one <span class="o">&lt;-</span> <span class="kr">function
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Data">Data<a class="anchor-link" href="#Data">&#182;</a></h2><p>Load data and test</p>
-
+<h2 id="Load-Data">Load Data<a class="anchor-link" href="#Load-Data">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[152]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Library</span>
 <span class="kn">library</span><span class="p">(</span>tidyverse<span class="p">)</span>
+<span class="kn">library</span><span class="p">(</span>AER<span class="p">)</span>
 
 <span class="c1"># Load Sample Data</span>
 <span class="kp">setwd</span><span class="p">(</span><span class="s">&#39;C:/Users/fan/R4Econ/_data/&#39;</span><span class="p">)</span>
 df <span class="o">&lt;-</span> read_csv<span class="p">(</span><span class="s">&#39;height_weight.csv&#39;</span><span class="p">)</span>
+
+<span class="c1"># Source Dependency</span>
+<span class="kn">source</span><span class="p">(</span><span class="s">&#39;C:/Users/fan/R4Econ/linreg/ivreg/ivregdfrow.R&#39;</span><span class="p">)</span>
+
+<span class="c1"># Setting</span>
+<span class="kp">options</span><span class="p">(</span>repr.matrix.max.rows<span class="o">=</span><span class="m">50</span><span class="p">,</span> repr.matrix.max.cols<span class="o">=</span><span class="m">50</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -11932,15 +11927,7 @@ df <span class="o">&lt;-</span> read_csv<span class="p">(</span><span class="s">
 
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>-- Attaching packages --------------------------------------- tidyverse 1.2.1 --
-v ggplot2 3.1.0     v purrr   0.2.5
-v tibble  1.4.2     v dplyr   0.7.8
-v tidyr   0.8.2     v stringr 1.3.1
-v readr   1.2.1     v forcats 0.3.0
--- Conflicts ------------------------------------------ tidyverse_conflicts() --
-x dplyr::filter() masks stats::filter()
-x dplyr::lag()    masks stats::lag()
-Parsed with column specification:
+<pre>Parsed with column specification:
 cols(
   S.country = col_character(),
   vil.id = col_double(),
@@ -11970,61 +11957,20 @@ cols(
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Function-Testing-By-Gender-Groups">Function Testing By Gender Groups<a class="anchor-link" href="#Function-Testing-By-Gender-Groups">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Select-Variables">Select Variables<a class="anchor-link" href="#Select-Variables">&#182;</a></h3><p>Need two variables, a group variable that is a factor, and a numeric</p>
-
+<h2 id="Data-Cleaning">Data Cleaning<a class="anchor-link" href="#Data-Cleaning">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[153]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span>vars.group <span class="o">&lt;-</span> <span class="s">&#39;sex&#39;</span>
-var.numeric <span class="o">&lt;-</span> <span class="s">&#39;hgt&#39;</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span>df.select <span class="o">&lt;-</span> df <span class="o">%&gt;%</span> select<span class="p">(</span>one_of<span class="p">(</span>vars.group<span class="p">,</span> var.numeric<span class="p">))</span> <span class="o">%&gt;%</span> drop_na<span class="p">()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Main-Statistics">Main Statistics<a class="anchor-link" href="#Main-Statistics">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span><span class="c1"># Single Variable Group Statistics</span>
-ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</span> vars.group <span class="o">=</span> vars.group<span class="p">,</span> var.numeric <span class="o">=</span> var.numeric<span class="p">,</span> str.stats.group <span class="o">=</span> <span class="s">&#39;main&#39;</span><span class="p">)</span>
+<div class=" highlight hl-r"><pre><span></span><span class="c1"># Convert Variable for Sex which is categorical to Numeric</span>
+df <span class="o">&lt;-</span> df
+df<span class="o">$</span>male <span class="o">&lt;-</span> <span class="p">(</span><span class="kp">as.numeric</span><span class="p">(</span><span class="kp">factor</span><span class="p">(</span>df<span class="o">$</span>sex<span class="p">))</span> <span class="o">-</span> <span class="m">1</span><span class="p">)</span>
+<span class="kp">summary</span><span class="p">(</span><span class="kp">factor</span><span class="p">(</span>df<span class="o">$</span>sex<span class="p">))</span>
+<span class="kp">summary</span><span class="p">(</span>df<span class="o">$</span>male<span class="p">)</span>
 </pre></div>
 
 </div>
@@ -12042,61 +11988,160 @@ ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</spa
 
 
 <div class="output_html rendered_html output_subarea ">
-<dl>
-	<dt>$df_table_grp_stats</dt>
-		<dd><table>
-<thead><tr><th scope=col>sex</th><th scope=col>mean</th><th scope=col>min</th><th scope=col>max</th><th scope=col>sd</th></tr></thead>
-<tbody>
-	<tr><td>Female  </td><td>82.81198</td><td>41.2    </td><td>170.6   </td><td>29.79351</td></tr>
-	<tr><td>Male    </td><td>84.68152</td><td>41.3    </td><td>182.9   </td><td>31.75037</td></tr>
-</tbody>
-</table>
-</dd>
-	<dt>$df_row_grp_stats</dt>
-		<dd><table>
-<thead><tr><th scope=col>hgt.sex.gFemale.max</th><th scope=col>hgt.sex.gFemale.mean</th><th scope=col>hgt.sex.gFemale.min</th><th scope=col>hgt.sex.gFemale.sd</th><th scope=col>hgt.sex.gMale.max</th><th scope=col>hgt.sex.gMale.mean</th><th scope=col>hgt.sex.gMale.min</th><th scope=col>hgt.sex.gMale.sd</th></tr></thead>
-<tbody>
-	<tr><td>170.6   </td><td>82.81198</td><td>41.2    </td><td>29.79351</td><td>182.9   </td><td>84.68152</td><td>41.3    </td><td>31.75037</td></tr>
-</tbody>
-</table>
-</dd>
-	<dt>$df_overall_stats</dt>
-		<dd><table>
-<thead><tr><th scope=col>hgt.mean</th><th scope=col>hgt.min</th><th scope=col>hgt.max</th><th scope=col>hgt.sd</th></tr></thead>
-<tbody>
-	<tr><td>83.80921</td><td>41.2    </td><td>182.9   </td><td>30.86631</td></tr>
-</tbody>
-</table>
-</dd>
-	<dt>$df_row_stats_all</dt>
-		<dd><dl>
-	<dt>$hgt.sex.gFemale.max</dt>
-		<dd>170.6</dd>
-	<dt>$hgt.sex.gFemale.mean</dt>
-		<dd>82.8119830899308</dd>
-	<dt>$hgt.sex.gFemale.min</dt>
-		<dd>41.2</dd>
-	<dt>$hgt.sex.gFemale.sd</dt>
-		<dd>29.7935118668632</dd>
-	<dt>$hgt.sex.gMale.max</dt>
-		<dd>182.9</dd>
-	<dt>$hgt.sex.gMale.mean</dt>
-		<dd>84.6815235661938</dd>
-	<dt>$hgt.sex.gMale.min</dt>
-		<dd>41.3</dd>
-	<dt>$hgt.sex.gMale.sd</dt>
-		<dd>31.7503680336368</dd>
-	<dt>$hgt.mean</dt>
-		<dd>83.8092099128501</dd>
-	<dt>$hgt.min</dt>
-		<dd>41.2</dd>
-	<dt>$hgt.max</dt>
-		<dd>182.9</dd>
-	<dt>$hgt.sd</dt>
-		<dd>30.8663089446023</dd>
+<dl class=dl-horizontal>
+	<dt>Female</dt>
+		<dd>16446</dd>
+	<dt>Male</dt>
+		<dd>18619</dd>
 </dl>
-</dd>
-</dl>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+<div class="output_text output_subarea ">
+<pre>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  0.000   0.000   1.000   0.531   1.000   1.000 </pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Parameters">Parameters<a class="anchor-link" href="#Parameters">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[154]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span>var.y1 <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;hgt&#39;</span><span class="p">)</span>
+var.y2 <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;wgt&#39;</span><span class="p">)</span>
+vars.y <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span>var.y1<span class="p">,</span> var.y2<span class="p">)</span>
+vars.x <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;prot&#39;</span><span class="p">)</span>
+vars.c <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;male&#39;</span><span class="p">,</span> <span class="s">&#39;wgt0&#39;</span><span class="p">,</span> <span class="s">&#39;hgt0&#39;</span><span class="p">,</span> <span class="s">&#39;svymthRound&#39;</span><span class="p">)</span>
+vars.other.keep <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;S.country&#39;</span><span class="p">,</span> <span class="s">&#39;vil.id&#39;</span><span class="p">,</span> <span class="s">&#39;indi.id&#39;</span><span class="p">,</span> <span class="s">&#39;svymthRound&#39;</span><span class="p">)</span>
+
+<span class="c1"># Decompose sequence</span>
+vars.tomean.first <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;male&#39;</span><span class="p">,</span> <span class="s">&#39;hgt0&#39;</span><span class="p">)</span>
+var.tomean.first.name.suffix <span class="o">&lt;-</span> <span class="s">&#39;_A&#39;</span>
+vars.tomean.third <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span>vars.tomean.second<span class="p">,</span> <span class="s">&#39;prot&#39;</span><span class="p">)</span>
+var.tomean.third.name.suffix <span class="o">&lt;-</span> <span class="s">&#39;_B&#39;</span>
+vars.tomean.fourth <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span>vars.tomean.third<span class="p">,</span> <span class="s">&#39;svymthRound&#39;</span><span class="p">)</span>
+var.tomean.fourth.name.suffix <span class="o">&lt;-</span> <span class="s">&#39;_C&#39;</span>
+list.vars.tomean <span class="o">=</span> <span class="kt">list</span><span class="p">(</span>vars.tomean.first<span class="p">,</span> 
+                        vars.tomean.third<span class="p">,</span>
+                        vars.tomean.fourth<span class="p">)</span>
+list.vars.tomean.name.suffix <span class="o">&lt;-</span> <span class="kt">list</span><span class="p">(</span>var.tomean.first.name.suffix<span class="p">,</span> 
+                                     var.tomean.third.name.suffix<span class="p">,</span>
+                                     var.tomean.fourth.name.suffix<span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Example-Guatemala-OLS">Example Guatemala OLS<a class="anchor-link" href="#Example-Guatemala-OLS">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[155]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span>df.use <span class="o">&lt;-</span> df <span class="o">%&gt;%</span> filter<span class="p">(</span>S.country <span class="o">==</span> <span class="s">&#39;Guatemala&#39;</span><span class="p">)</span> <span class="o">%&gt;%</span> filter<span class="p">(</span>svymthRound <span class="o">%in%</span> <span class="kt">c</span><span class="p">(</span><span class="m">12</span><span class="p">,</span> <span class="m">18</span><span class="p">,</span> <span class="m">24</span><span class="p">))</span>
+vars.z <span class="o">&lt;-</span> <span class="kc">NULL</span>
+list.out <span class="o">&lt;-</span> ff_lr_decompose<span class="p">(</span>df<span class="o">=</span>df.use<span class="p">,</span> vars.y<span class="p">,</span> vars.x<span class="p">,</span> vars.c<span class="p">,</span> vars.z<span class="p">,</span> vars.other.keep<span class="p">,</span>
+                            list.vars.tomean<span class="p">,</span> list.vars.tomean.name.suffix<span class="p">,</span>
+                            graph<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> graph.nrow<span class="o">=</span><span class="m">1</span><span class="p">)</span>
+<span class="kp">options</span><span class="p">(</span>repr.matrix.max.rows<span class="o">=</span><span class="m">10</span><span class="p">,</span> repr.matrix.max.cols<span class="o">=</span><span class="m">50</span><span class="p">)</span>
+list.out<span class="o">$</span>dfmain
+<span class="kp">options</span><span class="p">(</span>repr.plot.width <span class="o">=</span> <span class="m">10</span><span class="p">,</span> repr.plot.height <span class="o">=</span> <span class="m">4</span><span class="p">)</span>
+list.out<span class="o">$</span>dfsumm
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Warning message:
+&#34;Setting row names on a tibble is deprecated.&#34;</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<thead><tr><th scope=col>S.country</th><th scope=col>vil.id</th><th scope=col>indi.id</th><th scope=col>svymthRound</th><th scope=col>prot</th><th scope=col>male</th><th scope=col>wgt0</th><th scope=col>hgt0</th><th scope=col>variable</th><th scope=col>value</th><th scope=col>prot_mean</th><th scope=col>male_mean</th><th scope=col>wgt0_mean</th><th scope=col>hgt0_mean</th><th scope=col>svymthRound_mean</th><th scope=col>value_mean</th><th scope=col>value_A</th><th scope=col>value_B</th><th scope=col>value_C</th></tr></thead>
+<tbody>
+	<tr><td>Guatemala</td><td>3        </td><td>1352     </td><td>18       </td><td>13.3     </td><td>1        </td><td>2545.2   </td><td>47.4     </td><td>hgt      </td><td>70.2     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td><td>71.37891 </td><td>73.31571 </td><td>73.60235 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1352     </td><td>24       </td><td>46.3     </td><td>1        </td><td>2545.2   </td><td>47.4     </td><td>hgt      </td><td>75.8     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td><td>76.97891 </td><td>77.44455 </td><td>73.68902 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1354     </td><td>12       </td><td> 1.0     </td><td>1        </td><td>3634.3   </td><td>51.2     </td><td>hgt      </td><td>66.3     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td><td>65.24416 </td><td>65.17313 </td><td>69.50194 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1354     </td><td>18       </td><td> 9.8     </td><td>1        </td><td>3634.3   </td><td>51.2     </td><td>hgt      </td><td>69.2     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td><td>68.14416 </td><td>67.68082 </td><td>67.96746 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1354     </td><td>24       </td><td>15.4     </td><td>1        </td><td>3634.3   </td><td>51.2     </td><td>hgt      </td><td>75.3     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td><td>74.24416 </td><td>73.53117 </td><td>69.77564 </td></tr>
+	<tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2019     </td><td>12       </td><td>17.3     </td><td>1        </td><td>3132.9   </td><td>49.7     </td><td>wgt      </td><td> 7777.6  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td><td> 7702.788</td><td>7861.861 </td><td>8639.751 </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2019     </td><td>18       </td><td>24.5     </td><td>1        </td><td>3132.9   </td><td>49.7     </td><td>wgt      </td><td> 9729.6  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td><td> 9654.788</td><td>9667.175 </td><td>9718.684 </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2019     </td><td>24       </td><td>57.8     </td><td>1        </td><td>3132.9   </td><td>49.7     </td><td>wgt      </td><td>10276.5  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td><td>10201.688</td><td>9535.651 </td><td>8860.779 </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2023     </td><td>12       </td><td>15.9     </td><td>1        </td><td>3607.1   </td><td>50.3     </td><td>wgt      </td><td> 8424.7  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td><td> 8304.458</td><td>8216.735 </td><td>8994.625 </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2023     </td><td>18       </td><td>22.2     </td><td>1        </td><td>3607.1   </td><td>50.3     </td><td>wgt      </td><td> 6933.2  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td><td> 6812.958</td><td>6596.885 </td><td>6648.393 </td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<thead><tr><th scope=col>value_var</th><th scope=col>value_mean_var</th><th scope=col>value_A_var</th><th scope=col>value_B_var</th><th scope=col>value_C_var</th><th scope=col>value_var_frac</th><th scope=col>value_mean_var_frac</th><th scope=col>value_A_var_frac</th><th scope=col>value_B_var_frac</th><th scope=col>value_C_var_frac</th></tr></thead>
+<tbody>
+	<tr><td>     21.864</td><td>NA         </td><td>     20.264</td><td>     21.231</td><td>     10.293</td><td>1          </td><td>NA         </td><td>0.927      </td><td>0.971      </td><td>0.471      </td></tr>
+	<tr><td>2965693.245</td><td>NA         </td><td>2863501.267</td><td>2662604.945</td><td>2316612.760</td><td>1          </td><td>NA         </td><td>0.966      </td><td>0.898      </td><td>0.781      </td></tr>
+</tbody>
+</table>
 
 </div>
 
@@ -12110,16 +12155,584 @@ ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</spa
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Specify-Two-Specific-Statistics">Specify Two Specific Statistics<a class="anchor-link" href="#Specify-Two-Specific-Statistics">&#182;</a></h3>
+<h2 id="Example-Guatemala-IV-=-vil.id">Example Guatemala IV = vil.id<a class="anchor-link" href="#Example-Guatemala-IV-=-vil.id">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[156]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span>ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</span> vars.group <span class="o">=</span> vars.group<span class="p">,</span> var.numeric <span class="o">=</span> var.numeric<span class="p">,</span> str.stats.specify <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;mean&#39;</span><span class="p">,</span> <span class="s">&#39;sd&#39;</span><span class="p">))</span>
+<div class=" highlight hl-r"><pre><span></span>df.use <span class="o">&lt;-</span> df <span class="o">%&gt;%</span> filter<span class="p">(</span>S.country <span class="o">==</span> <span class="s">&#39;Guatemala&#39;</span><span class="p">)</span> <span class="o">%&gt;%</span> filter<span class="p">(</span>svymthRound <span class="o">%in%</span> <span class="kt">c</span><span class="p">(</span><span class="m">12</span><span class="p">,</span> <span class="m">18</span><span class="p">,</span> <span class="m">24</span><span class="p">))</span>
+vars.z <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;vil.id&#39;</span><span class="p">)</span>
+list.out <span class="o">&lt;-</span> ff_lr_decompose<span class="p">(</span>df<span class="o">=</span>df.use<span class="p">,</span> vars.y<span class="p">,</span> vars.x<span class="p">,</span> vars.c<span class="p">,</span> vars.z<span class="p">,</span> vars.other.keep<span class="p">,</span>
+                            list.vars.tomean<span class="p">,</span> list.vars.tomean.name.suffix<span class="p">,</span>
+                            graph<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> graph.nrow<span class="o">=</span><span class="m">1</span><span class="p">)</span>
+list.out<span class="o">$</span>dfsumm
+<span class="kp">options</span><span class="p">(</span>repr.plot.width <span class="o">=</span> <span class="m">10</span><span class="p">,</span> repr.plot.height <span class="o">=</span> <span class="m">2</span><span class="p">)</span>
+list.out<span class="o">$</span>graph
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Warning message:
+&#34;Setting row names on a tibble is deprecated.&#34;</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<thead><tr><th scope=col>value_var</th><th scope=col>value_mean_var</th><th scope=col>value_A_var</th><th scope=col>value_B_var</th><th scope=col>value_C_var</th><th scope=col>value_var_frac</th><th scope=col>value_mean_var_frac</th><th scope=col>value_A_var_frac</th><th scope=col>value_B_var_frac</th><th scope=col>value_C_var_frac</th></tr></thead>
+<tbody>
+	<tr><td>     21.864</td><td>NA         </td><td>     20.235</td><td>     18.623</td><td>     11.653</td><td>1          </td><td>NA         </td><td>0.926      </td><td>0.852      </td><td>0.533      </td></tr>
+	<tr><td>2965693.245</td><td>NA         </td><td>2876682.895</td><td>2663130.427</td><td>2555834.238</td><td>1          </td><td>NA         </td><td>0.970      </td><td>0.898      </td><td>0.862      </td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAADwCAMAAAAn6G2CAAAASFBMVEUAAAAAv8QaGhozMzNN
+TU1oaGh8fHx8rgCMjIyampqnp6eysrK9vb3HfP/Hx8fQ0NDZ2dnh4eHp6enr6+vw8PDy8vL4
+dm3////FPqgwAAAACXBIWXMAABJ0AAASdAHeZh94AAAe+klEQVR4nO2di3qrLBOFsV8a27Tu
+HtJf7/9Of8ETKioDyMm1nmc32UaGCY5vBkRkDQRBUCJioR2AIAjSFYAFQVAyArAgCEpGABYE
+QckIwIIgKBkBWBAEJSMAC4KgZARgQRCUjNwA6xvKRE7CARGRk1yFhBsBWJAsJ+GAiMhJrkLC
+jQAsSJaTcEBE5CRXIeFGABYky0k4ICJykquQcCMAC5LlJBwQETnJVUi4EYAFyXISDoiInOQq
+JNwIwIJkOQkHREROchUSbgRgQbKchAMiIie5Cgk3ArAgWU7CARGRk1yFhBsBWJAsJ+GAiMhJ
+rkLCjQAsSJaTcEBE5CRXIeFGANaRXkI74FVOwiHziLiYXIWEGwFYR1oCK2+AOQmHzCNiJYSE
+PwFYRwKwEBEHQkj4E4B1pJfvlxcRkfxF/Cfn+HQSDjlHxIv8ByHhXQDWkUQwvnRB+vKCn9OL
+R0QXDdJfhIRXAVhHGn9N5dds5SQcso6Ilx5VCIkgArCOBGAhImQBWEEFYB0JwEJEyJL6gwgJ
+/wKwjgRgISJkAVhBBWAdSY5KjLAiIvoAePlGSIQQgHWk8Tp2dw37G9ewLx4RE7AQEv4FYJGU
+c2AKOQmHK0UEQsKvACxdTTMGc5aTcLhIRCAkAgjA0lbmE5o7OQmHq0QEQsK/ACxIlpNwQETk
+JFch4UYAFiTLSTggInKSq5BwIwALkuUkHBAROclVSLgRgAXJchIOiIic5Cok3AjAgmQ5CQdE
+RE5yFRJuBGBBspyEAyIiJ7kKCTdyA6ynhawKx2QiCzechAMxImwctigbqNrkXHYVEm4EYDkz
+kYUbTsKBGBFXOvvtygJYAJY7E1m44SQciBFxpbPfriyABWC5M5GFG07CgRgRVzr77coCWACW
+OxNZuOEkHIgRcaWz364sgAVguTORhRtOwoEYEVc6++3KpgMsxtT/Y7bAAbBMTVRVFG44tuEk
+HIgRkdDZX7SyrBbAshKAZWaC42qJrDi+CYB1TtGih1UxvPFUr6OiQbuEAFZgEwOq5sSK45sA
+WCcUXSLKhlj5AOuPvYrXV/bTfL8xdns0HEk/t3sHJmlb88buv00PrL93xt7/zAILwDIwUSne
+BXDjDBtOwoEYEdEDa42nZoWwM+p1WfSUDOuNcQj9ttz6YkIPjqQ7exdgkre16GK3vx5YN775
+1SywACy6iWrjfRzfBMByW7QlU/nkSfWkrqwpsTIC1henUfNgX22S9a9pfjiOBKEEmORt97/m
+3qGraT74mwf7NAosAItsotr6TxzfJA5gZaGyVVHXtaBUWY7b2/+J1yKUY9Ho9db+ufE/ze/X
+x72D09j1m2/jiVgPMv4ZezOq0Q2wLqVq539QL1+EPTFdKUueXdVdSvV81nWLr7Fst9Eoycoo
+w2o+2XfzzT7ad/eu/zegSvxVbOv+DdsNhAyLamI5m2H6fxzfJI4My5fDp539AlfPan4lmDOr
+HMryj0yIlROw/th727n7a5p39vr59TuHk2obgOXbxGr21bQljm8CYLkoWhZFVa2n2vFPOLK6
+snwHOrFyAlYLpV/Rt+uu/q3hNGxbdwkNBWARTShieNgUxzcBsOyLloUaVp2kvqEJsbIC1neb
+KfEVs/jfv/sSWNO2O3/30W1/8EH3f+0mEwFYNBOqMAaw7CIiMmCJIfZ6v+zErKqidguzAlab
+Lon5CQ+2Hq+St8nTGv7EtAb2YxRYABbJhPpnt/Ltxnk2nIQDMSJiApboB9YHuGrL1tMY/E4u
+pl/v6UXPAtYnn7vQ8L4hu38vBt3lbW/sbbx6+Cs+MAssAItkAsA6ISKiAVbF06WyPMRVV7bF
+Woesve6jVr0+iga9NcehACyKiY3ABLCsIiIOYFVd5658avCqLyuQ1TPLuF6KACwAi2RiKywr
+v26caMNJOBAjIgJgjdf79Hg1luWdR8EsArEALBsBWAQT20FZ+XTjTBvz43q7dbOY5fdHr/SI
+CA4sTqtu6Lw8Hr5alBUFSjELglwvWQAWgEUwsROReQLrNv6Z3h+9GkREWGCJ5Gq40Fdu7r1d
+7YAs3SwLwLIRgKVtYjccK29unGtjdlivACwZV0+d8XZFtV1aVpR6xAKwbARgaZsAsDYBlSqw
+qjmutHm1qlYgq9BDFoBlIwBL18RBKFaxfJPwwPqvlZOwOlv8xvViXHKhrGsLW7xw0ZQlboY/
+VwCWrgkAaxNYtybFDGt587Lu+NVWtXVd82kRh0kWMiwbAViaJo7CEMBqkgJWVTXztRb0+4Ob
+1bbEEsgyKWtR7cllnRDCmQAsTROHgxNVJN/EP7Buy32JERHiNKz44TLm1Wa1Isk6uFwIYNkI
+wNIzcTyYellgLalFjogAp+Fq9T0ar3aqLQ6JlROw/rcjB1xRCMDSMqFzvbqK45v4BtZtvS8x
+Iryfht1qobOilAGs/WpFjvWstg0CWDYCsHRM6M0IJN61T3fDg435cR1nscvv56+3m/TGLCJ8
+n4biOBWzokRe7VfbJVmbJgEsGwFYOiauCiw/EeH5NOx5JRel8uqo2l1iAVg20gHW/Lfzpthm
+0Y4pAEuTRI09sQAsqr/kEgOvpKK1a2A9i3qbWACWjTSANR+duC1HW7ks2jEBYGnf1QpgGUWE
+z9NQetjNWJTOq+NqixZZVak0DGDZiAqsm/VFbGcN6cuENoYa+04hgEX1l7i/4NW8qAGvdKoV
+xDIsa1Gt+7J7hzl+YNnPunHWkJ5MUBY6ArBMIsLjaTj2B6eiJrzSqpY/JUyVYwFYNrIG1n/J
+3DlmJtK9YbiRbJCXU4lcVubVUNSEV5rVFnWlMA9g2QgZ1oEJ2tq3tikWMiyqv5SdZ7zqixol
+WLrVCmItK7g8sKxmJgBY+yYoBAKw4pbIf4v5tro8tcqiqJpzawgrACsyE+THoVgSKxtg+XKY
+UlYacB+KmuVXlGqLVa8QGZZNYAFYeyZo+GnoRfTc8GjDJpZk+XKYUHZ5/2BjzisiJ+e9wssB
+iw1/u6eqinfD9n6TvgCsHRMmT8gEsMgR4ec0XORXvKgxr2jAKuYj+3kBq1ZLBayBUhKw2PS5
+pigz3aXb8q8x093okb5WxAKwqP7q7rji1bMx5xVxrL+o8wWWTpewT6uG9y6B9fph9ARpi3aM
+GFhU9ABYZhHh4zScXyAUqs1mNJCq7StviTXVdWFgdR1AGViM2idc7NyWvr1/UQwIWbRjvMAi
+kwfAMosID6ehileNOa/I81ULiY7XA5bUHVRlWCQtSvz9e+PIu//7JVmxaMfsgGVFLACL6q/e
+bmtg2eRXdJdlYl0WWFtjWCQpSnw9bi2zXil5lkU7RgusHe4Ug5Q2ACxiRJx/GqoSrNLn2V+1
+xBoGsi4ILPmq4Agq5mzQ/fchepZ3fSsW7RgrsDaxI3NqzqzBhgWxACyqvzo7KXnl+eyvimF2
+w2WBxQecJloxV9Maft5EevV9Z2/aVizaMTFgLbMqGVmjDXNiRQYs+VrwxoqjjXzdOM4lkjcG
+3D2f/VXRXyy8IrDcaQmsr/vYGySgz6IdIwWWmjlLXM03ZgcszYdQyNNdTCLCB7AUFwh9n/1t
+jiWIBWDZaDmtgbG3n+Gj22rvLVm0Y5zAUiJHiSvxwdKGMbESBNatiRxYK17V3SQD72d/TywA
+y0bLaQ2PH/V++7JoxyiBpQLOJq7Gz64JrNVtD+SI8A4s67EkQ2A9xTgWgGWj5bQGMysW7Rgj
+sBS8WV0SXH1+dWBNQ1hxrZDG12iYLdFw8gINO6paR8LVfoaCA2sYt7rpdwe5gp1f55hY8eaA
+Vv0ukg1TYiUMLGlfYkScmjesRtzHSecB0hWeY1ncEIQMaw6sG5NEsmLRjhECa0mbo+xq3G3H
+hoEbpgoDrMU7Xw5rAWvOKy/VbnlTWCwRAWA1c2B9Srz6JFmxaMfYgaVJK2FD3tWMWAAW1d+D
+z5e8cnNPn3nZllgWtwQBWFtdQqIs2jE+YMmoIeCK27DOsdIFVpxdwu38KhSwnkWzXjX59Gpt
+yhoR4TThyc9LEwNoFPfeSCrnGmxIJS4ILMMFh847DZcDWKWjZV4sylY2vcLogBU2w+Kz5S8/
+htWtS7mbWU2Imm8S26aCJsSKC1izldB0ZrqbRYQvYC0OWhhgdU4ZEgvAArAWJqp9Vj3XrJJs
+iA/H4hkAy1y+HD4G1nQ03a2tble2UjjjoVrjgjsKPoZlKIt2jApYRbFHmT1YjTbafQZkGRAL
+wKL6u/fhjFdlWXuq9qgsgGUhN8DKQ0Wx/ShUDitdOy2yujcXfq6ql1PpqGw18WqFq4DAehoT
+C8BaAevz1jTf7PZBs2LRjtFkWCIvUiRF/M6zNtwXUuwmqSi6AqZrAFoJGVYvmVeKIxYOWMbE
+ArCWwPpkrPnlE0hpxLJox0iA1XXjFoDpWKUMrPVzQuZutMhqy1Xr02RfABbV3+2Ppg6hIr06
+r1qtsh2xqNEBYClWa/hu/33+EFZq4LJoxziAVQgTEq/qDlYWbvTEUvy0a5swE4DVaUiw+HGI
+DVjPiscaOccCsBQTR7/YK3kCqUU7RgGsohh/9vrkiQorhRv81nxxCZuALACL6u/mJ0OC1R5I
+9REICqzCqFcIYC2BdWO/7+yHj2KRrFi0YwzAKsaBha5vZ0IrhRttN7MnljaysgFWeFVikYay
+bOo6tCsqFeKKTOpLNxgBaz8ZOkiVFh9/8Od88QTroeuyULDzy4UJMXzVjN03Q1op3eiJpZ9l
+ZQMsXw5vlu06hPxQbjV90Ayrdc4gx8ojw9pFEiPy7MFuX22iReNV4sDif4Yresa0UrvR2q6E
+RQDrHIf3gVXu/VSEBZYRsQAsTBzl+VWbWonZfObJ1aYbE7G0kAVgUf3d2F51Vz32Wj0wsEyI
+lSaw2PC3v4NGfrzX6qYaAGtfRY+Syi652najBWJVaiMLwKL6q94seHWQ14YGlsHAe4TAKtVS
+AWvrQaqz2wObwwxsrsftUvcSFv2IeGWZXO25UQwwBLDcO7wDrKNfiPDAIqdYEQJLp0soU8gx
+sB7Xuvm56GK6LKszSTER6xBZABbVX+XW6lkWh40dHFh0YqUOrA4sMrAWrGHSX7VW0xpoS432
+smjHkMAqunk6ZRs3p5KiC0udJAvAovqr3Fpp8CoKYBGJlSiwpO6gKsOSdzzMlq684mgxTGav
+ziZFfwXyeZhkAVhUf5Vbq1pjodjwwBLEokx5TxtYW2NYsx2nv2otPntjRg/6smjHYMAqi2HY
+qnLjxcFtIlo5FoBF9Ve1UYtXMQBryLFyB5Z8VXAEFVuPYbHFq0KLj35v91/dmJRk0Y6BgFWW
+85VBzybFNMtrN8eKDFjyKqLJrDha6vEqCmARiZU2sHiHb6IVU0xroAPrGiuOiuViPAOrGKre
+TbLiApbemu6323JfYkS4PQ1LaVUZj9Ualh3WNNIjVrLAcqcrAotPKHzOeXU+KfSIlSCwbnE9
+NacUTyv1Xq1xWRKxAKwLThwVxFg9KuJ8UlTFhKxTbhdxYmN2WNN7zFddl7q8igRYJGLlCixC
+lnQ5YImB7/XDuDyQohpr3b5lJAtg/dfKSViRVfMZdUWYuk3F3eUrNyS5cEMEGdbnWwu6+w/N
+SrDzi2xig1deSCERayvJygJY1Ihwljfwh2dVmvlVNBkWJcXKNcMiaAGsv1eRmTH2LW3culZk
+Fp7OGtLARD+xQPHoQC/Akh85pV4fF8Ci+iu9r/s5dZ6rtS6rTywAawmsd/bg8yP+sfu0TRW2
+8kN+m2SA1c/cVD2d2QspZsMrztcZd2JjdliTAlZ7YEkJVjzA0icWgKWa6T78G5QNsJb5lfxr
+7AlY8rPsVbdbA1hUf4c3tWhPAq8iAtZErIP7iaIDln8ZAmuxgrJFO/oDVr+QnpJXnkixmCK0
+RhaARfW3fxXpFYlXMQLrKMeKDljBM6y+S/hg79M2ZdiOQ1j/hbsmRJO4ClNL15BCPOa0W2h8
+lP7DWcNoHLGU38c4073jFe1Z25EBSyfFArBWg+79clg36Qadvd/ZXhbt6CnDKof8SjHg7sgL
+LRuLHKteJFlxZVgW8uVwV9aEVzEBS5dYANZ6WsPHK2OvD/kWaOUYlvyaBLD4n63+oBsv9Gws
+bxyZIwvAovrL/9TP1IGlSSwAS2fiaA7A6tco3uSVV2AtiRXCjc3CjuTLYV7WjFdxAatL/Y+I
+BWCZAiuxLuFRfuWTFApiTcgCsKj+GvMqMmBJOZbXajUK7igssJisafMWsAyHWJ01pL6J4UFb
+G+NXjrzQtbEm1oQsAIvqbz+foc1QEgeWztwGAEsHWLvXijpZtKMHYGnwyispqvl8rKfULQSw
+qP72+VVBTrCiA5YGsQCsVZfwjS/g93t/o1mxaEdPwJJ5FRpYXf3KbiGARdTQHyTnVxECayLW
+Vq8QwNpaIpnRiGXRjqcDq5/QUOzyyjMpFL3C7rzLBli+VHfz64oQk+rcqyiaphJLN9ShXdFT
+cGD1XcG/fBbwW10fVPcdPJNCEGuOLOFpNsDy43Dd8oq/GnQIY8ywDqe855Fh7S2ATH1qzp11
+XcJsMqz1+JU6tH2TousVzuaQ8oEsAIuiYfzKiFdRAutgHCt/YOnuMehXMdNdQxbteC6wVrza
+Cm3vpFCMY7W9VwCLoLrv75vxKk5giR+xTWIBWKuP/h58pvsH8WFfFu3oBViHvAqQ2ihyLNJj
+yx25sSzsSB4cFs3VGPMqUmCNDytUrZiWJrDGhw32vT358V6LDiAdWGayaMdTgdUtgHUw3u7K
+C6qNzhcZWcOQjFc3FoUdyYPDYtSvMewPmld7ftkxyfJb7WbBHf3vf4VaKmBtPUjV5lH1hrJo
+xzOBpTOfwZ0XZBu9NzNkOcixLgKsup9/RZ/iblWtl7JFIXKsVYoVIbB0uoTjY5+bQ2BRB90N
+ZdGOJwKLwKswo93VCllNvT0J5zQ3ZoUd6XSHe7QXxryKGVh9P3fVK0wdWB2MZGAt+HTpLmG/
+vqgWrwJdnhs9GrxsavuBrCsAq5+3VhSNMa/iBpY6yUoUWFJ3UJVhzXaUX1TKF1jdE0uP5l85
+9MLExuRTIZjVDGv9+nVDKuxIJzs89gcbY15FDqxnP/Q+I1bawNoaw5rtKL+olC2wysXzJg5+
+iUPNJ5CnhYnRymnWu083psIzbT0vaevV1xLJdWk5fmVWrfeyVVXMiJUqsOSrgiOo2Oag+xWB
+1T0QvjiaL+rSC0MbM8eaHlo2xHIHLJ013R08loTs8DTenjmwBLKkh+6mDaxGPEFwnM6gnNZw
+1UF3Yn4VEljrZ2FwZll0C3MHVj3lV8/K4ssmASyBrOmajL9qpYI70gWWO+UJrHIx3H78QxwS
+WIqnjdXzGw19uNEXlkUBlsVzlGgOT5cH+WHNH1gdsgr/1Y4FdwRgOTFR8vRKns5w3HEICCzl
+81zrZ2HKrEDAmoawzn2OknjSEF/WoFvX4BKqOLNCO6GSI2ApFuHb3NXU1ZmsThGbwkoT5Xz4
+SmucIyiwJg8nE3x6gxmxAmZY5w+69wuHjePtV8iwnvySt0izkGFlCKyyrOfdwQSANboomeAX
+C42SrEBjWPLracDql2adxtsvAiw+v6GSR7N8VfvME1gxia99Nkufk+g4qJzki9MF7QlEB6w+
+vZKuD14GWOKHeBrN8lZtnsAybQurhlSaEHczzIbb9S58B86wBj/nJvgcUnqA5tslLKXh9opY
+1qLaWMryoVnzNAvAkmTaFlYNqTKxxJX2PJ3gwOpcXZgQc0ipARoOWIaPJdHcuVx2BwllLaqN
+qGzZIcvseswpwPKvvIA1zs8ZpD2vME5g9YPMtPg8Yaa76nlJW6/0iNDaeZiYVlwYWN3tZoZZ
+FjIsSaZtYdWQSxOKc1uzP+jGC2sblWpakZh2RIpPh8DyExE6O4+84n8qxTwQuhIEVtO2g5iz
+Y5BlAViSTNvCqiHnJlSpCOG+jRiApQZsN7GbEJ0ZAmsjvdIqa1FtdGV50SHLog4VAFiSTNvC
+qiFlE+IJDha8igRY6sUHxJfTD8/8gDXepiSmX81vvqRURKw2vrJdUQlZPn7H9g4zgGUknoSs
+B6dJ98VGAyyl1yRi5Qas8bbKdX51TWCZIQvAkmTaFlYNOahWD0zT7uOPBVhb426EbmFewCpn
+6dWqda4JLAlZ2j9kAJYk07awakihuu4WvFulV8R1R+IB1hZqtZOsnIA1LRJcrLuDB2Utqo21
+rFxUkLxaP5HXebV7hxnAoqnHVWOLq7iAtZlk1VpJVj7Aktc0V/PqwsB6iiuGbZsspx66rnbv
+MANYFNX9kzTXvUH6sm5RAYt/A9VXaE9gjdCMAlgOJJZl6MXvULrO4gz6apnVtkvdhLqFC8DS
+Vi3ham7CAFfRAWsnyzpEVhTAItWp2jjLrorNo3rlDKsTX8ihXt7v77LavcMMYGlKLBs7Zley
+CSNcRQis7SzrtMgUhR2JVOd602zB1R1eAVhcLbI4s/YDIx5g7TMnvyWS63rA1WohRvU5fooX
+59hY5opbyFo/xdyRG07CgRgRq51nz+PbwxWANaiq+GoOe8hKA1hs+VgKSmF9mbaFQUN2tHrO
+5l31JsxxFSmwnhunqkDWJrNSB9Z8OftdXAFYkyrBrG1kJQKso12SAlY90qqczZjjJmxoRfPi
+TBtrEztZ1gaykgZWucBVcXBcASxJ1erMcFHt3mHWAhYb/va9PfnxXsun5hwGVjrAqocTtCyW
+x4SveW2Fq4iB9dxkVsGZpYBWwsBa0uoIVwDWXKK5NkY5TwJWpZYKWFsPUl0/l3BHSQCrHlKr
+p/IHxBZWml74sLFhYjvNKuoVtFIFFjW5ksuaKENgPQdmrX7Tg3YJx8c+NxcAlnRCqg6DOEDn
+kcK3jb1RVeVm8eDVObSSBFY5x1WhmzMDWGt1LScCw0W1e4eZCKyuAygDa/GwnKSBVdfSiVio
+YKVeWNitF35tHIyqqj8oB2o5cMNJOBAjQgUrDyvFZgssESr9TTvTo+5DDrpP3UFVhjXb8Ug6
+wJLXkrRfX3LVHqst9RpVynHEMayvAaxnF4gbHxUjtRwCa+/IO1lxlC+zUQ47d2NWtA4+gLWl
+vilFWJQ21e6hgQSsrTGsZran/KKQBrD2VvbuZdoWz3lD1jKqurxhe/0MKbIvAyyuauekHtts
+e9LDkQO6R972IRQCVd3U305732vHX6NvaVs0BWBxVTK1ivK4gLLSHWkCS74qOIKKKcawnMzD
+Oh9YA6hECBcHoOJahPalgCW0cW1GNEtTStyq63m+euiA7pE3AZbqKBeT4yYCsA41NvDY5KWs
+40p3RAIWH7GaaMVU0xqUW+Yf77kzD1X5vQGwyi3N47baD2DlZ9cD1rZW7TgEab2U2gHdI28C
+rCWjBsJafF0AS7vs9o9cpy147bFBF1juZA2s/7iU5Y4aaC7N0kZf8tLSbvG1DIF1HBE23wdy
+KznVJRdOEFhCFuCPIy/JJ8NyeZUwtgepui17tQzLuOCOHAGLseX8hu1dj3cBsPzZCO6G9pEH
+sAKUzRVYBAFYzkxk4Yb2kQewApQFsAAsdyaycEP7yANYAcoCWACWOxNZuKF95AGsAGUBLNJM
+95v8/sSZ7omayMIN/SPvZKa7tcOpnf12ZaMDln+5uZfQRuor4L4VhxexuJGOAjXYtaqNSQBW
+pzi8iMWNdHQtciA8AKxecXgRixvp6FrkQHgAWL3i8CIWN9LRtciB8IgAWBAEQZoCsCAISkYA
+FgRByQjAgiAoGQFYEAQlIwALgqBkFBJY6ps6Ajhxk289CeiH/AptSO/WoDyqvYWrOlYFBNbG
+bbOBXAnsRUSNEbc0b77OotrpRs4A3zhSAVh95QBWGroQsG6SdQCrV2hgNTE0PICVjpZRkzGw
+ZMMAVq+gwOoHj5ombMPf5n+C+hC8MWLXMmoArGspJLD6uAve8DEAaxhBDe1G9FpGjUdg3cIB
+KwCiI1XoLmEMDR8DsKJpjNgVakSH/54AWOEFYPVVA1hpKBSwglR7k18BLC4AC8BKSoGAFaba
+m/wCYHEBWABWUrogsGRsAVgB645kxu4QD5jpnoQuN9N9dS/GpUMF9xJCEJSMACwIgpIRgAVB
+UDICsCAISkYAFgRByQjAgiAoGQFYEAQlIwALgqBkBGBBEJSMACwIgpIRgAXRxBAyUDgh+iCa
+ACwooBB9EE0AFhRQiD5oU3/sVby+sp/m+42x26PpgNVBS/z9e2fs/S+gk9ClBGBB23pjv+3f
+35ZbX0zosQLWjW9+DesmdB0BWNC2vjihmgf7apOsf03zM8BqAtYH3+PBPgM7Cl1FABa0o9du
+4Tj+9vfr474G1mv37i2gj9CVBGBBO/pk3803+2jf3bs+4RJYjA3bIciDEGnQjv7Ye9vh+2ua
+d/b6+fULYEGBhUiD9vTOfkV/r7siOAPW79QlhCBPQrxBe/pus6fvhiPqu/kbx7Bu7F//vwcf
+dP/H7qH9hC4iAAva1Ws3Z+HB5DEs8b8P/u5PTGtgP6HdhC4iAAva1Sefz9DwviG7f4/dwceN
+ffQdQ/FBUBehCwnAgiAoGQFYEAQlIwALgqBkBGBBEJSMACwIgpIRgAVBUDICsCAISkYAFgRB
+yQjAgiAoGQFYEAQlIwALgqBkBGBBEJSM/g/1fxtjiAB7PAAAAABJRU5ErkJggg=="
+>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Example-Cebu-OLS">Example Cebu OLS<a class="anchor-link" href="#Example-Cebu-OLS">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[157]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span>df.use <span class="o">&lt;-</span> df <span class="o">%&gt;%</span> filter<span class="p">(</span>S.country <span class="o">==</span> <span class="s">&#39;Cebu&#39;</span><span class="p">)</span> <span class="o">%&gt;%</span> filter<span class="p">(</span>svymthRound <span class="o">%in%</span> <span class="kt">c</span><span class="p">(</span><span class="m">12</span><span class="p">,</span> <span class="m">18</span><span class="p">,</span> <span class="m">24</span><span class="p">))</span>
+vars.z <span class="o">&lt;-</span> <span class="kc">NULL</span>
+list.out <span class="o">&lt;-</span> ff_lr_decompose<span class="p">(</span>df<span class="o">=</span>df.use<span class="p">,</span> vars.y<span class="p">,</span> vars.x<span class="p">,</span> vars.c<span class="p">,</span> vars.z<span class="p">,</span> vars.other.keep<span class="p">,</span>
+                            list.vars.tomean<span class="p">,</span> list.vars.tomean.name.suffix<span class="p">,</span>
+                            graph<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> graph.nrow<span class="o">=</span><span class="m">1</span><span class="p">)</span>
+<span class="kp">options</span><span class="p">(</span>repr.matrix.max.rows<span class="o">=</span><span class="m">10</span><span class="p">,</span> repr.matrix.max.cols<span class="o">=</span><span class="m">50</span><span class="p">)</span>
+list.out<span class="o">$</span>dfmain
+<span class="kp">options</span><span class="p">(</span>repr.plot.width <span class="o">=</span> <span class="m">10</span><span class="p">,</span> repr.plot.height <span class="o">=</span> <span class="m">4</span><span class="p">)</span>
+list.out<span class="o">$</span>dfsumm
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Warning message:
+&#34;Setting row names on a tibble is deprecated.&#34;</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<thead><tr><th scope=col>S.country</th><th scope=col>vil.id</th><th scope=col>indi.id</th><th scope=col>svymthRound</th><th scope=col>prot</th><th scope=col>male</th><th scope=col>wgt0</th><th scope=col>hgt0</th><th scope=col>variable</th><th scope=col>value</th><th scope=col>prot_mean</th><th scope=col>male_mean</th><th scope=col>wgt0_mean</th><th scope=col>hgt0_mean</th><th scope=col>svymthRound_mean</th><th scope=col>value_mean</th><th scope=col>value_A</th><th scope=col>value_B</th><th scope=col>value_C</th></tr></thead>
+<tbody>
+	<tr><td>Cebu     </td><td>1        </td><td>1        </td><td>12       </td><td>11.3     </td><td>1        </td><td>2043.8   </td><td>44.2     </td><td>hgt      </td><td>70.8     </td><td>16.95957 </td><td>0.5263013</td><td>2988.773 </td><td>49.23897 </td><td>17.87441 </td><td>74.99584 </td><td>72.12171 </td><td>75.23858 </td><td>79.26306 </td></tr>
+	<tr><td>Cebu     </td><td>1        </td><td>2        </td><td>12       </td><td> 5.9     </td><td>0        </td><td>2839.9   </td><td>49.7     </td><td>hgt      </td><td>72.2     </td><td>16.95957 </td><td>0.5263013</td><td>2988.773 </td><td>49.23897 </td><td>17.87441 </td><td>74.99584 </td><td>72.64812 </td><td>73.04655 </td><td>77.07104 </td></tr>
+	<tr><td>Cebu     </td><td>1        </td><td>2        </td><td>18       </td><td> 0.5     </td><td>0        </td><td>2839.9   </td><td>49.7     </td><td>hgt      </td><td>76.5     </td><td>16.95957 </td><td>0.5263013</td><td>2988.773 </td><td>49.23897 </td><td>17.87441 </td><td>74.99584 </td><td>76.94812 </td><td>77.54600 </td><td>77.45996 </td></tr>
+	<tr><td>Cebu     </td><td>1        </td><td>2        </td><td>24       </td><td>14.1     </td><td>0        </td><td>2839.9   </td><td>49.7     </td><td>hgt      </td><td>79.2     </td><td>16.95957 </td><td>0.5263013</td><td>2988.773 </td><td>49.23897 </td><td>17.87441 </td><td>74.99584 </td><td>79.64812 </td><td>79.74370 </td><td>75.54714 </td></tr>
+	<tr><td>Cebu     </td><td>1        </td><td>3        </td><td>12       </td><td>21.4     </td><td>0        </td><td>3445.6   </td><td>51.7     </td><td>hgt      </td><td>68.0     </td><td>16.95957 </td><td>0.5263013</td><td>2988.773 </td><td>49.23897 </td><td>17.87441 </td><td>74.99584 </td><td>67.70200 </td><td>66.12292 </td><td>70.14740 </td></tr>
+	<tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+	<tr><td>Cebu     </td><td>33       </td><td>1348     </td><td>18       </td><td>48.6     </td><td>1        </td><td>3339.5   </td><td>52.4     </td><td>wgt      </td><td> 9938.4  </td><td>16.95957 </td><td>0.5263013</td><td>2988.773 </td><td>49.23897 </td><td>17.87441 </td><td>8845.333 </td><td> 9632.231</td><td> 8705.546</td><td> 8687.786</td></tr>
+	<tr><td>Cebu     </td><td>33       </td><td>1348     </td><td>24       </td><td>17.6     </td><td>1        </td><td>3339.5   </td><td>52.4     </td><td>wgt      </td><td>13120.4  </td><td>16.95957 </td><td>0.5263013</td><td>2988.773 </td><td>49.23897 </td><td>17.87441 </td><td>8845.333 </td><td>12814.231</td><td>12439.011</td><td>11572.732</td></tr>
+	<tr><td>Cebu     </td><td>33       </td><td>1349     </td><td>12       </td><td>15.3     </td><td>1        </td><td>3216.5   </td><td>50.9     </td><td>wgt      </td><td> 8979.3  </td><td>16.95957 </td><td>0.5263013</td><td>2988.773 </td><td>49.23897 </td><td>17.87441 </td><td>8845.333 </td><td> 8700.920</td><td> 8501.461</td><td> 9332.220</td></tr>
+	<tr><td>Cebu     </td><td>33       </td><td>1349     </td><td>18       </td><td>12.0     </td><td>1        </td><td>3216.5   </td><td>50.9     </td><td>wgt      </td><td>10759.6  </td><td>16.95957 </td><td>0.5263013</td><td>2988.773 </td><td>49.23897 </td><td>17.87441 </td><td>8845.333 </td><td>10481.220</td><td>10340.466</td><td>10322.705</td></tr>
+	<tr><td>Cebu     </td><td>33       </td><td>1349     </td><td>24       </td><td>38.4     </td><td>1        </td><td>3216.5   </td><td>50.9     </td><td>wgt      </td><td> 9634.6  </td><td>16.95957 </td><td>0.5263013</td><td>2988.773 </td><td>49.23897 </td><td>17.87441 </td><td>8845.333 </td><td> 9356.220</td><td> 8745.831</td><td> 7879.551</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<thead><tr><th scope=col>value_var</th><th scope=col>value_mean_var</th><th scope=col>value_A_var</th><th scope=col>value_B_var</th><th scope=col>value_C_var</th><th scope=col>value_var_frac</th><th scope=col>value_mean_var_frac</th><th scope=col>value_A_var_frac</th><th scope=col>value_B_var_frac</th><th scope=col>value_C_var_frac</th></tr></thead>
+<tbody>
+	<tr><td>     24.375</td><td>NA         </td><td>     22.561</td><td>     21.712</td><td>     10.423</td><td>1          </td><td>NA         </td><td>0.926      </td><td>0.891      </td><td>0.428      </td></tr>
+	<tr><td>3337460.957</td><td>NA         </td><td>3218987.397</td><td>2898062.395</td><td>2417504.727</td><td>1          </td><td>NA         </td><td>0.965      </td><td>0.868      </td><td>0.724      </td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Example-Cebu-IV">Example Cebu IV<a class="anchor-link" href="#Example-Cebu-IV">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[158]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span>df.use <span class="o">&lt;-</span> df <span class="o">%&gt;%</span> filter<span class="p">(</span>S.country <span class="o">==</span> <span class="s">&#39;Cebu&#39;</span><span class="p">)</span> <span class="o">%&gt;%</span> filter<span class="p">(</span>svymthRound <span class="o">%in%</span> <span class="kt">c</span><span class="p">(</span><span class="m">12</span><span class="p">,</span> <span class="m">18</span><span class="p">,</span> <span class="m">24</span><span class="p">))</span>
+vars.z <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;wealthIdx&#39;</span><span class="p">)</span>
+list.out <span class="o">&lt;-</span> ff_lr_decompose<span class="p">(</span>df<span class="o">=</span>df.use<span class="p">,</span> vars.y<span class="p">,</span> vars.x<span class="p">,</span> vars.c<span class="p">,</span> vars.z<span class="p">,</span> vars.other.keep<span class="p">,</span>
+                            list.vars.tomean<span class="p">,</span> list.vars.tomean.name.suffix<span class="p">,</span>
+                            graph<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> graph.nrow<span class="o">=</span><span class="m">1</span><span class="p">)</span>
+list.out<span class="o">$</span>dfsumm
+<span class="kp">options</span><span class="p">(</span>repr.plot.width <span class="o">=</span> <span class="m">10</span><span class="p">,</span> repr.plot.height <span class="o">=</span> <span class="m">2</span><span class="p">)</span>
+list.out<span class="o">$</span>graph
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Warning message:
+&#34;Setting row names on a tibble is deprecated.&#34;</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<thead><tr><th scope=col>value_var</th><th scope=col>value_mean_var</th><th scope=col>value_A_var</th><th scope=col>value_B_var</th><th scope=col>value_C_var</th><th scope=col>value_var_frac</th><th scope=col>value_mean_var_frac</th><th scope=col>value_A_var_frac</th><th scope=col>value_B_var_frac</th><th scope=col>value_C_var_frac</th></tr></thead>
+<tbody>
+	<tr><td>     24.375</td><td>NA         </td><td>     22.625</td><td>     22.676</td><td>     14.89 </td><td>1          </td><td>NA         </td><td>0.928      </td><td>0.930      </td><td>0.611      </td></tr>
+	<tr><td>3337460.957</td><td>NA         </td><td>3237415.252</td><td>3298020.911</td><td>3071065.97 </td><td>1          </td><td>NA         </td><td>0.970      </td><td>0.988      </td><td>0.920      </td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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
+/9CVHQgvyCsfAAAAAElFTkSuQmCC"
+>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Examples-Line-by-Line">Examples Line by Line<a class="anchor-link" href="#Examples-Line-by-Line">&#182;</a></h2><p>The examples are just to test the code with different types of variables.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[159]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span>df.use <span class="o">&lt;-</span> df <span class="o">%&gt;%</span> filter<span class="p">(</span>S.country <span class="o">==</span> <span class="s">&#39;Guatemala&#39;</span><span class="p">)</span> <span class="o">%&gt;%</span> filter<span class="p">(</span>svymthRound <span class="o">%in%</span> <span class="kt">c</span><span class="p">(</span><span class="m">12</span><span class="p">,</span> <span class="m">18</span><span class="p">,</span> <span class="m">24</span><span class="p">))</span>
+<span class="kp">dim</span><span class="p">(</span>df.use<span class="p">)</span>
 </pre></div>
 
 </div>
@@ -12137,49 +12750,10 @@ ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</spa
 
 
 <div class="output_html rendered_html output_subarea ">
-<dl>
-	<dt>$df_table_grp_stats</dt>
-		<dd><table>
-<thead><tr><th scope=col>sex</th><th scope=col>mean</th><th scope=col>sd</th></tr></thead>
-<tbody>
-	<tr><td>Female  </td><td>82.81198</td><td>29.79351</td></tr>
-	<tr><td>Male    </td><td>84.68152</td><td>31.75037</td></tr>
-</tbody>
-</table>
-</dd>
-	<dt>$df_row_grp_stats</dt>
-		<dd><table>
-<thead><tr><th scope=col>hgt.sex.gFemale.mean</th><th scope=col>hgt.sex.gFemale.sd</th><th scope=col>hgt.sex.gMale.mean</th><th scope=col>hgt.sex.gMale.sd</th></tr></thead>
-<tbody>
-	<tr><td>82.81198</td><td>29.79351</td><td>84.68152</td><td>31.75037</td></tr>
-</tbody>
-</table>
-</dd>
-	<dt>$df_overall_stats</dt>
-		<dd><table>
-<thead><tr><th scope=col>hgt.mean</th><th scope=col>hgt.sd</th></tr></thead>
-<tbody>
-	<tr><td>83.80921</td><td>30.86631</td></tr>
-</tbody>
-</table>
-</dd>
-	<dt>$df_row_stats_all</dt>
-		<dd><dl>
-	<dt>$hgt.sex.gFemale.mean</dt>
-		<dd>82.8119830899308</dd>
-	<dt>$hgt.sex.gFemale.sd</dt>
-		<dd>29.7935118668632</dd>
-	<dt>$hgt.sex.gMale.mean</dt>
-		<dd>84.6815235661938</dd>
-	<dt>$hgt.sex.gMale.sd</dt>
-		<dd>31.7503680336368</dd>
-	<dt>$hgt.mean</dt>
-		<dd>83.8092099128501</dd>
-	<dt>$hgt.sd</dt>
-		<dd>30.8663089446023</dd>
-</dl>
-</dd>
-</dl>
+<ol class=list-inline>
+	<li>2022</li>
+	<li>16</li>
+</ol>
 
 </div>
 
@@ -12193,16 +12767,93 @@ ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</spa
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Specify-One-Specific-Statistics">Specify One Specific Statistics<a class="anchor-link" href="#Specify-One-Specific-Statistics">&#182;</a></h3>
+<h3 id="Setting-Up-Parameters">Setting Up Parameters<a class="anchor-link" href="#Setting-Up-Parameters">&#182;</a></h3>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[160]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span>ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</span> vars.group <span class="o">=</span> vars.group<span class="p">,</span> var.numeric <span class="o">=</span> var.numeric<span class="p">,</span> str.stats.specify <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;mean&#39;</span><span class="p">))</span>
+<div class=" highlight hl-r"><pre><span></span><span class="c1"># Define Left Hand Side Variables</span>
+var.y1 <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;hgt&#39;</span><span class="p">)</span>
+var.y2 <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;wgt&#39;</span><span class="p">)</span>
+vars.y <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span>var.y1<span class="p">,</span> var.y2<span class="p">)</span>
+<span class="c1"># Define Right Hand Side Variables</span>
+vars.x <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;prot&#39;</span><span class="p">)</span>
+vars.c <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;male&#39;</span><span class="p">,</span> <span class="s">&#39;wgt0&#39;</span><span class="p">,</span> <span class="s">&#39;hgt0&#39;</span><span class="p">,</span> <span class="s">&#39;svymthRound&#39;</span><span class="p">)</span>
+<span class="c1"># vars.z &lt;- c(&#39;p.A.prot&#39;)</span>
+vars.z <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;vil.id&#39;</span><span class="p">)</span>
+<span class="c1"># vars.z &lt;- NULL</span>
+vars.xc <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span>vars.x<span class="p">,</span> vars.c<span class="p">)</span>
+
+<span class="c1"># Other variables to keep</span>
+vars.other.keep <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;S.country&#39;</span><span class="p">,</span> <span class="s">&#39;vil.id&#39;</span><span class="p">,</span> <span class="s">&#39;indi.id&#39;</span><span class="p">,</span> <span class="s">&#39;svymthRound&#39;</span><span class="p">)</span>
+
+<span class="c1"># Decompose sequence</span>
+vars.tomean.first <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;male&#39;</span><span class="p">,</span> <span class="s">&#39;hgt0&#39;</span><span class="p">)</span>
+var.tomean.first.name.suffix <span class="o">&lt;-</span> <span class="s">&#39;_mh02m&#39;</span>
+vars.tomean.second <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span>vars.tomean.first<span class="p">,</span> <span class="s">&#39;hgt0&#39;</span><span class="p">,</span> <span class="s">&#39;wgt0&#39;</span><span class="p">)</span>
+var.tomean.second.name.suffix <span class="o">&lt;-</span> <span class="s">&#39;_mh0me2m&#39;</span>
+vars.tomean.third <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span>vars.tomean.second<span class="p">,</span> <span class="s">&#39;prot&#39;</span><span class="p">)</span>
+var.tomean.third.name.suffix <span class="o">&lt;-</span> <span class="s">&#39;_mh0mep2m&#39;</span>
+vars.tomean.fourth <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span>vars.tomean.third<span class="p">,</span> <span class="s">&#39;svymthRound&#39;</span><span class="p">)</span>
+var.tomean.fourth.name.suffix <span class="o">&lt;-</span> <span class="s">&#39;_mh0mepm2m&#39;</span>
+list.vars.tomean <span class="o">=</span> <span class="kt">list</span><span class="p">(</span>
+<span class="c1">#                         vars.tomean.first, </span>
+                        vars.tomean.second<span class="p">,</span>                         
+                        vars.tomean.third<span class="p">,</span>
+                        vars.tomean.fourth
+                        <span class="p">)</span>
+list.vars.tomean.name.suffix <span class="o">&lt;-</span> <span class="kt">list</span><span class="p">(</span>
+<span class="c1">#                                     var.tomean.first.name.suffix, </span>
+                                     var.tomean.second.name.suffix<span class="p">,</span>
+                                     var.tomean.third.name.suffix<span class="p">,</span>
+                                     var.tomean.fourth.name.suffix
+                                    <span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Obtain-Regression-Coefficients-from-somewhere">Obtain Regression Coefficients from somewhere<a class="anchor-link" href="#Obtain-Regression-Coefficients-from-somewhere">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[161]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="c1"># Regressions</span>
+<span class="c1"># regf.iv from C:\Users\fan\R4Econ\linreg\ivreg\ivregdfrow.R</span>
+df.reg.out <span class="o">&lt;-</span> as_tibble<span class="p">(</span>bind_rows<span class="p">(</span><span class="kp">lapply</span><span class="p">(</span>vars.y<span class="p">,</span> regf.iv<span class="p">,</span>
+                                         vars.x<span class="o">=</span>vars.x<span class="p">,</span> vars.c<span class="o">=</span>vars.c<span class="p">,</span> vars.z<span class="o">=</span>vars.z<span class="p">,</span> df<span class="o">=</span>df<span class="p">)))</span>
+<span class="c1"># Regressions</span>
+<span class="c1"># reg1 &lt;- regf.iv(var.y = var.y1, vars.x, vars.c, vars.z, df.use)</span>
+<span class="c1"># reg2 &lt;- regf.iv(var.y = var.y2, vars.x, vars.c, vars.z, df.use)</span>
+<span class="c1"># df.reg.out &lt;- as_tibble(bind_rows(reg1, reg2))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[162]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="kp">options</span><span class="p">(</span>repr.matrix.max.rows<span class="o">=</span><span class="m">50</span><span class="p">,</span> repr.matrix.max.cols<span class="o">=</span><span class="m">50</span><span class="p">)</span>
+df.reg.out
 </pre></div>
 
 </div>
@@ -12220,110 +12871,33 @@ ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</spa
 
 
 <div class="output_html rendered_html output_subarea ">
-<dl>
-	<dt>$df_table_grp_stats</dt>
-		<dd><table>
-<thead><tr><th scope=col>sex</th><th scope=col>mean</th></tr></thead>
+<table>
+<thead><tr><th scope=col>X.Intercept._Estimate</th><th scope=col>X.Intercept._Pr...z..</th><th scope=col>X.Intercept._Std.Error</th><th scope=col>X.Intercept._zvalue</th><th scope=col>hgt0_Estimate</th><th scope=col>hgt0_Pr...z..</th><th scope=col>hgt0_Std.Error</th><th scope=col>hgt0_zvalue</th><th scope=col>male_Estimate</th><th scope=col>male_Pr...z..</th><th scope=col>male_Std.Error</th><th scope=col>male_zvalue</th><th scope=col>prot_Estimate</th><th scope=col>prot_Pr...z..</th><th scope=col>prot_Std.Error</th><th scope=col>prot_zvalue</th><th scope=col>Sargan_df1</th><th scope=col>svymthRound_Estimate</th><th scope=col>svymthRound_Pr...z..</th><th scope=col>svymthRound_Std.Error</th><th scope=col>svymthRound_zvalue</th><th scope=col>vars_var.y</th><th scope=col>vars_vars.c</th><th scope=col>vars_vars.x</th><th scope=col>vars_vars.z</th><th scope=col>Weakinstruments_df1</th><th scope=col>Weakinstruments_df2</th><th scope=col>Weakinstruments_p.value</th><th scope=col>Weakinstruments_statistic</th><th scope=col>wgt0_Estimate</th><th scope=col>wgt0_Pr...z..</th><th scope=col>wgt0_Std.Error</th><th scope=col>wgt0_zvalue</th><th scope=col>Wu.Hausman_df1</th><th scope=col>Wu.Hausman_df2</th><th scope=col>Wu.Hausman_p.value</th><th scope=col>Wu.Hausman_statistic</th></tr></thead>
 <tbody>
-	<tr><td>Female  </td><td>82.81198</td></tr>
-	<tr><td>Male    </td><td>84.68152</td></tr>
+	<tr><td>22.2547168993562          </td><td>8.90880805116339e-75      </td><td>1.21637209166939          </td><td>18.2959778934199          </td><td>0.683485333749857         </td><td>4.55758747404583e-123     </td><td>0.0289699490334337        </td><td>23.5929077044995          </td><td>1.24473528437265          </td><td>6.90641190023989e-47      </td><td>0.0865599892152535        </td><td>14.3800304928101          </td><td>-0.27147719759472         </td><td>1.41850396300123e-19      </td><td>0.0299946394681993        </td><td>-9.05085716674618         </td><td>0                         </td><td>1.13391864772583          </td><td>0                         </td><td>0.0250995291586825        </td><td>45.176889198082           </td><td>hgt                       </td><td>male+wgt0+hgt0+svymthRound</td><td>prot                      </td><td>vil.id                    </td><td>1                         </td><td>18957                     </td><td>2.50701851391303e-60      </td><td>270.337017802049          </td><td>0.000443041849600911      </td><td>0.00335642643992964       </td><td>0.00015105124195408       </td><td>2.93305664931638          </td><td>1                         </td><td>18956                     </td><td>2.71953708467901e-42      </td><td>186.64752853014           </td></tr>
+	<tr><td>-1101.09005806864         </td><td>0.00510620293260513       </td><td>393.210441213089          </td><td>-2.80025640893889         </td><td>75.4867896610275          </td><td>3.00433623813613e-16      </td><td>9.23594523428083          </td><td>8.17315258440956          </td><td>489.852902350196          </td><td>3.81065764666863e-65      </td><td>28.7388865413848          </td><td>17.0449506331706          </td><td>-59.0727542411542         </td><td>9.53469044018094e-09      </td><td>10.293563528696           </td><td>-5.73880503835948         </td><td>0                         </td><td>250.778883169332          </td><td>6.33178366808817e-190     </td><td>8.53129752452757          </td><td>29.395163215014           </td><td>wgt                       </td><td>male+wgt0+hgt0+svymthRound</td><td>prot                      </td><td>vil.id                    </td><td>1                         </td><td>18962                     </td><td>1.34647368544412e-60      </td><td>271.592883001643          </td><td>0.769615810959556         </td><td>1.88093171544694e-60      </td><td>0.0469249111255955        </td><td>16.4010073220952          </td><td>1                         </td><td>18961                     </td><td>4.84720137482191e-16      </td><td>65.9737961330202          </td></tr>
 </tbody>
 </table>
-</dd>
-	<dt>$df_row_grp_stats</dt>
-		<dd><table>
-<thead><tr><th scope=col>hgt.sex.gFemale.mean</th><th scope=col>hgt.sex.gMale.mean</th></tr></thead>
-<tbody>
-	<tr><td>82.81198</td><td>84.68152</td></tr>
-</tbody>
-</table>
-</dd>
-	<dt>$df_overall_stats</dt>
-		<dd><table>
-<thead><tr><th scope=col>hgt.mean</th></tr></thead>
-<tbody>
-	<tr><td>83.80921</td></tr>
-</tbody>
-</table>
-</dd>
-	<dt>$df_row_stats_all</dt>
-		<dd><dl>
-	<dt>$hgt.sex.gFemale.mean</dt>
-		<dd>82.8119830899308</dd>
-	<dt>$hgt.sex.gMale.mean</dt>
-		<dd>84.6815235661938</dd>
-	<dt>$hgt.mean</dt>
-		<dd>83.8092099128501</dd>
-</dl>
-</dd>
-</dl>
 
 </div>
 
 </div>
 
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Function-Testing-By-Country-and-Gender--Groups">Function Testing By Country and Gender  Groups<a class="anchor-link" href="#Function-Testing-By-Country-and-Gender--Groups">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Select-Variables">Select Variables<a class="anchor-link" href="#Select-Variables">&#182;</a></h3><p>Need two variables, a group variable that is a factor, and a numeric. Now joint grouping variables.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span>vars.group <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;S.country&#39;</span><span class="p">,</span> <span class="s">&#39;sex&#39;</span><span class="p">)</span>
-var.numeric <span class="o">&lt;-</span> <span class="s">&#39;hgt&#39;</span>
-</pre></div>
-
-</div>
 </div>
 </div>
 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[163]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span>df.select <span class="o">&lt;-</span> df <span class="o">%&gt;%</span> select<span class="p">(</span>one_of<span class="p">(</span>vars.group<span class="p">,</span> var.numeric<span class="p">))</span> <span class="o">%&gt;%</span> drop_na<span class="p">()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Main-Statistics">Main Statistics<a class="anchor-link" href="#Main-Statistics">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span>ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</span> vars.group <span class="o">=</span> vars.group<span class="p">,</span> var.numeric <span class="o">=</span> var.numeric<span class="p">,</span> str.stats.group <span class="o">=</span> <span class="s">&#39;main&#39;</span><span class="p">)</span>
+<div class=" highlight hl-r"><pre><span></span><span class="c1"># Select Variables</span>
+str.esti.suffix <span class="o">&lt;-</span> <span class="s">&#39;_Estimate&#39;</span>
+arr.esti.name <span class="o">&lt;-</span> <span class="kp">paste0</span><span class="p">(</span>vars.xc<span class="p">,</span> str.esti.suffix<span class="p">)</span>
+str.outcome.name <span class="o">&lt;-</span> <span class="s">&#39;vars_var.y&#39;</span>
+arr.columns2select <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span>arr.esti.name<span class="p">,</span> str.outcome.name<span class="p">)</span>
+arr.columns2select
 </pre></div>
 
 </div>
@@ -12341,82 +12915,86 @@ var.numeric <span class="o">&lt;-</span> <span class="s">&#39;hgt&#39;</span>
 
 
 <div class="output_html rendered_html output_subarea ">
-<dl>
-	<dt>$df_table_grp_stats</dt>
-		<dd><table>
-<thead><tr><th scope=col>S.country</th><th scope=col>sex</th><th scope=col>mean</th><th scope=col>min</th><th scope=col>max</th><th scope=col>sd</th></tr></thead>
-<tbody>
-	<tr><td>Cebu     </td><td>Female   </td><td>84.61326 </td><td>41.3     </td><td>170.6    </td><td>32.53651 </td></tr>
-	<tr><td>Cebu     </td><td>Male     </td><td>87.02836 </td><td>41.3     </td><td>182.9    </td><td>34.99090 </td></tr>
-	<tr><td>Guatemala</td><td>Female   </td><td>76.58771 </td><td>41.2     </td><td>119.9    </td><td>15.71801 </td></tr>
-	<tr><td>Guatemala</td><td>Male     </td><td>77.04710 </td><td>41.5     </td><td>124.7    </td><td>15.11444 </td></tr>
-</tbody>
-</table>
-</dd>
-	<dt>$df_row_grp_stats</dt>
-		<dd><table>
-<thead><tr><th scope=col>hgt.S.country.sex.Cebu.Female.max</th><th scope=col>hgt.S.country.sex.Cebu.Female.mean</th><th scope=col>hgt.S.country.sex.Cebu.Female.min</th><th scope=col>hgt.S.country.sex.Cebu.Female.sd</th><th scope=col>hgt.S.country.sex.Cebu.Male.max</th><th scope=col>hgt.S.country.sex.Cebu.Male.mean</th><th scope=col>hgt.S.country.sex.Cebu.Male.min</th><th scope=col>hgt.S.country.sex.Cebu.Male.sd</th><th scope=col>hgt.S.country.sex.Guatemala.Female.max</th><th scope=col>hgt.S.country.sex.Guatemala.Female.mean</th><th scope=col>hgt.S.country.sex.Guatemala.Female.min</th><th scope=col>hgt.S.country.sex.Guatemala.Female.sd</th><th scope=col>hgt.S.country.sex.Guatemala.Male.max</th><th scope=col>hgt.S.country.sex.Guatemala.Male.mean</th><th scope=col>hgt.S.country.sex.Guatemala.Male.min</th><th scope=col>hgt.S.country.sex.Guatemala.Male.sd</th></tr></thead>
-<tbody>
-	<tr><td>170.6   </td><td>84.61326</td><td>41.3    </td><td>32.53651</td><td>182.9   </td><td>87.02836</td><td>41.3    </td><td>34.9909 </td><td>119.9   </td><td>76.58771</td><td>41.2    </td><td>15.71801</td><td>124.7   </td><td>77.0471 </td><td>41.5    </td><td>15.11444</td></tr>
-</tbody>
-</table>
-</dd>
-	<dt>$df_overall_stats</dt>
-		<dd><table>
-<thead><tr><th scope=col>hgt.mean</th><th scope=col>hgt.min</th><th scope=col>hgt.max</th><th scope=col>hgt.sd</th></tr></thead>
-<tbody>
-	<tr><td>83.80921</td><td>41.2    </td><td>182.9   </td><td>30.86631</td></tr>
-</tbody>
-</table>
-</dd>
-	<dt>$df_row_stats_all</dt>
-		<dd><dl>
-	<dt>$hgt.S.country.sex.Cebu.Female.max</dt>
-		<dd>170.6</dd>
-	<dt>$hgt.S.country.sex.Cebu.Female.mean</dt>
-		<dd>84.613260654113</dd>
-	<dt>$hgt.S.country.sex.Cebu.Female.min</dt>
-		<dd>41.3</dd>
-	<dt>$hgt.S.country.sex.Cebu.Female.sd</dt>
-		<dd>32.5365100867272</dd>
-	<dt>$hgt.S.country.sex.Cebu.Male.max</dt>
-		<dd>182.9</dd>
-	<dt>$hgt.S.country.sex.Cebu.Male.mean</dt>
-		<dd>87.0283579465542</dd>
-	<dt>$hgt.S.country.sex.Cebu.Male.min</dt>
-		<dd>41.3</dd>
-	<dt>$hgt.S.country.sex.Cebu.Male.sd</dt>
-		<dd>34.9908993778761</dd>
-	<dt>$hgt.S.country.sex.Guatemala.Female.max</dt>
-		<dd>119.9</dd>
-	<dt>$hgt.S.country.sex.Guatemala.Female.mean</dt>
-		<dd>76.5877054794521</dd>
-	<dt>$hgt.S.country.sex.Guatemala.Female.min</dt>
-		<dd>41.2</dd>
-	<dt>$hgt.S.country.sex.Guatemala.Female.sd</dt>
-		<dd>15.7180141025107</dd>
-	<dt>$hgt.S.country.sex.Guatemala.Male.max</dt>
-		<dd>124.7</dd>
-	<dt>$hgt.S.country.sex.Guatemala.Male.mean</dt>
-		<dd>77.0470975121533</dd>
-	<dt>$hgt.S.country.sex.Guatemala.Male.min</dt>
-		<dd>41.5</dd>
-	<dt>$hgt.S.country.sex.Guatemala.Male.sd</dt>
-		<dd>15.1144367867969</dd>
-	<dt>$hgt.mean</dt>
-		<dd>83.8092099128501</dd>
-	<dt>$hgt.min</dt>
-		<dd>41.2</dd>
-	<dt>$hgt.max</dt>
-		<dd>182.9</dd>
-	<dt>$hgt.sd</dt>
-		<dd>30.8663089446023</dd>
-</dl>
-</dd>
-</dl>
+<ol class=list-inline>
+	<li>'prot_Estimate'</li>
+	<li>'male_Estimate'</li>
+	<li>'wgt0_Estimate'</li>
+	<li>'hgt0_Estimate'</li>
+	<li>'svymthRound_Estimate'</li>
+	<li>'vars_var.y'</li>
+</ol>
 
 </div>
 
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[164]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="c1"># Generate dataframe for coefficients</span>
+df.coef <span class="o">&lt;-</span> df.reg.out<span class="p">[,</span><span class="kt">c</span><span class="p">(</span>arr.columns2select<span class="p">)]</span> <span class="o">%&gt;%</span> mutate_at<span class="p">(</span>vars<span class="p">(</span>arr.esti.name<span class="p">),</span> <span class="kp">as.numeric</span><span class="p">)</span> <span class="o">%&gt;%</span> column_to_rownames<span class="p">(</span>str.outcome.name<span class="p">)</span> 
+df.coef
+str<span class="p">(</span>df.coef<span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Warning message:
+&#34;Setting row names on a tibble is deprecated.&#34;</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<thead><tr><th></th><th scope=col>prot_Estimate</th><th scope=col>male_Estimate</th><th scope=col>wgt0_Estimate</th><th scope=col>hgt0_Estimate</th><th scope=col>svymthRound_Estimate</th></tr></thead>
+<tbody>
+	<tr><th scope=row>hgt</th><td> -0.2714772 </td><td>  1.244735  </td><td>0.0004430418</td><td> 0.6834853  </td><td>  1.133919  </td></tr>
+	<tr><th scope=row>wgt</th><td>-59.0727542 </td><td>489.852902  </td><td>0.7696158110</td><td>75.4867897  </td><td>250.778883  </td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:	2 obs. of  5 variables:
+ $ prot_Estimate       : num  -0.271 -59.073
+ $ male_Estimate       : num  1.24 489.85
+ $ wgt0_Estimate       : num  0.000443 0.769616
+ $ hgt0_Estimate       : num  0.683 75.487
+ $ svymthRound_Estimate: num  1.13 250.78
+</pre>
+</div>
 </div>
 
 </div>
@@ -12427,16 +13005,24 @@ var.numeric <span class="o">&lt;-</span> <span class="s">&#39;hgt&#39;</span>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Specify-Two-Specific-Statistics">Specify Two Specific Statistics<a class="anchor-link" href="#Specify-Two-Specific-Statistics">&#182;</a></h3>
+<h3 id="Decomposition-Step-1">Decomposition Step 1<a class="anchor-link" href="#Decomposition-Step-1">&#182;</a></h3>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[165]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span>ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</span> vars.group <span class="o">=</span> vars.group<span class="p">,</span> var.numeric <span class="o">=</span> var.numeric<span class="p">,</span> str.stats.specify <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;mean&#39;</span><span class="p">,</span> <span class="s">&#39;sd&#39;</span><span class="p">))</span>
+<div class=" highlight hl-r"><pre><span></span><span class="c1"># Decomposition Step 1: gather</span>
+df.decompose_step1 <span class="o">&lt;-</span> df.use <span class="o">%&gt;%</span> 
+                        filter<span class="p">(</span>svymthRound <span class="o">%in%</span> <span class="kt">c</span><span class="p">(</span><span class="m">12</span><span class="p">,</span> <span class="m">18</span><span class="p">,</span> <span class="m">24</span><span class="p">))</span> <span class="o">%&gt;%</span>
+                        select<span class="p">(</span>one_of<span class="p">(</span><span class="kt">c</span><span class="p">(</span>vars.other.keep<span class="p">,</span> vars.xc<span class="p">,</span> vars.y<span class="p">)))</span> <span class="o">%&gt;%</span> 
+                        drop_na<span class="p">()</span> <span class="o">%&gt;%</span> 
+                        gather<span class="p">(</span>variable<span class="p">,</span> value<span class="p">,</span> <span class="o">-</span>one_of<span class="p">(</span><span class="kt">c</span><span class="p">(</span>vars.other.keep<span class="p">,</span> vars.xc<span class="p">)))</span>
+<span class="kp">options</span><span class="p">(</span>repr.matrix.max.rows<span class="o">=</span><span class="m">20</span><span class="p">,</span> repr.matrix.max.cols<span class="o">=</span><span class="m">20</span><span class="p">)</span>
+<span class="kp">dim</span><span class="p">(</span>df.decompose_step1<span class="p">)</span>
+df.decompose_step1
 </pre></div>
 
 </div>
@@ -12454,59 +13040,48 @@ var.numeric <span class="o">&lt;-</span> <span class="s">&#39;hgt&#39;</span>
 
 
 <div class="output_html rendered_html output_subarea ">
-<dl>
-	<dt>$df_table_grp_stats</dt>
-		<dd><table>
-<thead><tr><th scope=col>S.country</th><th scope=col>sex</th><th scope=col>mean</th><th scope=col>sd</th></tr></thead>
+<ol class=list-inline>
+	<li>1382</li>
+	<li>10</li>
+</ol>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<thead><tr><th scope=col>S.country</th><th scope=col>vil.id</th><th scope=col>indi.id</th><th scope=col>svymthRound</th><th scope=col>prot</th><th scope=col>male</th><th scope=col>wgt0</th><th scope=col>hgt0</th><th scope=col>variable</th><th scope=col>value</th></tr></thead>
 <tbody>
-	<tr><td>Cebu     </td><td>Female   </td><td>84.61326 </td><td>32.53651 </td></tr>
-	<tr><td>Cebu     </td><td>Male     </td><td>87.02836 </td><td>34.99090 </td></tr>
-	<tr><td>Guatemala</td><td>Female   </td><td>76.58771 </td><td>15.71801 </td></tr>
-	<tr><td>Guatemala</td><td>Male     </td><td>77.04710 </td><td>15.11444 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1352     </td><td>18       </td><td>13.3     </td><td>1        </td><td>2545.2   </td><td>47.4     </td><td>hgt      </td><td>70.2     </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1352     </td><td>24       </td><td>46.3     </td><td>1        </td><td>2545.2   </td><td>47.4     </td><td>hgt      </td><td>75.8     </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1354     </td><td>12       </td><td> 1.0     </td><td>1        </td><td>3634.3   </td><td>51.2     </td><td>hgt      </td><td>66.3     </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1354     </td><td>18       </td><td> 9.8     </td><td>1        </td><td>3634.3   </td><td>51.2     </td><td>hgt      </td><td>69.2     </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1354     </td><td>24       </td><td>15.4     </td><td>1        </td><td>3634.3   </td><td>51.2     </td><td>hgt      </td><td>75.3     </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1356     </td><td>12       </td><td> 8.6     </td><td>1        </td><td>3911.8   </td><td>51.9     </td><td>hgt      </td><td>68.1     </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1356     </td><td>18       </td><td>17.8     </td><td>1        </td><td>3911.8   </td><td>51.9     </td><td>hgt      </td><td>74.1     </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1356     </td><td>24       </td><td>30.5     </td><td>1        </td><td>3911.8   </td><td>51.9     </td><td>hgt      </td><td>77.1     </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1357     </td><td>12       </td><td> 1.0     </td><td>1        </td><td>3791.4   </td><td>52.6     </td><td>hgt      </td><td>71.5     </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1357     </td><td>18       </td><td>12.7     </td><td>1        </td><td>3791.4   </td><td>52.6     </td><td>hgt      </td><td>77.8     </td></tr>
+	<tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2017     </td><td>18       </td><td>42.6     </td><td>1        </td><td>3312.9   </td><td>49.2     </td><td>wgt      </td><td> 8641.0  </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2017     </td><td>24       </td><td>43.1     </td><td>1        </td><td>3312.9   </td><td>49.2     </td><td>wgt      </td><td>10922.6  </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2018     </td><td>12       </td><td>24.0     </td><td>0        </td><td>3682.8   </td><td>48.8     </td><td>wgt      </td><td> 6266.3  </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2018     </td><td>18       </td><td>37.2     </td><td>0        </td><td>3682.8   </td><td>48.8     </td><td>wgt      </td><td>11008.2  </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2018     </td><td>24       </td><td>31.7     </td><td>0        </td><td>3682.8   </td><td>48.8     </td><td>wgt      </td><td> 9668.5  </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2019     </td><td>12       </td><td>17.3     </td><td>1        </td><td>3132.9   </td><td>49.7     </td><td>wgt      </td><td> 7777.6  </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2019     </td><td>18       </td><td>24.5     </td><td>1        </td><td>3132.9   </td><td>49.7     </td><td>wgt      </td><td> 9729.6  </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2019     </td><td>24       </td><td>57.8     </td><td>1        </td><td>3132.9   </td><td>49.7     </td><td>wgt      </td><td>10276.5  </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2023     </td><td>12       </td><td>15.9     </td><td>1        </td><td>3607.1   </td><td>50.3     </td><td>wgt      </td><td> 8424.7  </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2023     </td><td>18       </td><td>22.2     </td><td>1        </td><td>3607.1   </td><td>50.3     </td><td>wgt      </td><td> 6933.2  </td></tr>
 </tbody>
 </table>
-</dd>
-	<dt>$df_row_grp_stats</dt>
-		<dd><table>
-<thead><tr><th scope=col>hgt.S.country.sex.Cebu.Female.mean</th><th scope=col>hgt.S.country.sex.Cebu.Female.sd</th><th scope=col>hgt.S.country.sex.Cebu.Male.mean</th><th scope=col>hgt.S.country.sex.Cebu.Male.sd</th><th scope=col>hgt.S.country.sex.Guatemala.Female.mean</th><th scope=col>hgt.S.country.sex.Guatemala.Female.sd</th><th scope=col>hgt.S.country.sex.Guatemala.Male.mean</th><th scope=col>hgt.S.country.sex.Guatemala.Male.sd</th></tr></thead>
-<tbody>
-	<tr><td>84.61326</td><td>32.53651</td><td>87.02836</td><td>34.9909 </td><td>76.58771</td><td>15.71801</td><td>77.0471 </td><td>15.11444</td></tr>
-</tbody>
-</table>
-</dd>
-	<dt>$df_overall_stats</dt>
-		<dd><table>
-<thead><tr><th scope=col>hgt.mean</th><th scope=col>hgt.sd</th></tr></thead>
-<tbody>
-	<tr><td>83.80921</td><td>30.86631</td></tr>
-</tbody>
-</table>
-</dd>
-	<dt>$df_row_stats_all</dt>
-		<dd><dl>
-	<dt>$hgt.S.country.sex.Cebu.Female.mean</dt>
-		<dd>84.613260654113</dd>
-	<dt>$hgt.S.country.sex.Cebu.Female.sd</dt>
-		<dd>32.5365100867272</dd>
-	<dt>$hgt.S.country.sex.Cebu.Male.mean</dt>
-		<dd>87.0283579465542</dd>
-	<dt>$hgt.S.country.sex.Cebu.Male.sd</dt>
-		<dd>34.9908993778761</dd>
-	<dt>$hgt.S.country.sex.Guatemala.Female.mean</dt>
-		<dd>76.5877054794521</dd>
-	<dt>$hgt.S.country.sex.Guatemala.Female.sd</dt>
-		<dd>15.7180141025107</dd>
-	<dt>$hgt.S.country.sex.Guatemala.Male.mean</dt>
-		<dd>77.0470975121533</dd>
-	<dt>$hgt.S.country.sex.Guatemala.Male.sd</dt>
-		<dd>15.1144367867969</dd>
-	<dt>$hgt.mean</dt>
-		<dd>83.8092099128501</dd>
-	<dt>$hgt.sd</dt>
-		<dd>30.8663089446023</dd>
-</dl>
-</dd>
-</dl>
 
 </div>
 
@@ -12520,16 +13095,25 @@ var.numeric <span class="o">&lt;-</span> <span class="s">&#39;hgt&#39;</span>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Specify-One-Specific-Statistics">Specify One Specific Statistics<a class="anchor-link" href="#Specify-One-Specific-Statistics">&#182;</a></h3>
+<h3 id="Decomposition-Step-2">Decomposition Step 2<a class="anchor-link" href="#Decomposition-Step-2">&#182;</a></h3>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[166]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span>ff_summ_by_group_summ_one<span class="p">(</span>df.select<span class="p">,</span> vars.group <span class="o">=</span> vars.group<span class="p">,</span> var.numeric <span class="o">=</span> var.numeric<span class="p">,</span> str.stats.specify <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;mean&#39;</span><span class="p">))</span>
+<div class=" highlight hl-r"><pre><span></span><span class="c1"># Decomposition Step 2: mutate_at(vars, funs(mean = mean(.)))</span>
+<span class="c1"># the xc averaging could have taken place earlier, no difference in mean across variables</span>
+df.decompose_step2 <span class="o">&lt;-</span> df.decompose_step1 <span class="o">%&gt;%</span> 
+                        group_by<span class="p">(</span>variable<span class="p">)</span> <span class="o">%&gt;%</span> 
+                        mutate_at<span class="p">(</span>vars<span class="p">(</span><span class="kt">c</span><span class="p">(</span>vars.xc<span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">)),</span> funs<span class="p">(</span>mean <span class="o">=</span> <span class="kp">mean</span><span class="p">(</span><span class="m">.</span><span class="p">)))</span> <span class="o">%&gt;%</span> 
+                        ungroup<span class="p">()</span>
+
+<span class="kp">options</span><span class="p">(</span>repr.matrix.max.rows<span class="o">=</span><span class="m">20</span><span class="p">,</span> repr.matrix.max.cols<span class="o">=</span><span class="m">20</span><span class="p">)</span>
+<span class="kp">dim</span><span class="p">(</span>df.decompose_step2<span class="p">)</span>
+df.decompose_step2
 </pre></div>
 
 </div>
@@ -12547,49 +13131,778 @@ var.numeric <span class="o">&lt;-</span> <span class="s">&#39;hgt&#39;</span>
 
 
 <div class="output_html rendered_html output_subarea ">
-<dl>
-	<dt>$df_table_grp_stats</dt>
-		<dd><table>
-<thead><tr><th scope=col>S.country</th><th scope=col>sex</th><th scope=col>mean</th></tr></thead>
+<ol class=list-inline>
+	<li>1382</li>
+	<li>16</li>
+</ol>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<thead><tr><th scope=col>S.country</th><th scope=col>vil.id</th><th scope=col>indi.id</th><th scope=col>svymthRound</th><th scope=col>prot</th><th scope=col>male</th><th scope=col>wgt0</th><th scope=col>hgt0</th><th scope=col>variable</th><th scope=col>value</th><th scope=col>prot_mean</th><th scope=col>male_mean</th><th scope=col>wgt0_mean</th><th scope=col>hgt0_mean</th><th scope=col>svymthRound_mean</th><th scope=col>value_mean</th></tr></thead>
 <tbody>
-	<tr><td>Cebu     </td><td>Female   </td><td>84.61326 </td></tr>
-	<tr><td>Cebu     </td><td>Male     </td><td>87.02836 </td></tr>
-	<tr><td>Guatemala</td><td>Female   </td><td>76.58771 </td></tr>
-	<tr><td>Guatemala</td><td>Male     </td><td>77.04710 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1352     </td><td>18       </td><td>13.3     </td><td>1        </td><td>2545.2   </td><td>47.4     </td><td>hgt      </td><td>70.2     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1352     </td><td>24       </td><td>46.3     </td><td>1        </td><td>2545.2   </td><td>47.4     </td><td>hgt      </td><td>75.8     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1354     </td><td>12       </td><td> 1.0     </td><td>1        </td><td>3634.3   </td><td>51.2     </td><td>hgt      </td><td>66.3     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1354     </td><td>18       </td><td> 9.8     </td><td>1        </td><td>3634.3   </td><td>51.2     </td><td>hgt      </td><td>69.2     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1354     </td><td>24       </td><td>15.4     </td><td>1        </td><td>3634.3   </td><td>51.2     </td><td>hgt      </td><td>75.3     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1356     </td><td>12       </td><td> 8.6     </td><td>1        </td><td>3911.8   </td><td>51.9     </td><td>hgt      </td><td>68.1     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1356     </td><td>18       </td><td>17.8     </td><td>1        </td><td>3911.8   </td><td>51.9     </td><td>hgt      </td><td>74.1     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1356     </td><td>24       </td><td>30.5     </td><td>1        </td><td>3911.8   </td><td>51.9     </td><td>hgt      </td><td>77.1     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1357     </td><td>12       </td><td> 1.0     </td><td>1        </td><td>3791.4   </td><td>52.6     </td><td>hgt      </td><td>71.5     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1357     </td><td>18       </td><td>12.7     </td><td>1        </td><td>3791.4   </td><td>52.6     </td><td>hgt      </td><td>77.8     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td></tr>
+	<tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2017     </td><td>18       </td><td>42.6     </td><td>1        </td><td>3312.9   </td><td>49.2     </td><td>wgt      </td><td> 8641.0  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2017     </td><td>24       </td><td>43.1     </td><td>1        </td><td>3312.9   </td><td>49.2     </td><td>wgt      </td><td>10922.6  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2018     </td><td>12       </td><td>24.0     </td><td>0        </td><td>3682.8   </td><td>48.8     </td><td>wgt      </td><td> 6266.3  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2018     </td><td>18       </td><td>37.2     </td><td>0        </td><td>3682.8   </td><td>48.8     </td><td>wgt      </td><td>11008.2  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2018     </td><td>24       </td><td>31.7     </td><td>0        </td><td>3682.8   </td><td>48.8     </td><td>wgt      </td><td> 9668.5  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2019     </td><td>12       </td><td>17.3     </td><td>1        </td><td>3132.9   </td><td>49.7     </td><td>wgt      </td><td> 7777.6  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2019     </td><td>18       </td><td>24.5     </td><td>1        </td><td>3132.9   </td><td>49.7     </td><td>wgt      </td><td> 9729.6  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2019     </td><td>24       </td><td>57.8     </td><td>1        </td><td>3132.9   </td><td>49.7     </td><td>wgt      </td><td>10276.5  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2023     </td><td>12       </td><td>15.9     </td><td>1        </td><td>3607.1   </td><td>50.3     </td><td>wgt      </td><td> 8424.7  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2023     </td><td>18       </td><td>22.2     </td><td>1        </td><td>3607.1   </td><td>50.3     </td><td>wgt      </td><td> 6933.2  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td></tr>
 </tbody>
 </table>
-</dd>
-	<dt>$df_row_grp_stats</dt>
-		<dd><table>
-<thead><tr><th scope=col>hgt.S.country.sex.Cebu.Female.mean</th><th scope=col>hgt.S.country.sex.Cebu.Male.mean</th><th scope=col>hgt.S.country.sex.Guatemala.Female.mean</th><th scope=col>hgt.S.country.sex.Guatemala.Male.mean</th></tr></thead>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Decomposition-Step-3-Non-Loop">Decomposition Step 3 Non-Loop<a class="anchor-link" href="#Decomposition-Step-3-Non-Loop">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[167]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span>ff_lr_decompose_valadj <span class="o">&lt;-</span> <span class="kr">function</span><span class="p">(</span>df<span class="p">,</span> df.coef<span class="p">,</span> vars.tomean<span class="p">,</span> str.esti.suffix<span class="p">)</span> <span class="p">{</span>    
+    new_value <span class="o">&lt;-</span> <span class="p">(</span>df<span class="o">$</span>value <span class="o">+</span> 
+                  <span class="kp">rowSums</span><span class="p">((</span>df<span class="p">[</span><span class="kp">paste0</span><span class="p">(</span>vars.tomean<span class="p">,</span> <span class="s">&#39;_mean&#39;</span><span class="p">)]</span> <span class="o">-</span> df<span class="p">[</span>vars.tomean<span class="p">])</span>
+                          <span class="o">*</span>df.coef<span class="p">[</span>df<span class="o">$</span>variable<span class="p">,</span> <span class="kp">paste0</span><span class="p">(</span>vars.tomean<span class="p">,</span> str.esti.suffix<span class="p">)]))</span>    
+    <span class="kr">return</span><span class="p">(</span>new_value<span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1"># # Decomposition Step 3: mutate_at(vars, funs(mean = mean(.)))</span>
+<span class="c1"># var.decomp.one &lt;- (paste0(&#39;value&#39;, list.vars.tomean.name.suffix[[1]]))</span>
+<span class="c1"># var.decomp.two &lt;- (paste0(&#39;value&#39;, list.vars.tomean.name.suffix[[2]]))</span>
+<span class="c1"># var.decomp.thr &lt;- (paste0(&#39;value&#39;, list.vars.tomean.name.suffix[[3]]))</span>
+<span class="c1"># df.decompose_step3 &lt;- df.decompose_step2 %&gt;% </span>
+<span class="c1">#                         mutate((!!var.decomp.one) := f_decompose_here(., df.coef, list.vars.tomean[[1]], str.esti.suffix), </span>
+<span class="c1">#                                (!!var.decomp.two) := f_decompose_here(., df.coef, list.vars.tomean[[2]], str.esti.suffix),</span>
+<span class="c1">#                                (!!var.decomp.thr) := f_decompose_here(., df.coef, list.vars.tomean[[3]], str.esti.suffix))</span>
+
+<span class="c1"># options(repr.matrix.max.rows=10, repr.matrix.max.cols=20)</span>
+<span class="c1"># dim(df.decompose_step3)</span>
+<span class="c1"># df.decompose_step3</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Decomposition-Step-3-With-Loop">Decomposition Step 3 With Loop<a class="anchor-link" href="#Decomposition-Step-3-With-Loop">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[168]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span>df.decompose_step3 <span class="o">&lt;-</span> df.decompose_step2
+<span class="kr">for</span> <span class="p">(</span>i <span class="kr">in</span> <span class="m">1</span><span class="o">:</span><span class="kp">length</span><span class="p">(</span>list.vars.tomean<span class="p">))</span> <span class="p">{</span>
+    var.decomp.cur <span class="o">&lt;-</span> <span class="p">(</span><span class="kp">paste0</span><span class="p">(</span><span class="s">&#39;value&#39;</span><span class="p">,</span> list.vars.tomean.name.suffix<span class="p">[[</span>i<span class="p">]]))</span>
+    vars.tomean <span class="o">&lt;-</span> list.vars.tomean<span class="p">[[</span>i<span class="p">]]</span>
+    var.decomp.cur
+    df.decompose_step3 <span class="o">&lt;-</span> df.decompose_step3 <span class="o">%&gt;%</span> mutate<span class="p">((</span><span class="o">!!</span>var.decomp.cur<span class="p">)</span> <span class="o">:=</span> ff_lr_decompose_valadj<span class="p">(</span><span class="m">.</span><span class="p">,</span> df.coef<span class="p">,</span> vars.tomean<span class="p">,</span> str.esti.suffix<span class="p">))</span>
+    
+<span class="p">}</span>
+<span class="kp">options</span><span class="p">(</span>repr.matrix.max.rows<span class="o">=</span><span class="m">10</span><span class="p">,</span> repr.matrix.max.cols<span class="o">=</span><span class="m">20</span><span class="p">)</span>
+<span class="kp">dim</span><span class="p">(</span>df.decompose_step3<span class="p">)</span>
+df.decompose_step3
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<ol class=list-inline>
+	<li>1382</li>
+	<li>19</li>
+</ol>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<thead><tr><th scope=col>S.country</th><th scope=col>vil.id</th><th scope=col>indi.id</th><th scope=col>svymthRound</th><th scope=col>prot</th><th scope=col>male</th><th scope=col>wgt0</th><th scope=col>hgt0</th><th scope=col>variable</th><th scope=col>value</th><th scope=col>prot_mean</th><th scope=col>male_mean</th><th scope=col>wgt0_mean</th><th scope=col>hgt0_mean</th><th scope=col>svymthRound_mean</th><th scope=col>value_mean</th><th scope=col>value_mh0me2m</th><th scope=col>value_mh0mep2m</th><th scope=col>value_mh0mepm2m</th></tr></thead>
 <tbody>
-	<tr><td>84.61326</td><td>87.02836</td><td>76.58771</td><td>77.0471 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1352     </td><td>18       </td><td>13.3     </td><td>1        </td><td>2545.2   </td><td>47.4     </td><td>hgt      </td><td>70.2     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td><td>73.19390 </td><td>71.19903 </td><td>71.68148 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1352     </td><td>24       </td><td>46.3     </td><td>1        </td><td>2545.2   </td><td>47.4     </td><td>hgt      </td><td>75.8     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td><td>78.79390 </td><td>85.75778 </td><td>79.43671 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1354     </td><td>12       </td><td> 1.0     </td><td>1        </td><td>3634.3   </td><td>51.2     </td><td>hgt      </td><td>66.3     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td><td>63.61689 </td><td>58.28285 </td><td>65.56882 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1354     </td><td>18       </td><td> 9.8     </td><td>1        </td><td>3634.3   </td><td>51.2     </td><td>hgt      </td><td>69.2     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td><td>66.51689 </td><td>63.57185 </td><td>64.05430 </td></tr>
+	<tr><td>Guatemala</td><td>3        </td><td>1354     </td><td>24       </td><td>15.4     </td><td>1        </td><td>3634.3   </td><td>51.2     </td><td>hgt      </td><td>75.3     </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>73.41216 </td><td>72.61689 </td><td>71.19213 </td><td>64.87106 </td></tr>
+	<tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2019     </td><td>12       </td><td>17.3     </td><td>1        </td><td>3132.9   </td><td>49.7     </td><td>wgt      </td><td> 7777.6  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td><td> 7702.954</td><td> 7505.167</td><td> 9116.539</td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2019     </td><td>18       </td><td>24.5     </td><td>1        </td><td>3132.9   </td><td>49.7     </td><td>wgt      </td><td> 9729.6  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td><td> 9654.954</td><td> 9882.491</td><td> 9989.190</td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2019     </td><td>24       </td><td>57.8     </td><td>1        </td><td>3132.9   </td><td>49.7     </td><td>wgt      </td><td>10276.5  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td><td>10201.854</td><td>12396.514</td><td>10998.539</td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2023     </td><td>12       </td><td>15.9     </td><td>1        </td><td>3607.1   </td><td>50.3     </td><td>wgt      </td><td> 8424.7  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td><td> 7894.518</td><td> 7614.029</td><td> 9225.402</td></tr>
+	<tr><td>Guatemala</td><td>14       </td><td>2023     </td><td>18       </td><td>22.2     </td><td>1        </td><td>3607.1   </td><td>50.3     </td><td>wgt      </td><td> 6933.2  </td><td>20.64819 </td><td>0.5499276</td><td>3312.297 </td><td>49.75137 </td><td>18.42547 </td><td>8807.877 </td><td> 6403.018</td><td> 6494.688</td><td> 6601.387</td></tr>
 </tbody>
 </table>
-</dd>
-	<dt>$df_overall_stats</dt>
-		<dd><table>
-<thead><tr><th scope=col>hgt.mean</th></tr></thead>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Decomposition-Step-4-Variance">Decomposition Step 4 Variance<a class="anchor-link" href="#Decomposition-Step-4-Variance">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[169]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span>df.decompose_step3 <span class="o">%&gt;%</span>
+        select<span class="p">(</span>variable<span class="p">,</span> contains<span class="p">(</span><span class="s">&#39;value&#39;</span><span class="p">))</span> <span class="o">%&gt;%</span>
+        group_by<span class="p">(</span>variable<span class="p">)</span> <span class="o">%&gt;%</span>
+        summarize_all<span class="p">(</span>funs<span class="p">(</span>mean <span class="o">=</span> <span class="kp">mean</span><span class="p">,</span> var <span class="o">=</span> var<span class="p">))</span> <span class="o">%&gt;%</span>
+        select<span class="p">(</span>matches<span class="p">(</span><span class="s">&#39;value&#39;</span><span class="p">))</span> <span class="o">%&gt;%</span> select<span class="p">(</span>ends_with<span class="p">(</span><span class="s">&quot;_var&quot;</span><span class="p">))</span> <span class="o">%&gt;%</span>
+        mutate_if<span class="p">(</span><span class="kp">is.numeric</span><span class="p">,</span> funs<span class="p">(</span> frac <span class="o">=</span> <span class="p">(</span><span class="m">.</span><span class="o">/</span>value_var<span class="p">)))</span> <span class="o">%&gt;%</span>
+        mutate_if<span class="p">(</span><span class="kp">is.numeric</span><span class="p">,</span> <span class="kp">round</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<thead><tr><th scope=col>value_var</th><th scope=col>value_mean_var</th><th scope=col>value_mh0me2m_var</th><th scope=col>value_mh0mep2m_var</th><th scope=col>value_mh0mepm2m_var</th><th scope=col>value_var_frac</th><th scope=col>value_mean_var_frac</th><th scope=col>value_mh0me2m_var_frac</th><th scope=col>value_mh0mep2m_var_frac</th><th scope=col>value_mh0mepm2m_var_frac</th></tr></thead>
 <tbody>
-	<tr><td>83.80921</td></tr>
+	<tr><td>     21.864</td><td>NA         </td><td>     25.35 </td><td>     49.047</td><td>     23.06 </td><td>1          </td><td>NA         </td><td>1.159      </td><td>2.243      </td><td>1.055      </td></tr>
+	<tr><td>2965693.245</td><td>NA         </td><td>2949187.64 </td><td>4192769.518</td><td>3147506.60 </td><td>1          </td><td>NA         </td><td>0.994      </td><td>1.414      </td><td>1.061      </td></tr>
 </tbody>
 </table>
-</dd>
-	<dt>$df_row_stats_all</dt>
-		<dd><dl>
-	<dt>$hgt.S.country.sex.Cebu.Female.mean</dt>
-		<dd>84.613260654113</dd>
-	<dt>$hgt.S.country.sex.Cebu.Male.mean</dt>
-		<dd>87.0283579465542</dd>
-	<dt>$hgt.S.country.sex.Guatemala.Female.mean</dt>
-		<dd>76.5877054794521</dd>
-	<dt>$hgt.S.country.sex.Guatemala.Male.mean</dt>
-		<dd>77.0470975121533</dd>
-	<dt>$hgt.mean</dt>
-		<dd>83.8092099128501</dd>
-</dl>
-</dd>
-</dl>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Graphical-Results">Graphical Results<a class="anchor-link" href="#Graphical-Results">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Graphically, difficult to pick up exact differences in variance, a 50 percent reduction in variance visually does not look like 50 percent. Intuitively, we are kind of seeing standard deviation, not variance on the graph if we think abou the x-scale.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[170]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span>df.decompose_step3 <span class="o">%&gt;%</span> 
+    select<span class="p">(</span>variable<span class="p">,</span> contains<span class="p">(</span><span class="s">&#39;value&#39;</span><span class="p">),</span> <span class="o">-</span>value_mean<span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<thead><tr><th scope=col>variable</th><th scope=col>value</th><th scope=col>value_mh0me2m</th><th scope=col>value_mh0mep2m</th><th scope=col>value_mh0mepm2m</th></tr></thead>
+<tbody>
+	<tr><td>hgt     </td><td>70.2    </td><td>73.19390</td><td>71.19903</td><td>71.68148</td></tr>
+	<tr><td>hgt     </td><td>75.8    </td><td>78.79390</td><td>85.75778</td><td>79.43671</td></tr>
+	<tr><td>hgt     </td><td>66.3    </td><td>63.61689</td><td>58.28285</td><td>65.56882</td></tr>
+	<tr><td>hgt     </td><td>69.2    </td><td>66.51689</td><td>63.57185</td><td>64.05430</td></tr>
+	<tr><td>hgt     </td><td>75.3    </td><td>72.61689</td><td>71.19213</td><td>64.87106</td></tr>
+	<tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+	<tr><td>wgt      </td><td> 7777.6  </td><td> 7702.954</td><td> 7505.167</td><td> 9116.539</td></tr>
+	<tr><td>wgt      </td><td> 9729.6  </td><td> 9654.954</td><td> 9882.491</td><td> 9989.190</td></tr>
+	<tr><td>wgt      </td><td>10276.5  </td><td>10201.854</td><td>12396.514</td><td>10998.539</td></tr>
+	<tr><td>wgt      </td><td> 8424.7  </td><td> 7894.518</td><td> 7614.029</td><td> 9225.402</td></tr>
+	<tr><td>wgt      </td><td> 6933.2  </td><td> 6403.018</td><td> 6494.688</td><td> 6601.387</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[171]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="kp">options</span><span class="p">(</span>repr.plot.width <span class="o">=</span> <span class="m">10</span><span class="p">,</span> repr.plot.height <span class="o">=</span> <span class="m">4</span><span class="p">)</span>
+df.decompose_step3 <span class="o">%&gt;%</span> 
+    select<span class="p">(</span>variable<span class="p">,</span> contains<span class="p">(</span><span class="s">&#39;value&#39;</span><span class="p">),</span> <span class="o">-</span>value_mean<span class="p">)</span> <span class="o">%&gt;%</span>
+    rename<span class="p">(</span>outcome <span class="o">=</span> variable<span class="p">)</span> <span class="o">%&gt;%</span>
+    gather<span class="p">(</span>variable<span class="p">,</span> value<span class="p">,</span> <span class="o">-</span>outcome<span class="p">)</span> <span class="o">%&gt;%</span>
+    ggplot<span class="p">(</span>aes<span class="p">(</span>x<span class="o">=</span>value<span class="p">,</span> color <span class="o">=</span> variable<span class="p">,</span> fill <span class="o">=</span> variable<span class="p">))</span> <span class="o">+</span> 
+        geom_line<span class="p">(</span>stat <span class="o">=</span> <span class="s">&quot;density&quot;</span><span class="p">)</span> <span class="o">+</span> 
+        facet_wrap<span class="p">(</span><span class="o">~</span> outcome<span class="p">,</span> scales<span class="o">=</span><span class="s">&#39;free&#39;</span><span class="p">,</span> nrow<span class="o">=</span><span class="m">2</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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"
+>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Additional-Detailed-Testings">Additional Detailed Testings<a class="anchor-link" href="#Additional-Detailed-Testings">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[172]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="kp">head</span><span class="p">(</span>df.decompose_step2<span class="p">[</span>vars.tomean.first<span class="p">],</span><span class="m">3</span><span class="p">)</span>
+<span class="kp">head</span><span class="p">(</span>df.decompose_step2<span class="p">[</span><span class="kp">paste0</span><span class="p">(</span>vars.tomean.first<span class="p">,</span> <span class="s">&#39;_mean&#39;</span><span class="p">)],</span> <span class="m">3</span><span class="p">)</span>
+<span class="kp">head</span><span class="p">(</span>df.coef<span class="p">[</span>df.decompose_step2<span class="o">$</span>variable<span class="p">,</span> <span class="kp">paste0</span><span class="p">(</span>vars.tomean.first<span class="p">,</span> str.esti.suffix<span class="p">)],</span> <span class="m">3</span><span class="p">)</span>
+df.decompose.tomean.first <span class="o">&lt;-</span> df.decompose_step2 <span class="o">%&gt;%</span>
+    mutate<span class="p">(</span>pred_new <span class="o">=</span> df.decompose_step2<span class="o">$</span>value <span class="o">+</span>
+        <span class="kp">rowSums</span><span class="p">((</span>df.decompose_step2<span class="p">[</span><span class="kp">paste0</span><span class="p">(</span>vars.tomean.first<span class="p">,</span> <span class="s">&#39;_mean&#39;</span><span class="p">)]</span> <span class="o">-</span> df.decompose_step2<span class="p">[</span>vars.tomean.first<span class="p">])</span>
+            <span class="o">*</span>df.coef<span class="p">[</span>df.decompose_step2<span class="o">$</span>variable<span class="p">,</span> <span class="kp">paste0</span><span class="p">(</span>vars.tomean.first<span class="p">,</span> str.esti.suffix<span class="p">)]))</span> <span class="o">%&gt;%</span>
+        select<span class="p">(</span>variable<span class="p">,</span> value<span class="p">,</span> pred_new<span class="p">)</span>
+<span class="kp">head</span><span class="p">(</span>df.decompose.tomean.first<span class="p">,</span> <span class="m">10</span><span class="p">)</span>
+df.decompose.tomean.first <span class="o">%&gt;%</span>
+        group_by<span class="p">(</span>variable<span class="p">)</span> <span class="o">%&gt;%</span>
+        summarize_all<span class="p">(</span>funs<span class="p">(</span>mean <span class="o">=</span> <span class="kp">mean</span><span class="p">,</span> sd <span class="o">=</span> sd<span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<thead><tr><th scope=col>male</th><th scope=col>hgt0</th></tr></thead>
+<tbody>
+	<tr><td>1   </td><td>47.4</td></tr>
+	<tr><td>1   </td><td>47.4</td></tr>
+	<tr><td>1   </td><td>51.2</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<thead><tr><th scope=col>male_mean</th><th scope=col>hgt0_mean</th></tr></thead>
+<tbody>
+	<tr><td>0.5499276</td><td>49.75137 </td></tr>
+	<tr><td>0.5499276</td><td>49.75137 </td></tr>
+	<tr><td>0.5499276</td><td>49.75137 </td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<thead><tr><th scope=col>male_Estimate</th><th scope=col>hgt0_Estimate</th></tr></thead>
+<tbody>
+	<tr><td>1.244735 </td><td>0.6834853</td></tr>
+	<tr><td>1.244735 </td><td>0.6834853</td></tr>
+	<tr><td>1.244735 </td><td>0.6834853</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<thead><tr><th scope=col>variable</th><th scope=col>value</th><th scope=col>pred_new</th></tr></thead>
+<tbody>
+	<tr><td>hgt     </td><td>70.2    </td><td>71.24691</td></tr>
+	<tr><td>hgt     </td><td>75.8    </td><td>76.84691</td></tr>
+	<tr><td>hgt     </td><td>66.3    </td><td>64.74966</td></tr>
+	<tr><td>hgt     </td><td>69.2    </td><td>67.64966</td></tr>
+	<tr><td>hgt     </td><td>75.3    </td><td>73.74966</td></tr>
+	<tr><td>hgt     </td><td>68.1    </td><td>66.07123</td></tr>
+	<tr><td>hgt     </td><td>74.1    </td><td>72.07123</td></tr>
+	<tr><td>hgt     </td><td>77.1    </td><td>75.07123</td></tr>
+	<tr><td>hgt     </td><td>71.5    </td><td>68.99279</td></tr>
+	<tr><td>hgt     </td><td>77.8    </td><td>75.29279</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<thead><tr><th scope=col>variable</th><th scope=col>value_mean</th><th scope=col>pred_new_mean</th><th scope=col>value_sd</th><th scope=col>pred_new_sd</th></tr></thead>
+<tbody>
+	<tr><td>hgt        </td><td>  73.41216 </td><td>  73.41216 </td><td>   4.675867</td><td>   4.534947</td></tr>
+	<tr><td>wgt        </td><td>8807.87656 </td><td>8807.87656 </td><td>1722.118824</td><td>1695.221845</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Note the r-square from regression above matches up with the 1 - ratio below. This is the proper decomposition method that is equivalent to r2.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[173]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span>df.decompose_step2 <span class="o">%&gt;%</span>
+    mutate<span class="p">(</span>pred_new <span class="o">=</span> df.decompose_step2<span class="o">$</span>value <span class="o">+</span>
+        <span class="kp">rowSums</span><span class="p">((</span>df.decompose_step2<span class="p">[</span><span class="kp">paste0</span><span class="p">(</span>vars.tomean.second<span class="p">,</span> <span class="s">&#39;_mean&#39;</span><span class="p">)]</span> <span class="o">-</span> df.decompose_step2<span class="p">[</span>vars.tomean.second<span class="p">])</span>
+            <span class="o">*</span>df.coef<span class="p">[</span>df.decompose_step2<span class="o">$</span>variable<span class="p">,</span> <span class="kp">paste0</span><span class="p">(</span>vars.tomean.second<span class="p">,</span> str.esti.suffix<span class="p">)]))</span> <span class="o">%&gt;%</span>
+        select<span class="p">(</span>variable<span class="p">,</span> value<span class="p">,</span> pred_new<span class="p">)</span> <span class="o">%&gt;%</span>
+        group_by<span class="p">(</span>variable<span class="p">)</span> <span class="o">%&gt;%</span>
+        summarize_all<span class="p">(</span>funs<span class="p">(</span>mean <span class="o">=</span> <span class="kp">mean</span><span class="p">,</span> var <span class="o">=</span> var<span class="p">))</span> <span class="o">%&gt;%</span>
+        mutate<span class="p">(</span>ratio <span class="o">=</span> <span class="p">(</span>pred_new_var<span class="o">/</span>value_var<span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<thead><tr><th scope=col>variable</th><th scope=col>value_mean</th><th scope=col>pred_new_mean</th><th scope=col>value_var</th><th scope=col>pred_new_var</th><th scope=col>ratio</th></tr></thead>
+<tbody>
+	<tr><td>hgt         </td><td>  73.41216  </td><td>  73.41216  </td><td>2.186374e+01</td><td>     25.3504</td><td>1.1594724   </td></tr>
+	<tr><td>wgt         </td><td>8807.87656  </td><td>8807.87656  </td><td>2.965693e+06</td><td>2949187.6357</td><td>0.9944345   </td></tr>
+</tbody>
+</table>
 
 </div>
 

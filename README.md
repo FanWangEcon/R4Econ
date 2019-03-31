@@ -12,67 +12,70 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 ## 1.1 Tabulate and Counting
 
 1. [Tabulation Categorical as Matrix](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/tabulate/ListUniqueCateNAsMat.R): ipynb \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/tabulate/ListUniqueCateNAsMat.R) \| html \| pdf
-    + Many-Category Categorical Variable, Tabulation shown as Matrix
+    + Many-Category Categorical Variable, Tabulation shown as Matrix.
     + **core**: *group_by + summarise(freq = n()) + mutate + min(ceiling(sqrt(count))) + substring + dim/reshape*
 2. [By Groups, Count Variables Observations](summarize/count/ByGroupCountAllVarNonNA.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/ByGroupCountAllVarNonNA.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/ByGroupCountAllVarNonNA.R) \|  [**html**](summarize/count/ByGroupCountAllVarNonNA.html) \| pdf
-    + By Groups, Count non-NA observations of All Variables
+    + By Groups, Count non-NA observations of All Variables.
     + **core**: *group_by + summarise_if(is.numeric, funs(sum(is.na(.)==0)))*
 3. [By Groups, Count Unique Individuals](summarize/count/ByGroupCountUniqueIndi.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/ByGroupCountUniqueIndi.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/ByGroupCountUniqueIndi.R) \|  [**html**](summarize/count/ByGroupCountUniqueIndi.html) \| pdf
-    + By Groups, Count Unique Individuals and non-NA observations of other Variables
+    + By Groups, Count Unique Individuals and non-NA observations of other Variables.
     + **core**: *group_by + mutate_if + mutate + n_distinct + slice(1L)*
 
 ## 1.2 Averaging
 
 1. [All Variables Summary Stats](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/SummPercentiles.R): ipynb \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/SummPercentiles.R) \| html \| pdf
-    + All Variables: N + NAcount + Mean + SD + Percentiles
+    + All Variables: N + NAcount + Mean + SD + Percentiles.
     + **core**: *summarise_if(is.numeric) + gather + separate + spread  + select*
 2. [By Groups, One Variable All Statistics](summarize/summ/ByGroupSummOne.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupSummOne.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupSummOne.R) \| [**html**](summarize/summ/ByGroupSummOne.html) \| pdf
-    + Pick stats, overall, and by multiple groups, stats as matrix or wide row with name=(ctsvar + catevar + catelabel)
+    + Pick stats, overall, and by multiple groups, stats as matrix or wide row with name=(ctsvar + catevar + catelabel).
     + **core**: *group_by + summarize_at(, funs()) + rename(!!var := !!sym(var)) + mutate(!!var := paste0(var,'str',!!!syms(vars))) + gather + unite + spread(varcates, value)*
 3. [By Groups, Multiple Variables Mean + SD + N](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupSumm.R): ipynb \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupSumm.R) \| html \| pdf
-    + By Groups, All Numeric Variables Mean + SD + N
+    + By Groups, All Numeric Variables Mean + SD + N.
     + **core**: *group_by + summarise_if(is.numeric(fun)) + gather + separate + spread + mutate + select + spread + unite*
 4. [By within Individual Groups Variables, Averages](summarize/summ/ByGroupsSummWide.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummWide.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummWide.R) \|  [**html**](summarize/summ/ByGroupsSummWide.html) \| pdf
-    + By Multiple within Individual Groups Variables; Averages for All Numeric Variables within All Groups of All Group Variables; Long to Wide to very Wide
+    + By Multiple within Individual Groups Variables; Averages for All Numeric Variables within All Groups of All Group Variables; Long to Wide to very Wide.
     + **core**: *gather + group_by + summarise_if(is.numeric, funs(mean(., na.rm = TRUE))) + mutate(all_m_cate = paste0(variable, '_c', value)) + gather + unite + spread (note: gather twice, spread at end)*
 
 # 2. Data/Variable Generation
 1. [Quantiles from Multiple Variables](generate/quantile/VarCateIdxVarsQuantiles.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quantile/VarCateIdxVarsQuantiles.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quantile/VarCateIdxVarsQuantiles.R) \|  [**html**](generate/quantile/VarCateIdxVarsQuantiles.html) \| pdf
-    + Dataframe of Variables' Quantiles by Panel Groups; Quantile Categorical Variables for Panel within Group Observations; Quantile cut variable suffix and quantile labeling; Joint Quantile Categorical Variable with Linear Index
+    + Dataframe of Variables' Quantiles by Panel Groups; Quantile Categorical Variables for Panel within Group Observations; Quantile cut variable suffix and quantile labeling; Joint Quantile Categorical Variable with Linear Index.
     + **core**: *group_by + slicke(1L) + lapply(enframe(quantiles())) + reduce(full_join) + mutate_at(funs(q=f_cut(.,cut)))) + levels() + rename_at + unlist(lapply) + mutate(!!var.qjnt.grp.idx := group_indices(., !!!syms(vars.quantile.cut.all)))*
 
 
 # 3. Linear Regressions
 
-1. [IV Regression](linreg/ivreg/ivregdfrow.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/ivregdfrow.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/ivregdfrow.R) \|  [**html**](linreg/ivreg/ivregdfrow.html) \| pdf
-    + IV Regression store all Coefficients and Diagnostics as Dataframe Row
+1. [IV/OLS Regression](linreg/ivreg/ivregdfrow.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/ivregdfrow.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/ivregdfrow.R) \|  [**html**](linreg/ivreg/ivregdfrow.html) \| pdf
+    + IV/OLS Regression store all Coefficients and Diagnostics as Dataframe Row.
     + **core**: *library(aer) + ivreg(as.formula, diagnostics = TRUE) + gather + drop_na + unite*
+2. [Regression Decomposition](linreg/decompose/decompose.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose/decompose.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose/decompose.R) \|  [**html**](linreg/decompose/decompose.html) \| pdf
+    + Post multiple regressions, fraction of outcome variables' variances explained by multiple subsets of right hand side variables.
+    + **core**: *gather + group_by(variable) + mutate_at(vars, funs(mean = mean(.))) + rowSums(mat*mat) + mutate_if(is.numeric, funs(frac = (./value_var)))*
 
 
 # 4. Optimization
 
 ## 4.1 Planner's Problem
 1. [CES Objective Function](optimization/planner/ces/cesplannerobj.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planner/ces/cesplannerobj.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planner/ces/cesplannerobj.R) \|  [**html**](optimization/planner/ces/cesplannerobj.html) \| pdf
-    + Constant Elasticity of Substitution Planner Welfare Objective Function
+    + Constant Elasticity of Substitution Planner Welfare Objective Function.
     + **core**: *prod/mean/pow, logspace, geom_bar+identity+dodge*
 2. [CES Subsidy Optimization Over Panel Groups](optimization/planner/ces/cesoptimizer.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planner/ces/cesoptimizer.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planner/ces/cesoptimizer.R) \|  [**html**](optimization/planner/ces/cesoptimizer.html) \| pdf
-    + Constant Elasticity of Substitution Planner Welfare Subsidies Optimizer Over Quantile/Individual Groups
+    + Constant Elasticity of Substitution Planner Welfare Subsidies Optimizer Over Quantile/Individual Groups.
     + **core**: *optim(x, obj, func.params), do.call(func_str, func.params); setNames+list+append*  
 
 ## 4.2 Optimization Support
 1. [Constrained Share Parameters to Unconstrained Parameters](optimization/support/fraction.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/support/fraction.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/support/fraction.R) \|  [**html**](optimization/support/fraction.html) \| pdf
-    + Constrained: a + b + c = Z, a >= 0, b >= 0, c >= 0; Unconstrained maximands of a and b for optimization
+    + Constrained: a + b + c = Z, a >= 0, b >= 0, c >= 0; Unconstrained maximands of a and b for optimization.
     + **core**: *f - f/(1+exp(x)), while, runif + qexp + qnorm/dnorm*
 
 # 5. Tools
 
 1. [List of List to Dataframe](https://github.com/FanWangEcon/R4Econ/blob/master/support/dplyrtricks/nestedlist2df.R): ipynb \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/support/dplyrtricks/nestedlist2df.R) \| html \| pdf
-    + Results stored as nested named list (with different keys in sub-lists)
+    + Results stored as nested named list (with different keys in sub-lists).
     + **core**: *as.data.frame + gather + separate(sep(\\.), extra='merge') + spread + column_to_rownames*
 
 # 6. Support
 
 1. [Installations](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/condainstalls.R): ipynb \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/condainstalls.R) \| html \| pdf
-    + Conda R Package Installations
+    + Conda R Package Installations.
 2. [Controls](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/controls.R): ipynb \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/controls.R) \| html \| pdf
-    + Graph Sizing, Warnings, Table Col/Row Max Display, Timer
+    + Graph Sizing, Warnings, Table Col/Row Max Display, Timer.
