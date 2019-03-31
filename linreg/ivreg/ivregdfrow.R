@@ -4,7 +4,6 @@
 # The idea is to combine results from various IVs together row by row  or col by col.
 # This functoin could work with dplyr do
 # var.y is single outcome, vars.x, vars.c and vars.z are vectors of endogenous variables, controls and instruments.
-
 regf.iv <- function(var.y, vars.x, vars.c, vars.z, df, transpose=TRUE) {
 #     library(AER)
     # A. Set-Up Equation
@@ -13,7 +12,7 @@ regf.iv <- function(var.y, vars.x, vars.c, vars.z, df, transpose=TRUE) {
     str.vars.z <- paste(vars.z, collapse='+')
     equa.iv <- paste(var.y,
                      paste(paste(str.vars.x, str.vars.c, sep='+'),
-                           paste(str.vars.z, str.vars.z, sep='+'),
+                           paste(str.vars.z, str.vars.c, sep='+'),
                            sep='|'),
                      sep='~')
 #     print(equa.iv)
