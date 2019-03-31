@@ -3,7 +3,7 @@
 # f.by.group.vars.mnsdobs(df.main.guat, vars.group.by=c('S.country', 'svymthRound'))
 f.by.group.vars.mnsdobs <- function(df,
                                     vars.group.by = c('S.country', 'svymthRound'),
-                                    transpose = FALSE) {
+                                    transpose = FALSE, fmt_mean = '%.1f', fmt_sd = '%.1f') {
 
   # names(raw.selected.df)
   # -matches(paste0(other.vars.list, collapse='|'))
@@ -21,8 +21,8 @@ f.by.group.vars.mnsdobs <- function(df,
         gather(variable, value, -one_of(vars.group.by)) %>%
         separate(variable, c('var', 'stats'), sep = "_") %>%
         spread(stats, value) %>%
-        mutate(mean.sd.n = paste0(sprintf("%.1f", round(mean,1)),
-                                ' (', sprintf("%.1f", round(sd,1)), ', ', count, ')')) %>%
+        mutate(mean.sd.n = paste0(sprintf(fmt_mean, (mean)),
+                                ' (', sprintf(fmt_sd, (sd)), ', ', count, ')')) %>%
         select(one_of(vars.group.by), var, mean.sd.n)  %>%
         spread(var, mean.sd.n)
 
