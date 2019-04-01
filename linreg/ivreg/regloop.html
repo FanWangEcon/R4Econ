@@ -11797,15 +11797,18 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[310]:</div>
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>ff_reg_mbyn <span class="o">&lt;-</span> <span class="kr">function</span><span class="p">(</span>list.vars.y<span class="p">,</span> list.vars.x<span class="p">,</span>
                         vars.c<span class="p">,</span> vars.z<span class="p">,</span> df<span class="p">,</span> 
                         return_all <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span> 
-                        stats_ends <span class="o">=</span> <span class="s">&#39;value&#39;</span><span class="p">)</span> <span class="p">{</span>
+                        stats_ends <span class="o">=</span> <span class="s">&#39;value&#39;</span><span class="p">,</span> time <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span> <span class="p">{</span>
     
     <span class="c1"># regf.iv() function is from C:\Users\fan\R4Econ\linreg\ivreg\ivregdfrow.R</span>
+    <span class="kr">if</span> <span class="p">(</span>time<span class="p">)</span> <span class="p">{</span>
+        start_time <span class="o">&lt;-</span> <span class="kp">Sys.time</span><span class="p">()</span>
+    <span class="p">}</span>
     
     <span class="kr">if</span> <span class="p">(</span>return_all<span class="p">)</span> <span class="p">{</span>
         df.reg.out.all <span class="o">&lt;-</span> bind_rows<span class="p">(</span><span class="kp">lapply</span><span class="p">(</span>list.vars.x<span class="p">,</span>
@@ -11821,7 +11824,12 @@ div#notebook {
                                       select<span class="p">(</span>vars_var.y<span class="p">,</span> ends_with<span class="p">(</span>stats_ends<span class="p">))</span>
                               <span class="p">)))</span> <span class="o">%&gt;%</span> reduce<span class="p">(</span>full_join<span class="p">)</span>        
     <span class="p">}</span>
-                              
+     
+    <span class="kr">if</span> <span class="p">(</span>time<span class="p">)</span> <span class="p">{</span>
+        end_time <span class="o">&lt;-</span> <span class="kp">Sys.time</span><span class="p">()</span>
+        <span class="kp">print</span><span class="p">(</span><span class="kp">paste0</span><span class="p">(</span><span class="s">&#39;Estimation for all ys and xs took (seconds):&#39;</span><span class="p">,</span> end_time <span class="o">-</span> start_time<span class="p">))</span>                                  
+    <span class="p">}</span>
+                                  
     <span class="kr">return</span><span class="p">(</span>df.reg.out.all<span class="p">)</span>                                  
 <span class="p">}</span>
 </pre></div>
@@ -11841,7 +11849,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[311]:</div>
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1"># Library</span>
@@ -11909,7 +11917,7 @@ cols(
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[312]:</div>
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>var.y1 <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;hgt&#39;</span><span class="p">)</span>
@@ -11943,7 +11951,7 @@ vars.c <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[313]:</div>
+<div class="prompt input_prompt">In&nbsp;[39]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>vars.z <span class="o">&lt;-</span> <span class="kc">NULL</span>
@@ -11995,7 +12003,7 @@ vars.c <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[314]:</div>
+<div class="prompt input_prompt">In&nbsp;[40]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>vars.z <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;indi.id&#39;</span><span class="p">)</span>
@@ -12047,7 +12055,7 @@ vars.c <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[315]:</div>
+<div class="prompt input_prompt">In&nbsp;[41]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>vars.z <span class="o">&lt;-</span> <span class="kc">NULL</span>
@@ -12099,7 +12107,7 @@ vars.c <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[316]:</div>
+<div class="prompt input_prompt">In&nbsp;[42]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>vars.z <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;indi.id&#39;</span><span class="p">)</span>
@@ -12151,7 +12159,7 @@ vars.c <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[317]:</div>
+<div class="prompt input_prompt">In&nbsp;[43]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>vars.z <span class="o">&lt;-</span> <span class="kc">NULL</span>
@@ -12215,7 +12223,7 @@ ff_reg_mbyn<span class="p">(</span>list.vars.y<span class="p">,</span> list.vars
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[318]:</div>
+<div class="prompt input_prompt">In&nbsp;[44]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>vars.z <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;indi.id&#39;</span><span class="p">)</span>
@@ -12287,7 +12295,7 @@ ff_reg_mbyn<span class="p">(</span>list.vars.y<span class="p">,</span> list.vars
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[319]:</div>
+<div class="prompt input_prompt">In&nbsp;[45]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>vars.z <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&#39;indi.id&#39;</span><span class="p">)</span>
@@ -12310,10 +12318,10 @@ vars.c <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[320]:</div>
+<div class="prompt input_prompt">In&nbsp;[46]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span>df.reg.out <span class="o">&lt;-</span> as_tibble<span class="p">(</span>bind_rows<span class="p">(</span><span class="kp">lapply</span><span class="p">(</span>vars.y<span class="p">,</span> regf.iv<span class="p">,</span> vars.x<span class="o">=</span>var.x1<span class="p">,</span> vars.c<span class="o">=</span>vars.c<span class="p">,</span> vars.z<span class="o">=</span>vars.z<span class="p">,</span> df<span class="o">=</span>df<span class="p">)))</span>
+<div class=" highlight hl-r"><pre><span></span>df.reg.out <span class="o">&lt;-</span> as_tibble<span class="p">(</span>bind_rows<span class="p">(</span><span class="kp">lapply</span><span class="p">(</span>list.vars.y<span class="p">,</span> regf.iv<span class="p">,</span> vars.x<span class="o">=</span>var.x1<span class="p">,</span> vars.c<span class="o">=</span>vars.c<span class="p">,</span> vars.z<span class="o">=</span>vars.z<span class="p">,</span> df<span class="o">=</span>df<span class="p">)))</span>
 </pre></div>
 
 </div>
@@ -12331,11 +12339,11 @@ vars.c <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[321]:</div>
+<div class="prompt input_prompt">In&nbsp;[47]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span><span class="kp">lapply</span><span class="p">(</span>vars.y<span class="p">,</span> <span class="kr">function</span><span class="p">(</span>y<span class="p">)</span> <span class="p">(</span><span class="kp">mean</span><span class="p">(</span>df<span class="p">[[</span>var.x1<span class="p">]],</span> na.rm<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span> <span class="o">+</span> <span class="kp">mean</span><span class="p">(</span>df<span class="p">[[</span>y<span class="p">]],</span> na.rm<span class="o">=</span><span class="kc">TRUE</span><span class="p">)))</span>
-lapplytwice <span class="o">&lt;-</span> <span class="kp">lapply</span><span class="p">(</span>vars.x<span class="p">,</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">(</span><span class="kp">lapply</span><span class="p">(</span>vars.y<span class="p">,</span> <span class="kr">function</span><span class="p">(</span>y<span class="p">)</span> <span class="p">(</span><span class="kp">mean</span><span class="p">(</span>df<span class="p">[[</span>x<span class="p">]],</span> na.rm<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span> <span class="o">+</span> <span class="kp">mean</span><span class="p">(</span>df<span class="p">[[</span>y<span class="p">]],</span> na.rm<span class="o">=</span><span class="kc">TRUE</span><span class="p">)))))</span>
+<div class=" highlight hl-r"><pre><span></span><span class="kp">lapply</span><span class="p">(</span>list.vars.y<span class="p">,</span> <span class="kr">function</span><span class="p">(</span>y<span class="p">)</span> <span class="p">(</span><span class="kp">mean</span><span class="p">(</span>df<span class="p">[[</span>var.x1<span class="p">]],</span> na.rm<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span> <span class="o">+</span> <span class="kp">mean</span><span class="p">(</span>df<span class="p">[[</span>y<span class="p">]],</span> na.rm<span class="o">=</span><span class="kc">TRUE</span><span class="p">)))</span>
+lapplytwice <span class="o">&lt;-</span> <span class="kp">lapply</span><span class="p">(</span>list.vars.x<span class="p">,</span> <span class="kr">function</span><span class="p">(</span>x<span class="p">)</span> <span class="p">(</span><span class="kp">lapply</span><span class="p">(</span>list.vars.y<span class="p">,</span> <span class="kr">function</span><span class="p">(</span>y<span class="p">)</span> <span class="p">(</span><span class="kp">mean</span><span class="p">(</span>df<span class="p">[[</span>x<span class="p">]],</span> na.rm<span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span> <span class="o">+</span> <span class="kp">mean</span><span class="p">(</span>df<span class="p">[[</span>y<span class="p">]],</span> na.rm<span class="o">=</span><span class="kc">TRUE</span><span class="p">)))))</span>
 lapplytwice
 </pre></div>
 
@@ -12422,7 +12430,7 @@ lapplytwice
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[322]:</div>
+<div class="prompt input_prompt">In&nbsp;[48]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>df.reg.out.all <span class="o">&lt;-</span> bind_rows<span class="p">(</span><span class="kp">lapply</span><span class="p">(</span>list.vars.x<span class="p">,</span>
@@ -12438,7 +12446,7 @@ lapplytwice
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[323]:</div>
+<div class="prompt input_prompt">In&nbsp;[49]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>df.reg.out.all
@@ -12498,7 +12506,7 @@ lapplytwice
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[324]:</div>
+<div class="prompt input_prompt">In&nbsp;[50]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>df.reg.out.all <span class="o">&lt;-</span> <span class="p">(</span><span class="kp">lapply</span><span class="p">(</span>list.vars.x<span class="p">,</span>
@@ -12537,7 +12545,7 @@ Joining, by = &#34;vars_var.y&#34;
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[325]:</div>
+<div class="prompt input_prompt">In&nbsp;[51]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>df.reg.out.all

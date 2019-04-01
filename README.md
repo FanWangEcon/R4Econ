@@ -49,7 +49,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
     + **core**: *library(aer) + ivreg(as.formula, diagnostics = TRUE) + gather + drop_na + unite*
 2. [M Outcomes and N RHS Alternatives](linreg/ivreg/regloop.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/regloop.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/regloop.R) \|  [**html**](linreg/ivreg/regloop.html) \| pdf
     + There are M outcome variables and N alternative explanatory variables. Regress all M outcome variables on N endogenous/independent right hand side variables one by one, with controls and/or IVs, collect coefficients.
-    + **core**:*bind_rows(lapply(listx, function(x)(bind_rows(lapply(listy, regf.iv)))) + select/starts_with/ends_with + reduce(full_join)*
+    + **core**: *bind_rows(lapply(listx, function(x)(bind_rows(lapply(listy, regf.iv)))) + select/starts_with/ends_with + reduce(full_join)*
 3. [Regression Decomposition](linreg/decompose/decompose.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose/decompose.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose/decompose.R) \|  [**html**](linreg/decompose/decompose.html) \| pdf
     + Post multiple regressions, fraction of outcome variables' variances explained by multiple subsets of right hand side variables.
     + **core**: *gather + group_by(variable) + mutate_at(vars, funs(mean = mean(.))) + rowSums(mat*mat) + mutate_if(is.numeric, funs(frac = (./value_var)))*

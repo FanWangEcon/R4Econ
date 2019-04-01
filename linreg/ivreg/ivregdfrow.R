@@ -11,6 +11,8 @@ regf.iv <- function(var.y, vars.x, vars.c, vars.z, df, transpose=TRUE) {
     str.vars.x <- paste(vars.x, collapse='+')
     str.vars.c <- paste(vars.c, collapse='+')
 
+    df <- df %>% select(one_of(var.y, vars.x, vars.c, vars.z)) %>% drop_na() %>% filter_all(all_vars(!is.infinite(.)))
+
     if (length(vars.z) >= 1) {
         #     library(AER)
             str.vars.z <- paste(vars.z, collapse='+')
