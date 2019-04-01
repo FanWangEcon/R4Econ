@@ -37,14 +37,17 @@
 
 ff_lr_decompose <- function(df, vars.y, vars.x, vars.c, vars.z, vars.other.keep,
                             list.vars.tomean, list.vars.tomean.name.suffix,
+                            df.reg.out = NULL,
                             graph=FALSE, graph.nrow=2) {
 
     vars.xc <- c(vars.x, vars.c)
 
     # Regressions
     # regf.iv from C:\Users\fan\R4Econ\linreg\ivreg\ivregdfrow.R
-    df.reg.out <- as_tibble(bind_rows(lapply(vars.y, regf.iv,
-                                             vars.x=vars.x, vars.c=vars.c, vars.z=vars.z, df=df)))
+    if(is.null(df.reg.out)) {
+      df.reg.out <- as_tibble(bind_rows(lapply(vars.y, regf.iv,
+                                               vars.x=vars.x, vars.c=vars.c, vars.z=vars.z, df=df)))
+    }
 
     # Select Variables
     str.esti.suffix <- '_Estimate'
@@ -85,7 +88,7 @@ ff_lr_decompose <- function(df, vars.y, vars.x, vars.c, vars.z, vars.other.keep,
             select(variable, contains('value')) %>%
             group_by(variable) %>%
             summarize_all(funs(mean = mean, var = var)) %>%
-            select(matches('value')) %>% select(ends_with("_var")) %>%
+            select(variable, matches('value')) %>% select(variable, ends_with("_var")) %>%
             mutate_if(is.numeric, funs( frac = (./value_var))) %>%
             mutate_if(is.numeric, round, 3)
 

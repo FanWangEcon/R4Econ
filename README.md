@@ -10,7 +10,6 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 # 1. Summary Statistics
 
 ## 1.1 Tabulate and Counting
-
 1. [Tabulation Categorical as Matrix](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/tabulate/ListUniqueCateNAsMat.R): ipynb \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/tabulate/ListUniqueCateNAsMat.R) \| html \| pdf
     + Many-Category Categorical Variable, Tabulation shown as Matrix.
     + **core**: *group_by + summarise(freq = n()) + mutate + min(ceiling(sqrt(count))) + substring + dim/reshape*
@@ -37,6 +36,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
     + **core**: *gather + group_by + summarise_if(is.numeric, funs(mean(., na.rm = TRUE))) + mutate(all_m_cate = paste0(variable, '_c', value)) + gather + unite + spread (note: gather twice, spread at end)*
 
 # 2. Data/Variable Generation
+
 1. [Quantiles from Multiple Variables](generate/quantile/VarCateIdxVarsQuantiles.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quantile/VarCateIdxVarsQuantiles.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quantile/VarCateIdxVarsQuantiles.R) \|  [**html**](generate/quantile/VarCateIdxVarsQuantiles.html) \| pdf
     + Dataframe of Variables' Quantiles by Panel Groups; Quantile Categorical Variables for Panel within Group Observations; Quantile cut variable suffix and quantile labeling; Joint Quantile Categorical Variable with Linear Index.
     + **core**: *group_by + slicke(1L) + lapply(enframe(quantiles())) + reduce(full_join) + mutate_at(funs(q=f_cut(.,cut)))) + levels() + rename_at + unlist(lapply) + mutate(!!var.qjnt.grp.idx := group_indices(., !!!syms(vars.quantile.cut.all)))*
@@ -47,7 +47,10 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 1. [IV/OLS Regression](linreg/ivreg/ivregdfrow.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/ivregdfrow.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/ivregdfrow.R) \|  [**html**](linreg/ivreg/ivregdfrow.html) \| pdf
     + IV/OLS Regression store all Coefficients and Diagnostics as Dataframe Row.
     + **core**: *library(aer) + ivreg(as.formula, diagnostics = TRUE) + gather + drop_na + unite*
-2. [Regression Decomposition](linreg/decompose/decompose.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose/decompose.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose/decompose.R) \|  [**html**](linreg/decompose/decompose.html) \| pdf
+2. [M Outcomes and N RHS Alternatives](linreg/ivreg/regloop.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/regloop.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/regloop.R) \|  [**html**](linreg/ivreg/regloop.html) \| pdf
+    + There are M outcome variables and N alternative explanatory variables. Regress all M outcome variables on N endogenous/independent right hand side variables one by one, with controls and/or IVs, collect coefficients.
+    + **core**:*bind_rows(lapply(listx, function(x)(bind_rows(lapply(listy, regf.iv)))) + select/starts_with/ends_with + reduce(full_join)*
+3. [Regression Decomposition](linreg/decompose/decompose.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose/decompose.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose/decompose.R) \|  [**html**](linreg/decompose/decompose.html) \| pdf
     + Post multiple regressions, fraction of outcome variables' variances explained by multiple subsets of right hand side variables.
     + **core**: *gather + group_by(variable) + mutate_at(vars, funs(mean = mean(.))) + rowSums(mat*mat) + mutate_if(is.numeric, funs(frac = (./value_var)))*
 
