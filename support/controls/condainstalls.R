@@ -14,3 +14,7 @@ conda install -c r r-tidyverse
 conda install -c conda-forge r-aer
 # https://anaconda.org/conda-forge/r-minpack.lm
 conda install -c conda-forge r-minpack.lm
+
+
+# Allowing for Invoking Matlab Files from Inside R
+conda install -c conda-forge r-matlab
