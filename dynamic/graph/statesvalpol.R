@@ -7,6 +7,15 @@ ff_dyna_sup_grid_out_graph <- function(df, x.var,
                                        it.subplot.var.show.cnt = 3,
                                        round = 3,
                                        ncol = 3, print=TRUE){
+  # df <- df.aprime.max_c.fibs
+  # x.var <- 'aprime'
+  # fill.var <- 'fl_r_inf'
+  # subplot.var <- 'fl_for_br_block'
+  # out.var <- 'fl_coh_add'
+  # ff_dyna_sup_grid_out_graph(df, x.var, fill.var, out.var, subplot.var,
+  #                           it.fill.var.show.cnt = 3,
+  #                           it.subplot.var.show.cnt = 3,
+  #                           round = 3, ncol = 3, print=TRUE)
 
     fill.var.unique <- unique(df[[fill.var]])
     seq.fill.var <- unique(round(seq(1, length(fill.var.unique), length.out = it.fill.var.show.cnt)))

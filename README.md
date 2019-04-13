@@ -1,7 +1,7 @@
 
-This is a work-in-progress [website](https://fanwangecon.github.io/R4Econ/) of support files for doing Panel Data Statistics/Econometrics Analyasis, produced by [Fan](https://fanwangecon.github.io/). Materials gathered from various [projects](https://fanwangecon.github.io/research) in which R codes are used. An effort is made to use only [base R](https://www.rdocumentation.org/packages/base/versions/3.5.2) and [tidyverse](https://www.tidyverse.org/) packages whenever possible to reduce dependencies. The goal of this repository is to make it easier to find/re-use codes produced for various projects.
+This is a work-in-progress [website](https://fanwangecon.github.io/R4Econ/) of support files for doing Panel Data Statistics/Econometrics Analysis, produced by [Fan](https://fanwangecon.github.io/). Materials gathered from various [projects](https://fanwangecon.github.io/research) in which R codes are used. An effort is made to use only [base R](https://www.rdocumentation.org/packages/base/versions/3.5.2) and [tidyverse](https://www.tidyverse.org/) packages whenever possible to reduce dependencies. The goal of this repository is to make it easier to find/re-use codes produced for various projects.
 
-R files are linked below by section. Various functions are stored in corresponding .R files. To use the files, clone the repository, and then source the [preamble.R](https://github.com/FanWangEcon/R4Econ/blob/master/preamble.R) file. Some files also have examples/instructions created using Jupyter notebooks and are shown as HTML files. See [here](docs/gitsetup.md) for github set up.
+R files are linked below by section. Various functions are stored in corresponding .R files. To use the files, clone the repository, and then source the [preamble.R](https://github.com/FanWangEcon/R4Econ/blob/master/preamble.R) file. Some files also have examples/instructions created using Jupyter notebooks and are shown as HTML files. See [here](docs/gitsetup.md) for Github set up.
 
 Bullet points show which [base R](https://www.rdocumentation.org/packages/base/versions/3.5.2), [tidyverse](https://www.tidyverse.org/) or other functions/commands are used to achieve various objectives.
 
@@ -70,13 +70,20 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
     + Constrained: a + b + c = Z, a >= 0, b >= 0, c >= 0; Unconstrained maximands of a and b for optimization.
     + **core**: *f - f/(1+exp(x)), while, runif + qexp + qnorm/dnorm*
 
-# 5. Tools
+# 5. Graphing
+
+1. [Line Plot with Two Categories, as Color and Subplot](dynamic/graph/statesvalpol.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/dynamic/graph/statesvalpol.ipynb) \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/dynamic/graph/statesvalpol.R) \|  [**html**](dynamic/graph/statesvalpol.html) \| pdf
+    + Optimal choices/value-function along states. Asset as X-axis, shocks as color, potentially another state as subplots.
+    + **core**: *unique + mutate(var := as.factor(var)) + ggplot + facet_wrap + geom_line + geom_point + labs + theme(axis.text.x = element_text(angle = 90, hjust = 1))*
+    
+
+# 6. Tools
 
 1. [List of List to Dataframe](https://github.com/FanWangEcon/R4Econ/blob/master/support/dplyrtricks/nestedlist2df.R): ipynb \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/support/dplyrtricks/nestedlist2df.R) \| html \| pdf
     + Results stored as nested named list (with different keys in sub-lists).
     + **core**: *as.data.frame + gather + separate(sep(\\.), extra='merge') + spread + column_to_rownames*
 
-# 6. Support
+# 7. Support
 
 1. [Installations](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/condainstalls.R): ipynb \| [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/condainstalls.R) \| html \| pdf
     + Conda R Package Installations.
