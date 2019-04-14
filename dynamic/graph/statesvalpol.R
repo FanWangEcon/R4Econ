@@ -6,7 +6,12 @@ ff_dyna_sup_grid_out_graph <- function(df, x.var,
                                        it.fill.var.show.cnt = 3,
                                        it.subplot.var.show.cnt = 3,
                                        round = 3,
-                                       ncol = 3, print=TRUE){
+                                       ncol = 3,
+                                       geom_type = 'line',
+                                       st.caption = '',
+                                       bl.lines.axis = FALSE,
+                                       bl.lines.45 = FALSE,
+                                       print=TRUE){
   # df <- df.aprime.max_c.fibs
   # x.var <- 'aprime'
   # fill.var <- 'fl_r_inf'
@@ -49,10 +54,22 @@ ff_dyna_sup_grid_out_graph <- function(df, x.var,
         plot <- plot + facet_wrap(as.formula(paste0('~ ', subplot.var)), ncol = ncol)
     }
 
-    plot <- plot + geom_line(size = 1) +
-                    geom_point() +
-                    labs(title = paste0('outcome=',out.var,', x=', x.var, ', color=', fill.var)) +
-                    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+    if (geom_type == 'line') {
+        plot <- plot  + geom_line(size = 1) + geom_point()
+    }
+
+    if (bl.lines.axis) {
+      plot <- plot + geom_hline(yintercept = 0, size=1, color='black', linetype=2, alpha=0.5) +
+                     geom_vline(xintercept = 0, size=1, color='black', linetype=2, alpha=0.5)
+    }
+    if (bl.lines.45) {
+      plot <- plot + geom_abline(intercept = 0, slope = 1, size=1, color='black', linetype=1, alpha=0.5)
+    }
+
+   plot <- plot  + labs(title = paste0('outcome=',out.var,', x=', x.var, ', color=', fill.var),
+                        caption = st.caption)
+
+    plot <- plot + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
     if (print) {
       print(plot)
