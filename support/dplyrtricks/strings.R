@@ -8,3 +8,10 @@ if ("d" %in% colnames(dat)){}
 # integers are combined into strings
 mutate(it_z_n = sprintf("%02d", it_z_n),
        it_a_n = sprintf("%04d", it_a_n))
+
+# String replacement
+gsub(x = paste0(unique(df.slds.stats.perc$it.inner.counter), ':',
+                unique(df.slds.stats.perc$z_n_a_n), collapse = ';'),
+     pattern = "\n",
+     replacement = "")
+gsub(x = var,  pattern = "\n", replacement = "")

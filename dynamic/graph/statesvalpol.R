@@ -9,6 +9,8 @@ ff_dyna_sup_grid_out_graph <- function(df, x.var,
                                        ncol = 3,
                                        geom_type = 'line',
                                        st.title = '',
+                                       st.labs.x = '',
+                                       st.labs.y = '',
                                        st.caption = '',
                                        bl.lines.axis = FALSE,
                                        bl.lines.45 = FALSE,
@@ -68,6 +70,8 @@ ff_dyna_sup_grid_out_graph <- function(df, x.var,
     }
 
    plot <- plot  + labs(title = paste0(st.title, 'outcome=',out.var,', x=', x.var, ', color=', fill.var),
+                        x = st.labs.x,
+                        y = st.labs.y,
                         caption = st.caption)
 
     plot <- plot + theme(axis.text.x = element_text(angle = 90, hjust = 1))

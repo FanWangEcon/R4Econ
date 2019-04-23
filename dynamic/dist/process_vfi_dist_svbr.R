@@ -116,12 +116,17 @@ ff_dyna_combine_vfds <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
     # Generate Categorical Variables
     df.slds <- df.slds %>% mutate(it.z.n_str = sprintf("%02d", it.z.n),
                                   it.a.n_str = sprintf("%04d", it.a.n)) %>%
-                      mutate(st_pm_z_n_n_z = paste0('crra=', fl.crra,
-                                                    ',rho=', fl.rho,
-                                                    ',sig=', fl.sig,
-                                                    '\nan=', it.a.n_str,
-                                                    ',zn=', it.z.n_str),
-                             st_it_pm = paste0('pm=', it.pm.subset,
+                           mutate(st_pm_z_n_n_z = paste0('crra=', fl.crra,
+                                                        ',rho=', fl.rho,
+                                                        ',sig=', fl.sig,
+                                                        '\nan=', it.a.n_str,
+                                                        ',zn=', it.z.n_str),
+                                  st_crrarhosig = paste0('crra=', fl.crra,
+                                                         ',rho=', fl.rho,
+                                                         ',sig=', fl.sig),
+                                  z_n_a_n = paste0('an=', it.a.n_str,
+                                                   ',zn=', it.z.n_str),
+                                  st_it_pm = paste0('pm=', it.pm.subset,
                                                     ',i=', it.inner.counter))
     return(list(df=df.slds))
 
