@@ -48,8 +48,8 @@ ff_dyna_combine_vfds <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
     mt.fl.expanded <- do.call(expand.grid, list.ar.it)
 
     df.slds <- tibble()
+    df.dist <- tibble()
     for (i in 1:dim(mt.fl.expanded)[1]) {
-
         # Counters
         it.inner.counter <- mt.fl.expanded[i, 1]
         it.pm.subset <- mt.fl.expanded[i, 2]
@@ -62,7 +62,7 @@ ff_dyna_combine_vfds <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
         ds.mat.out <- readMat(paste0(root, curfolder, st.ds.matfile))
 
         # From Distribution File
-        mt.dist <- ds.mat.out$D0
+        mt.dist <- ds.mat.out$mt.D0
 
         # From VFI file
         mt.pol <- vf.mat.out$mt.pol
@@ -81,7 +81,10 @@ ff_dyna_combine_vfds <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
         fl.rho <- vf.mat.out$fl.rho
         fl.sig <- vf.mat.out$fl.sig
 
-        # Combine to Dataframe
+        #######################################
+        ### combine a by z matrixes together
+        #######################################
+        # Combine to Dataframe Full Matrix
         ar.st.vars <- c('a', 'z')
         list.ar.fl <- list(ar.a, paste0('z=', round(ar.z, 3)))
         list.ts.valpolmat <- tibble(val=as.numeric(mt.val),
@@ -96,16 +99,41 @@ ff_dyna_combine_vfds <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
                                     fl.crra = fl.crra,
                                     fl.rho = fl.rho,
                                     fl.sig = fl.sig)
-
+        # Expand
         df.slds.cur <- ff_dyna_sup_expand_grids(ar.st.vars, list.ar.fl, list.ts.valpolmat)
+
+
+        #######################################
+        ### combine marrginal as
+        #######################################
+        list.ar.fl <- list(ar.a, c(1))
+        # Marginal Distribution
+        ar.dist.a <- ds.mat.out$ar.dist.a
+        list.ar.prob.a <- tibble(proba = as.numeric(ar.dist.a),
+                                 probz=1,
+                                 it.pm.subset = it.pm.subset,
+                                 it.inner.counter = it.inner.counter,
+                                 it.z.n = it.z.n,
+                                 it.a.n = it.a.n,
+                                 fl.crra = fl.crra,
+                                 fl.rho = fl.rho,
+                                 fl.sig = fl.sig)
+
+         # Expand
+         df.dist.cur <- ff_dyna_sup_expand_grids(ar.st.vars, list.ar.fl, list.ar.prob.a)
+
+        # Print if need to
         if(bl.txt.print) {
             print(dim(df.slds.cur))
         }
 
         # Stack Dataframes together
         df.slds <- bind_rows(df.slds, df.slds.cur)
+        df.dist <- bind_rows(df.dist, df.dist.cur)
+
         if(bl.txt.print) {
             print(dim(df.slds))
+            print(dim(df.dist))
         }
     }
 
@@ -116,18 +144,47 @@ ff_dyna_combine_vfds <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
     # Generate Categorical Variables
     df.slds <- df.slds %>% mutate(it.z.n_str = sprintf("%02d", it.z.n),
                                   it.a.n_str = sprintf("%04d", it.a.n)) %>%
-                           mutate(st_pm_z_n_n_z = paste0('crra=', fl.crra,
+                           mutate(st_pm_zan = paste0('crra=', fl.crra,
                                                         ',rho=', fl.rho,
                                                         ',sig=', fl.sig,
                                                         '\nan=', it.a.n_str,
                                                         ',zn=', it.z.n_str),
+                                  st_zan = paste0('an=', it.a.n_str,
+                                                  ',zn=', it.z.n_str),
+                                  st_crra_zan = paste0('crra=', fl.crra,
+                                                       '\nan=', it.a.n_str,
+                                                       ',zn=', it.z.n_str),
                                   st_crrarhosig = paste0('crra=', fl.crra,
                                                          ',rho=', fl.rho,
                                                          ',sig=', fl.sig),
+                                  rho_sig = paste0('rho=', fl.rho, ',sig=', fl.sig),
                                   z_n_a_n = paste0('an=', it.a.n_str,
                                                    ',zn=', it.z.n_str),
                                   st_it_pm = paste0('pm=', it.pm.subset,
                                                     ',i=', it.inner.counter))
-    return(list(df=df.slds))
+
+      # Categorical variables also for df.dist
+      df.dist <- df.dist %>% mutate(it.z.n_str = sprintf("%02d", it.z.n),
+                                    it.a.n_str = sprintf("%04d", it.a.n)) %>%
+                             mutate(st_pm_zan = paste0('crra=', fl.crra,
+                                                          ',rho=', fl.rho,
+                                                          ',sig=', fl.sig,
+                                                          '\nan=', it.a.n_str,
+                                                          ',zn=', it.z.n_str),
+                                    st_crra_zan = paste0('crra=', fl.crra,
+                                                         '\nan=', it.a.n_str,
+                                                         ',zn=', it.z.n_str),
+                                    st_zan = paste0('an=', it.a.n_str,
+                                                    ',zn=', it.z.n_str),
+                                    st_crrarhosig = paste0('crra=', fl.crra,
+                                                           ',rho=', fl.rho,
+                                                           ',sig=', fl.sig),
+                                    rho_sig = paste0('rho=', fl.rho, ',sig=', fl.sig),
+                                    z_n_a_n = paste0('an=', it.a.n_str,
+                                                     ',zn=', it.z.n_str),
+                                    st_it_pm = paste0('pm=', it.pm.subset,
+                                                      ',i=', it.inner.counter))
+
+    return(list(df_slds=df.slds, df_dist=df.dist))
 
 }

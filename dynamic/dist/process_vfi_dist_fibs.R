@@ -62,7 +62,7 @@ ff_dyna_combine_vfds_fibs <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/'
         ds.mat.out <- readMat(paste0(root, curfolder, st.ds.matfile))
 
         # From Distribution File
-        mt.dist <- ds.mat.out$D0
+        mt.dist <- ds.mat.out$mt.D0
 
         # From VFI file
         mt.pol <- vf.mat.out$mt.pol
