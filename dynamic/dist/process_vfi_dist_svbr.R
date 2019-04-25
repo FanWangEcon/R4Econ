@@ -40,10 +40,6 @@ ff_dyna_combine_vfds <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
 
     # bl.txt.print <- TRUE
 
-    st.caption <- paste0(subfolder, '\n',
-                         paste0('ar.it.inner.counter:', paste0(ar.it.inner.counter, collapse='-'), ';'), '\n',
-                         paste0('ar.it.pm.subset:', paste0(ar.it.pm.subset, collapse='-'), ';'))
-
     list.ar.it <- list(ar.it.inner.counter, ar.it.pm.subset)
     mt.fl.expanded <- do.call(expand.grid, list.ar.it)
 
@@ -167,10 +163,10 @@ ff_dyna_combine_vfds <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
       df.dist <- df.dist %>% mutate(it.z.n_str = sprintf("%02d", it.z.n),
                                     it.a.n_str = sprintf("%04d", it.a.n)) %>%
                              mutate(st_pm_zan = paste0('crra=', fl.crra,
-                                                          ',rho=', fl.rho,
-                                                          ',sig=', fl.sig,
-                                                          '\nan=', it.a.n_str,
-                                                          ',zn=', it.z.n_str),
+                                                       ',rho=', fl.rho,
+                                                       ',sig=', fl.sig,
+                                                       '\nan=', it.a.n_str,
+                                                       ',zn=', it.z.n_str),
                                     st_crra_zan = paste0('crra=', fl.crra,
                                                          '\nan=', it.a.n_str,
                                                          ',zn=', it.z.n_str),
@@ -185,6 +181,34 @@ ff_dyna_combine_vfds <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
                                     st_it_pm = paste0('pm=', it.pm.subset,
                                                       ',i=', it.inner.counter))
 
-    return(list(df_slds=df.slds, df_dist=df.dist))
+    # Captioning Texts
+    st.caption <- paste0(paste0(folder, ';', subfolder, ';', st.file.prefix.vf, ';', st.file.prefix.ds), '\n',
+                         paste0('ar.it.inner.counter:', paste0(ar.it.inner.counter, collapse='-'), ';'),
+                         paste0('ar.it.pm.subset:', paste0(ar.it.pm.subset, collapse='-')))
+
+    #################################################
+    ### Main File
+    # This is the densest grid result, other results less grid points
+    # Dense grid results include multiple crra and shock parameters
+    #################################################
+    df.slds.main <- df.slds %>% filter(it.inner.counter == 1)
+    df.dist.main <- df.dist %>% filter(it.inner.counter == 1)
+
+    #################################################
+    ### Main File Results for DIST, additional results for df.dist.main
+    #################################################
+    vars.group.by <- 'st_crrarhosig'
+    # more detailed files for df.dist.main
+    st.main.grid <- paste0('A grid count = ', unique(df.dist.main$it.a.n), ', z grid count = ', unique(df.dist.main$it.z.n))
+    # a readable csv file with aprob across parameters for main-dense, ignore other numbers
+    df.dist.main.aprob <- df.dist.main %>% select(a, z, proba, one_of(vars.group.by)) %>% spread(a, proba) %>% mutate_if(is.numeric, round, 4)
+    # a simple percentile file checking on discrete proabiliy distribution, does not make sense, but useful.
+    df.dist.main.aprob.dist <- df.dist.main %>% select(a, proba, vars.group.by) %>% group_by(!!!syms(vars.group.by)) %>%
+                                do(data.frame(f.summ.percentiles(.) %>% mutate_if(is.numeric, round, 4)))
+
+    return(list(df_slds=df.slds, df_dist=df.dist,
+                df_slds_main=df.slds.main, df_dist_main=df.dist.main,
+                df_dist_main_aprob=df.dist.main.aprob, df_dist_main_aprob_dist=df.dist.main.aprob.dist,
+                st_caption=st.caption, st_main_grid=st.main.grid))
 
 }
