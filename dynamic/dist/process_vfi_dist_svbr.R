@@ -77,6 +77,8 @@ ff_dyna_combine_vfds <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
         fl.rho <- vf.mat.out$fl.rho
         fl.sig <- vf.mat.out$fl.sig
 
+
+
         #######################################
         ### combine a by z matrixes together
         #######################################
@@ -134,8 +136,23 @@ ff_dyna_combine_vfds <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
     }
 
     # Generate Additional Variables
+    # df.slds <- df.slds %>% mutate(wealth = inc + a,
+    #                               bl.borr = if_else(aprime < 0, 1, 0))
+
+    # Generate Additional Variables
     df.slds <- df.slds %>% mutate(wealth = inc + a,
-                                  bl.borr = if_else(aprime < 0, 1, 0))
+                                  bl.borr = if_else(aprime < 0, 1, 0),
+                                  bl.none = if_else(aprime == 0, 1, 0),
+                                  bl.save = if_else(aprime > 0, 1, 0),
+                                  bl.forborr.forsave = if_else((fbr < 0 & fsv > 0), 1, 0),
+                                  bl.infborr.onlyinf = if_else((ifb < 0 & fbr == 0), 1, 0),
+                                  bl.forborr.infborr = if_else((ifb < 0 & fbr < 0), 1, 0))
+
+    # Better Names for fbr, ifb and fsv
+    df.slds <- df.slds %>% mutate(formal.borrowing.amount = fbr,
+                                  informal.borrowi.amount = ifb,
+                                  forsave.whenForBorr.amt = fsv,
+                                  total.net.borr.save.all = a)
 
     # Generate Categorical Variables
     df.slds <- df.slds %>% mutate(it.z.n_str = sprintf("%02d", it.z.n),

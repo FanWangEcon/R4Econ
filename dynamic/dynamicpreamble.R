@@ -6,6 +6,7 @@ setwd("C:/Users/fan/R4Econ/dynamic/graph/")
 source("statesvalpol.R")
 
 setwd("C:/Users/fan/R4Econ/dynamic/dist/")
+source("process_vfi_dist_sbkp.R")
 source("process_vfi_dist_fibs.R")
 source("process_vfi_dist_svbr.R")
 source("disperc.R")

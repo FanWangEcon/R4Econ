@@ -1,7 +1,7 @@
 ff_dyna_simu_slds <- function(df.slds.groupby.seg,
                               var.prob = 'prob',
                               it.sample.draws = 20000,
-                              bl.graph.print = FALSE){
+                              bl.graph.print = FALSE, bl.return.sample = FALSE){
 
     ar.it.simu <- sample(dim(df.slds.groupby.seg)[1], it.sample.draws, replace = TRUE,
                          prob = (df.slds.groupby.seg[[var.prob]]/sum(df.slds.groupby.seg[[var.prob]])));
@@ -18,5 +18,10 @@ ff_dyna_simu_slds <- function(df.slds.groupby.seg,
 
     df.sampled.percentiles <- f.summ.percentiles(df.sampled)
 
-    return(df.sampled.percentiles)
+    if (bl.return.sample) {
+      return(df.sampled)
+    } else {
+      return(df.sampled.percentiles)
+    }
+
 }

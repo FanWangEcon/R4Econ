@@ -15,7 +15,7 @@
 #                                 ar.it.inner.counter = 1:1:9,
 #                                 bl.txt.print = FALSE)
 
-ff_dyna_combine_vfds <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
+ff_dyna_combine_sbkp <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
                                  folder = 'matlab/inf_az/_mat/svbr/',
                                  subfolder = 'gda_medium1',
                                  st.file.prefix.vf = 'vf_az_p_gb_sa',
@@ -85,6 +85,11 @@ ff_dyna_combine_vfds <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
       mt.con <- vf.mat.out$mt.cons
       mt.inc <- vf.mat.out$mt.incm
 
+      mt.for.borr <- floor(vf.mat.out$mt.for.borr)
+      mt.for.save <- vf.mat.out$mt.for.save
+      mt.inf.borr <- vf.mat.out$mt.inf.borr
+      mt.coh.add <- vf.mat.out$mt.coh.add
+
       # State Vectors
       ar.a <- vf.mat.out$ar.a
       ar.k <- vf.mat.out$ar.k
@@ -98,6 +103,11 @@ ff_dyna_combine_vfds <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
       fl.rho <- vf.mat.out$fl.rho
       fl.sig <- vf.mat.out$fl.sig
 
+      fl.r.inf <- vf.mat.out$fl.r.inf;
+      fl.r.fsv <- vf.mat.out$fl.r.fsv;
+      fl.r.fbr <- vf.mat.out$fl.r.fbr;
+      fl.for.br.block <- vf.mat.out$fl.for.br.block;
+
       #######################################
       ### Column Appending Functions
       #######################################
@@ -109,8 +119,11 @@ ff_dyna_combine_vfds <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
           it.a.n = it.a.n,
           fl.crra = fl.crra,
           fl.rho = fl.rho,
-          fl.sig = fl.sig
-        )
+          fl.sig = fl.sig,
+          fl.r.inf = fl.r.inf,
+          fl.r.fsv = fl.r.fsv,
+          fl.r.fbr = fl.r.fbr,
+          fl.for.br.block = fl.for.br.block)
       }
 
       #######################################
@@ -124,7 +137,11 @@ ff_dyna_combine_vfds <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
         aprime = as.numeric(mt.pol),
         con = as.numeric(mt.con),
         inc = as.numeric(mt.inc),
-        prob = as.numeric(mt.dist)
+        prob = as.numeric(mt.dist),
+        fbr=as.numeric(mt.for.borr),
+        fsv=as.numeric(mt.for.save),
+        ifb=as.numeric(mt.inf.borr),
+        cdd=as.numeric(mt.coh.add),
       )
       # Expand
       df.slds.cur <-
@@ -216,7 +233,17 @@ ff_dyna_combine_vfds <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
 
     # Generate Additional Variables
     df.slds <- df.slds %>% mutate(wealth = inc + a,
-                                  bl.borr = if_else(aprime < 0, 1, 0))
+                                  bl.borr = if_else(aprime < 0, 1, 0),
+                                  bl.none = if_else(aprime == 0, 1, 0),
+                                  bl.save = if_else(aprime > 0, 1, 0),
+                                  bl.forborr.forsave = if_else((fbr < 0 & fsv > 0), 1, 0),
+                                  bl.infborr.onlyinf = if_else((ifb < 0 & fbr == 0), 1, 0),
+                                  bl.forborr.infborr = if_else((ifb < 0 & fbr < 0), 1, 0))
+
+    df.slds <- df.slds %>% mutate(formal.borrowing.amount = fbr,
+                                  informal.borrowi.amount = ifb,
+                                  forsave.whenForBorr.amt = fsv,
+                                  total.net.borr.save.all = a)
 
     # Add Parameter Categorical Variables
     df.slds <- ff_add_simu_joinedparams_as_vars(df.slds)
@@ -262,23 +289,24 @@ ff_dyna_combine_vfds <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
     st.main.grid <-
       paste0(
         'A grid count = ',
-        unique(df.dist.main$it.a.n),
+        unique(df.dist.ak.cur$it.a.n),
         ', z grid count = ',
-        unique(df.dist.main$it.z.n)
+        unique(df.dist.ak.cur$it.z.n)
       )
 
-    # a readable csv file with aprob across parameters for main-dense, ignore other numbers
-    df.dist.main.aprob <-
-      df.dist.main %>% select(a, z, proba, one_of(vars.group.by)) %>% spread(a, proba) %>% mutate_if(is.numeric, round, 4)
+    # # a readable csv file with aprob across parameters for main-dense, ignore other numbers
+    # df.dist.main.aprob <-
+    #   df.dist.main %>% select(a, z, proba, one_of(vars.group.by)) %>% spread(a, proba) %>% mutate_if(is.numeric, round, 4)
+    #
+    # # a simple percentile file checking on discrete proabiliy distribution, does not make sense, but useful.
+    # df.dist.main.aprob.dist <-
+    #   df.dist.main %>% select(a, proba, vars.group.by) %>% group_by(!!!syms(vars.group.by)) %>%
+    #   do(data.frame(f.summ.percentiles(.) %>% mutate_if(is.numeric, round, 4)))
 
-    # a simple percentile file checking on discrete proabiliy distribution, does not make sense, but useful.
-    df.dist.main.aprob.dist <-
-      df.dist.main %>% select(a, proba, vars.group.by) %>% group_by(!!!syms(vars.group.by)) %>%
-      do(data.frame(f.summ.percentiles(.) %>% mutate_if(is.numeric, round, 4)))
-
-    return(list(df_slds=df.slds, df_dist=df.dist,
+    return(list(df_slds=df.slds, df_dist = df.dist.a,
                 df_slds_main=df.slds.main, df_dist_ak_main = df.dist.ak.main ,
-                df_dist_main_aprob=df.dist.main.aprob, df_dist_main_aprob_dist=df.dist.main.aprob.dist,
                 st_caption=st.caption, st_main_grid=st.main.grid))
+
+                # df_dist_main_aprob=df.dist.main.aprob, df_dist_main_aprob_dist=df.dist.main.aprob.dist,
 
 }
