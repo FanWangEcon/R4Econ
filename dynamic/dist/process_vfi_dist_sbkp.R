@@ -5,15 +5,24 @@
 # library(AER)
 # library(R.matlab)
 
-# ls.vfds <- ff_dyna_combine_vfds(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
-#                                 folder = 'matlab/inf_az/_mat/svbr/',
-#                                 subfolder = 'gda_medium1',
-#                                 st.file.prefix.vf = 'vf_az_p_gb_sa',
-#                                 st.file.prefix.ds = 'ds_az_p_gb_sa',
-#                                 ar.it.pm.subset = c(110,112, 116,118,
-#                                                     150,152, 156,158),
-#                                 ar.it.inner.counter = 1:1:9,
-#                                 bl.txt.print = FALSE)
+
+
+#' Merge mat files together
+#'
+#' Function that merges mat file from matlab to process in R
+#'
+#' @bl.get.vf ... vf files very large potentially, if false, do not save them
+#' @examples
+#' ff_dyna_combine_vfds(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
+#'                                 folder = 'matlab/inf_az/_mat/svbr/',
+#'                                 subfolder = 'gda_medium1',
+#'                                 st.file.prefix.vf = 'vf_az_p_gb_sa',
+#'                                 st.file.prefix.ds = 'ds_az_p_gb_sa',
+#'                                 ar.it.pm.subset = c(110,112, 116,118,
+#'                                                     150,152, 156,158),
+#'                                 ar.it.inner.counter = 1:1:9,
+#'                                 bl.txt.print = FALSE)
+#'
 
 ff_dyna_combine_sbkp <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
                                  folder = 'matlab/inf_az/_mat/svbr/',
@@ -22,8 +31,9 @@ ff_dyna_combine_sbkp <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
                                  st.file.prefix.ds = 'ds_az_p_gb_sa',
                                  ar.it.pm.subset = c(110,112, 116,118, 150,152, 156,158),
                                  ar.it.inner.counter = 1:1:9,
+                                 bl.get.vf = TRUE,
                                  bl.txt.print = FALSE){
-
+    # bl.get.ds
     # options(warn=-1) # Suppress Warning Messages
     # Load in Matlab Mat File from running vf_az
 
@@ -61,13 +71,15 @@ ff_dyna_combine_sbkp <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
 
       # Folder Names and Load .mat
       curfolder <- paste0(folder, subfolder, '/pm', it.pm.subset, '/')
-      st.vf.matfile <-
-        paste0(st.file.prefix.vf,
-               it.pm.subset,
-               '_c',
-               it.inner.counter,
-               '.mat')
-      vf.mat.out <- readMat(paste0(root, curfolder, st.vf.matfile))
+      if (bl.get.vf) {
+        st.vf.matfile <-
+          paste0(st.file.prefix.vf,
+                 it.pm.subset,
+                 '_c',
+                 it.inner.counter,
+                 '.mat')
+        vf.mat.out <- readMat(paste0(root, curfolder, st.vf.matfile))
+      }
       st.ds.matfile <-
         paste0(st.file.prefix.ds,
                it.pm.subset,
@@ -76,42 +88,59 @@ ff_dyna_combine_sbkp <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
                '.mat')
       ds.mat.out <- readMat(paste0(root, curfolder, st.ds.matfile))
 
+      bl.has.fbis <- FALSE
+      if ('mt.for.save' %in% names(ds.mat.out)) {
+        bl.has.fbis <- TRUE
+      }
+
       # From Distribution File
-      mt.dist <- ds.mat.out$mt.D0
+      mt.dist <- ds.mat.out$mt.dist.ak.z
 
-      # From VFI file
-      mt.pol <- vf.mat.out$mt.pol
-      mt.val <- vf.mat.out$mt.val
-      mt.con <- vf.mat.out$mt.cons
-      mt.inc <- vf.mat.out$mt.incm
+      if (bl.get.vf) {
+        # From VFI file
+        mt.fin <- vf.mat.out$mt.pol.fin
+        mt.kap <- vf.mat.out$mt.pol.kap
+        mt.idx <- vf.mat.out$mt.pol.idx
+        mt.val <- vf.mat.out$mt.val
+        mt.con <- vf.mat.out$mt.cons
+        mt.inc <- vf.mat.out$mt.incm
 
-      mt.for.borr <- floor(vf.mat.out$mt.for.borr)
-      mt.for.save <- vf.mat.out$mt.for.save
-      mt.inf.borr <- vf.mat.out$mt.inf.borr
-      mt.coh.add <- vf.mat.out$mt.coh.add
+        if (bl.has.fbis) {
+          mt.for.borr <- floor(vf.mat.out$mt.for.borr)
+          mt.for.save <- vf.mat.out$mt.for.save
+          mt.inf.borr <- vf.mat.out$mt.inf.borr
+          mt.coh.add <- vf.mat.out$mt.coh.add
+        }
+      }
 
       # State Vectors
-      ar.a <- vf.mat.out$ar.a
-      ar.k <- vf.mat.out$ar.k
-      ar.z <- vf.mat.out$ar.z
+      ar.a <- ds.mat.out$ar.a
+      ar.k <- ds.mat.out$ar.k
+      ar.z <- ds.mat.out$ar.z
 
       # LParameters
-      it.z.n <- vf.mat.out$it.z.n
-      it.a.n <- vf.mat.out$it.a.n
-      it.k.n <- vf.mat.out$it.k.n
-      fl.crra <- vf.mat.out$fl.crra
-      fl.rho <- vf.mat.out$fl.rho
-      fl.sig <- vf.mat.out$fl.sig
+      it.z.n <- ds.mat.out$it.z.n
+      it.a.n <- ds.mat.out$it.a.n
+      it.k.n <- ds.mat.out$it.k.n
+      fl.sig <- ds.mat.out$fl.sig
+      if (bl.get.vf) {
+        fl.crra <- vf.mat.out$fl.crra
+        fl.rho <- vf.mat.out$fl.rho
+      }
 
-      fl.r.inf <- vf.mat.out$fl.r.inf;
-      fl.r.fsv <- vf.mat.out$fl.r.fsv;
-      fl.r.fbr <- vf.mat.out$fl.r.fbr;
-      fl.for.br.block <- vf.mat.out$fl.for.br.block;
+      if (bl.has.fbis) {
+        # these parameters exist in fibs models only
+        fl.r.inf <- ds.mat.out$fl.r.inf
+        fl.r.fsv <- ds.mat.out$fl.r.fsv
+        fl.r.fbr <- ds.mat.out$fl.r.fbr
+        fl.for.br.block <- ds.mat.out$fl.for.br.block
+      }
 
       #######################################
       ### Column Appending Functions
       #######################################
       ff_add_simu_params_as_vars <- function(df) {
+
         df <- df %>% mutate(
           it.pm.subset = it.pm.subset,
           it.inner.counter = it.inner.counter,
@@ -119,12 +148,26 @@ ff_dyna_combine_sbkp <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
           it.a.n = it.a.n,
           fl.crra = fl.crra,
           fl.rho = fl.rho,
-          fl.sig = fl.sig,
-          fl.r.inf = fl.r.inf,
-          fl.r.fsv = fl.r.fsv,
-          fl.r.fbr = fl.r.fbr,
-          fl.for.br.block = fl.for.br.block)
+          fl.sig = fl.sig)
+
+        if (bl.get.vf) {
+          df <- df %>% mutate(
+            fl.crra = fl.crra,
+            fl.rho = fl.rho)
+        }
+
+        if (bl.has.fbis) {
+          # these parameters exist in fibs models only
+          df <- df %>% mutate(
+            fl.r.inf = fl.r.inf,
+            fl.r.fsv = fl.r.fsv,
+            fl.r.fbr = fl.r.fbr,
+            fl.for.br.block = fl.for.br.block)
+        }
+
+        return(df)
       }
+
 
       #######################################
       ### combine a by z matrixes together
@@ -132,20 +175,32 @@ ff_dyna_combine_sbkp <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
       # Combine to Dataframe Full Matrix
       ar.st.vars <- c('a', 'k', 'z')
       list.ar.fl <- list(ar.a, ar.k, paste0('z=', round(ar.z, 3)))
+
       list.ts.valpolmat <- tibble(
         val = as.numeric(mt.val),
-        aprime = as.numeric(mt.pol),
+        aprime = as.numeric(mt.fin),
+        kprime = as.numeric(mt.kap),
         con = as.numeric(mt.con),
         inc = as.numeric(mt.inc),
-        prob = as.numeric(mt.dist),
-        fbr=as.numeric(mt.for.borr),
-        fsv=as.numeric(mt.for.save),
-        ifb=as.numeric(mt.inf.borr),
-        cdd=as.numeric(mt.coh.add),
+        prob = as.numeric(mt.dist)
       )
+      if (bl.has.fbis) {
+        list.ts.valpolmat <- tibble(
+          val = as.numeric(mt.val),
+          aprime = as.numeric(mt.fin),
+          kprime = as.numeric(mt.kap),
+          con = as.numeric(mt.con),
+          inc = as.numeric(mt.inc),
+          prob = as.numeric(mt.dist),
+          fbr=as.numeric(mt.for.borr),
+          fsv=as.numeric(mt.for.save),
+          ifb=as.numeric(mt.inf.borr),
+          cdd=as.numeric(mt.coh.add),
+        )
+      }
+
       # Expand
-      df.slds.cur <-
-        ff_dyna_sup_expand_grids(ar.st.vars, list.ar.fl, list.ts.valpolmat)
+      df.slds.cur <- ff_dyna_sup_expand_grids(ar.st.vars, list.ar.fl, list.ts.valpolmat)
       # Append more stats
       df.slds.cur <- ff_add_simu_params_as_vars(df.slds.cur)
 
@@ -235,15 +290,21 @@ ff_dyna_combine_sbkp <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
     df.slds <- df.slds %>% mutate(wealth = inc + a,
                                   bl.borr = if_else(aprime < 0, 1, 0),
                                   bl.none = if_else(aprime == 0, 1, 0),
-                                  bl.save = if_else(aprime > 0, 1, 0),
-                                  bl.forborr.forsave = if_else((fbr < 0 & fsv > 0), 1, 0),
-                                  bl.infborr.onlyinf = if_else((ifb < 0 & fbr == 0), 1, 0),
-                                  bl.forborr.infborr = if_else((ifb < 0 & fbr < 0), 1, 0))
+                                  bl.save = if_else(aprime > 0, 1, 0))
+    if (bl.has.fbis) {
+      df.slds <- df.slds %>% mutate(wealth = inc + a,
+                                    bl.borr = if_else(aprime < 0, 1, 0),
+                                    bl.none = if_else(aprime == 0, 1, 0),
+                                    bl.save = if_else(aprime > 0, 1, 0),
+                                    bl.forborr.forsave = if_else((fbr < 0 & fsv > 0), 1, 0),
+                                    bl.infborr.onlyinf = if_else((ifb < 0 & fbr == 0), 1, 0),
+                                    bl.forborr.infborr = if_else((ifb < 0 & fbr < 0), 1, 0))
 
-    df.slds <- df.slds %>% mutate(formal.borrowing.amount = fbr,
-                                  informal.borrowi.amount = ifb,
-                                  forsave.whenForBorr.amt = fsv,
-                                  total.net.borr.save.all = a)
+      df.slds <- df.slds %>% mutate(formal.borrowing.amount = fbr,
+                                    informal.borrowi.amount = ifb,
+                                    forsave.whenForBorr.amt = fsv,
+                                    total.net.borr.save.all = a)
+    }
 
     # Add Parameter Categorical Variables
     df.slds <- ff_add_simu_joinedparams_as_vars(df.slds)
@@ -303,7 +364,10 @@ ff_dyna_combine_sbkp <- function(root = 'C:/Users/fan/ThaiForInfLuuRobFan/',
     #   df.dist.main %>% select(a, proba, vars.group.by) %>% group_by(!!!syms(vars.group.by)) %>%
     #   do(data.frame(f.summ.percentiles(.) %>% mutate_if(is.numeric, round, 4)))
 
-    return(list(df_slds=df.slds, df_dist = df.dist.a,
+    return(list(df_slds = df.slds,
+                df_dist_a = df.dist.a,
+                df_dist_k = df.dist.k,
+                df_dist_ak = df.dist.ak,
                 df_slds_main=df.slds.main, df_dist_ak_main = df.dist.ak.main ,
                 st_caption=st.caption, st_main_grid=st.main.grid))
 
