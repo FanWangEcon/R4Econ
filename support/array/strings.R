@@ -3,6 +3,10 @@ if ("d" %in% colnames(dat)){}
 
 # if string value is contained in variable
 ("bridex.B" %in% (df.reg.out.all$vars_var.y))
+# if string value is not contained in variable:
+# 1. type is variable name
+# 2. Toyota|Mazda are strings to be excluded
+filter(mtcars, !grepl('Toyota|Mazda', type))
 
 # Add Leading zero for integer values to allow for sorting when
 # integers are combined into strings
@@ -15,3 +19,7 @@ gsub(x = paste0(unique(df.slds.stats.perc$it.inner.counter), ':',
      pattern = "\n",
      replacement = "")
 gsub(x = var,  pattern = "\n", replacement = "")
+
+# Simple Collapse
+vars.group.by <- c('abc', 'efg')
+paste0(vars.group.by, collapse='|')

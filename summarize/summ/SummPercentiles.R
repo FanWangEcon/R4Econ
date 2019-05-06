@@ -2,14 +2,6 @@
 # https://fanwangecon.github.io/R4Econ/summarize/summ/SummPercentiles.html
 # f.summ.percentiles(df.main.guat) %>% mutate_if(is.numeric, round, 2)
 
-# use the following tool, over many groups
-# vars.group.by <- 'st_crrarhosig'
-# options(repr.matrix.max.rows=Inf, repr.matrix.max.cols=Inf)
-# df %>% arrange(!!!syms(vars.group.by)) %>%
-#        group_by(!!!syms(vars.group.by)) %>%
-#        do(data.frame(f.summ.percentiles(.) %>%
-#                      mutate_if(is.numeric, round, 4)))
-
 f.summ.percentiles <- function(df, col2varname = FALSE) {
     names(df) <- gsub("_", ".", names(df))
 
