@@ -1,31 +1,44 @@
-# Data Function
-# https://fanwangecon.github.io/R4Econ/summarize/count/ByGroupCountUniqueIndi.html
 f.by.group.unique.obs <- function(df,
                                   vars.group = c('S.country', 'vil.id'),
                                   var.unique.identifier = 'indi.id',
+                                  st.unique.suffix = '_unique',
                                   graph=TRUE) {
-    
+#' Unique Observations
+#' @examples
+#' https://fanwangecon.github.io/R4Econ/summarize/count/ByGroupCountUniqueIndi.html
+#' ls.df <- f.by.group.unique.obs(df.counting %>% ungroup() %>%
+#'                       select(one_of(vars.group.by, vars.arrange.by, var.countobs, var.countobs.nonNA.n)),
+#'                       vars.group = vars.count.groups, var.unique.identifier = var.unique.identifier, graph = FALSE)
+#' df.countobs.nonNA.n <- ls.df$df
+
     vars.all <- names(df)
-    df.group.unique <- df %>% group_by(!!!syms(vars.group)) %>%
+    var.unique.indi <- paste0(var.unique.identifier, st.unique.suffix)
+
+    df.group.unique <- df %>%
+          mutate_at(vars.group, funs(as.factor(.))) %>%
+          group_by(!!!syms(vars.group)) %>%
           arrange(!!!syms(vars.group)) %>%
           mutate_if(is.numeric, funs(n=sum(is.na(.)==0))) %>%
-          mutate(unique_indi = n_distinct(!!sym(var.unique.identifier))) %>%
+          mutate(!!var.unique.indi := n_distinct(!!sym(var.unique.identifier))) %>%
           slice(1L) %>%
-          select(!!!syms(vars.group), unique_indi, everything(), -!!var.unique.identifier,
+          select(!!!syms(vars.group), var.unique.indi, everything(), -!!var.unique.identifier,
                 -one_of(vars.all))
 
     if (graph){
-        graph <- graphf.by.group.unique.obs(df.group.unique, vars.group)
+        graph <- graphf.by.group.unique.obs(df.group.unique, var.unique.indi, vars.group)
         return(list(df=df.group.unique, graph=graph))
     } else {
         return(list(df=df.group.unique))
     }
 }
 
-# Graphing Function
-# https://fanwangecon.github.io/R4Econ/summarize/count/ByGroupCountUniqueIndi.html
 graphf.by.group.unique.obs <- function(df.by.group,
+                                       var.unique.indi,
                                        vars.group = c('S.country', 'vil.id')) {
+#' Graphing Function
+#' @examples
+#' https://fanwangecon.github.io/R4Econ/summarize/count/ByGroupCountUniqueIndi.html
+
     color.var <- vars.group[1]
     x.var <- vars.group[2]
 
@@ -47,7 +60,7 @@ graphf.by.group.unique.obs <- function(df.by.group,
 
     # Graphing (unique_indi used earlier as name)
     graph <- df.by.group %>%
-        select(one_of(vars.group), unique_indi) %>%
+        select(one_of(vars.group, var.unique.indi)) %>%
         gather(variable, value, -one_of(vars.group)) %>%
         ggplot(aes(x=!!sym(x.var), y=value))  +
         geom_bar(stat = 'identity', position="dodge")  +
