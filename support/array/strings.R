@@ -19,6 +19,7 @@ gsub(x = paste0(unique(df.slds.stats.perc$it.inner.counter), ':',
      pattern = "\n",
      replacement = "")
 gsub(x = var,  pattern = "\n", replacement = "")
+gsub(x = var.input,  pattern = "\\.", replacement = "_")
 
 # Simple Collapse
 vars.group.by <- c('abc', 'efg')
