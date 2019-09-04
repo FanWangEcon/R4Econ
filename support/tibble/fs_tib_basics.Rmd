@@ -1,0 +1,44 @@
+---
+title: "R Tibble Basics"
+output:
+  html_notebook: default
+  pdf_document:
+    df_print: paged
+  html_document:
+    df_print: paged
+  word_document: default
+urlcolor: blue
+---
+
+Back to [Fan](https://fanwangecon.github.io)'s [Reusable R Code](https://fanwangecon.github.io/R4Econ/) table of content.
+
+# Load Packages and Tibble
+
+```{r}
+# Load Tidyverse
+library(tidyverse)
+# Load Fan's R4Econ Package
+library(R4Econ) 
+# Load datasets
+tb_iris <- as_tibble(iris)
+```
+
+# Table Basics
+
+Show what is in the table: 1, column and row names; 2, contents inside table.
+
+```{r}
+rownames(tb_iris)
+colnames(tb_iris)
+colnames(tb_iris)
+summary(tb_iris)
+```
+
+# R4Econ Function to Summarize All Variables in Table
+
+Use R4Econ's summary tool. 
+
+```{r}
+df_summ_stats <- ff_summ_percentiles(tb_iris)
+t(df_summ_stats)
+```

@@ -1,0 +1,29 @@
+---
+title: "Load Stata File"
+output:
+  html_notebook: default
+  pdf_document:
+    df_print: paged
+  html_document:
+    df_print: paged
+  word_document: default
+urlcolor: blue
+---
+
+Back to [Fan](https://fanwangecon.github.io)'s [Reusable R Code](https://fanwangecon.github.io/R4Econ/) table of content.
+
+# Load Data in from Stata
+
+Load Libraries
+```{r}
+library(tidyverse)
+library(haven)
+```
+
+Load the iris dataset in stata format, obtained from haven repo
+
+```{r}
+df_iris <- read_dta("../../_data/iris.dta")
+tb_iris <- as_tibble(df_iris)
+summary(tb_iris)
+```
