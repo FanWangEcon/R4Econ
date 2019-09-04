@@ -10,7 +10,7 @@ ff_summ_percentiles <- function(df = iris, bl_statsasrows = TRUE, col2varname = 
     #' @param bl_statsasrows boolean if true then rotate table
     #' @return a dataframe with summary statistics.
     #' @author Fan Wang, \url{http://fanwangecon.github.io}
-    #' @references \url{https://fanwangecon.github.io/R4Econ/}
+    #' @references \url{https://fanwangecon.github.io/R4Econ/reference/ff_summ_percentiles.html}
     #' @export
     #' @import dplyr tidyr tibble
     #' @examples

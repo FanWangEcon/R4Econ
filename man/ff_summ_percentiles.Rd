@@ -26,7 +26,7 @@ ff_summ_percentiles(iris)
 ff_summ_percentiles(iris, FALSE)
 }
 \references{
-\url{https://fanwangecon.github.io/R4Econ/}
+\url{https://fanwangecon.github.io/R4Econ/reference/ff_summ_percentiles.html}
 }
 \author{
 Fan Wang, \url{http://fanwangecon.github.io}
