@@ -73,6 +73,8 @@ usethis::use_package("tidyr")
 usethis::use_package("tibble")
 # negate function to select only numeric columns
 usethis::use_package("purrr")
+# to read csv files
+usethis::use_package("readr")
 
 # In rStudio go to directory, set as working
 setwd('C:/Users/fan/R4Econ')

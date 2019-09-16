@@ -22,13 +22,13 @@ Please contact [FanWangEcon](https://github.com/FanWangEcon) for issues or probl
 2. [By Groups, Count Variables Observations](summarize/count/ByGroupCountAllVarNonNA.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/ByGroupCountAllVarNonNA.ipynb) | [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/ByGroupCountAllVarNonNA.R) |  [**html**](summarize/count/ByGroupCountAllVarNonNA.html) | pdf
     + By Groups, Count non-NA observations of All Variables.
     + **core**: *group_by + summarise_if(is.numeric, funs(sum(is.na(.)==0)))*
-3. [By Groups, Count Unique Individuals](summarize/count/ByGroupCountUniqueIndi.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/ByGroupCountUniqueIndi.ipynb) | [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/ByGroupCountUniqueIndi.R) |  [**html**](summarize/count/ByGroupCountUniqueIndi.html) | pdf
+3. [By Groups, Count Unique Individuals](https://github.com/FanWangEcon/R4Econ/blob/master/R/ff_count.R): [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/R/ff_count.R) | [html](https://fanwangecon.github.io/R4Econ/reference/ff_summ_count_unique_by_groups.html)
     + By Groups, Count Unique Individuals and non-NA observations of other Variables.
     + **core**: *group_by + mutate_if + mutate + n_distinct + slice(1L)*
 
 ## 1.2 Averaging
 
-1. [All Variables Summary Stats](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/SummPercentiles.R): ipynb | [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/SummPercentiles.R) | html | pdf
+1. [All Variables Summary Stats](https://github.com/FanWangEcon/R4Econ/blob/master/R/ff_summ_percentiles.R): [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/R/ff_summ_percentiles.R) | [html](https://fanwangecon.github.io/R4Econ/reference/ff_summ_percentiles.html)
     + All Variables: N + NAcount + Mean + SD + Percentiles.
     + **core**: *summarise_if(is.numeric) + gather + separate + spread  + select*
 2. [By Groups, One Variable All Statistics](summarize/summ/ByGroupSummOne.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupSummOne.ipynb) | [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupSummOne.R) | [**html**](summarize/summ/ByGroupSummOne.html) | pdf
@@ -39,7 +39,7 @@ Please contact [FanWangEcon](https://github.com/FanWangEcon) for issues or probl
     + **core**: *group_by + summarise_if(is.numeric(fun)) + gather + separate + spread + mutate + select + spread + unite*
 4. [By Groups, Multiple Variables Mean + SD + Percentiles](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummPercentiles.R): ipynb | [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummPercentiles.R) | html | pdf
     + By Groups, All Numeric Variables Mean + SD + Percentiles, groups = row-groups, variables = rows
-    + **core**: *summarise_if(is.numeric) + gather + separate + spread  + select*    
+    + **core**: *summarise_if(is.numeric) + gather + separate + spread  + select*        
 5. [By within Individual Groups Variables, Averages](summarize/summ/ByGroupsSummWide.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummWide.ipynb) | [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummWide.R) |  [**html**](summarize/summ/ByGroupsSummWide.html) | pdf
     + By Multiple within Individual Groups Variables; Averages for All Numeric Variables within All Groups of All Group Variables; Long to Wide to very Wide.
     + **core**: *gather + group_by + summarise_if(is.numeric, funs(mean(., na.rm = TRUE))) + mutate(all_m_cate = paste0(variable, '_c', value)) + gather + unite + spread (note: gather twice, spread at end)*
