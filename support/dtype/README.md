@@ -18,6 +18,11 @@ To help clarify data types for inputs, add prefix to variable names:
   + ls_svr: list of string variable namess
 - sc = structure, generic large store
 
+Regressions
+
+- rs: reg results
+- rsm: result summary
+- vf: factor variable
 
 acronyms
 

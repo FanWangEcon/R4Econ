@@ -22,7 +22,7 @@ Please contact [FanWangEcon](https://github.com/FanWangEcon) for issues or probl
 2. [By Groups, Count Variables Observations](summarize/count/ByGroupCountAllVarNonNA.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/ByGroupCountAllVarNonNA.ipynb) | [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/ByGroupCountAllVarNonNA.R) |  [**html**](summarize/count/ByGroupCountAllVarNonNA.html) | pdf
     + By Groups, Count non-NA observations of All Variables.
     + **core**: *group_by + summarise_if(is.numeric, funs(sum(is.na(.)==0)))*
-3. [By Groups, Count Unique Individuals](https://github.com/FanWangEcon/R4Econ/blob/master/R/ff_count.R): [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/R/ff_count.R) | [html](https://fanwangecon.github.io/R4Econ/reference/ff_summ_count_unique_by_groups.html)
+3. [By Groups, Count Unique Individuals](https://fanwangecon.github.io/R4Econ/reference/ff_summ_count_unique_by_groups.html): [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/R/ff_count.R) | [html](https://fanwangecon.github.io/R4Econ/reference/ff_summ_count_unique_by_groups.html)
     + By Groups, Count Unique Individuals and non-NA observations of other Variables.
     + **core**: *group_by + mutate_if + mutate + n_distinct + slice(1L)*
 
