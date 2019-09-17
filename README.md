@@ -63,10 +63,16 @@ Please contact [FanWangEcon](https://github.com/FanWangEcon) for issues or probl
     + Post multiple regressions, fraction of outcome variables' variances explained by multiple subsets of right hand side variables.
     + **core**: *gather + group_by(variable) + mutate_at(vars, funs(mean = mean(.))) + rowSums(mat*mat) + mutate_if(is.numeric, funs(frac = (./value_var)))*
 
+# 4. Panel
 
-# 4. Optimization
+1. [Long Panel Duplicate One Variable to Wide](https://fanwangecon.github.io/R4Econ/reference/ff_panel_longandwide.html): [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/R/ff_panel_expand.R) | [REF html](https://fanwangecon.github.io/R4Econ/reference/ff_panel_longandwide.html) | [GUIDE html](https://fanwangecon.github.io/R4Econ/panel/expand/fst_panel_lag_expand.html)
+    + long panel var X, average X by within i t subgroups, expand avgX_{i,tgroup} to wide, merge to long panel
+    + **core**: *group_by + summarise + spread + left_join*
 
-## 4.1 Planner's Problem
+
+# 5. Optimization
+
+## 5.1 Planner's Problem
 1. [CES Objective Function](optimization/planner/ces/cesplannerobj.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planner/ces/cesplannerobj.ipynb) | [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planner/ces/cesplannerobj.R) |  [**html**](optimization/planner/ces/cesplannerobj.html) | pdf
     + Constant Elasticity of Substitution Planner Welfare Objective Function.
     + **core**: *prod/mean/pow, logspace, geom_bar+identity+dodge*
@@ -74,25 +80,25 @@ Please contact [FanWangEcon](https://github.com/FanWangEcon) for issues or probl
     + Constant Elasticity of Substitution Planner Welfare Subsidies Optimizer Over Quantile/Individual Groups.
     + **core**: *optim(x, obj, func.params), do.call(func_str, func.params); setNames+list+append*  
 
-## 4.2 Optimization Support
+## 5.2 Optimization Support
 1. [Constrained Share Parameters to Unconstrained Parameters](optimization/support/fraction.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/support/fraction.ipynb) | [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/support/fraction.R) |  [**html**](optimization/support/fraction.html) | pdf
     + Constrained: a + b + c = Z, a >= 0, b >= 0, c >= 0; Unconstrained maximands of a and b for optimization.
     + **core**: *f - f/(1+exp(x)), while, runif + qexp + qnorm/dnorm*
 
-# 5. Graphing
+# 6. Graphing
 
 1. [Line Plot with Two Categories, as Color and Subplot](dynamic/graph/statesvalpol.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/dynamic/graph/statesvalpol.ipynb) | [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/dynamic/graph/statesvalpol.R) |  [**html**](dynamic/graph/statesvalpol.html) | pdf
     + Optimal choices/value-function along states. Asset as X-axis, shocks as color, potentially another state as subplots.
     + **core**: *unique + mutate(var := as.factor(var)) + ggplot + facet_wrap + geom_line + geom_point + labs + theme(axis.text.x = element_text(angle = 90, hjust = 1))*
 
 
-# 6. Tools
+# 7. Tools
 
 1. [List of List to Dataframe](https://github.com/FanWangEcon/R4Econ/blob/master/support/dplyrtricks/nestedlist2df.R): ipynb | [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/support/dplyrtricks/nestedlist2df.R) | html | pdf
     + Results stored as nested named list (with different keys in sub-lists).
     + **core**: *as.data.frame + gather + separate(sep(\\.), extra='merge') + spread + column_to_rownames*
 
-# 7. Support
+# 8. Support
 
 1. [Installations](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/condainstalls.R): ipynb | [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/condainstalls.R) | html | pdf
     + Conda R Package Installations.

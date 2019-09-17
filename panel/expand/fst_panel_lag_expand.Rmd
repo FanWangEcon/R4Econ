@@ -1,5 +1,5 @@
 ---
-title: "Append Lagged Information as Additional Panel Variables"
+title: "Append Group Mean Lagged Values as Additional Panel Variables"
 output:
   html_document:
     df_print: paged
@@ -231,8 +231,6 @@ rs_test_mth4 = lm(hgt ~
                vf_mth6[,4]:mth6m20t24 ,
            data=df_hw_cebu_widelong)
 rsm_coef_mth4 = tidy(rs_test_mth4)
-# vf_months[, 11:12]factor(svymthRound)24:svymthRound22
-rsm_coef_inputs = rsm_coef_mth4 %>% filter(grepl('vf_months', term))
+rsm_coef_inputs = rsm_coef_mth4 %>% filter(grepl('vf_mth6', term))
 rsm_coef_inputs
 ```
-
