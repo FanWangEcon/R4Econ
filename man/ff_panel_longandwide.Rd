@@ -14,7 +14,7 @@ ff_panel_longandwide(df, svr_id_t, svr_id_i, svr_data)
 \item{svr_data}{string variable name}
 }
 \value{
-a dataframe with stats outputs.
+a long panel frame with wide expansion of group mean lagged vars
 }
 \description{
 There is a variable recorded for a panel, and a variable with date info, and another with obs info

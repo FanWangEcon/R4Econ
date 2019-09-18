@@ -11,7 +11,7 @@ ff_panel_longandwide <- function(df, svr_id_t, svr_id_i, svr_data) {
     #' @param svr_id_t string time variable name
     #' @param svr_id_i string individual ID name
     #' @param svr_data string variable name
-    #' @return a dataframe with stats outputs.
+    #' @return a long panel frame with wide expansion of group mean lagged vars
     #' @author Fan Wang, \url{http://fanwangecon.github.io}
     #' @references
     #' \url{https://fanwangecon.github.io/R4Econ/reference/ff_panel_longandwide.html}
@@ -43,7 +43,7 @@ ff_panel_longandwide <- function(df, svr_id_t, svr_id_i, svr_data) {
       summarise(!!sym(svr_data_mean) := mean(!!sym(svr_data)))
 
     # Spread
-    df_wide <- df_widespread %>% spread(!!sym(svr_id_t), !!sym(svr_data_mean), sep = "")
+    df_wide <- df_widespread %>% spread(!!sym(svr_id_t), !!sym(svr_data_mean), sep = paste0('_', svr_data, '_'))
 
     # Merge Back, now dataframe is both wide and long
     df_widelong <- df %>% left_join(df_wide)
