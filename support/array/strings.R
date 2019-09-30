@@ -24,3 +24,6 @@ gsub(x = var.input,  pattern = "\\.", replacement = "_")
 # Simple Collapse
 vars.group.by <- c('abc', 'efg')
 paste0(vars.group.by, collapse='|')
+
+# filter does not contain string
+rs_hgt_prot_log_tidy %>% filter(!str_detect(term, 'prot'))
