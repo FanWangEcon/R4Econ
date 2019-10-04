@@ -1,11 +1,19 @@
 ---
 title: "CES log lin formulas working with micro estimates"
 output:
-  pdf_document: defaults
   html_document:
     df_print: paged
-  word_document: default
-  html_notebook: default
+    number_sections: true
+    toc: true
+    toc_depth: 2  
+  html_notebook:
+    number_sections: true
+  word_document:
+    number_sections: true
+  pdf_document:
+    number_sections: true
+    toc: true
+    toc_depth: 2  
 urlcolor: blue
 ---
 
@@ -30,7 +38,7 @@ Doing this allows for lagged intereaction that are time specific in an arbitrary
 
 # Get Data
 
-```{r}
+```{r Load Packages and Process Data}
 # Load Library
 rm(list = ls())
 library(tidyverse)
@@ -60,7 +68,7 @@ attach(df_hw_cebu_m24)
 
 ## Linear Regression
 
-```{r}
+```{r Linear Regression}
 # Input Matrix
 mt_lincv <- model.matrix(~ hgt0 + wgt0)
 mt_linht <- model.matrix(~ sex:hgt0med - 1)
@@ -73,7 +81,7 @@ rs_hgt_prot_lin_tidy = tidy(rs_hgt_prot_lin)
 
 ## Log-Linear Regression
 
-```{r}
+```{r Log-Linear Regression}
 # Input Matrix
 mt_logcv <- model.matrix(~ hgt0 + wgt0)
 mt_loght <- model.matrix(~ sex:hgt0med - 1)
@@ -84,9 +92,9 @@ print(summary(rs_hgt_prot_log))
 rs_hgt_prot_log_tidy = tidy(rs_hgt_prot_log)
 ```
 
-## Construct Input Arrays $A_i and \alpha_i $
+## Construct Input Arrays $A_i$ and $\alpha_i$
 
-```{r}
+```{r Post Regression Input Processing}
 
 # Generate A_i
 ar_Ai_lin <- mt_lincv %*% as.matrix(rs_hgt_prot_lin_tidy %>% filter(!str_detect(term, 'prot')) %>% select(estimate))
@@ -99,24 +107,27 @@ ar_alphai_log <- mt_loght %*% as.matrix(rs_hgt_prot_log_tidy %>% filter(str_dete
 
 ```
 
-
 # Optimal Allocations
 
+## Common Parameters for Optimal Allocation
 
-## Optimal Linear Allocation
-
-```{r}
+```{r Set Allocation Parameters}
 
 # Child Count
 df_hw_cebu_m24_full <- df_hw_cebu_m24
 it_obs = dim(df_hw_cebu_m24)[1]
 
-ar_rho = c(seq(-200, -100, 20), seq(-100, -50, 10), seq(-50, -10, 5), seq(-5, -2, 5), seq(-2, -0.01, 0.1), seq(0.01, 0.99, 0.05))
+ar_rho = c(seq(-200, -100, length.out=5), seq(-100, -25, length.out=5), seq(-25, -5, length.out=5), seq(-5, -1, length.out=5), seq(-1, -0.01, length.out=5), seq(0.01, 0.25, length.out=5), seq(0.25, 0.99, length.out=5))
 ar_rho = unique(ar_rho)
+```
+
+## Optimal Linear Allocation
+
+```{r Optimal Linear Allocation}
+
 # Optimal Linear Equation
 # Planner Inputs
-rho = -10
-mt_hev = matrix(, nrow = length(ar_rho), ncol = 2)
+mt_hev_lin = matrix(, nrow = length(ar_rho), ncol = 2)
 
 for (it_rho_ctr in seq(1,length(ar_rho))) {
   rho = ar_rho[it_rho_ctr]
@@ -145,13 +156,13 @@ for (it_rho_ctr in seq(1,length(ar_rho))) {
   
   ## HEV
   fl_hev = (fl_v_opti_lin/fl_v_data_lin - 1)
-  mt_hev[it_rho_ctr,1] = rho;
-  mt_hev[it_rho_ctr,2] = fl_hev;
+  mt_hev_lin[it_rho_ctr,1] = rho;
+  mt_hev_lin[it_rho_ctr,2] = fl_hev;
 }
 
-tb_hev <- as_tibble(mt_hev) %>% mutate(id = row_number())
+tb_hev_lin <- as_tibble(mt_hev_lin) %>% mutate(id = row_number())
 
-lineplot <- tb_hev %>%
+lineplot_lin <- tb_hev_lin %>%
     ggplot(aes(x=id, y=V2)) +
         geom_line() +
         geom_point() +
@@ -161,7 +172,60 @@ lineplot <- tb_hev %>%
              caption = 'Linear') +
         scale_x_continuous(labels = as.character(tb_hev$V1),
                            breaks = tb_hev$V1)
-print(lineplot)
+print(lineplot_lin)
+
+```
+
+## Optimal LogLinear Allocation
+
+```{r Optimal Loglinear Allocation}
+
+mt_hev_log = matrix(, nrow = length(ar_rho), ncol = 2)
+
+for (it_rho_ctr in seq(1,length(ar_rho))) {
+  rho = ar_rho[it_rho_ctr]
+  fl_N_hat = sum(df_hw_cebu_m24$prot)
+  
+  ar_term_b = ar_Ai_lin*(ar_alphai_lin*(1/(rho - 1)))
+  ar_term_c = ar_Ai_lin*(ar_alphai_lin*(1/(rho - 1)))
+  ar_term_d = (ar_alphai_lin*(rho/(rho - 1)))
+  
+  # Child Specific Optimal Allocation Array to Store
+  ar_opti_lin = matrix(, nrow = it_obs, ncol = 1)
+  for (m in seq(1:it_obs)) {
+    fl_topright_q = sum((ar_term_b[m] - ar_term_c)/ar_term_d)
+    fl_bottom_q = sum((ar_alphai_lin[m]/ar_alphai_lin)^(rho/(rho-1)))
+    fl_opti_q = (fl_N_hat - fl_topright_q)/fl_bottom_q
+    ar_opti_lin[m] = fl_opti_q
+  }
+  
+  # Min and Max
+  ar_opti_lin = pmin(fl_N_hat, pmax(0, ar_opti_lin))
+  df_hw_cebu_m24_full = cbind(df_hw_cebu_m24_full, ar_opti_lin)
+  
+  # Utilities
+  fl_v_data_lin = sum((ar_Ai_lin + prot*ar_alphai_lin - 70)^rho)^(1/rho)
+  fl_v_opti_lin = sum((ar_Ai_lin + ar_opti_lin*ar_alphai_lin - 70)^rho)^(1/rho)
+  
+  ## HEV
+  fl_hev = (fl_v_opti_lin/fl_v_data_lin - 1)
+  mt_hev_log[it_rho_ctr,1] = rho;
+  mt_hev_log[it_rho_ctr,2] = fl_hev;
+}
+
+tb_hev_log <- as_tibble(mt_hev_log) %>% mutate(id = row_number())
+
+lineplot_log <- tb_hev_log %>%
+    ggplot(aes(x=id, y=V2)) +
+        geom_line() +
+        geom_point() +
+        labs(title = 'HEV and Preference',
+             x = 'pref',
+             y = 'HEV',
+             caption = 'Linear') +
+        scale_x_continuous(labels = as.character(tb_hev$V1),
+                           breaks = tb_hev$V1)
+print(lineplot_log)
 
 ```
 

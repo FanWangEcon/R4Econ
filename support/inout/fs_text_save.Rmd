@@ -1,0 +1,32 @@
+---
+title: "Save Text to File"
+output:
+  html_document:
+    df_print: paged
+  pdf_document:
+    df_print: paged
+  html_notebook: default
+  word_document: default
+urlcolor: blue
+---
+
+Back to [Fan](https://fanwangecon.github.io)'s [Reusable R Code](https://fanwangecon.github.io/R4Econ/) table of content.
+
+# Save Text to File
+
+Tabular outputs, text outputs, etc are saved as variables, which could be printed in console. They can also be saved to file for future re-used. For example, latex outputs need to be saved to file.
+
+```{r}
+# Graphing Library
+library(kableExtra)
+# Load Data
+dt <- mtcars[1:5, 1:6]
+# Generate latex string variable
+st_out_tex <- kable(dt, "latex")
+print(st_out_tex)
+# File out
+# fileConn <- file("./../../_file/tex/tex_sample_a_tab.tex")
+fileConn <- file("C:/users/fan/R4Econ/_file/tex/tex_sample_a_tab.tex")
+writeLines(st_out_tex, fileConn)
+close(fileConn)
+```
