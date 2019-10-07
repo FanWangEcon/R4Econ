@@ -28,3 +28,7 @@ acronyms
 
 - drv: discrete random variable
 - smp: sample
+
+files
+
+- fst: fan_script_test
