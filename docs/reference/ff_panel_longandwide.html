@@ -148,7 +148,7 @@ Doing this allows for lagged intereaction that are time specific in an arbitrary
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a dataframe with stats outputs.</p>
+    <p>a long panel frame with wide expansion of group mean lagged vars</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><a href='https://fanwangecon.github.io/R4Econ/reference/ff_panel_longandwide.html'>https://fanwangecon.github.io/R4Econ/reference/ff_panel_longandwide.html</a>
@@ -170,112 +170,112 @@ Doing this allows for lagged intereaction that are time specific in an arbitrary
                                          <span class='kw'>svr_id_t</span> <span class='kw'>=</span> <span class='st'>'mth6'</span>,
                                          <span class='kw'>svr_id_i</span> <span class='kw'>=</span> <span class='st'>'indi.id'</span>,
                                          <span class='kw'>svr_data</span> <span class='kw'>=</span> <span class='st'>'cal'</span>)</div><div class='output co'>#&gt; <span class='message'>Joining, by = "indi.id"</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>df_longandwide</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>indi.id</span>, <span class='no'>svymthRound</span>, <span class='no'>mth6</span>, <span class='no'>cal</span>, <span class='fu'><a href='https://dplyr.tidyverse.org/reference/reexports.html'>matches</a></span>(<span class='st'>'mth6'</span>), <span class='fu'><a href='https://dplyr.tidyverse.org/reference/reexports.html'>everything</a></span>()), <span class='kw'>n</span><span class='kw'>=</span><span class='fl'>100</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 16,188 x 20</span><span>
-#&gt;     indi.id svymthRound mth6     cal mth6m00t06 mth6m08t12 mth6m14t18 mth6m20t24
-#&gt;       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>  1</span><span>       1           2 m00t~    4.7       65.2      239.         </span><span style='color: #BB0000;'>NA</span><span>         </span><span style='color: #BB0000;'>NA</span><span> 
-#&gt; </span><span style='color: #555555;'>  2</span><span>       1           4 m00t~   10.3       65.2      239.         </span><span style='color: #BB0000;'>NA</span><span>         </span><span style='color: #BB0000;'>NA</span><span> 
-#&gt; </span><span style='color: #555555;'>  3</span><span>       1           6 m00t~  181.        65.2      239.         </span><span style='color: #BB0000;'>NA</span><span>         </span><span style='color: #BB0000;'>NA</span><span> 
-#&gt; </span><span style='color: #555555;'>  4</span><span>       1           8 m08t~   85.3       65.2      239.         </span><span style='color: #BB0000;'>NA</span><span>         </span><span style='color: #BB0000;'>NA</span><span> 
-#&gt; </span><span style='color: #555555;'>  5</span><span>       1          10 m08t~  288         65.2      239.         </span><span style='color: #BB0000;'>NA</span><span>         </span><span style='color: #BB0000;'>NA</span><span> 
-#&gt; </span><span style='color: #555555;'>  6</span><span>       1          12 m08t~  343.        65.2      239.         </span><span style='color: #BB0000;'>NA</span><span>         </span><span style='color: #BB0000;'>NA</span><span> 
-#&gt; </span><span style='color: #555555;'>  7</span><span>       1          14 m14t~   </span><span style='color: #BB0000;'>NA</span><span>         65.2      239.         </span><span style='color: #BB0000;'>NA</span><span>         </span><span style='color: #BB0000;'>NA</span><span> 
-#&gt; </span><span style='color: #555555;'>  8</span><span>       1          16 m14t~   </span><span style='color: #BB0000;'>NA</span><span>         65.2      239.         </span><span style='color: #BB0000;'>NA</span><span>         </span><span style='color: #BB0000;'>NA</span><span> 
-#&gt; </span><span style='color: #555555;'>  9</span><span>       1          18 m14t~   </span><span style='color: #BB0000;'>NA</span><span>         65.2      239.         </span><span style='color: #BB0000;'>NA</span><span>         </span><span style='color: #BB0000;'>NA</span><span> 
-#&gt; </span><span style='color: #555555;'> 10</span><span>       1          20 m20t~   </span><span style='color: #BB0000;'>NA</span><span>         65.2      239.         </span><span style='color: #BB0000;'>NA</span><span>         </span><span style='color: #BB0000;'>NA</span><span> 
-#&gt; </span><span style='color: #555555;'> 11</span><span>       1          22 m20t~   </span><span style='color: #BB0000;'>NA</span><span>         65.2      239.         </span><span style='color: #BB0000;'>NA</span><span>         </span><span style='color: #BB0000;'>NA</span><span> 
-#&gt; </span><span style='color: #555555;'> 12</span><span>       1          24 m20t~   </span><span style='color: #BB0000;'>NA</span><span>         65.2      239.         </span><span style='color: #BB0000;'>NA</span><span>         </span><span style='color: #BB0000;'>NA</span><span> 
-#&gt; </span><span style='color: #555555;'> 13</span><span>       2           2 m00t~  166.        63.6      148.        178.       333.
-#&gt; </span><span style='color: #555555;'> 14</span><span>       2           4 m00t~    0.5       63.6      148.        178.       333.
-#&gt; </span><span style='color: #555555;'> 15</span><span>       2           6 m00t~   24.1       63.6      148.        178.       333.
-#&gt; </span><span style='color: #555555;'> 16</span><span>       2           8 m08t~  155.        63.6      148.        178.       333.
-#&gt; </span><span style='color: #555555;'> 17</span><span>       2          10 m08t~  142.        63.6      148.        178.       333.
-#&gt; </span><span style='color: #555555;'> 18</span><span>       2          12 m08t~  146.        63.6      148.        178.       333.
-#&gt; </span><span style='color: #555555;'> 19</span><span>       2          14 m14t~  228         63.6      148.        178.       333.
-#&gt; </span><span style='color: #555555;'> 20</span><span>       2          16 m14t~  194.        63.6      148.        178.       333.
-#&gt; </span><span style='color: #555555;'> 21</span><span>       2          18 m14t~  111.        63.6      148.        178.       333.
-#&gt; </span><span style='color: #555555;'> 22</span><span>       2          20 m20t~  305         63.6      148.        178.       333.
-#&gt; </span><span style='color: #555555;'> 23</span><span>       2          22 m20t~  332.        63.6      148.        178.       333.
-#&gt; </span><span style='color: #555555;'> 24</span><span>       2          24 m20t~  363.        63.6      148.        178.       333.
-#&gt; </span><span style='color: #555555;'> 25</span><span>       3           2 m00t~    0.5       19.4      206.        520.       798.
-#&gt; </span><span style='color: #555555;'> 26</span><span>       3           4 m00t~   12.9       19.4      206.        520.       798.
-#&gt; </span><span style='color: #555555;'> 27</span><span>       3           6 m00t~   44.8       19.4      206.        520.       798.
-#&gt; </span><span style='color: #555555;'> 28</span><span>       3           8 m08t~   57         19.4      206.        520.       798.
-#&gt; </span><span style='color: #555555;'> 29</span><span>       3          10 m08t~   73.7       19.4      206.        520.       798.
-#&gt; </span><span style='color: #555555;'> 30</span><span>       3          12 m08t~  488.        19.4      206.        520.       798.
-#&gt; </span><span style='color: #555555;'> 31</span><span>       3          14 m14t~  459.        19.4      206.        520.       798.
-#&gt; </span><span style='color: #555555;'> 32</span><span>       3          16 m14t~  408         19.4      206.        520.       798.
-#&gt; </span><span style='color: #555555;'> 33</span><span>       3          18 m14t~  692.        19.4      206.        520.       798.
-#&gt; </span><span style='color: #555555;'> 34</span><span>       3          20 m20t~  612         19.4      206.        520.       798.
-#&gt; </span><span style='color: #555555;'> 35</span><span>       3          22 m20t~ </span><span style='text-decoration: underline;'>1</span><span>226.        19.4      206.        520.       798.
-#&gt; </span><span style='color: #555555;'> 36</span><span>       3          24 m20t~  555.        19.4      206.        520.       798.
-#&gt; </span><span style='color: #555555;'> 37</span><span>       4           2 m00t~    0.5       17.5       43.8       254.       489 
-#&gt; </span><span style='color: #555555;'> 38</span><span>       4           4 m00t~    0.5       17.5       43.8       254.       489 
-#&gt; </span><span style='color: #555555;'> 39</span><span>       4           6 m00t~   51.4       17.5       43.8       254.       489 
-#&gt; </span><span style='color: #555555;'> 40</span><span>       4           8 m08t~   39.4       17.5       43.8       254.       489 
-#&gt; </span><span style='color: #555555;'> 41</span><span>       4          10 m08t~   47         17.5       43.8       254.       489 
-#&gt; </span><span style='color: #555555;'> 42</span><span>       4          12 m08t~   44.9       17.5       43.8       254.       489 
-#&gt; </span><span style='color: #555555;'> 43</span><span>       4          14 m14t~  221.        17.5       43.8       254.       489 
-#&gt; </span><span style='color: #555555;'> 44</span><span>       4          16 m14t~  242.        17.5       43.8       254.       489 
-#&gt; </span><span style='color: #555555;'> 45</span><span>       4          18 m14t~  300.        17.5       43.8       254.       489 
-#&gt; </span><span style='color: #555555;'> 46</span><span>       4          20 m20t~  581.        17.5       43.8       254.       489 
-#&gt; </span><span style='color: #555555;'> 47</span><span>       4          22 m20t~  420.        17.5       43.8       254.       489 
-#&gt; </span><span style='color: #555555;'> 48</span><span>       4          24 m20t~  466.        17.5       43.8       254.       489 
-#&gt; </span><span style='color: #555555;'> 49</span><span>       5           2 m00t~   12.1       99.9      131.       </span><span style='text-decoration: underline;'>1</span><span>048.      </span><span style='text-decoration: underline;'>1</span><span>114.
-#&gt; </span><span style='color: #555555;'> 50</span><span>       5           4 m00t~   25.3       99.9      131.       </span><span style='text-decoration: underline;'>1</span><span>048.      </span><span style='text-decoration: underline;'>1</span><span>114.
-#&gt; </span><span style='color: #555555;'> 51</span><span>       5           6 m00t~  262.        99.9      131.       </span><span style='text-decoration: underline;'>1</span><span>048.      </span><span style='text-decoration: underline;'>1</span><span>114.
-#&gt; </span><span style='color: #555555;'> 52</span><span>       5           8 m08t~   71.3       99.9      131.       </span><span style='text-decoration: underline;'>1</span><span>048.      </span><span style='text-decoration: underline;'>1</span><span>114.
-#&gt; </span><span style='color: #555555;'> 53</span><span>       5          10 m08t~   87.8       99.9      131.       </span><span style='text-decoration: underline;'>1</span><span>048.      </span><span style='text-decoration: underline;'>1</span><span>114.
-#&gt; </span><span style='color: #555555;'> 54</span><span>       5          12 m08t~  234.        99.9      131.       </span><span style='text-decoration: underline;'>1</span><span>048.      </span><span style='text-decoration: underline;'>1</span><span>114.
-#&gt; </span><span style='color: #555555;'> 55</span><span>       5          14 m14t~  453.        99.9      131.       </span><span style='text-decoration: underline;'>1</span><span>048.      </span><span style='text-decoration: underline;'>1</span><span>114.
-#&gt; </span><span style='color: #555555;'> 56</span><span>       5          16 m14t~ </span><span style='text-decoration: underline;'>1</span><span>484.        99.9      131.       </span><span style='text-decoration: underline;'>1</span><span>048.      </span><span style='text-decoration: underline;'>1</span><span>114.
-#&gt; </span><span style='color: #555555;'> 57</span><span>       5          18 m14t~ </span><span style='text-decoration: underline;'>1</span><span>206.        99.9      131.       </span><span style='text-decoration: underline;'>1</span><span>048.      </span><span style='text-decoration: underline;'>1</span><span>114.
-#&gt; </span><span style='color: #555555;'> 58</span><span>       5          20 m20t~ </span><span style='text-decoration: underline;'>1</span><span>178.        99.9      131.       </span><span style='text-decoration: underline;'>1</span><span>048.      </span><span style='text-decoration: underline;'>1</span><span>114.
-#&gt; </span><span style='color: #555555;'> 59</span><span>       5          22 m20t~ </span><span style='text-decoration: underline;'>1</span><span>221.        99.9      131.       </span><span style='text-decoration: underline;'>1</span><span>048.      </span><span style='text-decoration: underline;'>1</span><span>114.
-#&gt; </span><span style='color: #555555;'> 60</span><span>       5          24 m20t~  943.        99.9      131.       </span><span style='text-decoration: underline;'>1</span><span>048.      </span><span style='text-decoration: underline;'>1</span><span>114.
-#&gt; </span><span style='color: #555555;'> 61</span><span>       6           2 m00t~   34.9      135.       293.        555.       488.
-#&gt; </span><span style='color: #555555;'> 62</span><span>       6           4 m00t~  267.       135.       293.        555.       488.
-#&gt; </span><span style='color: #555555;'> 63</span><span>       6           6 m00t~  102.       135.       293.        555.       488.
-#&gt; </span><span style='color: #555555;'> 64</span><span>       6           8 m08t~  169.       135.       293.        555.       488.
-#&gt; </span><span style='color: #555555;'> 65</span><span>       6          10 m08t~  387.       135.       293.        555.       488.
-#&gt; </span><span style='color: #555555;'> 66</span><span>       6          12 m08t~  324.       135.       293.        555.       488.
-#&gt; </span><span style='color: #555555;'> 67</span><span>       6          14 m14t~  653.       135.       293.        555.       488.
-#&gt; </span><span style='color: #555555;'> 68</span><span>       6          16 m14t~  534.       135.       293.        555.       488.
-#&gt; </span><span style='color: #555555;'> 69</span><span>       6          18 m14t~  479.       135.       293.        555.       488.
-#&gt; </span><span style='color: #555555;'> 70</span><span>       6          20 m20t~  417.       135.       293.        555.       488.
-#&gt; </span><span style='color: #555555;'> 71</span><span>       6          22 m20t~  346.       135.       293.        555.       488.
-#&gt; </span><span style='color: #555555;'> 72</span><span>       6          24 m20t~  700.       135.       293.        555.       488.
-#&gt; </span><span style='color: #555555;'> 73</span><span>       7           2 m00t~    3.6       93.1      270.         </span><span style='color: #BB0000;'>NA</span><span>        609.
-#&gt; </span><span style='color: #555555;'> 74</span><span>       7           4 m00t~  153.        93.1      270.         </span><span style='color: #BB0000;'>NA</span><span>        609.
-#&gt; </span><span style='color: #555555;'> 75</span><span>       7           6 m00t~  122.        93.1      270.         </span><span style='color: #BB0000;'>NA</span><span>        609.
-#&gt; </span><span style='color: #555555;'> 76</span><span>       7           8 m08t~  408.        93.1      270.         </span><span style='color: #BB0000;'>NA</span><span>        609.
-#&gt; </span><span style='color: #555555;'> 77</span><span>       7          10 m08t~  173         93.1      270.         </span><span style='color: #BB0000;'>NA</span><span>        609.
-#&gt; </span><span style='color: #555555;'> 78</span><span>       7          12 m08t~  228.        93.1      270.         </span><span style='color: #BB0000;'>NA</span><span>        609.
-#&gt; </span><span style='color: #555555;'> 79</span><span>       7          14 m14t~  391.        93.1      270.         </span><span style='color: #BB0000;'>NA</span><span>        609.
-#&gt; </span><span style='color: #555555;'> 80</span><span>       7          16 m14t~   </span><span style='color: #BB0000;'>NA</span><span>         93.1      270.         </span><span style='color: #BB0000;'>NA</span><span>        609.
-#&gt; </span><span style='color: #555555;'> 81</span><span>       7          18 m14t~  637.        93.1      270.         </span><span style='color: #BB0000;'>NA</span><span>        609.
-#&gt; </span><span style='color: #555555;'> 82</span><span>       7          20 m20t~  688.        93.1      270.         </span><span style='color: #BB0000;'>NA</span><span>        609.
-#&gt; </span><span style='color: #555555;'> 83</span><span>       7          22 m20t~  629.        93.1      270.         </span><span style='color: #BB0000;'>NA</span><span>        609.
-#&gt; </span><span style='color: #555555;'> 84</span><span>       7          24 m20t~  510         93.1      270.         </span><span style='color: #BB0000;'>NA</span><span>        609.
-#&gt; </span><span style='color: #555555;'> 85</span><span>       8           2 m00t~  307.       384.       713.        829.       861.
-#&gt; </span><span style='color: #555555;'> 86</span><span>       8           4 m00t~  363.       384.       713.        829.       861.
-#&gt; </span><span style='color: #555555;'> 87</span><span>       8           6 m00t~  483.       384.       713.        829.       861.
-#&gt; </span><span style='color: #555555;'> 88</span><span>       8           8 m08t~  418.       384.       713.        829.       861.
-#&gt; </span><span style='color: #555555;'> 89</span><span>       8          10 m08t~  694.       384.       713.        829.       861.
-#&gt; </span><span style='color: #555555;'> 90</span><span>       8          12 m08t~ </span><span style='text-decoration: underline;'>1</span><span>028.       384.       713.        829.       861.
-#&gt; </span><span style='color: #555555;'> 91</span><span>       8          14 m14t~  691.       384.       713.        829.       861.
-#&gt; </span><span style='color: #555555;'> 92</span><span>       8          16 m14t~  880.       384.       713.        829.       861.
-#&gt; </span><span style='color: #555555;'> 93</span><span>       8          18 m14t~  916.       384.       713.        829.       861.
-#&gt; </span><span style='color: #555555;'> 94</span><span>       8          20 m20t~  637.       384.       713.        829.       861.
-#&gt; </span><span style='color: #555555;'> 95</span><span>       8          22 m20t~ </span><span style='text-decoration: underline;'>1</span><span>169.       384.       713.        829.       861.
-#&gt; </span><span style='color: #555555;'> 96</span><span>       8          24 m20t~  775.       384.       713.        829.       861.
-#&gt; </span><span style='color: #555555;'> 97</span><span>       9           2 m00t~    0.5        7.1       65         183.       647.
-#&gt; </span><span style='color: #555555;'> 98</span><span>       9           4 m00t~    0.5        7.1       65         183.       647.
-#&gt; </span><span style='color: #555555;'> 99</span><span>       9           6 m00t~   20.3        7.1       65         183.       647.
-#&gt; </span><span style='color: #555555;'>100</span><span>       9           8 m08t~   15.1        7.1       65         183.       647.
-#&gt; </span><span style='color: #555555;'># ... with 1.609e+04 more rows, and 12 more variables: S.country </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,
-#&gt; #   vil.id </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, sex </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, momEdu </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, wealthIdx </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, hgt </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
-#&gt; #   wgt </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, hgt0 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, wgt0 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, prot </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, p.A.prot </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
-#&gt; #   p.A.nProt </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div></span></pre>
+#&gt;     indi.id svymthRound mth6     cal mth6_cal_m00t06 mth6_cal_m08t12
+#&gt;       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>  1</span><span>       1           2 m00t~    4.7            65.2           239. 
+#&gt; </span><span style='color: #555555;'>  2</span><span>       1           4 m00t~   10.3            65.2           239. 
+#&gt; </span><span style='color: #555555;'>  3</span><span>       1           6 m00t~  181.             65.2           239. 
+#&gt; </span><span style='color: #555555;'>  4</span><span>       1           8 m08t~   85.3            65.2           239. 
+#&gt; </span><span style='color: #555555;'>  5</span><span>       1          10 m08t~  288              65.2           239. 
+#&gt; </span><span style='color: #555555;'>  6</span><span>       1          12 m08t~  343.             65.2           239. 
+#&gt; </span><span style='color: #555555;'>  7</span><span>       1          14 m14t~   </span><span style='color: #BB0000;'>NA</span><span>              65.2           239. 
+#&gt; </span><span style='color: #555555;'>  8</span><span>       1          16 m14t~   </span><span style='color: #BB0000;'>NA</span><span>              65.2           239. 
+#&gt; </span><span style='color: #555555;'>  9</span><span>       1          18 m14t~   </span><span style='color: #BB0000;'>NA</span><span>              65.2           239. 
+#&gt; </span><span style='color: #555555;'> 10</span><span>       1          20 m20t~   </span><span style='color: #BB0000;'>NA</span><span>              65.2           239. 
+#&gt; </span><span style='color: #555555;'> 11</span><span>       1          22 m20t~   </span><span style='color: #BB0000;'>NA</span><span>              65.2           239. 
+#&gt; </span><span style='color: #555555;'> 12</span><span>       1          24 m20t~   </span><span style='color: #BB0000;'>NA</span><span>              65.2           239. 
+#&gt; </span><span style='color: #555555;'> 13</span><span>       2           2 m00t~  166.             63.6           148. 
+#&gt; </span><span style='color: #555555;'> 14</span><span>       2           4 m00t~    0.5            63.6           148. 
+#&gt; </span><span style='color: #555555;'> 15</span><span>       2           6 m00t~   24.1            63.6           148. 
+#&gt; </span><span style='color: #555555;'> 16</span><span>       2           8 m08t~  155.             63.6           148. 
+#&gt; </span><span style='color: #555555;'> 17</span><span>       2          10 m08t~  142.             63.6           148. 
+#&gt; </span><span style='color: #555555;'> 18</span><span>       2          12 m08t~  146.             63.6           148. 
+#&gt; </span><span style='color: #555555;'> 19</span><span>       2          14 m14t~  228              63.6           148. 
+#&gt; </span><span style='color: #555555;'> 20</span><span>       2          16 m14t~  194.             63.6           148. 
+#&gt; </span><span style='color: #555555;'> 21</span><span>       2          18 m14t~  111.             63.6           148. 
+#&gt; </span><span style='color: #555555;'> 22</span><span>       2          20 m20t~  305              63.6           148. 
+#&gt; </span><span style='color: #555555;'> 23</span><span>       2          22 m20t~  332.             63.6           148. 
+#&gt; </span><span style='color: #555555;'> 24</span><span>       2          24 m20t~  363.             63.6           148. 
+#&gt; </span><span style='color: #555555;'> 25</span><span>       3           2 m00t~    0.5            19.4           206. 
+#&gt; </span><span style='color: #555555;'> 26</span><span>       3           4 m00t~   12.9            19.4           206. 
+#&gt; </span><span style='color: #555555;'> 27</span><span>       3           6 m00t~   44.8            19.4           206. 
+#&gt; </span><span style='color: #555555;'> 28</span><span>       3           8 m08t~   57              19.4           206. 
+#&gt; </span><span style='color: #555555;'> 29</span><span>       3          10 m08t~   73.7            19.4           206. 
+#&gt; </span><span style='color: #555555;'> 30</span><span>       3          12 m08t~  488.             19.4           206. 
+#&gt; </span><span style='color: #555555;'> 31</span><span>       3          14 m14t~  459.             19.4           206. 
+#&gt; </span><span style='color: #555555;'> 32</span><span>       3          16 m14t~  408              19.4           206. 
+#&gt; </span><span style='color: #555555;'> 33</span><span>       3          18 m14t~  692.             19.4           206. 
+#&gt; </span><span style='color: #555555;'> 34</span><span>       3          20 m20t~  612              19.4           206. 
+#&gt; </span><span style='color: #555555;'> 35</span><span>       3          22 m20t~ </span><span style='text-decoration: underline;'>1</span><span>226.             19.4           206. 
+#&gt; </span><span style='color: #555555;'> 36</span><span>       3          24 m20t~  555.             19.4           206. 
+#&gt; </span><span style='color: #555555;'> 37</span><span>       4           2 m00t~    0.5            17.5            43.8
+#&gt; </span><span style='color: #555555;'> 38</span><span>       4           4 m00t~    0.5            17.5            43.8
+#&gt; </span><span style='color: #555555;'> 39</span><span>       4           6 m00t~   51.4            17.5            43.8
+#&gt; </span><span style='color: #555555;'> 40</span><span>       4           8 m08t~   39.4            17.5            43.8
+#&gt; </span><span style='color: #555555;'> 41</span><span>       4          10 m08t~   47              17.5            43.8
+#&gt; </span><span style='color: #555555;'> 42</span><span>       4          12 m08t~   44.9            17.5            43.8
+#&gt; </span><span style='color: #555555;'> 43</span><span>       4          14 m14t~  221.             17.5            43.8
+#&gt; </span><span style='color: #555555;'> 44</span><span>       4          16 m14t~  242.             17.5            43.8
+#&gt; </span><span style='color: #555555;'> 45</span><span>       4          18 m14t~  300.             17.5            43.8
+#&gt; </span><span style='color: #555555;'> 46</span><span>       4          20 m20t~  581.             17.5            43.8
+#&gt; </span><span style='color: #555555;'> 47</span><span>       4          22 m20t~  420.             17.5            43.8
+#&gt; </span><span style='color: #555555;'> 48</span><span>       4          24 m20t~  466.             17.5            43.8
+#&gt; </span><span style='color: #555555;'> 49</span><span>       5           2 m00t~   12.1            99.9           131. 
+#&gt; </span><span style='color: #555555;'> 50</span><span>       5           4 m00t~   25.3            99.9           131. 
+#&gt; </span><span style='color: #555555;'> 51</span><span>       5           6 m00t~  262.             99.9           131. 
+#&gt; </span><span style='color: #555555;'> 52</span><span>       5           8 m08t~   71.3            99.9           131. 
+#&gt; </span><span style='color: #555555;'> 53</span><span>       5          10 m08t~   87.8            99.9           131. 
+#&gt; </span><span style='color: #555555;'> 54</span><span>       5          12 m08t~  234.             99.9           131. 
+#&gt; </span><span style='color: #555555;'> 55</span><span>       5          14 m14t~  453.             99.9           131. 
+#&gt; </span><span style='color: #555555;'> 56</span><span>       5          16 m14t~ </span><span style='text-decoration: underline;'>1</span><span>484.             99.9           131. 
+#&gt; </span><span style='color: #555555;'> 57</span><span>       5          18 m14t~ </span><span style='text-decoration: underline;'>1</span><span>206.             99.9           131. 
+#&gt; </span><span style='color: #555555;'> 58</span><span>       5          20 m20t~ </span><span style='text-decoration: underline;'>1</span><span>178.             99.9           131. 
+#&gt; </span><span style='color: #555555;'> 59</span><span>       5          22 m20t~ </span><span style='text-decoration: underline;'>1</span><span>221.             99.9           131. 
+#&gt; </span><span style='color: #555555;'> 60</span><span>       5          24 m20t~  943.             99.9           131. 
+#&gt; </span><span style='color: #555555;'> 61</span><span>       6           2 m00t~   34.9           135.            293. 
+#&gt; </span><span style='color: #555555;'> 62</span><span>       6           4 m00t~  267.            135.            293. 
+#&gt; </span><span style='color: #555555;'> 63</span><span>       6           6 m00t~  102.            135.            293. 
+#&gt; </span><span style='color: #555555;'> 64</span><span>       6           8 m08t~  169.            135.            293. 
+#&gt; </span><span style='color: #555555;'> 65</span><span>       6          10 m08t~  387.            135.            293. 
+#&gt; </span><span style='color: #555555;'> 66</span><span>       6          12 m08t~  324.            135.            293. 
+#&gt; </span><span style='color: #555555;'> 67</span><span>       6          14 m14t~  653.            135.            293. 
+#&gt; </span><span style='color: #555555;'> 68</span><span>       6          16 m14t~  534.            135.            293. 
+#&gt; </span><span style='color: #555555;'> 69</span><span>       6          18 m14t~  479.            135.            293. 
+#&gt; </span><span style='color: #555555;'> 70</span><span>       6          20 m20t~  417.            135.            293. 
+#&gt; </span><span style='color: #555555;'> 71</span><span>       6          22 m20t~  346.            135.            293. 
+#&gt; </span><span style='color: #555555;'> 72</span><span>       6          24 m20t~  700.            135.            293. 
+#&gt; </span><span style='color: #555555;'> 73</span><span>       7           2 m00t~    3.6            93.1           270. 
+#&gt; </span><span style='color: #555555;'> 74</span><span>       7           4 m00t~  153.             93.1           270. 
+#&gt; </span><span style='color: #555555;'> 75</span><span>       7           6 m00t~  122.             93.1           270. 
+#&gt; </span><span style='color: #555555;'> 76</span><span>       7           8 m08t~  408.             93.1           270. 
+#&gt; </span><span style='color: #555555;'> 77</span><span>       7          10 m08t~  173              93.1           270. 
+#&gt; </span><span style='color: #555555;'> 78</span><span>       7          12 m08t~  228.             93.1           270. 
+#&gt; </span><span style='color: #555555;'> 79</span><span>       7          14 m14t~  391.             93.1           270. 
+#&gt; </span><span style='color: #555555;'> 80</span><span>       7          16 m14t~   </span><span style='color: #BB0000;'>NA</span><span>              93.1           270. 
+#&gt; </span><span style='color: #555555;'> 81</span><span>       7          18 m14t~  637.             93.1           270. 
+#&gt; </span><span style='color: #555555;'> 82</span><span>       7          20 m20t~  688.             93.1           270. 
+#&gt; </span><span style='color: #555555;'> 83</span><span>       7          22 m20t~  629.             93.1           270. 
+#&gt; </span><span style='color: #555555;'> 84</span><span>       7          24 m20t~  510              93.1           270. 
+#&gt; </span><span style='color: #555555;'> 85</span><span>       8           2 m00t~  307.            384.            713. 
+#&gt; </span><span style='color: #555555;'> 86</span><span>       8           4 m00t~  363.            384.            713. 
+#&gt; </span><span style='color: #555555;'> 87</span><span>       8           6 m00t~  483.            384.            713. 
+#&gt; </span><span style='color: #555555;'> 88</span><span>       8           8 m08t~  418.            384.            713. 
+#&gt; </span><span style='color: #555555;'> 89</span><span>       8          10 m08t~  694.            384.            713. 
+#&gt; </span><span style='color: #555555;'> 90</span><span>       8          12 m08t~ </span><span style='text-decoration: underline;'>1</span><span>028.            384.            713. 
+#&gt; </span><span style='color: #555555;'> 91</span><span>       8          14 m14t~  691.            384.            713. 
+#&gt; </span><span style='color: #555555;'> 92</span><span>       8          16 m14t~  880.            384.            713. 
+#&gt; </span><span style='color: #555555;'> 93</span><span>       8          18 m14t~  916.            384.            713. 
+#&gt; </span><span style='color: #555555;'> 94</span><span>       8          20 m20t~  637.            384.            713. 
+#&gt; </span><span style='color: #555555;'> 95</span><span>       8          22 m20t~ </span><span style='text-decoration: underline;'>1</span><span>169.            384.            713. 
+#&gt; </span><span style='color: #555555;'> 96</span><span>       8          24 m20t~  775.            384.            713. 
+#&gt; </span><span style='color: #555555;'> 97</span><span>       9           2 m00t~    0.5             7.1            65  
+#&gt; </span><span style='color: #555555;'> 98</span><span>       9           4 m00t~    0.5             7.1            65  
+#&gt; </span><span style='color: #555555;'> 99</span><span>       9           6 m00t~   20.3             7.1            65  
+#&gt; </span><span style='color: #555555;'>100</span><span>       9           8 m08t~   15.1             7.1            65  
+#&gt; </span><span style='color: #555555;'># ... with 1.609e+04 more rows, and 14 more variables: mth6_cal_m14t18 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
+#&gt; #   mth6_cal_m20t24 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, S.country </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, vil.id </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, sex </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,
+#&gt; #   momEdu </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, wealthIdx </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, hgt </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, wgt </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, hgt0 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
+#&gt; #   wgt0 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, prot </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, p.A.prot </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, p.A.nProt </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
