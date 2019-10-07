@@ -1,5 +1,5 @@
-This is a work-in-progress [website](https://fanwangecon.github.io/R4Econ/) consisting of support files for doing Panel Data Statistics/Econometrics Analysis. Materials gathered from various [projects](https://fanwangecon.github.io/research) in which R code is used. Files are from the [R4Econ](https://github.com/FanWangEcon/R4Econ) [![HitCount](http://hits.dwyl.io/FanWangEcon/R4Econ.svg)](http://hits.dwyl.io/FanWangEcon/R4Econ)
- repository. Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or problems.
+This is a work-in-progress [website](https://fanwangecon.github.io/R4Econ/) consisting of support files for doing Panel Data Statistics/Econometrics Analysis. Materials gathered from various [projects](https://fanwangecon.github.io/research) in which R code is used. Files are from [**Fan**](https://fanwangecon.github.io/)'s [R4Econ](https://github.com/FanWangEcon/R4Econ) repository. Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or problems.
+
 
 # R Code from Various Projects using Panel Data
 
@@ -105,3 +105,8 @@ Please contact [FanWangEcon](https://github.com/FanWangEcon) for issues or probl
     + Conda R Package Installations.
 2. [Controls](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/controls.R): ipynb | [**R**](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/controls.R) | html | pdf
     + Graph Sizing, Warnings, Table Col/Row Max Display, Timer.
+
+----
+Files are from [Fan](https://fanwangecon.github.io)'s [R4Econ](https://github.com/FanWangEcon/R4Econ) repository. Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or problems.
+
+[![HitCount](http://hits.dwyl.io/FanWangEcon/R4Econ.svg)](http://hits.dwyl.io/FanWangEcon/R4Econ)
