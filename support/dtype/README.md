@@ -32,3 +32,8 @@ acronyms
 files
 
 - fst: fan_script_test
+
+function naming
+
+- ff: generic
+- ffi: inner small local function

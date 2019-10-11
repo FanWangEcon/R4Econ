@@ -1,29 +1,27 @@
 #' ---
 #' title: "Meshgrid Arrays in R"
 #' output:
-#'   html_document: default
-#'   word_document: default
 #'   pdf_document: default
+#'   word_document: default
+#'   html_document: default
 #'   html_notebook: default
 #' urlcolor: blue
 #' always_allow_html: yes
 #' ---
 #' 
-#' Back to **[Fan](https://fanwangecon.github.io/)**'s R4Econ Homepage **[Table of Content](https://fanwangecon.github.io/R4Econ/)**
-#' 
-#' # Searched Terms
+#' Go back to [fan](http://fanwangecon.github.io/CodeDynaAsset/)'s [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
 #' 
 #' - r expand.grid meshed array to matrix
 #' - r meshgrid
 #' - r array to matrix
 #' - r reshape array to matrix
 #' 
-#' ## Set-up
-#' 
-## ---- results = 'hide'---------------------------------------------------
+## ----GlobalOptions, echo = T, results = 'hide', message=F, warning=F-----
+options(knitr.duplicate.label = 'allow')
+
+## ----loadlib, echo = T, results = 'hide', message=F, warning=F-----------
 library(knitr)
 library(kableExtra)
-getwd()
 # file name
 st_file_name = 'fs_meshr'
 # Generate R File
@@ -32,6 +30,8 @@ purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentat
 # rmarkdown::render("C:/Users/fan/R4Econ/support/array/fs_meshr.Rmd", "pdf_document")
 # rmarkdown::render("C:/Users/fan/R4Econ/support/array/fs_meshr.Rmd", "html_document")
 
+#' 
+#' # Meshgrid for R
 #' 
 #' ## Define Two Arrays and Mesh Them
 #' 

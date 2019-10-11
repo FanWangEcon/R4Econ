@@ -48,15 +48,28 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
     + By Multiple within Individual Groups Variables; Averages for All Numeric Variables within All Groups of All Group Variables; Long to Wide to very Wide.
     + **core**: *gather + group_by + summarise_if(is.numeric, funs(mean(., na.rm = TRUE))) + mutate(all_m_cate = paste0(variable, '_c', value)) + gather + unite + spread (note: gather twice, spread at end)*
 
-# 2. Data/Variable Generation
+# 2. Array, Matrix, Tibble, Data Manipulations
 
-## 2.1 Matrix Manipulation
+## 2.1 Array Manipulation
 
 1. [Array Combinations as Matrix](https://fanwangecon.github.io/R4Econ/support/array/fs_meshr.html): r \| ref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/array/fs_meshr.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/array/fs_meshr.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/array/fs_meshr.html)
     - combinations of two arrays to matrix form (meshgrid)
     - **m**: *expand.grid, dim*
 
-## 2.2 Distributions
+## 2.2 Matrix Manipulations
+
+1. [Matrix Basics](https://fanwangecon.github.io/R4Econ/support/matrix/fs_genmatrix.html): r \| ref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/matrix/fs_genmatrix.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/matrix/fs_genmatrix.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/matrix/fs_genmatrix.html)
+    - generate and combine fixed and random matrixes
+    - **m**: *rbind, matrix*
+
+## 2.3 Tibble Manipulations
+
+1. [Tibble Basics](https://fanwangecon.github.io/R4Econ/support/tibble/fs_tib_basics.html): r \| ref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/tibble/fs_tib_basics.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/tibble/fs_tib_basics.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/tibble/fs_tib_basics.html)
+    - generate tibbles, rename tibble variables, tibble row and column names
+    - tibble statistics
+    - **m**: *as_tibble(mt_combine) %>% rename_all(~c(ar_st_varnames)); colnames, rownames*
+
+## 2.4 Distributions
 
 1. [Quantiles from Multiple Variables](generate/quantile/VarCateIdxVarsQuantiles.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quantile/VarCateIdxVarsQuantiles.ipynb) | [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quantile/VarCateIdxVarsQuantiles.R) |  [**html**](generate/quantile/VarCateIdxVarsQuantiles.html) | pdf
     + Dataframe of Variables' Quantiles by Panel Groups; Quantile Categorical Variables for Panel within Group Observations; Quantile cut variable suffix and quantile labeling; Joint Quantile Categorical Variable with Linear Index.
