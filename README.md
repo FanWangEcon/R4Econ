@@ -4,7 +4,7 @@
 
 This is a work-in-progress [website](https://fanwangecon.github.io/R4Econ/) consisting of support files for doing Panel Data Statistics/Econometrics Analysis. Materials gathered from various [projects](https://fanwangecon.github.io/research) in which R code is used. Files are from [**Fan**](https://fanwangecon.github.io/)'s [R4Econ](https://github.com/FanWangEcon/R4Econ) repository.
 
-R files are linked below by section. Some R functions are in the R4Econ package (see [Reference](https://fanwangecon.github.io/R4Econ/reference/index.html)), others are outside of the R folder. Some are functions, other are tutorial examples. To use all files, clone the repository. For functions not in R folder, source the [preamble.R](https://github.com/FanWangEcon/R4Econ/blob/master/preamble.R) file. Files in R folder have documentations and examples, see the reference link. Some files also have examples/instructions created using Jupyter notebooks and are shown as HTML files. See [here](gitsetup.md) for Github set up.
+R files are linked below by section. Some R functions are in the R4Econ package (see [Reference](https://fanwangecon.github.io/R4Econ/reference/index.html)), others are outside of the R folder. See [here](gitsetup.md) for Github set up.
 
 ```
 # To Install only the Programs in the R folder of the R4Econ Repository
@@ -12,6 +12,8 @@ devtools::install_github("fanwangecon/R4Econ")
 ```
 
 Bullet points show which [base R](https://www.rdocumentation.org/packages/base/versions/3.5.2), [tidyverse](https://www.tidyverse.org/) or other functions/commands are used to achieve various objectives. An effort is made to use only [base R](https://www.rdocumentation.org/packages/base/versions/3.5.2) and [tidyverse](https://www.tidyverse.org/) packages whenever possible to reduce dependencies. The goal of this repository is to make it easier to find/re-use codes produced for various projects.
+
+From [Fan](https://fanwangecon.github.io/)'s other repositories: For dynamic borrowing and savings problems, see [Dynamic Asset Repository](https://fanwangecon.github.io/CodeDynaAsset/); For code examples, see also [Matlab Example Code](https://fanwangecon.github.io/M4Econ/) and [Stata Example Code](https://fanwangecon.github.io/Stata4Econ/); For intro econ with Matlab, see [Intro Mathematics for Economists](https://fanwangecon.github.io/Math4Econ/), and for intro stat with R, see [Intro Statistics for Undergraduates](https://fanwangecon.github.io/Stat4Econ/). See [here](https://github.com/FanWangEcon) for all of [Fan](https://fanwangecon.github.io/)'s public repositories.
 
 Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or problems.
 
