@@ -24,31 +24,31 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 ## 1.1 Tabulate and Counting
 1. [Tabulation Categorical as Matrix](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/tabulate/ListUniqueCateNAsMat.R): ipynb | [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/tabulate/ListUniqueCateNAsMat.R) | html | pdf
     + Many-Category Categorical Variable, Tabulation shown as Matrix.
-    + **core**: *group_by + summarise(freq = n()) + mutate + min(ceiling(sqrt(count))) + substring + dim/reshape*
+    + **tidy**: *group_by + summarise(freq = n()) + mutate + min(ceiling(sqrt(count))) + substring + dim/reshape*
 2. [By Groups, Count Variables Observations](summarize/count/ByGroupCountAllVarNonNA.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/ByGroupCountAllVarNonNA.ipynb) | [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/ByGroupCountAllVarNonNA.R) |  [**html**](summarize/count/ByGroupCountAllVarNonNA.html) | pdf
     + By Groups, Count non-NA observations of All Variables.
-    + **core**: *group_by + summarise_if(is.numeric, funs(sum(is.na(.)==0)))*
+    + **tidy**: *group_by + summarise_if(is.numeric, funs(sum(is.na(.)==0)))*
 3. [By Groups, Count Unique Individuals](https://fanwangecon.github.io/R4Econ/reference/ff_summ_count_unique_by_groups.html): [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/R/ff_count.R) | [html](https://fanwangecon.github.io/R4Econ/reference/ff_summ_count_unique_by_groups.html)
     + By Groups, Count Unique Individuals and non-NA observations of other Variables.
-    + **core**: *group_by + mutate_if + mutate + n_distinct + slice(1L)*
+    + **tidy**: *group_by + mutate_if + mutate + n_distinct + slice(1L)*
 
 ## 1.2 Averaging
 
 1. [All Variables Summary Stats](https://github.com/FanWangEcon/R4Econ/blob/master/R/ff_summ_percentiles.R): [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/R/ff_summ_percentiles.R) | [html](https://fanwangecon.github.io/R4Econ/reference/ff_summ_percentiles.html)
     + All Variables: N + NAcount + Mean + SD + Percentiles.
-    + **core**: *summarise_if(is.numeric) + gather + separate + spread  + select*
+    + **tidy**: *summarise_if(is.numeric) + gather + separate + spread  + select*
 2. [By Groups, One Variable All Statistics](summarize/summ/ByGroupSummOne.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupSummOne.ipynb) | [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupSummOne.R) | [**html**](summarize/summ/ByGroupSummOne.html) | pdf
     + Pick stats, overall, and by multiple groups, stats as matrix or wide row with name=(ctsvar + catevar + catelabel).
-    + **core**: *group_by + summarize_at(, funs()) + rename(!!var := !!sym(var)) + mutate(!!var := paste0(var,'str',!!!syms(vars))) + gather + unite + spread(varcates, value)*
+    + **tidy**: *group_by + summarize_at(, funs()) + rename(!!var := !!sym(var)) + mutate(!!var := paste0(var,'str',!!!syms(vars))) + gather + unite + spread(varcates, value)*
 3. [By Groups, Multiple Variables Mean + SD + N](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupSumm.R): ipynb | [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupSumm.R) | html | pdf
     + By Groups, All Numeric Variables Mean + SD + N, groups = rows, variables = columns
-    + **core**: *group_by + summarise_if(is.numeric(fun)) + gather + separate + spread + mutate + select + spread + unite*
+    + **tidy**: *group_by + summarise_if(is.numeric(fun)) + gather + separate + spread + mutate + select + spread + unite*
 4. [By Groups, Multiple Variables Mean + SD + Percentiles](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummPercentiles.R): ipynb | [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummPercentiles.R) | html | pdf
     + By Groups, All Numeric Variables Mean + SD + Percentiles, groups = row-groups, variables = rows
-    + **core**: *summarise_if(is.numeric) + gather + separate + spread  + select*        
+    + **tidy**: *summarise_if(is.numeric) + gather + separate + spread  + select*        
 5. [By within Individual Groups Variables, Averages](summarize/summ/ByGroupsSummWide.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummWide.ipynb) | [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/summ/ByGroupsSummWide.R) |  [**html**](summarize/summ/ByGroupsSummWide.html) | pdf
     + By Multiple within Individual Groups Variables; Averages for All Numeric Variables within All Groups of All Group Variables; Long to Wide to very Wide.
-    + **core**: *gather + group_by + summarise_if(is.numeric, funs(mean(., na.rm = TRUE))) + mutate(all_m_cate = paste0(variable, '_c', value)) + gather + unite + spread (note: gather twice, spread at end)*
+    + **tidy**: *gather + group_by + summarise_if(is.numeric, funs(mean(., na.rm = TRUE))) + mutate(all_m_cate = paste0(variable, '_c', value)) + gather + unite + spread (note: gather twice, spread at end)*
 
 # 2. Array, Matrix, Tibble, Data Manipulations
 
@@ -56,83 +56,83 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 1. [Array Combinations as Matrix](https://fanwangecon.github.io/R4Econ/support/array/fs_meshr.html): r \| ref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/array/fs_meshr.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/array/fs_meshr.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/array/fs_meshr.html)
     - combinations of two arrays to matrix form (meshgrid)
-    - **m**: *expand.grid, dim*
+    - **tidy**: *expand_grid, expand.grid, dim*
 
 ## 2.2 Matrix Manipulations
 
 1. [Matrix Basics](https://fanwangecon.github.io/R4Econ/support/matrix/fs_genmatrix.html): r \| ref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/matrix/fs_genmatrix.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/matrix/fs_genmatrix.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/matrix/fs_genmatrix.html)
     - generate and combine fixed and random matrixes
-    - **m**: *rbind, matrix*
+    - **r**: *rbind, matrix*
 
 ## 2.3 Tibble Manipulations
 
 1. [Tibble Basics](https://fanwangecon.github.io/R4Econ/support/tibble/fs_tib_basics.html): r \| ref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/tibble/fs_tib_basics.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/tibble/fs_tib_basics.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/tibble/fs_tib_basics.html)
     - generate tibbles, rename tibble variables, tibble row and column names
     - tibble statistics
-    - **m**: *as_tibble(mt_combine) %>% rename_all(~c(ar_st_varnames)); colnames, rownames*
+    - **tidy**: *as_tibble(mt_combine) %>% rename_all(~c(ar_st_varnames)); colnames, rownames*
 
 ## 2.3 Function over Arrays, Matrix and Tibble
 
 1. [Evaluate Function each Row of Matrix](https://fanwangecon.github.io/R4Econ/support/function/fs_applysapplymutate.html): r \| ref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_applysapplymutate.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_applysapplymutate.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/function/fs_applysapplymutate.html)
     - evaluate function f(x_i,y_i,c), where c is a constant and x and y vary over each row of a matrix, with index i indicating rows
     - get same results using apply, sapply, and dplyr mutate
-    - **m**: *apply(mt_nN_by_nQ_A_alpha, 1, ffi_linear_hardcode); sapply(ls_ar_nN_by_nQ_A_alpha, ffi_linear_sapply, ar_A=ar_nN_A, ar_alpha=ar_nN_alpha); rowwise() %>% mutate(dplyr_eval = ffi_linear_dplyrdo(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha))*
+    - **tidy**: *apply(mt_nN_by_nQ_A_alpha, 1, ffi_linear_hardcode); sapply(ls_ar_nN_by_nQ_A_alpha, ffi_linear_sapply, ar_A=ar_nN_A, ar_alpha=ar_nN_alpha); rowwise() %>% mutate(dplyr_eval = ffi_linear_dplyrdo(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha))*
 2. [Evaluate Nonlinear Function each Row of Matrix](https://fanwangecon.github.io/R4Econ/support/function/fs_funceval.html): r \| ref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_funceval.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_funceval.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/function/fs_funceval.html)
     - evaluate nonlinear function f(x_i, y_i, ar_x, ar_y, c, d), where c and d are constants, and ar_x and ar_y are arrays, both fixed. x_i and y_i vary over each row of matrix.
     - get same results using apply, sapply, and dplyr mutate
-    - **m**: *rowwise() %>% mutate(dplyr_eval = ffi_linear_dplyrdo(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha))*
+    - **tidy**: *rowwise() %>% mutate(dplyr_eval = ffi_linear_dplyrdo(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha))*
 
 ## 2.4 Distributions
 
 1. [Quantiles from Multiple Variables](generate/quantile/VarCateIdxVarsQuantiles.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quantile/VarCateIdxVarsQuantiles.ipynb) | [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quantile/VarCateIdxVarsQuantiles.R) |  [**html**](generate/quantile/VarCateIdxVarsQuantiles.html) | pdf
     + Dataframe of Variables' Quantiles by Panel Groups; Quantile Categorical Variables for Panel within Group Observations; Quantile cut variable suffix and quantile labeling; Joint Quantile Categorical Variable with Linear Index.
-    + **core**: *group_by + slicke(1L) + lapply(enframe(quantiles())) + reduce(full_join) + mutate_at(funs(q=f_cut(.,cut)))) + levels() + rename_at + unlist(lapply) + mutate(!!var.qjnt.grp.idx := group_indices(., !!!syms(vars.quantile.cut.all)))*
+    + **tidy**: *group_by + slicke(1L) + lapply(enframe(quantiles())) + reduce(full_join) + mutate_at(funs(q=f_cut(.,cut)))) + levels() + rename_at + unlist(lapply) + mutate(!!var.qjnt.grp.idx := group_indices(., !!!syms(vars.quantile.cut.all)))*
 
 # 3. Linear Regressions
 
 1. [IV/OLS Regression](linreg/ivreg/ivregdfrow.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/ivregdfrow.ipynb) | [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/ivregdfrow.R) |  [**html**](linreg/ivreg/ivregdfrow.html) | pdf
     + IV/OLS Regression store all Coefficients and Diagnostics as Dataframe Row.
-    + **core**: *library(aer) + ivreg(as.formula, diagnostics = TRUE) + gather + drop_na + unite*
+    + **tidy**: *library(aer) + ivreg(as.formula, diagnostics = TRUE) + gather + drop_na + unite*
 2. [M Outcomes and N RHS Alternatives](linreg/ivreg/regloop.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/regloop.ipynb) | [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/regloop.R) |  [**html**](linreg/ivreg/regloop.html) | pdf
     + There are M outcome variables and N alternative explanatory variables. Regress all M outcome variables on N endogenous/independent right hand side variables one by one, with controls and/or IVs, collect coefficients.
-    + **core**: *bind_rows(lapply(listx, function(x)(bind_rows(lapply(listy, regf.iv)))) + select/starts_with/ends_with + reduce(full_join)*
+    + **tidy**: *bind_rows(lapply(listx, function(x)(bind_rows(lapply(listy, regf.iv)))) + select/starts_with/ends_with + reduce(full_join)*
 3. [Regression Decomposition](linreg/decompose/decompose.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose/decompose.ipynb) | [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose/decompose.R) |  [**html**](linreg/decompose/decompose.html) | pdf
     + Post multiple regressions, fraction of outcome variables' variances explained by multiple subsets of right hand side variables.
-    + **core**: *gather + group_by(variable) + mutate_at(vars, funs(mean = mean(.))) + rowSums(mat*mat) + mutate_if(is.numeric, funs(frac = (./value_var)))*
+    + **tidy**: *gather + group_by(variable) + mutate_at(vars, funs(mean = mean(.))) + rowSums(mat*mat) + mutate_if(is.numeric, funs(frac = (./value_var)))*
 
 # 4. Panel
 
 1. [Long Panel Duplicate One Variable to Wide](https://fanwangecon.github.io/R4Econ/reference/ff_panel_longandwide.html): [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/R/ff_panel_expand.R) | [REF html](https://fanwangecon.github.io/R4Econ/reference/ff_panel_longandwide.html) | [GUIDE html](https://fanwangecon.github.io/R4Econ/panel/expand/fst_panel_lag_expand.html)
     + long panel var X, average X by within i t subgroups, expand avgX_{i,tgroup} to wide, merge to long panel
-    + **core**: *group_by + summarise + spread + left_join*
+    + **tidy**: *group_by + summarise + spread + left_join*
 
 # 5. Optimization
 
 ## 5.1 Planner's Problem
 1. [CES Objective Function](optimization/planner/ces/cesplannerobj.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planner/ces/cesplannerobj.ipynb) | [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planner/ces/cesplannerobj.R) |  [**html**](optimization/planner/ces/cesplannerobj.html) | pdf
     + Constant Elasticity of Substitution Planner Welfare Objective Function.
-    + **core**: *prod/mean/pow, logspace, geom_bar+identity+dodge*
+    + **tidy**: *prod/mean/pow, logspace, geom_bar+identity+dodge*
 2. [CES Subsidy Optimization Over Panel Groups](optimization/planner/ces/cesoptimizer.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planner/ces/cesoptimizer.ipynb) | [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planner/ces/cesoptimizer.R) |  [**html**](optimization/planner/ces/cesoptimizer.html) | pdf
     + Constant Elasticity of Substitution Planner Welfare Subsidies Optimizer Over Quantile/Individual Groups.
-    + **core**: *optim(x, obj, func.params), do.call(func_str, func.params); setNames+list+append*  
+    + **tidy**: *optim(x, obj, func.params), do.call(func_str, func.params); setNames+list+append*  
 
 ## 5.2 Optimization Support
 1. [Constrained Share Parameters to Unconstrained Parameters](optimization/support/fraction.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/support/fraction.ipynb) | [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/support/fraction.R) |  [**html**](optimization/support/fraction.html) | pdf
     + Constrained: a + b + c = Z, a >= 0, b >= 0, c >= 0; Unconstrained maximands of a and b for optimization.
-    + **core**: *f - f/(1+exp(x)), while, runif + qexp + qnorm/dnorm*
+    + **tidy**: *f - f/(1+exp(x)), while, runif + qexp + qnorm/dnorm*
 
 # 6. Graphing
 
 1. [Line Plot with Two Categories, as Color and Subplot](dynamic/graph/statesvalpol.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/dynamic/graph/statesvalpol.ipynb) | [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/dynamic/graph/statesvalpol.R) |  [**html**](dynamic/graph/statesvalpol.html) | pdf
     + Optimal choices/value-function along states. Asset as X-axis, shocks as color, potentially another state as subplots.
-    + **core**: *unique + mutate(var := as.factor(var)) + ggplot + facet_wrap + geom_line + geom_point + labs + theme(axis.text.x = element_text(angle = 90, hjust = 1))*
+    + **tidy**: *unique + mutate(var := as.factor(var)) + ggplot + facet_wrap + geom_line + geom_point + labs + theme(axis.text.x = element_text(angle = 90, hjust = 1))*
 
 
 # 7. Tools
 
 1. [List of List to Dataframe](https://github.com/FanWangEcon/R4Econ/blob/master/support/dplyrtricks/nestedlist2df.R): ipynb | [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/support/dplyrtricks/nestedlist2df.R) | html | pdf
     + Results stored as nested named list (with different keys in sub-lists).
-    + **core**: *as.data.frame + gather + separate(sep(\\.), extra='merge') + spread + column_to_rownames*
+    + **tidy**: *as.data.frame + gather + separate(sep(\\.), extra='merge') + spread + column_to_rownames*
 
 # 8. Support
 
