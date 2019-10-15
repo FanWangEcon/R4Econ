@@ -381,9 +381,13 @@ summary {
 <li>r meshgrid</li>
 <li>r array to matrix</li>
 <li>r reshape array to matrix</li>
+<li>dplyr permuations rows of matrix and element of array</li>
+<li>tidyr expand_grid mesh matrix and vector</li>
 </ul>
 <pre class="r"><code>options(knitr.duplicate.label = &#39;allow&#39;)</code></pre>
-<pre class="r"><code>library(knitr)
+<pre class="r"><code>library(tidyverse)
+library(tidyr)
+library(knitr)
 library(kableExtra)
 # file name
 st_file_name = &#39;fs_meshr&#39;
@@ -392,10 +396,227 @@ purl(paste0(st_file_name, &quot;.Rmd&quot;), output=paste0(st_file_name, &quot;.
 # Generate PDF and HTML
 # rmarkdown::render(&quot;C:/Users/fan/R4Econ/support/array/fs_meshr.Rmd&quot;, &quot;pdf_document&quot;)
 # rmarkdown::render(&quot;C:/Users/fan/R4Econ/support/array/fs_meshr.Rmd&quot;, &quot;html_document&quot;)</code></pre>
-<div id="meshgrid-for-r" class="section level1">
-<h1>Meshgrid for R</h1>
-<div id="define-two-arrays-and-mesh-them" class="section level2">
-<h2>Define Two Arrays and Mesh Them</h2>
+<div id="mesh-matrix-and-vector-using-dplyr-expand_grid" class="section level1">
+<h1>Mesh Matrix and Vector using dplyr expand_grid</h1>
+<p>In the example below, we have a matrix that is 5 by 2, and a vector that is 1 by 3. We want to generate a tibble dataset that meshes the matrix and the vector, so that all combinations show up.</p>
+<p>Note <em>expand_grid</em> is a from tidyr 1.0.0.</p>
+<pre class="r"><code># it_child_count = N, the number of children
+it_N_child_cnt = 5
+# P fixed parameters, nN is N dimensional, nP is P dimensional
+ar_nN_A = seq(-2, 2, length.out = it_N_child_cnt)
+ar_nN_alpha = seq(0.1, 0.9, length.out = it_N_child_cnt)
+mt_nP_A_alpha = cbind(ar_nN_A, ar_nN_alpha)
+
+# Choice Grid
+it_N_choice_cnt = 3
+fl_max = 10
+fl_min = 0
+ar_nN_alpha = seq(fl_min, fl_max, length.out = it_N_choice_cnt)
+
+# expand grid with dplyr
+library(tidyr)
+expand_grid(x = 1:3, y = 1:2)</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##       x     y
+##   &lt;int&gt; &lt;int&gt;
+## 1     1     1
+## 2     1     2
+## 3     2     1
+## 4     2     2
+## 5     3     1
+## 6     3     2</code></pre>
+<pre class="r"><code>tb_expanded &lt;- as_tibble(mt_nP_A_alpha) %&gt;% expand_grid(choices = ar_nN_alpha)
+
+# display
+kable(tb_expanded) %&gt;%
+  kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;condensed&quot;, &quot;responsive&quot;))</code></pre>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+ar_nN_A
+</th>
+<th style="text-align:right;">
+ar_nN_alpha
+</th>
+<th style="text-align:right;">
+choices
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+-2
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-2
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-2
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.7
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.7
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.7
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.9
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.9
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.9
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="mesh-matrix-meshgrid-for-r-using-expand.grid" class="section level1">
+<h1>Mesh Matrix (meshgrid) for R using expand.grid</h1>
+<div id="define-two-arrays-and-mesh-them-using-expand.grid" class="section level2">
+<h2>Define Two Arrays and Mesh Them using expand.grid</h2>
 <p>Given two arrays, mesh the two arrays together.</p>
 <pre class="r"><code># use expand.grid to generate all combinations of two arrays
 
@@ -409,12 +630,12 @@ mt_A_alpha = expand.grid(A = ar_A, alpha = ar_alpha)
 
 mt_A_meshed = mt_A_alpha[,1]
 dim(mt_A_meshed) = c(it_ar_A, it_ar_alpha)
-  
+
 mt_alpha_meshed = mt_A_alpha[,2]
 dim(mt_alpha_meshed) = c(it_ar_A, it_ar_alpha)
 
 # display
-kable(mt_A_meshed) %&gt;% 
+kable(mt_A_meshed) %&gt;%
   kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;condensed&quot;, &quot;responsive&quot;))</code></pre>
 <table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
 <tbody>
@@ -580,7 +801,7 @@ kable(mt_A_meshed) %&gt;%
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>kable(mt_alpha_meshed) %&gt;% 
+<pre class="r"><code>kable(mt_alpha_meshed) %&gt;%
   kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;condensed&quot;, &quot;responsive&quot;))</code></pre>
 <table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
 <tbody>
@@ -747,8 +968,8 @@ kable(mt_A_meshed) %&gt;%
 </tbody>
 </table>
 </div>
-<div id="two-identical-arrays-mesh-to-generate-square" class="section level2">
-<h2>Two Identical Arrays, Mesh to Generate Square</h2>
+<div id="two-identical-arrays-mesh-to-generate-square-using-expand.grid" class="section level2">
+<h2>Two Identical Arrays, Mesh to Generate Square using expand.grid</h2>
 <p>Two Identical Arrays, individual attributes, each column is an individual for a matrix, and each row is also an individual</p>
 <pre class="r"><code># use expand.grid to generate all combinations of two arrays
 
@@ -762,7 +983,7 @@ mt_Acol = mt_A_A[,2]
 dim(mt_Acol) = c(it_ar_A, it_ar_A)
 
 # display
-kable(mt_Arow) %&gt;% 
+kable(mt_Arow) %&gt;%
   kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;condensed&quot;, &quot;responsive&quot;))</code></pre>
 <table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
 <tbody>
@@ -853,7 +1074,7 @@ kable(mt_Arow) %&gt;%
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>kable(mt_Acol) %&gt;% 
+<pre class="r"><code>kable(mt_Acol) %&gt;%
   kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;condensed&quot;, &quot;responsive&quot;))</code></pre>
 <table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
 <tbody>

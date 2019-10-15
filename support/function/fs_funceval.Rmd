@@ -108,18 +108,17 @@ ffi_nonlin_dplyrdo <- function(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, f
 }
 
 # Parameters
-fl_N = 120
 fl_rho = -1
 
 # Evaluate Function 
 print(ffi_nonlin_dplyrdo(mt_nN_by_nQ_A_alpha[1,1],
                          mt_nN_by_nQ_A_alpha[1,2],
-                         mt_nN_by_nQ_A_alpha[1,3]*fl_N, 
+                         mt_nN_by_nQ_A_alpha[1,3]*fl_N_agg, 
                          ar_nN_A, ar_nN_alpha, fl_N_agg, fl_rho))
 for (i in seq(1,dim(mt_nN_by_nQ_A_alpha)[1])){
-  fl_eval = ffi_nonlin_dplyrdo(mt_nN_by_nQ_A_alpha[i,1],
-                               mt_nN_by_nQ_A_alpha[i,2],
-                               mt_nN_by_nQ_A_alpha[i,3]*fl_N, 
+  fl_eval = ffi_nonlin_dplyrdo(mt_nN_by_nQ_A_alpha[i,1], 
+                               mt_nN_by_nQ_A_alpha[i,2], 
+                               mt_nN_by_nQ_A_alpha[i,3]*fl_N_agg, 
                                ar_nN_A, ar_nN_alpha, fl_N_agg, fl_rho)
   print(fl_eval)
 }
@@ -147,9 +146,9 @@ ffi_nonlin_dplyrdo <- function(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, f
   ar_p1_s2 = (fl_alpha/ar_alpha)
   ar_p1_s3 = (1/(ar_alpha*fl_rho - 1))
   ar_p1 = (ar_p1_s1*ar_p1_s2)^ar_p1_s3
-  ar_p2 = fl_N_q^((fl_alpha*fl_rho-1)/(ar_alpha*fl_rho-1))
+  ar_p2 = (fl_N*fl_N_agg)^((fl_alpha*fl_rho-1)/(ar_alpha*fl_rho-1))
   ar_overall = ar_p1*ar_p2
-  fl_overall = fl_N - sum(ar_overall)
+  fl_overall = fl_N_agg - sum(ar_overall)
 
   return(fl_overall)
 }
