@@ -1,21 +1,21 @@
----
-title: "Convert Jupyter Files to RMD"
-output:
-  html_notebook: default
-  pdf_document:
-    df_print: paged
-  html_document:
-    df_print: paged
-  word_document: default
-urlcolor: blue
----
-
-Back to [Fan](https://fanwangecon.github.io)'s [Reusable R Code](https://fanwangecon.github.io/R4Econ/) table of content.
-
-```{r GlobalOptions, echo = T, results = 'hide', message=F, warning=F}
+#' ---
+#' title: "Convert Jupyter Files to RMD"
+#' output:
+#'   html_notebook: default
+#'   pdf_document:
+#'     df_print: paged
+#'   html_document:
+#'     df_print: paged
+#'   word_document: default
+#' urlcolor: blue
+#' ---
+#' 
+#' Back to [Fan](https://fanwangecon.github.io)'s [Reusable R Code](https://fanwangecon.github.io/R4Econ/) table of content.
+#' 
+## ----GlobalOptions, echo = T, results = 'hide', message=F, warning=F-----
 options(knitr.duplicate.label = 'allow')
-```
-```{r loadlib, echo = T, results = 'hide', message=F, warning=F}
+
+## ----loadlib, echo = T, results = 'hide', message=F, warning=F-----------
 library(tidyverse)
 library(tidyr)
 library(rmarkdown)
@@ -28,17 +28,17 @@ purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentat
 # Generate PDF and HTML
 # rmarkdown::render("C:/Users/fan/R4Econ/support/array/fs_meshr.Rmd", "pdf_document")
 # rmarkdown::render("C:/Users/fan/R4Econ/support/array/fs_meshr.Rmd", "html_document")
-```
 
-# Jupyter Files and RMD
-
-Rmarkdown in Rstudio is easier for debugging, and allows for easier interaction with current workspace.
-
-# Jupyter to RMD conversion
-
-Rmarkdown has a conversion program: [convert_ipynb](https://rmarkdown.rstudio.com/docs/reference/convert_ipynb.html).
-
-```{r}
+#' 
+#' # Jupyter Files and RMD
+#' 
+#' Rmarkdown in Rstudio is easier for debugging, and allows for easier interaction with current workspace.
+#' 
+#' # Jupyter to RMD conversion
+#' 
+#' Rmarkdown has a conversion program: [convert_ipynb](https://rmarkdown.rstudio.com/docs/reference/convert_ipynb.html).
+#' 
+## ------------------------------------------------------------------------
 # Generate Paths
 spt_file_root = 'C:/Users/fan/Stat4Econ/descriptive/'
 spt_file_name = 'DataBasketball'
@@ -57,4 +57,4 @@ close(fileConn)
 # Convert to PDF and HTML
 rmarkdown::render(spt_file_full_rmd, "pdf_document")
 rmarkdown::render(spt_file_full_rmd, "html_document")
-```
+

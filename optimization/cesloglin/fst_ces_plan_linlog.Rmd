@@ -5,7 +5,7 @@ output:
     df_print: paged
     number_sections: true
     toc: true
-    toc_depth: 2  
+    toc_depth: 2
   html_notebook:
     number_sections: true
   word_document:
@@ -13,7 +13,7 @@ output:
   pdf_document:
     number_sections: true
     toc: true
-    toc_depth: 2  
+    toc_depth: 2
 urlcolor: blue
 ---
 
@@ -49,12 +49,12 @@ library(R4Econ)
 df_hw_cebu_m24 <- df_hgt_wgt %>% filter(S.country == 'Cebu' & svymthRound == 24 & prot > 0 & hgt > 0) %>% drop_na()
 
 # Generate Discrete Version of momEdu
-df_hw_cebu_m24 <- df_hw_cebu_m24 %>% 
-    mutate(momEduRound = cut(momEdu, 
-                             breaks=c(-Inf, 10, Inf), 
+df_hw_cebu_m24 <- df_hw_cebu_m24 %>%
+    mutate(momEduRound = cut(momEdu,
+                             breaks=c(-Inf, 10, Inf),
                              labels=c("MEduLow","MEduHigh"))) %>%
-    mutate(hgt0med = cut(hgt0, 
-                             breaks=c(-Inf, 50, Inf), 
+    mutate(hgt0med = cut(hgt0,
+                             breaks=c(-Inf, 50, Inf),
                              labels=c("h0low","h0high")))
 
 df_hw_cebu_m24$momEduRound = as.factor(df_hw_cebu_m24$momEduRound)
@@ -123,20 +123,22 @@ ar_rho = unique(ar_rho)
 
 ## Optimal Linear Allocation
 
-```{r Optimal Linear Allocation}
+### Optimal Linear Allocation Hard-Coded
 
+```{r Optimal Linear Allocation Hard Code}
 # Optimal Linear Equation
 # Planner Inputs
 mt_hev_lin = matrix(, nrow = length(ar_rho), ncol = 2)
+mt_opti_N = matrix(, nrow = it_obs, ncol = length(ar_rho))
 
 for (it_rho_ctr in seq(1,length(ar_rho))) {
   rho = ar_rho[it_rho_ctr]
   fl_N_hat = sum(df_hw_cebu_m24$prot)
-  
+
   ar_term_b = ar_Ai_lin*(ar_alphai_lin*(1/(rho - 1)))
   ar_term_c = ar_Ai_lin*(ar_alphai_lin*(1/(rho - 1)))
   ar_term_d = (ar_alphai_lin*(rho/(rho - 1)))
-  
+
   # Child Specific Optimal Allocation Array to Store
   ar_opti_lin = matrix(, nrow = it_obs, ncol = 1)
   for (m in seq(1:it_obs)) {
@@ -145,21 +147,79 @@ for (it_rho_ctr in seq(1,length(ar_rho))) {
     fl_opti_q = (fl_N_hat - fl_topright_q)/fl_bottom_q
     ar_opti_lin[m] = fl_opti_q
   }
-  
+
   # Min and Max
   ar_opti_lin = pmin(fl_N_hat, pmax(0, ar_opti_lin))
+  mt_opti_N[,it_rho_ctr] = ar_opti_lin
   df_hw_cebu_m24_full = cbind(df_hw_cebu_m24_full, ar_opti_lin)
-  
+
   # Utilities
   fl_v_data_lin = sum((ar_Ai_lin + prot*ar_alphai_lin - 70)^rho)^(1/rho)
   fl_v_opti_lin = sum((ar_Ai_lin + ar_opti_lin*ar_alphai_lin - 70)^rho)^(1/rho)
-  
+
   ## HEV
   fl_hev = (fl_v_opti_lin/fl_v_data_lin - 1)
   mt_hev_lin[it_rho_ctr,1] = rho;
   mt_hev_lin[it_rho_ctr,2] = fl_hev;
 }
+```
 
+### Optimal Linear Allocation Solved using Function and DPLYR
+
+```{r Optimal Linear Allocation Equation Line by Line Test}
+# Randomly test 10 individuals/rho combinations to see if the same results produced by the functional (vectorized) code below as the looped code above.
+
+set.seed(123)
+for (it_ctr in seq(1, 10)) {
+  # Which Individual to Test
+  it_indi_ctr_test = sample(it_obs, 1)
+  it_rho_ctr_test = sample(length(ar_rho), 1)
+  
+  # Get Inputs for Function
+  fl_A = ar_Ai_lin[it_indi_ctr_test]
+  fl_alpha = ar_alphai_lin[it_indi_ctr_test]
+  fl_N = df_hw_cebu_m24$prot[it_indi_ctr_test]
+  ar_A = ar_Ai_lin
+  ar_alpha = ar_alphai_lin
+  fl_N_agg = sum(df_hw_cebu_m24$prot)
+  fl_rho = ar_rho[it_rho_ctr_test]
+  # Existing optimal choice
+  fl_opti_loop = mt_opti_N[it_indi_ctr_test, it_rho_ctr_test]
+  
+  # From Paper Proposition 1
+  # top of fraction
+  fl_p1_s1 = (fl_A * ((fl_alpha) * (1 / (fl_rho - 1))))
+  ar_p1_s2 = (ar_A * ((ar_alpha) * (1 / (fl_rho - 1))))
+  ar_p1_s3 = ((ar_alpha) * (fl_rho / (fl_rho - 1)))
+  fl_p1_s3 = fl_N_agg - sum((fl_p1_s1 - ar_p1_s2) / ar_p1_s3)
+  
+  # bottom of fraction
+  ar_p2 = (fl_alpha / ar_alpha) ^ (fl_rho / (fl_rho - 1))
+  
+  # overall
+  fl_opti_equa = fl_p1_s3 / sum(ar_p2)
+  fl_opti_equa = pmin(fl_N_agg, pmax(0, fl_opti_equa))
+  
+  print(
+    paste0(
+      'it_ctr:',
+      it_ctr,
+      ', fl_rho:',
+      fl_rho,
+      ', i:',
+      it_indi_ctr_test,
+      ', fl_opti_equa:',
+      fl_opti_equa,
+      ', fl_opti_loop:',
+      fl_opti_loop
+    )
+  )
+}
+```
+
+### Graphical Illustration of Optimal Allocation
+
+```{r}
 tb_hev_lin <- as_tibble(mt_hev_lin) %>% mutate(id = row_number())
 
 lineplot_lin <- tb_hev_lin %>%
@@ -170,8 +230,8 @@ lineplot_lin <- tb_hev_lin %>%
              x = 'pref',
              y = 'HEV',
              caption = 'Linear') +
-        scale_x_continuous(labels = as.character(tb_hev$V1),
-                           breaks = tb_hev$V1)
+        scale_x_continuous(labels = as.character(tb_hev_lin$V1),
+                           breaks = tb_hev_lin$V1)
 print(lineplot_lin)
 
 ```
@@ -185,11 +245,11 @@ mt_hev_log = matrix(, nrow = length(ar_rho), ncol = 2)
 for (it_rho_ctr in seq(1,length(ar_rho))) {
   rho = ar_rho[it_rho_ctr]
   fl_N_hat = sum(df_hw_cebu_m24$prot)
-  
+
   ar_term_b = ar_Ai_lin*(ar_alphai_lin*(1/(rho - 1)))
   ar_term_c = ar_Ai_lin*(ar_alphai_lin*(1/(rho - 1)))
   ar_term_d = (ar_alphai_lin*(rho/(rho - 1)))
-  
+
   # Child Specific Optimal Allocation Array to Store
   ar_opti_lin = matrix(, nrow = it_obs, ncol = 1)
   for (m in seq(1:it_obs)) {
@@ -198,15 +258,15 @@ for (it_rho_ctr in seq(1,length(ar_rho))) {
     fl_opti_q = (fl_N_hat - fl_topright_q)/fl_bottom_q
     ar_opti_lin[m] = fl_opti_q
   }
-  
+
   # Min and Max
   ar_opti_lin = pmin(fl_N_hat, pmax(0, ar_opti_lin))
   df_hw_cebu_m24_full = cbind(df_hw_cebu_m24_full, ar_opti_lin)
-  
+
   # Utilities
   fl_v_data_lin = sum((ar_Ai_lin + prot*ar_alphai_lin - 70)^rho)^(1/rho)
   fl_v_opti_lin = sum((ar_Ai_lin + ar_opti_lin*ar_alphai_lin - 70)^rho)^(1/rho)
-  
+
   ## HEV
   fl_hev = (fl_v_opti_lin/fl_v_data_lin - 1)
   mt_hev_log[it_rho_ctr,1] = rho;
@@ -223,9 +283,8 @@ lineplot_log <- tb_hev_log %>%
              x = 'pref',
              y = 'HEV',
              caption = 'Linear') +
-        scale_x_continuous(labels = as.character(tb_hev$V1),
-                           breaks = tb_hev$V1)
+        scale_x_continuous(labels = as.character(tb_hev_log$V1),
+                           breaks = tb_hev_log$V1)
 print(lineplot_log)
 
 ```
-

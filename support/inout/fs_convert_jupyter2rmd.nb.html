@@ -1750,6 +1750,29 @@ summary {
 
 <!-- rnb-text-begin -->
 <p>Back to <a href="https://fanwangecon.github.io">Fan</a>’s <a href="https://fanwangecon.github.io/R4Econ/">Reusable R Code</a> table of content.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub3B0aW9ucyhrbml0ci5kdXBsaWNhdGUubGFiZWwgPSAnYWxsb3cnKVxuYGBgIn0= -->
+<pre class="r"><code>options(knitr.duplicate.label = &#39;allow&#39;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KHRpZHlyKVxubGlicmFyeShybWFya2Rvd24pXG5saWJyYXJ5KGtuaXRyKVxubGlicmFyeShrYWJsZUV4dHJhKVxuIyBmaWxlIG5hbWVcbnN0X2ZpbGVfbmFtZSA9ICdmc19jb252ZXJ0X2p1cHl0ZXIycm1kJ1xuIyBHZW5lcmF0ZSBSIEZpbGVcbnB1cmwocGFzdGUwKHN0X2ZpbGVfbmFtZSwgXCIuUm1kXCIpLCBvdXRwdXQ9cGFzdGUwKHN0X2ZpbGVfbmFtZSwgXCIuUlwiKSwgZG9jdW1lbnRhdGlvbiA9IDIpXG4jIEdlbmVyYXRlIFBERiBhbmQgSFRNTFxuIyBybWFya2Rvd246OnJlbmRlcihcIkM6L1VzZXJzL2Zhbi9SNEVjb24vc3VwcG9ydC9hcnJheS9mc19tZXNoci5SbWRcIiwgXCJwZGZfZG9jdW1lbnRcIilcbiMgcm1hcmtkb3duOjpyZW5kZXIoXCJDOi9Vc2Vycy9mYW4vUjRFY29uL3N1cHBvcnQvYXJyYXkvZnNfbWVzaHIuUm1kXCIsIFwiaHRtbF9kb2N1bWVudFwiKVxuYGBgIn0= -->
+<pre class="r"><code>library(tidyverse)
+library(tidyr)
+library(rmarkdown)
+library(knitr)
+library(kableExtra)
+# file name
+st_file_name = &#39;fs_convert_jupyter2rmd&#39;
+# Generate R File
+purl(paste0(st_file_name, &quot;.Rmd&quot;), output=paste0(st_file_name, &quot;.R&quot;), documentation = 2)
+# Generate PDF and HTML
+# rmarkdown::render(&quot;C:/Users/fan/R4Econ/support/array/fs_meshr.Rmd&quot;, &quot;pdf_document&quot;)
+# rmarkdown::render(&quot;C:/Users/fan/R4Econ/support/array/fs_meshr.Rmd&quot;, &quot;html_document&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 <div id="jupyter-files-and-rmd" class="section level1">
 <h1>Jupyter Files and RMD</h1>
 <p>Rmarkdown in Rstudio is easier for debugging, and allows for easier interaction with current workspace.</p>
@@ -1759,27 +1782,20 @@ summary {
 <p>Rmarkdown has a conversion program: <a href="https://rmarkdown.rstudio.com/docs/reference/convert_ipynb.html">convert_ipynb</a>.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG4jIEdlbmVyYXRlIFBhdGhzXG5zcHRfZmlsZV9yb290ID0gJ0M6L1VzZXJzL2Zhbi9TdGF0NEVjb24vZGVzY3JpcHRpdmUvJ1xuc3B0X2ZpbGVfbmFtZSA9ICdDOi9Vc2Vycy9mYW4vU3RhdDRFY29uL2Rlc2NyaXB0aXZlL0RhdGFCYXNrZXRiYWxsJ1xuc3B0X2ZpbGVfZnVsbF9pcHluYiA9IHBhc3RlMChzcHRfZmlsZV9yb290LCBzcHRfZmlsZV9uYW1lLCAnLmlweW5iJylcbnNwdF9maWxlX2Z1bGxfcm1kID0gcGFzdGUwKHNwdF9maWxlX3Jvb3QsIHNwdF9maWxlX25hbWUsICcucm1kJylcblxuIyBDb252ZXJ0IGZyb20gSVBZTkIgdG8gUk1EXG5maWxlX25iX3JtZCA9IHJtYXJrZG93bjo6OmNvbnZlcnRfaXB5bmIoc3B0X2ZpbGVfZnVsbF9pcHluYilcbnN0X25iX3JtZCA9IHhmdW46OmZpbGVfc3RyaW5nKGZpbGVfbmJfcm1kKVxuXG4jIFNhdmUgUk1EXG5maWxlQ29ubiA8LSBmaWxlKHNwdF9maWxlX2Z1bGxfcm1kKVxud3JpdGVMaW5lcyhzdF9uYl9ybWQsIGZpbGVDb25uKVxuY2xvc2UoZmlsZUNvbm4pXG5gYGAifQ== -->
-<pre class="r"><code>
-# Generate Paths
-spt_file_root = &#39;C:/Users/fan/Stat4Econ/descriptive/&#39;
-spt_file_name = &#39;C:/Users/fan/Stat4Econ/descriptive/DataBasketball&#39;
-spt_file_full_ipynb = paste0(spt_file_root, spt_file_name, &#39;.ipynb&#39;)
-spt_file_full_rmd = paste0(spt_file_root, spt_file_name, &#39;.rmd&#39;)
-
-# Convert from IPYNB to RMD
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBDb252ZXJ0IGZyb20gSVBZTkIgdG8gUk1EXG5maWxlX25iX3JtZCA9IHJtYXJrZG93bjo6OmNvbnZlcnRfaXB5bmIoc3B0X2ZpbGVfZnVsbF9pcHluYilcblxuYGBgIn0= -->
+<pre class="r"><code># Convert from IPYNB to RMD
 file_nb_rmd = rmarkdown:::convert_ipynb(spt_file_full_ipynb)
-st_nb_rmd = xfun::file_string(file_nb_rmd)
-
-# Save RMD
-fileConn &lt;- file(spt_file_full_rmd)
-writeLines(st_nb_rmd, fileConn)
-close(fileConn)</code></pre>
+</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3I6IGxleGljYWwgZXJyb3I6IGludmFsaWQgY2hhciBpbiBqc29uIHRleHQuXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBDOi9Vc2Vycy9mYW4vU3RhdDRFY29uL2Rlc2NyaXB0XG4gICAgICAgICAgICAgICAgICAgICAocmlnaHQgaGVyZSkgLS0tLS0tXlxuIn0= -->
+<pre><code>Error: lexical error: invalid char in json text.
+                                       C:/Users/fan/Stat4Econ/descript
+                     (right here) ------^</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkNvbnZlcnQgSnVweXRlciBGaWxlcyB0byBSTUQiDQpvdXRwdXQ6DQogIGh0bWxfbm90ZWJvb2s6IGRlZmF1bHQNCiAgcGRmX2RvY3VtZW50Og0KICAgIGRmX3ByaW50OiBwYWdlZA0KICBodG1sX2RvY3VtZW50Og0KICAgIGRmX3ByaW50OiBwYWdlZA0KICB3b3JkX2RvY3VtZW50OiBkZWZhdWx0DQp1cmxjb2xvcjogYmx1ZQ0KLS0tDQoNCkJhY2sgdG8gW0Zhbl0oaHR0cHM6Ly9mYW53YW5nZWNvbi5naXRodWIuaW8pJ3MgW1JldXNhYmxlIFIgQ29kZV0oaHR0cHM6Ly9mYW53YW5nZWNvbi5naXRodWIuaW8vUjRFY29uLykgdGFibGUgb2YgY29udGVudC4NCg0KIyBKdXB5dGVyIEZpbGVzIGFuZCBSTUQNCg0KUm1hcmtkb3duIGluIFJzdHVkaW8gaXMgZWFzaWVyIGZvciBkZWJ1Z2dpbmcsIGFuZCBhbGxvd3MgZm9yIGVhc2llciBpbnRlcmFjdGlvbiB3aXRoIGN1cnJlbnQgd29ya3NwYWNlLg0KDQoNCiMgSnVweXRlciB0byBSTUQgY29udmVyc2lvbg0KDQpSbWFya2Rvd24gaGFzIGEgY29udmVyc2lvbiBwcm9ncmFtOiBbY29udmVydF9pcHluYl0oaHR0cHM6Ly9ybWFya2Rvd24ucnN0dWRpby5jb20vZG9jcy9yZWZlcmVuY2UvY29udmVydF9pcHluYi5odG1sKS4NCg0KYGBge3J9DQoNCiMgR2VuZXJhdGUgUGF0aHMNCnNwdF9maWxlX3Jvb3QgPSAnQzovVXNlcnMvZmFuL1N0YXQ0RWNvbi9kZXNjcmlwdGl2ZS8nDQpzcHRfZmlsZV9uYW1lID0gJ0M6L1VzZXJzL2Zhbi9TdGF0NEVjb24vZGVzY3JpcHRpdmUvRGF0YUJhc2tldGJhbGwnDQpzcHRfZmlsZV9mdWxsX2lweW5iID0gcGFzdGUwKHNwdF9maWxlX3Jvb3QsIHNwdF9maWxlX25hbWUsICcuaXB5bmInKQ0Kc3B0X2ZpbGVfZnVsbF9ybWQgPSBwYXN0ZTAoc3B0X2ZpbGVfcm9vdCwgc3B0X2ZpbGVfbmFtZSwgJy5ybWQnKQ0KDQojIENvbnZlcnQgZnJvbSBJUFlOQiB0byBSTUQNCmZpbGVfbmJfcm1kID0gcm1hcmtkb3duOjo6Y29udmVydF9pcHluYihzcHRfZmlsZV9mdWxsX2lweW5iKQ0Kc3RfbmJfcm1kID0geGZ1bjo6ZmlsZV9zdHJpbmcoZmlsZV9uYl9ybWQpDQoNCiMgU2F2ZSBSTUQNCmZpbGVDb25uIDwtIGZpbGUoc3B0X2ZpbGVfZnVsbF9ybWQpDQp3cml0ZUxpbmVzKHN0X25iX3JtZCwgZmlsZUNvbm4pDQpjbG9zZShmaWxlQ29ubikNCmBgYA0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkNvbnZlcnQgSnVweXRlciBGaWxlcyB0byBSTUQiDQpvdXRwdXQ6DQogIGh0bWxfbm90ZWJvb2s6IGRlZmF1bHQNCiAgcGRmX2RvY3VtZW50Og0KICAgIGRmX3ByaW50OiBwYWdlZA0KICBodG1sX2RvY3VtZW50Og0KICAgIGRmX3ByaW50OiBwYWdlZA0KICB3b3JkX2RvY3VtZW50OiBkZWZhdWx0DQp1cmxjb2xvcjogYmx1ZQ0KLS0tDQoNCkJhY2sgdG8gW0Zhbl0oaHR0cHM6Ly9mYW53YW5nZWNvbi5naXRodWIuaW8pJ3MgW1JldXNhYmxlIFIgQ29kZV0oaHR0cHM6Ly9mYW53YW5nZWNvbi5naXRodWIuaW8vUjRFY29uLykgdGFibGUgb2YgY29udGVudC4NCg0KYGBge3IgR2xvYmFsT3B0aW9ucywgZWNobyA9IFQsIHJlc3VsdHMgPSAnaGlkZScsIG1lc3NhZ2U9Riwgd2FybmluZz1GfQ0Kb3B0aW9ucyhrbml0ci5kdXBsaWNhdGUubGFiZWwgPSAnYWxsb3cnKQ0KYGBgDQpgYGB7ciBsb2FkbGliLCBlY2hvID0gVCwgcmVzdWx0cyA9ICdoaWRlJywgbWVzc2FnZT1GLCB3YXJuaW5nPUZ9DQpsaWJyYXJ5KHRpZHl2ZXJzZSkNCmxpYnJhcnkodGlkeXIpDQpsaWJyYXJ5KHJtYXJrZG93bikNCmxpYnJhcnkoa25pdHIpDQpsaWJyYXJ5KGthYmxlRXh0cmEpDQojIGZpbGUgbmFtZQ0Kc3RfZmlsZV9uYW1lID0gJ2ZzX2NvbnZlcnRfanVweXRlcjJybWQnDQojIEdlbmVyYXRlIFIgRmlsZQ0KcHVybChwYXN0ZTAoc3RfZmlsZV9uYW1lLCAiLlJtZCIpLCBvdXRwdXQ9cGFzdGUwKHN0X2ZpbGVfbmFtZSwgIi5SIiksIGRvY3VtZW50YXRpb24gPSAyKQ0KIyBHZW5lcmF0ZSBQREYgYW5kIEhUTUwNCiMgcm1hcmtkb3duOjpyZW5kZXIoIkM6L1VzZXJzL2Zhbi9SNEVjb24vc3VwcG9ydC9hcnJheS9mc19tZXNoci5SbWQiLCAicGRmX2RvY3VtZW50IikNCiMgcm1hcmtkb3duOjpyZW5kZXIoIkM6L1VzZXJzL2Zhbi9SNEVjb24vc3VwcG9ydC9hcnJheS9mc19tZXNoci5SbWQiLCAiaHRtbF9kb2N1bWVudCIpDQpgYGANCg0KIyBKdXB5dGVyIEZpbGVzIGFuZCBSTUQNCg0KUm1hcmtkb3duIGluIFJzdHVkaW8gaXMgZWFzaWVyIGZvciBkZWJ1Z2dpbmcsIGFuZCBhbGxvd3MgZm9yIGVhc2llciBpbnRlcmFjdGlvbiB3aXRoIGN1cnJlbnQgd29ya3NwYWNlLg0KDQojIEp1cHl0ZXIgdG8gUk1EIGNvbnZlcnNpb24NCg0KUm1hcmtkb3duIGhhcyBhIGNvbnZlcnNpb24gcHJvZ3JhbTogW2NvbnZlcnRfaXB5bmJdKGh0dHBzOi8vcm1hcmtkb3duLnJzdHVkaW8uY29tL2RvY3MvcmVmZXJlbmNlL2NvbnZlcnRfaXB5bmIuaHRtbCkuDQoNCmBgYHtyfQ0KIyBHZW5lcmF0ZSBQYXRocw0Kc3B0X2ZpbGVfcm9vdCA9ICdDOi9Vc2Vycy9mYW4vU3RhdDRFY29uL2Rlc2NyaXB0aXZlLycNCnNwdF9maWxlX25hbWUgPSAnRGF0YUJhc2tldGJhbGwnDQpzcHRfZmlsZV9mdWxsX2lweW5iID0gcGFzdGUwKHNwdF9maWxlX3Jvb3QsIHNwdF9maWxlX25hbWUsICcuaXB5bmInKQ0Kc3B0X2ZpbGVfZnVsbF9ybWQgPSBwYXN0ZTAoc3B0X2ZpbGVfcm9vdCwgc3B0X2ZpbGVfbmFtZSwgJy5ybWQnKQ0KDQojIENvbnZlcnQgZnJvbSBJUFlOQiB0byBSTUQNCmZpbGVfbmJfcm1kID0gcm1hcmtkb3duOjo6Y29udmVydF9pcHluYihzcHRfZmlsZV9mdWxsX2lweW5iKQ0Kc3RfbmJfcm1kID0geGZ1bjo6ZmlsZV9zdHJpbmcoZmlsZV9uYl9ybWQpDQoNCiMgU2F2ZSBSTUQNCmZpbGVDb25uIDwtIGZpbGUoc3B0X2ZpbGVfZnVsbF9ybWQpDQp3cml0ZUxpbmVzKHN0X25iX3JtZCwgZmlsZUNvbm4pDQpjbG9zZShmaWxlQ29ubikNCg0KIyBDb252ZXJ0IHRvIFBERiBhbmQgSFRNTA0Kcm1hcmtkb3duOjpyZW5kZXIoc3B0X2ZpbGVfZnVsbF9ybWQsICJwZGZfZG9jdW1lbnQiKQ0Kcm1hcmtkb3duOjpyZW5kZXIoc3B0X2ZpbGVfZnVsbF9ybWQsICJodG1sX2RvY3VtZW50IikNCmBgYA0K</div>
 
 
 
