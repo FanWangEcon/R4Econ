@@ -1,48 +1,48 @@
----
-title: "CES log lin formulas working with micro estimates"
-output:
-  html_document:
-    df_print: paged
-    number_sections: true
-    toc: true
-    toc_depth: 3
-  html_notebook:
-    number_sections: true
-  word_document:
-    number_sections: true
-  pdf_document:
-    number_sections: true
-    toc: true
-    toc_depth: 3
-urlcolor: blue
----
-
-Back to **[Fan](https://fanwangecon.github.io/)**'s R4Econ Homepage **[Table of Content](https://fanwangecon.github.io/R4Econ/)**
-
-# Outline
-
-There is a dataset with child attributes, nutritional inputs and outputs. Run regression to estimate some input output relationship first. Then generate required inputs for code.
-
-1. Required Input
-  + @param df tibble data table including variables using svr names below each row is potentially an individual who will receive alternative allocations
-  + @param svr_A_i string name of the A_i variable, dot product of covariates and coefficients
-  + @param svr_alpha_i string name of the alpha_i variable, individual specific elasticity information
-  + @param svr_beta_i string name of the beta_i variable, relative preference weight for each child
-  + @param svr_N_i string name of the vector of existing inputs, based on which to compute aggregate resource
-  + @param fl_N_hat float total resource avaible for allocation, if not specific, sum by svr_N_i
-  + @param fl_rho float preference for equality for the planner
-  + @return a dataframe that expands the df inputs with additional results.
-2. The structure assumes some regression has already taken place to generate the i specific variables listed. and
-
-Doing this allows for lagged intereaction that are time specific in an arbitrary way.
-
-## Set Up
-
-```{r GlobalOptions, echo = T, results = 'hide', message=F, warning=F}
+#' ---
+#' title: "CES log lin formulas working with micro estimates"
+#' output:
+#'   html_document:
+#'     df_print: paged
+#'     number_sections: true
+#'     toc: true
+#'     toc_depth: 3
+#'   html_notebook:
+#'     number_sections: true
+#'   word_document:
+#'     number_sections: true
+#'   pdf_document:
+#'     number_sections: true
+#'     toc: true
+#'     toc_depth: 3
+#' urlcolor: blue
+#' ---
+#' 
+#' Back to **[Fan](https://fanwangecon.github.io/)**'s R4Econ Homepage **[Table of Content](https://fanwangecon.github.io/R4Econ/)**
+#' 
+#' # Outline
+#' 
+#' There is a dataset with child attributes, nutritional inputs and outputs. Run regression to estimate some input output relationship first. Then generate required inputs for code.
+#' 
+#' 1. Required Input
+#'   + @param df tibble data table including variables using svr names below each row is potentially an individual who will receive alternative allocations
+#'   + @param svr_A_i string name of the A_i variable, dot product of covariates and coefficients
+#'   + @param svr_alpha_i string name of the alpha_i variable, individual specific elasticity information
+#'   + @param svr_beta_i string name of the beta_i variable, relative preference weight for each child
+#'   + @param svr_N_i string name of the vector of existing inputs, based on which to compute aggregate resource
+#'   + @param fl_N_hat float total resource avaible for allocation, if not specific, sum by svr_N_i
+#'   + @param fl_rho float preference for equality for the planner
+#'   + @return a dataframe that expands the df inputs with additional results.
+#' 2. The structure assumes some regression has already taken place to generate the i specific variables listed. and
+#' 
+#' Doing this allows for lagged intereaction that are time specific in an arbitrary way.
+#' 
+#' ## Set Up
+#' 
+## ----GlobalOptions, echo = T, results = 'hide', message=F, warning=F-----
 rm(list = ls(all.names = TRUE))
 options(knitr.duplicate.label = 'allow')
-```
-```{r loadlib, echo = T, results = 'hide', message=F, warning=F}
+
+## ----loadlib, echo = T, results = 'hide', message=F, warning=F-----------
 library(tidyverse)
 library(tidymodels)
 library(R4Econ)
@@ -55,11 +55,11 @@ purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentat
 # Generate PDF and HTML
 # rmarkdown::render("C:/Users/fan/R4Econ/support/function/fs_funceval.Rmd", "pdf_document")
 # rmarkdown::render("C:/Users/fan/R4Econ/support/function/fs_funceval.Rmd", "html_document")
-```
 
-## Get Data
-
-```{r Load Packages and Process Data}
+#' 
+#' ## Get Data
+#' 
+## ----Load Packages and Process Data--------------------------------------
 # Load Library
 
 # Select Cebu Only
@@ -79,13 +79,13 @@ df_hw_cebu_m24$hgt0med = as.factor(df_hw_cebu_m24$hgt0med)
 
 # Attach
 attach(df_hw_cebu_m24)
-```
 
-# Regression with Data and Construct Input Arrays
-
-## Linear Regression
-
-```{r Linear Regression}
+#' 
+#' # Regression with Data and Construct Input Arrays
+#' 
+#' ## Linear Regression
+#' 
+## ----Linear Regression---------------------------------------------------
 # Input Matrix
 mt_lincv <- model.matrix(~ hgt0 + wgt0)
 mt_linht <- model.matrix(~ sex:hgt0med - 1)
@@ -94,11 +94,11 @@ mt_linht <- model.matrix(~ sex:hgt0med - 1)
 rs_hgt_prot_lin = lm(hgt ~ prot:mt_linht + mt_lincv - 1)
 print(summary(rs_hgt_prot_lin))
 rs_hgt_prot_lin_tidy = tidy(rs_hgt_prot_lin)
-```
 
-## Log-Linear Regression
-
-```{r Log-Linear Regression}
+#' 
+#' ## Log-Linear Regression
+#' 
+## ----Log-Linear Regression-----------------------------------------------
 # Input Matrix
 mt_logcv <- model.matrix(~ hgt0 + wgt0)
 mt_loght <- model.matrix(~ sex:hgt0med - 1)
@@ -107,11 +107,11 @@ mt_loght <- model.matrix(~ sex:hgt0med - 1)
 rs_hgt_prot_log = lm(log(hgt) ~ log(prot):mt_loght + mt_logcv - 1)
 print(summary(rs_hgt_prot_log))
 rs_hgt_prot_log_tidy = tidy(rs_hgt_prot_log)
-```
 
-## Construct Input Arrays $A_i$ and $\alpha_i$
-
-```{r Post Regression Input Processing}
+#' 
+#' ## Construct Input Arrays $A_i$ and $\alpha_i$
+#' 
+## ----Post Regression Input Processing------------------------------------
 
 # Generate A_i
 ar_Ai_lin <- mt_lincv %*% as.matrix(rs_hgt_prot_lin_tidy %>% filter(!str_detect(term, 'prot')) %>% select(estimate))
@@ -122,13 +122,13 @@ ar_Ai_log <- mt_logcv %*% as.matrix(rs_hgt_prot_log_tidy %>% filter(!str_detect(
 ar_alphai_lin <- mt_linht %*% as.matrix(rs_hgt_prot_lin_tidy %>% filter(str_detect(term, 'prot')) %>% select(estimate))
 ar_alphai_log <- mt_loght %*% as.matrix(rs_hgt_prot_log_tidy %>% filter(str_detect(term, 'prot')) %>% select(estimate))
 
-```
 
-# Optimal Allocations
-
-## Common Parameters for Optimal Allocation
-
-```{r Set Allocation Parameters}
+#' 
+#' # Optimal Allocations
+#' 
+#' ## Common Parameters for Optimal Allocation
+#' 
+## ----Set Allocation Parameters-------------------------------------------
 
 # Child Count
 df_hw_cebu_m24_full <- df_hw_cebu_m24
@@ -141,15 +141,15 @@ fl_N_agg = sum(ar_prot_data)
 # Vector of Planner Preference
 ar_rho = c(seq(-200, -100, length.out=5), seq(-100, -25, length.out=5), seq(-25, -5, length.out=5), seq(-5, -1, length.out=5), seq(-1, -0.01, length.out=5), seq(0.01, 0.25, length.out=5), seq(0.25, 0.99, length.out=5))
 ar_rho = unique(ar_rho)
-```
 
-## Optimal Linear Allocation (CRS)
-
-This also works with any CRS CES.
-
-### Optimal Linear Allocation Hard-Coded
-
-```{r Optimal Linear Allocation Hard Code All Rho}
+#' 
+#' ## Optimal Linear Allocation (CRS)
+#' 
+#' This also works with any CRS CES.
+#' 
+#' ### Optimal Linear Allocation Hard-Coded
+#' 
+## ----Optimal Linear Allocation Hard Code All Rho-------------------------
 # Optimal Linear Equation
 # Planner Inputs
 mt_hev_lin = matrix(, nrow = length(ar_rho), ncol = 2)
@@ -185,11 +185,11 @@ for (it_rho_ctr in seq(1,length(ar_rho))) {
   mt_hev_lin[it_rho_ctr,1] = rho;
   mt_hev_lin[it_rho_ctr,2] = fl_hev;
 }
-```
 
-### Optimal Linear Allocation Pseudo-Function
-
-```{r Optimal Linear Allocation Equation Line by Line Test one Rho Selected Individuals}
+#' 
+#' ### Optimal Linear Allocation Pseudo-Function
+#' 
+## ----Optimal Linear Allocation Equation Line by Line Test one Rho Selected Individuals----
 # Randomly test 10 individuals/rho combinations to see if the same results produced by the functional (vectorized) code below as the looped code above.
 
 set.seed(123)
@@ -237,11 +237,11 @@ for (it_ctr in seq(1, 10)) {
     )
   )
 }
-```
 
-### Optimal Linear Allocation Function DPLYR
-
-```{r Optimal Linear Allocation Functional Equation DPLYR one rho all individuals}
+#' 
+#' ### Optimal Linear Allocation Function DPLYR
+#' 
+## ----Optimal Linear Allocation Functional Equation DPLYR one rho all individuals----
 
 # Define Explicit Optimal Choice Function
 ffi_linear_dplyrdo <- function(fl_A, fl_alpha, fl_rho, ar_A, ar_alpha, fl_N_agg){
@@ -278,11 +278,11 @@ tb_nN_by_nQ_A_alpha = tb_nN_by_nQ_A_alpha %>% rowwise() %>%
 kable(tb_nN_by_nQ_A_alpha[1:10,]) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 
-```
 
-### Optimal Linear Allocation Function DPLYR All Rho
-
-```{r Optimal Linear Allocation Functional Equation DPLYR all rho all individuals}
+#' 
+#' ### Optimal Linear Allocation Function DPLYR All Rho
+#' 
+## ----Optimal Linear Allocation Functional Equation DPLYR all rho all individuals----
 
 # Generate Data, all individuals specific parameters
 mt_nN_by_nQ_A_alpha = cbind(ar_Ai_lin, ar_alphai_lin, ar_prot_data)
@@ -299,22 +299,15 @@ tb_nN_by_nQ_A_alpha_mesh_rho = tb_nN_by_nQ_A_alpha_mesh_rho %>% rowwise() %>%
                                                                     ar_Ai_lin, ar_alphai_lin,
                                                                     fl_N_agg))
 
-# Check if Total Allocations sum Up to Same LEvels
-tb_nN_by_nQ_A_alpha_mesh_rho %>%
-  group_by(fl_rho) %>%
-  mutate(N_opti_all_sum = sum(dplyr_eval_opti)) %>% top_n(10) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
-
 # Show
 kable(tb_nN_by_nQ_A_alpha_mesh_rho[1:50,]) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
-```
 
-
-### Graphical Illustration of Optimal Allocation
-
-```{r}
+#' 
+#' 
+#' ### Graphical Illustration of Optimal Allocation
+#' 
+## ------------------------------------------------------------------------
 tb_hev_lin <- as_tibble(mt_hev_lin) %>% mutate(id = row_number())
 
 lineplot_lin <- tb_hev_lin %>%
@@ -329,15 +322,15 @@ lineplot_lin <- tb_hev_lin %>%
                            breaks = tb_hev_lin$V1)
 print(lineplot_lin)
 
-```
 
-## Optimal LogLinear Allocation
-
-This also works with any CRS CES.
-
-### Optimal LogLinear Allocation Hard-Coded
-
-```{r Optimal Loglinear Allocation}
+#' 
+#' ## Optimal LogLinear Allocation
+#' 
+#' This also works with any CRS CES.
+#' 
+#' ### Optimal LogLinear Allocation Hard-Coded
+#' 
+## ----Optimal Loglinear Allocation----------------------------------------
 
 mt_hev_log = matrix(, nrow = length(ar_rho), ncol = 2)
 
@@ -386,4 +379,4 @@ lineplot_log <- tb_hev_log %>%
                            breaks = tb_hev_log$V1)
 print(lineplot_log)
 
-```
+

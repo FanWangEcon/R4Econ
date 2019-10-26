@@ -1,5 +1,5 @@
 ---
-title: "Evaluate Nonlinear Function with N arrays of Inputs"
+title: "DPLYR Evaluate Nonlinear Function with N arrays of Inputs"
 output:
   pdf_document: default
   word_document: default
@@ -11,7 +11,7 @@ always_allow_html: yes
 
 Go back to [fan](http://fanwangecon.github.io/CodeDynaAsset/)'s [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
 
-## Issue and Goal 
+## Issue and Goal
 
 We want evaluate nonlinear function f(Q_i, y_i, ar_x, ar_y, c, d), where c and d are constants, and ar_x and ar_y are arrays, both fixed. x_i and y_i vary over each row of matrix. We would like to evaluate this nonlinear function concurrently across $N$ individuals. The eventual goal is to find the $i$ specific $Q$ that solves the nonlinear equations.
 
@@ -89,12 +89,12 @@ Implement the non-linear problem's evaluation using apply over all $N$ individua
 ffi_nonlin_dplyrdo <- function(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, fl_rho){
   # ar_A_alpha[1] is A
   # ar_A_alpha[2] is alpha
-    
+
   # # Test Parameters
   # fl_N = 100
   # fl_rho = -1
   # fl_N_q = 10
-  
+
   # Apply Function
   ar_p1_s1 = exp((fl_A - ar_A)*fl_rho)
   ar_p1_s2 = (fl_alpha/ar_alpha)
@@ -102,23 +102,23 @@ ffi_nonlin_dplyrdo <- function(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, f
   ar_p1 = (ar_p1_s1*ar_p1_s2)^ar_p1_s3
   ar_p2 = fl_N^((fl_alpha*fl_rho-1)/(ar_alpha*fl_rho-1))
   ar_overall = ar_p1*ar_p2
-  fl_overall = fl_N_agg - sum(ar_overall)  
-  
+  fl_overall = fl_N_agg - sum(ar_overall)
+
   return(fl_overall)
 }
 
 # Parameters
 fl_rho = -1
 
-# Evaluate Function 
+# Evaluate Function
 print(ffi_nonlin_dplyrdo(mt_nN_by_nQ_A_alpha[1,1],
                          mt_nN_by_nQ_A_alpha[1,2],
-                         mt_nN_by_nQ_A_alpha[1,3]*fl_N_agg, 
+                         mt_nN_by_nQ_A_alpha[1,3]*fl_N_agg,
                          ar_nN_A, ar_nN_alpha, fl_N_agg, fl_rho))
 for (i in seq(1,dim(mt_nN_by_nQ_A_alpha)[1])){
-  fl_eval = ffi_nonlin_dplyrdo(mt_nN_by_nQ_A_alpha[i,1], 
-                               mt_nN_by_nQ_A_alpha[i,2], 
-                               mt_nN_by_nQ_A_alpha[i,3]*fl_N_agg, 
+  fl_eval = ffi_nonlin_dplyrdo(mt_nN_by_nQ_A_alpha[i,1],
+                               mt_nN_by_nQ_A_alpha[i,2],
+                               mt_nN_by_nQ_A_alpha[i,3]*fl_N_agg,
                                ar_nN_A, ar_nN_alpha, fl_N_agg, fl_rho)
   print(fl_eval)
 }
@@ -133,14 +133,14 @@ tb_nN_by_nQ_A_alpha <- as_tibble(mt_nN_by_nQ_A_alpha) %>% rename_all(~c(ar_st_co
 
 # Define Implicit Function
 ffi_nonlin_dplyrdo <- function(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, fl_rho){
-    
+
   # Test Parameters
   # ar_A = ar_nN_A
   # ar_alpha = ar_nN_alpha
   # fl_N = 100
   # fl_rho = -1
   # fl_N_q = 10
-  
+
   # Apply Function
   ar_p1_s1 = exp((fl_A - ar_A)*fl_rho)
   ar_p1_s2 = (fl_alpha/ar_alpha)
@@ -154,8 +154,8 @@ ffi_nonlin_dplyrdo <- function(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, f
 }
 
 # fl_A, fl_alpha are from columns of tb_nN_by_nQ_A_alpha
-tb_nN_by_nQ_A_alpha = tb_nN_by_nQ_A_alpha %>% rowwise() %>% 
-                        mutate(dplyr_eval = ffi_nonlin_dplyrdo(fl_A, fl_alpha, fl_N, 
+tb_nN_by_nQ_A_alpha = tb_nN_by_nQ_A_alpha %>% rowwise() %>%
+                        mutate(dplyr_eval = ffi_nonlin_dplyrdo(fl_A, fl_alpha, fl_N,
                                                                ar_nN_A, ar_nN_alpha,
                                                                fl_N_agg, fl_rho))
 # Show

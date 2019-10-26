@@ -1,9 +1,9 @@
 ---
-title: "R Tibble Basics"
+title: "R DPLYR Tibble Basics"
 output:
-  pdf_document: default
-  word_document: default
   html_document: default
+  word_document: default
+  pdf_document: default
   html_notebook: default
 urlcolor: blue
 always_allow_html: yes
@@ -13,7 +13,7 @@ Go back to [fan](http://fanwangecon.github.io/CodeDynaAsset/)'s [R4Econ](https:/
 
 
 ```{r GlobalOptions, echo = T, results = 'hide', message=F, warning=F}
-rm(list = ls(all.names = TRUE)) 
+rm(list = ls(all.names = TRUE))
 options(knitr.duplicate.label = 'allow')
 ```
 
@@ -21,7 +21,7 @@ options(knitr.duplicate.label = 'allow')
 library(tidyverse)
 library(knitr)
 library(kableExtra)
-library(R4Econ) 
+library(R4Econ)
 # file name
 st_file_name = 'fs_tib_basics'
 # Generate R File
@@ -61,9 +61,9 @@ ar_st_varnames <- paste0('tibcolvar', c(1,2,3))
 tb_combine <- as_tibble(mt_combine) %>% rename_all(~c(ar_st_varnames))
 
 # Display
-kable(mt_combine) %>% 
+kable(mt_combine) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
-kable(tb_combine) %>% 
+kable(tb_combine) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 ```
 
@@ -78,13 +78,33 @@ colnames(tb_iris)
 summary(tb_iris)
 ```
 
+## Tibble Sorting
+
+- dplyr arrange desc reverse
+- dplyr sort
+
+```{r}
+# Sort in Ascending Order
+tb_iris %>% select(Species, Sepal.Length, everything()) %>%
+  arrange(Species, Sepal.Length) %>% head(10) %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
+
+# Sort in Descending Order
+tb_iris %>% select(Species, Sepal.Length, everything()) %>%
+  arrange(desc(Species), desc(Sepal.Length)) %>% head(10) %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
+```
+
+
 # R4Econ Function
 
 ## R4Econ Summarize over Tible
-Use R4Econ's summary tool. 
+Use R4Econ's summary tool.
 
 ```{r}
 df_summ_stats <- ff_summ_percentiles(tb_iris)
-kable(t(df_summ_stats)) %>% 
+kable(t(df_summ_stats)) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 ```

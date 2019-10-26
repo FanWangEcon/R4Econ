@@ -1782,15 +1782,137 @@ purl(paste0(st_file_name, &quot;.Rmd&quot;), output=paste0(st_file_name, &quot;.
 <p>Rmarkdown has a conversion program: <a href="https://rmarkdown.rstudio.com/docs/reference/convert_ipynb.html">convert_ipynb</a>.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBDb252ZXJ0IGZyb20gSVBZTkIgdG8gUk1EXG5maWxlX25iX3JtZCA9IHJtYXJrZG93bjo6OmNvbnZlcnRfaXB5bmIoc3B0X2ZpbGVfZnVsbF9pcHluYilcblxuYGBgIn0= -->
-<pre class="r"><code># Convert from IPYNB to RMD
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBHZW5lcmF0ZSBQYXRoc1xuc3B0X2ZpbGVfcm9vdCA9ICdDOi9Vc2Vycy9mYW4vU3RhdDRFY29uL2Rlc2NyaXB0aXZlLydcbnNwdF9maWxlX25hbWUgPSAnRGF0YUJhc2tldGJhbGwnXG5zcHRfZmlsZV9mdWxsX2lweW5iID0gcGFzdGUwKHNwdF9maWxlX3Jvb3QsIHNwdF9maWxlX25hbWUsICcuaXB5bmInKVxuc3B0X2ZpbGVfZnVsbF9ybWQgPSBwYXN0ZTAoc3B0X2ZpbGVfcm9vdCwgc3B0X2ZpbGVfbmFtZSwgJy5ybWQnKVxuXG4jIENvbnZlcnQgZnJvbSBJUFlOQiB0byBSTURcbmZpbGVfbmJfcm1kID0gcm1hcmtkb3duOjo6Y29udmVydF9pcHluYihzcHRfZmlsZV9mdWxsX2lweW5iKVxuc3RfbmJfcm1kID0geGZ1bjo6ZmlsZV9zdHJpbmcoZmlsZV9uYl9ybWQpXG5cbiMgU2F2ZSBSTURcbmZpbGVDb25uIDwtIGZpbGUoc3B0X2ZpbGVfZnVsbF9ybWQpXG53cml0ZUxpbmVzKHN0X25iX3JtZCwgZmlsZUNvbm4pXG5jbG9zZShmaWxlQ29ubilcblxuIyBDb252ZXJ0IHRvIFBERiBhbmQgSFRNTFxucm1hcmtkb3duOjpyZW5kZXIoc3B0X2ZpbGVfZnVsbF9ybWQsIFwicGRmX2RvY3VtZW50XCIpXG5gYGAifQ== -->
+<pre class="r"><code># Generate Paths
+spt_file_root = &#39;C:/Users/fan/Stat4Econ/descriptive/&#39;
+spt_file_name = &#39;DataBasketball&#39;
+spt_file_full_ipynb = paste0(spt_file_root, spt_file_name, &#39;.ipynb&#39;)
+spt_file_full_rmd = paste0(spt_file_root, spt_file_name, &#39;.rmd&#39;)
+
+# Convert from IPYNB to RMD
 file_nb_rmd = rmarkdown:::convert_ipynb(spt_file_full_ipynb)
-</code></pre>
+st_nb_rmd = xfun::file_string(file_nb_rmd)
+
+# Save RMD
+fileConn &lt;- file(spt_file_full_rmd)
+writeLines(st_nb_rmd, fileConn)
+close(fileConn)
+
+# Convert to PDF and HTML
+rmarkdown::render(spt_file_full_rmd, &quot;pdf_document&quot;)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3I6IGxleGljYWwgZXJyb3I6IGludmFsaWQgY2hhciBpbiBqc29uIHRleHQuXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBDOi9Vc2Vycy9mYW4vU3RhdDRFY29uL2Rlc2NyaXB0XG4gICAgICAgICAgICAgICAgICAgICAocmlnaHQgaGVyZSkgLS0tLS0tXlxuIn0= -->
-<pre><code>Error: lexical error: invalid char in json text.
-                                       C:/Users/fan/Stat4Econ/descript
-                     (right here) ------^</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiXG5cbnByb2Nlc3NpbmcgZmlsZTogRGF0YUJhc2tldGJhbGwucm1kXG4ifQ== -->
+<pre><code>
+
+processing file: DataBasketball.rmd</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMCVcbiAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gIHwuLi4uLi4uLi4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDE0JVxuICBvcmRpbmFyeSB0ZXh0IHdpdGhvdXQgUiBjb2RlXG5cblxuICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgfC4uLi4uLi4uLi4uLi4uLi4uLi4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMjklXG5sYWJlbDogdW5uYW1lZC1jaHVuay0yXG4ifQ== -->
+<pre><code>
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |.........                                                        |  14%
+  ordinary text without R code
+
+
+  |                                                                       
+  |...................                                              |  29%
+label: unnamed-chunk-2</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWW91IGNoYW5nZWQgdGhlIHdvcmtpbmcgZGlyZWN0b3J5IHRvIEM6L1VzZXJzL2Zhbi9TdGF0NEVjb24vZGF0YSAocHJvYmFibHkgdmlhIHNldHdkKCkpLiBJdCB3aWxsIGJlIHJlc3RvcmVkIHRvIEM6L1VzZXJzL2Zhbi9TdGF0NEVjb24vZGVzY3JpcHRpdmUuIFNlZSB0aGUgTm90ZSBzZWN0aW9uIGluID9rbml0cjo6a25pdFxuIn0= -->
+<pre><code>You changed the working directory to C:/Users/fan/Stat4Econ/data (probably via setwd()). It will be restored to C:/Users/fan/Stat4Econ/descriptive. See the Note section in ?knitr::knit</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA0MyVcbiAgb3JkaW5hcnkgdGV4dCB3aXRob3V0IFIgY29kZVxuXG5cbiAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gIHwuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDU3JVxubGFiZWw6IHVubmFtZWQtY2h1bmstM1xuXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLiAgICAgICAgICAgICAgICAgICB8ICA3MSVcbiAgb3JkaW5hcnkgdGV4dCB3aXRob3V0IFIgY29kZVxuXG5cbiAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gIHwuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLiAgICAgICAgIHwgIDg2JVxubGFiZWw6IHVubmFtZWQtY2h1bmstNFxuXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi58IDEwMCVcbiAgb3JkaW5hcnkgdGV4dCB3aXRob3V0IFIgY29kZVxuIn0= -->
+<pre><code>
+  |                                                                       
+  |............................                                     |  43%
+  ordinary text without R code
+
+
+  |                                                                       
+  |.....................................                            |  57%
+label: unnamed-chunk-3
+
+  |                                                                       
+  |..............................................                   |  71%
+  ordinary text without R code
+
+
+  |                                                                       
+  |........................................................         |  86%
+label: unnamed-chunk-4
+
+  |                                                                       
+  |.................................................................| 100%
+  ordinary text without R code</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoib3V0cHV0IGZpbGU6IERhdGFCYXNrZXRiYWxsLmtuaXQubWRcbiJ9 -->
+<pre><code>output file: DataBasketball.knit.md</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXCJDOi9Qcm9ncmFtIEZpbGVzL1JTdHVkaW8vYmluL3BhbmRvYy9wYW5kb2NcIiArUlRTIC1LNTEybSAtUlRTIERhdGFCYXNrZXRiYWxsLnV0ZjgubWQgLS10byBsYXRleCAtLWZyb20gbWFya2Rvd24rYXV0b2xpbmtfYmFyZV91cmlzK2FzY2lpX2lkZW50aWZpZXJzK3RleF9tYXRoX3NpbmdsZV9iYWNrc2xhc2ggLS1vdXRwdXQgRGF0YUJhc2tldGJhbGwudGV4IC0tdGVtcGxhdGUgXCJDOlxcVXNlcnNcXGZhblxcRG9jdW1lbnRzXFxSXFx3aW4tbGlicmFyeVxcMy42XFxybWFya2Rvd25cXHJtZFxcbGF0ZXhcXGRlZmF1bHQtMS4xNy4wLjIudGV4XCIgLS1oaWdobGlnaHQtc3R5bGUgdGFuZ28gLS1wZGYtZW5naW5lIHBkZmxhdGV4IC0tdmFyaWFibGUgZ3JhcGhpY3M9eWVzIC0tdmFyaWFibGUgXCJnZW9tZXRyeTptYXJnaW49MWluXCIgLS12YXJpYWJsZSBcImNvbXBhY3QtdGl0bGU6eWVzXCIgXG4ifQ== -->
+<pre><code>&quot;C:/Program Files/RStudio/bin/pandoc/pandoc&quot; +RTS -K512m -RTS DataBasketball.utf8.md --to latex --from markdown+autolink_bare_uris+ascii_identifiers+tex_math_single_backslash --output DataBasketball.tex --template &quot;C:\Users\fan\Documents\R\win-library\3.6\rmarkdown\rmd\latex\default-1.17.0.2.tex&quot; --highlight-style tango --pdf-engine pdflatex --variable graphics=yes --variable &quot;geometry:margin=1in&quot; --variable &quot;compact-title:yes&quot; </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5PdXRwdXQgY3JlYXRlZDogRGF0YUJhc2tldGJhbGwucGRmXG4ifQ== -->
+<pre><code>
+Output created: DataBasketball.pdf</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucm1hcmtkb3duOjpyZW5kZXIoc3B0X2ZpbGVfZnVsbF9ybWQsIFwiaHRtbF9kb2N1bWVudFwiKVxuYGBgIn0= -->
+<pre class="r"><code>rmarkdown::render(spt_file_full_rmd, &quot;html_document&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5cbnByb2Nlc3NpbmcgZmlsZTogRGF0YUJhc2tldGJhbGwucm1kXG4ifQ== -->
+<pre><code>
+
+processing file: DataBasketball.rmd</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMCVcbiAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gIHwuLi4uLi4uLi4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDE0JVxuICBvcmRpbmFyeSB0ZXh0IHdpdGhvdXQgUiBjb2RlXG5cblxuICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgfC4uLi4uLi4uLi4uLi4uLi4uLi4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMjklXG5sYWJlbDogdW5uYW1lZC1jaHVuay0xXG4ifQ== -->
+<pre><code>
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |.........                                                        |  14%
+  ordinary text without R code
+
+
+  |                                                                       
+  |...................                                              |  29%
+label: unnamed-chunk-1</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWW91IGNoYW5nZWQgdGhlIHdvcmtpbmcgZGlyZWN0b3J5IHRvIEM6L1VzZXJzL2Zhbi9TdGF0NEVjb24vZGF0YSAocHJvYmFibHkgdmlhIHNldHdkKCkpLiBJdCB3aWxsIGJlIHJlc3RvcmVkIHRvIEM6L1VzZXJzL2Zhbi9TdGF0NEVjb24vZGVzY3JpcHRpdmUuIFNlZSB0aGUgTm90ZSBzZWN0aW9uIGluID9rbml0cjo6a25pdFxuIn0= -->
+<pre><code>You changed the working directory to C:/Users/fan/Stat4Econ/data (probably via setwd()). It will be restored to C:/Users/fan/Stat4Econ/descriptive. See the Note section in ?knitr::knit</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA0MyVcbiAgb3JkaW5hcnkgdGV4dCB3aXRob3V0IFIgY29kZVxuXG5cbiAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gIHwuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDU3JVxubGFiZWw6IHVubmFtZWQtY2h1bmstMlxuXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLiAgICAgICAgICAgICAgICAgICB8ICA3MSVcbiAgb3JkaW5hcnkgdGV4dCB3aXRob3V0IFIgY29kZVxuXG5cbiAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gIHwuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLiAgICAgICAgIHwgIDg2JVxubGFiZWw6IHVubmFtZWQtY2h1bmstM1xuXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi58IDEwMCVcbiAgb3JkaW5hcnkgdGV4dCB3aXRob3V0IFIgY29kZVxuIn0= -->
+<pre><code>
+  |                                                                       
+  |............................                                     |  43%
+  ordinary text without R code
+
+
+  |                                                                       
+  |.....................................                            |  57%
+label: unnamed-chunk-2
+
+  |                                                                       
+  |..............................................                   |  71%
+  ordinary text without R code
+
+
+  |                                                                       
+  |........................................................         |  86%
+label: unnamed-chunk-3
+
+  |                                                                       
+  |.................................................................| 100%
+  ordinary text without R code</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoib3V0cHV0IGZpbGU6IERhdGFCYXNrZXRiYWxsLmtuaXQubWRcbiJ9 -->
+<pre><code>output file: DataBasketball.knit.md</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXCJDOi9Qcm9ncmFtIEZpbGVzL1JTdHVkaW8vYmluL3BhbmRvYy9wYW5kb2NcIiArUlRTIC1LNTEybSAtUlRTIERhdGFCYXNrZXRiYWxsLnV0ZjgubWQgLS10byBodG1sNCAtLWZyb20gbWFya2Rvd24rYXV0b2xpbmtfYmFyZV91cmlzK2FzY2lpX2lkZW50aWZpZXJzK3RleF9tYXRoX3NpbmdsZV9iYWNrc2xhc2grc21hcnQgLS1vdXRwdXQgRGF0YUJhc2tldGJhbGwuaHRtbCAtLWVtYWlsLW9iZnVzY2F0aW9uIG5vbmUgLS1zZWxmLWNvbnRhaW5lZCAtLXN0YW5kYWxvbmUgLS1zZWN0aW9uLWRpdnMgLS10ZW1wbGF0ZSBcIkM6XFxVc2Vyc1xcZmFuXFxEb2N1bWVudHNcXFJcXHdpbi1saWJyYXJ5XFwzLjZcXHJtYXJrZG93blxccm1kXFxoXFxkZWZhdWx0Lmh0bWxcIiAtLW5vLWhpZ2hsaWdodCAtLXZhcmlhYmxlIGhpZ2hsaWdodGpzPTEgLS12YXJpYWJsZSBcInRoZW1lOmJvb3RzdHJhcFwiIC0taW5jbHVkZS1pbi1oZWFkZXIgXCJDOlxcVXNlcnNcXGZhblxcQXBwRGF0YVxcTG9jYWxcXFRlbXBcXFJ0bXBNejZTQ1dcXHJtYXJrZG93bi1zdHJlNGZjNjBmYzY0NDUuaHRtbFwiIC0tbWF0aGpheCAtLXZhcmlhYmxlIFwibWF0aGpheC11cmw6aHR0cHM6Ly9tYXRoamF4LnJzdHVkaW8uY29tL2xhdGVzdC9NYXRoSmF4LmpzP2NvbmZpZz1UZVgtQU1TLU1NTF9IVE1Mb3JNTUxcIiBcbiJ9 -->
+<pre><code>&quot;C:/Program Files/RStudio/bin/pandoc/pandoc&quot; +RTS -K512m -RTS DataBasketball.utf8.md --to html4 --from markdown+autolink_bare_uris+ascii_identifiers+tex_math_single_backslash+smart --output DataBasketball.html --email-obfuscation none --self-contained --standalone --section-divs --template &quot;C:\Users\fan\Documents\R\win-library\3.6\rmarkdown\rmd\h\default.html&quot; --no-highlight --variable highlightjs=1 --variable &quot;theme:bootstrap&quot; --include-in-header &quot;C:\Users\fan\AppData\Local\Temp\RtmpMz6SCW\rmarkdown-stre4fc60fc6445.html&quot; --mathjax --variable &quot;mathjax-url:https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot; </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5PdXRwdXQgY3JlYXRlZDogRGF0YUJhc2tldGJhbGwuaHRtbFxuIn0= -->
+<pre><code>
+Output created: DataBasketball.html</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 </div>
