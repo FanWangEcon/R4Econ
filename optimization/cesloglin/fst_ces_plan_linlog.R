@@ -257,7 +257,7 @@ ffi_linear_dplyrdo <- function(fl_A, fl_alpha, fl_rho, ar_A, ar_alpha, fl_N_agg)
   
   # overall
   fl_opti_equa = fl_p1_s3 / sum(ar_p2)
-  fl_opti_equa = pmin(fl_N_agg, pmax(0, fl_opti_equa))
+  # fl_opti_equa = pmin(fl_N_agg, pmax(0, fl_opti_equa))
 
 
   return(fl_opti_equa)
@@ -295,9 +295,17 @@ tb_nN_by_nQ_A_alpha_mesh_rho <- tb_nN_by_nQ_A_alpha %>% expand_grid(fl_rho = ar_
 
 # fl_A, fl_alpha are from columns of tb_nN_by_nQ_A_alpha
 tb_nN_by_nQ_A_alpha_mesh_rho = tb_nN_by_nQ_A_alpha_mesh_rho %>% rowwise() %>% 
-                        mutate(dplyr_eval_opti = ffi_linear_dplyrdo(fl_A, fl_alpha, fl_rho,
+                              mutate(dplyr_eval_opti = ffi_linear_dplyrdo(fl_A, fl_alpha, fl_rho,
                                                                     ar_Ai_lin, ar_alphai_lin,
-                                                                    fl_N_agg))
+                                                                    fl_N_agg)) %>%
+                              ungroup()
+
+# Check if Total Allocations sum Up to Same Level for Each RHO
+tb_nN_by_nQ_A_alpha_mesh_rho %>%
+  group_by(fl_rho) %>%
+  summarise(N_opti_all_sum = sum(dplyr_eval_opti))%>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 
 # Show
 kable(tb_nN_by_nQ_A_alpha_mesh_rho[1:50,]) %>%
