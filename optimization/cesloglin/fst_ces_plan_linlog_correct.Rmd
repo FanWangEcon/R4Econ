@@ -150,7 +150,7 @@ fl_N_agg = sum(ar_prot_data)
 
 # Vector of Planner Preference
 ar_rho = c(seq(-200, -100, length.out=5), seq(-100, -25, length.out=5), seq(-25, -5, length.out=5), seq(-5, -1, length.out=5), seq(-1, -0.01, length.out=5), seq(0.01, 0.25, length.out=5), seq(0.25, 0.99, length.out=5))
-ar_rho = c(-2)
+ar_rho = c(-50)
 ar_rho = unique(ar_rho)
 ```
 
@@ -177,15 +177,67 @@ for (it_rho_ctr in seq(1,length(ar_rho))) {
 
   # c. Generate Rank Index
   tb_opti <- tb_opti %>% arrange(rank_val) %>% mutate(rank_idx = row_number())
-  
+
   # d. Populate lowest index alpha, beta, and A to all rows
+  tb_opti <- tb_opti %>% mutate(lowest_rank_A = A[rank_idx==1]) %>%
+                mutate(lowest_rank_alpha = alpha[rank_idx==1]) %>%
+                mutate(lowest_rank_beta = beta[rank_idx==1])
   
-  # d. relative slope and relative intercept with respect to lowest index
+  # e. relative slope and relative intercept with respect to lowest index
+  tb_opti <- tb_opti %>% 
+                mutate(rela_slope_to_lowest = 
+                         (((lowest_rank_alpha*lowest_rank_beta)/(alpha*beta))^(1/(rho-1))*(lowest_rank_alpha/alpha))
+                      ) %>%
+                mutate(rela_intercept_to_lowest = 
+                         ((((lowest_rank_alpha*lowest_rank_beta)/(alpha*beta))^(1/(rho-1))*(lowest_rank_A/alpha)) - (A/alpha))
+                      )
+
+  # f. cumulative sums
+  tb_opti <- tb_opti %>% 
+                mutate(rela_slope_to_lowest_cumsum = 
+                         cumsum(rela_slope_to_lowest)
+                      ) %>%
+                mutate(rela_intercept_to_lowest_cumsum = 
+                         cumsum(rela_intercept_to_lowest)
+                      )
+  
+  # g. inverting cumulative slopes and intercepts
+  tb_opti <- tb_opti %>% 
+                mutate(rela_slope_to_lowest_cumsum_invert = 
+                         (1/rela_slope_to_lowest_cumsum)
+                      ) %>%
+                mutate(rela_intercept_to_lowest_cumsum_invert = 
+                         ((-1)*(rela_intercept_to_lowest_cumsum)/(rela_slope_to_lowest_cumsum))
+                      )
+  
+  # h. Relative x-intercept points
+  tb_opti <- tb_opti %>% 
+                mutate(rela_x_intercept = 
+                         (-1)*(rela_intercept_to_lowest/rela_slope_to_lowest)
+                      ) 
+  
+  # i. Inverted relative x-intercepts
+  tb_opti <- tb_opti %>% 
+                mutate(rela_x_intercept_cumsuminvert_spline_knots = 
+                         (rela_intercept_to_lowest_cumsum + rela_slope_to_lowest_cumsum*rela_x_intercept)
+                      ) 
+  
+  # j. Sort by order of receiving transfers/subsidies
+  tb_opti <- tb_opti %>% arrange(rela_x_intercept)
+  
 }
 
-
-
-
+# lineplot <- tb_opti %>% 
+#     gather(variable, value, -month) %>%
+#     ggplot(aes(x=month, y=value, colour=variable, linetype=variable)) +
+#         geom_line() +
+#         geom_point() +
+#         labs(title = 'Mean and SD of Temperature Acorss US Cities',
+#              x = 'Months',
+#              y = 'Temperature in Fahrenheit',
+#              caption = 'Temperature data 2017') +
+#         scale_x_continuous(labels = as.character(df_temp_mth_summ$month),
+#                            breaks = df_temp_mth_summ$month)
 
 ```
 

@@ -24,11 +24,16 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 ## 1.1 Aggregation
 
 1. [Count Unique Groups and Mean within Groups](https://fanwangecon.github.io/R4Econ/summarize/aggregate/fs_group_unique_agg.html): r \| ref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/fs_group_unique_agg.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/fs_group_unique_agg.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/summarize/aggregate/fs_group_unique_agg.html)
+    + Unique groups defined by multiple values and count obs within group
+    + Mean, sd, observation count for non-NA within unique groups
     + **tidy**: *group_by() + summarise(n()); group_by() + summarise_if(is.numeric, funs(mean = mean(., na.rm = TRUE), n = sum(is.na(.)==0)))*
 
 ## 1.2 Sorting and Index
 
-1. [Sorted Index and Expand Value from One Row](https://fanwangecon.github.io/R4Econ/summarize/index/fs_index_populate.html): r \| ref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index/fs_index_populate.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index/fs_index_populate.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/summarize/index/fs_index_populate.html)
+1. [Sorted Index, Interval Index and Expand Value from One Row](https://fanwangecon.github.io/R4Econ/summarize/index/fs_index_populate.html): r \| ref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index/fs_index_populate.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index/fs_index_populate.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/summarize/index/fs_index_populate.html)
+    + Sort and generate index for rows
+    + Generate negative and positive index based on deviations
+    + Populate Values from one row to other rows
     + **tidy**: *arrange + row_number(); mutate(lowest = min(Sepal.Length)); case_when(row_number()==x ~ Septal.Length); mutate(Sepal.New = Sepal.Length[Sepal.Index == 1])*
 
 ## 1.3 Tabulate and Counting
