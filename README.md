@@ -19,14 +19,19 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 [![](https://img.shields.io/github/last-commit/fanwangecon/R4Econ)](https://github.com/FanWangEcon/R4Econ/commits/master) [![](https://img.shields.io/github/commit-activity/m/fanwangecon/R4Econ)](https://github.com/FanWangEcon/R4Econ/graphs/commit-activity) [![](https://img.shields.io/github/issues/fanwangecon/R4Econ)](https://github.com/FanWangEcon/R4Econ/issues) [![](https://img.shields.io/github/issues-pr/fanwangecon/R4Econ)](https://github.com/FanWangEcon/R4Econ/pulls)
 
-# 1. Summary Statistics
+# 1. DPLYR Basic Data Wrangling
 
-## 1.1 Basic Aggregation
+## 1.1 Aggregation
 
 1. [Count Unique Groups and Mean within Groups](https://fanwangecon.github.io/R4Econ/summarize/aggregate/fs_group_unique_agg.html): r \| ref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/fs_group_unique_agg.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/fs_group_unique_agg.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/summarize/aggregate/fs_group_unique_agg.html)
     + **tidy**: *group_by() + summarise(n()); group_by() + summarise_if(is.numeric, funs(mean = mean(., na.rm = TRUE), n = sum(is.na(.)==0)))*
 
-## 1.2 Tabulate and Counting
+## 1.2 Sorting and Index
+
+1. [Sorted Index and Expand Value from One Row](https://fanwangecon.github.io/R4Econ/summarize/index/fs_index_populate.html): r \| ref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index/fs_index_populate.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index/fs_index_populate.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/summarize/index/fs_index_populate.html)
+    + **tidy**: *arrange + row_number(); mutate(lowest = min(Sepal.Length)); case_when(row_number()==x ~ Septal.Length); mutate(Sepal.New = Sepal.Length[Sepal.Index == 1])*
+
+## 1.3 Tabulate and Counting
 
 1. [Tabulation Categorical as Matrix](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/tabulate/ListUniqueCateNAsMat.R): ipynb | [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/tabulate/ListUniqueCateNAsMat.R) | html | pdf
     + Many-Category Categorical Variable, Tabulation shown as Matrix.
@@ -38,7 +43,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
     + By Groups, Count Unique Individuals and non-NA observations of other Variables.
     + **tidy**: *group_by + mutate_if + mutate + n_distinct + slice(1L)*
 
-## 1.3 Averaging
+## 1.4 Averaging
 
 1. [All Variables Summary Stats](https://github.com/FanWangEcon/R4Econ/blob/master/R/ff_summ_percentiles.R): [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/R/ff_summ_percentiles.R) | [html](https://fanwangecon.github.io/R4Econ/reference/ff_summ_percentiles.html)
     + All Variables: N + NAcount + Mean + SD + Percentiles.

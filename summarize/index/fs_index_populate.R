@@ -1,5 +1,5 @@
 #' ---
-#' title: "R Example DPLYR Generated Sorted Index and Expand Value from an Index to All Rows"
+#' title: "R Example DPLYR Generate Sorted Index and Expand Value from Lowest Index to All Rows"
 #' output:
 #'   pdf_document: default
 #'   word_document: default
@@ -11,12 +11,12 @@
 #' 
 #' Go back to [fan](http://fanwangecon.github.io/CodeDynaAsset/)'s [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
 #' 
-## ----GlobalOptions, echo = T, results = 'hide', message=F, warning=F-----------------------------------------------------
+## ----GlobalOptions, echo = T, results = 'hide', message=F, warning=F-----
 rm(list = ls(all.names = TRUE))
 options(knitr.duplicate.label = 'allow')
 
 #' 
-## ----loadlib, echo = T, results = 'hide', message=F, warning=F-----------------------------------------------------------
+## ----loadlib, echo = T, results = 'hide', message=F, warning=F-----------
 library(tidyverse)
 library(knitr)
 library(kableExtra)
@@ -37,51 +37,77 @@ purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentat
 #' There is a variable, sort by this variable, then generate index from 1 to N representing sorted values of this index. If there are repeating values, still assign index, different index each value. 
 #' 
 #' - r generate index sort
+#' - dplyr mutate equals index
 #' 
-## ------------------------------------------------------------------------------------------------------------------------
-# dataset subsetting
-df_iris <- iris %>% arrange(Sepal.Length) %>% mutate(Sepal.Length.Index = row_number())
+## ------------------------------------------------------------------------
+# Sort and generate variable equal to sorted index
+df_iris <- iris %>% arrange(Sepal.Length) %>% 
+              mutate(Sepal.Length.Index = row_number()) %>%
+              select(Sepal.Length, Sepal.Length.Index, everything())
 
 # Show results Head 10
-df_iris %>%
+df_iris %>% head(10) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 
 #' 
-#' ## Aggrgate Groups only Unique Group Show up With Means
+#' ## Populate Value from Lowest Index to All other Rows
 #' 
-#' Several variables that are grouping identifiers. Several variables that are values which mean be unique for each group members. For example, a Panel of income for N households over T years with also household education information that is invariant over time. Want to generate a dataset where the unit of observation are households, rather than household years. Take average of all numeric variables that are household and year specific.
+#' We would like to calculate for example the ratio of each individual's highest to the the person with the lowest height in a dataset. We first need to generated sorted index from lowest to highest, and then populate the lowest height to all rows, and then divide. 
 #' 
-#' A complicating factor potentially is that the number of observations differ within group, for example, income might be observed for all years for some households but not for other households.
 #' 
-#' - r dplyr aggregate group average
-#' - Aggregating and analyzing data with dplyr
-#' - column can't be modified because it is a grouping variable
-#' - see also: [Aggregating and analyzing data with dplyr](https://datacarpentry.org/dc_zurich/R-ecology/04-dplyr.html)
+#' *Search Terms*:
 #' 
-## ------------------------------------------------------------------------------------------------------------------------
-# In the df_hgt_wgt from R4Econ, there is a country id, village id,
-# and individual id, and various other statistics
-vars.group <- c('S.country', 'vil.id', 'indi.id')
-vars.values <- c('hgt', 'momEdu')
-
-# dataset subsetting
-df_use <- df_hgt_wgt %>% select(!!!syms(c(vars.group, vars.values)))
-
-# Group, count and generate means for each numeric variables
-df.group <- df_use %>% group_by(!!!syms(vars.group)) %>%
-            arrange(!!!syms(vars.group)) %>%
-            summarise_if(is.numeric,
-                         funs(mean = mean(., na.rm = TRUE),
-                              sd = sd(., na.rm = TRUE),
-                              n = sum(is.na(.)==0)))
+#' - r spread value to all rows from one row
+#' - r other rows equal to the value of one row
+#' - Conditional assignment of one variable to the value of one of two other variables
+#' - dplyr mutate conditional
+#' - dplyr value from one row to all rows
+#' - dplyr mutate equal to value in another cell
+#' 
+#' *Links*:
+#' 
+#' - see: dplyr [rank](https://dplyr.tidyverse.org/reference/ranking.html)
+#' - see: dplyr [case_when](https://dplyr.tidyverse.org/reference/case_when.html)
+#' 
+#' ### Short Method: mutate and min
+#' 
+#' We just want the lowest value to be in its own column, so that we can compute various statistics using the lowest value variable and the original variable.
+#' 
+## ------------------------------------------------------------------------
+# 1. Sort
+df_iris_m1 <- iris %>% mutate(Sepal.Length.Lowest.all = min(Sepal.Length)) %>%
+                select(Sepal.Length, Sepal.Length.Lowest.all, everything())
+              
 
 # Show results Head 10
-df.group %>% head(10) %>%
+df_iris_m1 %>% head(10) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+
+#' 
+#' ### Long Method: row_number and case_when
+#' 
+#' This is the long method, using row_number, and case_when. The benefit of this method is that it generates several intermediate variables that might be useful. And the key final step is to set a new variable (A=*Sepal.Length.Lowest.all*) equal to another variable's (B=*Sepal.Length*'s) value at the index that satisfies condition based a third variable (C=*Sepal.Length.Index*).
+#' 
+## ------------------------------------------------------------------------
+# 1. Sort
+# 2. generate index
+# 3. value at lowest index (case_when)
+# 4. spread value from lowest index to other rows
+# Note step 4 does not require step 3
+df_iris_m2 <- iris %>% arrange(Sepal.Length) %>% 
+              mutate(Sepal.Length.Index = row_number()) %>%
+              mutate(Sepal.Length.Lowest.one = 
+                       case_when(row_number()==1 ~ Sepal.Length)) %>%
+              mutate(Sepal.Length.Lowest.all = 
+                       Sepal.Length[Sepal.Length.Index==1]) %>%
+              select(Sepal.Length, Sepal.Length.Index, 
+                     Sepal.Length.Lowest.one, Sepal.Length.Lowest.all)
+              
+
 # Show results Head 10
-df.group %>% tail(10) %>%
+df_iris_m2 %>% head(10) %>%
   kable() %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 
