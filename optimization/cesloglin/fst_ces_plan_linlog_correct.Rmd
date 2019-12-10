@@ -218,12 +218,28 @@ for (it_rho_ctr in seq(1,length(ar_rho))) {
   
   # i. Inverted relative x-intercepts
   tb_opti <- tb_opti %>% 
-                mutate(rela_x_intercept_cumsuminvert_spline_knots = 
+                mutate(opti_lowest_spline_knots = 
                          (rela_intercept_to_lowest_cumsum + rela_slope_to_lowest_cumsum*rela_x_intercept)
                       ) 
   
   # j. Sort by order of receiving transfers/subsidies
   tb_opti <- tb_opti %>% arrange(rela_x_intercept)
+
+  # k. Find position of subsidy
+  tb_opti <- tb_opti %>% arrange(opti_lowest_spline_knots) %>% 
+                mutate(tot_devi = opti_lowest_spline_knots - fl_N_agg) %>%
+                arrange((-1)*case_when(tot_devi < 0 ~ tot_devi)) %>%
+                mutate(allocate_lowest = 
+                         case_when(row_number() == 1 ~ 
+                                     rela_intercept_to_lowest_cumsum_invert + 
+                                     rela_slope_to_lowest_cumsum_invert*fl_N_agg)) %>%
+                mutate(allocate_lowest = allocate_lowest[row_number() == 1]) %>%
+                mutate(opti_allocate = 
+                         rela_intercept_to_lowest +
+                         rela_slope_to_lowest*allocate_lowest) %>%
+                mutate(opti_allocate = 
+                         case_when(opti_allocate >= 0 ~ opti_allocate)) %>%
+                mutate(opti_allocate_total = sum(opti_allocate, na.rm=TRUE))
   
 }
 
