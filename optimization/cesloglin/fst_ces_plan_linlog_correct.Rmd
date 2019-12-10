@@ -150,6 +150,7 @@ fl_N_agg = sum(ar_prot_data)
 
 # Vector of Planner Preference
 ar_rho = c(seq(-200, -100, length.out=5), seq(-100, -25, length.out=5), seq(-25, -5, length.out=5), seq(-5, -1, length.out=5), seq(-1, -0.01, length.out=5), seq(0.01, 0.25, length.out=5), seq(0.25, 0.99, length.out=5))
+ar_rho = c(-2)
 ar_rho = unique(ar_rho)
 ```
 
@@ -165,14 +166,26 @@ This also works with any CRS CES.
 mt_hev_lin = matrix(, nrow = length(ar_rho), ncol = 2)
 mt_opti_N = matrix(, nrow = it_obs, ncol = length(ar_rho))
 
-# Loop over Planner Preference
+# A. First Loop over Planner Preference
+# Generate Rank Order
 for (it_rho_ctr in seq(1,length(ar_rho))) {
   rho = ar_rho[it_rho_ctr]
   
-  # Generate V4, Rank Index Value, rho specific
-  tb_opti <- tb_opti %>% mutate(rank_val = A/((alpha*Beta))^(1/(1-rho)))
+  # B. Generate V4, Rank Index Value, rho specific
+  # tb_opti <- tb_opti %>% mutate(!!paste0('rv_', it_rho_ctr) := A/((alpha*beta))^(1/(1-rho)))
+  tb_opti <- tb_opti %>% mutate(rank_val = A/((alpha*beta))^(1/(1-rho)))
+
+  # c. Generate Rank Index
+  tb_opti <- tb_opti %>% arrange(rank_val) %>% mutate(rank_idx = row_number())
   
+  # d. Populate lowest index alpha, beta, and A to all rows
+  
+  # d. relative slope and relative intercept with respect to lowest index
 }
+
+
+
+
 
 ```
 
