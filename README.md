@@ -86,8 +86,13 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
     - generate tibbles, rename tibble variables, tibble row and column names
     - tibble statistics
     - **tidy**: *as_tibble(mt_combine) %>% rename_all(~c(ar_st_varnames)); colnames, rownames*
+2. [Input Data Text](https://fanwangecon.github.io/R4Econ/summarize/dist/fst_hist_onevar.html): R4Efunc \| R4Eref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/dist/fst_hist_onevar.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/dist/fst_hist_onevar.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/summarize/dist/fst_hist_onevar.html)
+    - input multiple variables with comma separated text strings
+    - quantitative/continuous and categorical/discrete variables
+    - histogram and summary statistics
+    - **tidy**: *ar_one <- c(107.72,101.28);ar_two <- c(101.72,101.28);mt_data <- cbind(ar_one, ar_two); as_tibble(mt_data)*
 
-## 2.3 Function over Arrays, Matrix and Tibble
+## 2.4 Function over Arrays, Matrix and Tibble
 
 1. [Evaluate Function each Row of Matrix](https://fanwangecon.github.io/R4Econ/support/function/fs_applysapplymutate.html): R4Efunc \| R4Eref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_applysapplymutate.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_applysapplymutate.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/function/fs_applysapplymutate.html)
     - evaluate function f(x_i,y_i,c), where c is a constant and x and y vary over each row of a matrix, with index i indicating rows
@@ -98,7 +103,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
     - get same results using apply, sapply, and dplyr mutate
     - **tidy**: *rowwise() %>% mutate(dplyr_eval = ffi_linear_dplyrdo(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha))*
 
-## 2.4 Distributions
+## 2.5 Distributions
 
 1. [Quantiles from Multiple Variables](generate/quantile/VarCateIdxVarsQuantiles.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quantile/VarCateIdxVarsQuantiles.ipynb) | [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quantile/VarCateIdxVarsQuantiles.R) |  [**html**](generate/quantile/VarCateIdxVarsQuantiles.html) | pdf
     + Dataframe of Variables' Quantiles by Panel Groups; Quantile Categorical Variables for Panel within Group Observations; Quantile cut variable suffix and quantile labeling; Joint Quantile Categorical Variable with Linear Index.
