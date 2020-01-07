@@ -394,12 +394,28 @@ roxygen2 and pkgdown</div></h1>
 <li><em>ffv_</em>: for project specific functions vignettes files, generally RMD</li>
 <li><em>ff_</em>: for non-project specific functions files</li>
 <li><em>ffp_</em>: for project specific functions files</li>
+<li><em>ffy_</em>: for project specific utility files</li>
 <li>Each function file could be prepared to have multiple functions inside, each file have the root which is the function name.</li>
 </ul></li>
 </ol>
+<p>Additionally, follow these general structures for <em>functions</em> in <em>/R</em> folder:</p>
+<ol style="list-style-type: decimal">
+<li>3 letter/digit project name</li>
+<li>3 letter/digit current file name, in R4E, three letter func group name: <em>ffp_opt_lin.R</em></li>
+<li>5 letter/digit function name within file: <em>function ffp_opt_lin_solum</em></li>
+</ol>
+<p>With this structure, we end up with potentially fairly long names, but hopefully also not too long and clear.</p>
+<p>Additionally, follow these general structures for <em>vignettes</em> in <em>/vignettes</em> folder:</p>
+<ol style="list-style-type: decimal">
+<li>Follow conventions for function name vignettes should be associated with functions</li>
+<li>Append onto existing function name 5 letter/digit to describe what this vignettes is suppose to achieve: <em>ffv_opt_lin_solum_vign1.Rmd</em>.
+<ul>
+<li>note the file starts with <em>ffv</em></li>
+</ul></li>
+</ol>
 </div>
-<div id="create-r-project" class="section level1">
-<h1><span class="header-section-number">3</span> Create R Project</h1>
+<div id="create-r-project-directory" class="section level1">
+<h1><span class="header-section-number">3</span> Create R Project Directory</h1>
 <div id="folder-does-not-exist-yet" class="section level2">
 <h2><span class="header-section-number">3.1</span> Folder does not exist yet</h2>
 <p>If the project/folder does not yet exist:</p>
@@ -422,7 +438,8 @@ roxygen2 and pkgdown</div></h1>
 <div id="r-project-template" class="section level3">
 <h3><span class="header-section-number">3.2.1</span> R project template</h3>
 <p>The [rprjtemplate][<a href="https://github.com/FanWangEcon/Tex4Econ/tree/master/nontex/rprjtemplate" class="uri">https://github.com/FanWangEcon/Tex4Econ/tree/master/nontex/rprjtemplate</a>] serves this templating role.</p>
-<pre class="r"><code>devtools::create(&quot;C:/Users/fan/Tex4Econ/nontex/rprjtemplate&quot;)</code></pre>
+<pre class="r"><code># Create project
+devtools::create(&quot;C:/Users/fan/Tex4Econ/nontex/rprjtemplate&quot;)</code></pre>
 <p>Running the <em>devtools::create()</em> command will create the core needed folder structure with:</p>
 <ol style="list-style-type: decimal">
 <li>NAMESPACE</li>
@@ -438,33 +455,162 @@ roxygen2 and pkgdown</div></h1>
 <li>MIT LICENSE</li>
 <li>etc.</li>
 </ol>
+<p>For adding vignette later:</p>
+<p>Add these to the DESCRIPTION file: - Suggests: knitr, rmarkdown - VignetteBuilder: knitr</p>
 </div>
 </div>
 </div>
-<div id="package-r-project" class="section level1">
-<h1><span class="header-section-number">4</span> Package R Project</h1>
-<div id="build-project" class="section level2">
-<h2><span class="header-section-number">4.1</span> Build Project</h2>
-<pre class="r"><code>devtools::build(&#39;C:/Users/fan/PrjOptiAlloc&#39;)</code></pre>
+<div id="develop-and-package-r-project" class="section level1">
+<h1><span class="header-section-number">4</span> Develop and Package R Project</h1>
+<p>Developing a package means write various vignettes and functions. My process is to write various vignettes first, to basically test out core functionalities. Then convert parts of those vignettes to functions.</p>
+<p>As functions are developed, some vignettes can be invoked differently, taking advantage of newly written functions. Make sure keep the original vignette that is not dependent on any other functions for ease of going to the initial point and figuring out what is happening. Names could be written to indicate vignette vintage.</p>
+<div id="development-process" class="section level2">
+<h2><span class="header-section-number">4.1</span> Development Process</h2>
+<ol style="list-style-type: decimal">
+<li>Write original vignette with dependencies, minimize dependencies, for example, do not import tidyverse, since package will not allow for all tidyverse components to be added, too much space needed.
+<ul>
+<li>this is not really a vignette, it is a function testing sandbox that does not call any package functions but provides line by line descriptions for the core functions with print outputs.</li>
+</ul></li>
+<li>Test vignette inside Rstudio/VSCode etc. (These vignette do not depend on the function to be written below, they do not exist yet)</li>
+<li>When raw vignettes work, start converting vignette components to functions, include minimal dependencies,
+<ul>
+<li>in function: <em><span class="citation">@import</span></em></li>
+<li>add to DESCRIPTION: <strong>usethis::use_package(“tidyr”)</strong> if tidyr is needed as <em>IMPORT</em></li>
+<li><em>DEPENDS</em> vs <em>IMPORTS</em></li>
+<li><em>important</em>: slowly check what does the function depend on, for example <em>R4Econ</em> has its own dependencies, when installing as packages, make those dependencies explicit in the new function if it calls <em>R4Econ</em>. Otherwise, <em>test()</em> might throw error. This is resolved if <em>R4Econ</em> add several things under depends.</li>
+</ul></li>
+<li>Run the documentation tool:
+<ul>
+<li><strong>setwd(‘C:/Users/fan/PrjOptiAlloc’)</strong></li>
+<li><strong>devtools::document()</strong></li>
+<li>this updates <em>NAMESPACE</em></li>
+<li>generates new <em>.Rd</em> files</li>
+</ul></li>
+<li>Test <span class="citation">@examples</span> from Roxygen documentations
+<ul>
+<li><strong>devtools::run_examples()</strong></li>
+<li>this tests if <em><span class="citation">@examples</span></em> are working.</li>
+</ul></li>
+<li>Continue 3 to 4 - [ ] o convert various components of vignette.</li>
+<li>Build package and load package using:
+<ul>
+<li><strong>devtools::check()</strong></li>
+<li>this will run <em>run_examples</em> as well, but at the very end, will test everything for package.<br />
+</li>
+</ul></li>
+<li>Now install package
+<ul>
+<li><strong>devtools::install()</strong></li>
+<li><em>library(PrjOptiAlloc)</em> should work now</li>
+<li><em>ls(“package:PrjOptiAlloc”)</em> to list all objects in package<br />
+</li>
+<li><strong>devtools::reload()</strong></li>
+</ul></li>
+<li>Publish webpage, review local, using <em>pkgdown</em>:
+<ul>
+<li><strong>pkgdown::build_site()</strong></li>
+</ul></li>
+</ol>
+<pre class="r"><code># Step 3
+rm(list = ls(all.names = TRUE))
+setwd(&#39;C:/Users/fan/PrjOptiAlloc&#39;)
+devtools::document()
+# Step 4
+devtools::run_examples()
+# Step 6
+devtools::check()
+# Step 7 
+devtools::install()
+library(PrjOptiAlloc)
+ls(&quot;package:PrjOptiAlloc&quot;)
+devtools::reload()
+# Step 8 
+pkgdown::build_site()</code></pre>
 </div>
-<div id="r-project-build-and-generate-documentations" class="section level2">
-<h2><span class="header-section-number">4.2</span> R project build and generate documentations</h2>
-<p>Assuming that we have used roxygen2 formats to write functions, now generate <em>.Rd</em> automatically with the <em>document()</em> function. This should create a <em>/man</em> folder in which various <em>.Rd</em> files are stored. Note that their .Rd are for specific R functions, not for files that contain multiple functions.</p>
-<pre class="r"><code>devtools::document(&#39;C:/Users/fan/PrjOptiAlloc&#39;)</code></pre>
-</div>
-<div id="r-project-build-site-with-pkgdown" class="section level2">
-<h2><span class="header-section-number">4.3</span> R project build site with pkgdown</h2>
-<p>Once we have used <em>pkgdown::build_site()</em>, by default, all html and other package presentation files and reference files are saved in the <em>/docs</em> folder, build_site is for building site, not for generating <em>/man</em> documenation. If R files change, need to document first, before rebuilding site.</p>
-<pre class="r"><code>pkgdown::build_site(&quot;C:/Users/fan/PrjOptiAlloc&quot;)</code></pre>
+<div id="attach-vs-import" class="section level2">
+<h2><span class="header-section-number">4.2</span> Attach vs Import</h2>
+<p>Packages that are loaded in under *usethis::use_package** are imports, not attached.</p>
+<p>According to <a href="http://r-pkgs.had.co.nz/namespace.html">Wickham</a>: - <em>apkg::bfnc()</em>: when packages are loaded, its components can be accessed with the <em>::</em>. That is, if I want to use the <em>document()</em> from from <em>devtools()</em>, if I first attach, I can directly call document(). Without attaching, just loading, I have to do <em>devtools::document()</em>. - <em>attach(), library()</em> : when attaching, must first load. After attached, can directly call function names, for example, <em>filter</em>, it is on the search path.</p>
+<p>See <a href="http://blog.obeautifulcode.com/R/How-R-Searches-And-Finds-Stuff/">How R Searches and Finds Stuff</a>:</p>
+<blockquote>
+<p>The better solution would have been to stuff reshape’s cast() function into imports:ggplot2 using the Imports feature. In that case, we would have travelled from 2 to 3 and stopped. Now you can see why the choice between Imports and Depends is not arbitrary. With so many packages on CRAN and so many of us working in related disciplines its no surprise that same-named functions appear in multiple packages. Depends is less safe. Depends makes a package vulnerable to whatever other packages are loaded by the user.</p>
+</blockquote>
+<p>This is <a href="https://stackoverflow.com/questions/8637993/better-explanation-of-when-to-use-imports-depends">question</a> as well.</p>
 </div>
 <div id="dealing-with-datasets" class="section level2">
-<h2><span class="header-section-number">4.4</span> Dealing with Datasets</h2>
+<h2><span class="header-section-number">4.3</span> Dealing with Datasets</h2>
 <p>Datasets to be used with the project should be in the <em>/data</em> folder. The name of the data file should appear in several spots and be consistent, suppose data is called <em>abc</em></p>
 <ol style="list-style-type: decimal">
 <li>Rdata file name: <em>/data/abc.Rdata</em></li>
 <li>Rdata file contains a dataframe inside that has to be called abc as well, so open the Rdata file inside Rstudio or R, what is the file called? is it abc? Look under environment</li>
 <li>In the <em>/R/ffp_abc.R</em>, the last line should be “abc”, but the file name does not need to be.</li>
+<li>If any functions uses a dataset, this could be done in two ways:
+<ul>
+<li>a dataset is a parameter for a function. In <span class="citation">@example</span>, can load in dataframes declared in dependencies.</li>
+<li>inside a function, if direclty use a dataframe, that data frame should be declared following 1 to 3 here in <em>/data</em>, make sure it has the same name, and write: <em>data(data_name)</em> at the beginning of the function to explicitly load the function in.</li>
+</ul></li>
 </ol>
+</div>
+<div id="logging-and-printing" class="section level2">
+<h2><span class="header-section-number">4.4</span> Logging and Printing</h2>
+<p>Logging and printing control is as usual important. See:</p>
+<ol style="list-style-type: decimal">
+<li><a href="https://stackoverflow.com/questions/36699272/why-is-message-a-better-choice-than-print-in-r-for-writing-a-package/36700294#36700294">Why is message() a better choice than print() in R for writing a package?</a></li>
+<li><a href="https://adv-r.hadley.nz/conditions.html">Conditions</a></li>
+</ol>
+<p>For simple package, for regression results, table outputs etc, use <em>print</em>, print statements can be suppressed by <em>invisible(capture.output(abc &lt;- ffy_opt_dtgch_cbem4()))</em>.</p>
+</div>
+<div id="build-project" class="section level2">
+<h2><span class="header-section-number">4.5</span> Build Project</h2>
+<p><a href="http://r-pkgs.had.co.nz/check.html">check</a> to make sure file structures etc are all correct. Will also test the <span class="citation">@examples</span> inside r functions in ROxygen comments.</p>
+<pre class="r"><code># will check the file structure, but also @example in functions.
+devtools::check(&#39;C:/Users/fan/PrjOptiAlloc&#39;)
+devtools::check(&#39;C:/Users/fan/PrjOptiAlloc&#39;, manual=FALSE)
+devtools::run_examples(&#39;C:/Users/fan/PrjOptiAlloc&#39;)
+devtools::build(&#39;C:/Users/fan/PrjOptiAlloc&#39;)</code></pre>
+</div>
+<div id="r-project-build-and-generate-documentations" class="section level2">
+<h2><span class="header-section-number">4.6</span> R project build and generate documentations</h2>
+<p>Assuming that we have used roxygen2 formats to write functions, now generate <em>.Rd</em> automatically with the <em>document()</em> function. This should create a <em>/man</em> folder in which various <em>.Rd</em> files are stored. Note that their .Rd are for specific R functions, not for files that contain multiple functions.</p>
+<pre class="r"><code># add dependencies:
+setwd(&#39;C:/Users/fan/PrjOptiAlloc&#39;)
+usethis::use_package(&quot;tidyr&quot;)
+usethis::use_package(&quot;dplyr&quot;)
+usethis::use_package(&quot;stringr&quot;)
+usethis::use_package(&quot;broom&quot;)
+usethis::use_package(&quot;ggplot2&quot;)
+usethis::use_package(&quot;R4Econ&quot;)
+# document will generate new NAMESPACE, so after dependencies added, need to document.
+# funciton import must be consistent with these
+devtools::document(&#39;C:/Users/fan/PrjOptiAlloc&#39;)</code></pre>
+<div id="vignettes-generation" class="section level3">
+<h3><span class="header-section-number">4.6.1</span> Vignettes Generation</h3>
+<p>To generate Vignettes, follow instructions <a href="https://kbroman.org/pkg_primer/pages/vignettes.html">here</a>:</p>
+<ol style="list-style-type: decimal">
+<li>create a vignette directory</li>
+<li>put RMD files in there, RMD front matter should look like below</li>
+<li>add to DESCRIPTION file:
+<ul>
+<li>Suggests: knitr, rmarkdown</li>
+<li>VignetteBuilder: knitr</li>
+</ul></li>
+<li>run <em>devtools::build_vignettes()</em>. Running build should build all? automatically builds vignette</li>
+</ol>
+<pre><code>title: &quot;Put the title of your vignette here&quot;
+output: rmarkdown::html_vignette
+vignette: &gt;
+  %\VignetteIndexEntry{Put the title of your vignette here}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}</code></pre>
+<pre class="r"><code>devtools::build_vignettes(&#39;C:/Users/fan/PrjOptiAlloc&#39;)
+devtools::check()</code></pre>
+</div>
+</div>
+<div id="r-project-build-site-with-pkgdown" class="section level2">
+<h2><span class="header-section-number">4.7</span> R project build site with pkgdown</h2>
+<p>Once we have used <em>pkgdown::build_site()</em>, by default, all html and other package presentation files and reference files are saved in the <em>/docs</em> folder, build_site is for building site, not for generating <em>/man</em> documenation. If R files change, need to document first, before rebuilding site.</p>
+<pre class="r"><code>pkgdown::build_site(&quot;C:/Users/fan/PrjOptiAlloc&quot;)
+pkgdown::build_site(&quot;C:/Users/fan/PrjOptiAlloc&quot;,build_vignettes=FALSE)</code></pre>
 </div>
 </div>
 

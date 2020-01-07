@@ -1779,12 +1779,28 @@ roxygen2 and pkgdown</div></h1>
 <li><em>ffv_</em>: for project specific functions vignettes files, generally RMD</li>
 <li><em>ff_</em>: for non-project specific functions files</li>
 <li><em>ffp_</em>: for project specific functions files</li>
+<li><em>ffy_</em>: for project specific utility files</li>
 <li>Each function file could be prepared to have multiple functions inside, each file have the root which is the function name.</li>
 </ul></li>
 </ol>
+<p>Additionally, follow these general structures for <em>functions</em> in <em>/R</em> folder:</p>
+<ol style="list-style-type: decimal">
+<li>3 letter/digit project name</li>
+<li>3 letter/digit current file name, in R4E, three letter func group name: <em>ffp_opt_lin.R</em></li>
+<li>5 letter/digit function name within file: <em>function ffp_opt_lin_solum</em></li>
+</ol>
+<p>With this structure, we end up with potentially fairly long names, but hopefully also not too long and clear.</p>
+<p>Additionally, follow these general structures for <em>vignettes</em> in <em>/vignettes</em> folder:</p>
+<ol style="list-style-type: decimal">
+<li>Follow conventions for function name vignettes should be associated with functions</li>
+<li>Append onto existing function name 5 letter/digit to describe what this vignettes is suppose to achieve: <em>ffv_opt_lin_solum_vign1.Rmd</em>.
+<ul>
+<li>note the file starts with <em>ffv</em></li>
+</ul></li>
+</ol>
 </div>
-<div id="create-r-project" class="section level1">
-<h1><span class="header-section-number">3</span> Create R Project</h1>
+<div id="create-r-project-directory" class="section level1">
+<h1><span class="header-section-number">3</span> Create R Project Directory</h1>
 <div id="folder-does-not-exist-yet" class="section level2">
 <h2><span class="header-section-number">3.1</span> Folder does not exist yet</h2>
 <p>If the project/folder does not yet exist:</p>
@@ -1815,8 +1831,9 @@ roxygen2 and pkgdown</div></h1>
 <p>The [rprjtemplate][<a href="https://github.com/FanWangEcon/Tex4Econ/tree/master/nontex/rprjtemplate" class="uri">https://github.com/FanWangEcon/Tex4Econ/tree/master/nontex/rprjtemplate</a>] serves this templating role.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGV2dG9vbHM6OmNyZWF0ZShcIkM6L1VzZXJzL2Zhbi9UZXg0RWNvbi9ub250ZXgvcnByanRlbXBsYXRlXCIpXG5gYGAifQ== -->
-<pre class="r"><code>devtools::create(&quot;C:/Users/fan/Tex4Econ/nontex/rprjtemplate&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBDcmVhdGUgcHJvamVjdFxuZGV2dG9vbHM6OmNyZWF0ZShcIkM6L1VzZXJzL2Zhbi9UZXg0RWNvbi9ub250ZXgvcnByanRlbXBsYXRlXCIpXG5gYGAifQ== -->
+<pre class="r"><code># Create project
+devtools::create(&quot;C:/Users/fan/Tex4Econ/nontex/rprjtemplate&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1835,56 +1852,195 @@ roxygen2 and pkgdown</div></h1>
 <li>MIT LICENSE</li>
 <li>etc.</li>
 </ol>
+<p>For adding vignette later:</p>
+<p>Add these to the DESCRIPTION file: - Suggests: knitr, rmarkdown - VignetteBuilder: knitr</p>
 </div>
 </div>
 </div>
-<div id="package-r-project" class="section level1">
-<h1><span class="header-section-number">4</span> Package R Project</h1>
-<div id="build-project" class="section level2">
-<h2><span class="header-section-number">4.1</span> Build Project</h2>
+<div id="develop-and-package-r-project" class="section level1">
+<h1><span class="header-section-number">4</span> Develop and Package R Project</h1>
+<p>Developing a package means write various vignettes and functions. My process is to write various vignettes first, to basically test out core functionalities. Then convert parts of those vignettes to functions.</p>
+<p>As functions are developed, some vignettes can be invoked differently, taking advantage of newly written functions. Make sure keep the original vignette that is not dependent on any other functions for ease of going to the initial point and figuring out what is happening. Names could be written to indicate vignette vintage.</p>
+<div id="development-process" class="section level2">
+<h2><span class="header-section-number">4.1</span> Development Process</h2>
+<ol style="list-style-type: decimal">
+<li>Write original vignette with dependencies, minimize dependencies, for example, do not import tidyverse, since package will not allow for all tidyverse components to be added, too much space needed.
+<ul>
+<li>this is not really a vignette, it is a function testing sandbox that does not call any package functions but provides line by line descriptions for the core functions with print outputs.</li>
+</ul></li>
+<li>Test vignette inside Rstudio/VSCode etc. (These vignette do not depend on the function to be written below, they do not exist yet)</li>
+<li>When raw vignettes work, start converting vignette components to functions, include minimal dependencies,
+<ul>
+<li>in function: <em><span class="citation">@import</span></em></li>
+<li>add to DESCRIPTION: <strong>usethis::use_package(“tidyr”)</strong> if tidyr is needed as <em>IMPORT</em></li>
+<li><em>DEPENDS</em> vs <em>IMPORTS</em></li>
+<li><em>important</em>: slowly check what does the function depend on, for example <em>R4Econ</em> has its own dependencies, when installing as packages, make those dependencies explicit in the new function if it calls <em>R4Econ</em>. Otherwise, <em>test()</em> might throw error. This is resolved if <em>R4Econ</em> add several things under depends.</li>
+</ul></li>
+<li>Run the documentation tool:
+<ul>
+<li><strong>setwd(‘C:/Users/fan/PrjOptiAlloc’)</strong></li>
+<li><strong>devtools::document()</strong></li>
+<li>this updates <em>NAMESPACE</em></li>
+<li>generates new <em>.Rd</em> files</li>
+</ul></li>
+<li>Test <span class="citation">@examples</span> from Roxygen documentations
+<ul>
+<li><strong>devtools::run_examples()</strong></li>
+<li>this tests if <em><span class="citation">@examples</span></em> are working.</li>
+</ul></li>
+<li>Continue 3 to 4 - [ ] o convert various components of vignette.</li>
+<li>Build package and load package using:
+<ul>
+<li><strong>devtools::check()</strong></li>
+<li>this will run <em>run_examples</em> as well, but at the very end, will test everything for package.<br />
+</li>
+</ul></li>
+<li>Now install package
+<ul>
+<li><strong>devtools::install()</strong></li>
+<li><em>library(PrjOptiAlloc)</em> should work now</li>
+<li><em>ls(“package:PrjOptiAlloc”)</em> to list all objects in package<br />
+</li>
+<li><strong>devtools::reload()</strong></li>
+</ul></li>
+<li>Publish webpage, review local, using <em>pkgdown</em>:
+<ul>
+<li><strong>pkgdown::build_site()</strong></li>
+</ul></li>
+</ol>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGV2dG9vbHM6OmJ1aWxkKCdDOi9Vc2Vycy9mYW4vUHJqT3B0aUFsbG9jJylcbmBgYCJ9 -->
-<pre class="r"><code>devtools::build(&#39;C:/Users/fan/PrjOptiAlloc&#39;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBTdGVwIDNcbnJtKGxpc3QgPSBscyhhbGwubmFtZXMgPSBUUlVFKSlcbnNldHdkKCdDOi9Vc2Vycy9mYW4vUHJqT3B0aUFsbG9jJylcbmRldnRvb2xzOjpkb2N1bWVudCgpXG4jIFN0ZXAgNFxuZGV2dG9vbHM6OnJ1bl9leGFtcGxlcygpXG4jIFN0ZXAgNlxuZGV2dG9vbHM6OmNoZWNrKClcbiMgU3RlcCA3IFxuZGV2dG9vbHM6Omluc3RhbGwoKVxubGlicmFyeShQcmpPcHRpQWxsb2MpXG5scyhcInBhY2thZ2U6UHJqT3B0aUFsbG9jXCIpXG5kZXZ0b29sczo6cmVsb2FkKClcbiMgU3RlcCA4IFxucGtnZG93bjo6YnVpbGRfc2l0ZSgpXG5gYGAifQ== -->
+<pre class="r"><code># Step 3
+rm(list = ls(all.names = TRUE))
+setwd(&#39;C:/Users/fan/PrjOptiAlloc&#39;)
+devtools::document()
+# Step 4
+devtools::run_examples()
+# Step 6
+devtools::check()
+# Step 7 
+devtools::install()
+library(PrjOptiAlloc)
+ls(&quot;package:PrjOptiAlloc&quot;)
+devtools::reload()
+# Step 8 
+pkgdown::build_site()</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
-<div id="r-project-build-and-generate-documentations" class="section level2">
-<h2><span class="header-section-number">4.2</span> R project build and generate documentations</h2>
-<p>Assuming that we have used roxygen2 formats to write functions, now generate <em>.Rd</em> automatically with the <em>document()</em> function. This should create a <em>/man</em> folder in which various <em>.Rd</em> files are stored. Note that their .Rd are for specific R functions, not for files that contain multiple functions.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGV2dG9vbHM6OmRvY3VtZW50KCdDOi9Vc2Vycy9mYW4vUHJqT3B0aUFsbG9jJylcbmBgYCJ9 -->
-<pre class="r"><code>devtools::document(&#39;C:/Users/fan/PrjOptiAlloc&#39;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="r-project-build-site-with-pkgdown" class="section level2">
-<h2><span class="header-section-number">4.3</span> R project build site with pkgdown</h2>
-<p>Once we have used <em>pkgdown::build_site()</em>, by default, all html and other package presentation files and reference files are saved in the <em>/docs</em> folder, build_site is for building site, not for generating <em>/man</em> documenation. If R files change, need to document first, before rebuilding site.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGtnZG93bjo6YnVpbGRfc2l0ZShcIkM6L1VzZXJzL2Zhbi9QcmpPcHRpQWxsb2NcIilcbmBgYCJ9 -->
-<pre class="r"><code>pkgdown::build_site(&quot;C:/Users/fan/PrjOptiAlloc&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
+<div id="attach-vs-import" class="section level2">
+<h2><span class="header-section-number">4.2</span> Attach vs Import</h2>
+<p>Packages that are loaded in under *usethis::use_package** are imports, not attached.</p>
+<p>According to <a href="http://r-pkgs.had.co.nz/namespace.html">Wickham</a>: - <em>apkg::bfnc()</em>: when packages are loaded, its components can be accessed with the <em>::</em>. That is, if I want to use the <em>document()</em> from from <em>devtools()</em>, if I first attach, I can directly call document(). Without attaching, just loading, I have to do <em>devtools::document()</em>. - <em>attach(), library()</em> : when attaching, must first load. After attached, can directly call function names, for example, <em>filter</em>, it is on the search path.</p>
+<p>See <a href="http://blog.obeautifulcode.com/R/How-R-Searches-And-Finds-Stuff/">How R Searches and Finds Stuff</a>:</p>
+<blockquote>
+<p>The better solution would have been to stuff reshape’s cast() function into imports:ggplot2 using the Imports feature. In that case, we would have travelled from 2 to 3 and stopped. Now you can see why the choice between Imports and Depends is not arbitrary. With so many packages on CRAN and so many of us working in related disciplines its no surprise that same-named functions appear in multiple packages. Depends is less safe. Depends makes a package vulnerable to whatever other packages are loaded by the user.</p>
+</blockquote>
+<p>This is <a href="https://stackoverflow.com/questions/8637993/better-explanation-of-when-to-use-imports-depends">question</a> as well.</p>
 </div>
 <div id="dealing-with-datasets" class="section level2">
-<h2><span class="header-section-number">4.4</span> Dealing with Datasets</h2>
+<h2><span class="header-section-number">4.3</span> Dealing with Datasets</h2>
 <p>Datasets to be used with the project should be in the <em>/data</em> folder. The name of the data file should appear in several spots and be consistent, suppose data is called <em>abc</em></p>
 <ol style="list-style-type: decimal">
 <li>Rdata file name: <em>/data/abc.Rdata</em></li>
 <li>Rdata file contains a dataframe inside that has to be called abc as well, so open the Rdata file inside Rstudio or R, what is the file called? is it abc? Look under environment</li>
 <li>In the <em>/R/ffp_abc.R</em>, the last line should be “abc”, but the file name does not need to be.</li>
+<li>If any functions uses a dataset, this could be done in two ways:
+<ul>
+<li>a dataset is a parameter for a function. In <span class="citation">@example</span>, can load in dataframes declared in dependencies.</li>
+<li>inside a function, if direclty use a dataframe, that data frame should be declared following 1 to 3 here in <em>/data</em>, make sure it has the same name, and write: <em>data(data_name)</em> at the beginning of the function to explicitly load the function in.</li>
+</ul></li>
 </ol>
+</div>
+<div id="logging-and-printing" class="section level2">
+<h2><span class="header-section-number">4.4</span> Logging and Printing</h2>
+<p>Logging and printing control is as usual important. See:</p>
+<ol style="list-style-type: decimal">
+<li><a href="https://stackoverflow.com/questions/36699272/why-is-message-a-better-choice-than-print-in-r-for-writing-a-package/36700294#36700294">Why is message() a better choice than print() in R for writing a package?</a></li>
+<li><a href="https://adv-r.hadley.nz/conditions.html">Conditions</a></li>
+</ol>
+<p>For simple package, for regression results, table outputs etc, use <em>print</em>, print statements can be suppressed by <em>invisible(capture.output(abc &lt;- ffy_opt_dtgch_cbem4()))</em>.</p>
+</div>
+<div id="build-project" class="section level2">
+<h2><span class="header-section-number">4.5</span> Build Project</h2>
+<p><a href="http://r-pkgs.had.co.nz/check.html">check</a> to make sure file structures etc are all correct. Will also test the <span class="citation">@examples</span> inside r functions in ROxygen comments.</p>
 <!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyB3aWxsIGNoZWNrIHRoZSBmaWxlIHN0cnVjdHVyZSwgYnV0IGFsc28gQGV4YW1wbGUgaW4gZnVuY3Rpb25zLlxuZGV2dG9vbHM6OmNoZWNrKCdDOi9Vc2Vycy9mYW4vUHJqT3B0aUFsbG9jJylcbmRldnRvb2xzOjpjaGVjaygnQzovVXNlcnMvZmFuL1Byak9wdGlBbGxvYycsIG1hbnVhbD1GQUxTRSlcbmRldnRvb2xzOjpydW5fZXhhbXBsZXMoJ0M6L1VzZXJzL2Zhbi9QcmpPcHRpQWxsb2MnKVxuZGV2dG9vbHM6OmJ1aWxkKCdDOi9Vc2Vycy9mYW4vUHJqT3B0aUFsbG9jJylcbmBgYCJ9 -->
+<pre class="r"><code># will check the file structure, but also @example in functions.
+devtools::check(&#39;C:/Users/fan/PrjOptiAlloc&#39;)
+devtools::check(&#39;C:/Users/fan/PrjOptiAlloc&#39;, manual=FALSE)
+devtools::run_examples(&#39;C:/Users/fan/PrjOptiAlloc&#39;)
+devtools::build(&#39;C:/Users/fan/PrjOptiAlloc&#39;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="r-project-build-and-generate-documentations" class="section level2">
+<h2><span class="header-section-number">4.6</span> R project build and generate documentations</h2>
+<p>Assuming that we have used roxygen2 formats to write functions, now generate <em>.Rd</em> automatically with the <em>document()</em> function. This should create a <em>/man</em> folder in which various <em>.Rd</em> files are stored. Note that their .Rd are for specific R functions, not for files that contain multiple functions.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBhZGQgZGVwZW5kZW5jaWVzOlxuc2V0d2QoJ0M6L1VzZXJzL2Zhbi9QcmpPcHRpQWxsb2MnKVxudXNldGhpczo6dXNlX3BhY2thZ2UoXCJ0aWR5clwiKVxudXNldGhpczo6dXNlX3BhY2thZ2UoXCJkcGx5clwiKVxudXNldGhpczo6dXNlX3BhY2thZ2UoXCJzdHJpbmdyXCIpXG51c2V0aGlzOjp1c2VfcGFja2FnZShcImJyb29tXCIpXG51c2V0aGlzOjp1c2VfcGFja2FnZShcImdncGxvdDJcIilcbnVzZXRoaXM6OnVzZV9wYWNrYWdlKFwiUjRFY29uXCIpXG4jIGRvY3VtZW50IHdpbGwgZ2VuZXJhdGUgbmV3IE5BTUVTUEFDRSwgc28gYWZ0ZXIgZGVwZW5kZW5jaWVzIGFkZGVkLCBuZWVkIHRvIGRvY3VtZW50LlxuIyBmdW5jaXRvbiBpbXBvcnQgbXVzdCBiZSBjb25zaXN0ZW50IHdpdGggdGhlc2VcbmRldnRvb2xzOjpkb2N1bWVudCgnQzovVXNlcnMvZmFuL1Byak9wdGlBbGxvYycpXG5gYGAifQ== -->
+<pre class="r"><code># add dependencies:
+setwd(&#39;C:/Users/fan/PrjOptiAlloc&#39;)
+usethis::use_package(&quot;tidyr&quot;)
+usethis::use_package(&quot;dplyr&quot;)
+usethis::use_package(&quot;stringr&quot;)
+usethis::use_package(&quot;broom&quot;)
+usethis::use_package(&quot;ggplot2&quot;)
+usethis::use_package(&quot;R4Econ&quot;)
+# document will generate new NAMESPACE, so after dependencies added, need to document.
+# funciton import must be consistent with these
+devtools::document(&#39;C:/Users/fan/PrjOptiAlloc&#39;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<div id="vignettes-generation" class="section level3">
+<h3><span class="header-section-number">4.6.1</span> Vignettes Generation</h3>
+<p>To generate Vignettes, follow instructions <a href="https://kbroman.org/pkg_primer/pages/vignettes.html">here</a>:</p>
+<ol style="list-style-type: decimal">
+<li>create a vignette directory</li>
+<li>put RMD files in there, RMD front matter should look like below</li>
+<li>add to DESCRIPTION file:
+<ul>
+<li>Suggests: knitr, rmarkdown</li>
+<li>VignetteBuilder: knitr</li>
+</ul></li>
+<li>run <em>devtools::build_vignettes()</em>. Running build should build all? automatically builds vignette</li>
+</ol>
+<pre><code>title: &quot;Put the title of your vignette here&quot;
+output: rmarkdown::html_vignette
+vignette: &gt;
+  %\VignetteIndexEntry{Put the title of your vignette here}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}</code></pre>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGV2dG9vbHM6OmJ1aWxkX3ZpZ25ldHRlcygnQzovVXNlcnMvZmFuL1Byak9wdGlBbGxvYycpXG5kZXZ0b29sczo6Y2hlY2soKVxuYGBgIn0= -->
+<pre class="r"><code>devtools::build_vignettes(&#39;C:/Users/fan/PrjOptiAlloc&#39;)
+devtools::check()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+</div>
+<div id="r-project-build-site-with-pkgdown" class="section level2">
+<h2><span class="header-section-number">4.7</span> R project build site with pkgdown</h2>
+<p>Once we have used <em>pkgdown::build_site()</em>, by default, all html and other package presentation files and reference files are saved in the <em>/docs</em> folder, build_site is for building site, not for generating <em>/man</em> documenation. If R files change, need to document first, before rebuilding site.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGtnZG93bjo6YnVpbGRfc2l0ZShcIkM6L1VzZXJzL2Zhbi9QcmpPcHRpQWxsb2NcIilcbnBrZ2Rvd246OmJ1aWxkX3NpdGUoXCJDOi9Vc2Vycy9mYW4vUHJqT3B0aUFsbG9jXCIsYnVpbGRfdmlnbmV0dGVzPUZBTFNFKVxuYGBgIn0= -->
+<pre class="r"><code>pkgdown::build_site(&quot;C:/Users/fan/PrjOptiAlloc&quot;)
+pkgdown::build_site(&quot;C:/Users/fan/PrjOptiAlloc&quot;,build_vignettes=FALSE)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
 </div>
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogfA0KICB8IEdlbmVyYXRlIFIgUGFja2FnZSBFeGFtcGxlDQogIHwgcm94eWdlbjIgYW5kIHBrZ2Rvd24NCm91dHB1dDoNCiAgaHRtbF9kb2N1bWVudDoNCiAgICBudW1iZXJfc2VjdGlvbnM6IHRydWUNCiAgaHRtbF9ub3RlYm9vazoNCiAgICBudW1iZXJfc2VjdGlvbnM6IHRydWUNCiAgd29yZF9kb2N1bWVudDoNCiAgICBudW1iZXJfc2VjdGlvbnM6IHRydWUNCiAgcGRmX2RvY3VtZW50Og0KICAgIGRmX3ByaW50OiBwYWdlZA0KICAgIG51bWJlcl9zZWN0aW9uczogdHJ1ZQ0KdXJsY29sb3I6IGJsdWUNCmFsd2F5c19hbGxvd19odG1sOiB5ZXMNCi0tLQ0KDQpHbyBiYWNrIHRvIFtmYW5dKGh0dHA6Ly9mYW53YW5nZWNvbi5naXRodWIuaW8vKSdzIFtSNEVjb25dKGh0dHA6Ly9mYW53YW5nZWNvbi5naXRodWIuaW8vUjRFY29uLykuDQoNCmBgYHtyIHNldHVwLCBpbmNsdWRlPUZBTFNFfQ0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFLCBldmFsID0gRkFMU0UpDQpgYGANCg0KIyBPYmplY3RpdmUNCg0KRG9jdW1lbnQgYW5kIGdlbmVyYXRlIHNoYXJhYmxlIFIgcGFja2FnZS4NCg0KMS4gVXNlIFtyb3h5Z2VuMl0oaHR0cHM6Ly9naXRodWIuY29tL2hhZGxleS9yb3h5Z2VuMikgZnJvbSBbSGFkbGV5XShodHRwczovL2dpdGh1Yi5jb20vaGFkbGV5KSB0byBkb2N1bWVudCBwYWNrYWdlLg0KMi4gVXNlIFtwa2dkb3duXShodHRwczovL2dpdGh1Yi5jb20vci1saWIvcGtnZG93bikgdG8gcGFja2FnZSBmaWxlIGFuZCBwdWJsaXNoIHRvIGdpdGh1YiBwYWdlcy4NCg0KIyBGaWxlIFN0cnVjdHVyZSBhbmQgTmFtaW5nIENvbnZlbnRpb24NCg0KKipGb2xkZXJzKio6DQoNCjEuIFIgZnVuY3Rpb24gZnVuY3Rpb25zIGluIHRoZSAqL1IqIGZvbGRlcg0KMi4gUkRhdGEgZmlsZXMgaW4gdGhlICovZGF0YSogZm9sZGVyDQoNCioqTmFtaW5nIENvbnZlbnRpb25zKio6DQoNCjEuIGZ1bmN0aW9ucyBmaWxlcyBhbmQgZnVuY3Rpb25zIGFsbCBzaG91bGQgYmUgKnNuYWtlX2Nhc2VfbmFtZXMqDQoyLiBmdW5jdGlvbiBuYW1lIHByZWZpeDoNCiAgICAtICpmc18qOiBmb3Igbm9uLXByb2plY3Qgc3BlY2lmaWMgc2NyaXB0IGZpbGVzDQogICAgLSAqZmZzXyo6IGZvciBwcm9qZWN0IHNwZWNpZmljIGZ1bmN0aW9ucyBzY3JpcHQgZmlsZXMNCiAgICAtICpmdl8qOiBmb3Igbm9uLXByb2plY3Qgc3BlY2lmaWMgdmlnbmV0dGVzIGZpbGVzLCBnZW5lcmFsbHkgUk1EDQogICAgLSAqZmZ2Xyo6IGZvciBwcm9qZWN0IHNwZWNpZmljIGZ1bmN0aW9ucyB2aWduZXR0ZXMgZmlsZXMsIGdlbmVyYWxseSBSTUQNCiAgICAtICpmZl8qOiBmb3Igbm9uLXByb2plY3Qgc3BlY2lmaWMgZnVuY3Rpb25zIGZpbGVzDQogICAgLSAqZmZwXyo6IGZvciBwcm9qZWN0IHNwZWNpZmljIGZ1bmN0aW9ucyBmaWxlcw0KICAgIC0gRWFjaCBmdW5jdGlvbiBmaWxlIGNvdWxkIGJlIHByZXBhcmVkIHRvIGhhdmUgbXVsdGlwbGUgZnVuY3Rpb25zIGluc2lkZSwgZWFjaCBmaWxlIGhhdmUgdGhlIHJvb3Qgd2hpY2ggaXMgdGhlIGZ1bmN0aW9uIG5hbWUuDQoNCiMgQ3JlYXRlIFIgUHJvamVjdA0KDQojIyBGb2xkZXIgZG9lcyBub3QgZXhpc3QgeWV0DQoNCklmIHRoZSBwcm9qZWN0L2ZvbGRlciBkb2VzIG5vdCB5ZXQgZXhpc3Q6DQoNCjEuICpkZXZ0b29sczpjcmVhdGUqIHRoZSBmb2xkZXIgb2YgaW50ZXJlc3QNCjIuIE1vdmUgeW91ciBmaWxlcyBvdmVyIHRvICovUiogYW5kICovZGF0YSogZm9sZGVycy4NCiAgICArIFdyaXRlIGZpbGVzIGZvbGxvd2luZyBjb252ZW50aW9ucyBhYm92ZSBhbmQgd2l0aCByIGRlc2NyaXB0aW9ucw0KMy4gKnBrZ2Rvd246OmJ1aWxkX3NpdGUoKSoNCg0KYGBge3J9DQpkZXZ0b29sczo6Y3JlYXRlKCJDOi9Vc2Vycy9mYW4vUjRFY29uIikNCmBgYA0KDQojIyBGb2xkZXIgYWxyZWFkeSBleGlzdHMNCg0KSWYgdGhlcmUgaXMgYWxyZWFkeSBhIGZvbGRlciB3aXRoIGEgYnVuY2ggb2YgZmlsZXMgaW5jbHVkaW5nIFIgYW5kIG5vdCBSIGZpbGVzLCBhbmQgdGhlIGZvbGRlciBuZWVkcyB0byBiZSBjb252ZXJ0ZWQgdG8gYmVjb21lIGEgUiBwYWNrYWdlIGFuZCB3YXMgcHJldmlvdXNseSBub3QgYSBSIHBhY2thZ2UuDQoNClRoZSBpZGVhIGlzIHRvIHVzZSBhIGZvbGRlciBzb21ld2hlcmUgdG8gZ2VuZXJhdGUgYSBnZW5lcmljIHRlbXBsYXRlIGZvbGRlci4gVGhpcyBmb2xkZXIgd2lsbCBoYXZlIGZpbGVzIGFuZCBzdHJ1Y3R1cmUgd2UgbmVlZCBmb3Igb3VyIGFjdHVhbCBmb2xkZXIuIEVhY2ggdGltZSwgd2Ugd2lsbCBqdXN0IGNvcHkgdGhhdCBmb2xkZXIncyBjb250ZW50cyBpbnRvIHRoZSBmb2xkZXIgdGhhdCB3ZSB3YW50IHRvIHR1cm4gaW50byBhIFIgZm9sZGVyLiBBbmQgZG8gYSBnbG9iYWwgc2VhcmNoIHRvIHJlcGxhY2UgdGhlIHRlbXBsYXRlIGZvbGRlcidzIGZvbGRlciBuYW1lIHdpdGggdGhlIGFjdHVhbCBwcm9qZWN0IG5hbWUuIFRvIGF2b2lkIGNvbmZ1c2lvbiwgZ2VuZXJhdGUgdGhpcyBmb2xkZXIgb3V0c2lkZSBvZiBhbiBleGlzdGluZyBSIHBhY2thZ2UuDQoNCklmIHRoZXJlIGlzIGFscmVhZHkgYSBSIGZvbGRlciBpbiB5b3VyIGV4aXN0aW5nIHByb2plY3QsIGRlbGV0ZSB0aGF0IG9yIHJlbmFtZSB0aGF0IGFuZCBtb3ZlIGZpbGVzIGJhY2sgaW50byB0aGUgKi9SKiBmb2xkZXIgYWZ0ZXIgY29tcGxldGlvbi4gTWFrZSBzdXJlIHRoZXJlIGFyZSBubyBkdXBsaWNhdGUgZm9sZGVyIG9yIGZpbGUgbmFtZXMgaW4gdGhlIG9sZCBhbmQgdGhlIG5ldyBwcm9qZWN0Lg0KDQpTZWFyY2ggcmVwbGFjZSB0aGUgd29yZCAqcnByanRlbXBsYXRlKiBpbnNpZGUgeW91ciBvbGQgcHJvamVjdCBmb2xkZXIgd2l0aCB0aGUgbmV3IGZpbGVzLCByZXBsYWNlIHRoYXQgd2l0aCB5b3VyIHByb2plY3QgbmFtZS4gU2hvdWxkIGFwcGVhciBpbiB0aHJlZSBkaWZmZXJlbnQgc3BvdHMuDQoNCiMjIyBSIHByb2plY3QgdGVtcGxhdGUNCg0KVGhlIFtycHJqdGVtcGxhdGVdW2h0dHBzOi8vZ2l0aHViLmNvbS9GYW5XYW5nRWNvbi9UZXg0RWNvbi90cmVlL21hc3Rlci9ub250ZXgvcnByanRlbXBsYXRlXSBzZXJ2ZXMgdGhpcyB0ZW1wbGF0aW5nIHJvbGUuDQoNCmBgYHtyfQ0KZGV2dG9vbHM6OmNyZWF0ZSgiQzovVXNlcnMvZmFuL1RleDRFY29uL25vbnRleC9ycHJqdGVtcGxhdGUiKQ0KYGBgDQoNClJ1bm5pbmcgdGhlICpkZXZ0b29sczo6Y3JlYXRlKCkqIGNvbW1hbmQgd2lsbCBjcmVhdGUgdGhlIGNvcmUgbmVlZGVkIGZvbGRlciBzdHJ1Y3R1cmUgd2l0aDoNCg0KMS4gTkFNRVNQQUNFDQoyLiBERVNDUklQVElPTg0KMy4gKi5naXRpZ25vcmUqDQo0LiAqLlJidWlsZGlnbm9yZSoNCjQuICouUnByb2oqDQo1LiBFbXB0eSBSIGZvbGRlcg0KDQpOb3cgY3VzdG9taXplIHRoaXMgZm9sZGVyIGZvciBmdXR1cmUgdXNlIHdpdGgNCg0KMS4gY3VzdG9tICouZ2l0aWdub3JlKg0KMi4gTUlUIExJQ0VOU0UNCjMuIGV0Yy4NCg0KIyBQYWNrYWdlIFIgUHJvamVjdA0KDQojIyBCdWlsZCBQcm9qZWN0DQoNCmBgYHtyfQ0KZGV2dG9vbHM6OmJ1aWxkKCdDOi9Vc2Vycy9mYW4vUHJqT3B0aUFsbG9jJykNCmBgYA0KDQojIyBSIHByb2plY3QgYnVpbGQgYW5kIGdlbmVyYXRlIGRvY3VtZW50YXRpb25zDQoNCkFzc3VtaW5nIHRoYXQgd2UgaGF2ZSB1c2VkIHJveHlnZW4yIGZvcm1hdHMgdG8gd3JpdGUgZnVuY3Rpb25zLCBub3cgZ2VuZXJhdGUgKi5SZCogYXV0b21hdGljYWxseSB3aXRoIHRoZSAqZG9jdW1lbnQoKSogZnVuY3Rpb24uIFRoaXMgc2hvdWxkIGNyZWF0ZSBhICovbWFuKiBmb2xkZXIgaW4gd2hpY2ggdmFyaW91cyAqLlJkKiBmaWxlcyBhcmUgc3RvcmVkLiBOb3RlIHRoYXQgdGhlaXIgLlJkIGFyZSBmb3Igc3BlY2lmaWMgUiBmdW5jdGlvbnMsIG5vdCBmb3IgZmlsZXMgdGhhdCBjb250YWluIG11bHRpcGxlIGZ1bmN0aW9ucy4NCg0KYGBge3J9DQpkZXZ0b29sczo6ZG9jdW1lbnQoJ0M6L1VzZXJzL2Zhbi9QcmpPcHRpQWxsb2MnKQ0KYGBgDQoNCiMjIFIgcHJvamVjdCBidWlsZCBzaXRlIHdpdGggcGtnZG93bg0KDQpPbmNlIHdlIGhhdmUgdXNlZCAqcGtnZG93bjo6YnVpbGRfc2l0ZSgpKiwgYnkgZGVmYXVsdCwgYWxsIGh0bWwgYW5kIG90aGVyIHBhY2thZ2UgcHJlc2VudGF0aW9uIGZpbGVzIGFuZCByZWZlcmVuY2UgZmlsZXMgYXJlIHNhdmVkIGluIHRoZSAqL2RvY3MqIGZvbGRlciwgYnVpbGRfc2l0ZSBpcyBmb3IgYnVpbGRpbmcgc2l0ZSwgbm90IGZvciBnZW5lcmF0aW5nICovbWFuKiBkb2N1bWVuYXRpb24uIElmIFIgZmlsZXMgY2hhbmdlLCBuZWVkIHRvIGRvY3VtZW50IGZpcnN0LCBiZWZvcmUgcmVidWlsZGluZyBzaXRlLiANCg0KYGBge3J9DQpwa2dkb3duOjpidWlsZF9zaXRlKCJDOi9Vc2Vycy9mYW4vUHJqT3B0aUFsbG9jIikNCmBgYA0KDQojIyBEZWFsaW5nIHdpdGggRGF0YXNldHMNCg0KRGF0YXNldHMgdG8gYmUgdXNlZCB3aXRoIHRoZSBwcm9qZWN0IHNob3VsZCBiZSBpbiB0aGUgKi9kYXRhKiBmb2xkZXIuIFRoZSBuYW1lIG9mIHRoZSBkYXRhIGZpbGUgc2hvdWxkIGFwcGVhciBpbiBzZXZlcmFsIHNwb3RzIGFuZCBiZSBjb25zaXN0ZW50LCBzdXBwb3NlIGRhdGEgaXMgY2FsbGVkICphYmMqDQoNCjEuIFJkYXRhIGZpbGUgbmFtZTogKi9kYXRhL2FiYy5SZGF0YSoNCjIuIFJkYXRhIGZpbGUgY29udGFpbnMgYSBkYXRhZnJhbWUgaW5zaWRlIHRoYXQgaGFzIHRvIGJlIGNhbGxlZCBhYmMgYXMgd2VsbCwgc28gb3BlbiB0aGUgUmRhdGEgZmlsZSBpbnNpZGUgUnN0dWRpbyBvciBSLCB3aGF0IGlzIHRoZSBmaWxlIGNhbGxlZD8gaXMgaXQgYWJjPyBMb29rIHVuZGVyIGVudmlyb25tZW50DQozLiBJbiB0aGUgKi9SL2ZmcF9hYmMuUiosIHRoZSBsYXN0IGxpbmUgc2hvdWxkIGJlICJhYmMiLCBidXQgdGhlIGZpbGUgbmFtZSBkb2VzIG5vdCBuZWVkIHRvIGJlLg0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogfA0KICB8IEdlbmVyYXRlIFIgUGFja2FnZSBFeGFtcGxlDQogIHwgcm94eWdlbjIgYW5kIHBrZ2Rvd24NCm91dHB1dDoNCiAgcGRmX2RvY3VtZW50Og0KICAgIGRmX3ByaW50OiBwYWdlZA0KICAgIG51bWJlcl9zZWN0aW9uczogdHJ1ZQ0KICBodG1sX25vdGVib29rOg0KICAgIG51bWJlcl9zZWN0aW9uczogdHJ1ZQ0KICB3b3JkX2RvY3VtZW50Og0KICAgIG51bWJlcl9zZWN0aW9uczogdHJ1ZQ0KICBodG1sX2RvY3VtZW50Og0KICAgIG51bWJlcl9zZWN0aW9uczogdHJ1ZQ0KdXJsY29sb3I6IGJsdWUNCmFsd2F5c19hbGxvd19odG1sOiB5ZXMNCi0tLQ0KDQpHbyBiYWNrIHRvIFtmYW5dKGh0dHA6Ly9mYW53YW5nZWNvbi5naXRodWIuaW8vKSdzIFtSNEVjb25dKGh0dHA6Ly9mYW53YW5nZWNvbi5naXRodWIuaW8vUjRFY29uLykuDQoNCmBgYHtyIHNldHVwLCBpbmNsdWRlPUZBTFNFfQ0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFLCBldmFsID0gRkFMU0UpDQpgYGANCg0KIyBPYmplY3RpdmUNCg0KRG9jdW1lbnQgYW5kIGdlbmVyYXRlIHNoYXJhYmxlIFIgcGFja2FnZS4NCg0KMS4gVXNlIFtyb3h5Z2VuMl0oaHR0cHM6Ly9naXRodWIuY29tL2hhZGxleS9yb3h5Z2VuMikgZnJvbSBbSGFkbGV5XShodHRwczovL2dpdGh1Yi5jb20vaGFkbGV5KSB0byBkb2N1bWVudCBwYWNrYWdlLg0KMi4gVXNlIFtwa2dkb3duXShodHRwczovL2dpdGh1Yi5jb20vci1saWIvcGtnZG93bikgdG8gcGFja2FnZSBmaWxlIGFuZCBwdWJsaXNoIHRvIGdpdGh1YiBwYWdlcy4NCg0KIyBGaWxlIFN0cnVjdHVyZSBhbmQgTmFtaW5nIENvbnZlbnRpb24NCg0KKipGb2xkZXJzKio6DQoNCjEuIFIgZnVuY3Rpb24gZnVuY3Rpb25zIGluIHRoZSAqL1IqIGZvbGRlcg0KMi4gUkRhdGEgZmlsZXMgaW4gdGhlICovZGF0YSogZm9sZGVyDQoNCioqTmFtaW5nIENvbnZlbnRpb25zKio6DQoNCjEuIGZ1bmN0aW9ucyBmaWxlcyBhbmQgZnVuY3Rpb25zIGFsbCBzaG91bGQgYmUgKnNuYWtlX2Nhc2VfbmFtZXMqDQoyLiBmdW5jdGlvbiBuYW1lIHByZWZpeDoNCiAgICAtICpmc18qOiBmb3Igbm9uLXByb2plY3Qgc3BlY2lmaWMgc2NyaXB0IGZpbGVzDQogICAgLSAqZmZzXyo6IGZvciBwcm9qZWN0IHNwZWNpZmljIGZ1bmN0aW9ucyBzY3JpcHQgZmlsZXMNCiAgICAtICpmdl8qOiBmb3Igbm9uLXByb2plY3Qgc3BlY2lmaWMgdmlnbmV0dGVzIGZpbGVzLCBnZW5lcmFsbHkgUk1EDQogICAgLSAqZmZ2Xyo6IGZvciBwcm9qZWN0IHNwZWNpZmljIGZ1bmN0aW9ucyB2aWduZXR0ZXMgZmlsZXMsIGdlbmVyYWxseSBSTUQNCiAgICAtICpmZl8qOiBmb3Igbm9uLXByb2plY3Qgc3BlY2lmaWMgZnVuY3Rpb25zIGZpbGVzDQogICAgLSAqZmZwXyo6IGZvciBwcm9qZWN0IHNwZWNpZmljIGZ1bmN0aW9ucyBmaWxlcw0KICAgIC0gKmZmeV8qOiBmb3IgcHJvamVjdCBzcGVjaWZpYyB1dGlsaXR5IGZpbGVzDQogICAgLSBFYWNoIGZ1bmN0aW9uIGZpbGUgY291bGQgYmUgcHJlcGFyZWQgdG8gaGF2ZSBtdWx0aXBsZSBmdW5jdGlvbnMgaW5zaWRlLCBlYWNoIGZpbGUgaGF2ZSB0aGUgcm9vdCB3aGljaCBpcyB0aGUgZnVuY3Rpb24gbmFtZS4NCg0KQWRkaXRpb25hbGx5LCBmb2xsb3cgdGhlc2UgZ2VuZXJhbCBzdHJ1Y3R1cmVzIGZvciAqZnVuY3Rpb25zKiBpbiAqL1IqIGZvbGRlcjogICAgIA0KDQoxLiAzIGxldHRlci9kaWdpdCBwcm9qZWN0IG5hbWUNCjIuIDMgbGV0dGVyL2RpZ2l0IGN1cnJlbnQgZmlsZSBuYW1lLCBpbiBSNEUsIHRocmVlIGxldHRlciBmdW5jIGdyb3VwIG5hbWU6ICpmZnBfb3B0X2xpbi5SKg0KMy4gNSBsZXR0ZXIvZGlnaXQgZnVuY3Rpb24gbmFtZSB3aXRoaW4gZmlsZTogKmZ1bmN0aW9uIGZmcF9vcHRfbGluX3NvbHVtKg0KDQpXaXRoIHRoaXMgc3RydWN0dXJlLCB3ZSBlbmQgdXAgd2l0aCBwb3RlbnRpYWxseSBmYWlybHkgbG9uZyBuYW1lcywgYnV0IGhvcGVmdWxseSBhbHNvIG5vdCB0b28gbG9uZyBhbmQgY2xlYXIuDQoNCkFkZGl0aW9uYWxseSwgZm9sbG93IHRoZXNlIGdlbmVyYWwgc3RydWN0dXJlcyBmb3IgKnZpZ25ldHRlcyogaW4gKi92aWduZXR0ZXMqIGZvbGRlcjoNCg0KMS4gRm9sbG93IGNvbnZlbnRpb25zIGZvciBmdW5jdGlvbiBuYW1lIHZpZ25ldHRlcyBzaG91bGQgYmUgYXNzb2NpYXRlZCB3aXRoIGZ1bmN0aW9ucw0KMi4gQXBwZW5kIG9udG8gZXhpc3RpbmcgZnVuY3Rpb24gbmFtZSA1IGxldHRlci9kaWdpdCB0byBkZXNjcmliZSB3aGF0IHRoaXMgdmlnbmV0dGVzIGlzIHN1cHBvc2UgdG8gYWNoaWV2ZTogKmZmdl9vcHRfbGluX3NvbHVtX3ZpZ24xLlJtZCouDQogICAgKyBub3RlIHRoZSBmaWxlIHN0YXJ0cyB3aXRoICpmZnYqDQoNCiMgQ3JlYXRlIFIgUHJvamVjdCBEaXJlY3RvcnkNCg0KIyMgRm9sZGVyIGRvZXMgbm90IGV4aXN0IHlldA0KDQpJZiB0aGUgcHJvamVjdC9mb2xkZXIgZG9lcyBub3QgeWV0IGV4aXN0Og0KDQoxLiAqZGV2dG9vbHM6Y3JlYXRlKiB0aGUgZm9sZGVyIG9mIGludGVyZXN0DQoyLiBNb3ZlIHlvdXIgZmlsZXMgb3ZlciB0byAqL1IqIGFuZCAqL2RhdGEqIGZvbGRlcnMuDQogICAgKyBXcml0ZSBmaWxlcyBmb2xsb3dpbmcgY29udmVudGlvbnMgYWJvdmUgYW5kIHdpdGggciBkZXNjcmlwdGlvbnMNCjMuICpwa2dkb3duOjpidWlsZF9zaXRlKCkqDQoNCmBgYHtyfQ0KZGV2dG9vbHM6OmNyZWF0ZSgiQzovVXNlcnMvZmFuL1I0RWNvbiIpDQpgYGANCg0KIyMgRm9sZGVyIGFscmVhZHkgZXhpc3RzDQoNCklmIHRoZXJlIGlzIGFscmVhZHkgYSBmb2xkZXIgd2l0aCBhIGJ1bmNoIG9mIGZpbGVzIGluY2x1ZGluZyBSIGFuZCBub3QgUiBmaWxlcywgYW5kIHRoZSBmb2xkZXIgbmVlZHMgdG8gYmUgY29udmVydGVkIHRvIGJlY29tZSBhIFIgcGFja2FnZSBhbmQgd2FzIHByZXZpb3VzbHkgbm90IGEgUiBwYWNrYWdlLg0KDQpUaGUgaWRlYSBpcyB0byB1c2UgYSBmb2xkZXIgc29tZXdoZXJlIHRvIGdlbmVyYXRlIGEgZ2VuZXJpYyB0ZW1wbGF0ZSBmb2xkZXIuIFRoaXMgZm9sZGVyIHdpbGwgaGF2ZSBmaWxlcyBhbmQgc3RydWN0dXJlIHdlIG5lZWQgZm9yIG91ciBhY3R1YWwgZm9sZGVyLiBFYWNoIHRpbWUsIHdlIHdpbGwganVzdCBjb3B5IHRoYXQgZm9sZGVyJ3MgY29udGVudHMgaW50byB0aGUgZm9sZGVyIHRoYXQgd2Ugd2FudCB0byB0dXJuIGludG8gYSBSIGZvbGRlci4gQW5kIGRvIGEgZ2xvYmFsIHNlYXJjaCB0byByZXBsYWNlIHRoZSB0ZW1wbGF0ZSBmb2xkZXIncyBmb2xkZXIgbmFtZSB3aXRoIHRoZSBhY3R1YWwgcHJvamVjdCBuYW1lLiBUbyBhdm9pZCBjb25mdXNpb24sIGdlbmVyYXRlIHRoaXMgZm9sZGVyIG91dHNpZGUgb2YgYW4gZXhpc3RpbmcgUiBwYWNrYWdlLg0KDQpJZiB0aGVyZSBpcyBhbHJlYWR5IGEgUiBmb2xkZXIgaW4geW91ciBleGlzdGluZyBwcm9qZWN0LCBkZWxldGUgdGhhdCBvciByZW5hbWUgdGhhdCBhbmQgbW92ZSBmaWxlcyBiYWNrIGludG8gdGhlICovUiogZm9sZGVyIGFmdGVyIGNvbXBsZXRpb24uIE1ha2Ugc3VyZSB0aGVyZSBhcmUgbm8gZHVwbGljYXRlIGZvbGRlciBvciBmaWxlIG5hbWVzIGluIHRoZSBvbGQgYW5kIHRoZSBuZXcgcHJvamVjdC4NCg0KU2VhcmNoIHJlcGxhY2UgdGhlIHdvcmQgKnJwcmp0ZW1wbGF0ZSogaW5zaWRlIHlvdXIgb2xkIHByb2plY3QgZm9sZGVyIHdpdGggdGhlIG5ldyBmaWxlcywgcmVwbGFjZSB0aGF0IHdpdGggeW91ciBwcm9qZWN0IG5hbWUuIFNob3VsZCBhcHBlYXIgaW4gdGhyZWUgZGlmZmVyZW50IHNwb3RzLg0KDQojIyMgUiBwcm9qZWN0IHRlbXBsYXRlDQoNClRoZSBbcnByanRlbXBsYXRlXVtodHRwczovL2dpdGh1Yi5jb20vRmFuV2FuZ0Vjb24vVGV4NEVjb24vdHJlZS9tYXN0ZXIvbm9udGV4L3Jwcmp0ZW1wbGF0ZV0gc2VydmVzIHRoaXMgdGVtcGxhdGluZyByb2xlLg0KDQpgYGB7cn0NCiMgQ3JlYXRlIHByb2plY3QNCmRldnRvb2xzOjpjcmVhdGUoIkM6L1VzZXJzL2Zhbi9UZXg0RWNvbi9ub250ZXgvcnByanRlbXBsYXRlIikNCmBgYA0KDQpSdW5uaW5nIHRoZSAqZGV2dG9vbHM6OmNyZWF0ZSgpKiBjb21tYW5kIHdpbGwgY3JlYXRlIHRoZSBjb3JlIG5lZWRlZCBmb2xkZXIgc3RydWN0dXJlIHdpdGg6DQoNCjEuIE5BTUVTUEFDRQ0KMi4gREVTQ1JJUFRJT04NCjMuICouZ2l0aWdub3JlKg0KNC4gKi5SYnVpbGRpZ25vcmUqDQo0LiAqLlJwcm9qKg0KNS4gRW1wdHkgUiBmb2xkZXINCg0KTm93IGN1c3RvbWl6ZSB0aGlzIGZvbGRlciBmb3IgZnV0dXJlIHVzZSB3aXRoDQoNCjEuIGN1c3RvbSAqLmdpdGlnbm9yZSoNCjIuIE1JVCBMSUNFTlNFDQozLiBldGMuDQoNCkZvciBhZGRpbmcgdmlnbmV0dGUgbGF0ZXI6DQoNCkFkZCB0aGVzZSB0byB0aGUgREVTQ1JJUFRJT04gZmlsZToNCi0gU3VnZ2VzdHM6IGtuaXRyLCBybWFya2Rvd24NCi0gVmlnbmV0dGVCdWlsZGVyOiBrbml0cg0KDQoNCiMgRGV2ZWxvcCBhbmQgUGFja2FnZSBSIFByb2plY3QNCg0KRGV2ZWxvcGluZyBhIHBhY2thZ2UgbWVhbnMgd3JpdGUgdmFyaW91cyB2aWduZXR0ZXMgYW5kIGZ1bmN0aW9ucy4gTXkgcHJvY2VzcyBpcyB0byB3cml0ZSB2YXJpb3VzIHZpZ25ldHRlcyBmaXJzdCwgdG8gYmFzaWNhbGx5IHRlc3Qgb3V0IGNvcmUgZnVuY3Rpb25hbGl0aWVzLiBUaGVuIGNvbnZlcnQgcGFydHMgb2YgdGhvc2UgdmlnbmV0dGVzIHRvIGZ1bmN0aW9ucy4NCg0KQXMgZnVuY3Rpb25zIGFyZSBkZXZlbG9wZWQsIHNvbWUgdmlnbmV0dGVzIGNhbiBiZSBpbnZva2VkIGRpZmZlcmVudGx5LCB0YWtpbmcgYWR2YW50YWdlIG9mIG5ld2x5IHdyaXR0ZW4gZnVuY3Rpb25zLiBNYWtlIHN1cmUga2VlcCB0aGUgb3JpZ2luYWwgdmlnbmV0dGUgdGhhdCBpcyBub3QgZGVwZW5kZW50IG9uIGFueSBvdGhlciBmdW5jdGlvbnMgZm9yIGVhc2Ugb2YgZ29pbmcgdG8gdGhlIGluaXRpYWwgcG9pbnQgYW5kIGZpZ3VyaW5nIG91dCB3aGF0IGlzIGhhcHBlbmluZy4gTmFtZXMgY291bGQgYmUgd3JpdHRlbiB0byBpbmRpY2F0ZSB2aWduZXR0ZSB2aW50YWdlLg0KDQojIyBEZXZlbG9wbWVudCBQcm9jZXNzDQoNCjEuIFdyaXRlIG9yaWdpbmFsIHZpZ25ldHRlIHdpdGggZGVwZW5kZW5jaWVzLCBtaW5pbWl6ZSBkZXBlbmRlbmNpZXMsIGZvciBleGFtcGxlLCBkbyBub3QgaW1wb3J0IHRpZHl2ZXJzZSwgc2luY2UgcGFja2FnZSB3aWxsIG5vdCBhbGxvdyBmb3IgYWxsIHRpZHl2ZXJzZSBjb21wb25lbnRzIHRvIGJlIGFkZGVkLCB0b28gbXVjaCBzcGFjZSBuZWVkZWQuDQogICAgLSB0aGlzIGlzIG5vdCByZWFsbHkgYSB2aWduZXR0ZSwgaXQgaXMgYSBmdW5jdGlvbiB0ZXN0aW5nIHNhbmRib3ggdGhhdCBkb2VzIG5vdCBjYWxsIGFueSBwYWNrYWdlIGZ1bmN0aW9ucyBidXQgcHJvdmlkZXMgbGluZSBieSBsaW5lIGRlc2NyaXB0aW9ucyBmb3IgdGhlIGNvcmUgZnVuY3Rpb25zIHdpdGggcHJpbnQgb3V0cHV0cy4NCjIuIFRlc3QgdmlnbmV0dGUgaW5zaWRlIFJzdHVkaW8vVlNDb2RlIGV0Yy4gKFRoZXNlIHZpZ25ldHRlIGRvIG5vdCBkZXBlbmQgb24gdGhlIGZ1bmN0aW9uIHRvIGJlIHdyaXR0ZW4gYmVsb3csIHRoZXkgZG8gbm90IGV4aXN0IHlldCkNCjMuIFdoZW4gcmF3IHZpZ25ldHRlcyB3b3JrLCBzdGFydCBjb252ZXJ0aW5nIHZpZ25ldHRlIGNvbXBvbmVudHMgdG8gZnVuY3Rpb25zLCBpbmNsdWRlIG1pbmltYWwgZGVwZW5kZW5jaWVzLA0KICAgIC0gaW4gZnVuY3Rpb246ICpAaW1wb3J0Kg0KICAgIC0gYWRkIHRvIERFU0NSSVBUSU9OOiAqKnVzZXRoaXM6OnVzZV9wYWNrYWdlKCJ0aWR5ciIpKiogaWYgdGlkeXIgaXMgbmVlZGVkIGFzICpJTVBPUlQqDQogICAgLSAqREVQRU5EUyogdnMgKklNUE9SVFMqDQogICAgLSAqaW1wb3J0YW50Kjogc2xvd2x5IGNoZWNrIHdoYXQgZG9lcyB0aGUgZnVuY3Rpb24gZGVwZW5kIG9uLCBmb3IgZXhhbXBsZSAqUjRFY29uKiBoYXMgaXRzIG93biBkZXBlbmRlbmNpZXMsIHdoZW4gaW5zdGFsbGluZyBhcyBwYWNrYWdlcywgbWFrZSB0aG9zZSBkZXBlbmRlbmNpZXMgZXhwbGljaXQgaW4gdGhlIG5ldyBmdW5jdGlvbiBpZiBpdCBjYWxscyAqUjRFY29uKi4gT3RoZXJ3aXNlLCAqdGVzdCgpKiBtaWdodCB0aHJvdyBlcnJvci4gVGhpcyBpcyByZXNvbHZlZCBpZiAqUjRFY29uKiBhZGQgc2V2ZXJhbCB0aGluZ3MgdW5kZXIgZGVwZW5kcy4NCjMuIFJ1biB0aGUgZG9jdW1lbnRhdGlvbiB0b29sOg0KICAgIC0gKipzZXR3ZCgnQzovVXNlcnMvZmFuL1Byak9wdGlBbGxvYycpKioNCiAgICAtICoqZGV2dG9vbHM6OmRvY3VtZW50KCkqKg0KICAgIC0gdGhpcyB1cGRhdGVzICpOQU1FU1BBQ0UqDQogICAgLSBnZW5lcmF0ZXMgbmV3ICouUmQqIGZpbGVzDQo0LiBUZXN0IEBleGFtcGxlcyBmcm9tIFJveHlnZW4gZG9jdW1lbnRhdGlvbnMNCiAgICAtICoqZGV2dG9vbHM6OnJ1bl9leGFtcGxlcygpKioNCiAgICAtIHRoaXMgdGVzdHMgaWYgKkBleGFtcGxlcyogYXJlIHdvcmtpbmcuDQo1LiBDb250aW51ZSAzIHRvIDQgLSBbIF0gbyBjb252ZXJ0IHZhcmlvdXMgY29tcG9uZW50cyBvZiB2aWduZXR0ZS4NCjYuIEJ1aWxkIHBhY2thZ2UgYW5kIGxvYWQgcGFja2FnZSB1c2luZzoNCiAgICAtICoqZGV2dG9vbHM6OmNoZWNrKCkqKg0KICAgIC0gdGhpcyB3aWxsIHJ1biAqcnVuX2V4YW1wbGVzKiBhcyB3ZWxsLCBidXQgYXQgdGhlIHZlcnkgZW5kLCB3aWxsIHRlc3QgZXZlcnl0aGluZyBmb3IgcGFja2FnZS4gIA0KNy4gTm93IGluc3RhbGwgcGFja2FnZQ0KICAgIC0gKipkZXZ0b29sczo6aW5zdGFsbCgpKioNCiAgICAtICpsaWJyYXJ5KFByak9wdGlBbGxvYykqIHNob3VsZCB3b3JrIG5vdw0KICAgIC0gKmxzKCJwYWNrYWdlOlByak9wdGlBbGxvYyIpKiB0byBsaXN0IGFsbCBvYmplY3RzIGluIHBhY2thZ2UgIA0KICAgIC0gKipkZXZ0b29sczo6cmVsb2FkKCkqKg0KOC4gUHVibGlzaCB3ZWJwYWdlLCByZXZpZXcgbG9jYWwsIHVzaW5nICpwa2dkb3duKjoNCiAgICAtICoqcGtnZG93bjo6YnVpbGRfc2l0ZSgpKioNCg0KYGBge3J9DQojIFN0ZXAgMw0Kcm0obGlzdCA9IGxzKGFsbC5uYW1lcyA9IFRSVUUpKQ0Kc2V0d2QoJ0M6L1VzZXJzL2Zhbi9QcmpPcHRpQWxsb2MnKQ0KZGV2dG9vbHM6OmRvY3VtZW50KCkNCiMgU3RlcCA0DQpkZXZ0b29sczo6cnVuX2V4YW1wbGVzKCkNCiMgU3RlcCA2DQpkZXZ0b29sczo6Y2hlY2soKQ0KIyBTdGVwIDcgDQpkZXZ0b29sczo6aW5zdGFsbCgpDQpsaWJyYXJ5KFByak9wdGlBbGxvYykNCmxzKCJwYWNrYWdlOlByak9wdGlBbGxvYyIpDQpkZXZ0b29sczo6cmVsb2FkKCkNCiMgU3RlcCA4IA0KcGtnZG93bjo6YnVpbGRfc2l0ZSgpDQpgYGANCg0KIyMgQXR0YWNoIHZzIEltcG9ydA0KDQpQYWNrYWdlcyB0aGF0IGFyZSBsb2FkZWQgaW4gdW5kZXIgKnVzZXRoaXM6OnVzZV9wYWNrYWdlKiogYXJlIGltcG9ydHMsIG5vdCBhdHRhY2hlZC4NCg0KQWNjb3JkaW5nIHRvIFtXaWNraGFtXShodHRwOi8vci1wa2dzLmhhZC5jby5uei9uYW1lc3BhY2UuaHRtbCk6DQogICAgLSAqYXBrZzo6YmZuYygpKjogd2hlbiBwYWNrYWdlcyBhcmUgbG9hZGVkLCBpdHMgY29tcG9uZW50cyBjYW4gYmUgYWNjZXNzZWQgd2l0aCB0aGUgKjo6Ki4gVGhhdCBpcywgaWYgSSB3YW50IHRvIHVzZSB0aGUgKmRvY3VtZW50KCkqIGZyb20gZnJvbSAqZGV2dG9vbHMoKSosIGlmIEkgZmlyc3QgYXR0YWNoLCBJIGNhbiBkaXJlY3RseSBjYWxsIGRvY3VtZW50KCkuIFdpdGhvdXQgYXR0YWNoaW5nLCBqdXN0IGxvYWRpbmcsIEkgaGF2ZSB0byBkbyAqZGV2dG9vbHM6OmRvY3VtZW50KCkqLg0KICAgIC0gKmF0dGFjaCgpLCBsaWJyYXJ5KCkqIDogd2hlbiBhdHRhY2hpbmcsIG11c3QgZmlyc3QgbG9hZC4gQWZ0ZXIgYXR0YWNoZWQsIGNhbiBkaXJlY3RseSBjYWxsIGZ1bmN0aW9uIG5hbWVzLCBmb3IgZXhhbXBsZSwgKmZpbHRlciosIGl0IGlzIG9uIHRoZSBzZWFyY2ggcGF0aC4NCg0KU2VlIFtIb3cgUiBTZWFyY2hlcyBhbmQgRmluZHMgU3R1ZmYNCl0oaHR0cDovL2Jsb2cub2JlYXV0aWZ1bGNvZGUuY29tL1IvSG93LVItU2VhcmNoZXMtQW5kLUZpbmRzLVN0dWZmLyk6DQoNCj4gVGhlIGJldHRlciBzb2x1dGlvbiB3b3VsZCBoYXZlIGJlZW4gdG8gc3R1ZmYgcmVzaGFwZeKAmXMgY2FzdCgpIGZ1bmN0aW9uIGludG8gaW1wb3J0czpnZ3Bsb3QyIHVzaW5nIHRoZSBJbXBvcnRzIGZlYXR1cmUuIEluIHRoYXQgY2FzZSwgd2Ugd291bGQgaGF2ZSB0cmF2ZWxsZWQgZnJvbSAyIHRvIDMgYW5kIHN0b3BwZWQuIE5vdyB5b3UgY2FuIHNlZSB3aHkgdGhlIGNob2ljZSBiZXR3ZWVuIEltcG9ydHMgYW5kIERlcGVuZHMgaXMgbm90IGFyYml0cmFyeS4gV2l0aCBzbyBtYW55IHBhY2thZ2VzIG9uIENSQU4gYW5kIHNvIG1hbnkgb2YgdXMgd29ya2luZyBpbiByZWxhdGVkIGRpc2NpcGxpbmVzIGl0cyBubyBzdXJwcmlzZSB0aGF0IHNhbWUtbmFtZWQgZnVuY3Rpb25zIGFwcGVhciBpbiBtdWx0aXBsZSBwYWNrYWdlcy4gRGVwZW5kcyBpcyBsZXNzIHNhZmUuIERlcGVuZHMgbWFrZXMgYSBwYWNrYWdlIHZ1bG5lcmFibGUgdG8gd2hhdGV2ZXIgb3RoZXIgcGFja2FnZXMgYXJlIGxvYWRlZCBieSB0aGUgdXNlci4NCg0KDQpUaGlzIGlzIFtxdWVzdGlvbl0oaHR0cHM6Ly9zdGFja292ZXJmbG93LmNvbS9xdWVzdGlvbnMvODYzNzk5My9iZXR0ZXItZXhwbGFuYXRpb24tb2Ytd2hlbi10by11c2UtaW1wb3J0cy1kZXBlbmRzKSBhcyB3ZWxsLg0KDQojIyBEZWFsaW5nIHdpdGggRGF0YXNldHMNCg0KRGF0YXNldHMgdG8gYmUgdXNlZCB3aXRoIHRoZSBwcm9qZWN0IHNob3VsZCBiZSBpbiB0aGUgKi9kYXRhKiBmb2xkZXIuIFRoZSBuYW1lIG9mIHRoZSBkYXRhIGZpbGUgc2hvdWxkIGFwcGVhciBpbiBzZXZlcmFsIHNwb3RzIGFuZCBiZSBjb25zaXN0ZW50LCBzdXBwb3NlIGRhdGEgaXMgY2FsbGVkICphYmMqDQoNCjEuIFJkYXRhIGZpbGUgbmFtZTogKi9kYXRhL2FiYy5SZGF0YSoNCjIuIFJkYXRhIGZpbGUgY29udGFpbnMgYSBkYXRhZnJhbWUgaW5zaWRlIHRoYXQgaGFzIHRvIGJlIGNhbGxlZCBhYmMgYXMgd2VsbCwgc28gb3BlbiB0aGUgUmRhdGEgZmlsZSBpbnNpZGUgUnN0dWRpbyBvciBSLCB3aGF0IGlzIHRoZSBmaWxlIGNhbGxlZD8gaXMgaXQgYWJjPyBMb29rIHVuZGVyIGVudmlyb25tZW50DQozLiBJbiB0aGUgKi9SL2ZmcF9hYmMuUiosIHRoZSBsYXN0IGxpbmUgc2hvdWxkIGJlICJhYmMiLCBidXQgdGhlIGZpbGUgbmFtZSBkb2VzIG5vdCBuZWVkIHRvIGJlLg0KNC4gSWYgYW55IGZ1bmN0aW9ucyB1c2VzIGEgZGF0YXNldCwgdGhpcyBjb3VsZCBiZSBkb25lIGluIHR3byB3YXlzOg0KICAgIC0gYSBkYXRhc2V0IGlzIGEgcGFyYW1ldGVyIGZvciBhIGZ1bmN0aW9uLiBJbiBAZXhhbXBsZSwgY2FuIGxvYWQgaW4gZGF0YWZyYW1lcyBkZWNsYXJlZCBpbiBkZXBlbmRlbmNpZXMuDQogICAgLSBpbnNpZGUgYSBmdW5jdGlvbiwgaWYgZGlyZWNsdHkgdXNlIGEgZGF0YWZyYW1lLCB0aGF0IGRhdGEgZnJhbWUgc2hvdWxkIGJlIGRlY2xhcmVkIGZvbGxvd2luZyAxIHRvIDMgaGVyZSBpbiAqL2RhdGEqLCBtYWtlIHN1cmUgaXQgaGFzIHRoZSBzYW1lIG5hbWUsIGFuZCB3cml0ZTogKmRhdGEoZGF0YV9uYW1lKSogYXQgdGhlIGJlZ2lubmluZyBvZiB0aGUgZnVuY3Rpb24gdG8gZXhwbGljaXRseSBsb2FkIHRoZSBmdW5jdGlvbiBpbi4NCg0KIyMgTG9nZ2luZyBhbmQgUHJpbnRpbmcNCg0KTG9nZ2luZyBhbmQgcHJpbnRpbmcgY29udHJvbCBpcyBhcyB1c3VhbCBpbXBvcnRhbnQuIFNlZToNCg0KMS4gW1doeSBpcyBtZXNzYWdlKCkgYSBiZXR0ZXIgY2hvaWNlIHRoYW4gcHJpbnQoKSBpbiBSIGZvciB3cml0aW5nIGEgcGFja2FnZT9dKGh0dHBzOi8vc3RhY2tvdmVyZmxvdy5jb20vcXVlc3Rpb25zLzM2Njk5MjcyL3doeS1pcy1tZXNzYWdlLWEtYmV0dGVyLWNob2ljZS10aGFuLXByaW50LWluLXItZm9yLXdyaXRpbmctYS1wYWNrYWdlLzM2NzAwMjk0IzM2NzAwMjk0KQ0KMi4gW0NvbmRpdGlvbnNdKGh0dHBzOi8vYWR2LXIuaGFkbGV5Lm56L2NvbmRpdGlvbnMuaHRtbCkNCg0KRm9yIHNpbXBsZSBwYWNrYWdlLCBmb3IgcmVncmVzc2lvbiByZXN1bHRzLCB0YWJsZSBvdXRwdXRzIGV0YywgdXNlICpwcmludCosIHByaW50IHN0YXRlbWVudHMgY2FuIGJlIHN1cHByZXNzZWQgYnkgKmludmlzaWJsZShjYXB0dXJlLm91dHB1dChhYmMgPC0gZmZ5X29wdF9kdGdjaF9jYmVtNCgpKSkqLg0KDQojIyBCdWlsZCBQcm9qZWN0DQoNCltjaGVja10oaHR0cDovL3ItcGtncy5oYWQuY28ubnovY2hlY2suaHRtbCkgdG8gbWFrZSBzdXJlIGZpbGUgc3RydWN0dXJlcyBldGMgYXJlIGFsbCBjb3JyZWN0LiBXaWxsIGFsc28gdGVzdCB0aGUgQGV4YW1wbGVzIGluc2lkZSByIGZ1bmN0aW9ucyBpbiBST3h5Z2VuIGNvbW1lbnRzLg0KDQpgYGB7cn0NCiMgd2lsbCBjaGVjayB0aGUgZmlsZSBzdHJ1Y3R1cmUsIGJ1dCBhbHNvIEBleGFtcGxlIGluIGZ1bmN0aW9ucy4NCmRldnRvb2xzOjpjaGVjaygnQzovVXNlcnMvZmFuL1Byak9wdGlBbGxvYycpDQpkZXZ0b29sczo6Y2hlY2soJ0M6L1VzZXJzL2Zhbi9QcmpPcHRpQWxsb2MnLCBtYW51YWw9RkFMU0UpDQpkZXZ0b29sczo6cnVuX2V4YW1wbGVzKCdDOi9Vc2Vycy9mYW4vUHJqT3B0aUFsbG9jJykNCmRldnRvb2xzOjpidWlsZCgnQzovVXNlcnMvZmFuL1Byak9wdGlBbGxvYycpDQpgYGANCg0KIyMgUiBwcm9qZWN0IGJ1aWxkIGFuZCBnZW5lcmF0ZSBkb2N1bWVudGF0aW9ucw0KDQpBc3N1bWluZyB0aGF0IHdlIGhhdmUgdXNlZCByb3h5Z2VuMiBmb3JtYXRzIHRvIHdyaXRlIGZ1bmN0aW9ucywgbm93IGdlbmVyYXRlICouUmQqIGF1dG9tYXRpY2FsbHkgd2l0aCB0aGUgKmRvY3VtZW50KCkqIGZ1bmN0aW9uLiBUaGlzIHNob3VsZCBjcmVhdGUgYSAqL21hbiogZm9sZGVyIGluIHdoaWNoIHZhcmlvdXMgKi5SZCogZmlsZXMgYXJlIHN0b3JlZC4gTm90ZSB0aGF0IHRoZWlyIC5SZCBhcmUgZm9yIHNwZWNpZmljIFIgZnVuY3Rpb25zLCBub3QgZm9yIGZpbGVzIHRoYXQgY29udGFpbiBtdWx0aXBsZSBmdW5jdGlvbnMuDQoNCmBgYHtyfQ0KIyBhZGQgZGVwZW5kZW5jaWVzOg0Kc2V0d2QoJ0M6L1VzZXJzL2Zhbi9QcmpPcHRpQWxsb2MnKQ0KdXNldGhpczo6dXNlX3BhY2thZ2UoInRpZHlyIikNCnVzZXRoaXM6OnVzZV9wYWNrYWdlKCJkcGx5ciIpDQp1c2V0aGlzOjp1c2VfcGFja2FnZSgic3RyaW5nciIpDQp1c2V0aGlzOjp1c2VfcGFja2FnZSgiYnJvb20iKQ0KdXNldGhpczo6dXNlX3BhY2thZ2UoImdncGxvdDIiKQ0KdXNldGhpczo6dXNlX3BhY2thZ2UoIlI0RWNvbiIpDQojIGRvY3VtZW50IHdpbGwgZ2VuZXJhdGUgbmV3IE5BTUVTUEFDRSwgc28gYWZ0ZXIgZGVwZW5kZW5jaWVzIGFkZGVkLCBuZWVkIHRvIGRvY3VtZW50Lg0KIyBmdW5jaXRvbiBpbXBvcnQgbXVzdCBiZSBjb25zaXN0ZW50IHdpdGggdGhlc2UNCmRldnRvb2xzOjpkb2N1bWVudCgnQzovVXNlcnMvZmFuL1Byak9wdGlBbGxvYycpDQpgYGANCg0KIyMjIFZpZ25ldHRlcyBHZW5lcmF0aW9uDQoNClRvIGdlbmVyYXRlIFZpZ25ldHRlcywgZm9sbG93IGluc3RydWN0aW9ucyBbaGVyZV0oaHR0cHM6Ly9rYnJvbWFuLm9yZy9wa2dfcHJpbWVyL3BhZ2VzL3ZpZ25ldHRlcy5odG1sKToNCg0KMS4gY3JlYXRlIGEgdmlnbmV0dGUgZGlyZWN0b3J5DQoyLiBwdXQgUk1EIGZpbGVzIGluIHRoZXJlLCBSTUQgZnJvbnQgbWF0dGVyIHNob3VsZCBsb29rIGxpa2UgYmVsb3cNCjMuIGFkZCB0byBERVNDUklQVElPTiBmaWxlOg0KICAgIC0gU3VnZ2VzdHM6IGtuaXRyLCBybWFya2Rvd24NCiAgICAtIFZpZ25ldHRlQnVpbGRlcjoga25pdHINCjQuIHJ1biAqZGV2dG9vbHM6OmJ1aWxkX3ZpZ25ldHRlcygpKi4gUnVubmluZyBidWlsZCBzaG91bGQgYnVpbGQgYWxsPyBhdXRvbWF0aWNhbGx5IGJ1aWxkcyB2aWduZXR0ZQ0KDQpgYGANCnRpdGxlOiAiUHV0IHRoZSB0aXRsZSBvZiB5b3VyIHZpZ25ldHRlIGhlcmUiDQpvdXRwdXQ6IHJtYXJrZG93bjo6aHRtbF92aWduZXR0ZQ0KdmlnbmV0dGU6ID4NCiAgJVxWaWduZXR0ZUluZGV4RW50cnl7UHV0IHRoZSB0aXRsZSBvZiB5b3VyIHZpZ25ldHRlIGhlcmV9DQogICVcVmlnbmV0dGVFbmdpbmV7a25pdHI6OnJtYXJrZG93bn0NCiAgXHVzZXBhY2thZ2VbdXRmOF17aW5wdXRlbmN9DQpgYGANCg0KYGBge3J9DQpkZXZ0b29sczo6YnVpbGRfdmlnbmV0dGVzKCdDOi9Vc2Vycy9mYW4vUHJqT3B0aUFsbG9jJykNCmRldnRvb2xzOjpjaGVjaygpDQpgYGANCg0KDQojIyBSIHByb2plY3QgYnVpbGQgc2l0ZSB3aXRoIHBrZ2Rvd24NCg0KT25jZSB3ZSBoYXZlIHVzZWQgKnBrZ2Rvd246OmJ1aWxkX3NpdGUoKSosIGJ5IGRlZmF1bHQsIGFsbCBodG1sIGFuZCBvdGhlciBwYWNrYWdlIHByZXNlbnRhdGlvbiBmaWxlcyBhbmQgcmVmZXJlbmNlIGZpbGVzIGFyZSBzYXZlZCBpbiB0aGUgKi9kb2NzKiBmb2xkZXIsIGJ1aWxkX3NpdGUgaXMgZm9yIGJ1aWxkaW5nIHNpdGUsIG5vdCBmb3IgZ2VuZXJhdGluZyAqL21hbiogZG9jdW1lbmF0aW9uLiBJZiBSIGZpbGVzIGNoYW5nZSwgbmVlZCB0byBkb2N1bWVudCBmaXJzdCwgYmVmb3JlIHJlYnVpbGRpbmcgc2l0ZS4NCg0KYGBge3J9DQpwa2dkb3duOjpidWlsZF9zaXRlKCJDOi9Vc2Vycy9mYW4vUHJqT3B0aUFsbG9jIikNCnBrZ2Rvd246OmJ1aWxkX3NpdGUoIkM6L1VzZXJzL2Zhbi9QcmpPcHRpQWxsb2MiLGJ1aWxkX3ZpZ25ldHRlcz1GQUxTRSkNCmBgYA0K</div>
 
 
 

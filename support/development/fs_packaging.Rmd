@@ -3,14 +3,14 @@ title: |
   | Generate R Package Example
   | roxygen2 and pkgdown
 output:
-  html_document:
+  pdf_document:
+    df_print: paged
     number_sections: true
   html_notebook:
     number_sections: true
   word_document:
     number_sections: true
-  pdf_document:
-    df_print: paged
+  html_document:
     number_sections: true
 urlcolor: blue
 always_allow_html: yes
@@ -46,9 +46,24 @@ Document and generate sharable R package.
     - *ffv_*: for project specific functions vignettes files, generally RMD
     - *ff_*: for non-project specific functions files
     - *ffp_*: for project specific functions files
+    - *ffy_*: for project specific utility files
     - Each function file could be prepared to have multiple functions inside, each file have the root which is the function name.
 
-# Create R Project
+Additionally, follow these general structures for *functions* in */R* folder:     
+
+1. 3 letter/digit project name
+2. 3 letter/digit current file name, in R4E, three letter func group name: *ffp_opt_lin.R*
+3. 5 letter/digit function name within file: *function ffp_opt_lin_solum*
+
+With this structure, we end up with potentially fairly long names, but hopefully also not too long and clear.
+
+Additionally, follow these general structures for *vignettes* in */vignettes* folder:
+
+1. Follow conventions for function name vignettes should be associated with functions
+2. Append onto existing function name 5 letter/digit to describe what this vignettes is suppose to achieve: *ffv_opt_lin_solum_vign1.Rmd*.
+    + note the file starts with *ffv*
+
+# Create R Project Directory
 
 ## Folder does not exist yet
 
@@ -78,6 +93,7 @@ Search replace the word *rprjtemplate* inside your old project folder with the n
 The [rprjtemplate][https://github.com/FanWangEcon/Tex4Econ/tree/master/nontex/rprjtemplate] serves this templating role.
 
 ```{r}
+# Create project
 devtools::create("C:/Users/fan/Tex4Econ/nontex/rprjtemplate")
 ```
 
@@ -96,29 +112,82 @@ Now customize this folder for future use with
 2. MIT LICENSE
 3. etc.
 
-# Package R Project
+For adding vignette later:
 
-## Build Project
+Add these to the DESCRIPTION file:
+- Suggests: knitr, rmarkdown
+- VignetteBuilder: knitr
+
+
+# Develop and Package R Project
+
+Developing a package means write various vignettes and functions. My process is to write various vignettes first, to basically test out core functionalities. Then convert parts of those vignettes to functions.
+
+As functions are developed, some vignettes can be invoked differently, taking advantage of newly written functions. Make sure keep the original vignette that is not dependent on any other functions for ease of going to the initial point and figuring out what is happening. Names could be written to indicate vignette vintage.
+
+## Development Process
+
+1. Write original vignette with dependencies, minimize dependencies, for example, do not import tidyverse, since package will not allow for all tidyverse components to be added, too much space needed.
+    - this is not really a vignette, it is a function testing sandbox that does not call any package functions but provides line by line descriptions for the core functions with print outputs.
+2. Test vignette inside Rstudio/VSCode etc. (These vignette do not depend on the function to be written below, they do not exist yet)
+3. When raw vignettes work, start converting vignette components to functions, include minimal dependencies,
+    - in function: *@import*
+    - add to DESCRIPTION: **usethis::use_package("tidyr")** if tidyr is needed as *IMPORT*
+    - *DEPENDS* vs *IMPORTS*
+    - *important*: slowly check what does the function depend on, for example *R4Econ* has its own dependencies, when installing as packages, make those dependencies explicit in the new function if it calls *R4Econ*. Otherwise, *test()* might throw error. This is resolved if *R4Econ* add several things under depends.
+3. Run the documentation tool:
+    - **setwd('C:/Users/fan/PrjOptiAlloc')**
+    - **devtools::document()**
+    - this updates *NAMESPACE*
+    - generates new *.Rd* files
+4. Test @examples from Roxygen documentations
+    - **devtools::run_examples()**
+    - this tests if *@examples* are working.
+5. Continue 3 to 4 - [ ] o convert various components of vignette.
+6. Build package and load package using:
+    - **devtools::check()**
+    - this will run *run_examples* as well, but at the very end, will test everything for package.  
+7. Now install package
+    - **devtools::install()**
+    - *library(PrjOptiAlloc)* should work now
+    - *ls("package:PrjOptiAlloc")* to list all objects in package  
+    - **devtools::reload()**
+8. Publish webpage, review local, using *pkgdown*:
+    - **pkgdown::build_site()**
 
 ```{r}
-devtools::build('C:/Users/fan/PrjOptiAlloc')
+# Step 3
+rm(list = ls(all.names = TRUE))
+setwd('C:/Users/fan/PrjOptiAlloc')
+devtools::document()
+# Step 4
+devtools::run_examples()
+# Step 6
+devtools::check()
+# Step 7
+devtools::install()
+library(PrjOptiAlloc)
+ls("package:PrjOptiAlloc")
+devtools::reload()
+# Step 8
+pkgdown::build_site()
 ```
 
-## R project build and generate documentations
+## Attach vs Import
 
-Assuming that we have used roxygen2 formats to write functions, now generate *.Rd* automatically with the *document()* function. This should create a */man* folder in which various *.Rd* files are stored. Note that their .Rd are for specific R functions, not for files that contain multiple functions.
+Packages that are loaded in under *usethis::use_package** are imports, not attached.
 
-```{r}
-devtools::document('C:/Users/fan/PrjOptiAlloc')
-```
+According to [Wickham](http://r-pkgs.had.co.nz/namespace.html):
+    - *apkg::bfnc()*: when packages are loaded, its components can be accessed with the *::*. That is, if I want to use the *document()* from from *devtools()*, if I first attach, I can directly call document(). Without attaching, just loading, I have to do *devtools::document()*.
+    - *attach(), library()* : when attaching, must first load. After attached, can directly call function names, for example, *filter*, it is on the search path.
 
-## R project build site with pkgdown
+See [How R Searches and Finds Stuff
+](http://blog.obeautifulcode.com/R/How-R-Searches-And-Finds-Stuff/):
 
-Once we have used *pkgdown::build_site()*, by default, all html and other package presentation files and reference files are saved in the */docs* folder, build_site is for building site, not for generating */man* documenation. If R files change, need to document first, before rebuilding site. 
+> The better solution would have been to stuff reshape’s cast() function into imports:ggplot2 using the Imports feature. In that case, we would have travelled from 2 to 3 and stopped. Now you can see why the choice between Imports and Depends is not arbitrary. With so many packages on CRAN and so many of us working in related disciplines its no surprise that same-named functions appear in multiple packages. Depends is less safe. Depends makes a package vulnerable to whatever other packages are loaded by the user.
 
-```{r}
-pkgdown::build_site("C:/Users/fan/PrjOptiAlloc")
-```
+
+This is [question](https://stackoverflow.com/questions/8637993/better-explanation-of-when-to-use-imports-depends) as well.
 
 ## Dealing with Datasets
 
@@ -127,3 +196,79 @@ Datasets to be used with the project should be in the */data* folder. The name o
 1. Rdata file name: */data/abc.Rdata*
 2. Rdata file contains a dataframe inside that has to be called abc as well, so open the Rdata file inside Rstudio or R, what is the file called? is it abc? Look under environment
 3. In the */R/ffp_abc.R*, the last line should be "abc", but the file name does not need to be.
+4. If any functions uses a dataset, this could be done in two ways:
+    - a dataset is a parameter for a function. In @example, can load in dataframes declared in dependencies.
+    - inside a function, if direclty use a dataframe, that data frame should be declared following 1 to 3 here in */data*, make sure it has the same name, and write: *data(data_name)* at the beginning of the function to explicitly load the function in.
+
+## Logging and Printing
+
+Logging and printing control is as usual important. See:
+
+1. [Why is message() a better choice than print() in R for writing a package?](https://stackoverflow.com/questions/36699272/why-is-message-a-better-choice-than-print-in-r-for-writing-a-package/36700294#36700294)
+2. [Conditions](https://adv-r.hadley.nz/conditions.html)
+
+For simple package, for regression results, table outputs etc, use *print*, print statements can be suppressed by *invisible(capture.output(abc <- ffy_opt_dtgch_cbem4()))*.
+
+## Check and Run Examples
+
+[check](http://r-pkgs.had.co.nz/check.html) to make sure file structures etc are all correct. Will also test the @examples inside r functions in ROxygen comments.
+
+```{r}
+# will check the file structure, but also @example in functions.
+devtools::check('C:/Users/fan/PrjOptiAlloc')
+devtools::check('C:/Users/fan/PrjOptiAlloc', manual=FALSE)
+devtools::run_examples('C:/Users/fan/PrjOptiAlloc')
+devtools::build('C:/Users/fan/PrjOptiAlloc')
+```
+
+## Add Depenencies
+
+Assuming that we have used roxygen2 formats to write functions, now generate *.Rd* automatically with the *document()* function. This should create a */man* folder in which various *.Rd* files are stored. Note that their .Rd are for specific R functions, not for files that contain multiple functions.
+
+```{r}
+# add dependencies:
+setwd('C:/Users/fan/PrjOptiAlloc')
+usethis::use_package("tidyr")
+usethis::use_package("dplyr")
+usethis::use_package("stringr")
+usethis::use_package("broom")
+usethis::use_package("ggplot2")
+usethis::use_package("R4Econ")
+# document will generate new NAMESPACE, so after dependencies added, need to document.
+# funciton import must be consistent with these
+devtools::document('C:/Users/fan/PrjOptiAlloc')
+```
+
+### Vignettes Generation
+
+To generate Vignettes, follow instructions [here](https://kbroman.org/pkg_primer/pages/vignettes.html):
+
+1. create a vignette directory
+2. put RMD files in there, RMD front matter should look like below
+3. add to DESCRIPTION file:
+    - Suggests: knitr, rmarkdown
+    - VignetteBuilder: knitr
+4. run *devtools::build_vignettes()*. Running build should build all? automatically builds vignette
+
+```
+title: "Put the title of your vignette here"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Put the title of your vignette here}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+```
+
+```{r}
+devtools::build_vignettes('C:/Users/fan/PrjOptiAlloc')
+devtools::check()
+```
+
+
+## R project build site with pkgdown
+
+Once we have used *pkgdown::build_site()*, by default, all html and other package presentation files and reference files are saved in the */docs* folder, build_site is for building site, not for generating */man* documenation. If R files change, need to document first, before rebuilding site.
+
+```{r}
+pkgdown::build_site("C:/Users/fan/PrjOptiAlloc")
+```
