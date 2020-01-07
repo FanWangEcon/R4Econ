@@ -17,7 +17,9 @@ To help clarify data types for inputs, add prefix to variable names:
   + list.ar.st: list of arrays of strings
   + ls_svr: list of string variable namess
 - sc = structure, generic large store
-
+- df = dataframe
+  + tb if tb, but tb can also be called df. 
+  
 Regressions
 
 - rs: reg results

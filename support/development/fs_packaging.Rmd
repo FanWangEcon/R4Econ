@@ -45,6 +45,7 @@ Document and generate sharable R package.
     - *fv_*: for non-project specific vignettes files, generally RMD
     - *ffv_*: for project specific functions vignettes files, generally RMD
     - *ff_*: for non-project specific functions files
+    - *ffd_*: for project specific data description files
     - *ffp_*: for project specific functions files
     - *ffy_*: for project specific utility files
     - Each function file could be prepared to have multiple functions inside, each file have the root which is the function name.
@@ -142,6 +143,7 @@ As functions are developed, some vignettes can be invoked differently, taking ad
     - generates new *.Rd* files
 4. Test @examples from Roxygen documentations
     - **devtools::run_examples()**
+    - if also want to test vignette, also do: **devtools::build_vignettes()**
     - this tests if *@examples* are working.
 5. Continue 3 to 4 - [ ] o convert various components of vignette.
 6. Build package and load package using:
@@ -162,6 +164,7 @@ setwd('C:/Users/fan/PrjOptiAlloc')
 devtools::document()
 # Step 4
 devtools::run_examples()
+devtools::build_vignettes()
 # Step 6
 devtools::check()
 # Step 7
