@@ -1,9 +1,9 @@
 #' ---
 #' title: "R DPLYR Tibble Basics"
 #' output:
-#'   html_document: default
-#'   word_document: default
 #'   pdf_document: default
+#'   word_document: default
+#'   html_document: default
 #'   html_notebook: default
 #' urlcolor: blue
 #' always_allow_html: yes
@@ -12,12 +12,12 @@
 #' Go back to [fan](http://fanwangecon.github.io/CodeDynaAsset/)'s [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
 #' 
 #' 
-## ----GlobalOptions, echo = T, results = 'hide', message=F, warning=F-----
+## ----GlobalOptions, echo = T, results = 'hide', message=F, warning=F----------
 rm(list = ls(all.names = TRUE))
 options(knitr.duplicate.label = 'allow')
 
 #' 
-## ----loadlib, echo = T, results = 'hide', message=F, warning=F-----------
+## ----loadlib, echo = T, results = 'hide', message=F, warning=F----------------
 library(tidyverse)
 library(knitr)
 library(kableExtra)
@@ -45,7 +45,7 @@ purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentat
 #' - dplyr rename all columns by index
 #' - see also: [SO-51205520](https://stackoverflow.com/questions/45535157/difference-between-dplyrrename-and-dplyrrename-all)
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # Base Inputs
 ar_col <- c(-1,+1)
 mt_rnorm <- matrix(rnorm(4,mean=0,sd=1), nrow=2, ncol=2)
@@ -60,17 +60,22 @@ ar_st_varnames <- paste0('tibcolvar', c(1,2,3))
 # Combine to tibble, add name col1, col2, etc.
 tb_combine <- as_tibble(mt_combine) %>% rename_all(~c(ar_st_varnames))
 
+# Tibble back to matrix
+mt_tb_combine_back <- data.matrix(tb_combine)
+
 # Display
 kable(mt_combine) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 kable(tb_combine) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
+kable(mt_tb_combine_back) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 
 #' 
 #' ## Tibble Row and Column and Summarize
 #' Show what is in the table: 1, column and row names; 2, contents inside table.
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 tb_iris <- as_tibble(iris)
 rownames(tb_iris)
 colnames(tb_iris)
@@ -83,7 +88,7 @@ summary(tb_iris)
 #' - dplyr arrange desc reverse
 #' - dplyr sort
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # Sort in Ascending Order
 tb_iris %>% select(Species, Sepal.Length, everything()) %>%
   arrange(Species, Sepal.Length) %>% head(10) %>%
@@ -103,7 +108,7 @@ tb_iris %>% select(Species, Sepal.Length, everything()) %>%
 #' ## R4Econ Summarize over Tible
 #' Use R4Econ's summary tool.
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 df_summ_stats <- ff_summ_percentiles(tb_iris)
 kable(t(df_summ_stats)) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
