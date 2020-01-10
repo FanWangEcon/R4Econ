@@ -61,7 +61,8 @@ With this structure, we end up with potentially fairly long names, but hopefully
 Additionally, follow these general structures for *vignettes* in */vignettes* folder:
 
 1. Follow conventions for function name vignettes should be associated with functions
-2. Append onto existing function name 5 letter/digit to describe what this vignettes is suppose to achieve: *ffv_opt_lin_solum_vign1.Rmd*.
+2. There should be a core vignette that has the same name as the R function it is trying to provide line by line details or math descriptions of. If the function is called: *ffp_opt_lin_solum.r*, the vignette shold be **ffv_opt_lin_solum.Rmd*. 
+3. Append onto existing function name 5 letter/digit to describe what this vignettes is suppose to achieve: *ffv_opt_lin_solum_vign1.Rmd*.
     + note the file starts with *ffv*
 
 # Create R Project Directory
@@ -168,9 +169,9 @@ devtools::build_vignettes()
 # Step 6
 devtools::check()
 # Step 7
-devtools::install()
-library(PrjOptiAlloc)
-# ls("package:PrjOptiAlloc")
+#devtools::install()
+#library(PrjOptiAlloc)
+#ls("package:PrjOptiAlloc")
 devtools::reload()
 # Step 8
 pkgdown::build_site()
