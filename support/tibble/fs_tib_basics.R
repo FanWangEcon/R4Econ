@@ -1,9 +1,9 @@
 #' ---
 #' title: "R DPLYR Tibble Basics"
 #' output:
-#'   pdf_document: default
-#'   word_document: default
 #'   html_document: default
+#'   word_document: default
+#'   pdf_document: default
 #'   html_notebook: default
 #' urlcolor: blue
 #' always_allow_html: yes
@@ -21,7 +21,7 @@ options(knitr.duplicate.label = 'allow')
 library(tidyverse)
 library(knitr)
 library(kableExtra)
-library(R4Econ)
+library(REconTools)
 # file name
 st_file_name = 'fs_tib_basics'
 # Generate R File
@@ -43,6 +43,7 @@ purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentat
 #' - dplyr rename tibble
 #' - dplyr rename tibble all variables
 #' - dplyr rename all columns by index
+#' - dplyr tibble add index column
 #' - see also: [SO-51205520](https://stackoverflow.com/questions/45535157/difference-between-dplyrrename-and-dplyrrename-all)
 #' 
 ## -----------------------------------------------------------------------------
@@ -59,6 +60,8 @@ ar_st_varnames <- paste0('tibcolvar', c(1,2,3))
 
 # Combine to tibble, add name col1, col2, etc.
 tb_combine <- as_tibble(mt_combine) %>% rename_all(~c(ar_st_varnames))
+# Add an index column to the dataframe, ID column
+tb_combine <- tb_combine %>% rowid_to_column(var = "ID")
 
 # Tibble back to matrix
 mt_tb_combine_back <- data.matrix(tb_combine)
@@ -103,9 +106,9 @@ tb_iris %>% select(Species, Sepal.Length, everything()) %>%
 
 #' 
 #' 
-#' # R4Econ Function
+#' # REconTools Function
 #' 
-#' ## R4Econ Summarize over Tible
+#' ## REconTools Summarize over Tible
 #' Use R4Econ's summary tool.
 #' 
 ## -----------------------------------------------------------------------------

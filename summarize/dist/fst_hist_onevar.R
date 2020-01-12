@@ -23,7 +23,7 @@ library(tidyverse)
 library(tidyr)
 library(knitr)
 library(kableExtra)
-library(R4Econ)
+library(REconTools)
 # file name
 st_file_name = 'fst_hist_onevar'
 # Generate R File

@@ -46,7 +46,7 @@ pkgdown::build_site()
 pkgdown::template_navbar()
 
 require(R4Econ)
-library(R4Econ)
+library(REconTools)
 
 ff_summ_percentiles()
 

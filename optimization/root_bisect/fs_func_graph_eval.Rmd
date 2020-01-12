@@ -11,9 +11,9 @@ always_allow_html: yes
 
 Go back to [fan](http://fanwangecon.github.io/CodeDynaAsset/)'s [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
 
-## Issue and Goal
+# Issue and Goal
 
-We want evaluate linear function $0=f(z_{ij}, x_i, y_i, \textbf{X}, \textbf{Y}, c, d)$. There are $i$ functions that have $i$ specific $x$ and $y$. For each $i$ function, we evaluate along a grid of feasible values for $z$, over $j\in J$ grid points, looking for the $j$ that is closest to the root. $\textbf{X}$ and $\textbf{Y}$ are arrays common across the $i$ equations, and $c$ and $d$ are constants.
+We want evaluate linear function $0=f(z_{ij}, x_i, y_i, \textbf{X}, \textbf{Y}, c, d)$. There are $i$ functions that have $i$ specific $x$ and $y$. For each $i$ function, we evaluate along a grid of feasible values for $z$, over $j\in J$ grid points, potentially looking for the $j$ that is closest to the root. $\textbf{X}$ and $\textbf{Y}$ are arrays common across the $i$ equations, and $c$ and $d$ are constants.
 
 The evaluation strategy is the following, given min and max for $z$ that are specific for each $j$, and given common number of grid points, generate a matrix of $z_{ij}$. Suppose there the number of $i$ is $I$, and the number of grid points for $j$ is $J$.
 
@@ -47,11 +47,15 @@ There is a function that takes $M=Q+P$ inputs, we want to evaluate this function
 
 $$M = Q+P = Q + Q*N$$
 
-Now we need to expand this by the number of choice grid. Each row, representing one equation, is expanded by the number of choice grids. We are graphically searching, or rather brute force searching, which means if we have 100 individuals, we want to plot out the nonlinear equation for each of these lines, and show graphically where each line crosses zero. We achieve this, by evaluating the equation for each of the 100 individuals along a grid of feasible choices. 
+Now we need to expand this by the number of choice grid. Each row, representing one equation, is expanded by the number of choice grids. We are graphically searching, or rather brute force searching, which means if we have 100 individuals, we want to plot out the nonlinear equation for each of these lines, and show graphically where each line crosses zero. We achieve this, by evaluating the equation for each of the 100 individuals along a grid of feasible choices.
 
 In this problem here, the feasible choices are shared across individuals.
 
 ```{r setup}
+# Parameters
+fl_rho = 0.20
+svr_id_var = 'INDI_ID'
+
 # it_child_count = N, the number of children
 it_N_child_cnt = 5
 # it_heter_param = Q, number of parameters that are heterogeneous across children
@@ -66,36 +70,46 @@ ar_nP_A_alpha = c(ar_nN_A, ar_nN_alpha)
 mt_nN_by_nQ_A_alpha = cbind(ar_nN_A, ar_nN_alpha)
 
 # Choice Grid for nutritional feasible choices for each
-it_N_choice_cnt = 3
 fl_N_agg = 100
 fl_N_min = 0
-ar_N_choices = seq(fl_N_min, fl_N_agg, length.out = it_N_choice_cnt)
+it_N_choice_cnt_ttest = 3
+it_N_choice_cnt_dense = 100
+ar_N_choices_ttest = seq(fl_N_min, fl_N_agg, length.out = it_N_choice_cnt_ttest)
+ar_N_choices_dense = seq(fl_N_min, fl_N_agg, length.out = it_N_choice_cnt_dense)
 
 # Mesh Expand
-tb_states_choices <- as_tibble(mt_nN_by_nQ_A_alpha) %>% expand_grid(choices = ar_N_choices)
+tb_states_choices <- as_tibble(mt_nN_by_nQ_A_alpha) %>% rowid_to_column(var=svr_id_var) 
+tb_states_choices_ttest <- tb_states_choices %>% expand_grid(choices = ar_N_choices_ttest)
+tb_states_choices_dense <- tb_states_choices %>% expand_grid(choices = ar_N_choices_dense)
 
 # display
-kable(tb_states_choices) %>%
+summary(tb_states_choices_dense)
+kable(tb_states_choices_ttest) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 ```
 
-## Evaluate nonlinear function over entire tibble dataframe
+# Apply Same Function all Rows, Some Inputs Row-specific, other Shared
 
-The bisection specific code does not need to do much. 
-- @param list variables in file for grouping
-- @param string variable name of input where functions are evaluated
-- @param string variable name of evaluated function output
+There are two types of inputs, row-specific inputs, and inputs that should be applied for each row. The Function just requires all of these inputs, it does not know what is row-specific and what is common for all row. Dplyr recognizes which parameter inputs already existing in the piped dataframe/tibble, given rowwise, those will be row-specific inputs. Additional function parameters that do not exist in dataframe as variable names, but that are pre-defined scalars or arrays will be applied to all rows.
 
-the function looks within group, finds min/max etc that are relevant. 
+- @param string variable name of input where functions are evaluated, these are already contained in the dataframe, existing variable names, row specific, rowwise computation over these, each rowwise calculation using different rows: *fl_A*, *fl_alpha*, *fl_N*
+- @param scalar and array values that are applied to every rowwise calculation, all rowwise calculations using the same scalars and arrays:*ar_A*, *ar_alpha*, *fl_N_agg*, *fl_rho*
+- @param string output variable name
 
-```{r linear_apply}
+The function looks within group, finds min/max etc that are relevant.
 
+## 3 Points and Denser Dataframs and Define Function 
+
+```{r define function}
 # Convert Matrix to Tibble
-ar_st_col_names = c('fl_A', 'fl_alpha', 'fl_N')
-tb_states_choices <- tb_states_choices %>% rename_all(~c(ar_st_col_names))
+ar_st_col_names = c(svr_id_var,'fl_A', 'fl_alpha', 'fl_N')
+tb_states_choices_ttest <- tb_states_choices_ttest %>% rename_all(~c(ar_st_col_names))
+tb_states_choices_dense <- tb_states_choices_dense %>% rename_all(~c(ar_st_col_names))
 
 # Define Implicit Function
 ffi_nonlin_dplyrdo <- function(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, fl_rho){
+  # scalar value that are row-specific, in dataframe already: *fl_A*, *fl_alpha*, *fl_N*
+  # array and scalars not in dataframe, common all rows: *ar_A*, *ar_alpha*, *fl_N_agg*, *fl_rho*
 
   # Test Parameters
   # ar_A = ar_nN_A
@@ -115,16 +129,57 @@ ffi_nonlin_dplyrdo <- function(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, f
 
   return(fl_overall)
 }
+```
 
-# Parameters
-fl_rho = 0.20
+## Evaluate at Three Choice Points and Show Table
 
+In the example below, just show results evaluating over three choice points and show table. 
+
+```{r linear_apply}
 # fl_A, fl_alpha are from columns of tb_nN_by_nQ_A_alpha
-tb_states_choices_eval = tb_states_choices %>% rowwise() %>%
+tb_states_choices_ttest_eval = tb_states_choices_ttest %>% rowwise() %>%
                         mutate(dplyr_eval = ffi_nonlin_dplyrdo(fl_A, fl_alpha, fl_N,
                                                                ar_nN_A, ar_nN_alpha,
                                                                fl_N_agg, fl_rho))
 # Show
-kable(tb_states_choices_eval) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
+kable(tb_states_choices_ttest_eval) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 ```
+
+## Evaluate at Many Choice Points and Show Graphically
+
+Same as above, but now we evaluate the function over the individuals at many choice points so that we can graph things out. 
+
+```{r linear apply many points}
+# fl_A, fl_alpha are from columns of tb_nN_by_nQ_A_alpha
+tb_states_choices_dense_eval = tb_states_choices_dense %>% rowwise() %>%
+                        mutate(dplyr_eval = ffi_nonlin_dplyrdo(fl_A, fl_alpha, fl_N,
+                                                               ar_nN_A, ar_nN_alpha,
+                                                               fl_N_agg, fl_rho))
+```
+
+```{r graph many evaluations}
+# Show
+dim(tb_states_choices_dense_eval)
+summary(tb_states_choices_dense_eval)
+lineplot <- tb_states_choices_dense_eval %>% 
+    ggplot(aes(x=fl_N, y=dplyr_eval)) +
+        geom_line() +
+        facet_wrap( . ~ INDI_ID, scales = "free") + 
+        geom_hline(yintercept=0, linetype="dashed", 
+                color = "red", size=1)
+        labs(title = 'Evaluate Non-Linear Functions to Search for Roots',
+             x = 'X values',
+             y = 'f(x)',
+             caption = 'Evaluating the Function') 
+print(lineplot)
+```
+
+# Bisection Solve Optimal Choice for Each Individual
+
+The bisection specific code does not need to do much.
+
+- @param list variables in file for grouping, each group is an individual for whom we want to calculate optimal choice for using bisection.
+- @param string variable name of input where functions are evaluated, these are already contained in the dataframe, existing variable names, row specific, rowwise computation over these, each rowwise calculation using different rows.
+- @param scalar and array values that are applied to every rowwise calculation, all rowwise calculations using the same scalars and arrays.
+- @param string output variable name

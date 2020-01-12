@@ -20,7 +20,7 @@ options(knitr.duplicate.label = 'allow')
 library(tidyverse)
 library(knitr)
 library(kableExtra)
-library(R4Econ)
+library(REconTools)
 # file name
 st_file_name = 'fs_index_populate'
 # Generate R File

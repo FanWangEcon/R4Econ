@@ -68,9 +68,9 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 ## 2.3 Tibble Manipulations
 
 1. [Tibble Basics](https://fanwangecon.github.io/R4Econ/support/tibble/fs_tib_basics.html): R4Efunc \| R4Eref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/tibble/fs_tib_basics.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/tibble/fs_tib_basics.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/tibble/fs_tib_basics.html)
-    - generate tibbles, rename tibble variables, tibble row and column names
+    - generate tibbles, rename tibble variables, tibble row and column names, index
     - tibble statistics
-    - **tidy**: *as_tibble(mt_combine) %>% rename_all(~c(ar_st_varnames)); colnames, rownames*
+    - **tidy**: *as_tibble(mt_combine) %>% rename_all(~c(ar_st_varnames)); rowid_to_column(); colnames, rownames*
 2. [Input Data Text](https://fanwangecon.github.io/R4Econ/summarize/dist/fst_hist_onevar.html): R4Efunc \| R4Eref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/dist/fst_hist_onevar.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/dist/fst_hist_onevar.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/summarize/dist/fst_hist_onevar.html)
     - input multiple variables with comma separated text strings
     - quantitative/continuous and categorical/discrete variables

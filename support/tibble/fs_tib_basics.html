@@ -381,7 +381,7 @@ options(knitr.duplicate.label = &#39;allow&#39;)</code></pre>
 <pre class="r"><code>library(tidyverse)
 library(knitr)
 library(kableExtra)
-library(R4Econ)
+library(REconTools)
 # file name
 st_file_name = &#39;fs_tib_basics&#39;
 # Generate R File
@@ -400,6 +400,7 @@ purl(paste0(st_file_name, &quot;.Rmd&quot;), output=paste0(st_file_name, &quot;.
 <li>dplyr rename tibble</li>
 <li>dplyr rename tibble all variables</li>
 <li>dplyr rename all columns by index</li>
+<li>dplyr tibble add index column</li>
 <li>see also: <a href="https://stackoverflow.com/questions/45535157/difference-between-dplyrrename-and-dplyrrename-all">SO-51205520</a></li>
 </ul>
 <pre class="r"><code># Base Inputs
@@ -415,6 +416,8 @@ ar_st_varnames &lt;- paste0(&#39;tibcolvar&#39;, c(1,2,3))
 
 # Combine to tibble, add name col1, col2, etc.
 tb_combine &lt;- as_tibble(mt_combine) %&gt;% rename_all(~c(ar_st_varnames))
+# Add an index column to the dataframe, ID column
+tb_combine &lt;- tb_combine %&gt;% rowid_to_column(var = &quot;ID&quot;)
 
 # Tibble back to matrix
 mt_tb_combine_back &lt;- data.matrix(tb_combine)
@@ -442,10 +445,10 @@ matcolvar3
 -1
 </td>
 <td style="text-align:right;">
--0.2331386
+0.0713789
 </td>
 <td style="text-align:right;">
--0.2873464
+0.7735891
 </td>
 </tr>
 <tr>
@@ -453,10 +456,10 @@ matcolvar3
 1
 </td>
 <td style="text-align:right;">
-0.5861476
+-0.1240493
 </td>
 <td style="text-align:right;">
-0.4691782
+0.0254197
 </td>
 </tr>
 </tbody>
@@ -467,6 +470,9 @@ matcolvar3
 <thead>
 <tr>
 <th style="text-align:right;">
+ID
+</th>
+<th style="text-align:right;">
 tibcolvar1
 </th>
 <th style="text-align:right;">
@@ -480,24 +486,30 @@ tibcolvar3
 <tbody>
 <tr>
 <td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
 -1
 </td>
 <td style="text-align:right;">
--0.2331386
+0.0713789
 </td>
 <td style="text-align:right;">
--0.2873464
+0.7735891
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
-0.5861476
+-0.1240493
 </td>
 <td style="text-align:right;">
-0.4691782
+0.0254197
 </td>
 </tr>
 </tbody>
@@ -508,6 +520,9 @@ tibcolvar3
 <thead>
 <tr>
 <th style="text-align:right;">
+ID
+</th>
+<th style="text-align:right;">
 tibcolvar1
 </th>
 <th style="text-align:right;">
@@ -521,24 +536,30 @@ tibcolvar3
 <tbody>
 <tr>
 <td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
 -1
 </td>
 <td style="text-align:right;">
--0.2331386
+0.0713789
 </td>
 <td style="text-align:right;">
--0.2873464
+0.7735891
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
-0.5861476
+-0.1240493
 </td>
 <td style="text-align:right;">
-0.4691782
+0.0254197
 </td>
 </tr>
 </tbody>
@@ -986,10 +1007,10 @@ virginica
 </table>
 </div>
 </div>
-<div id="r4econ-function" class="section level1">
-<h1>R4Econ Function</h1>
-<div id="r4econ-summarize-over-tible" class="section level2">
-<h2>R4Econ Summarize over Tible</h2>
+<div id="recontools-function" class="section level1">
+<h1>REconTools Function</h1>
+<div id="recontools-summarize-over-tible" class="section level2">
+<h2>REconTools Summarize over Tible</h2>
 <p>Use R4Econ’s summary tool.</p>
 <pre class="r"><code>df_summ_stats &lt;- ff_summ_percentiles(tb_iris)
 kable(t(df_summ_stats)) %&gt;%
