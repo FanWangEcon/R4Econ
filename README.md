@@ -10,7 +10,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 [![](https://img.shields.io/github/last-commit/fanwangecon/R4Econ)](https://github.com/FanWangEcon/R4Econ/commits/master) [![](https://img.shields.io/github/commit-activity/m/fanwangecon/R4Econ)](https://github.com/FanWangEcon/R4Econ/graphs/commit-activity) [![](https://img.shields.io/github/issues/fanwangecon/R4Econ)](https://github.com/FanWangEcon/R4Econ/issues) [![](https://img.shields.io/github/issues-pr/fanwangecon/R4Econ)](https://github.com/FanWangEcon/R4Econ/pulls)
 
-# 1. DPLYR Basic Data Wrangling
+# 1. Data Wrangling
 
 ## 1.1 Aggregation
 
@@ -55,23 +55,23 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 ## 2.1 Array Manipulation
 
-1. [Array Combinations as Matrix](https://fanwangecon.github.io/R4Econ/support/array/fs_meshr.html): R4Efunc \| R4Eref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/array/fs_meshr.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/array/fs_meshr.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/array/fs_meshr.html)
+1. [Array Combinations as Matrix](https://fanwangecon.github.io/R4Econ/support/array/fs_meshr.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/array/fs_meshr.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/array/fs_meshr.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/array/fs_meshr.html)
     - combinations of two arrays to matrix form (meshgrid)
     - **tidy**: *expand_grid, expand.grid, dim*
 
 ## 2.2 Matrix Manipulations
 
-1. [Matrix Basics](https://fanwangecon.github.io/R4Econ/support/matrix/fs_genmatrix.html): R4Efunc \| R4Eref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/matrix/fs_genmatrix.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/matrix/fs_genmatrix.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/matrix/fs_genmatrix.html)
+1. [Matrix Basics](https://fanwangecon.github.io/R4Econ/support/matrix/fs_genmatrix.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/matrix/fs_genmatrix.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/matrix/fs_genmatrix.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/matrix/fs_genmatrix.html)
     - generate and combine fixed and random matrixes
     - **r**: *rbind, matrix*
 
 ## 2.3 Tibble Manipulations
 
-1. [Tibble Basics](https://fanwangecon.github.io/R4Econ/support/tibble/fs_tib_basics.html): R4Efunc \| R4Eref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/tibble/fs_tib_basics.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/tibble/fs_tib_basics.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/tibble/fs_tib_basics.html)
+1. [Tibble Basics](https://fanwangecon.github.io/R4Econ/support/tibble/fs_tib_basics.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/tibble/fs_tib_basics.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/tibble/fs_tib_basics.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/tibble/fs_tib_basics.html)
     - generate tibbles, rename tibble variables, tibble row and column names, index
     - tibble statistics
     - **tidy**: *as_tibble(mt_combine) %>% rename_all(~c(ar_st_varnames)); rowid_to_column(); colnames, rownames*
-2. [Input Data Text](https://fanwangecon.github.io/R4Econ/summarize/dist/fst_hist_onevar.html): R4Efunc \| R4Eref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/dist/fst_hist_onevar.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/dist/fst_hist_onevar.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/summarize/dist/fst_hist_onevar.html)
+2. [Input Data Text](https://fanwangecon.github.io/R4Econ/summarize/dist/fst_hist_onevar.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/dist/fst_hist_onevar.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/dist/fst_hist_onevar.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/summarize/dist/fst_hist_onevar.html)
     - input multiple variables with comma separated text strings
     - quantitative/continuous and categorical/discrete variables
     - histogram and summary statistics
@@ -79,11 +79,11 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 ## 2.4 Function over Arrays, Matrix and Tibble
 
-1. [Evaluate Function each Row of Matrix](https://fanwangecon.github.io/R4Econ/support/function/fs_applysapplymutate.html): R4Efunc \| R4Eref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_applysapplymutate.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_applysapplymutate.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/function/fs_applysapplymutate.html)
+1. [Evaluate Function each Row of Matrix](https://fanwangecon.github.io/R4Econ/support/function/fs_applysapplymutate.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_applysapplymutate.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_applysapplymutate.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/function/fs_applysapplymutate.html)
     - evaluate function f(x_i,y_i,c), where c is a constant and x and y vary over each row of a matrix, with index i indicating rows
     - get same results using apply, sapply, and dplyr mutate
     - **tidy**: *tb %>% rowwise() %>% do(out = cur_func(., fl)) %>% unnest(out); tb %>% pmap(func) %>% unlist(); apply(mt, 1, func); sapply(ls_ar, func, ar1, ar2); rowwise() %>% mutate(out = func(inputs))*
-2. [Evaluate Nonlinear Function each Row of Matrix](https://fanwangecon.github.io/R4Econ/support/function/fs_funceval.html): R4Efunc \| R4Eref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_funceval.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_funceval.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/function/fs_funceval.html)
+2. [Evaluate Nonlinear Function each Row of Matrix](https://fanwangecon.github.io/R4Econ/support/function/fs_funceval.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_funceval.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_funceval.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/function/fs_funceval.html)
     - evaluate nonlinear function f(x_i, y_i, ar_x, ar_y, c, d), where c and d are constants, and ar_x and ar_y are arrays, both fixed. x_i and y_i vary over each row of matrix.
     - get same results using apply, sapply, and dplyr mutate
     - **tidy**: *rowwise() %>% mutate(out = funct(inputs))*
@@ -106,9 +106,19 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
     + Post multiple regressions, fraction of outcome variables' variances explained by multiple subsets of right hand side variables.
     + **tidy**: *gather + group_by(variable) + mutate_at(vars, funs(mean = mean(.))) + rowSums(mat*mat) + mutate_if(is.numeric, funs(frac = (./value_var)))*
 
-# 5. Optimization
+# 4. Optimization
 
-## 5.1 Planner's Problem
+## 4.1 Bisection
+
+1. [Concurrent Bisection over Dataframe Rows](https://fanwangecon.github.io/R4Econ/optimization/root_bisect/fs_func_graph_eval.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/root_bisect/fs_func_graph_eval.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/root_bisect/fs_func_graph_eval.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/optimization/root_bisect/fs_func_graph_eval.html)
+    + Post multiple regressions, fraction of outcome variables' variances explained by multiple subsets of right hand side variables.
+    + **case_when**: *mutate(!!sym(abc) := case_when(efg < 0 ~ !!sym(opq), TRUE ~ iso))*
+    + **pivot_long**: *df %>% pivot_longer(cols = starts_with('abc'), names_to = c('a', 'b'), names_pattern = paste0('prefix', "(.*)_(.*)"),values_to = val)*
+    + **pivot_wider**: *df %>% pivot_wider(names_from = !!sym(name), values_from = val)*
+    + **ggplot**: *geom_line, facet_wrap, geom_hline*
+
+## 4.1 Planner's Problem
+
 1. [CES Objective Function](optimization/planner/ces/cesplannerobj.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planner/ces/cesplannerobj.ipynb) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planner/ces/cesplannerobj.R) \| [**html**](optimization/planner/ces/cesplannerobj.html) \| pdf
     + Constant Elasticity of Substitution Planner Welfare Objective Function.
     + **tidy**: *prod/mean/pow, logspace, geom_bar+identity+dodge*
@@ -116,25 +126,24 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
     + Constant Elasticity of Substitution Planner Welfare Subsidies Optimizer Over Quantile/Individual Groups.
     + **tidy**: *optim(x, obj, func.params), do.call(func_str, func.params); setNames+list+append*
 
-## 5.2 Optimization Support
+## 4.3 Optimization Support
 1. [Constrained Share Parameters to Unconstrained Parameters](optimization/support/fraction.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/support/fraction.ipynb) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/support/fraction.R) \| [**html**](optimization/support/fraction.html) \| pdf
     + Constrained: a + b + c = Z, a >= 0, b >= 0, c >= 0; Unconstrained maximands of a and b for optimization.
     + **tidy**: *f - f/(1+exp(x)), while, runif + qexp + qnorm/dnorm*
 
-# 6. Graphing
+# 5. Graphing
 
 1. [Line Plot with Two Categories, as Color and Subplot](dynamic/graph/statesvalpol.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/dynamic/graph/statesvalpol.ipynb) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/dynamic/graph/statesvalpol.R) \| [**html**](dynamic/graph/statesvalpol.html) \| pdf
     + Optimal choices/value-function along states. Asset as X-axis, shocks as color, potentially another state as subplots.
     + **tidy**: *unique + mutate(var := as.factor(var)) + ggplot + facet_wrap + geom_line + geom_point + labs + theme(axis.text.x = element_text(angle = 90, hjust = 1))*
 
-
-# 7. Tools
+# 6. Tools
 
 1. [List of List to Dataframe](https://github.com/FanWangEcon/R4Econ/blob/master/support/dplyrtricks/nestedlist2df.R): ipynb \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/support/dplyrtricks/nestedlist2df.R) \| html \| pdf
     + Results stored as nested named list (with different keys in sub-lists).
     + **tidy**: *as.data.frame + gather + separate(sep(\\.), extra='merge') + spread + column_to_rownames*
 
-# 8. Support
+# 7. Support
 
 1. [Installations](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/condainstalls.R): ipynb \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/support/controls/condainstalls.R) \| html \| pdf
     + Conda R Package Installations.

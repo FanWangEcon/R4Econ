@@ -297,8 +297,26 @@ while (it_cur <= it_tol && fl_p_dist2zr >= fl_tol ) {
 #' 
 #' To view results easily, how iterations improved to help us find the roots, convert table from wide to long. Pivot twice. This allows us to easily graph out how bisection is working out iterationby iteration. 
 #' 
+#' Here, we will first show what the raw table looks like, the wide only table, and then show the long version, and finally the version that is medium wide. 
 #' 
-## ----reshape solution for table show------------------------------------------
+#' #### Table One--Very Wide
+#' 
+#' Show what the *tb_states_choices_bisec* looks like. 
+#' 
+#' Variables are formatted like: *bisec_xx_yy*, where yy is the iteration indicator, and xx is either a, b, fa, or fb. 
+#' 
+## ----very wide table----------------------------------------------------------
+head(tb_states_choices_bisec, 10)
+str(tb_states_choices_bisec)
+
+#' 
+#' #### Table Two--Very Wide to Very Long
+#' 
+#' We want to treat the iteration count information that is the suffix of variable names as a variable by itself. Additionally, we want to treat the a,b,fa,fb as a variable. Structuring the data very long like this allows for easy graphing and other types of analysis. Rather than dealing with many many variables, we have only 3 core variables that store bisection iteration information. 
+#' 
+#' Here we use the very nice *pivot_longer* function. Note that to achieve this, we put a common prefix in front of the variables we wanted to convert to long. THis is helpful, because we can easily identify which variables need to be reshaped.  
+#' 
+## ----reshape solution from wide to very long----------------------------------
 # New variables
 svr_bisect_iter <- 'biseciter'
 svr_abfafb_long_name <- 'varname'
@@ -314,10 +332,17 @@ tb_states_choices_bisec_long <- tb_states_choices_bisec %>%
     values_to = svr_number_col
   ) 
 
-# # Generate ID column based on INDI ID and ITER
-# tb_states_choices_bisec_long <- tb_states_choices_bisec_long %>%
-#   mutate(!!sym(svr_id_bisect_iter) := paste0(!!sym(svr_id_var), '_', !!sym(svr_bisect_iter)))
+# Print
+summary(tb_states_choices_bisec_long)
+head(tb_states_choices_bisec_long %>% select(-one_of('p','f_p','f_p_t_f_a')), 30)
+tail(tb_states_choices_bisec_long %>% select(-one_of('p','f_p','f_p_t_f_a')), 30)
 
+#' 
+#' #### Table Two--Very Very Long to Wider Again
+#' 
+#' But the previous results are too long, with the a, b, fa, and fb all in one column as different categories, they are really not different categories, they are in fact different types of variables. So we want to spread those four categories of this variable into four columns, each one representing the a, b, fa, and fb values. The rows would then be uniquly identified by the iteration counter and individual ID. 
+#' 
+## ----reshape solution for table show------------------------------------------
 # Pivot wide to very long to a little wide
 tb_states_choices_bisec_wider <- tb_states_choices_bisec_long %>%
   pivot_wider(
