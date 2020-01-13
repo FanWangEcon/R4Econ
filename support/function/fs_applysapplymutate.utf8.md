@@ -31,11 +31,13 @@ The objective is either to just evaluate this function across $N$ individuals, o
 
 ## Set Up
 
-```{r GlobalOptions, echo = T, results = 'hide', message=F, warning=F}
+
+```r
 rm(list = ls(all.names = TRUE))
 options(knitr.duplicate.label = 'allow')
 ```
-```{r loadlib, echo = T, results = 'hide', message=F, warning=F}
+
+```r
 library(tidyverse)
 library(knitr)
 library(kableExtra)
@@ -54,7 +56,8 @@ There is a function that takes $M=Q+P$ inputs, we want to evaluate this function
 
 $$M = Q+P = Q + Q*N$$
 
-```{r setup}
+
+```r
 # it_child_count = N, the number of children
 it_N_child_cnt = 5
 # it_heter_param = Q, number of parameters that are heterogeneous across children
@@ -73,12 +76,31 @@ kable(mt_nN_by_nQ_A_alpha) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 ```
 
+\begin{table}[H]
+\centering
+\begin{tabular}{r|r}
+\hline
+ar\_nN\_A & ar\_nN\_alpha\\
+\hline
+-2 & 0.1\\
+\hline
+-1 & 0.3\\
+\hline
+0 & 0.5\\
+\hline
+1 & 0.7\\
+\hline
+2 & 0.9\\
+\hline
+\end{tabular}
+\end{table}
+
 ## Using apply
 
 First we use the apply function, we have to hard-code the arrays that are fixed for each of the $N$ individuals. Then apply allows us to loop over the matrix that is $N$ by $Q$, each row one at a time, from $1$ to $N$.
 
-```{r linear_apply}
 
+```r
 # Define Implicit Function
 ffi_linear_hardcode <- function(ar_A_alpha){
   # ar_A_alpha[1] is A
@@ -101,8 +123,8 @@ ar_func_apply = apply(mt_nN_by_nQ_A_alpha, 1, ffi_linear_hardcode)
 Sapply allows us to not have tohard code in the A and alpha arrays. But Sapply works over List or Vector, not Matrix. So we have to convert the $N$ by $Q$ matrix to a N element list
 Now update the function with sapply.
 
-```{r linear_sapply}
 
+```r
 ls_ar_nN_by_nQ_A_alpha = as.list(data.frame(t(mt_nN_by_nQ_A_alpha)))
 
 # Define Implicit Function
@@ -129,14 +151,36 @@ ar_func_sapply = sapply(ls_ar_nN_by_nQ_A_alpha, ffi_linear_sapply,
 - applying a function to every row of a table using dplyr
 - dplyr rowwise
 
-```{r linear_dplyr}
+
+```r
 # Convert Matrix to Tibble
 ar_st_col_names = c('fl_A', 'fl_alpha')
 tb_nN_by_nQ_A_alpha <- as_tibble(mt_nN_by_nQ_A_alpha) %>% rename_all(~c(ar_st_col_names))
 # Show
 kable(tb_nN_by_nQ_A_alpha) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
+```
 
+\begin{table}[H]
+\centering
+\begin{tabular}{r|r}
+\hline
+fl\_A & fl\_alpha\\
+\hline
+-2 & 0.1\\
+\hline
+-1 & 0.3\\
+\hline
+0 & 0.5\\
+\hline
+1 & 0.7\\
+\hline
+2 & 0.9\\
+\hline
+\end{tabular}
+\end{table}
+
+```r
 # Define Implicit Function
 ffi_linear_dplyrdo <- function(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha){
   # ar_A_alpha[1] is A
@@ -152,10 +196,40 @@ ffi_linear_dplyrdo <- function(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha){
 # fl_A, fl_alpha are from columns of tb_nN_by_nQ_A_alpha
 tb_nN_by_nQ_A_alpha_show <- tb_nN_by_nQ_A_alpha %>% rowwise() %>%
                     mutate(dplyr_eval = ffi_linear_dplyrdo(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha))
+```
+
+```
+## [1] "cur row, fl_A=-2, fl_alpha=0.1"
+## [1] "cur row, fl_A=-1, fl_alpha=0.3"
+## [1] "cur row, fl_A=0, fl_alpha=0.5"
+## [1] "cur row, fl_A=1, fl_alpha=0.7"
+## [1] "cur row, fl_A=2, fl_alpha=0.9"
+```
+
+```r
 # Show
 kable(tb_nN_by_nQ_A_alpha_show) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 ```
+
+\begin{table}[H]
+\centering
+\begin{tabular}{r|r|r}
+\hline
+fl\_A & fl\_alpha & dplyr\_eval\\
+\hline
+-2 & 0.1 & 2.346356\\
+\hline
+-1 & 0.3 & 2.094273\\
+\hline
+0 & 0.5 & 1.895316\\
+\hline
+1 & 0.7 & 1.733708\\
+\hline
+2 & 0.9 & 1.599477\\
+\hline
+\end{tabular}
+\end{table}
 
 ## Using Dplyr Mutate with Function and Parameters as Parameters
 
@@ -167,7 +241,8 @@ We want to allow the function itself to be a parameter, and the parameters of th
 
 First, hard code arrays that will not be changing across iterations in, reduces two parameters
 
-```{r dplyr formula}
+
+```r
 # Define function, fixed inputs are not parameters, but defined earlier as a part of the function
 # ar_nN_A, ar_nN_alpha are fixed, not parameters
 ffi_linear_dplyrdo_func <- function(fl_A, fl_alpha){
@@ -178,14 +253,14 @@ ffi_linear_dplyrdo_func <- function(fl_A, fl_alpha){
 # Evaluate function row by row of tibble
 tbfunc_A_nN_by_nQ_A_alpha = tb_nN_by_nQ_A_alpha %>% rowwise() %>%
                     mutate(dplyr_eval = ffi_linear_dplyrdo_func(fl_A, fl_alpha))
-
 ```
 
 ### DPLYR Apply Do Row by Row
 
 We can use *do* to apply anonymous functions to each row to generate output that has the same number of rows as dataframe. 
 
-```{r}
+
+```r
 tbfunc_B_nN_by_nQ_A_alpha = tb_nN_by_nQ_A_alpha %>% rowwise() %>% 
                     do(abc = .$fl_A + .$fl_alpha) %>%
                     unnest(abc)
@@ -194,6 +269,17 @@ tbfunc_B_nN_by_nQ_A_alpha = tb_nN_by_nQ_A_alpha %>% rowwise() %>%
                     unnest(abc)
 # Show
 print(tbfunc_B_nN_by_nQ_A_alpha )
+```
+
+```
+## # A tibble: 5 x 1
+##     abc
+##   <dbl>
+## 1    3 
+## 2    4 
+## 3    5 
+## 4    6.
+## 5    7.
 ```
 
 ### DPLYR Do With Flexible Function with Varying, Fixed and Row-specific Inputs
@@ -210,7 +296,8 @@ Now, we have three types of parameters, for something like a bisection type calc
 - dplyr mutate function applow to each row dot notation
 - note [rowwise might be bad](https://community.rstudio.com/t/dplyr-alternatives-to-rowwise/8071) according to Hadley, should use pmap?
 
-```{r}
+
+```r
 ffi_linear_dplyrdo_fdot <- function(ls_row, fl_param){
   # Type 1 Param = ar_nN_A, ar_nN_alpha
   # Type 2 Param = ls_row$fl_A, ls_row$fl_alpha
@@ -231,10 +318,30 @@ kable(tbfunc_B_nN_by_nQ_A_alpha) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 ```
 
+\begin{table}[H]
+\centering
+\begin{tabular}{r|r|l}
+\hline
+fl\_A & fl\_alpha & dplyr\_eval\_flex\\
+\hline
+-2 & 0.1 & 2.346356\\
+\hline
+-1 & 0.3 & 2.094273\\
+\hline
+0 & 0.5 & 1.895316\\
+\hline
+1 & 0.7 & 1.733708\\
+\hline
+2 & 0.9 & 1.599477\\
+\hline
+\end{tabular}
+\end{table}
+
 
 ## Compare Results
 
-```{r linear_combine}
+
+```r
 # Show overall Results
 mt_results <- cbind(ar_func_apply, ar_func_sapply, 
                     tb_nN_by_nQ_A_alpha_show['dplyr_eval'], 
@@ -247,3 +354,22 @@ colnames(mt_results) <- c('eval_lin_apply', 'eval_lin_sapply',
 kable(mt_results) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 ```
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l|r|r|r|l|r|r}
+\hline
+  & eval\_lin\_apply & eval\_lin\_sapply & eval\_dplyr\_mutate & eval\_dplyr\_mutate\_flex & A\_child & alpha\_child\\
+\hline
+X1 & 2.346356 & 2.346356 & 2.346356 & 2.346356 & -2 & 0.1\\
+\hline
+X2 & 2.094273 & 2.094273 & 2.094273 & 2.094273 & -1 & 0.3\\
+\hline
+X3 & 1.895316 & 1.895316 & 1.895316 & 1.895316 & 0 & 0.5\\
+\hline
+X4 & 1.733708 & 1.733708 & 1.733708 & 1.733708 & 1 & 0.7\\
+\hline
+X5 & 1.599477 & 1.599477 & 1.599477 & 1.599477 & 2 & 0.9\\
+\hline
+\end{tabular}
+\end{table}

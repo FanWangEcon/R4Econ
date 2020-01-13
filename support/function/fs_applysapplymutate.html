@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -339,6 +338,7 @@ summary {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -386,6 +386,8 @@ summary {
 <li>r sapply</li>
 <li>sapply over matrix row by row</li>
 <li>apply dplyr vectorize</li>
+<li>function as parameters using formulas</li>
+<li>do</li>
 </ul>
 <p>We want evaluate linear function f(x_i, y_i, ar_x, ar_y, c, d), where c and d are constants, and ar_x and ar_y are arrays, both fixed. x_i and y_i vary over each row of matrix. More specifically, we have a functions, this function takes inputs that are individual specific. We would like to evaluate this function concurrently across <span class="math inline">\(N\)</span> individuals.</p>
 <p>The function is such that across the <span class="math inline">\(N\)</span> individuals, some of the function parameter inputs are the same, but others are different. If we are looking at demand for a particular product, the prices of all products enter the demand equation for each product, but the product’s own price enters also in a different way.</p>
@@ -603,7 +605,7 @@ ffi_linear_dplyrdo &lt;- function(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha){
 
 # Evaluate function row by row of tibble
 # fl_A, fl_alpha are from columns of tb_nN_by_nQ_A_alpha
-tb_nN_by_nQ_A_alpha = tb_nN_by_nQ_A_alpha %&gt;% rowwise() %&gt;%
+tb_nN_by_nQ_A_alpha_show &lt;- tb_nN_by_nQ_A_alpha %&gt;% rowwise() %&gt;%
                     mutate(dplyr_eval = ffi_linear_dplyrdo(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha))</code></pre>
 <pre><code>## [1] &quot;cur row, fl_A=-2, fl_alpha=0.1&quot;
 ## [1] &quot;cur row, fl_A=-1, fl_alpha=0.3&quot;
@@ -611,7 +613,7 @@ tb_nN_by_nQ_A_alpha = tb_nN_by_nQ_A_alpha %&gt;% rowwise() %&gt;%
 ## [1] &quot;cur row, fl_A=1, fl_alpha=0.7&quot;
 ## [1] &quot;cur row, fl_A=2, fl_alpha=0.9&quot;</code></pre>
 <pre class="r"><code># Show
-kable(tb_nN_by_nQ_A_alpha) %&gt;%
+kable(tb_nN_by_nQ_A_alpha_show) %&gt;%
   kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;responsive&quot;))</code></pre>
 <table class="table table-striped table-hover table-responsive" style="margin-left: auto; margin-right: auto;">
 <thead>
@@ -686,13 +688,169 @@ dplyr_eval
 </tbody>
 </table>
 </div>
+<div id="using-dplyr-mutate-with-function-and-parameters-as-parameters" class="section level2">
+<h2>Using Dplyr Mutate with Function and Parameters as Parameters</h2>
+<p>We want to allow the function itself to be a parameter, and the parameters of the function to also be parameters.</p>
+<ul>
+<li>dplyr mutate pass function</li>
+<li>r function quosure string multiple</li>
+<li>r function multiple parameters as one string</li>
+</ul>
+<p>First, hard code arrays that will not be changing across iterations in, reduces two parameters</p>
+<pre class="r"><code># Define function, fixed inputs are not parameters, but defined earlier as a part of the function
+# ar_nN_A, ar_nN_alpha are fixed, not parameters
+ffi_linear_dplyrdo_func &lt;- function(fl_A, fl_alpha){
+  fl_out &lt;- sum(fl_A*ar_nN_A + 1/(fl_alpha + 1/ar_nN_alpha))
+  return(fl_out)
+}
+
+# Evaluate function row by row of tibble
+tbfunc_A_nN_by_nQ_A_alpha = tb_nN_by_nQ_A_alpha %&gt;% rowwise() %&gt;%
+                    mutate(dplyr_eval = ffi_linear_dplyrdo_func(fl_A, fl_alpha))</code></pre>
+<div id="dplyr-apply-do-row-by-row" class="section level3">
+<h3>DPLYR Apply Do Row by Row</h3>
+<p>We can use <em>do</em> to apply anonymous functions to each row to generate output that has the same number of rows as dataframe.</p>
+<pre class="r"><code>tbfunc_B_nN_by_nQ_A_alpha = tb_nN_by_nQ_A_alpha %&gt;% rowwise() %&gt;% 
+                    do(abc = .$fl_A + .$fl_alpha) %&gt;%
+                    unnest(abc)
+tbfunc_B_nN_by_nQ_A_alpha = tb_nN_by_nQ_A_alpha %&gt;% rowwise() %&gt;%
+                    do(abc = sum(.$fl_A*ar_nN_A + .$fl_alpha + ar_nN_alpha)) %&gt;%
+                    unnest(abc)
+# Show
+print(tbfunc_B_nN_by_nQ_A_alpha )</code></pre>
+<pre><code>## # A tibble: 5 x 1
+##     abc
+##   &lt;dbl&gt;
+## 1    3 
+## 2    4 
+## 3    5 
+## 4    6.
+## 5    7.</code></pre>
+</div>
+<div id="dplyr-do-with-flexible-function-with-varying-fixed-and-row-specific-inputs" class="section level3">
+<h3>DPLYR Do With Flexible Function with Varying, Fixed and Row-specific Inputs</h3>
+<p>Now, we have three types of parameters, for something like a bisection type calculation. We will supply the program with a function with some hard-coded value inside, and as parameters, we will have one parameter which is a row in the current matrix, and another parameter which is a sclar values. The three types of parameters are dealt with sparately:</p>
+<ol style="list-style-type: decimal">
+<li>parameters that are fixed for all bisection iterations, but differ for each row
+<ul>
+<li>these are hard-coded into the function</li>
+</ul></li>
+<li>parameters that are fixed for all bisection iterations, but are shared across rows
+<ul>
+<li>these are the first parameter of the function, a list</li>
+</ul></li>
+<li>parameters that differ for each iteration, but differ acoss iterations
+<ul>
+<li>second scalar value parameter for the function</li>
+</ul></li>
+</ol>
+<ul>
+<li>dplyr mutate function applow to each row dot notation</li>
+<li>note <a href="https://community.rstudio.com/t/dplyr-alternatives-to-rowwise/8071">rowwise might be bad</a> according to Hadley, should use pmap?</li>
+</ul>
+<pre class="r"><code>ffi_linear_dplyrdo_fdot &lt;- function(ls_row, fl_param){
+  # Type 1 Param = ar_nN_A, ar_nN_alpha
+  # Type 2 Param = ls_row$fl_A, ls_row$fl_alpha
+  # Type 3 Param = fl_param
+  
+  fl_out &lt;- (sum(ls_row$fl_A*ar_nN_A + 1/(ls_row$fl_alpha + 1/ar_nN_alpha))) + fl_param
+  return(fl_out)
+}
+
+cur_func &lt;- ffi_linear_dplyrdo_fdot
+fl_param &lt;- 0
+dplyr_eval_flex &lt;- tb_nN_by_nQ_A_alpha %&gt;% rowwise() %&gt;%
+                              do(dplyr_eval_flex = cur_func(., fl_param)) %&gt;%
+                              unnest(dplyr_eval_flex)
+tbfunc_B_nN_by_nQ_A_alpha &lt;- tb_nN_by_nQ_A_alpha %&gt;% add_column(dplyr_eval_flex)
+# Show
+kable(tbfunc_B_nN_by_nQ_A_alpha) %&gt;%
+  kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;responsive&quot;))</code></pre>
+<table class="table table-striped table-hover table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+fl_A
+</th>
+<th style="text-align:right;">
+fl_alpha
+</th>
+<th style="text-align:left;">
+dplyr_eval_flex
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+-2
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:left;">
+2.346356
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:left;">
+2.094273
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:left;">
+1.895316
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.7
+</td>
+<td style="text-align:left;">
+1.733708
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.9
+</td>
+<td style="text-align:left;">
+1.599477
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div id="compare-results" class="section level2">
 <h2>Compare Results</h2>
 <pre class="r"><code># Show overall Results
 mt_results &lt;- cbind(ar_func_apply, ar_func_sapply, 
-                    tb_nN_by_nQ_A_alpha[&#39;dplyr_eval&#39;], mt_nN_by_nQ_A_alpha)
+                    tb_nN_by_nQ_A_alpha_show[&#39;dplyr_eval&#39;], 
+                    tbfunc_B_nN_by_nQ_A_alpha[&#39;dplyr_eval_flex&#39;],
+                    mt_nN_by_nQ_A_alpha)
 colnames(mt_results) &lt;- c(&#39;eval_lin_apply&#39;, &#39;eval_lin_sapply&#39;,
-                          &#39;eval_dplyr_mutate&#39;, &#39;A_child&#39;, &#39;alpha_child&#39;)
+                          &#39;eval_dplyr_mutate&#39;, 
+                          &#39;eval_dplyr_mutate_flex&#39;, 
+                          &#39;A_child&#39;, &#39;alpha_child&#39;)
 kable(mt_results) %&gt;%
   kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;responsive&quot;))</code></pre>
 <table class="table table-striped table-hover table-responsive" style="margin-left: auto; margin-right: auto;">
@@ -708,6 +866,9 @@ eval_lin_sapply
 </th>
 <th style="text-align:right;">
 eval_dplyr_mutate
+</th>
+<th style="text-align:left;">
+eval_dplyr_mutate_flex
 </th>
 <th style="text-align:right;">
 A_child
@@ -731,6 +892,9 @@ X1
 <td style="text-align:right;">
 2.346356
 </td>
+<td style="text-align:left;">
+2.346356
+</td>
 <td style="text-align:right;">
 -2
 </td>
@@ -749,6 +913,9 @@ X2
 2.094273
 </td>
 <td style="text-align:right;">
+2.094273
+</td>
+<td style="text-align:left;">
 2.094273
 </td>
 <td style="text-align:right;">
@@ -771,6 +938,9 @@ X3
 <td style="text-align:right;">
 1.895316
 </td>
+<td style="text-align:left;">
+1.895316
+</td>
 <td style="text-align:right;">
 0
 </td>
@@ -791,6 +961,9 @@ X4
 <td style="text-align:right;">
 1.733708
 </td>
+<td style="text-align:left;">
+1.733708
+</td>
 <td style="text-align:right;">
 1
 </td>
@@ -809,6 +982,9 @@ X5
 1.599477
 </td>
 <td style="text-align:right;">
+1.599477
+</td>
+<td style="text-align:left;">
 1.599477
 </td>
 <td style="text-align:right;">
