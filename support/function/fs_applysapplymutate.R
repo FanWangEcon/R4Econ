@@ -141,7 +141,7 @@ kable(tb_nN_by_nQ_A_alpha) %>%
 ffi_linear_dplyrdo <- function(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha){
   # ar_A_alpha[1] is A
   # ar_A_alpha[2] is alpha
-  
+
   print(paste0('cur row, fl_A=', fl_A, ', fl_alpha=', fl_alpha))
   fl_out = sum(fl_A*ar_nN_A + 1/(fl_alpha + 1/ar_nN_alpha))
 
@@ -175,7 +175,7 @@ kable(tbfunc_A_nN_by_nQ_A_alpha_rowwise) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 
 #' 
-#' ## Using Dplyr Mutate with Pmap 
+#' ## Using Dplyr Mutate with Pmap
 #' 
 #' Apparantly *rowwise()* is not a good idea, and *pmap* should be used, below is the *pmap* solution to the problem. Which does seem nicer. Crucially, don't have to define input parameter names, automatically I think they are matching up to the names in the function
 #' 
@@ -199,8 +199,11 @@ ffi_linear_dplyrdo_func <- function(fl_alpha, fl_A){
 tb_nN_by_nQ_A_alpha %>% pmap(ffi_linear_dplyrdo_func) %>% unlist()
 
 # Same as above, but in line line and save output as new column in dataframe
-tbfunc_A_nN_by_nQ_A_alpha_pmap <- tb_nN_by_nQ_A_alpha %>% 
-          mutate(dplyr_eval_pmap = 
+# note this ONLY works if the tibble only has variables that are inputs for the function
+# if tibble contains additional variables, those should be droppd, or only the ones needed
+# selected, inside the pmap call below.
+tbfunc_A_nN_by_nQ_A_alpha_pmap <- tb_nN_by_nQ_A_alpha %>%
+          mutate(dplyr_eval_pmap =
                    unlist(
                      pmap(tb_nN_by_nQ_A_alpha, ffi_linear_dplyrdo_func)
                      )
@@ -230,7 +233,7 @@ ffi_linear_dplyrdo_fdot <- function(ls_row, fl_param){
   # Type 1 Param = ar_nN_A, ar_nN_alpha
   # Type 2 Param = ls_row$fl_A, ls_row$fl_alpha
   # Type 3 Param = fl_param
-  
+
   fl_out <- (sum(ls_row$fl_A*ar_nN_A + 1/(ls_row$fl_alpha + 1/ar_nN_alpha))) + fl_param
   return(fl_out)
 }
@@ -250,17 +253,17 @@ kable(tbfunc_B_nN_by_nQ_A_alpha) %>%
 #' 
 ## ----linear_combine-----------------------------------------------------------
 # Show overall Results
-mt_results <- cbind(ar_func_apply, ar_func_sapply, 
+mt_results <- cbind(ar_func_apply, ar_func_sapply,
                     tb_nN_by_nQ_A_alpha_show['dplyr_eval'],
-                    tbfunc_A_nN_by_nQ_A_alpha_rowwise['dplyr_eval'], 
-                    tbfunc_A_nN_by_nQ_A_alpha_pmap['dplyr_eval_pmap'], 
+                    tbfunc_A_nN_by_nQ_A_alpha_rowwise['dplyr_eval'],
+                    tbfunc_A_nN_by_nQ_A_alpha_pmap['dplyr_eval_pmap'],
                     tbfunc_B_nN_by_nQ_A_alpha['dplyr_eval_flex'],
                     mt_nN_by_nQ_A_alpha)
 colnames(mt_results) <- c('eval_lin_apply', 'eval_lin_sapply',
-                          'eval_dplyr_mutate', 
+                          'eval_dplyr_mutate',
                           'eval_dplyr_mutate_hcode',
                           'eval_dplyr_mutate_pmap',
-                          'eval_dplyr_mutate_flex', 
+                          'eval_dplyr_mutate_flex',
                           'A_child', 'alpha_child')
 kable(mt_results) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))

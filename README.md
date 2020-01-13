@@ -113,7 +113,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 1. [Concurrent Bisection over Dataframe Rows](https://fanwangecon.github.io/R4Econ/optimization/root_bisect/fs_func_graph_eval.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/root_bisect/fs_func_graph_eval.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/root_bisect/fs_func_graph_eval.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/optimization/root_bisect/fs_func_graph_eval.html)
     + Post multiple regressions, fraction of outcome variables' variances explained by multiple subsets of right hand side variables.
     + **case_when**: *mutate(!!sym(abc) := case_when(efg < 0 ~ !!sym(opq), TRUE ~ iso))*
-    + **pivot_long**: *df %>% pivot_longer(cols = starts_with('abc'), names_to = c('a', 'b'), names_pattern = paste0('prefix', "(.*)_(.*)"),values_to = val)*
+    + **pivot_long**: *df %>% pivot_longer(cols = starts_with('abc'), names_to = c('a', 'b'), names_pattern = paste0('prefix', "(.)_(.)"),values_to = val)*
     + **pivot_wider**: *df %>% pivot_wider(names_from = !!sym(name), values_from = val)*
     + **ggplot**: *geom_line, facet_wrap, geom_hline*
 

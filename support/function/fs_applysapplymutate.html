@@ -596,7 +596,7 @@ fl_alpha
 ffi_linear_dplyrdo &lt;- function(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha){
   # ar_A_alpha[1] is A
   # ar_A_alpha[2] is alpha
-  
+
   print(paste0(&#39;cur row, fl_A=&#39;, fl_A, &#39;, fl_alpha=&#39;, fl_alpha))
   fl_out = sum(fl_A*ar_nN_A + 1/(fl_alpha + 1/ar_nN_alpha))
 
@@ -797,8 +797,11 @@ ffi_linear_dplyrdo_func &lt;- function(fl_alpha, fl_A){
 tb_nN_by_nQ_A_alpha %&gt;% pmap(ffi_linear_dplyrdo_func) %&gt;% unlist()</code></pre>
 <pre><code>## [1] 2.346356 2.094273 1.895316 1.733708 1.599477</code></pre>
 <pre class="r"><code># Same as above, but in line line and save output as new column in dataframe
-tbfunc_A_nN_by_nQ_A_alpha_pmap &lt;- tb_nN_by_nQ_A_alpha %&gt;% 
-          mutate(dplyr_eval_pmap = 
+# note this ONLY works if the tibble only has variables that are inputs for the function
+# if tibble contains additional variables, those should be droppd, or only the ones needed
+# selected, inside the pmap call below.
+tbfunc_A_nN_by_nQ_A_alpha_pmap &lt;- tb_nN_by_nQ_A_alpha %&gt;%
+          mutate(dplyr_eval_pmap =
                    unlist(
                      pmap(tb_nN_by_nQ_A_alpha, ffi_linear_dplyrdo_func)
                      )
@@ -905,7 +908,7 @@ dplyr_eval_pmap
   # Type 1 Param = ar_nN_A, ar_nN_alpha
   # Type 2 Param = ls_row$fl_A, ls_row$fl_alpha
   # Type 3 Param = fl_param
-  
+
   fl_out &lt;- (sum(ls_row$fl_A*ar_nN_A + 1/(ls_row$fl_alpha + 1/ar_nN_alpha))) + fl_param
   return(fl_out)
 }
@@ -995,17 +998,17 @@ dplyr_eval_flex
 <div id="compare-results" class="section level2">
 <h2>Compare Results</h2>
 <pre class="r"><code># Show overall Results
-mt_results &lt;- cbind(ar_func_apply, ar_func_sapply, 
+mt_results &lt;- cbind(ar_func_apply, ar_func_sapply,
                     tb_nN_by_nQ_A_alpha_show[&#39;dplyr_eval&#39;],
-                    tbfunc_A_nN_by_nQ_A_alpha_rowwise[&#39;dplyr_eval&#39;], 
-                    tbfunc_A_nN_by_nQ_A_alpha_pmap[&#39;dplyr_eval_pmap&#39;], 
+                    tbfunc_A_nN_by_nQ_A_alpha_rowwise[&#39;dplyr_eval&#39;],
+                    tbfunc_A_nN_by_nQ_A_alpha_pmap[&#39;dplyr_eval_pmap&#39;],
                     tbfunc_B_nN_by_nQ_A_alpha[&#39;dplyr_eval_flex&#39;],
                     mt_nN_by_nQ_A_alpha)
 colnames(mt_results) &lt;- c(&#39;eval_lin_apply&#39;, &#39;eval_lin_sapply&#39;,
-                          &#39;eval_dplyr_mutate&#39;, 
+                          &#39;eval_dplyr_mutate&#39;,
                           &#39;eval_dplyr_mutate_hcode&#39;,
                           &#39;eval_dplyr_mutate_pmap&#39;,
-                          &#39;eval_dplyr_mutate_flex&#39;, 
+                          &#39;eval_dplyr_mutate_flex&#39;,
                           &#39;A_child&#39;, &#39;alpha_child&#39;)
 kable(mt_results) %&gt;%
   kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;responsive&quot;))</code></pre>

@@ -5,6 +5,7 @@ To help clarify data types for inputs, add prefix to variable names:
 - st = string
     + spt = string path
     + svr = variable string
+    + sfc = function string name
 - fl = float
 - it = integer
 - ar = single dimensional array
@@ -18,8 +19,9 @@ To help clarify data types for inputs, add prefix to variable names:
   + ls_svr: list of string variable namess
 - sc = structure, generic large store
 - df = dataframe
-  + tb if tb, but tb can also be called df. 
-  
+  + tb if tb, but tb can also be called df.
+- fc = functions
+
 Regressions
 
 - rs: reg results
