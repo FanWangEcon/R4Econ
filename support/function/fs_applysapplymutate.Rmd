@@ -120,7 +120,7 @@ ar_func_sapply = sapply(ls_ar_nN_by_nQ_A_alpha, ffi_linear_sapply,
                         ar_A=ar_nN_A, ar_alpha=ar_nN_alpha)
 ```
 
-## Using dplyr mutate
+## Using dplyr mutate rowwise
 
 - dplyr mutate own function
 - dplyr all row function
@@ -157,17 +157,9 @@ kable(tb_nN_by_nQ_A_alpha_show) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 ```
 
-## Using Dplyr Mutate with Function and Parameters as Parameters
+same as before, still rowwise, but hard code some inputs:
 
-We want to allow the function itself to be a parameter, and the parameters of the function to also be parameters. 
-
-- dplyr mutate pass function
-- r function quosure string multiple
-- r function multiple parameters as one string
-
-First, hard code arrays that will not be changing across iterations in, reduces two parameters
-
-```{r dplyr formula}
+```{r dplyr formula hard code inputs}
 # Define function, fixed inputs are not parameters, but defined earlier as a part of the function
 # ar_nN_A, ar_nN_alpha are fixed, not parameters
 ffi_linear_dplyrdo_func <- function(fl_A, fl_alpha){
@@ -176,27 +168,50 @@ ffi_linear_dplyrdo_func <- function(fl_A, fl_alpha){
 }
 
 # Evaluate function row by row of tibble
-tbfunc_A_nN_by_nQ_A_alpha = tb_nN_by_nQ_A_alpha %>% rowwise() %>%
+tbfunc_A_nN_by_nQ_A_alpha_rowwise = tb_nN_by_nQ_A_alpha %>% rowwise() %>%
                     mutate(dplyr_eval = ffi_linear_dplyrdo_func(fl_A, fl_alpha))
-
-```
-
-### DPLYR Apply Do Row by Row
-
-We can use *do* to apply anonymous functions to each row to generate output that has the same number of rows as dataframe. 
-
-```{r}
-tbfunc_B_nN_by_nQ_A_alpha = tb_nN_by_nQ_A_alpha %>% rowwise() %>% 
-                    do(abc = .$fl_A + .$fl_alpha) %>%
-                    unnest(abc)
-tbfunc_B_nN_by_nQ_A_alpha = tb_nN_by_nQ_A_alpha %>% rowwise() %>%
-                    do(abc = sum(.$fl_A*ar_nN_A + .$fl_alpha + ar_nN_alpha)) %>%
-                    unnest(abc)
 # Show
-print(tbfunc_B_nN_by_nQ_A_alpha )
+kable(tbfunc_A_nN_by_nQ_A_alpha_rowwise) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 ```
 
-### DPLYR Do With Flexible Function with Varying, Fixed and Row-specific Inputs
+## Using Dplyr Mutate with Pmap 
+
+Apparantly *rowwise()* is not a good idea, and *pmap* should be used, below is the *pmap* solution to the problem. Which does seem nicer. Crucially, don't have to define input parameter names, automatically I think they are matching up to the names in the function
+
+- dplyr mutate pass function
+- r function quosure string multiple
+- r function multiple parameters as one string
+- dplyr mutate anonymous function
+- quosure style lambda
+- pmap tibble rows
+- dplyr pwalk
+
+```{r dplyr formula}
+# Define function, fixed inputs are not parameters, but defined earlier as a part of the function
+# Rorate fl_alpha and fl_A name compared to before to make sure pmap tracks by names
+ffi_linear_dplyrdo_func <- function(fl_alpha, fl_A){
+  fl_out <- sum(fl_A*ar_nN_A + 1/(fl_alpha + 1/ar_nN_alpha))
+  return(fl_out)
+}
+
+# Evaluate a function row by row of dataframe, generate list, then to vecotr
+tb_nN_by_nQ_A_alpha %>% pmap(ffi_linear_dplyrdo_func) %>% unlist()
+
+# Same as above, but in line line and save output as new column in dataframe
+tbfunc_A_nN_by_nQ_A_alpha_pmap <- tb_nN_by_nQ_A_alpha %>% 
+          mutate(dplyr_eval_pmap = 
+                   unlist(
+                     pmap(tb_nN_by_nQ_A_alpha, ffi_linear_dplyrdo_func)
+                     )
+                 )
+
+# Show
+kable(tbfunc_A_nN_by_nQ_A_alpha_pmap) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
+```
+
+## DPLYR Three Types of INputs ROWWISE
 
 Now, we have three types of parameters, for something like a bisection type calculation. We will supply the program with a function with some hard-coded value inside, and as parameters, we will have one parameter which is a row in the current matrix, and another parameter which is a sclar values. The three types of parameters are dealt with sparately:
 
@@ -231,17 +246,20 @@ kable(tbfunc_B_nN_by_nQ_A_alpha) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 ```
 
-
 ## Compare Results
 
 ```{r linear_combine}
 # Show overall Results
 mt_results <- cbind(ar_func_apply, ar_func_sapply, 
-                    tb_nN_by_nQ_A_alpha_show['dplyr_eval'], 
+                    tb_nN_by_nQ_A_alpha_show['dplyr_eval'],
+                    tbfunc_A_nN_by_nQ_A_alpha_rowwise['dplyr_eval'], 
+                    tbfunc_A_nN_by_nQ_A_alpha_pmap['dplyr_eval_pmap'], 
                     tbfunc_B_nN_by_nQ_A_alpha['dplyr_eval_flex'],
                     mt_nN_by_nQ_A_alpha)
 colnames(mt_results) <- c('eval_lin_apply', 'eval_lin_sapply',
                           'eval_dplyr_mutate', 
+                          'eval_dplyr_mutate_hcode',
+                          'eval_dplyr_mutate_pmap',
                           'eval_dplyr_mutate_flex', 
                           'A_child', 'alpha_child')
 kable(mt_results) %>%

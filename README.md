@@ -82,11 +82,11 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 1. [Evaluate Function each Row of Matrix](https://fanwangecon.github.io/R4Econ/support/function/fs_applysapplymutate.html): R4Efunc \| R4Eref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_applysapplymutate.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_applysapplymutate.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/function/fs_applysapplymutate.html)
     - evaluate function f(x_i,y_i,c), where c is a constant and x and y vary over each row of a matrix, with index i indicating rows
     - get same results using apply, sapply, and dplyr mutate
-    - **tidy**: *do(); apply(mt_nN_by_nQ_A_alpha, 1, ffi_linear_hardcode); sapply(ls_ar_nN_by_nQ_A_alpha, ffi_linear_sapply, ar_A=ar_nN_A, ar_alpha=ar_nN_alpha); rowwise() %>% mutate(dplyr_eval = ffi_linear_dplyrdo(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha))*
+    - **tidy**: *tb %>% rowwise() %>% do(out = cur_func(., fl)) %>% unnest(out); tb %>% pmap(func) %>% unlist(); apply(mt, 1, func); sapply(ls_ar, func, ar1, ar2); rowwise() %>% mutate(out = func(inputs))*
 2. [Evaluate Nonlinear Function each Row of Matrix](https://fanwangecon.github.io/R4Econ/support/function/fs_funceval.html): R4Efunc \| R4Eref \| [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_funceval.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_funceval.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/function/fs_funceval.html)
     - evaluate nonlinear function f(x_i, y_i, ar_x, ar_y, c, d), where c and d are constants, and ar_x and ar_y are arrays, both fixed. x_i and y_i vary over each row of matrix.
     - get same results using apply, sapply, and dplyr mutate
-    - **tidy**: *rowwise() %>% mutate(dplyr_eval = ffi_linear_dplyrdo(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha))*
+    - **tidy**: *rowwise() %>% mutate(out = funct(inputs))*
 
 ## 2.5 Distributions
 
