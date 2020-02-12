@@ -29,10 +29,13 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 ## 1.3 Tabulate and Counting
 
-1. [Tabulation Categorical as Matrix](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/tabulate/ListUniqueCateNAsMat.R): ipynb \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/tabulate/ListUniqueCateNAsMat.R) \| html \| pdf
+1. [Counting Basics](https://fanwangecon.github.io/R4Econ/summarize/count/fs_count_basics.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/fs_count_basics.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/fs_count_basics.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/summarize/count/fs_count_basics.html)
+    - uncount to generate panel skeleton from years in survey
+    - **tidy**: *uncount(yrs_count) %>% group_by() %>% mutate(yr = row_number() + start_yr)*
+2. [Tabulation Categorical as Matrix](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/tabulate/ListUniqueCateNAsMat.R): ipynb \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/tabulate/ListUniqueCateNAsMat.R) \| html \| pdf
     + Many-Category Categorical Variable, Tabulation shown as Matrix.
     + **tidy**: *group_by + summarise(freq = n()) + mutate + min(ceiling(sqrt(count))) + substring + dim/reshape*
-2. [By Groups, Count Variables Observations](summarize/count/ByGroupCountAllVarNonNA.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/ByGroupCountAllVarNonNA.ipynb) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/ByGroupCountAllVarNonNA.R) \|  [**html**](https://fanwangecon.github.io/R4Econ/summarize/count/ByGroupCountAllVarNonNA.html) \| pdf
+3. [By Groups, Count Variables Observations](summarize/count/ByGroupCountAllVarNonNA.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/ByGroupCountAllVarNonNA.ipynb) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/ByGroupCountAllVarNonNA.R) \|  [**html**](https://fanwangecon.github.io/R4Econ/summarize/count/ByGroupCountAllVarNonNA.html) \| pdf
     + By Groups, Count non-NA observations of All Variables.
     + **tidy**: *group_by + summarise_if(is.numeric, funs(sum(is.na(.)==0)))*
 
