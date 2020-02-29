@@ -405,21 +405,43 @@ purl(paste0(st_file_name, &quot;.Rmd&quot;), output=paste0(st_file_name, &quot;.
 </ul>
 <pre class="r"><code># Base Inputs
 ar_col &lt;- c(-1,+1)
-mt_rnorm &lt;- matrix(rnorm(4,mean=0,sd=1), nrow=2, ncol=2)
+mt_rnorm_a &lt;- matrix(rnorm(4,mean=0,sd=1), nrow=2, ncol=2)
+mt_rnorm_b &lt;- matrix(rnorm(4,mean=0,sd=1), nrow=2, ncol=4)
 
 # Combine Matrix
-mt_combine &lt;- cbind(ar_col, mt_rnorm)
-colnames(mt_combine) &lt;- paste0(&#39;matcolvar&#39;, seq(1,dim(mt_combine)[2]))
+mt_combine &lt;- cbind(ar_col, mt_rnorm_a, mt_rnorm_b)
+colnames(mt_combine) &lt;- c(&#39;ar_col&#39;,
+                          paste0(&#39;matcolvar_grpa_&#39;, seq(1,dim(mt_rnorm_a)[2])),
+                          paste0(&#39;matcolvar_grpb_&#39;, seq(1,dim(mt_rnorm_b)[2])))
 
 # Variable Names
-ar_st_varnames &lt;- paste0(&#39;tibcolvar&#39;, c(1,2,3))
+ar_st_varnames &lt;- c(&#39;var_one&#39;, 
+                    paste0(&#39;tibcolvar_ga_&#39;, c(1,2)), 
+                    paste0(&#39;tibcolvar_gb_&#39;, c(1,2,3,4)))
 
 # Combine to tibble, add name col1, col2, etc.
 tb_combine &lt;- as_tibble(mt_combine) %&gt;% rename_all(~c(ar_st_varnames))
+
 # Add an index column to the dataframe, ID column
 tb_combine &lt;- tb_combine %&gt;% rowid_to_column(var = &quot;ID&quot;)
 
-# Tibble back to matrix
+# Change all gb variable names
+tb_combine &lt;- tb_combine %&gt;% 
+                  rename_at(vars(starts_with(&quot;tibcolvar_gb_&quot;)),
+                            funs(str_replace(., &quot;_gb_&quot;, &quot;_gbrenamed_&quot;)))</code></pre>
+<pre><code>## Warning: funs() is soft deprecated as of dplyr 0.8.0
+## Please use a list of either functions or lambdas: 
+## 
+##   # Simple named list: 
+##   list(mean = mean, median = median)
+## 
+##   # Auto named with `tibble::lst()`: 
+##   tibble::lst(mean, median)
+## 
+##   # Using lambdas
+##   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
+## This warning is displayed once per session.</code></pre>
+<pre class="r"><code># Tibble back to matrix
 mt_tb_combine_back &lt;- data.matrix(tb_combine)
 
 # Display
@@ -429,13 +451,25 @@ kable(mt_combine) %&gt;%
 <thead>
 <tr>
 <th style="text-align:right;">
-matcolvar1
+ar_col
 </th>
 <th style="text-align:right;">
-matcolvar2
+matcolvar_grpa_1
 </th>
 <th style="text-align:right;">
-matcolvar3
+matcolvar_grpa_2
+</th>
+<th style="text-align:right;">
+matcolvar_grpb_1
+</th>
+<th style="text-align:right;">
+matcolvar_grpb_2
+</th>
+<th style="text-align:right;">
+matcolvar_grpb_3
+</th>
+<th style="text-align:right;">
+matcolvar_grpb_4
 </th>
 </tr>
 </thead>
@@ -445,10 +479,22 @@ matcolvar3
 -1
 </td>
 <td style="text-align:right;">
-0.0713789
+-1.3407572
 </td>
 <td style="text-align:right;">
-0.7735891
+-1.2478202
+</td>
+<td style="text-align:right;">
+-0.6879925
+</td>
+<td style="text-align:right;">
+0.2400848
+</td>
+<td style="text-align:right;">
+-0.6879925
+</td>
+<td style="text-align:right;">
+0.2400848
 </td>
 </tr>
 <tr>
@@ -456,10 +502,22 @@ matcolvar3
 1
 </td>
 <td style="text-align:right;">
--0.1240493
+0.2883494
 </td>
 <td style="text-align:right;">
-0.0254197
+-0.4836289
+</td>
+<td style="text-align:right;">
+-0.8521641
+</td>
+<td style="text-align:right;">
+0.7725927
+</td>
+<td style="text-align:right;">
+-0.8521641
+</td>
+<td style="text-align:right;">
+0.7725927
 </td>
 </tr>
 </tbody>
@@ -473,13 +531,25 @@ matcolvar3
 ID
 </th>
 <th style="text-align:right;">
-tibcolvar1
+var_one
 </th>
 <th style="text-align:right;">
-tibcolvar2
+tibcolvar_ga_1
 </th>
 <th style="text-align:right;">
-tibcolvar3
+tibcolvar_ga_2
+</th>
+<th style="text-align:right;">
+tibcolvar_gbrenamed_1
+</th>
+<th style="text-align:right;">
+tibcolvar_gbrenamed_2
+</th>
+<th style="text-align:right;">
+tibcolvar_gbrenamed_3
+</th>
+<th style="text-align:right;">
+tibcolvar_gbrenamed_4
 </th>
 </tr>
 </thead>
@@ -492,10 +562,22 @@ tibcolvar3
 -1
 </td>
 <td style="text-align:right;">
-0.0713789
+-1.3407572
 </td>
 <td style="text-align:right;">
-0.7735891
+-1.2478202
+</td>
+<td style="text-align:right;">
+-0.6879925
+</td>
+<td style="text-align:right;">
+0.2400848
+</td>
+<td style="text-align:right;">
+-0.6879925
+</td>
+<td style="text-align:right;">
+0.2400848
 </td>
 </tr>
 <tr>
@@ -506,10 +588,22 @@ tibcolvar3
 1
 </td>
 <td style="text-align:right;">
--0.1240493
+0.2883494
 </td>
 <td style="text-align:right;">
-0.0254197
+-0.4836289
+</td>
+<td style="text-align:right;">
+-0.8521641
+</td>
+<td style="text-align:right;">
+0.7725927
+</td>
+<td style="text-align:right;">
+-0.8521641
+</td>
+<td style="text-align:right;">
+0.7725927
 </td>
 </tr>
 </tbody>
@@ -523,13 +617,25 @@ tibcolvar3
 ID
 </th>
 <th style="text-align:right;">
-tibcolvar1
+var_one
 </th>
 <th style="text-align:right;">
-tibcolvar2
+tibcolvar_ga_1
 </th>
 <th style="text-align:right;">
-tibcolvar3
+tibcolvar_ga_2
+</th>
+<th style="text-align:right;">
+tibcolvar_gbrenamed_1
+</th>
+<th style="text-align:right;">
+tibcolvar_gbrenamed_2
+</th>
+<th style="text-align:right;">
+tibcolvar_gbrenamed_3
+</th>
+<th style="text-align:right;">
+tibcolvar_gbrenamed_4
 </th>
 </tr>
 </thead>
@@ -542,10 +648,22 @@ tibcolvar3
 -1
 </td>
 <td style="text-align:right;">
-0.0713789
+-1.3407572
 </td>
 <td style="text-align:right;">
-0.7735891
+-1.2478202
+</td>
+<td style="text-align:right;">
+-0.6879925
+</td>
+<td style="text-align:right;">
+0.2400848
+</td>
+<td style="text-align:right;">
+-0.6879925
+</td>
+<td style="text-align:right;">
+0.2400848
 </td>
 </tr>
 <tr>
@@ -556,10 +674,22 @@ tibcolvar3
 1
 </td>
 <td style="text-align:right;">
--0.1240493
+0.2883494
 </td>
 <td style="text-align:right;">
-0.0254197
+-0.4836289
+</td>
+<td style="text-align:right;">
+-0.8521641
+</td>
+<td style="text-align:right;">
+0.7725927
+</td>
+<td style="text-align:right;">
+-0.8521641
+</td>
+<td style="text-align:right;">
+0.7725927
 </td>
 </tr>
 </tbody>
