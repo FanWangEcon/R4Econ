@@ -73,7 +73,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 1. [Tibble Basics](https://fanwangecon.github.io/R4Econ/support/tibble/fs_tib_basics.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/tibble/fs_tib_basics.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/tibble/fs_tib_basics.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/tibble/fs_tib_basics.html)
     - generate tibbles, rename tibble variables, tibble row and column names, index
     - tibble statistics
-    - **tidy**: *as_tibble(mt_combine) %>% rename_all(~c(ar_st_varnames)); rename_at(vars(starts_with("xx")), funs(str_replace(., "yy", "yyyy")); rowid_to_column(); colnames, rownames*
+    - **tidy**: *as_tibble(mt_combine) %>% rename_all(~c(ar_st_varnames)); rename_at(vars(starts_with("xx")), funs(str_replace(., "yy", "yyyy")); rename_at(vars(num_range('',ar_it)), funs(paste0(st,.))); rowid_to_column(); colnames, rownames*
 2. [Input Data Text](https://fanwangecon.github.io/R4Econ/summarize/dist/fst_hist_onevar.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/dist/fst_hist_onevar.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/dist/fst_hist_onevar.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/summarize/dist/fst_hist_onevar.html)
     - input multiple variables with comma separated text strings
     - quantitative/continuous and categorical/discrete variables
@@ -95,7 +95,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 1. [Quantiles from Multiple Variables](generate/quantile/VarCateIdxVarsQuantiles.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quantile/VarCateIdxVarsQuantiles.ipynb) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/generate/quantile/VarCateIdxVarsQuantiles.R) \| [**html**](generate/quantile/VarCateIdxVarsQuantiles.html) \| pdf
     + Dataframe of Variables' Quantiles by Panel Groups; Quantile Categorical Variables for Panel within Group Observations; Quantile cut variable suffix and quantile labeling; Joint Quantile Categorical Variable with Linear Index.
-    + **tidy**: *group_by + slicke(1L) + lapply(enframe(quantiles())) + reduce(full_join) + mutate_at(funs(q=f_cut(.,cut)))) + levels() + rename_at + unlist(lapply) + mutate(!!var.qjnt.grp.idx := group_indices(., !!!syms(vars.quantile.cut.all)))*
+    + **tidy**: *group_by + slice(1L) + lapply(enframe(quantiles())) + reduce(full_join) + mutate_at(funs(q=f_cut(.,cut)))) + levels() + rename_at + unlist(lapply) + mutate(!!var.qjnt.grp.idx := group_indices(., !!!syms(vars.quantile.cut.all)))*
 
 # 3. Linear Regressions
 

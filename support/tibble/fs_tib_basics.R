@@ -86,6 +86,40 @@ kable(mt_tb_combine_back) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 
 #' 
+#' ## Rename Tibble with Numeric Column Names
+#' 
+#' After reshaping, often could end up with variable names that are all numeric, intgers for example, how to rename these variables to add a common prefix for example. 
+#' 
+## -----------------------------------------------------------------------------
+# Base Inputs
+ar_col <- c(-1,+1)
+mt_rnorm_c <- matrix(rnorm(4,mean=0,sd=1), nrow=5, ncol=10)
+mt_combine <- cbind(ar_col, mt_rnorm_c)
+
+# Variable Names
+ar_it_cols_ctr <- seq(1, dim(mt_rnorm_c)[2])
+ar_st_varnames <- c('var_one', ar_it_cols_ctr)
+
+# Combine to tibble, add name col1, col2, etc.
+tb_combine <- as_tibble(mt_combine) %>% rename_all(~c(ar_st_varnames))
+
+# Add an index column to the dataframe, ID column
+tb_combine_ori <- tb_combine %>% rowid_to_column(var = "ID")
+
+# Change all gb variable names
+tb_combine <- tb_combine_ori %>% 
+                  rename_at(
+                    vars(num_range('',ar_it_cols_ctr)),
+                    funs(paste0("rho", . , 'var'))
+                    )
+
+# Display
+kable(tb_combine_ori) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
+kable(tb_combine) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
+
+#' 
 #' ## Tibble Row and Column and Summarize
 #' Show what is in the table: 1, column and row names; 2, contents inside table.
 #' 

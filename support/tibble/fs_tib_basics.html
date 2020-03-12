@@ -479,22 +479,22 @@ matcolvar_grpb_4
 -1
 </td>
 <td style="text-align:right;">
--1.3407572
+-1.1557463
 </td>
 <td style="text-align:right;">
--1.2478202
+-2.0299202
 </td>
 <td style="text-align:right;">
--0.6879925
+-1.2133991
 </td>
 <td style="text-align:right;">
-0.2400848
+-0.764658
 </td>
 <td style="text-align:right;">
--0.6879925
+-1.2133991
 </td>
 <td style="text-align:right;">
-0.2400848
+-0.764658
 </td>
 </tr>
 <tr>
@@ -502,22 +502,22 @@ matcolvar_grpb_4
 1
 </td>
 <td style="text-align:right;">
-0.2883494
+0.1691242
 </td>
 <td style="text-align:right;">
--0.4836289
+-0.7409973
 </td>
 <td style="text-align:right;">
--0.8521641
+-0.6866453
 </td>
 <td style="text-align:right;">
-0.7725927
+-1.038347
 </td>
 <td style="text-align:right;">
--0.8521641
+-0.6866453
 </td>
 <td style="text-align:right;">
-0.7725927
+-1.038347
 </td>
 </tr>
 </tbody>
@@ -562,22 +562,22 @@ tibcolvar_gbrenamed_4
 -1
 </td>
 <td style="text-align:right;">
--1.3407572
+-1.1557463
 </td>
 <td style="text-align:right;">
--1.2478202
+-2.0299202
 </td>
 <td style="text-align:right;">
--0.6879925
+-1.2133991
 </td>
 <td style="text-align:right;">
-0.2400848
+-0.764658
 </td>
 <td style="text-align:right;">
--0.6879925
+-1.2133991
 </td>
 <td style="text-align:right;">
-0.2400848
+-0.764658
 </td>
 </tr>
 <tr>
@@ -588,22 +588,22 @@ tibcolvar_gbrenamed_4
 1
 </td>
 <td style="text-align:right;">
-0.2883494
+0.1691242
 </td>
 <td style="text-align:right;">
--0.4836289
+-0.7409973
 </td>
 <td style="text-align:right;">
--0.8521641
+-0.6866453
 </td>
 <td style="text-align:right;">
-0.7725927
+-1.038347
 </td>
 <td style="text-align:right;">
--0.8521641
+-0.6866453
 </td>
 <td style="text-align:right;">
-0.7725927
+-1.038347
 </td>
 </tr>
 </tbody>
@@ -648,22 +648,22 @@ tibcolvar_gbrenamed_4
 -1
 </td>
 <td style="text-align:right;">
--1.3407572
+-1.1557463
 </td>
 <td style="text-align:right;">
--1.2478202
+-2.0299202
 </td>
 <td style="text-align:right;">
--0.6879925
+-1.2133991
 </td>
 <td style="text-align:right;">
-0.2400848
+-0.764658
 </td>
 <td style="text-align:right;">
--0.6879925
+-1.2133991
 </td>
 <td style="text-align:right;">
-0.2400848
+-0.764658
 </td>
 </tr>
 <tr>
@@ -674,22 +674,525 @@ tibcolvar_gbrenamed_4
 1
 </td>
 <td style="text-align:right;">
-0.2883494
+0.1691242
 </td>
 <td style="text-align:right;">
--0.4836289
+-0.7409973
 </td>
 <td style="text-align:right;">
--0.8521641
+-0.6866453
 </td>
 <td style="text-align:right;">
-0.7725927
+-1.038347
 </td>
 <td style="text-align:right;">
--0.8521641
+-0.6866453
 </td>
 <td style="text-align:right;">
-0.7725927
+-1.038347
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="rename-tibble-with-numeric-column-names" class="section level2">
+<h2>Rename Tibble with Numeric Column Names</h2>
+<p>After reshaping, often could end up with variable names that are all numeric, intgers for example, how to rename these variables to add a common prefix for example.</p>
+<pre class="r"><code># Base Inputs
+ar_col &lt;- c(-1,+1)
+mt_rnorm_c &lt;- matrix(rnorm(4,mean=0,sd=1), nrow=5, ncol=10)</code></pre>
+<pre><code>## Warning in matrix(rnorm(4, mean = 0, sd = 1), nrow = 5, ncol = 10): data length
+## [4] is not a sub-multiple or multiple of the number of rows [5]</code></pre>
+<pre class="r"><code>mt_combine &lt;- cbind(ar_col, mt_rnorm_c)</code></pre>
+<pre><code>## Warning in cbind(ar_col, mt_rnorm_c): number of rows of result is not a multiple
+## of vector length (arg 1)</code></pre>
+<pre class="r"><code># Variable Names
+ar_it_cols_ctr &lt;- seq(1, dim(mt_rnorm_c)[2])
+ar_st_varnames &lt;- c(&#39;var_one&#39;, ar_it_cols_ctr)
+
+# Combine to tibble, add name col1, col2, etc.
+tb_combine &lt;- as_tibble(mt_combine) %&gt;% rename_all(~c(ar_st_varnames))</code></pre>
+<pre><code>## Warning: `as_tibble.matrix()` requires a matrix with column names or a `.name_repair` argument. Using compatibility `.name_repair`.
+## This warning is displayed once per session.</code></pre>
+<pre class="r"><code># Add an index column to the dataframe, ID column
+tb_combine_ori &lt;- tb_combine %&gt;% rowid_to_column(var = &quot;ID&quot;)
+
+# Change all gb variable names
+tb_combine &lt;- tb_combine_ori %&gt;% 
+                  rename_at(
+                    vars(num_range(&#39;&#39;,ar_it_cols_ctr)),
+                    funs(paste0(&quot;rho&quot;, . , &#39;var&#39;))
+                    )
+
+# Display
+kable(tb_combine_ori) %&gt;%
+  kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;responsive&quot;))</code></pre>
+<table class="table table-striped table-hover table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+ID
+</th>
+<th style="text-align:right;">
+var_one
+</th>
+<th style="text-align:right;">
+1
+</th>
+<th style="text-align:right;">
+2
+</th>
+<th style="text-align:right;">
+3
+</th>
+<th style="text-align:right;">
+4
+</th>
+<th style="text-align:right;">
+5
+</th>
+<th style="text-align:right;">
+6
+</th>
+<th style="text-align:right;">
+7
+</th>
+<th style="text-align:right;">
+8
+</th>
+<th style="text-align:right;">
+9
+</th>
+<th style="text-align:right;">
+10
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>kable(tb_combine) %&gt;%
+  kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;responsive&quot;))</code></pre>
+<table class="table table-striped table-hover table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+ID
+</th>
+<th style="text-align:right;">
+var_one
+</th>
+<th style="text-align:right;">
+rho1var
+</th>
+<th style="text-align:right;">
+rho2var
+</th>
+<th style="text-align:right;">
+rho3var
+</th>
+<th style="text-align:right;">
+rho4var
+</th>
+<th style="text-align:right;">
+rho5var
+</th>
+<th style="text-align:right;">
+rho6var
+</th>
+<th style="text-align:right;">
+rho7var
+</th>
+<th style="text-align:right;">
+rho8var
+</th>
+<th style="text-align:right;">
+rho9var
+</th>
+<th style="text-align:right;">
+rho10var
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
+</td>
+<td style="text-align:right;">
+-0.4418834
+</td>
+<td style="text-align:right;">
+0.4894510
+</td>
+<td style="text-align:right;">
+-1.6922229
+</td>
+<td style="text-align:right;">
+0.5752386
 </td>
 </tr>
 </tbody>
