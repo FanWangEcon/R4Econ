@@ -97,7 +97,9 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
     + Dataframe of Variables' Quantiles by Panel Groups; Quantile Categorical Variables for Panel within Group Observations; Quantile cut variable suffix and quantile labeling; Joint Quantile Categorical Variable with Linear Index.
     + **tidy**: *group_by + slice(1L) + lapply(enframe(quantiles())) + reduce(full_join) + mutate_at(funs(q=f_cut(.,cut)))) + levels() + rename_at + unlist(lapply) + mutate(!!var.qjnt.grp.idx := group_indices(., !!!syms(vars.quantile.cut.all)))*
 
-# 3. Linear Regressions
+# 3. Regressions
+
+## 3.1 Linear Regressions
 
 1. [IV/OLS Regression](linreg/ivreg/ivregdfrow.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/ivregdfrow.ipynb) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/ivregdfrow.R) \| [**html**](linreg/ivreg/ivregdfrow.html) \| pdf
     + IV/OLS Regression store all Coefficients and Diagnostics as Dataframe Row.
@@ -108,6 +110,12 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 3. [Regression Decomposition](linreg/decompose/decompose.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose/decompose.ipynb) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose/decompose.R) \| [**html**](linreg/decompose/decompose.html) \| pdf
     + Post multiple regressions, fraction of outcome variables' variances explained by multiple subsets of right hand side variables.
     + **tidy**: *gather + group_by(variable) + mutate_at(vars, funs(mean = mean(.))) + rowSums(mat*mat) + mutate_if(is.numeric, funs(frac = (./value_var)))*
+
+## 3.2 Nonlinear Regressions
+
+1. [Logit Regression](https://fanwangecon.github.io/R4Econ/regnonlin/logit/fs_logit_birhs.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/logit/fs_logit_birhs.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/logit/fs_logit_birhs.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/regnonlin/logit/fs_logit_birhs.html)
+    + Logit regression testing and prediction
+    + **tidy**: *glm(as.formula(), data, family='binomial'); predict(rs, newdata, type = "response")*
 
 # 4. Optimization
 
@@ -120,7 +128,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
     + **pivot_wider**: *df %>% pivot_wider(names_from = !!sym(name), values_from = val)*
     + **ggplot**: *geom_line, facet_wrap, geom_hline*
 
-## 4.1 Planner's Problem
+## 4.2 Planner's Problem
 
 1. [CES Objective Function](optimization/planner/ces/cesplannerobj.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planner/ces/cesplannerobj.ipynb) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/optimization/planner/ces/cesplannerobj.R) \| [**html**](optimization/planner/ces/cesplannerobj.html) \| pdf
     + Constant Elasticity of Substitution Planner Welfare Objective Function.
@@ -134,13 +142,12 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
     + Constrained: a + b + c = Z, a >= 0, b >= 0, c >= 0; Unconstrained maximands of a and b for optimization.
     + **tidy**: *f - f/(1+exp(x)), while, runif + qexp + qnorm/dnorm*
 
-# 5. Graphing
+# 5. Mathmatical
 
-1. [Line Plot with Two Categories, as Color and Subplot](dynamic/graph/statesvalpol.html): [**ipynb**](https://github.com/FanWangEcon/R4Econ/blob/master/dynamic/graph/statesvalpol.ipynb) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/dynamic/graph/statesvalpol.R) \| [**html**](dynamic/graph/statesvalpol.html) \| pdf
-    + Optimal choices/value-function along states. Asset as X-axis, shocks as color, potentially another state as subplots.
-    + **tidy**: *unique + mutate(var := as.factor(var)) + ggplot + facet_wrap + geom_line + geom_point + labs + theme(axis.text.x = element_text(angle = 90, hjust = 1))*
+1. [Aktinson Utility](https://fanwangecon.github.io/R4Econ/math/functions/fs_atkinson_ces.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/functions/fs_atkinson_ces.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/functions/fs_atkinson_ces.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/functions/fs_atkinson_ces.html)
+    - Aktinson Class Utility (CES) Derivatives
 
-# 6. Tools
+# 6. Additional Tools
 
 1. [List of List to Dataframe](https://github.com/FanWangEcon/R4Econ/blob/master/support/dplyrtricks/nestedlist2df.R): ipynb \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/support/dplyrtricks/nestedlist2df.R) \| html \| pdf
     + Results stored as nested named list (with different keys in sub-lists).

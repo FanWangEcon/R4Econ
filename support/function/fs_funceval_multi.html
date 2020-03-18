@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Fan Wang" />
 
 
 <title>DPLYR Evaluate Function with N Arrays of Inputs J times</title>
@@ -339,6 +339,7 @@ summary {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -371,11 +372,12 @@ summary {
 
 
 <h1 class="title toc-ignore">DPLYR Evaluate Function with N Arrays of Inputs J times</h1>
+<h4 class="author">Fan Wang</h4>
 
 </div>
 
 
-<p>Go back to <a href="http://fanwangecon.github.io/CodeDynaAsset/">fan</a>’s <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> Repository or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository.</p>
+<p>Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> Repository, or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository.</p>
 <div id="issue-and-goal" class="section level2">
 <h2>Issue and Goal</h2>
 <p>We want evaluate nonlinear function f(Q_i, y_i, ar_x, ar_y, c_j, d), where c_j is an element of some array, d is a constant, and ar_x and ar_y are arrays, both fixed. x_i and y_i vary over each row of matrix. We would like to evaluate this nonlinear function concurrently across <span class="math inline">\(N\)</span> individuals. The eventual goal is to find the <span class="math inline">\(i\)</span> specific <span class="math inline">\(Q\)</span> that solves the nonlinear equations.</p>

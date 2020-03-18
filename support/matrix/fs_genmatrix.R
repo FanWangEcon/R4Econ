@@ -1,5 +1,6 @@
 #' ---
 #' title: "R Generate and Combine Fixed and Random Matrix"
+#' author: Fan Wang
 #' output:
 #'   pdf_document: default
 #'   html_notebook:
@@ -8,13 +9,12 @@
 #'     df_print: paged
 #' ---
 #' 
-#' Go back to [fan](http://fanwangecon.github.io/CodeDynaAsset/)'s [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
+#' Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository, or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
 #' 
-## ----GlobalOptions, echo = T, results = 'hide', message=F, warning=F-----
+## ----GlobalOptions, echo = T, results = 'hide', message=F, warning=F----------
 options(knitr.duplicate.label = 'allow')
 
-#' 
-## ----loadlib, echo = T, results = 'hide', message=F, warning=F-----------
+## ----loadlib, echo = T, results = 'hide', message=F, warning=F----------------
 library(tidyverse)
 library(knitr)
 library(kableExtra)
@@ -33,7 +33,7 @@ purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentat
 #' 
 #' Names of each array become row names automatically.
 #' 
-## ----fixed matrix--------------------------------------------------------
+## ----fixed matrix-------------------------------------------------------------
 ar_row_one <- c(-1,+1)
 ar_row_two <- c(-3,-2)
 ar_row_three <- c(0.35,0.75)
@@ -47,7 +47,7 @@ kable(mt_n_by_2) %>%
 #' 
 #' Random draw from the normal distribution, random draw from the uniform distribution, and combine resulting matrixes.
 #' 
-## ----random matrix-------------------------------------------------------
+## ----random matrix------------------------------------------------------------
 # Generate 15 random normal, put in 5 rows, and 3 columns
 mt_rnorm <- matrix(rnorm(15,mean=0,sd=1), nrow=5, ncol=3)
 

@@ -1,5 +1,6 @@
 #' ---
 #' title: "R Example DPLYR Counting"
+#' author: Fan Wang
 #' output:
 #'   pdf_document: default
 #'   word_document: default
@@ -9,7 +10,7 @@
 #' always_allow_html: yes
 #' ---
 #' 
-#' Go back to [fan](http://fanwangecon.github.io/CodeDynaAsset/)'s [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
+#' Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository, or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
 #' 
 ## ----GlobalOptions, echo = T, results = 'hide', message=F, warning=F----------
 rm(list = ls(all.names = TRUE))

@@ -1,5 +1,6 @@
 #' ---
 #' title: "Meshgrid Arrays in R"
+#' author: Fan Wang
 #' output:
 #'   pdf_document: default
 #'   word_document: default
@@ -9,7 +10,7 @@
 #' always_allow_html: yes
 #' ---
 #' 
-#' Go back to [fan](http://fanwangecon.github.io/CodeDynaAsset/)'s [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
+#' Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository, or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
 #' 
 #' - r expand.grid meshed array to matrix
 #' - r meshgrid
@@ -18,10 +19,10 @@
 #' - dplyr permuations rows of matrix and element of array
 #' - tidyr expand_grid mesh matrix and vector
 #' 
-## ----GlobalOptions, echo = T, results = 'hide', message=F, warning=F-----
+## ----GlobalOptions, echo = T, results = 'hide', message=F, warning=F----------
 options(knitr.duplicate.label = 'allow')
 
-## ----loadlib, echo = T, results = 'hide', message=F, warning=F-----------
+## ----loadlib, echo = T, results = 'hide', message=F, warning=F----------------
 library(tidyverse)
 library(tidyr)
 library(knitr)
@@ -41,7 +42,7 @@ purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentat
 #' 
 #' Note *expand_grid* is a from tidyr 1.0.0.
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # it_child_count = N, the number of children
 it_N_child_cnt = 5
 # P fixed parameters, nN is N dimensional, nP is P dimensional
@@ -56,7 +57,6 @@ fl_min = 0
 ar_nN_alpha = seq(fl_min, fl_max, length.out = it_N_choice_cnt)
 
 # expand grid with dplyr
-library(tidyr)
 expand_grid(x = 1:3, y = 1:2)
 
 tb_expanded <- as_tibble(mt_nP_A_alpha) %>% expand_grid(choices = ar_nN_alpha)
@@ -72,7 +72,7 @@ kable(tb_expanded) %>%
 #' 
 #' Given two arrays, mesh the two arrays together.
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 
 # use expand.grid to generate all combinations of two arrays
 
@@ -101,7 +101,7 @@ kable(mt_alpha_meshed) %>%
 #' 
 #' Two Identical Arrays, individual attributes, each column is an individual for a matrix, and each row is also an individual
 #' 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # use expand.grid to generate all combinations of two arrays
 
 it_ar_A = 5

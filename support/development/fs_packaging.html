@@ -9,6 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Fan Wang" />
 
 
 <title>fs_packaging.utf8</title>
@@ -363,11 +364,12 @@ summary {
 
 <h1 class="title toc-ignore"><div class="line-block">Generate R Package Example<br />
 roxygen2 and pkgdown</div></h1>
+<h4 class="author">Fan Wang</h4>
 
 </div>
 
 
-<p>Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="http://fanwangecon.github.io/R4Econ/">R4Econ</a>.</p>
+<p>Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> Repository, or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository.</p>
 <div id="objective" class="section level1">
 <h1><span class="header-section-number">1</span> Objective</h1>
 <p>Document and generate sharable R package.</p>
@@ -393,6 +395,7 @@ roxygen2 and pkgdown</div></h1>
 <li><em>fv_</em>: for non-project specific vignettes files, generally RMD</li>
 <li><em>ffv_</em>: for project specific functions vignettes files, generally RMD</li>
 <li><em>ff_</em>: for non-project specific functions files</li>
+<li><em>ffd_</em>: for project specific data description files</li>
 <li><em>ffp_</em>: for project specific functions files</li>
 <li><em>ffy_</em>: for project specific utility files</li>
 <li>Each function file could be prepared to have multiple functions inside, each file have the root which is the function name.</li>
@@ -408,6 +411,7 @@ roxygen2 and pkgdown</div></h1>
 <p>Additionally, follow these general structures for <em>vignettes</em> in <em>/vignettes</em> folder:</p>
 <ol style="list-style-type: decimal">
 <li>Follow conventions for function name vignettes should be associated with functions</li>
+<li>There should be a core vignette that has the same name as the R function it is trying to provide line by line details or math descriptions of. If the function is called: <em>ffp_opt_lin_solum.r</em>, the vignette shold be **ffv_opt_lin_solum.Rmd*.</li>
 <li>Append onto existing function name 5 letter/digit to describe what this vignettes is suppose to achieve: <em>ffv_opt_lin_solum_vign1.Rmd</em>.
 <ul>
 <li>note the file starts with <em>ffv</em></li>
@@ -489,6 +493,7 @@ devtools::create(&quot;C:/Users/fan/Tex4Econ/nontex/rprjtemplate&quot;)</code></
 <li>Test <span class="citation">@examples</span> from Roxygen documentations
 <ul>
 <li><strong>devtools::run_examples()</strong></li>
+<li>if also want to test vignette, also do: <strong>devtools::build_vignettes()</strong></li>
 <li>this tests if <em><span class="citation">@examples</span></em> are working.</li>
 </ul></li>
 <li>Continue 3 to 4 - [ ] o convert various components of vignette.</li>
@@ -514,17 +519,19 @@ devtools::create(&quot;C:/Users/fan/Tex4Econ/nontex/rprjtemplate&quot;)</code></
 <pre class="r"><code># Step 3
 rm(list = ls(all.names = TRUE))
 setwd(&#39;C:/Users/fan/PrjOptiAlloc&#39;)
+#setwd(&#39;C:/Users/fan/REconTools&#39;)
 devtools::document()
 # Step 4
 devtools::run_examples()
+devtools::build_vignettes()
 # Step 6
 devtools::check()
-# Step 7 
-devtools::install()
-library(PrjOptiAlloc)
-ls(&quot;package:PrjOptiAlloc&quot;)
+# Step 7
+#devtools::install()
+#library(PrjOptiAlloc)
+#ls(&quot;package:PrjOptiAlloc&quot;)
 devtools::reload()
-# Step 8 
+# Step 8
 pkgdown::build_site()</code></pre>
 </div>
 <div id="attach-vs-import" class="section level2">
@@ -560,8 +567,8 @@ pkgdown::build_site()</code></pre>
 </ol>
 <p>For simple package, for regression results, table outputs etc, use <em>print</em>, print statements can be suppressed by <em>invisible(capture.output(abc &lt;- ffy_opt_dtgch_cbem4()))</em>.</p>
 </div>
-<div id="build-project" class="section level2">
-<h2><span class="header-section-number">4.5</span> Build Project</h2>
+<div id="check-and-run-examples" class="section level2">
+<h2><span class="header-section-number">4.5</span> Check and Run Examples</h2>
 <p><a href="http://r-pkgs.had.co.nz/check.html">check</a> to make sure file structures etc are all correct. Will also test the <span class="citation">@examples</span> inside r functions in ROxygen comments.</p>
 <pre class="r"><code># will check the file structure, but also @example in functions.
 devtools::check(&#39;C:/Users/fan/PrjOptiAlloc&#39;)
@@ -569,8 +576,8 @@ devtools::check(&#39;C:/Users/fan/PrjOptiAlloc&#39;, manual=FALSE)
 devtools::run_examples(&#39;C:/Users/fan/PrjOptiAlloc&#39;)
 devtools::build(&#39;C:/Users/fan/PrjOptiAlloc&#39;)</code></pre>
 </div>
-<div id="r-project-build-and-generate-documentations" class="section level2">
-<h2><span class="header-section-number">4.6</span> R project build and generate documentations</h2>
+<div id="add-depenencies" class="section level2">
+<h2><span class="header-section-number">4.6</span> Add Depenencies</h2>
 <p>Assuming that we have used roxygen2 formats to write functions, now generate <em>.Rd</em> automatically with the <em>document()</em> function. This should create a <em>/man</em> folder in which various <em>.Rd</em> files are stored. Note that their .Rd are for specific R functions, not for files that contain multiple functions.</p>
 <pre class="r"><code># add dependencies:
 setwd(&#39;C:/Users/fan/PrjOptiAlloc&#39;)
@@ -609,8 +616,7 @@ devtools::check()</code></pre>
 <div id="r-project-build-site-with-pkgdown" class="section level2">
 <h2><span class="header-section-number">4.7</span> R project build site with pkgdown</h2>
 <p>Once we have used <em>pkgdown::build_site()</em>, by default, all html and other package presentation files and reference files are saved in the <em>/docs</em> folder, build_site is for building site, not for generating <em>/man</em> documenation. If R files change, need to document first, before rebuilding site.</p>
-<pre class="r"><code>pkgdown::build_site(&quot;C:/Users/fan/PrjOptiAlloc&quot;)
-pkgdown::build_site(&quot;C:/Users/fan/PrjOptiAlloc&quot;,build_vignettes=FALSE)</code></pre>
+<pre class="r"><code>pkgdown::build_site(&quot;C:/Users/fan/PrjOptiAlloc&quot;)</code></pre>
 </div>
 </div>
 

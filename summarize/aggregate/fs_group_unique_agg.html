@@ -9,6 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Fan Wang" />
 
 
 <title>R DPLYR Unique Groups and Count</title>
@@ -371,11 +372,12 @@ summary {
 
 
 <h1 class="title toc-ignore">R DPLYR Unique Groups and Count</h1>
+<h4 class="author">Fan Wang</h4>
 
 </div>
 
 
-<p>Go back to <a href="http://fanwangecon.github.io/CodeDynaAsset/">fan</a>’s <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> Repository or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository.</p>
+<p>Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> Repository, or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository.</p>
 <pre class="r"><code>rm(list = ls(all.names = TRUE))
 options(knitr.duplicate.label = &#39;allow&#39;)</code></pre>
 <pre class="r"><code>library(tidyverse)
@@ -402,8 +404,8 @@ purl(paste0(st_file_name, &quot;.Rmd&quot;), output=paste0(st_file_name, &quot;.
 vars.group &lt;- c(&#39;hgt0&#39;, &#39;wgt0&#39;)
 
 # dataset subsetting
-df_use &lt;- df_hgt_wgt %&gt;% select(!!!syms(c(vars.group))) %&gt;% 
-            mutate(hgt0 = round(hgt0/5)*5, wgt0 = round(wgt0/2000)*2000) %&gt;% 
+df_use &lt;- df_hgt_wgt %&gt;% select(!!!syms(c(vars.group))) %&gt;%
+            mutate(hgt0 = round(hgt0/5)*5, wgt0 = round(wgt0/2000)*2000) %&gt;%
             drop_na()
 
 # Group, count and generate means for each numeric variables
@@ -532,7 +534,7 @@ n_obs_group
 <li>column can’t be modified because it is a grouping variable</li>
 <li>see also: <a href="https://datacarpentry.org/dc_zurich/R-ecology/04-dplyr.html">Aggregating and analyzing data with dplyr</a></li>
 </ul>
-<pre class="r"><code># In the df_hgt_wgt from R4Econ, there is a country id, village id, 
+<pre class="r"><code># In the df_hgt_wgt from R4Econ, there is a country id, village id,
 # and individual id, and various other statistics
 vars.group &lt;- c(&#39;S.country&#39;, &#39;vil.id&#39;, &#39;indi.id&#39;)
 vars.values &lt;- c(&#39;hgt&#39;, &#39;momEdu&#39;)
@@ -543,7 +545,7 @@ df_use &lt;- df_hgt_wgt %&gt;% select(!!!syms(c(vars.group, vars.values)))
 # Group, count and generate means for each numeric variables
 df.group &lt;- df_use %&gt;% group_by(!!!syms(vars.group)) %&gt;%
             arrange(!!!syms(vars.group)) %&gt;%
-            summarise_if(is.numeric, 
+            summarise_if(is.numeric,
                          funs(mean = mean(., na.rm = TRUE),
                               sd = sd(., na.rm = TRUE),
                               n = sum(is.na(.)==0)))</code></pre>

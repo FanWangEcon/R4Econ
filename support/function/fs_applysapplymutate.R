@@ -1,5 +1,6 @@
 #' ---
 #' title: "R use Apply, Sapply and dplyr Mutate to Evaluate one Function Across Rows of a Matrix"
+#' author: Fan Wang
 #' output:
 #'   pdf_document: default
 #'   word_document: default
@@ -9,7 +10,7 @@
 #' always_allow_html: yes
 #' ---
 #' 
-#' Go back to [fan](http://fanwangecon.github.io/CodeDynaAsset/)'s [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
+#' Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository, or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
 #' 
 #' ## Issue and Goal
 #' 
@@ -28,6 +29,8 @@
 #' The function is such that across the $N$ individuals, some of the function parameter inputs are the same, but others are different. If we are looking at demand for a particular product, the prices of all products enter the demand equation for each product, but the product's own price enters also in a different way.
 #' 
 #' The objective is either to just evaluate this function across $N$ individuals, or this is a part of a nonlinear solution system.
+#' 
+#' What is the relationship between apply, lapply and vectorization? see [Is the “*apply” family really not vectorized?](https://stackoverflow.com/a/29006276/8280804).
 #' 
 #' ## Set Up
 #' 

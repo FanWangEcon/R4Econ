@@ -9,6 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Fan Wang" />
 
 
 <title>R use Apply, Sapply and dplyr Mutate to Evaluate one Function Across Rows of a Matrix</title>
@@ -371,11 +372,12 @@ summary {
 
 
 <h1 class="title toc-ignore">R use Apply, Sapply and dplyr Mutate to Evaluate one Function Across Rows of a Matrix</h1>
+<h4 class="author">Fan Wang</h4>
 
 </div>
 
 
-<p>Go back to <a href="http://fanwangecon.github.io/CodeDynaAsset/">fan</a>’s <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> Repository or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository.</p>
+<p>Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> Repository, or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository.</p>
 <div id="issue-and-goal" class="section level2">
 <h2>Issue and Goal</h2>
 <ul>
@@ -392,6 +394,7 @@ summary {
 <p>We want evaluate linear function f(x_i, y_i, ar_x, ar_y, c, d), where c and d are constants, and ar_x and ar_y are arrays, both fixed. x_i and y_i vary over each row of matrix. More specifically, we have a functions, this function takes inputs that are individual specific. We would like to evaluate this function concurrently across <span class="math inline">\(N\)</span> individuals.</p>
 <p>The function is such that across the <span class="math inline">\(N\)</span> individuals, some of the function parameter inputs are the same, but others are different. If we are looking at demand for a particular product, the prices of all products enter the demand equation for each product, but the product’s own price enters also in a different way.</p>
 <p>The objective is either to just evaluate this function across <span class="math inline">\(N\)</span> individuals, or this is a part of a nonlinear solution system.</p>
+<p>What is the relationship between apply, lapply and vectorization? see <a href="https://stackoverflow.com/a/29006276/8280804">Is the “*apply” family really not vectorized?</a>.</p>
 </div>
 <div id="set-up" class="section level2">
 <h2>Set Up</h2>

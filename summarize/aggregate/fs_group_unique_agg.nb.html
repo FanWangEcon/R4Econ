@@ -9,6 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Fan Wang" />
 
 
 <title>R DPLYR Unique Groups and Count</title>
@@ -1744,50 +1745,80 @@ summary {
 
 
 <h1 class="title toc-ignore">R DPLYR Unique Groups and Count</h1>
+<h4 class="author">Fan Wang</h4>
 
 </div>
 
 
 <!-- rnb-text-begin -->
-<p>Go back to <a href="http://fanwangecon.github.io/CodeDynaAsset/">fan</a>’s <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> Repository or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository.</p>
+<p>Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> Repository, or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucm0obGlzdCA9IGxzKGFsbC5uYW1lcyA9IFRSVUUpKVxub3B0aW9ucyhrbml0ci5kdXBsaWNhdGUubGFiZWwgPSAnYWxsb3cnKVxuYGBgIn0= -->
-<pre class="r"><code>rm(list = ls(all.names = TRUE))
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxucm0obGlzdCA9IGxzKGFsbC5uYW1lcyA9IFRSVUUpKVxub3B0aW9ucyhrbml0ci5kdXBsaWNhdGUubGFiZWwgPSAnYWxsb3cnKVxuYGBgXG5gYGAifQ== -->
+<pre class="r"><code>```r
+rm(list = ls(all.names = TRUE))
 options(knitr.duplicate.label = &#39;allow&#39;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KGtuaXRyKVxubGlicmFyeShrYWJsZUV4dHJhKVxubGlicmFyeShSNEVjb24pXG4jIGZpbGUgbmFtZVxuc3RfZmlsZV9uYW1lID0gJ2ZzX2dyb3VwX3VuaXF1ZV9hZ2cnXG4jIEdlbmVyYXRlIFIgRmlsZVxucHVybChwYXN0ZTAoc3RfZmlsZV9uYW1lLCBcIi5SbWRcIiksIG91dHB1dD1wYXN0ZTAoc3RfZmlsZV9uYW1lLCBcIi5SXCIpLCBkb2N1bWVudGF0aW9uID0gMilcbiMgR2VuZXJhdGUgUERGIGFuZCBIVE1MXG4jIHJtYXJrZG93bjo6cmVuZGVyKFwiQzovVXNlcnMvZmFuL1I0RWNvbi9zdW1tYXJpemUvYWdncmVnYXRlL2ZzX2dyb3VwX3VuaXF1ZV9hZ2cuUm1kXCIsIFwicGRmX2RvY3VtZW50XCIpXG4jIHJtYXJrZG93bjo6cmVuZGVyKFwiQzovVXNlcnMvZmFuL1I0RWNvbi9zdW1tYXJpemUvYWdncmVnYXRlL2ZzX2dyb3VwX3VuaXF1ZV9hZ2cuUm1kXCIsIFwiaHRtbF9kb2N1bWVudFwiKVxuYGBgIn0= -->
-<pre class="r"><code>library(tidyverse)
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KGtuaXRyKVxubGlicmFyeShrYWJsZUV4dHJhKVxubGlicmFyeShSNEVjb24pXG4jIGZpbGUgbmFtZVxuc3RfZmlsZV9uYW1lID0gJ2ZzX2dyb3VwX3VuaXF1ZV9hZ2cnXG4jIEdlbmVyYXRlIFIgRmlsZVxucHVybChwYXN0ZTAoc3RfZmlsZV9uYW1lLCBcXC5SbWRcXCksIG91dHB1dD1wYXN0ZTAoc3RfZmlsZV9uYW1lLCBcXC5SXFwpLCBkb2N1bWVudGF0aW9uID0gMilcbiMgR2VuZXJhdGUgUERGIGFuZCBIVE1MXG4jIHJtYXJrZG93bjo6cmVuZGVyKFxcQzovVXNlcnMvZmFuL1I0RWNvbi9zdW1tYXJpemUvYWdncmVnYXRlL2ZzX2dyb3VwX3VuaXF1ZV9hZ2cuUm1kXFwsIFxccGRmX2RvY3VtZW50XFwpXG4jIHJtYXJrZG93bjo6cmVuZGVyKFxcQzovVXNlcnMvZmFuL1I0RWNvbi9zdW1tYXJpemUvYWdncmVnYXRlL2ZzX2dyb3VwX3VuaXF1ZV9hZ2cuUm1kXFwsIFxcaHRtbF9kb2N1bWVudFxcKVxuYGBgXG5gYGAifQ== --&gt;
+
+```r
+```r
+library(tidyverse)
 library(knitr)
 library(kableExtra)
-library(REconTools)
+library(R4Econ)
 # file name
 st_file_name = &#39;fs_group_unique_agg&#39;
 # Generate R File
-purl(paste0(st_file_name, &quot;.Rmd&quot;), output=paste0(st_file_name, &quot;.R&quot;), documentation = 2)
+purl(paste0(st_file_name, \.Rmd\), output=paste0(st_file_name, \.R\), documentation = 2)
 # Generate PDF and HTML
-# rmarkdown::render(&quot;C:/Users/fan/R4Econ/summarize/aggregate/fs_group_unique_agg.Rmd&quot;, &quot;pdf_document&quot;)
-# rmarkdown::render(&quot;C:/Users/fan/R4Econ/summarize/aggregate/fs_group_unique_agg.Rmd&quot;, &quot;html_document&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<div id="aggregate-table-with-groups" class="section level1">
-<h1>Aggregate Table with Groups</h1>
-<div id="aggrgate-groups-only-unique-group-and-count" class="section level2">
-<h2>Aggrgate Groups only Unique Group and Count</h2>
-<p>There are two variables that are numeric, we want to find all the unique groups of these two variables in a dataset and count how many times each unique group occurs</p>
-<ul>
-<li>r unique occurrence of numeric groups</li>
-<li>How to add count of unique values by group to R data.frame</li>
-</ul>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBOdW1lcmljIHZhbHVlIGNvbWJpbmF0aW9ucyB1bmlxdWUgR3JvdXBzXG52YXJzLmdyb3VwIDwtIGMoJ2hndDAnLCAnd2d0MCcpXG5cbiMgZGF0YXNldCBzdWJzZXR0aW5nXG5kZl91c2UgPC0gZGZfaGd0X3dndCAlPiUgc2VsZWN0KCEhIXN5bXMoYyh2YXJzLmdyb3VwKSkpICU+JSBcbiAgICAgICAgICAgIG11dGF0ZShoZ3QwID0gcm91bmQoaGd0MC81KSo1LCB3Z3QwID0gcm91bmQod2d0MC8yMDAwKSoyMDAwKSAlPiUgXG4gICAgICAgICAgICBkcm9wX25hKClcblxuIyBHcm91cCwgY291bnQgYW5kIGdlbmVyYXRlIG1lYW5zIGZvciBlYWNoIG51bWVyaWMgdmFyaWFibGVzXG4jIG11dGF0ZV9hdCh2YXJzLmdyb3VwLCBmdW5zKGFzLmZhY3RvciguKSkpICU+JVxuZGYuZ3JvdXAuY291bnQgPC0gZGZfdXNlICU+JSBncm91cF9ieSghISFzeW1zKHZhcnMuZ3JvdXApKSAlPiVcbiAgICAgICAgICAgICAgICAgICAgYXJyYW5nZSghISFzeW1zKHZhcnMuZ3JvdXApKSAlPiVcbiAgICAgICAgICAgICAgICAgICAgc3VtbWFyaXNlKG5fb2JzX2dyb3VwPW4oKSlcblxuIyBTaG93IHJlc3VsdHMgSGVhZCAxMFxuZGYuZ3JvdXAuY291bnQgJT4lXG4gIGthYmxlKCkgJT4lXG4gIGthYmxlX3N0eWxpbmcoYm9vdHN0cmFwX29wdGlvbnMgPSBjKFwic3RyaXBlZFwiLCBcImhvdmVyXCIsIFwiY29uZGVuc2VkXCIsIFwicmVzcG9uc2l2ZVwiKSlcbmBgYCJ9 -->
-<pre class="r"><code># Numeric value combinations unique Groups
+# rmarkdown::render(\C:/Users/fan/R4Econ/summarize/aggregate/fs_group_unique_agg.Rmd\, \pdf_document\)
+# rmarkdown::render(\C:/Users/fan/R4Econ/summarize/aggregate/fs_group_unique_agg.Rmd\, \html_document\)</code></pre>
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+# Aggregate Table with Groups
+
+## Aggrgate Groups only Unique Group and Count
+
+There are two variables that are numeric, we want to find all the unique groups of these two variables in a dataset and count how many times each unique group occurs
+
+- r unique occurrence of numeric groups
+- How to add count of unique values by group to R data.frame
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuIyBOdW1lcmljIHZhbHVlIGNvbWJpbmF0aW9ucyB1bmlxdWUgR3JvdXBzXG52YXJzLmdyb3VwIDwtIGMoJ2hndDAnLCAnd2d0MCcpXG5cbiMgZGF0YXNldCBzdWJzZXR0aW5nXG5kZl91c2UgPC0gZGZfaGd0X3dndCAlPiUgc2VsZWN0KCEhIXN5bXMoYyh2YXJzLmdyb3VwKSkpICU+JSBcbiAgICAgICAgICAgIG11dGF0ZShoZ3QwID0gcm91bmQoaGd0MC81KSo1LCB3Z3QwID0gcm91bmQod2d0MC8yMDAwKSoyMDAwKSAlPiUgXG4gICAgICAgICAgICBkcm9wX25hKClcblxuIyBHcm91cCwgY291bnQgYW5kIGdlbmVyYXRlIG1lYW5zIGZvciBlYWNoIG51bWVyaWMgdmFyaWFibGVzXG4jIG11dGF0ZV9hdCh2YXJzLmdyb3VwLCBmdW5zKGFzLmZhY3RvciguKSkpICU+JVxuZGYuZ3JvdXAuY291bnQgPC0gZGZfdXNlICU+JSBncm91cF9ieSghISFzeW1zKHZhcnMuZ3JvdXApKSAlPiVcbiAgICAgICAgICAgICAgICAgICAgYXJyYW5nZSghISFzeW1zKHZhcnMuZ3JvdXApKSAlPiVcbiAgICAgICAgICAgICAgICAgICAgc3VtbWFyaXNlKG5fb2JzX2dyb3VwPW4oKSlcblxuIyBTaG93IHJlc3VsdHMgSGVhZCAxMFxuZGYuZ3JvdXAuY291bnQgJT4lXG4gIGthYmxlKCkgJT4lXG4gIGthYmxlX3N0eWxpbmcoYm9vdHN0cmFwX29wdGlvbnMgPSBjKFxcc3RyaXBlZFxcLCBcXGhvdmVyXFwsIFxcY29uZGVuc2VkXFwsIFxccmVzcG9uc2l2ZVxcKSlcbmBgYFxuYGBgIn0= --&gt;
+
+```r
+```r
+# Numeric value combinations unique Groups
 vars.group &lt;- c(&#39;hgt0&#39;, &#39;wgt0&#39;)
 
 # dataset subsetting
@@ -1804,42 +1835,51 @@ df.group.count &lt;- df_use %&gt;% group_by(!!!syms(vars.group)) %&gt;%
 # Show results Head 10
 df.group.count %&gt;%
   kable() %&gt;%
-  kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;condensed&quot;, &quot;responsive&quot;))</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="aggrgate-groups-only-unique-group-show-up-with-means" class="section level2">
-<h2>Aggrgate Groups only Unique Group Show up With Means</h2>
-<p>Several variables that are grouping identifiers. Several variables that are values which mean be unique for each group members. For example, a Panel of income for N households over T years with also household education information that is invariant over time. Want to generate a dataset where the unit of observation are households, rather than household years. Take average of all numeric variables that are household and year specific.</p>
-<p>A complicating factor potentially is that the number of observations differ within group, for example, income might be observed for all years for some households but not for other households.</p>
-<ul>
-<li>r dplyr aggregate group average</li>
-<li>Aggregating and analyzing data with dplyr</li>
-<li>column can’t be modified because it is a grouping variable</li>
-<li>see also: <a href="https://datacarpentry.org/dc_zurich/R-ecology/04-dplyr.html">Aggregating and analyzing data with dplyr</a></li>
-</ul>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBJbiB0aGUgZGZfaGd0X3dndCBmcm9tIFI0RWNvbiwgdGhlcmUgaXMgYSBjb3VudHJ5IGlkLCB2aWxsYWdlIGlkLCBhbmQgaW5kaXZpZHVhbCBpZCwgYW5kIHZhcmlvdXMgb3RoZXIgc3RhdGlzdGljc1xudmFycy5ncm91cCA8LSBjKCdoZ3QwJywgJ3dndDAnKVxuXG5gYGAifQ== -->
-<pre class="r"><code># In the df_hgt_wgt from R4Econ, there is a country id, village id, and individual id, and various other statistics
+  kable_styling(bootstrap_options = c(\striped\, \hover\, \condensed\, \responsive\))</code></pre>
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+## Aggrgate Groups only Unique Group Show up With Means
+
+Several variables that are grouping identifiers. Several variables that are values which mean be unique for each group members. For example, a Panel of income for N households over T years with also household education information that is invariant over time. Want to generate a dataset where the unit of observation are households, rather than household years. Take average of all numeric variables that are household and year specific.
+
+A complicating factor potentially is that the number of observations differ within group, for example, income might be observed for all years for some households but not for other households.
+
+- r dplyr aggregate group average
+- Aggregating and analyzing data with dplyr
+- column can&#39;t be modified because it is a grouping variable
+- see also: [Aggregating and analyzing data with dplyr](https://datacarpentry.org/dc_zurich/R-ecology/04-dplyr.html)
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuIyBJbiB0aGUgZGZfaGd0X3dndCBmcm9tIFI0RWNvbiwgdGhlcmUgaXMgYSBjb3VudHJ5IGlkLCB2aWxsYWdlIGlkLCBhbmQgaW5kaXZpZHVhbCBpZCwgYW5kIHZhcmlvdXMgb3RoZXIgc3RhdGlzdGljc1xudmFycy5ncm91cCA8LSBjKCdoZ3QwJywgJ3dndDAnKVxuXG5gYGBcbmBgYCJ9 --&gt;
+
+```r
+```r
+# In the df_hgt_wgt from R4Econ, there is a country id, village id, and individual id, and various other statistics
 vars.group &lt;- c(&#39;hgt0&#39;, &#39;wgt0&#39;)
 </code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZyBtZXNzYWdlczpcbjE6IEluIG92ZXJsYXkoLi4uKSA6XG4gIHVuc2V0dGluZyAna25pdHIuZHVwbGljYXRlLmxhYmVsJyBmb3IgZHVyYXRpb24gb2YgcmVuZGVyXG4yOiBJbiBvdmVybGF5KC4uLikgOlxuICB1bnNldHRpbmcgJ2tuaXRyLmR1cGxpY2F0ZS5sYWJlbCcgZm9yIGR1cmF0aW9uIG9mIHJlbmRlclxuIn0= -->
-<pre><code>Warning messages:
-1: In overlay(...) :
-  unsetting &#39;knitr.duplicate.label&#39; for duration of render
-2: In overlay(...) :
-  unsetting &#39;knitr.duplicate.label&#39; for duration of render</code></pre>
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZyBtZXNzYWdlczpcbjE6IEluIG92ZXJsYXkoLi4uKSA6XG4gIHVuc2V0dGluZyAna25pdHIuZHVwbGljYXRlLmxhYmVsJyBmb3IgZHVyYXRpb24gb2YgcmVuZGVyXG4yOiBJbiBvdmVybGF5KC4uLikgOlxuICB1bnNldHRpbmcgJ2tuaXRyLmR1cGxpY2F0ZS5sYWJlbCcgZm9yIGR1cmF0aW9uIG9mIHJlbmRlclxuIn0= --&gt;
+</code></pre>
+<p>Warning messages: 1: In overlay(…) : unsetting ‘knitr.duplicate.label’ for duration of render 2: In overlay(…) : unsetting ‘knitr.duplicate.label’ for duration of render ```</p>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-</div>
-</div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgRFBMWVIgVW5pcXVlIEdyb3VwcyBhbmQgQ291bnQiDQpvdXRwdXQ6DQogIHBkZl9kb2N1bWVudDogZGVmYXVsdA0KICB3b3JkX2RvY3VtZW50OiBkZWZhdWx0DQogIGh0bWxfZG9jdW1lbnQ6IGRlZmF1bHQNCiAgaHRtbF9ub3RlYm9vazogZGVmYXVsdA0KdXJsY29sb3I6IGJsdWUNCmFsd2F5c19hbGxvd19odG1sOiB5ZXMNCi0tLQ0KDQpHbyBiYWNrIHRvIFtmYW5dKGh0dHA6Ly9mYW53YW5nZWNvbi5naXRodWIuaW8vQ29kZUR5bmFBc3NldC8pJ3MgW1I0RWNvbl0oaHR0cHM6Ly9mYW53YW5nZWNvbi5naXRodWIuaW8vUjRFY29uLykgUmVwb3NpdG9yeSBvciBbSW50cm8gU3RhdHMgd2l0aCBSXShodHRwczovL2ZhbndhbmdlY29uLmdpdGh1Yi5pby9TdGF0NEVjb24vKSBSZXBvc2l0b3J5Lg0KDQpgYGB7ciBHbG9iYWxPcHRpb25zLCBlY2hvID0gVCwgcmVzdWx0cyA9ICdoaWRlJywgbWVzc2FnZT1GLCB3YXJuaW5nPUZ9DQpybShsaXN0ID0gbHMoYWxsLm5hbWVzID0gVFJVRSkpDQpvcHRpb25zKGtuaXRyLmR1cGxpY2F0ZS5sYWJlbCA9ICdhbGxvdycpDQpgYGANCg0KYGBge3IgbG9hZGxpYiwgZWNobyA9IFQsIHJlc3VsdHMgPSAnaGlkZScsIG1lc3NhZ2U9Riwgd2FybmluZz1GfQ0KbGlicmFyeSh0aWR5dmVyc2UpDQpsaWJyYXJ5KGtuaXRyKQ0KbGlicmFyeShrYWJsZUV4dHJhKQ0KbGlicmFyeShSNEVjb24pDQojIGZpbGUgbmFtZQ0Kc3RfZmlsZV9uYW1lID0gJ2ZzX2dyb3VwX3VuaXF1ZV9hZ2cnDQojIEdlbmVyYXRlIFIgRmlsZQ0KcHVybChwYXN0ZTAoc3RfZmlsZV9uYW1lLCAiLlJtZCIpLCBvdXRwdXQ9cGFzdGUwKHN0X2ZpbGVfbmFtZSwgIi5SIiksIGRvY3VtZW50YXRpb24gPSAyKQ0KIyBHZW5lcmF0ZSBQREYgYW5kIEhUTUwNCiMgcm1hcmtkb3duOjpyZW5kZXIoIkM6L1VzZXJzL2Zhbi9SNEVjb24vc3VtbWFyaXplL2FnZ3JlZ2F0ZS9mc19ncm91cF91bmlxdWVfYWdnLlJtZCIsICJwZGZfZG9jdW1lbnQiKQ0KIyBybWFya2Rvd246OnJlbmRlcigiQzovVXNlcnMvZmFuL1I0RWNvbi9zdW1tYXJpemUvYWdncmVnYXRlL2ZzX2dyb3VwX3VuaXF1ZV9hZ2cuUm1kIiwgImh0bWxfZG9jdW1lbnQiKQ0KYGBgDQoNCiMgQWdncmVnYXRlIFRhYmxlIHdpdGggR3JvdXBzDQoNCiMjIEFnZ3JnYXRlIEdyb3VwcyBvbmx5IFVuaXF1ZSBHcm91cCBhbmQgQ291bnQNCg0KVGhlcmUgYXJlIHR3byB2YXJpYWJsZXMgdGhhdCBhcmUgbnVtZXJpYywgd2Ugd2FudCB0byBmaW5kIGFsbCB0aGUgdW5pcXVlIGdyb3VwcyBvZiB0aGVzZSB0d28gdmFyaWFibGVzIGluIGEgZGF0YXNldCBhbmQgY291bnQgaG93IG1hbnkgdGltZXMgZWFjaCB1bmlxdWUgZ3JvdXAgb2NjdXJzDQoNCi0gciB1bmlxdWUgb2NjdXJyZW5jZSBvZiBudW1lcmljIGdyb3Vwcw0KLSBIb3cgdG8gYWRkIGNvdW50IG9mIHVuaXF1ZSB2YWx1ZXMgYnkgZ3JvdXAgdG8gUiBkYXRhLmZyYW1lDQoNCmBgYHtyfQ0KIyBOdW1lcmljIHZhbHVlIGNvbWJpbmF0aW9ucyB1bmlxdWUgR3JvdXBzDQp2YXJzLmdyb3VwIDwtIGMoJ2hndDAnLCAnd2d0MCcpDQoNCiMgZGF0YXNldCBzdWJzZXR0aW5nDQpkZl91c2UgPC0gZGZfaGd0X3dndCAlPiUgc2VsZWN0KCEhIXN5bXMoYyh2YXJzLmdyb3VwKSkpICU+JSANCiAgICAgICAgICAgIG11dGF0ZShoZ3QwID0gcm91bmQoaGd0MC81KSo1LCB3Z3QwID0gcm91bmQod2d0MC8yMDAwKSoyMDAwKSAlPiUgDQogICAgICAgICAgICBkcm9wX25hKCkNCg0KIyBHcm91cCwgY291bnQgYW5kIGdlbmVyYXRlIG1lYW5zIGZvciBlYWNoIG51bWVyaWMgdmFyaWFibGVzDQojIG11dGF0ZV9hdCh2YXJzLmdyb3VwLCBmdW5zKGFzLmZhY3RvciguKSkpICU+JQ0KZGYuZ3JvdXAuY291bnQgPC0gZGZfdXNlICU+JSBncm91cF9ieSghISFzeW1zKHZhcnMuZ3JvdXApKSAlPiUNCiAgICAgICAgICAgICAgICAgICAgYXJyYW5nZSghISFzeW1zKHZhcnMuZ3JvdXApKSAlPiUNCiAgICAgICAgICAgICAgICAgICAgc3VtbWFyaXNlKG5fb2JzX2dyb3VwPW4oKSkNCg0KIyBTaG93IHJlc3VsdHMgSGVhZCAxMA0KZGYuZ3JvdXAuY291bnQgJT4lDQogIGthYmxlKCkgJT4lDQogIGthYmxlX3N0eWxpbmcoYm9vdHN0cmFwX29wdGlvbnMgPSBjKCJzdHJpcGVkIiwgImhvdmVyIiwgImNvbmRlbnNlZCIsICJyZXNwb25zaXZlIikpDQpgYGANCg0KIyMgQWdncmdhdGUgR3JvdXBzIG9ubHkgVW5pcXVlIEdyb3VwIFNob3cgdXAgV2l0aCBNZWFucw0KDQpTZXZlcmFsIHZhcmlhYmxlcyB0aGF0IGFyZSBncm91cGluZyBpZGVudGlmaWVycy4gU2V2ZXJhbCB2YXJpYWJsZXMgdGhhdCBhcmUgdmFsdWVzIHdoaWNoIG1lYW4gYmUgdW5pcXVlIGZvciBlYWNoIGdyb3VwIG1lbWJlcnMuIEZvciBleGFtcGxlLCBhIFBhbmVsIG9mIGluY29tZSBmb3IgTiBob3VzZWhvbGRzIG92ZXIgVCB5ZWFycyB3aXRoIGFsc28gaG91c2Vob2xkIGVkdWNhdGlvbiBpbmZvcm1hdGlvbiB0aGF0IGlzIGludmFyaWFudCBvdmVyIHRpbWUuIFdhbnQgdG8gZ2VuZXJhdGUgYSBkYXRhc2V0IHdoZXJlIHRoZSB1bml0IG9mIG9ic2VydmF0aW9uIGFyZSBob3VzZWhvbGRzLCByYXRoZXIgdGhhbiBob3VzZWhvbGQgeWVhcnMuIFRha2UgYXZlcmFnZSBvZiBhbGwgbnVtZXJpYyB2YXJpYWJsZXMgdGhhdCBhcmUgaG91c2Vob2xkIGFuZCB5ZWFyIHNwZWNpZmljLg0KDQpBIGNvbXBsaWNhdGluZyBmYWN0b3IgcG90ZW50aWFsbHkgaXMgdGhhdCB0aGUgbnVtYmVyIG9mIG9ic2VydmF0aW9ucyBkaWZmZXIgd2l0aGluIGdyb3VwLCBmb3IgZXhhbXBsZSwgaW5jb21lIG1pZ2h0IGJlIG9ic2VydmVkIGZvciBhbGwgeWVhcnMgZm9yIHNvbWUgaG91c2Vob2xkcyBidXQgbm90IGZvciBvdGhlciBob3VzZWhvbGRzLiANCg0KLSByIGRwbHlyIGFnZ3JlZ2F0ZSBncm91cCBhdmVyYWdlDQotIEFnZ3JlZ2F0aW5nIGFuZCBhbmFseXppbmcgZGF0YSB3aXRoIGRwbHlyDQotIGNvbHVtbiBjYW4ndCBiZSBtb2RpZmllZCBiZWNhdXNlIGl0IGlzIGEgZ3JvdXBpbmcgdmFyaWFibGUNCi0gc2VlIGFsc286IFtBZ2dyZWdhdGluZyBhbmQgYW5hbHl6aW5nIGRhdGEgd2l0aCBkcGx5cl0oaHR0cHM6Ly9kYXRhY2FycGVudHJ5Lm9yZy9kY196dXJpY2gvUi1lY29sb2d5LzA0LWRwbHlyLmh0bWwpDQoNCmBgYHtyfQ0KIyBJbiB0aGUgZGZfaGd0X3dndCBmcm9tIFI0RWNvbiwgdGhlcmUgaXMgYSBjb3VudHJ5IGlkLCB2aWxsYWdlIGlkLCANCiMgYW5kIGluZGl2aWR1YWwgaWQsIGFuZCB2YXJpb3VzIG90aGVyIHN0YXRpc3RpY3MNCnZhcnMuZ3JvdXAgPC0gYygnUy5jb3VudHJ5JywgJ3ZpbC5pZCcsICdpbmRpLmlkJykNCnZhcnMudmFsdWVzIDwtIGMoJ2hndCcsICdtb21FZHUnKQ0KDQojIGRhdGFzZXQgc3Vic2V0dGluZw0KZGZfdXNlIDwtIGRmX2hndF93Z3QgJT4lIHNlbGVjdCghISFzeW1zKGModmFycy5ncm91cCwgdmFycy52YWx1ZXMpKSkNCg0KIyBHcm91cCwgY291bnQgYW5kIGdlbmVyYXRlIG1lYW5zIGZvciBlYWNoIG51bWVyaWMgdmFyaWFibGVzDQpkZi5ncm91cCA8LSBkZl91c2UgJT4lIGdyb3VwX2J5KCEhIXN5bXModmFycy5ncm91cCkpICU+JQ0KICAgICAgICAgICAgYXJyYW5nZSghISFzeW1zKHZhcnMuZ3JvdXApKSAlPiUNCiAgICAgICAgICAgIHN1bW1hcmlzZV9pZihpcy5udW1lcmljLCANCiAgICAgICAgICAgICAgICAgICAgICAgICBmdW5zKG1lYW4gPSBtZWFuKC4sIG5hLnJtID0gVFJVRSksDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzZCA9IHNkKC4sIG5hLnJtID0gVFJVRSksDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICBuID0gc3VtKGlzLm5hKC4pPT0wKSkpDQoNCiMgU2hvdyByZXN1bHRzIEhlYWQgMTANCmRmLmdyb3VwICU+JSBoZWFkKDEwKSAlPiUNCiAga2FibGUoKSAlPiUNCiAga2FibGVfc3R5bGluZyhib290c3RyYXBfb3B0aW9ucyA9IGMoInN0cmlwZWQiLCAiaG92ZXIiLCAiY29uZGVuc2VkIiwgInJlc3BvbnNpdmUiKSkNCiMgU2hvdyByZXN1bHRzIEhlYWQgMTANCmRmLmdyb3VwICU+JSB0YWlsKDEwKSAlPiUNCiAga2FibGUoKSAlPiUNCiAga2FibGVfc3R5bGluZyhib290c3RyYXBfb3B0aW9ucyA9IGMoInN0cmlwZWQiLCAiaG92ZXIiLCAiY29uZGVuc2VkIiwgInJlc3BvbnNpdmUiKSkNCmBgYA0KDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgRFBMWVIgVW5pcXVlIEdyb3VwcyBhbmQgQ291bnQiDQphdXRob3I6IEZhbiBXYW5nDQpvdXRwdXQ6DQogIHBkZl9kb2N1bWVudDogZGVmYXVsdA0KICB3b3JkX2RvY3VtZW50OiBkZWZhdWx0DQogIGh0bWxfZG9jdW1lbnQ6IGRlZmF1bHQNCiAgaHRtbF9ub3RlYm9vazogZGVmYXVsdA0KdXJsY29sb3I6IGJsdWUNCmFsd2F5c19hbGxvd19odG1sOiB5ZXMNCi0tLQ0KDQpHbyBiYWNrIHRvIFtmYW5dKGh0dHA6Ly9mYW53YW5nZWNvbi5naXRodWIuaW8vKSdzIFtSRWNvblRvb2xzXShodHRwczovL2ZhbndhbmdlY29uLmdpdGh1Yi5pby9SRWNvblRvb2xzLykgUGFja2FnZSwgW1I0RWNvbl0oaHR0cHM6Ly9mYW53YW5nZWNvbi5naXRodWIuaW8vUjRFY29uLykgUmVwb3NpdG9yeSwgb3IgW0ludHJvIFN0YXRzIHdpdGggUl0oaHR0cHM6Ly9mYW53YW5nZWNvbi5naXRodWIuaW8vU3RhdDRFY29uLykgUmVwb3NpdG9yeS4NCg0KYGBge3IgR2xvYmFsT3B0aW9ucywgZWNobyA9IFQsIHJlc3VsdHMgPSAnaGlkZScsIG1lc3NhZ2U9Riwgd2FybmluZz1GfQ0Kcm0obGlzdCA9IGxzKGFsbC5uYW1lcyA9IFRSVUUpKQ0Kb3B0aW9ucyhrbml0ci5kdXBsaWNhdGUubGFiZWwgPSAnYWxsb3cnKQ0KYGBgDQoNCmBgYHtyIGxvYWRsaWIsIGVjaG8gPSBULCByZXN1bHRzID0gJ2hpZGUnLCBtZXNzYWdlPUYsIHdhcm5pbmc9Rn0NCmxpYnJhcnkodGlkeXZlcnNlKQ0KbGlicmFyeShrbml0cikNCmxpYnJhcnkoa2FibGVFeHRyYSkNCmxpYnJhcnkoUkVjb25Ub29scykNCiMgZmlsZSBuYW1lDQpzdF9maWxlX25hbWUgPSAnZnNfZ3JvdXBfdW5pcXVlX2FnZycNCiMgR2VuZXJhdGUgUiBGaWxlDQpwdXJsKHBhc3RlMChzdF9maWxlX25hbWUsICIuUm1kIiksIG91dHB1dD1wYXN0ZTAoc3RfZmlsZV9uYW1lLCAiLlIiKSwgZG9jdW1lbnRhdGlvbiA9IDIpDQojIEdlbmVyYXRlIFBERiBhbmQgSFRNTA0KIyBybWFya2Rvd246OnJlbmRlcigiQzovVXNlcnMvZmFuL1I0RWNvbi9zdW1tYXJpemUvYWdncmVnYXRlL2ZzX2dyb3VwX3VuaXF1ZV9hZ2cuUm1kIiwgInBkZl9kb2N1bWVudCIpDQojIHJtYXJrZG93bjo6cmVuZGVyKCJDOi9Vc2Vycy9mYW4vUjRFY29uL3N1bW1hcml6ZS9hZ2dyZWdhdGUvZnNfZ3JvdXBfdW5pcXVlX2FnZy5SbWQiLCAiaHRtbF9kb2N1bWVudCIpDQpgYGANCg0KIyBBZ2dyZWdhdGUgVGFibGUgd2l0aCBHcm91cHMNCg0KIyMgQWdncmdhdGUgR3JvdXBzIG9ubHkgVW5pcXVlIEdyb3VwIGFuZCBDb3VudA0KDQpUaGVyZSBhcmUgdHdvIHZhcmlhYmxlcyB0aGF0IGFyZSBudW1lcmljLCB3ZSB3YW50IHRvIGZpbmQgYWxsIHRoZSB1bmlxdWUgZ3JvdXBzIG9mIHRoZXNlIHR3byB2YXJpYWJsZXMgaW4gYSBkYXRhc2V0IGFuZCBjb3VudCBob3cgbWFueSB0aW1lcyBlYWNoIHVuaXF1ZSBncm91cCBvY2N1cnMNCg0KLSByIHVuaXF1ZSBvY2N1cnJlbmNlIG9mIG51bWVyaWMgZ3JvdXBzDQotIEhvdyB0byBhZGQgY291bnQgb2YgdW5pcXVlIHZhbHVlcyBieSBncm91cCB0byBSIGRhdGEuZnJhbWUNCg0KYGBge3J9DQojIE51bWVyaWMgdmFsdWUgY29tYmluYXRpb25zIHVuaXF1ZSBHcm91cHMNCnZhcnMuZ3JvdXAgPC0gYygnaGd0MCcsICd3Z3QwJykNCg0KIyBkYXRhc2V0IHN1YnNldHRpbmcNCmRmX3VzZSA8LSBkZl9oZ3Rfd2d0ICU+JSBzZWxlY3QoISEhc3ltcyhjKHZhcnMuZ3JvdXApKSkgJT4lDQogICAgICAgICAgICBtdXRhdGUoaGd0MCA9IHJvdW5kKGhndDAvNSkqNSwgd2d0MCA9IHJvdW5kKHdndDAvMjAwMCkqMjAwMCkgJT4lDQogICAgICAgICAgICBkcm9wX25hKCkNCg0KIyBHcm91cCwgY291bnQgYW5kIGdlbmVyYXRlIG1lYW5zIGZvciBlYWNoIG51bWVyaWMgdmFyaWFibGVzDQojIG11dGF0ZV9hdCh2YXJzLmdyb3VwLCBmdW5zKGFzLmZhY3RvciguKSkpICU+JQ0KZGYuZ3JvdXAuY291bnQgPC0gZGZfdXNlICU+JSBncm91cF9ieSghISFzeW1zKHZhcnMuZ3JvdXApKSAlPiUNCiAgICAgICAgICAgICAgICAgICAgYXJyYW5nZSghISFzeW1zKHZhcnMuZ3JvdXApKSAlPiUNCiAgICAgICAgICAgICAgICAgICAgc3VtbWFyaXNlKG5fb2JzX2dyb3VwPW4oKSkNCg0KIyBTaG93IHJlc3VsdHMgSGVhZCAxMA0KZGYuZ3JvdXAuY291bnQgJT4lDQogIGthYmxlKCkgJT4lDQogIGthYmxlX3N0eWxpbmcoYm9vdHN0cmFwX29wdGlvbnMgPSBjKCJzdHJpcGVkIiwgImhvdmVyIiwgImNvbmRlbnNlZCIsICJyZXNwb25zaXZlIikpDQpgYGANCg0KIyMgQWdncmdhdGUgR3JvdXBzIG9ubHkgVW5pcXVlIEdyb3VwIFNob3cgdXAgV2l0aCBNZWFucw0KDQpTZXZlcmFsIHZhcmlhYmxlcyB0aGF0IGFyZSBncm91cGluZyBpZGVudGlmaWVycy4gU2V2ZXJhbCB2YXJpYWJsZXMgdGhhdCBhcmUgdmFsdWVzIHdoaWNoIG1lYW4gYmUgdW5pcXVlIGZvciBlYWNoIGdyb3VwIG1lbWJlcnMuIEZvciBleGFtcGxlLCBhIFBhbmVsIG9mIGluY29tZSBmb3IgTiBob3VzZWhvbGRzIG92ZXIgVCB5ZWFycyB3aXRoIGFsc28gaG91c2Vob2xkIGVkdWNhdGlvbiBpbmZvcm1hdGlvbiB0aGF0IGlzIGludmFyaWFudCBvdmVyIHRpbWUuIFdhbnQgdG8gZ2VuZXJhdGUgYSBkYXRhc2V0IHdoZXJlIHRoZSB1bml0IG9mIG9ic2VydmF0aW9uIGFyZSBob3VzZWhvbGRzLCByYXRoZXIgdGhhbiBob3VzZWhvbGQgeWVhcnMuIFRha2UgYXZlcmFnZSBvZiBhbGwgbnVtZXJpYyB2YXJpYWJsZXMgdGhhdCBhcmUgaG91c2Vob2xkIGFuZCB5ZWFyIHNwZWNpZmljLg0KDQpBIGNvbXBsaWNhdGluZyBmYWN0b3IgcG90ZW50aWFsbHkgaXMgdGhhdCB0aGUgbnVtYmVyIG9mIG9ic2VydmF0aW9ucyBkaWZmZXIgd2l0aGluIGdyb3VwLCBmb3IgZXhhbXBsZSwgaW5jb21lIG1pZ2h0IGJlIG9ic2VydmVkIGZvciBhbGwgeWVhcnMgZm9yIHNvbWUgaG91c2Vob2xkcyBidXQgbm90IGZvciBvdGhlciBob3VzZWhvbGRzLg0KDQotIHIgZHBseXIgYWdncmVnYXRlIGdyb3VwIGF2ZXJhZ2UNCi0gQWdncmVnYXRpbmcgYW5kIGFuYWx5emluZyBkYXRhIHdpdGggZHBseXINCi0gY29sdW1uIGNhbid0IGJlIG1vZGlmaWVkIGJlY2F1c2UgaXQgaXMgYSBncm91cGluZyB2YXJpYWJsZQ0KLSBzZWUgYWxzbzogW0FnZ3JlZ2F0aW5nIGFuZCBhbmFseXppbmcgZGF0YSB3aXRoIGRwbHlyXShodHRwczovL2RhdGFjYXJwZW50cnkub3JnL2RjX3p1cmljaC9SLWVjb2xvZ3kvMDQtZHBseXIuaHRtbCkNCg0KYGBge3J9DQojIEluIHRoZSBkZl9oZ3Rfd2d0IGZyb20gUjRFY29uLCB0aGVyZSBpcyBhIGNvdW50cnkgaWQsIHZpbGxhZ2UgaWQsDQojIGFuZCBpbmRpdmlkdWFsIGlkLCBhbmQgdmFyaW91cyBvdGhlciBzdGF0aXN0aWNzDQp2YXJzLmdyb3VwIDwtIGMoJ1MuY291bnRyeScsICd2aWwuaWQnLCAnaW5kaS5pZCcpDQp2YXJzLnZhbHVlcyA8LSBjKCdoZ3QnLCAnbW9tRWR1JykNCg0KIyBkYXRhc2V0IHN1YnNldHRpbmcNCmRmX3VzZSA8LSBkZl9oZ3Rfd2d0ICU+JSBzZWxlY3QoISEhc3ltcyhjKHZhcnMuZ3JvdXAsIHZhcnMudmFsdWVzKSkpDQoNCiMgR3JvdXAsIGNvdW50IGFuZCBnZW5lcmF0ZSBtZWFucyBmb3IgZWFjaCBudW1lcmljIHZhcmlhYmxlcw0KZGYuZ3JvdXAgPC0gZGZfdXNlICU+JSBncm91cF9ieSghISFzeW1zKHZhcnMuZ3JvdXApKSAlPiUNCiAgICAgICAgICAgIGFycmFuZ2UoISEhc3ltcyh2YXJzLmdyb3VwKSkgJT4lDQogICAgICAgICAgICBzdW1tYXJpc2VfaWYoaXMubnVtZXJpYywNCiAgICAgICAgICAgICAgICAgICAgICAgICBmdW5zKG1lYW4gPSBtZWFuKC4sIG5hLnJtID0gVFJVRSksDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzZCA9IHNkKC4sIG5hLnJtID0gVFJVRSksDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICBuID0gc3VtKGlzLm5hKC4pPT0wKSkpDQoNCiMgU2hvdyByZXN1bHRzIEhlYWQgMTANCmRmLmdyb3VwICU+JSBoZWFkKDEwKSAlPiUNCiAga2FibGUoKSAlPiUNCiAga2FibGVfc3R5bGluZyhib290c3RyYXBfb3B0aW9ucyA9IGMoInN0cmlwZWQiLCAiaG92ZXIiLCAiY29uZGVuc2VkIiwgInJlc3BvbnNpdmUiKSkNCiMgU2hvdyByZXN1bHRzIEhlYWQgMTANCmRmLmdyb3VwICU+JSB0YWlsKDEwKSAlPiUNCiAga2FibGUoKSAlPiUNCiAga2FibGVfc3R5bGluZyhib290c3RyYXBfb3B0aW9ucyA9IGMoInN0cmlwZWQiLCAiaG92ZXIiLCAiY29uZGVuc2VkIiwgInJlc3BvbnNpdmUiKSkNCmBgYA0K</div>
 
 
 
