@@ -1,18 +1,18 @@
 ---
 title: "R Example Binary Outcome Estimation with Binary Regressor"
+author: Fan Wang
 output:
-  html_document: default
-  word_document: default
   pdf_document: default
+  word_document: default
+  html_document: default
   html_notebook: default
 urlcolor: blue
 always_allow_html: yes
 ---
 
-Go back to [fan](http://fanwangecon.github.io/CodeDynaAsset/)'s [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
+Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository, or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
 
 ```{r GlobalOptions, echo = T, results = 'hide', message=F, warning=F}
-dev.off(dev.list()["RStudioGD"])
 rm(list = ls(all.names = TRUE))
 options(knitr.duplicate.label = 'allow')
 ```
@@ -158,7 +158,7 @@ print(scatter)
 
 Given the x-variables included in the logit regression, how do they relate to A_i and alpha_i
 
-```{r logit prediction marginal vs base}
+```{r}
 # Generate Gap Variable
 df_mtcars <- df_mtcars %>% mutate(alpha_i = p_mpg_hp_bi1 - p_mpg_hp_bi0) %>%
                 mutate(A_i = p_mpg_hp_bi0)
