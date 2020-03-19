@@ -1,8 +1,9 @@
 #' ---
-#' title: "R DPLYR Tibble Basics"
+#' title: "R DPLYR Tibble Basics  \nFrom Matrixes to Tibble Dataframes"
+#' date: "`r format(Sys.Date())`"
 #' output:
-#'   pdf_document: default
 #'   word_document: default
+#'   pdf_document: default
 #'   html_document: default
 #'   html_notebook: default
 #' urlcolor: blue
@@ -59,8 +60,8 @@ colnames(mt_combine) <- c('ar_col',
                           paste0('matcolvar_grpb_', seq(1,dim(mt_rnorm_b)[2])))
 
 # Variable Names
-ar_st_varnames <- c('var_one', 
-                    paste0('tibcolvar_ga_', c(1,2)), 
+ar_st_varnames <- c('var_one',
+                    paste0('tibcolvar_ga_', c(1,2)),
                     paste0('tibcolvar_gb_', c(1,2,3,4)))
 
 # Combine to tibble, add name col1, col2, etc.
@@ -70,7 +71,7 @@ tb_combine <- as_tibble(mt_combine) %>% rename_all(~c(ar_st_varnames))
 tb_combine <- tb_combine %>% rowid_to_column(var = "ID")
 
 # Change all gb variable names
-tb_combine <- tb_combine %>% 
+tb_combine <- tb_combine %>%
                   rename_at(vars(starts_with("tibcolvar_gb_")),
                             funs(str_replace(., "_gb_", "_gbrenamed_")))
 
@@ -88,7 +89,7 @@ kable(mt_tb_combine_back) %>%
 #' 
 #' ## Rename Tibble with Numeric Column Names
 #' 
-#' After reshaping, often could end up with variable names that are all numeric, intgers for example, how to rename these variables to add a common prefix for example. 
+#' After reshaping, often could end up with variable names that are all numeric, intgers for example, how to rename these variables to add a common prefix for example.
 #' 
 ## -----------------------------------------------------------------------------
 # Base Inputs
@@ -107,7 +108,7 @@ tb_combine <- as_tibble(mt_combine) %>% rename_all(~c(ar_st_varnames))
 tb_combine_ori <- tb_combine %>% rowid_to_column(var = "ID")
 
 # Change all gb variable names
-tb_combine <- tb_combine_ori %>% 
+tb_combine <- tb_combine_ori %>%
                   rename_at(
                     vars(num_range('',ar_it_cols_ctr)),
                     funs(paste0("rho", . , 'var'))
