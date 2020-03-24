@@ -56,9 +56,13 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 # 2. Array, Matrix, Tibble, Data Manipulations
 
-## 2.1 Array Manipulation
+## 2.1 List and Array Manipulation
 
-1. [Array Combinations as Matrix](https://fanwangecon.github.io/R4Econ/support/array/fs_meshr.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/array/fs_meshr.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/array/fs_meshr.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/array/fs_meshr.html)
+1. [Multi-dimensional Named Lists](https://fanwangecon.github.io/R4Econ/support/list/fs_listr.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/list/fs_listr.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/list/fs_listr.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/list/fs_listr.html)
+    - Initiate Empty List
+    - Named one and two dimensional lists
+    - **r**: *vector(mode = "list", length = it_N); names(list) <- paste0('e',seq()); dimnames(ls2d)[[1]] <- paste0('r',seq()); dimnames(ls2d)[[2]] <- paste0('c',seq())*
+2. [Array Combinations as Matrix](https://fanwangecon.github.io/R4Econ/support/array/fs_meshr.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/array/fs_meshr.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/array/fs_meshr.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/array/fs_meshr.html)
     - combinations of two arrays to matrix form (meshgrid)
     - **tidy**: *expand_grid, expand.grid, dim*
 
