@@ -94,6 +94,9 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
     - evaluate nonlinear function f(x_i, y_i, ar_x, ar_y, c, d), where c and d are constants, and ar_x and ar_y are arrays, both fixed. x_i and y_i vary over each row of matrix.
     - get same results using apply, sapply, and dplyr mutate
     - **tidy**: *rowwise() %>% mutate(out = funct(inputs))*
+3. [Evaluate Function Do Anything Group Stack Results](https://fanwangecon.github.io/R4Econ/support/function/fs_funceval_group.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_funceval_group.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_funceval_group.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/function/fs_funceval_group.html)
+    - Group dataframe by categories, compute category specific output scalar or arrays based on within category variable information
+    - **tidy**: *df %>% group_by(ID) %>% do(inc = rnorm(.$N, mean=.$mn, sd=.$sd)) %>% unnest(c(inc)) %>% left_join(df, by="ID")*
 
 ## 2.5 Distributions
 

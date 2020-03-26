@@ -1,0 +1,154 @@
+#' ---
+#' title: "DPLYR Evaluate Function where Input Arrays are Group Specific Rows"
+#' author: Fan Wang
+#' output:
+#'   html_document: default
+#'   word_document: default
+#'   html_notebook: default
+#'   pdf_document: default
+#' urlcolor: blue
+#' always_allow_html: yes
+#' ---
+#' 
+#' Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository, or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
+#' 
+#' # Issue and Goal
+#' 
+#' ## Case One
+#' 
+#' There is a dataframe with $M$ rows, based on these $m$ specific information, generate dataframes for each $m$. Stack these indivdiual dataframes together and merge original $m$ specific information in as well. The number of rows for each $m$ is $Q_m$, each $m$ could have different number of expansion rows.
+#' 
+#' ## Case Two
+#' 
+#' There is a Panel with $M$ individuals and each individual has $Q$ records/rows. A function generate an individual specific outcome given the $Q$ individual specific inputs, along with shared parameters and arrays across the $M$ individuals.
+#' 
+#' For example, suppose we have a dataframe of individual wage information from different countries, each row is an individual from one country. We want to generate country specific gini based on the individual data for each country in the dataframe. But additionally, perhaps the gini formula requires not just individual income but some additional parameters or shared dataframes as inputs.
+#' 
+#' # Set Up
+#' 
+## ----GlobalOptions, echo = T, results = 'hide', message=F, warning=F----------
+rm(list = ls(all.names = TRUE))
+options(knitr.duplicate.label = 'allow')
+
+## ----loadlib, echo = T, results = 'hide', message=F, warning=F----------------
+library(tidyverse)
+library(REconTools)
+
+library(knitr)
+library(kableExtra)
+# file name
+st_file_name = 'fs_funceval_group'
+# Generate R File
+purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2)
+# Generate PDF and HTML
+# rmarkdown::render("C:/Users/fan/R4Econ/support/function/fs_funceval_group.Rmd", "pdf_document")
+# rmarkdown::render("C:/Users/fan/R4Econ/support/function/fs_funceval_group.Rmd", "html_document")
+
+#' 
+#' # Individual Specific Dataframe Expansion and Restack
+#' 
+#' Generate a panel with $M$ individuals, each individual is observed for different spans of times (*uncount*). Before expanding, generate individual specific normal distribution standard deviation. All individuals share the same mean, but have increasing standard deviations. 
+#' 
+#' ## Generate Dataframe with M Rows. 
+#' 
+#' This is the first step, generate $M$ rows of data, to be expanded. Each row contains the number of normal draws to make and the mean and the standard deviation for normal daraws that are $m$ specific. 
+#' 
+## ----setup_data---------------------------------------------------------------
+# Parameter Setups
+it_M <- 3
+it_Q_max <- 5
+fl_rnorm_mu <- 1000
+ar_rnorm_sd <- seq(0.01, 200, length.out=it_M)
+ar_it_q <- sample.int(it_Q_max, it_M, replace=TRUE)
+
+# N by Q varying parameters
+mt_data = cbind(ar_it_q, ar_rnorm_sd)
+tb_M <- as_tibble(mt_data) %>% rowid_to_column(var = "ID") %>%
+                rename(sd = ar_rnorm_sd, Q = ar_it_q) %>%
+                mutate(mean = fl_rnorm_mu)
+
+# display
+kable(tb_M) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+
+#' 
+#' ## Random Normal Draw Expansion
+#' 
+#' The steps are:
+#' 
+#' 1. [do anything](https://dplyr.tidyverse.org/reference/do.html)
+#' 2. use ".$" sign to refer to variable names, or [['name']]
+#' 3. unnest
+#' 4. left_join expanded and original
+#' 
+#' Note these all give the same results 
+#' 
+#' ### dot dollar
+#' 
+#' Use dot dollar to get variables
+#' 
+## ----normal draw expansion dot dollar-----------------------------------------
+# Generate $Q_m$ individual specific incomes, expanded different number of times for each m
+tb_income <- tb_M %>% group_by(ID) %>% 
+  do(income = rnorm(.$Q, mean=.$mean, sd=.$sd)) %>%
+  unnest(c(income))
+
+# Merge back with tb_M
+tb_income_full_dd <- tb_income %>%
+  left_join(tb_M)
+
+# display
+kable(tb_income) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+kable(tb_income_full_dd) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+
+#' 
+#' 
+#' # Generate Individual Specific Results Based on All within Individual Data
+#' 
+#' Given the within $m$ income observations, we can compute gini statistics that are individual specific based on the observed distribution of incomes. For this, we will use the [ff_dist_gini_vector_pos.html](https://fanwangecon.github.io/REconTools/reference/ff_dist_gini_vector_pos.html) function from [REconTools](https://fanwangecon.github.io/REconTools/).
+#' 
+#' To make this more interesting, we will generate large dataframe with more $M$ and more $Q$ each $m$.
+#' 
+#' ## Large Dataframe
+#' 
+#' There are up to ten thousand income observation per person. And there are ten people. 
+#' 
+## ----large df-----------------------------------------------------------------
+# Parameter Setups
+it_M <- 10
+it_Q_max <- 10000
+fl_rnorm_mu <- 1
+ar_rnorm_sd <- seq(0.01, 0.2, length.out=it_M)
+ar_it_q <- sample.int(it_Q_max, it_M, replace=TRUE)
+
+# N by Q varying parameters
+mt_data = cbind(ar_it_q, ar_rnorm_sd)
+tb_M <- as_tibble(mt_data) %>% rowid_to_column(var = "ID") %>%
+                rename(sd = ar_rnorm_sd, Q = ar_it_q) %>%
+                mutate(mean = fl_rnorm_mu)
+
+#' 
+#' ## Compute Group specific gini, NORMAL
+#' 
+#' There is only one input for the gini function *ar_pos*.  Note that the gini are not very large even with large SD, because these are normal distributions. By Construction, most peple are in the middle. So with almost zero standard deviation, we have perfect equality, as standard deviation increases, inequality increases, but still pretty equal overall, there is no fat upper tail
+#' 
+## -----------------------------------------------------------------------------
+# Normal Expansion
+tb_income_norm <- tb_M %>% group_by(ID) %>% 
+  do(income = rnorm(.$Q, mean=.$mean, sd=.$sd)) %>%
+  unnest(c(income)) %>%
+  left_join(tb_M, by="ID")
+
+# Gini by Group
+tb_gini_norm <- tb_income_norm %>% group_by(ID) %>% 
+  do(inc_gini_norm = ff_dist_gini_vector_pos(.$income)) %>%
+  unnest(c(inc_gini_norm)) %>%
+  left_join(tb_M, by="ID")
+
+# display
+kable(tb_gini_norm) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+
+#' 
