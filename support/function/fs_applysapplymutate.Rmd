@@ -32,7 +32,7 @@ The objective is either to just evaluate this function across $N$ individuals, o
 
 What is the relationship between apply, lapply and vectorization? see [Is the “*apply” family really not vectorized?](https://stackoverflow.com/a/29006276/8280804).
 
-## Set Up
+### Set Up
 
 ```{r GlobalOptions, echo = T, results = 'hide', message=F, warning=F}
 rm(list = ls(all.names = TRUE))
@@ -45,13 +45,13 @@ library(kableExtra)
 # file name
 st_file_name = 'fs_applysapplymutate'
 # Generate R File
-purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2)
+try(purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2))
 # Generate PDF and HTML
 # rmarkdown::render("C:/Users/fan/R4Econ/support/function/fs_funceval.Rmd", "pdf_document")
 # rmarkdown::render("C:/Users/fan/R4Econ/support/function/fs_funceval.Rmd", "html_document")
 ```
 
-## Set up Input Arrays
+### Set up Input Arrays
 
 There is a function that takes $M=Q+P$ inputs, we want to evaluate this function $N$ times. Each time, there are $M$ inputs, where all but $Q$ of the $M$ inputs, meaning $P$ of the $M$ inputs, are the same. In particular, $P=Q*N$.
 
@@ -76,7 +76,7 @@ kable(mt_nN_by_nQ_A_alpha) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 ```
 
-## Using apply
+### Using apply
 
 First we use the apply function, we have to hard-code the arrays that are fixed for each of the $N$ individuals. Then apply allows us to loop over the matrix that is $N$ by $Q$, each row one at a time, from $1$ to $N$.
 
@@ -96,7 +96,7 @@ ffi_linear_hardcode <- function(ar_A_alpha){
 ar_func_apply = apply(mt_nN_by_nQ_A_alpha, 1, ffi_linear_hardcode)
 ```
 
-## Using sapply
+### Using sapply
 
 - r convert matrix to list
 - Convert a matrix to a list of vectors in R
@@ -123,7 +123,7 @@ ar_func_sapply = sapply(ls_ar_nN_by_nQ_A_alpha, ffi_linear_sapply,
                         ar_A=ar_nN_A, ar_alpha=ar_nN_alpha)
 ```
 
-## Using dplyr mutate rowwise
+### Using dplyr mutate rowwise
 
 - dplyr mutate own function
 - dplyr all row function
@@ -178,7 +178,7 @@ kable(tbfunc_A_nN_by_nQ_A_alpha_rowwise) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 ```
 
-## Using Dplyr Mutate with Pmap
+### Using Dplyr Mutate with Pmap
 
 Apparantly *rowwise()* is not a good idea, and *pmap* should be used, below is the *pmap* solution to the problem. Which does seem nicer. Crucially, don't have to define input parameter names, automatically I think they are matching up to the names in the function
 
@@ -217,7 +217,7 @@ kable(tbfunc_A_nN_by_nQ_A_alpha_pmap) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 ```
 
-## DPLYR Three Types of INputs ROWWISE
+### DPLYR Three Types of INputs ROWWISE
 
 Now, we have three types of parameters, for something like a bisection type calculation. We will supply the program with a function with some hard-coded value inside, and as parameters, we will have one parameter which is a row in the current matrix, and another parameter which is a sclar values. The three types of parameters are dealt with sparately:
 
@@ -252,7 +252,7 @@ kable(tbfunc_B_nN_by_nQ_A_alpha) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 ```
 
-## Compare Results
+### Compare Results
 
 ```{r linear_combine}
 # Show overall Results

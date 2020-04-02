@@ -14,10 +14,10 @@
 #' - r generate text string as csv
 #' - r tibble matrix hand input
 #' 
-## ----GlobalOptions, echo = T, results = 'hide', message=F, warning=F----------
+## ----GlobalOptions, echo = T, results = 'hide', message=F, warning=F----------------------------
 options(knitr.duplicate.label = 'allow')
 
-## ----loadlib, echo = T, results = 'hide', message=F, warning=F----------------
+## ----loadlib, echo = T, results = 'hide', message=F, warning=F----------------------------------
 rm(list = ls(all.names = TRUE))
 library(tidyverse)
 library(tidyr)
@@ -27,19 +27,19 @@ library(REconTools)
 # file name
 st_file_name = 'fst_hist_onevar'
 # Generate R File
-purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2)
+try(purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2))
 # Generate PDF and HTML
 # rmarkdown::render("C:/Users/fan/R4Econ/summarize/dist/fst_hist_onevar.Rmd", "pdf_document")
 # rmarkdown::render("C:/Users/fan/R4Econ/summarize/dist/fst_hist_onevar.Rmd", "html_document")
 
 #' 
-#' # Generate Datasets
+#' ## Generate Datasets
 #' 
 #' First, we will generate a test score dataset, directly from string. Below we type line by line a dataset with four variables in comma separated (csv) format, where the first row includes the variables names. These texts could be stored in a separate file, or they could be directly included in code and read in as csv
 #' 
-#' ## A Dataset with only Two Continuous Variable
+#' ### A Dataset with only Two Continuous Variable
 #' 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 ar_test_scores_ec3 <- c(107.72,101.28,105.92,109.31,104.27,110.27,91.92846154,81.8,109.0071429,103.07,98.97923077,101.91,96.49,97.79923077,99.07846154,99.17,103.51,112.2225,101.2964286,94.5,98.92,97.09,93.83989011,97.36304945,80.34,65.74,85.275,82.19708791,86.53758242,86.2025,86.63,82.57392857,83.66,79.76,75.55642857,86.32571429,66.41,76.06,44.225,82.28,47.77392857,70.005,69.13769231,73.52571429,60.51,56.04)
 ar_test_scores_ec1 <- c(101.72,101.28,99.92,103.31,100.27,104.27,90.23615385,77.8,103.4357143,97.07,93.13307692,95.91,92.49,93.95307692,95.38615385,97.17,99.51,100.3475,95.83214286,92.5,94.92,91.09,90.4332967,93.52101648,80.34,59.74,79.525,77.67236264,81.59252747,82.3275,80.63,76.98464286,81.66,79.76,70.59214286,82.46857143,66.41,74.06,40.475,76.28,44.18464286,66.255,65.59923077,69.66857143,60.51,56.04)
 mt_test_scores <- cbind(ar_test_scores_ec1, ar_test_scores_ec3)
@@ -49,9 +49,9 @@ summary(tb_final_twovar)
 ff_summ_percentiles(df = tb_final_twovar, bl_statsasrows = TRUE, col2varname = FALSE)
 
 #' 
-#' ## A Dataset with one Continuous Variable and Histogram
+#' ### A Dataset with one Continuous Variable and Histogram
 #' 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 ar_final_scores <- c(94.28442509,95.68817475,97.25219512,77.89268293,95.08795497,93.27380863,92.3,84.25317073,86.08642991,84.69219512,71.43634146,76.21365854,71.68878049,77.46142589,79.29579268,43.7285453,63.80634146,67.92994774,100.8980488,100.0857143,99.93073171,98.4102439,97.93,97.10359756,96.97121951,96.60292683,96.23317073,93.92243902,93.82243902,92.75390244,92.65775261,92.20444653,91.73463415,90.38321161,89.37414634,86.95932458,79.58686411,78.70878049,77.2497561,76.88195122,76.52987805,74.72114313,74.27488676,71.30268293,63.70256098,37.90426829,2.292682927)
 mt_test_scores <- cbind(seq(1,length(ar_final_scores)), ar_final_scores)
 ar_st_varnames <- c('index', 'course_final')
@@ -60,9 +60,9 @@ summary(tb_onevar)
 ff_summ_percentiles(df = tb_onevar, bl_statsasrows = TRUE, col2varname = FALSE)
 
 #' 
-#' ## A Dataset with Multiple Variables
+#' ### A Dataset with Multiple Variables
 #' 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #load in data empirically by hand
 txt_test_data <- "init_prof, later_prof, class_id, exam_score
  'SW', 'SW', 1, 102
@@ -229,13 +229,11 @@ tb_test_data <- as_tibble(csv_test_data) %>% rename_all(~c(ar_st_varnames))
 summary(tb_test_data)
 
 #' 
+#' ## Analyze Test Scores Distribution
 #' 
+#' ### Histograms
 #' 
-#' # Analyze Test Scores Distribution
-#' 
-#' ## Histograms
-#' 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 ggplot(tb_final_twovar, aes(x=ar_test_scores_ec3)) +
   geom_histogram(bins=25) +
   labs(title = paste0('Sandbox: Final Distribution (Econ 2370, FW)'),
@@ -243,7 +241,7 @@ ggplot(tb_final_twovar, aes(x=ar_test_scores_ec3)) +
   theme_bw()
 
 #' 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 ggplot(tb_test_data, aes(x=exam_score)) +
   geom_histogram(bins=16) +
   labs(title = paste0('Exam Distribution'),

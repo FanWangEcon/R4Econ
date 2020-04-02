@@ -1,0 +1,653 @@
+---
+title: "R DPLYR Unique Groups and Count"
+author: Fan Wang
+output:
+  pdf_document: default
+  word_document: default
+  html_document: default
+  html_notebook: default
+urlcolor: blue
+always_allow_html: yes
+---
+
+Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository, or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
+
+```{r GlobalOptions, echo = T, results = 'hide', message=F, warning=F}
+rm(list = ls(all.names = TRUE))
+options(knitr.duplicate.label = 'allow')
+```
+
+```{r loadlib, echo = T, results = 'hide', message=F, warning=F}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(REconTools)
+# file name
+st_file_name = 'fs_group_unique_agg'
+# Generate R File
+try(purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2))
+# Generate PDF and HTML
+# rmarkdown::render("C:/Users/fan/R4Econ/summarize/aggregate/fs_group_unique_agg.Rmd", "pdf_document")
+# rmarkdown::render("C:/Users/fan/R4Econ/summarize/aggregate/fs_group_unique_agg.Rmd", "html_document")
+```
+
+# Aggregate Table with Groups
+
+## Aggrgate Groups only Unique Group and Count
+
+There are two variables that are numeric, we want to find all the unique groups of these two variables in a dataset and count how many times each unique group occurs
+
+- r unique occurrence of numeric groups
+- How to add count of unique values by group to R data.frame
+
+```{r}
+# Numeric value combinations unique Groups
+vars.group <- c('hgt0', 'wgt0')
+
+# dataset subsetting
+df_use <- df_hgt_wgt %>% select(!!!syms(c(vars.group))) %>%
+            mutate(hgt0 = round(hgt0/5)*5, wgt0 = round(wgt0/2000)*2000) %>%
+            drop_na()
+
+# Group, count and generate means for each numeric variables
+# mutate_at(vars.group, funs(as.factor(.))) %>%
+df.group.count <- df_use %>% group_by(!!!syms(vars.group)) %>%
+                    arrange(!!!syms(vars.group)) %>%
+                    summarise(n_obs_group=n())
+
+# Show results Head 10
+df.group.count %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+```
+
+## Aggrgate Groups only Unique Group Show up With Means
+
+Several variables that are grouping identifiers. Several variables that are values which mean be unique for each group members. For example, a Panel of income for N households over T years with also household education information that is invariant over time. Want to generate a dataset where the unit of observation are households, rather than household years. Take average of all numeric variables that are household and year specific.
+
+A complicating factor potentially is that the number of observations differ within group, for example, income might be observed for all years for some households but not for other households.
+
+- r dplyr aggregate group average
+- Aggregating and analyzing data with dplyr
+- column can't be modified because it is a grouping variable
+- see also: [Aggregating and analyzing data with dplyr](https://datacarpentry.org/dc_zurich/R-ecology/04-dplyr.html)
+
+```{r}
+# In the df_hgt_wgt from R4Econ, there is a country id, village id,
+# and individual id, and various other statistics
+vars.group <- c('S.country', 'vil.id', 'indi.id')
+vars.values <- c('hgt', 'momEdu')
+
+# dataset subsetting
+df_use <- df_hgt_wgt %>% select(!!!syms(c(vars.group, vars.values)))
+
+# Group, count and generate means for each numeric variables
+df.group <- df_use %>% group_by(!!!syms(vars.group)) %>%
+            arrange(!!!syms(vars.group)) %>%
+            summarise_if(is.numeric,
+                         funs(mean = mean(., na.rm = TRUE),
+                              sd = sd(., na.rm = TRUE),
+                              n = sum(is.na(.)==0)))
+
+# Show results Head 10
+df.group %>% head(10) %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+# Show results Head 10
+df.group %>% tail(10) %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+```
+
+<!--chapter:end:summarize/aggregate/fs_group_unique_agg.Rmd-->
+
+---
+title: "R Example DPLYR Generate Sorted Index, Ordinal Deviation Negative and Positive Index, and Expand Value from Lowest Index to All Rows"
+author: Fan Wang
+output:
+  pdf_document: default
+  word_document: default
+  html_document: default
+  html_notebook: default
+urlcolor: blue
+always_allow_html: yes
+---
+
+Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository, or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
+
+```{r GlobalOptions, echo = T, results = 'hide', message=F, warning=F}
+rm(list = ls(all.names = TRUE))
+options(knitr.duplicate.label = 'allow')
+```
+
+```{r loadlib, echo = T, results = 'hide', message=F, warning=F}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(REconTools)
+# file name
+st_file_name = 'fs_index_populate'
+# Generate R File
+try(purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2))
+# Generate PDF and HTML
+# rmarkdown::render("C:/Users/fan/R4Econ/summarize/index/fs_index_populate.Rmd", "pdf_document")
+# rmarkdown::render("C:/Users/fan/R4Econ/summarize/index/fs_index_populate.Rmd", "html_document")
+```
+
+# Generate Sorted Index within Group and Spread
+
+## Generate Sorted Index within Group with Repeating Values
+
+There is a variable, sort by this variable, then generate index from 1 to N representing sorted values of this index. If there are repeating values, still assign index, different index each value. 
+
+- r generate index sort
+- dplyr mutate equals index
+
+```{r}
+# Sort and generate variable equal to sorted index
+df_iris <- iris %>% arrange(Sepal.Length) %>% 
+              mutate(Sepal.Len.Index = row_number()) %>%
+              select(Sepal.Length, Sepal.Len.Index, everything())
+
+# Show results Head 10
+df_iris %>% head(10) %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+```
+
+## Populate Value from Lowest Index to All other Rows
+
+We would like to calculate for example the ratio of each individual's highest to the the person with the lowest height in a dataset. We first need to generated sorted index from lowest to highest, and then populate the lowest height to all rows, and then divide. 
+
+
+*Search Terms*:
+
+- r spread value to all rows from one row
+- r other rows equal to the value of one row
+- Conditional assignment of one variable to the value of one of two other variables
+- dplyr mutate conditional
+- dplyr value from one row to all rows
+- dplyr mutate equal to value in another cell
+
+*Links*:
+
+- see: dplyr [rank](https://dplyr.tidyverse.org/reference/ranking.html)
+- see: dplyr [case_when](https://dplyr.tidyverse.org/reference/case_when.html)
+
+### Short Method: mutate and min
+
+We just want the lowest value to be in its own column, so that we can compute various statistics using the lowest value variable and the original variable.
+
+```{r}
+# 1. Sort
+df_iris_m1 <- iris %>% mutate(Sepal.Len.Lowest.all = min(Sepal.Length)) %>%
+                select(Sepal.Length, Sepal.Len.Lowest.all, everything())
+              
+
+# Show results Head 10
+df_iris_m1 %>% head(10) %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+```
+
+### Long Method: row_number and case_when
+
+This is the long method, using row_number, and case_when. The benefit of this method is that it generates several intermediate variables that might be useful. And the key final step is to set a new variable (A=*Sepal.Len.Lowest.all*) equal to another variable's (B=*Sepal.Length*'s) value at the index that satisfies condition based a third variable (C=*Sepal.Len.Index*).
+
+```{r}
+# 1. Sort
+# 2. generate index
+# 3. value at lowest index (case_when)
+# 4. spread value from lowest index to other rows
+# Note step 4 does not require step 3
+df_iris_m2 <- iris %>% arrange(Sepal.Length) %>% 
+              mutate(Sepal.Len.Index = row_number()) %>%
+              mutate(Sepal.Len.Lowest.one = 
+                       case_when(row_number()==1 ~ Sepal.Length)) %>%
+              mutate(Sepal.Len.Lowest.all = 
+                       Sepal.Length[Sepal.Len.Index==1]) %>%
+              select(Sepal.Length, Sepal.Len.Index, 
+                     Sepal.Len.Lowest.one, Sepal.Len.Lowest.all)
+              
+
+# Show results Head 10
+df_iris_m2 %>% head(10) %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+```
+# Generate Sorted Index based on Deviations
+
+## Generate Positive and Negative Index based on Ordered Deviation from some Number
+
+There is a variable that is continuous, substract a number from this variable, and generate index based on deviations. Think of the index as generating intervals indicating where the value lies. 0th index indicates the largest value in sequence that is smaller than or equal to number $x$, 1st index indicates the smallest value in sequence that is larger than number $x$.
+
+The solution below is a little bit convoluated and long, there is likely a much quicker way. The process below shows various intermediary outputs that help arrive at deviation index *Sepal.Len.Devi.Index* from initial sorted index *Sepal.Len.Index*.
+
+*search*:
+
+- dplyr arrange ignore na
+- dplyr index deviation from order number sequence
+- dplyr index below above
+- dplyr index order below above value
+
+```{r}
+# 1. Sort and generate variable equal to sorted index
+# 2. Plus or minus deviations from some value
+# 3. Find the zero, which means, the number closests to zero including zero from the negative side
+# 4. Find the index at the highest zero and below deviation point
+# 5. Difference of zero index and original sorted index
+sc_val_x <- 4.65
+df_iris_deviate <- iris %>% arrange(Sepal.Length) %>% 
+              mutate(Sepal.Len.Index = row_number()) %>%
+              mutate(Sepal.Len.Devi = (Sepal.Length - sc_val_x)) %>%
+              mutate(Sepal.Len.Devi.Neg = 
+                       case_when(Sepal.Len.Devi <= 0 ~ (-1)*(Sepal.Len.Devi))) %>%
+              arrange((Sepal.Len.Devi.Neg), desc(Sepal.Len.Index)) %>%
+              mutate(Sepal.Len.Index.Zero = 
+                       case_when(row_number() == 1 ~ Sepal.Len.Index)) %>%
+              mutate(Sepal.Len.Devi.Index = 
+                       Sepal.Len.Index - Sepal.Len.Index.Zero[row_number() == 1]) %>%
+              arrange(Sepal.Len.Index) %>%
+              select(Sepal.Length, Sepal.Len.Index, Sepal.Len.Devi, 
+                     Sepal.Len.Devi.Neg, Sepal.Len.Index.Zero, Sepal.Len.Devi.Index)
+              
+                
+# Show results Head 10
+df_iris_deviate %>% head(20) %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+```
+
+<!--chapter:end:summarize/index/fs_index_populate.Rmd-->
+
+---
+title: "R Example DPLYR Counting"
+author: Fan Wang
+output:
+  pdf_document: default
+  word_document: default
+  html_document: default
+  html_notebook: default
+urlcolor: blue
+always_allow_html: yes
+---
+
+Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository, or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
+
+```{r GlobalOptions, echo = T, results = 'hide', message=F, warning=F}
+rm(list = ls(all.names = TRUE))
+options(knitr.duplicate.label = 'allow')
+```
+
+```{r loadlib, echo = T, results = 'hide', message=F, warning=F}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(REconTools)
+# file name
+st_file_name = 'fs_count_basics'
+# Generate R File
+try(purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2))
+# Generate PDF and HTML
+# rmarkdown::render("C:/Users/fan/R4Econ/summarize/count/fs_count_basics.Rmd", "pdf_document")
+# rmarkdown::render("C:/Users/fan/R4Econ/summarize/count/fs_count_basics.Rmd", "html_document")
+```
+
+# Uncount
+
+## Generate Panel Dataframe
+
+In some panel, there are $N$ individuals, each observed for $Y_i$ years. Given a dataset with two variables, the individual index, and the $Y_i$ variable, expand the dataframe so that there is a row for each individual index's each unique year in the survey.
+
+*Search*:
+
+- r duplicate row by variable
+
+*Links*:
+
+- see: [Create duplicate rows based on a variable](https://stackoverflow.com/questions/52498169/r-create-duplicate-rows-based-on-a-variable-dplyr-preferred)
+
+*Algorithm*:
+
+1. generate testing frame, the individual attribute dataset with invariant information over panel
+2. uncount, duplicate rows by years in survey 
+3. group and generate sorted index
+4. add indiviual specific stat year to index
+
+```{r}
+# 1. Array of Years in the Survey
+ar_years_in_survey <- c(2,3,1,10,2,5)
+ar_start_yaer <- c(1,2,3,1,1,1)
+ar_end_year <- c(2,4,3,10,2,5)
+mt_combine <- cbind(ar_years_in_survey, ar_start_yaer, ar_end_year)
+
+# This is the individual attribute dataset, attributes that are invariant acrosss years
+tb_indi_attributes <- as_tibble(mt_combine) %>% rowid_to_column(var = "ID")
+
+# 2. Sort and generate variable equal to sorted index
+tb_indi_panel <- tb_indi_attributes %>% uncount(ar_years_in_survey) 
+
+# 3. Panel now construct exactly which year in survey, note that all needed is sort index
+# Note sorting not needed, all rows identical now
+tb_indi_panel <- tb_indi_panel %>% 
+                    group_by(ID) %>% 
+                    mutate(yr_in_survey = row_number())
+
+tb_indi_panel <- tb_indi_panel %>% 
+                    mutate(calendar_year = yr_in_survey + ar_start_yaer - 1)
+
+# Show results Head 10
+tb_indi_panel %>% head(10) %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+```
+
+<!--chapter:end:summarize/count/fs_count_basics.Rmd-->
+
+---
+title: "Examples of Lists and Named One and Two Dimensional Lists in R"
+author: Fan Wang
+output:
+  pdf_document: default
+  word_document: default
+  html_document: default
+  html_notebook: default
+urlcolor: blue
+always_allow_html: yes
+---
+
+Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository, or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
+
+- r list tutorial
+- r vector vs list
+- r initialize empty multiple element list
+- r name rows and columns of 2 dimensional list
+- r row and colum names of list
+- list dimnames
+
+```{r GlobalOptions, echo = T, results = 'hide', message=F, warning=F}
+options(knitr.duplicate.label = 'allow')
+```
+```{r loadlib, echo = T, results = 'hide', message=F, warning=F}
+library(tidyverse)
+library(tidyr)
+library(knitr)
+library(kableExtra)
+# file name
+st_file_name = 'fs_listr'
+# Generate R File
+try(purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2))
+# Generate PDF and HTML
+# rmarkdown::render("C:/Users/fan/R4Econ/support/list/fs_listr.Rmd", "pdf_document")
+# rmarkdown::render("C:/Users/fan/R4Econ/support/list/fs_listr.Rmd", "html_document")
+```
+
+# Basics of Multiple Dimensional List
+
+## One Dimensional Named List
+
+1. define list
+2. slice list
+
+```{r}
+# Define Lists
+ls_num <- list(1,2,3)
+ls_str <- list('1','2','3')
+ls_num_str <- list(1,2,'3')
+
+# Named Lists
+ar_st_names <- c('e1','e2','e3')
+ls_num_str_named <- ls_num_str
+names(ls_num_str_named) <- ar_st_names
+
+# display
+print(paste0('ls_num:', str(ls_num)))
+print(paste0('ls_num[2:3]:', str(ls_num[2:3])))
+print(paste0('ls_str:', str(ls_str)))
+print(paste0('ls_str[2:3]:', str(ls_str[2:3])))
+print(paste0('ls_num_str:', str(ls_num_str)))
+print(paste0('ls_num_str[2:3]:', str(ls_num_str[2:3])))
+print(paste0('ls_num_str_named:', str(ls_num_str_named)))
+print(paste0('ls_num_str_named[c(\'e2\',\'e3\')]', str(ls_num_str_named[c('e2','e3')])))
+```
+
+## Two Dimensional Unnamed List
+
+Generate a multiple dimensional list:
+
+1. Initiate with an N element empty list
+2. Reshape list to M by Q
+3. Fill list elements
+4. Get list element by row and column number
+
+List allows for different data types to be stored together.
+
+Note that element specific names in named list are not preserved when the list is reshaped to be two dimensional. Two dimensional list, however, could have row and column names. 
+
+```{r}
+# Dimensions
+it_M <- 2
+it_Q <- 3 
+it_N <- it_M*it_Q
+
+# Initiate an Empty MxQ=N element list
+ls_2d_flat <- vector(mode = "list", length = it_N)
+ls_2d <- ls_2d_flat 
+
+# Named flat
+ls_2d_flat_named <- ls_2d_flat
+names(ls_2d_flat_named) <- paste0('e',seq(1,it_N))
+ls_2d_named <- ls_2d_flat_named
+
+# Reshape
+dim(ls_2d) <- c(it_M, it_Q)
+# named 2d list can not carry 1d name after reshape
+dim(ls_2d_named) <- c(it_M, it_Q)
+
+# display
+print('ls_2d_flat')
+print(ls_2d_flat)
+
+print('ls_2d_flat_named')
+print(ls_2d_flat_named)
+
+print('ls_2d')
+print(ls_2d)
+
+print('ls_2d_named')
+print(ls_2d_named)
+
+# Select Values, double bracket to select from 2dim list
+print('ls_2d[[1,2]]')
+print(ls_2d[[1,2]])
+```
+
+## Define Two Dimensional Named LIst
+
+For naming two dimensional lists, *rowname* and *colname* does not work. Rather, we need to use *dimnames*. Note that in addition to dimnames, we can continue to have element specific names. Both can co-exist. But note that the element specific names are not preserved after dimension transform, so need to be redefined afterwards.
+
+How to select an element of a two dimensional list:
+
+1. row and column names: *dimnames*, *ls_2d_flat_named[['row2','col2']]*
+2. named elements: *names*, *ls_2d_flat_named[['e5']]*
+3. select by index: *index*, *ls_2d_flat_named[[5]]*
+
+Neither *dimnames* nor *names* are required, but both can be used to select elements.
+
+```{r}
+# Dimensions
+it_M <- 3
+it_Q <- 4 
+it_N <- it_M*it_Q
+
+# Initiate an Empty MxQ=N element list
+ls_2d_flat_named <- vector(mode = "list", length = it_N)
+dim(ls_2d_flat_named) <- c(it_M, it_Q)
+
+# Fill with values 
+for (it_Q_ctr in seq(1,it_Q)) {
+  for (it_M_ctr in seq(1,it_M)) {
+    # linear index
+    ls_2d_flat_named[[it_M_ctr, it_Q_ctr]] <- (it_Q_ctr-1)*it_M+it_M_ctr
+  }
+}
+  
+# Replace row names, note rownames does not work
+dimnames(ls_2d_flat_named)[[1]] <- paste0('row',seq(1,it_M))
+dimnames(ls_2d_flat_named)[[2]] <- paste0('col',seq(1,it_Q))
+
+# Element Specific Names
+names(ls_2d_flat_named) <- paste0('e',seq(1,it_N))
+
+# These are not element names, can still name each element
+# display
+print('ls_2d_flat_named')
+print(ls_2d_flat_named)
+print('str(ls_2d_flat_named)')
+print(str(ls_2d_flat_named))
+
+# Select elements with with dimnames
+print('ls_2d_flat_named[[\'row2\',\'col2\']]')
+print(ls_2d_flat_named[['row2','col2']])
+
+# Select elements with element names
+print('ls_2d_flat_named[[\'e5\']]')
+print(ls_2d_flat_named[['e5']])
+
+# Select elements with index
+print('ls_2d_flat_named[[5]]')
+print(ls_2d_flat_named[[5]])
+
+```
+
+# Fill values 
+ls_2d_fill <- ls_2d
+ls_2d_fill[1,1]
+
+
+<!--chapter:end:support/list/fs_listr.Rmd-->
+
+---
+title: "Meshgrid Arrays in R"
+author: Fan Wang
+output:
+  pdf_document: default
+  word_document: default
+  html_document: default
+  html_notebook: default
+urlcolor: blue
+always_allow_html: yes
+---
+
+Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository, or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
+
+- r expand.grid meshed array to matrix
+- r meshgrid
+- r array to matrix
+- r reshape array to matrix
+- dplyr permuations rows of matrix and element of array
+- tidyr expand_grid mesh matrix and vector
+
+```{r GlobalOptions, echo = T, results = 'hide', message=F, warning=F}
+options(knitr.duplicate.label = 'allow')
+```
+```{r loadlib, echo = T, results = 'hide', message=F, warning=F}
+library(tidyverse)
+library(tidyr)
+library(knitr)
+library(kableExtra)
+# file name
+st_file_name = 'fs_meshr'
+# Generate R File
+try(purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2))
+# Generate PDF and HTML
+# rmarkdown::render("C:/Users/fan/R4Econ/support/array/fs_meshr.Rmd", "pdf_document")
+# rmarkdown::render("C:/Users/fan/R4Econ/support/array/fs_meshr.Rmd", "html_document")
+```
+
+# Mesh Matrix and Vector using dplyr expand_grid
+
+In the example below, we have a matrix that is 5 by 2, and a vector that is 1 by 3. We want to generate a tibble dataset that meshes the matrix and the vector, so that all combinations show up.
+
+Note *expand_grid* is a from tidyr 1.0.0.
+
+```{r}
+# it_child_count = N, the number of children
+it_N_child_cnt = 5
+# P fixed parameters, nN is N dimensional, nP is P dimensional
+ar_nN_A = seq(-2, 2, length.out = it_N_child_cnt)
+ar_nN_alpha = seq(0.1, 0.9, length.out = it_N_child_cnt)
+mt_nP_A_alpha = cbind(ar_nN_A, ar_nN_alpha)
+
+# Choice Grid
+it_N_choice_cnt = 3
+fl_max = 10
+fl_min = 0
+ar_nN_alpha = seq(fl_min, fl_max, length.out = it_N_choice_cnt)
+
+# expand grid with dplyr
+expand_grid(x = 1:3, y = 1:2)
+
+tb_expanded <- as_tibble(mt_nP_A_alpha) %>% expand_grid(choices = ar_nN_alpha)
+
+# display
+kable(tb_expanded) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+```
+
+# Mesh Matrix (meshgrid) for R  using expand.grid
+
+## Define Two Arrays and Mesh Them using expand.grid
+
+Given two arrays, mesh the two arrays together.
+
+```{r}
+
+# use expand.grid to generate all combinations of two arrays
+
+it_ar_A = 5
+it_ar_alpha = 10
+
+ar_A = seq(-2, 2, length.out=it_ar_A)
+ar_alpha = seq(0.1, 0.9, length.out=it_ar_alpha)
+
+mt_A_alpha = expand.grid(A = ar_A, alpha = ar_alpha)
+
+mt_A_meshed = mt_A_alpha[,1]
+dim(mt_A_meshed) = c(it_ar_A, it_ar_alpha)
+
+mt_alpha_meshed = mt_A_alpha[,2]
+dim(mt_alpha_meshed) = c(it_ar_A, it_ar_alpha)
+
+# display
+kable(mt_A_meshed) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+kable(mt_alpha_meshed) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+```
+
+## Two Identical Arrays, Mesh to Generate Square using expand.grid
+
+Two Identical Arrays, individual attributes, each column is an individual for a matrix, and each row is also an individual
+
+```{r}
+# use expand.grid to generate all combinations of two arrays
+
+it_ar_A = 5
+
+ar_A = seq(-2, 2, length.out=it_ar_A)
+mt_A_A = expand.grid(Arow = ar_A, Arow = ar_A)
+mt_Arow = mt_A_A[,1]
+dim(mt_Arow) = c(it_ar_A, it_ar_A)
+mt_Acol = mt_A_A[,2]
+dim(mt_Acol) = c(it_ar_A, it_ar_A)
+
+# display
+kable(mt_Arow) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+kable(mt_Acol) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+```
+
+<!--chapter:end:support/array/fs_meshr.Rmd-->
+

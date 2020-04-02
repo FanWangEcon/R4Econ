@@ -30,7 +30,7 @@ library(kableExtra)
 # file name
 st_file_name = 'fs_listr'
 # Generate R File
-purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2)
+try(purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2))
 # Generate PDF and HTML
 # rmarkdown::render("C:/Users/fan/R4Econ/support/list/fs_listr.Rmd", "pdf_document")
 # rmarkdown::render("C:/Users/fan/R4Econ/support/list/fs_listr.Rmd", "html_document")

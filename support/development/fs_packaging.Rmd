@@ -169,7 +169,7 @@ devtools::document()
 devtools::run_examples()
 # devtools::build_vignettes()
 # Step 6
-# devtools::check()
+devtools::check()
 # Step 7
 devtools::install()
 #library(PrjOptiAlloc)
@@ -177,6 +177,21 @@ devtools::install()
 devtools::reload()
 # Step 8
 pkgdown::build_site()
+```
+
+During development, after new R functions have been written, testing latested functions in vignette.
+
+```{r}
+devtools::load_all()
+library(PrjOptiAlloc)
+```
+
+bookdown
+
+```{r}
+setwd('C:/Users/fan/R4Econ')
+bookdown::render_book('index.Rmd', 'bookdown::gitbook')
+bookdown::render_book('index.Rmd', 'bookdown::pdf_book')
 ```
 
 ## Attach vs Import

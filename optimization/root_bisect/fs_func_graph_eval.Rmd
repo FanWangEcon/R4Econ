@@ -14,7 +14,7 @@ Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangec
 
 # Issue and Goal
 
-See the [ff_opti_bisect_pmap_multi](https://fanwangecon.github.io/REconTools/reference/ff_opti_bisect_pmap_multi.html) function from [Fan](https://fanwangecon.github.io/)'s *[REconTools](https://fanwangecon.github.io/REconTools/)* Package, which provides a resuable function based on the algorithm worked out here. 
+See the [ff_opti_bisect_pmap_multi](https://fanwangecon.github.io/REconTools/reference/ff_opti_bisect_pmap_multi.html) function from [Fan](https://fanwangecon.github.io/)'s *[REconTools](https://fanwangecon.github.io/REconTools/)* Package, which provides a resuable function based on the algorithm worked out here.
 
 We want evaluate linear function $0=f(z_{ij}, x_i, y_i, \textbf{X}, \textbf{Y}, c, d)$. There are $i$ functions that have $i$ specific $x$ and $y$. For each $i$ function, we evaluate along a grid of feasible values for $z$, over $j\in J$ grid points, potentially looking for the $j$ that is closest to the root. $\textbf{X}$ and $\textbf{Y}$ are arrays common across the $i$ equations, and $c$ and $d$ are constants.
 
@@ -38,7 +38,7 @@ library(kableExtra)
 # file name
 st_file_name = 'fs_func_graph_eval'
 # Generate R File
-purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2)
+try(purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2))
 # Generate PDF and HTML
 # rmarkdown::render("C:/Users/fan/R4Econ/support/function/fs_funceval.Rmd", "pdf_document")
 # rmarkdown::render("C:/Users/fan/R4Econ/support/function/fs_funceval.Rmd", "html_document")
@@ -317,7 +317,7 @@ str(tb_states_choices_bisec)
 
 We want to treat the iteration count information that is the suffix of variable names as a variable by itself. Additionally, we want to treat the a,b,fa,fb as a variable. Structuring the data very long like this allows for easy graphing and other types of analysis. Rather than dealing with many many variables, we have only 3 core variables that store bisection iteration information.
 
-Here we use the very nice *pivot_longer* function. Note that to achieve this, we put a common prefix in front of the variables we wanted to convert to long. THis is helpful, because we can easily identify which variables need to be reshaped.  
+Here we use the very nice *pivot_longer* function. Note that to achieve this, we put a common prefix in front of the variables we wanted to convert to long. THis is helpful, because we can easily identify which variables need to be reshaped.
 
 ```{r reshape solution from wide to very long}
 # New variables
@@ -374,7 +374,7 @@ lineplot <- tb_states_choices_bisec_long %>%
                shape=!!sym(svr_abfafb_long_name))) +
         facet_wrap( ~ INDI_ID) +
         geom_line() +
-        geom_point() +    
+        geom_point() +
         labs(title = 'Bisection Iteration over individuals Until Convergence',
              x = 'Bisection Iteration',
              y = 'a (left side point) and b (right side point) values',

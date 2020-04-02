@@ -24,7 +24,7 @@ library(REconTools)
 # file name
 st_file_name = 'fs_atkinson_ces'
 # Generate R File
-purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2)
+try(purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2))
 # Generate PDF and HTML
 # rmarkdown::render("C:/Users/fan/R4Econ/math/function/fs_atkinson_ces", "pdf_document")
 # rmarkdown::render("C:/Users/fan/R4Econ/math/function/fs_atkinson_ces", "html_document")

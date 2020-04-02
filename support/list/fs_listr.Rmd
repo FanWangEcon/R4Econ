@@ -30,15 +30,15 @@ library(kableExtra)
 # file name
 st_file_name = 'fs_listr'
 # Generate R File
-purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2)
+try(purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2))
 # Generate PDF and HTML
 # rmarkdown::render("C:/Users/fan/R4Econ/support/list/fs_listr.Rmd", "pdf_document")
 # rmarkdown::render("C:/Users/fan/R4Econ/support/list/fs_listr.Rmd", "html_document")
 ```
 
-# Basics of Multiple Dimensional List
+## Basics of Multiple Dimensional List
 
-## One Dimensional Named List
+### One Dimensional Named List
 
 1. define list
 2. slice list
@@ -65,7 +65,7 @@ print(paste0('ls_num_str_named:', str(ls_num_str_named)))
 print(paste0('ls_num_str_named[c(\'e2\',\'e3\')]', str(ls_num_str_named[c('e2','e3')])))
 ```
 
-## Two Dimensional Unnamed List
+### Two Dimensional Unnamed List
 
 Generate a multiple dimensional list:
 
@@ -76,17 +76,17 @@ Generate a multiple dimensional list:
 
 List allows for different data types to be stored together.
 
-Note that element specific names in named list are not preserved when the list is reshaped to be two dimensional. Two dimensional list, however, could have row and column names. 
+Note that element specific names in named list are not preserved when the list is reshaped to be two dimensional. Two dimensional list, however, could have row and column names.
 
 ```{r}
 # Dimensions
 it_M <- 2
-it_Q <- 3 
+it_Q <- 3
 it_N <- it_M*it_Q
 
 # Initiate an Empty MxQ=N element list
 ls_2d_flat <- vector(mode = "list", length = it_N)
-ls_2d <- ls_2d_flat 
+ls_2d <- ls_2d_flat
 
 # Named flat
 ls_2d_flat_named <- ls_2d_flat
@@ -116,7 +116,7 @@ print('ls_2d[[1,2]]')
 print(ls_2d[[1,2]])
 ```
 
-## Define Two Dimensional Named LIst
+### Define Two Dimensional Named LIst
 
 For naming two dimensional lists, *rowname* and *colname* does not work. Rather, we need to use *dimnames*. Note that in addition to dimnames, we can continue to have element specific names. Both can co-exist. But note that the element specific names are not preserved after dimension transform, so need to be redefined afterwards.
 
@@ -131,21 +131,21 @@ Neither *dimnames* nor *names* are required, but both can be used to select elem
 ```{r}
 # Dimensions
 it_M <- 3
-it_Q <- 4 
+it_Q <- 4
 it_N <- it_M*it_Q
 
 # Initiate an Empty MxQ=N element list
 ls_2d_flat_named <- vector(mode = "list", length = it_N)
 dim(ls_2d_flat_named) <- c(it_M, it_Q)
 
-# Fill with values 
+# Fill with values
 for (it_Q_ctr in seq(1,it_Q)) {
   for (it_M_ctr in seq(1,it_M)) {
     # linear index
     ls_2d_flat_named[[it_M_ctr, it_Q_ctr]] <- (it_Q_ctr-1)*it_M+it_M_ctr
   }
 }
-  
+
 # Replace row names, note rownames does not work
 dimnames(ls_2d_flat_named)[[1]] <- paste0('row',seq(1,it_M))
 dimnames(ls_2d_flat_named)[[2]] <- paste0('col',seq(1,it_Q))
@@ -174,7 +174,6 @@ print(ls_2d_flat_named[[5]])
 
 ```
 
-# Fill values 
+<!-- # Fill values
 ls_2d_fill <- ls_2d
-ls_2d_fill[1,1]
-
+ls_2d_fill[1,1] -->

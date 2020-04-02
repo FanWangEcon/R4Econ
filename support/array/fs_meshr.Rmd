@@ -30,13 +30,13 @@ library(kableExtra)
 # file name
 st_file_name = 'fs_meshr'
 # Generate R File
-purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2)
+try(purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2))
 # Generate PDF and HTML
 # rmarkdown::render("C:/Users/fan/R4Econ/support/array/fs_meshr.Rmd", "pdf_document")
 # rmarkdown::render("C:/Users/fan/R4Econ/support/array/fs_meshr.Rmd", "html_document")
 ```
 
-# Mesh Matrix and Vector using dplyr expand_grid
+## Mesh Matrix and Vector using dplyr expand_grid
 
 In the example below, we have a matrix that is 5 by 2, and a vector that is 1 by 3. We want to generate a tibble dataset that meshes the matrix and the vector, so that all combinations show up.
 
@@ -66,9 +66,9 @@ kable(tb_expanded) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 ```
 
-# Mesh Matrix (meshgrid) for R  using expand.grid
+## Mesh Matrix (meshgrid) for R  using expand.grid
 
-## Define Two Arrays and Mesh Them using expand.grid
+### Define Two Arrays and Mesh Them using expand.grid
 
 Given two arrays, mesh the two arrays together.
 
@@ -97,7 +97,7 @@ kable(mt_alpha_meshed) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 ```
 
-## Two Identical Arrays, Mesh to Generate Square using expand.grid
+### Two Identical Arrays, Mesh to Generate Square using expand.grid
 
 Two Identical Arrays, individual attributes, each column is an individual for a matrix, and each row is also an individual
 

@@ -1,5 +1,5 @@
 #' ---
-#' title: "DPLYR Evaluate Nonlinear Function with N arrays of Inputs"
+#' title: "DPLYR Evaluate Function over N Individuals with Individual Specific and Shared Arrays of Parameters"
 #' author: Fan Wang
 #' output:
 #'   pdf_document: default
@@ -20,18 +20,18 @@
 #' 
 #' ## Set Up
 #' 
-## ----GlobalOptions, echo = T, results = 'hide', message=F, warning=F----------
+## ----GlobalOptions, echo = T, results = 'hide', message=F, warning=F----------------------------------------------------------------------------------------------------
 rm(list = ls(all.names = TRUE))
 options(knitr.duplicate.label = 'allow')
 
-## ----loadlib, echo = T, results = 'hide', message=F, warning=F----------------
+## ----loadlib, echo = T, results = 'hide', message=F, warning=F----------------------------------------------------------------------------------------------------------
 library(tidyverse)
 library(knitr)
 library(kableExtra)
 # file name
 st_file_name = 'fs_funceval'
 # Generate R File
-purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2)
+try(purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2))
 # Generate PDF and HTML
 # rmarkdown::render("C:/Users/fan/R4Econ/support/function/fs_funceval.Rmd", "pdf_document")
 # rmarkdown::render("C:/Users/fan/R4Econ/support/function/fs_funceval.Rmd", "html_document")
@@ -43,7 +43,7 @@ purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentat
 #' 
 #' $$M = Q+P = Q + Q*N$$
 #' 
-## ----setup_data---------------------------------------------------------------
+## ----setup_data---------------------------------------------------------------------------------------------------------------------------------------------------------
 # it_child_count = N, the number of children
 it_N_child_cnt = 5
 # it_heter_param = Q, number of parameters that are heterogeneous across children
@@ -64,7 +64,7 @@ kable(mt_nN_by_nQ_A_alpha) %>%
 #' 
 #' ## Test non-linear Equation
 #' 
-## ----nonlinear_test-----------------------------------------------------------
+## ----nonlinear_test-----------------------------------------------------------------------------------------------------------------------------------------------------
 # Test Parameters
 fl_N_agg = 100
 fl_rho = -1
@@ -85,7 +85,7 @@ print(fl_overall)
 #' 
 #' Implement the non-linear problem's evaluation using apply over all $N$ individuals.
 #' 
-## ----nonlinear_func-----------------------------------------------------------
+## ----nonlinear_func-----------------------------------------------------------------------------------------------------------------------------------------------------
 # Define Implicit Function
 ffi_nonlin_dplyrdo <- function(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, fl_rho){
   # ar_A_alpha[1] is A
@@ -127,7 +127,7 @@ for (i in seq(1,dim(mt_nN_by_nQ_A_alpha)[1])){
 #' 
 #' ## Evaluate Nonlinear Function using dplyr mutate
 #' 
-## ----nonlinear_dplyr_mutate---------------------------------------------------
+## ----nonlinear_dplyr_mutate---------------------------------------------------------------------------------------------------------------------------------------------
 # Convert Matrix to Tibble
 ar_st_col_names = c('fl_A', 'fl_alpha', 'fl_N')
 tb_nN_by_nQ_A_alpha <- as_tibble(mt_nN_by_nQ_A_alpha) %>% rename_all(~c(ar_st_col_names))

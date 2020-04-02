@@ -1,0 +1,326 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={R Example DPLYR Counting},
+  pdfauthor={Fan Wang},
+  colorlinks=true,
+  linkcolor=Maroon,
+  filecolor=Maroon,
+  citecolor=Blue,
+  urlcolor=blue,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{R Example DPLYR Counting}
+\author{Fan Wang}
+\date{}
+
+\begin{document}
+\maketitle
+
+Go back to \href{http://fanwangecon.github.io/}{fan}'s
+\href{https://fanwangecon.github.io/REconTools/}{REconTools} Package,
+\href{https://fanwangecon.github.io/R4Econ/}{R4Econ} Repository, or
+\href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R}
+Repository.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rm}\NormalTok{(}\DataTypeTok{list =} \KeywordTok{ls}\NormalTok{(}\DataTypeTok{all.names =} \OtherTok{TRUE}\NormalTok{))}
+\KeywordTok{options}\NormalTok{(}\DataTypeTok{knitr.duplicate.label =} \StringTok{'allow'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(knitr)}
+\KeywordTok{library}\NormalTok{(kableExtra)}
+\KeywordTok{library}\NormalTok{(REconTools)}
+\CommentTok{# file name}
+\NormalTok{st_file_name =}\StringTok{ 'fs_count_basics'}
+\CommentTok{# Generate R File}
+\KeywordTok{try}\NormalTok{(}\KeywordTok{purl}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(st_file_name, }\StringTok{".Rmd"}\NormalTok{), }\DataTypeTok{output=}\KeywordTok{paste0}\NormalTok{(st_file_name, }\StringTok{".R"}\NormalTok{), }\DataTypeTok{documentation =} \DecValTok{2}\NormalTok{))}
+\CommentTok{# Generate PDF and HTML}
+\CommentTok{# rmarkdown::render("C:/Users/fan/R4Econ/summarize/count/fs_count_basics.Rmd", "pdf_document")}
+\CommentTok{# rmarkdown::render("C:/Users/fan/R4Econ/summarize/count/fs_count_basics.Rmd", "html_document")}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{uncount}{%
+\subsection{Uncount}\label{uncount}}
+
+In some panel, there are \(N\) individuals, each observed for \(Y_i\)
+years. Given a dataset with two variables, the individual index, and the
+\(Y_i\) variable, expand the dataframe so that there is a row for each
+individual index's each unique year in the survey.
+
+\emph{Search}:
+
+\begin{itemize}
+\tightlist
+\item
+  r duplicate row by variable
+\end{itemize}
+
+\emph{Links}:
+
+\begin{itemize}
+\tightlist
+\item
+  see:
+  \href{https://stackoverflow.com/questions/52498169/r-create-duplicate-rows-based-on-a-variable-dplyr-preferred}{Create
+  duplicate rows based on a variable}
+\end{itemize}
+
+\emph{Algorithm}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  generate testing frame, the individual attribute dataset with
+  invariant information over panel
+\item
+  uncount, duplicate rows by years in survey
+\item
+  group and generate sorted index
+\item
+  add indiviual specific stat year to index
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 1. Array of Years in the Survey}
+\NormalTok{ar_years_in_survey <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{10}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{5}\NormalTok{)}
+\NormalTok{ar_start_yaer <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{)}
+\NormalTok{ar_end_year <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{10}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{5}\NormalTok{)}
+\NormalTok{mt_combine <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(ar_years_in_survey, ar_start_yaer, ar_end_year)}
+
+\CommentTok{# This is the individual attribute dataset, attributes that are invariant acrosss years}
+\NormalTok{tb_indi_attributes <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(mt_combine) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rowid_to_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"ID"}\NormalTok{)}
+
+\CommentTok{# 2. Sort and generate variable equal to sorted index}
+\NormalTok{tb_indi_panel <-}\StringTok{ }\NormalTok{tb_indi_attributes }\OperatorTok{%>%}\StringTok{ }\KeywordTok{uncount}\NormalTok{(ar_years_in_survey)}
+
+\CommentTok{# 3. Panel now construct exactly which year in survey, note that all needed is sort index}
+\CommentTok{# Note sorting not needed, all rows identical now}
+\NormalTok{tb_indi_panel <-}\StringTok{ }\NormalTok{tb_indi_panel }\OperatorTok{%>%}
+\StringTok{                    }\KeywordTok{group_by}\NormalTok{(ID) }\OperatorTok{%>%}
+\StringTok{                    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{yr_in_survey =} \KeywordTok{row_number}\NormalTok{())}
+
+\NormalTok{tb_indi_panel <-}\StringTok{ }\NormalTok{tb_indi_panel }\OperatorTok{%>%}
+\StringTok{                    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{calendar_year =}\NormalTok{ yr_in_survey }\OperatorTok{+}\StringTok{ }\NormalTok{ar_start_yaer }\OperatorTok{-}\StringTok{ }\DecValTok{1}\NormalTok{)}
+
+\CommentTok{# Show results Head 10}
+\NormalTok{tb_indi_panel }\OperatorTok{%>%}\StringTok{ }\KeywordTok{head}\NormalTok{(}\DecValTok{10}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{kable}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{kable_styling}\NormalTok{(}\DataTypeTok{bootstrap_options =} \KeywordTok{c}\NormalTok{(}\StringTok{"striped"}\NormalTok{, }\StringTok{"hover"}\NormalTok{, }\StringTok{"condensed"}\NormalTok{, }\StringTok{"responsive"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+ID
+
+ar\_start\_yaer
+
+ar\_end\_year
+
+yr\_in\_survey
+
+calendar\_year
+
+1
+
+1
+
+2
+
+1
+
+1
+
+1
+
+1
+
+2
+
+2
+
+2
+
+2
+
+2
+
+4
+
+1
+
+2
+
+2
+
+2
+
+4
+
+2
+
+3
+
+2
+
+2
+
+4
+
+3
+
+4
+
+3
+
+3
+
+3
+
+1
+
+3
+
+4
+
+1
+
+10
+
+1
+
+1
+
+4
+
+1
+
+10
+
+2
+
+2
+
+4
+
+1
+
+10
+
+3
+
+3
+
+4
+
+1
+
+10
+
+4
+
+4
+
+\end{document}

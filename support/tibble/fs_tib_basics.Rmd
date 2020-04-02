@@ -26,16 +26,15 @@ library(REconTools)
 # file name
 st_file_name = 'fs_tib_basics'
 # Generate R File
-purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2)
+try(purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2))
 # Generate PDF and HTML
 # rmarkdown::render("C:/Users/fan/R4Econ/support/tibble/fs_tib_basics.Rmd", "pdf_document")
 # rmarkdown::render("C:/Users/fan/R4Econ/support/tibble/fs_tib_basics.Rmd", "html_document")
 ```
 
+## Tibble Basics
 
-# Tibble Basics
-
-## Generate Tibble given Matrixes and Arrays
+### Generate Tibble given Matrixes and Arrays
 
 Given Arrays and Matrixes, Generate Tibble and Name Variables/Columns
 
@@ -87,7 +86,7 @@ kable(mt_tb_combine_back) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 ```
 
-## Rename Tibble with Numeric Column Names
+### Rename Tibble with Numeric Column Names
 
 After reshaping, often could end up with variable names that are all numeric, intgers for example, how to rename these variables to add a common prefix for example.
 
@@ -121,7 +120,7 @@ kable(tb_combine) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 ```
 
-## Tibble Row and Column and Summarize
+### Tibble Row and Column and Summarize
 Show what is in the table: 1, column and row names; 2, contents inside table.
 
 ```{r}
@@ -132,7 +131,7 @@ colnames(tb_iris)
 summary(tb_iris)
 ```
 
-## Tibble Sorting
+### Tibble Sorting
 
 - dplyr arrange desc reverse
 - dplyr sort
@@ -151,10 +150,8 @@ tb_iris %>% select(Species, Sepal.Length, everything()) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 ```
 
+### REconTools Summarize over Tible
 
-# REconTools Function
-
-## REconTools Summarize over Tible
 Use R4Econ's summary tool.
 
 ```{r}
