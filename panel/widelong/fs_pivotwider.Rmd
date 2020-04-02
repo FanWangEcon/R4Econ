@@ -1,6 +1,7 @@
 ---
 title: "TIDYR Pivot Wider and Pivot Longer Examples"
 author: Fan Wang
+date: 2020-04-01
 output:
   pdf_document: default
   word_document: default
@@ -88,8 +89,8 @@ kable(df_panel_attend_date_wider) %>%
 ar_unique_ids <- sort(unique(df_panel_attend_date %>% pull(!!sym(svr_id))))
 df_panel_attend_date_wider_sort <- df_panel_attend_date_wider %>%
     arrange(!!sym(svr_date)) %>%
-    rename_at(vars(num_range('',ar_unique_ids)),
-              funs(paste0(st_idcol_prefix, . , ''))
+    rename_at(vars(num_range('',ar_unique_ids))
+              , list(~paste0(st_idcol_prefix, . , ''))
               )
 kable(df_panel_attend_date_wider_sort) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))

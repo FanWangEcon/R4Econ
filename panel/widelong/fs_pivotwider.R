@@ -1,6 +1,7 @@
 #' ---
 #' title: "TIDYR Pivot Wider and Pivot Longer Examples"
 #' author: Fan Wang
+#' date: 2020-04-01
 #' output:
 #'   pdf_document: default
 #'   word_document: default
@@ -16,11 +17,11 @@
 #' 
 #' Using the [pivot_wider](https://tidyr.tidyverse.org/reference/pivot_wider.html) function in tidyr to reshape panel or other data structures
 #' 
-## ----GlobalOptions, echo = T, results = 'hide', message=F, warning=F---------------------------------------------------------------------------------------------------
+## ----GlobalOptions, echo = T, results = 'hide', message=F, warning=F----------------------------
 rm(list = ls(all.names = TRUE))
 options(knitr.duplicate.label = 'allow')
 
-## ----loadlib, echo = T, results = 'hide', message=F, warning=F---------------------------------------------------------------------------------------------------------
+## ----loadlib, echo = T, results = 'hide', message=F, warning=F----------------------------------
 library(tidyr)
 library(dplyr)
 library(tibble)
@@ -42,7 +43,7 @@ try(purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), docume
 #' 
 #' **First**, generate the raw data structure, *df_panel_attend_date*: 
 #' 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 # Define
 it_N <- 3
 it_M <- 5
@@ -65,7 +66,7 @@ kable(df_panel_attend_date) %>%
 #' 
 #' **Second**, generate wider data structure, *df_attend_cumu_by_day*: 
 #' 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 # Define 
 svr_id <- 'student_id'
 svr_date <- 'date_in_class'
