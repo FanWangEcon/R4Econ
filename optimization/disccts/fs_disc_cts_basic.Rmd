@@ -1,0 +1,109 @@
+---
+title: "Solving A Constrained Maximization Problem  \nwith Fixed Cost and Minimum Choice Bound"
+author: Fan Wang
+date: 2020-04-06
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+always_allow_html: true
+---
+
+### Discrete and Continuous
+
+> Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository, or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+```{r loadlib, echo = T, results = 'hide', message=F, warning=F}
+library(tidyverse)
+library(tidyr)
+library(knitr)
+library(kableExtra)
+```
+
+Study the relationship between fixed cost $\phi$ and minimum choice bounds $a^{min}$. This is a general problem that appears in a lot of context.
+
+There is a cost to choosing $U$ over $B$. And when choosing $B$, there is a minimum choice associated with choosing $B$ category. So the question is, should we choose $U$ or $B$, and if we choose $B$, how much of $a$ should we choose.
+
+Individuals are defined by a single state variable $z$, which determines current wealth, and also helps to determine future wealth. We are interested in solving for the proportion of people choosing $U$ and $B$, and then within those choosing $B$, the proportion of individuals choosing the $a^{min}$
+
+There are three problems to solve:
+
+1. The discrete choice problem over $U$ and $B$
+2. The bounding threshold problem
+3. The unbounded continuous choice problem
+
+The problem presented here is a simple version of Udupa and Wang (2020)'s savings friction paper. 
+
+#### Unconstrained Savings and Borrowing
+
+There are endowments today and tomorrow. The endowment tomorrow is a function of the endowment today, higher endowment today increases endowment tomorrow. Households are defined by a single state variable $z$. In particular, there are three possible future, same endowment as today, endowment increases by $\epsilon$, or endowment decreases by $\epsilon$
+
+$$
+V^{unc}
+\left(
+  z
+\right)
+=
+\max_{a}
+\left(
+  \log
+    \Big(
+      z - \phi - a'
+    \Big)
+  +
+  \beta
+  \left(
+    \begin{array}{l}
+      P_h
+        \cdot
+      \log
+        \Big(
+          \exp(z + \epsilon) + a' \cdot R
+        \Big) +
+        \\
+      P_m
+        \cdot
+      \log
+        \Big(
+          \exp(z) + a' \cdot R
+        \Big) +
+        \\
+      P_l
+        \cdot
+      \log
+        \Big(
+          \exp(z - \epsilon) + a' \cdot R
+        \Big) \\
+    \end{array}
+  \right)
+\right)
+$$
+
+It is straight forward to solve the above problem numerically. we can solve the problem given a dense grid of $a$ and $z$ points, and find approximately exactly at each $z$ point.
+
+We will solve the problem twice, first using grid method, then using the R bisection method from Fan's [REconTools](https://github.com/FanWangEcon/REconTools/blob/master/R/ff_opti_bisect.R). We should see that the discretized solution is almost identical to the bisection solution which should be more exact. 
+
+Clearly some of the optimal savings or borrowing choices $a^{\prime,\ast}$ will be negative, when the household wants to borrow at some $z$, and it will be positive at other $z$ points where households want to save. 
+
+
+#### The Asset Choice Constraint 
+
+Now we add in a constraint, the constraint could be a borrowing or savings constraint.
+
+#### Compare Utility 
+
+What would be the optimal choice if households 
+
+
+
+
+
+
+
+

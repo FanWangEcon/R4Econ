@@ -13168,16 +13168,16 @@ Suppose we can divide N periods in which the individual is in the data into a nu
 <span class="c1"># 5. combine date categorical variable and value, single var: </span>
     <span class="c1"># m.12.c1= first year average from m.12 averaging</span>
 
-<span class="c1">#######################################</span>
+<span class="c1">######## ######## ######## ######## #######</span>
 <span class="c1"># Step 1</span>
-<span class="c1">#######################################</span>
+<span class="c1">######## ######## ######## ######## #######</span>
 <span class="c1"># 1. generate categoricals for full year (m.12), half year (m.6), quarter year (m.4)</span>
 <span class="c1"># 2. generate categoricals also for uneven years (m12t14) using stagger (+2 rather than -1)</span>
 
-<span class="c1">#######################################</span>
+<span class="c1">######## ######## ######## ######## #######</span>
 <span class="c1"># S2: reshape wide to long, so that all categorical date groups appear in var=value, </span>
     <span class="c1"># and categories in var=variable; calculate mean for all numeric variables for all date groups</span>
-<span class="c1">#######################################</span>
+<span class="c1">######## ######## ######## ######## #######</span>
 <span class="n">df.avg.long</span> <span class="o">&lt;-</span> <span class="n">df.groups.to.average</span> <span class="o">%&gt;%</span>
        <span class="nf">gather</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="o">-</span><span class="nf">one_of</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="n">vars.indi.grp</span><span class="p">,</span> 
                                          <span class="n">vars.not.groups2avg</span><span class="p">)))</span> <span class="o">%&gt;%</span>
@@ -13190,10 +13190,10 @@ Suppose we can divide N periods in which the individual is in the data into a nu
   <span class="nf">print</span><span class="p">(</span><span class="n">df.avg.long</span><span class="p">)</span>
 <span class="p">}</span>
 
-<span class="c1">#######################################</span>
+<span class="c1">######## ######## ######## ######## #######</span>
 <span class="c1"># S3 combine date categorical variable and value, single var: </span>
 <span class="c1">#    m.12.c1= first year average from m.12 averaging; to do this make data even longer first</span>
-<span class="c1">#######################################</span>
+<span class="c1">######## ######## ######## ######## #######</span>
 
 <span class="c1"># We already have the averages, but we want them to show up as variables, </span>
     <span class="c1"># mean for each group of each variable.</span>

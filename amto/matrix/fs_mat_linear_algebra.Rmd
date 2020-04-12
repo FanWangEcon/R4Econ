@@ -1,0 +1,41 @@
+---
+title: "Linear Algebra Operations"
+date: 2020-04-01
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+always_allow_html: true
+---
+
+### Linear Algebra
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+#### Matrix Multiplication
+
+Multiply Together a 3 by 2 matrix and a 2 by 1 vector
+
+```{r amto.matrix.fs_mat_linear_algebra.matrix_multiply}
+ar_row_one <- c(-1,+1)
+ar_row_two <- c(-3,-2)
+ar_row_three <- c(0.35,0.75)
+mt_n_by_2 <- rbind(ar_row_one, ar_row_two, ar_row_three)
+
+ar_row_four <- c(3,4)
+
+# Matrix Multiplication
+mt_out <- mt_n_by_2 %*% ar_row_four
+print(mt_n_by_2)
+print(ar_row_four)
+print(mt_out)
+```

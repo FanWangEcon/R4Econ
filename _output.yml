@@ -1,17 +1,54 @@
+# output:
+#   html_document: default
+#   word_document: default
+#   pdf_document:
+#     includes:
+#       in_header: preamble_book.tex
+#   html_notebook: default
+# urlcolor: blue
+# always_allow_html: yes
 bookdown::gitbook:
   css: style.css
   config:
     toc:
       before: |
-        <li><a href="./">A Minimal Book Example</a></li>
+        <li><a href="./">Panel Data and Optimization with R</a></li>
       after: |
-        <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-    edit: https://github.com/rstudio/bookdown-demo/edit/master/%s
+        <li><a href="https://fanwangecon.github.io/R4Econ/" target="blank">R4Econ</a></li>
+    # edit: https://github.com/FanWangEcon/R4Econ%s
     download: ["pdf", "epub"]
 bookdown::pdf_book:
+  toc: true
+  tod_depth: 5
   includes:
-    in_header: preamble.tex
+    in_header: preamble_book.tex
   latex_engine: xelatex
   citation_package: natbib
   keep_tex: yes
+  bookdown::gitbook:
+  config:
+    toc:
+      collapse: subsection
+      scroll_highlight: yes
+      before: null
+      after: null
+    toolbar:
+      position: fixed
+    edit : null
+    download: null
+    search: yes
+    fontsettings:
+      theme: white
+      family: sans
+      size: 2
+    sharing:
+      facebook: yes
+      github: no
+      twitter: yes
+      linkedin: no
+      weibo: no
+      instapaper: no
+      vk: no
+      all: ['facebook', 'twitter', 'linkedin', 'weibo', 'instapaper']
+    info: yes
 bookdown::epub_book: default

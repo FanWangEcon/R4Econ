@@ -1,0 +1,45 @@
+---
+title: "R Generate Arrays"
+date: 2020-04-11
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+always_allow_html: true
+---
+
+### Generate Arrays
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+#### Generate Special Arrays
+
+##### Log Space Arrays
+
+Often need to generate arrays on log rather than linear scale, below is log 10 scaled grid.
+
+```{r amto.array.fs_gen_arrays.special.log}
+# Parameters
+it.lower.bd.inc.cnt <- 3
+fl.log.lower <- -10
+fl.log.higher <- -9
+fl.min.rescale <- 0.01
+it.log.count <- 4
+# Generate
+ar.fl.log.rescaled <- exp(log(10)*seq(log10(fl.min.rescale),
+                                      log10(fl.min.rescale +
+                                              (fl.log.higher-fl.log.lower)),
+                                      length.out=it.log.count))
+ar.fl.log <- ar.fl.log.rescaled + fl.log.lower - fl.min.rescale
+# Print
+ar.fl.log
+```

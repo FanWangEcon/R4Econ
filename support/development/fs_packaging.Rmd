@@ -3,6 +3,7 @@ title: |
   | Generate R Package Example
   | roxygen2 and pkgdown
 author: Fan Wang
+date: 2020-04-01
 output:
   pdf_document:
     df_print: paged
@@ -163,27 +164,27 @@ As functions are developed, some vignettes can be invoked differently, taking ad
 # Step 3
 rm(list = ls(all.names = TRUE))
 setwd('C:/Users/fan/PrjOptiAlloc')
-#setwd('C:/Users/fan/REconTools')
+# setwd('C:/Users/fan/REconTools')
 devtools::document()
 # Step 4
 devtools::run_examples()
 # devtools::build_vignettes()
-# Step 6
+# Step 5
+# For this to work, functions that are used need to be EXPORTED
+# Add EXPORT line to the function. Add minimal Function Descritpiosn
 devtools::check()
-# Step 7
-devtools::install()
 #library(PrjOptiAlloc)
 #ls("package:PrjOptiAlloc")
-devtools::reload()
-# Step 8
+# Step 6
 pkgdown::build_site()
 ```
 
-During development, after new R functions have been written, testing latested functions in vignette.
+During development, after new R functions have been written, testing latested functions in vignette. Note that this simulates realoading files in R folder. When building package and checking, need to do *devtools::install*.
 
 ```{r}
 devtools::load_all()
 library(PrjOptiAlloc)
+# devtools::install(build_vignette = FALSE)
 ```
 
 bookdown

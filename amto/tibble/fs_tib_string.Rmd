@@ -1,0 +1,38 @@
+---
+title: "R Tibble Dataframe String Manipulations"
+date: 2020-04-01
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+always_allow_html: true
+---
+
+### String Values
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+#### Find and Replace
+
+Find and Replace in Dataframe.
+
+```{r, amto.tibble.fs_tib_string.find_replace, eval=FALSE}
+# if string value is contained in variable
+("bridex.B" %in% (df.reg.out.all$vars_var.y))
+# if string value is not contained in variable:
+# 1. type is variable name
+# 2. Toyota|Mazda are strings to be excluded
+filter(mtcars, !grepl('Toyota|Mazda', type))
+
+# filter does not contain string
+rs_hgt_prot_log_tidy %>% filter(!str_detect(term, 'prot'))
+```

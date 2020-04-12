@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 7 Optimization | Panel Data and Optimization with R</title>
+  <meta name="description" content="R Examples Panel and Optimization." />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 7 Optimization | Panel Data and Optimization with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="R Examples Panel and Optimization." />
+  <meta name="github-repo" content="fanwangecon/R4Econ" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 7 Optimization | Panel Data and Optimization with R" />
+  
+  <meta name="twitter:description" content="R Examples Panel and Optimization." />
+  
+
+<meta name="author" content="Fan Wang" />
+
+
+<meta name="date" content="2020-04-12" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="nonlinear-regression.html"/>
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Panel Data and Optimization with R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html"><i class="fa fa-check"></i><b>1</b> Array, Matrix, Dataframe</a><ul>
+<li class="chapter" data-level="1.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#list"><i class="fa fa-check"></i><b>1.1</b> List</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#multiple-dimensional-list"><i class="fa fa-check"></i><b>1.1.1</b> Multiple Dimensional List</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#array"><i class="fa fa-check"></i><b>1.2</b> Array</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#array-basics"><i class="fa fa-check"></i><b>1.2.1</b> Array Basics</a></li>
+<li class="chapter" data-level="1.2.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-arrays"><i class="fa fa-check"></i><b>1.2.2</b> Generate Arrays</a></li>
+<li class="chapter" data-level="1.2.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-arrays"><i class="fa fa-check"></i><b>1.2.3</b> String Arrays</a></li>
+<li class="chapter" data-level="1.2.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#mesh-matrix-and-vector"><i class="fa fa-check"></i><b>1.2.4</b> Mesh Matrix and Vector</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#matrix"><i class="fa fa-check"></i><b>1.3</b> Matrix</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-matrixes"><i class="fa fa-check"></i><b>1.3.1</b> Generate Matrixes</a></li>
+<li class="chapter" data-level="1.3.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#linear-algebra"><i class="fa fa-check"></i><b>1.3.2</b> Linear Algebra</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#dataframes-tibble"><i class="fa fa-check"></i><b>1.4</b> Dataframes (Tibble)</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-dataframe"><i class="fa fa-check"></i><b>1.4.1</b> Generate Dataframe</a></li>
+<li class="chapter" data-level="1.4.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#draw-random-rows"><i class="fa fa-check"></i><b>1.4.2</b> Draw Random Rows</a></li>
+<li class="chapter" data-level="1.4.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#variable-na-values"><i class="fa fa-check"></i><b>1.4.3</b> Variable NA Values</a></li>
+<li class="chapter" data-level="1.4.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-values"><i class="fa fa-check"></i><b>1.4.4</b> String Values</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="summarize-data.html"><a href="summarize-data.html"><i class="fa fa-check"></i><b>2</b> Summarize Data</a><ul>
+<li class="chapter" data-level="2.1" data-path="summarize-data.html"><a href="summarize-data.html#counting-observation"><i class="fa fa-check"></i><b>2.1</b> Counting Observation</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="summarize-data.html"><a href="summarize-data.html#uncount"><i class="fa fa-check"></i><b>2.1.1</b> Uncount</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="summarize-data.html"><a href="summarize-data.html#sorting-indexing-slicing"><i class="fa fa-check"></i><b>2.2</b> Sorting, Indexing, Slicing</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="summarize-data.html"><a href="summarize-data.html#sorting"><i class="fa fa-check"></i><b>2.2.1</b> Sorting</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="summarize-data.html"><a href="summarize-data.html#group-statistics"><i class="fa fa-check"></i><b>2.3</b> Group Statistics</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="summarize-data.html"><a href="summarize-data.html#groups-statistics"><i class="fa fa-check"></i><b>2.3.1</b> Groups Statistics</a></li>
+<li class="chapter" data-level="2.3.2" data-path="summarize-data.html"><a href="summarize-data.html#one-variable-group-summary"><i class="fa fa-check"></i><b>2.3.2</b> One Variable Group Summary</a></li>
+<li class="chapter" data-level="2.3.3" data-path="summarize-data.html"><a href="summarize-data.html#nested-within-group-stats"><i class="fa fa-check"></i><b>2.3.3</b> Nested within Group Stats</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="summarize-data.html"><a href="summarize-data.html#distributional-statistics"><i class="fa fa-check"></i><b>2.4</b> Distributional Statistics</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="summarize-data.html"><a href="summarize-data.html#histogram"><i class="fa fa-check"></i><b>2.4.1</b> Histogram</a></li>
+<li class="chapter" data-level="2.4.2" data-path="summarize-data.html"><a href="summarize-data.html#joint-quantiles-from-continuous"><i class="fa fa-check"></i><b>2.4.2</b> Joint Quantiles from Continuous</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="summarize-data.html"><a href="summarize-data.html#summarize-multiple-variables"><i class="fa fa-check"></i><b>2.5</b> Summarize Multiple Variables</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="summarize-data.html"><a href="summarize-data.html#generate-replace-variables"><i class="fa fa-check"></i><b>2.5.1</b> Generate Replace Variables</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>3</b> Functions</a><ul>
+<li class="chapter" data-level="3.1" data-path="functions.html"><a href="functions.html#dataframe-mutate"><i class="fa fa-check"></i><b>3.1</b> Dataframe Mutate</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="functions.html"><a href="functions.html#row-input-functions"><i class="fa fa-check"></i><b>3.1.1</b> Row Input Functions</a></li>
+<li class="chapter" data-level="3.1.2" data-path="functions.html"><a href="functions.html#evaluate-choices-across-states"><i class="fa fa-check"></i><b>3.1.2</b> Evaluate Choices Across States</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="functions.html"><a href="functions.html#dataframe-do-anything"><i class="fa fa-check"></i><b>3.2</b> Dataframe Do Anything</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="functions.html"><a href="functions.html#mxq-to-mxp-rows"><i class="fa fa-check"></i><b>3.2.1</b> MxQ to MxP Rows</a></li>
+<li class="chapter" data-level="3.2.2" data-path="functions.html"><a href="functions.html#mx1-to-mxq-rows"><i class="fa fa-check"></i><b>3.2.2</b> Mx1 to MxQ Rows</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="functions.html"><a href="functions.html#apply-and-pmap"><i class="fa fa-check"></i><b>3.3</b> Apply and pmap</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="functions.html"><a href="functions.html#apply-sapply-mutate"><i class="fa fa-check"></i><b>3.3.1</b> Apply, Sapply, Mutate</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="panel.html"><a href="panel.html"><i class="fa fa-check"></i><b>4</b> Panel</a><ul>
+<li class="chapter" data-level="4.1" data-path="panel.html"><a href="panel.html#generate-and-join"><i class="fa fa-check"></i><b>4.1</b> Generate and Join</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="panel.html"><a href="panel.html#generate-panel-structure"><i class="fa fa-check"></i><b>4.1.1</b> Generate Panel Structure</a></li>
+<li class="chapter" data-level="4.1.2" data-path="panel.html"><a href="panel.html#join-datasets"><i class="fa fa-check"></i><b>4.1.2</b> Join Datasets</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="panel.html"><a href="panel.html#wide-and-long"><i class="fa fa-check"></i><b>4.2</b> Wide and Long</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="panel.html"><a href="panel.html#long-to-wide"><i class="fa fa-check"></i><b>4.2.1</b> Long to Wide</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>5</b> Linear Regression</a><ul>
+<li class="chapter" data-level="5.1" data-path="linear-regression.html"><a href="linear-regression.html#ols-and-iv"><i class="fa fa-check"></i><b>5.1</b> OLS and IV</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="linear-regression.html"><a href="linear-regression.html#ols-and-iv-regression"><i class="fa fa-check"></i><b>5.1.1</b> OLS and IV Regression</a></li>
+<li class="chapter" data-level="5.1.2" data-path="linear-regression.html"><a href="linear-regression.html#iv-loop-over-rhs"><i class="fa fa-check"></i><b>5.1.2</b> IV Loop over RHS</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="linear-regression.html"><a href="linear-regression.html#decomposition"><i class="fa fa-check"></i><b>5.2</b> Decomposition</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="linear-regression.html"><a href="linear-regression.html#decompose-rhs"><i class="fa fa-check"></i><b>5.2.1</b> Decompose RHS</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="nonlinear-regression.html"><a href="nonlinear-regression.html"><i class="fa fa-check"></i><b>6</b> Nonlinear Regression</a><ul>
+<li class="chapter" data-level="6.1" data-path="nonlinear-regression.html"><a href="nonlinear-regression.html#logit-regression"><i class="fa fa-check"></i><b>6.1</b> Logit Regression</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="nonlinear-regression.html"><a href="nonlinear-regression.html#binary-logit"><i class="fa fa-check"></i><b>6.1.1</b> Binary Logit</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="optimization.html"><a href="optimization.html"><i class="fa fa-check"></i><b>7</b> Optimization</a><ul>
+<li class="chapter" data-level="7.1" data-path="optimization.html"><a href="optimization.html#bisection"><i class="fa fa-check"></i><b>7.1</b> Bisection</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="optimization.html"><a href="optimization.html#bisection-1"><i class="fa fa-check"></i><b>7.1.1</b> Bisection</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://fanwangecon.github.io/R4Econ/" target="blank">R4Econ</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Panel Data and Optimization with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="optimization" class="section level1">
+<h1><span class="header-section-number">Chapter 7</span> Optimization</h1>
+
+<div id="bisection" class="section level2">
+<h2><span class="header-section-number">7.1</span> Bisection</h2>
+
+<div id="bisection-1" class="section level3">
+<h3><span class="header-section-number">7.1.1</span> Bisection</h3>
+<blockquote>
+<p>Go back to <a href="http://fanwangecon.github.io/CodeDynaAsset/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> Repository, or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository.</p>
+</blockquote>
+<p>See the <a href="https://fanwangecon.github.io/REconTools/reference/ff_opti_bisect_pmap_multi.html">ff_opti_bisect_pmap_multi</a> function from <a href="https://fanwangecon.github.io/">Fan</a>’s <em><a href="https://fanwangecon.github.io/REconTools/">REconTools</a></em> Package, which provides a resuable function based on the algorithm worked out here.</p>
+<p>The bisection specific code does not need to do much.</p>
+<ul>
+<li>list variables in file for grouping, each group is an individual for whom we want to calculate optimal choice for using bisection.</li>
+<li>string variable name of input where functions are evaluated, these are already contained in the dataframe, existing variable names, row specific, rowwise computation over these, each rowwise calculation using different rows.</li>
+<li>scalar and array values that are applied to every rowwise calculation, all rowwise calculations using the same scalars and arrays.</li>
+<li>string output variable name</li>
+</ul>
+<p>This is how I implement the bisection algorithm, when we know the bounding minimum and maximum to be below and above zero already.</p>
+<ol style="list-style-type: decimal">
+<li>Evaluate <span class="math inline">\(f^0_a = f(a^0)\)</span> and <span class="math inline">\(f^0_b = f(b^0)\)</span>, min and max points.</li>
+<li>Evaluate at <span class="math inline">\(f^0_p = f(p^0)\)</span>, where <span class="math inline">\(p_0 = \frac{a^0+b^0}{2}\)</span>.</li>
+<li>if <span class="math inline">\(f^i_a \cdot f^i_p &lt; 0\)</span>, then <span class="math inline">\(b_{i+1} = p_i\)</span>, else, <span class="math inline">\(a_{i+1} = p_i\)</span> and <span class="math inline">\(f^{i+1}_a = p_i\)</span>.</li>
+<li>iteratre until convergence.</li>
+</ol>
+<p>Generate New columns of a and b as we iteratre, do not need to store p, p is temporary. Evaluate the function below which we have already tested, but now, in the dataframe before generating all permutations, <em>tb_states_choices</em>, now the <em>fl_N</em> element will be changing with each iteration, it will be row specific. <em>fl_N</em> are first min and max, then each subsequent ps.</p>
+<div id="initialize-matrix" class="section level4">
+<h4><span class="header-section-number">7.1.1.1</span> Initialize Matrix</h4>
+<p>First, initialize the matrix with <span class="math inline">\(a_0\)</span> and <span class="math inline">\(b_0\)</span>, the initial min and max points:</p>
+<div class="sourceCode" id="cb518"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb518-1" title="1"><span class="co"># common prefix to make reshaping easier</span></a>
+<a class="sourceLine" id="cb518-2" title="2">st_bisec_prefix &lt;-<span class="st"> &#39;bisec_&#39;</span></a>
+<a class="sourceLine" id="cb518-3" title="3">svr_a_lst &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;a_0&#39;</span>)</a>
+<a class="sourceLine" id="cb518-4" title="4">svr_b_lst &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;b_0&#39;</span>)</a>
+<a class="sourceLine" id="cb518-5" title="5">svr_fa_lst &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;fa_0&#39;</span>)</a>
+<a class="sourceLine" id="cb518-6" title="6">svr_fb_lst &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;fb_0&#39;</span>)</a>
+<a class="sourceLine" id="cb518-7" title="7"></a>
+<a class="sourceLine" id="cb518-8" title="8"><span class="co"># Add initial a and b</span></a>
+<a class="sourceLine" id="cb518-9" title="9">tb_states_choices_bisec &lt;-<span class="st"> </span>tb_states_choices <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb518-10" title="10"><span class="st">                            </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_a_lst) <span class="op">:</span><span class="er">=</span><span class="st"> </span>fl_N_min, <span class="op">!!</span><span class="kw">sym</span>(svr_b_lst) <span class="op">:</span><span class="er">=</span><span class="st"> </span>fl_N_agg)</a>
+<a class="sourceLine" id="cb518-11" title="11"></a>
+<a class="sourceLine" id="cb518-12" title="12"><span class="co"># Evaluate function f(a_0) and f(b_0)</span></a>
+<a class="sourceLine" id="cb518-13" title="13">tb_states_choices_bisec &lt;-<span class="st"> </span>tb_states_choices_bisec <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb518-14" title="14"><span class="st">                            </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_fa_lst) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, <span class="op">!!</span><span class="kw">sym</span>(svr_a_lst),</a>
+<a class="sourceLine" id="cb518-15" title="15">                                                                          ar_nN_A, ar_nN_alpha,</a>
+<a class="sourceLine" id="cb518-16" title="16">                                                                          fl_N_agg, fl_rho),</a>
+<a class="sourceLine" id="cb518-17" title="17">                                   <span class="op">!!</span><span class="kw">sym</span>(svr_fb_lst) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, <span class="op">!!</span><span class="kw">sym</span>(svr_b_lst),</a>
+<a class="sourceLine" id="cb518-18" title="18">                                                                          ar_nN_A, ar_nN_alpha,</a>
+<a class="sourceLine" id="cb518-19" title="19">                                                                          fl_N_agg, fl_rho))</a>
+<a class="sourceLine" id="cb518-20" title="20"><span class="co"># Summarize</span></a>
+<a class="sourceLine" id="cb518-21" title="21"><span class="kw">dim</span>(tb_states_choices_bisec)</a></code></pre></div>
+<pre><code>## [1] 4 7</code></pre>
+<div class="sourceCode" id="cb520"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb520-1" title="1"><span class="kw">summary</span>(tb_states_choices_bisec)</a></code></pre></div>
+<pre><code>##     INDI_ID          fl_A       fl_alpha     bisec_a_0   bisec_b_0     bisec_fa_0 
+##  Min.   :1.00   Min.   :-2   Min.   :0.1   Min.   :0   Min.   :100   Min.   :100  
+##  1st Qu.:1.75   1st Qu.:-1   1st Qu.:0.3   1st Qu.:0   1st Qu.:100   1st Qu.:100  
+##  Median :2.50   Median : 0   Median :0.5   Median :0   Median :100   Median :100  
+##  Mean   :2.50   Mean   : 0   Mean   :0.5   Mean   :0   Mean   :100   Mean   :100  
+##  3rd Qu.:3.25   3rd Qu.: 1   3rd Qu.:0.7   3rd Qu.:0   3rd Qu.:100   3rd Qu.:100  
+##  Max.   :4.00   Max.   : 2   Max.   :0.9   Max.   :0   Max.   :100   Max.   :100  
+##    bisec_fb_0       
+##  Min.   :-15057.61  
+##  1st Qu.: -5011.84  
+##  Median : -1033.19  
+##  Mean   : -4301.31  
+##  3rd Qu.:  -322.66  
+##  Max.   :   -81.25</code></pre>
+</div>
+<div id="iterate-and-solve-for-fp-update-fa-and-fb" class="section level4">
+<h4><span class="header-section-number">7.1.1.2</span> Iterate and Solve for f(p), update f(a) and f(b)</h4>
+<p>Implement the DPLYR based Concurrent bisection algorithm.</p>
+<div class="sourceCode" id="cb522"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb522-1" title="1"><span class="co"># fl_tol = float tolerance criteria</span></a>
+<a class="sourceLine" id="cb522-2" title="2"><span class="co"># it_tol = number of interations to allow at most</span></a>
+<a class="sourceLine" id="cb522-3" title="3">fl_tol &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^-</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb522-4" title="4">it_tol &lt;-<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb522-5" title="5"></a>
+<a class="sourceLine" id="cb522-6" title="6"><span class="co"># fl_p_dist2zr = distance to zero to initalize</span></a>
+<a class="sourceLine" id="cb522-7" title="7">fl_p_dist2zr &lt;-<span class="st"> </span><span class="dv">1000</span></a>
+<a class="sourceLine" id="cb522-8" title="8">it_cur &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb522-9" title="9"><span class="cf">while</span> (it_cur <span class="op">&lt;=</span><span class="st"> </span>it_tol <span class="op">&amp;&amp;</span><span class="st"> </span>fl_p_dist2zr <span class="op">&gt;=</span><span class="st"> </span>fl_tol ) {</a>
+<a class="sourceLine" id="cb522-10" title="10"></a>
+<a class="sourceLine" id="cb522-11" title="11">  it_cur &lt;-<span class="st"> </span>it_cur <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb522-12" title="12"></a>
+<a class="sourceLine" id="cb522-13" title="13">  <span class="co"># New Variables</span></a>
+<a class="sourceLine" id="cb522-14" title="14">  svr_a_cur &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;a_&#39;</span>, it_cur)</a>
+<a class="sourceLine" id="cb522-15" title="15">  svr_b_cur &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;b_&#39;</span>, it_cur)</a>
+<a class="sourceLine" id="cb522-16" title="16">  svr_fa_cur &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;fa_&#39;</span>, it_cur)</a>
+<a class="sourceLine" id="cb522-17" title="17">  svr_fb_cur &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;fb_&#39;</span>, it_cur)</a>
+<a class="sourceLine" id="cb522-18" title="18"></a>
+<a class="sourceLine" id="cb522-19" title="19">  <span class="co"># Evaluate function f(a_0) and f(b_0)</span></a>
+<a class="sourceLine" id="cb522-20" title="20">  <span class="co"># 1. generate p</span></a>
+<a class="sourceLine" id="cb522-21" title="21">  <span class="co"># 2. generate f_p</span></a>
+<a class="sourceLine" id="cb522-22" title="22">  <span class="co"># 3. generate f_p*f_a</span></a>
+<a class="sourceLine" id="cb522-23" title="23">  tb_states_choices_bisec &lt;-<span class="st"> </span>tb_states_choices_bisec <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb522-24" title="24"><span class="st">                              </span><span class="kw">mutate</span>(<span class="dt">p =</span> ((<span class="op">!!</span><span class="kw">sym</span>(svr_a_lst) <span class="op">+</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_b_lst))<span class="op">/</span><span class="dv">2</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb522-25" title="25"><span class="st">                              </span><span class="kw">mutate</span>(<span class="dt">f_p =</span> <span class="kw">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, p,</a>
+<a class="sourceLine" id="cb522-26" title="26">                                                              ar_nN_A, ar_nN_alpha,</a>
+<a class="sourceLine" id="cb522-27" title="27">                                                              fl_N_agg, fl_rho)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb522-28" title="28"><span class="st">                              </span><span class="kw">mutate</span>(<span class="dt">f_p_t_f_a =</span> f_p<span class="op">*!!</span><span class="kw">sym</span>(svr_fa_lst))</a>
+<a class="sourceLine" id="cb522-29" title="29">  <span class="co"># fl_p_dist2zr = sum(abs(p))</span></a>
+<a class="sourceLine" id="cb522-30" title="30">  fl_p_dist2zr &lt;-<span class="st"> </span><span class="kw">mean</span>(<span class="kw">abs</span>(tb_states_choices_bisec <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(f_p)))</a>
+<a class="sourceLine" id="cb522-31" title="31"></a>
+<a class="sourceLine" id="cb522-32" title="32">  <span class="co"># Update a and b</span></a>
+<a class="sourceLine" id="cb522-33" title="33">  tb_states_choices_bisec &lt;-<span class="st"> </span>tb_states_choices_bisec <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb522-34" title="34"><span class="st">                              </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_a_cur) <span class="op">:</span><span class="er">=</span></a>
+<a class="sourceLine" id="cb522-35" title="35"><span class="st">                                       </span><span class="kw">case_when</span>(f_p_t_f_a <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_a_lst),</a>
+<a class="sourceLine" id="cb522-36" title="36">                                                 <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>p)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb522-37" title="37"><span class="st">                              </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_b_cur) <span class="op">:</span><span class="er">=</span></a>
+<a class="sourceLine" id="cb522-38" title="38"><span class="st">                                       </span><span class="kw">case_when</span>(f_p_t_f_a <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span>p,</a>
+<a class="sourceLine" id="cb522-39" title="39">                                                 <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_b_lst)))</a>
+<a class="sourceLine" id="cb522-40" title="40">  <span class="co"># Update f(a) and f(b)</span></a>
+<a class="sourceLine" id="cb522-41" title="41">  tb_states_choices_bisec &lt;-<span class="st"> </span>tb_states_choices_bisec <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb522-42" title="42"><span class="st">                              </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_fa_cur) <span class="op">:</span><span class="er">=</span></a>
+<a class="sourceLine" id="cb522-43" title="43"><span class="st">                                       </span><span class="kw">case_when</span>(f_p_t_f_a <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_fa_lst),</a>
+<a class="sourceLine" id="cb522-44" title="44">                                                 <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>f_p)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb522-45" title="45"><span class="st">                              </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_fb_cur) <span class="op">:</span><span class="er">=</span></a>
+<a class="sourceLine" id="cb522-46" title="46"><span class="st">                                       </span><span class="kw">case_when</span>(f_p_t_f_a <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span>f_p,</a>
+<a class="sourceLine" id="cb522-47" title="47">                                                 <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_fb_lst)))</a>
+<a class="sourceLine" id="cb522-48" title="48">  <span class="co"># Save from last</span></a>
+<a class="sourceLine" id="cb522-49" title="49">  svr_a_lst &lt;-<span class="st"> </span>svr_a_cur</a>
+<a class="sourceLine" id="cb522-50" title="50">  svr_b_lst &lt;-<span class="st"> </span>svr_b_cur</a>
+<a class="sourceLine" id="cb522-51" title="51">  svr_fa_lst &lt;-<span class="st"> </span>svr_fa_cur</a>
+<a class="sourceLine" id="cb522-52" title="52">  svr_fb_lst &lt;-<span class="st"> </span>svr_fb_cur</a>
+<a class="sourceLine" id="cb522-53" title="53"></a>
+<a class="sourceLine" id="cb522-54" title="54">  <span class="co"># Summar current round</span></a>
+<a class="sourceLine" id="cb522-55" title="55">  <span class="kw">print</span>(<span class="kw">paste0</span>(<span class="st">&#39;it_cur:&#39;</span>, it_cur, <span class="st">&#39;, fl_p_dist2zr:&#39;</span>, fl_p_dist2zr))</a>
+<a class="sourceLine" id="cb522-56" title="56">  <span class="kw">summary</span>(tb_states_choices_bisec <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">one_of</span>(svr_a_cur, svr_b_cur, svr_fa_cur, svr_fb_cur)))</a>
+<a class="sourceLine" id="cb522-57" title="57">}</a></code></pre></div>
+<pre><code>## [1] &quot;it_cur:1, fl_p_dist2zr:1884.20860322127&quot;
+## [1] &quot;it_cur:2, fl_p_dist2zr:815.07213515036&quot;
+## [1] &quot;it_cur:3, fl_p_dist2zr:346.193951089409&quot;
+## [1] &quot;it_cur:4, fl_p_dist2zr:133.268318242343&quot;
+## [1] &quot;it_cur:5, fl_p_dist2zr:52.0759336601643&quot;
+## [1] &quot;it_cur:6, fl_p_dist2zr:8.2057326579422&quot;
+## [1] &quot;it_cur:7, fl_p_dist2zr:12.7240911320081&quot;
+## [1] &quot;it_cur:8, fl_p_dist2zr:4.10100732130902&quot;
+## [1] &quot;it_cur:9, fl_p_dist2zr:1.19915237247596&quot;
+## [1] &quot;it_cur:10, fl_p_dist2zr:1.46089191924225&quot;
+## [1] &quot;it_cur:11, fl_p_dist2zr:0.261965457555881&quot;
+## [1] &quot;it_cur:12, fl_p_dist2zr:0.462901483859291&quot;
+## [1] &quot;it_cur:13, fl_p_dist2zr:0.166336071560483&quot;
+## [1] &quot;it_cur:14, fl_p_dist2zr:0.011649263648799&quot;
+## [1] &quot;it_cur:15, fl_p_dist2zr:0.0715183716517558&quot;
+## [1] &quot;it_cur:16, fl_p_dist2zr:0.0299376539319738&quot;
+## [1] &quot;it_cur:17, fl_p_dist2zr:0.0132655999120672&quot;
+## [1] &quot;it_cur:18, fl_p_dist2zr:0.00317751042553027&quot;</code></pre>
+</div>
+<div id="reshape-wide-to-long-to-wide" class="section level4">
+<h4><span class="header-section-number">7.1.1.3</span> Reshape Wide to long to Wide</h4>
+<p>To view results easily, how iterations improved to help us find the roots, convert table from wide to long. Pivot twice. This allows us to easily graph out how bisection is working out iterationby iteration.</p>
+<p>Here, we will first show what the raw table looks like, the wide only table, and then show the long version, and finally the version that is medium wide.</p>
+<div id="table-onevery-wide" class="section level5">
+<h5><span class="header-section-number">7.1.1.3.1</span> Table One–Very Wide</h5>
+<p>Show what the <em>tb_states_choices_bisec</em> looks like.</p>
+<p>Variables are formatted like: <em>bisec_xx_yy</em>, where yy is the iteration indicator, and xx is either a, b, fa, or fb.</p>
+<div class="sourceCode" id="cb524"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb524-1" title="1"><span class="kw">head</span>(tb_states_choices_bisec, <span class="dv">10</span>)</a></code></pre></div>
+<pre><code>## Source: local data frame [4 x 82]
+## Groups: &lt;by row&gt;
+## 
+## # A tibble: 4 x 82
+##   INDI_ID   fl_A fl_alpha bisec_a_0 bisec_b_0 bisec_fa_0 bisec_fb_0     p      f_p f_p_t_f_a
+##     &lt;int&gt;  &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1       1 -2        0.1           0       100        100   -15058.   1.32  1.02e-2   4.45e-4
+## 2       2 -0.667    0.367         0       100        100    -1663.   7.29 -1.26e-3  -5.61e-6
+## 3       3  0.667    0.633         0       100        100     -403.  20.9   6.18e-4   1.54e-6
+## 4       4  2        0.9           0       100        100      -81.3 54.1  -6.09e-4  -4.46e-8
+## # ... with 72 more variables: bisec_a_1 &lt;dbl&gt;, bisec_b_1 &lt;dbl&gt;, bisec_fa_1 &lt;dbl&gt;, bisec_fb_1 &lt;dbl&gt;,
+## #   bisec_a_2 &lt;dbl&gt;, bisec_b_2 &lt;dbl&gt;, bisec_fa_2 &lt;dbl&gt;, bisec_fb_2 &lt;dbl&gt;, bisec_a_3 &lt;dbl&gt;,
+## #   bisec_b_3 &lt;dbl&gt;, bisec_fa_3 &lt;dbl&gt;, bisec_fb_3 &lt;dbl&gt;, bisec_a_4 &lt;dbl&gt;, bisec_b_4 &lt;dbl&gt;,
+## #   bisec_fa_4 &lt;dbl&gt;, bisec_fb_4 &lt;dbl&gt;, bisec_a_5 &lt;dbl&gt;, bisec_b_5 &lt;dbl&gt;, bisec_fa_5 &lt;dbl&gt;,
+## #   bisec_fb_5 &lt;dbl&gt;, bisec_a_6 &lt;dbl&gt;, bisec_b_6 &lt;dbl&gt;, bisec_fa_6 &lt;dbl&gt;, bisec_fb_6 &lt;dbl&gt;,
+## #   bisec_a_7 &lt;dbl&gt;, bisec_b_7 &lt;dbl&gt;, bisec_fa_7 &lt;dbl&gt;, bisec_fb_7 &lt;dbl&gt;, bisec_a_8 &lt;dbl&gt;,
+## #   bisec_b_8 &lt;dbl&gt;, bisec_fa_8 &lt;dbl&gt;, bisec_fb_8 &lt;dbl&gt;, bisec_a_9 &lt;dbl&gt;, bisec_b_9 &lt;dbl&gt;,
+## #   bisec_fa_9 &lt;dbl&gt;, bisec_fb_9 &lt;dbl&gt;, bisec_a_10 &lt;dbl&gt;, bisec_b_10 &lt;dbl&gt;, bisec_fa_10 &lt;dbl&gt;,
+## #   bisec_fb_10 &lt;dbl&gt;, bisec_a_11 &lt;dbl&gt;, bisec_b_11 &lt;dbl&gt;, bisec_fa_11 &lt;dbl&gt;, bisec_fb_11 &lt;dbl&gt;,
+## #   bisec_a_12 &lt;dbl&gt;, bisec_b_12 &lt;dbl&gt;, bisec_fa_12 &lt;dbl&gt;, bisec_fb_12 &lt;dbl&gt;, bisec_a_13 &lt;dbl&gt;,
+## #   bisec_b_13 &lt;dbl&gt;, bisec_fa_13 &lt;dbl&gt;, bisec_fb_13 &lt;dbl&gt;, bisec_a_14 &lt;dbl&gt;, bisec_b_14 &lt;dbl&gt;,
+## #   bisec_fa_14 &lt;dbl&gt;, bisec_fb_14 &lt;dbl&gt;, bisec_a_15 &lt;dbl&gt;, bisec_b_15 &lt;dbl&gt;, bisec_fa_15 &lt;dbl&gt;,
+## #   bisec_fb_15 &lt;dbl&gt;, bisec_a_16 &lt;dbl&gt;, bisec_b_16 &lt;dbl&gt;, bisec_fa_16 &lt;dbl&gt;, bisec_fb_16 &lt;dbl&gt;,
+## #   bisec_a_17 &lt;dbl&gt;, bisec_b_17 &lt;dbl&gt;, bisec_fa_17 &lt;dbl&gt;, bisec_fb_17 &lt;dbl&gt;, bisec_a_18 &lt;dbl&gt;,
+## #   bisec_b_18 &lt;dbl&gt;, bisec_fa_18 &lt;dbl&gt;, bisec_fb_18 &lt;dbl&gt;</code></pre>
+<div class="sourceCode" id="cb526"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb526-1" title="1"><span class="kw">str</span>(tb_states_choices_bisec)</a></code></pre></div>
+<pre><code>## Classes &#39;rowwise_df&#39;, &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:  4 obs. of  82 variables:
+##  $ INDI_ID    : int  1 2 3 4
+##  $ fl_A       : num  -2 -0.667 0.667 2
+##  $ fl_alpha   : num  0.1 0.367 0.633 0.9
+##  $ bisec_a_0  : num  0 0 0 0
+##  $ bisec_b_0  : num  100 100 100 100
+##  $ bisec_fa_0 : num  100 100 100 100
+##  $ bisec_fb_0 : num  -15057.6 -1663.3 -403.1 -81.3
+##  $ p          : num  1.32 7.29 20.89 54.1
+##  $ f_p        : num  0.010225 -0.001259 0.000618 -0.000609
+##  $ f_p_t_f_a  : num  4.45e-04 -5.61e-06 1.54e-06 -4.46e-08
+##  $ bisec_a_1  : num  0 0 0 50
+##  $ bisec_b_1  : num  50 50 50 100
+##  $ bisec_fa_1 : num  100 100 100 7.33
+##  $ bisec_fb_1 : num  -6659.8 -723.7 -145.9 -81.3
+##  $ bisec_a_2  : num  0 0 0 50
+##  $ bisec_b_2  : num  25 25 25 75
+##  $ bisec_fa_2 : num  100 100 100 7.33
+##  $ bisec_fb_2 : num  -2917.6 -285.2 -20.3 -37.2
+##  $ bisec_a_3  : num  0 0 12.5 50
+##  $ bisec_b_3  : num  12.5 12.5 25 62.5
+##  $ bisec_fa_3 : num  100 100 41.08 7.33
+##  $ bisec_fb_3 : num  -1248.4 -80.3 -20.3 -15
+##  $ bisec_a_4  : num  0 6.25 18.75 50
+##  $ bisec_b_4  : num  6.25 12.5 25 56.25
+##  $ bisec_fa_4 : num  100 15.52 10.54 7.33
+##  $ bisec_fb_4 : num  -503.16 -80.3 -20.32 -3.85
+##  $ bisec_a_5  : num  0 6.25 18.75 53.12
+##  $ bisec_b_5  : num  3.12 9.38 21.88 56.25
+##  $ bisec_fa_5 : num  100 15.52 10.54 1.74
+##  $ bisec_fb_5 : num  -170.1 -31.61 -4.86 -3.85
+##  $ bisec_a_6  : num  0 6.25 20.31 53.12
+##  $ bisec_b_6  : num  1.56 7.81 21.88 54.69
+##  $ bisec_fa_6 : num  100 15.52 2.85 1.74
+##  $ bisec_fb_6 : num  -21.09 -7.82 -4.86 -1.06
+##  $ bisec_a_7  : num  0.781 7.031 20.312 53.906
+##  $ bisec_b_7  : num  1.56 7.81 21.09 54.69
+##  $ bisec_fa_7 : num  45.65 3.909 2.853 0.338
+##  $ bisec_fb_7 : num  -21.089 -7.822 -0.999 -1.059
+##  $ bisec_a_8  : num  1.17 7.03 20.7 53.91
+##  $ bisec_b_8  : num  1.56 7.42 21.09 54.3
+##  $ bisec_fa_8 : num  13.174 3.909 0.928 0.338
+##  $ bisec_fb_8 : num  -21.089 -1.942 -0.999 -0.36
+##  $ bisec_a_9  : num  1.17 7.23 20.7 53.91
+##  $ bisec_b_9  : num  1.37 7.42 20.9 54.1
+##  $ bisec_fa_9 : num  13.174 0.988 0.928 0.338
+##  $ bisec_fb_9 : num  -3.763 -1.9416 -0.0351 -0.0108
+##  $ bisec_a_10 : num  1.27 7.23 20.8 54
+##  $ bisec_b_10 : num  1.37 7.32 20.9 54.1
+##  $ bisec_fa_10: num  4.757 0.988 0.446 0.164
+##  $ bisec_fb_10: num  -3.763 -0.476 -0.0351 -0.0108
+##  $ bisec_a_11 : num  1.32 7.28 20.85 54.05
+##  $ bisec_b_11 : num  1.37 7.32 20.9 54.1
+##  $ bisec_fa_11: num  0.5096 0.2561 0.2057 0.0765
+##  $ bisec_fb_11: num  -3.763 -0.476 -0.0351 -0.0108
+##  $ bisec_a_12 : num  1.32 7.28 20.87 54.08
+##  $ bisec_b_12 : num  1.34 7.3 20.9 54.1
+##  $ bisec_fa_12: num  0.5096 0.2561 0.0853 0.0328
+##  $ bisec_fb_12: num  -1.6236 -0.1099 -0.0351 -0.0108
+##  $ bisec_a_13 : num  1.32 7.29 20.89 54.09
+##  $ bisec_b_13 : num  1.33 7.3 20.9 54.1
+##  $ bisec_fa_13: num  0.5096 0.0731 0.0251 0.011
+##  $ bisec_fb_13: num  -0.5562 -0.1099 -0.0351 -0.0108
+##  $ bisec_a_14 : num  1.32 7.29 20.89 54.1
+##  $ bisec_b_14 : num  1.32 7.29 20.89 54.1
+##  $ bisec_fa_14: num  5.10e-01 7.31e-02 2.51e-02 7.33e-05
+##  $ bisec_fb_14: num  -0.02308 -0.01842 -0.00503 -0.01084
+##  $ bisec_a_15 : num  1.32 7.29 20.89 54.1
+##  $ bisec_b_15 : num  1.32 7.29 20.89 54.1
+##  $ bisec_fa_15: num  2.43e-01 2.73e-02 1.00e-02 7.33e-05
+##  $ bisec_fb_15: num  -0.02308 -0.01842 -0.00503 -0.00538
+##  $ bisec_a_16 : num  1.32 7.29 20.89 54.1
+##  $ bisec_b_16 : num  1.32 7.29 20.89 54.1
+##  $ bisec_fa_16: num  1.10e-01 4.46e-03 2.50e-03 7.33e-05
+##  $ bisec_fb_16: num  -0.02308 -0.01842 -0.00503 -0.00266
+##  $ bisec_a_17 : num  1.32 7.29 20.89 54.1
+##  $ bisec_b_17 : num  1.32 7.29 20.89 54.1
+##  $ bisec_fa_17: num  4.35e-02 4.46e-03 2.50e-03 7.33e-05
+##  $ bisec_fb_17: num  -0.02308 -0.00698 -0.00126 -0.00129
+##  $ bisec_a_18 : num  1.32 7.29 20.89 54.1
+##  $ bisec_b_18 : num  1.32 7.29 20.89 54.1
+##  $ bisec_fa_18: num  1.02e-02 4.46e-03 6.18e-04 7.33e-05
+##  $ bisec_fb_18: num  -0.023082 -0.001259 -0.001264 -0.000609</code></pre>
+</div>
+<div id="table-twovery-wide-to-very-long" class="section level5">
+<h5><span class="header-section-number">7.1.1.3.2</span> Table Two–Very Wide to Very Long</h5>
+<p>We want to treat the iteration count information that is the suffix of variable names as a variable by itself. Additionally, we want to treat the a,b,fa,fb as a variable. Structuring the data very long like this allows for easy graphing and other types of analysis. Rather than dealing with many many variables, we have only 3 core variables that store bisection iteration information.</p>
+<p>Here we use the very nice <em>pivot_longer</em> function. Note that to achieve this, we put a common prefix in front of the variables we wanted to convert to long. THis is helpful, because we can easily identify which variables need to be reshaped.</p>
+<div class="sourceCode" id="cb528"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb528-1" title="1"><span class="co"># New variables</span></a>
+<a class="sourceLine" id="cb528-2" title="2">svr_bisect_iter &lt;-<span class="st"> &#39;biseciter&#39;</span></a>
+<a class="sourceLine" id="cb528-3" title="3">svr_abfafb_long_name &lt;-<span class="st"> &#39;varname&#39;</span></a>
+<a class="sourceLine" id="cb528-4" title="4">svr_number_col &lt;-<span class="st"> &#39;value&#39;</span></a>
+<a class="sourceLine" id="cb528-5" title="5">svr_id_bisect_iter &lt;-<span class="st"> </span><span class="kw">paste0</span>(svr_id_var, <span class="st">&#39;_bisect_ier&#39;</span>)</a>
+<a class="sourceLine" id="cb528-6" title="6"></a>
+<a class="sourceLine" id="cb528-7" title="7"><span class="co"># Pivot wide to very long</span></a>
+<a class="sourceLine" id="cb528-8" title="8">tb_states_choices_bisec_long &lt;-<span class="st"> </span>tb_states_choices_bisec <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb528-9" title="9"><span class="st">  </span><span class="kw">pivot_longer</span>(</a>
+<a class="sourceLine" id="cb528-10" title="10">    <span class="dt">cols =</span> <span class="kw">starts_with</span>(st_bisec_prefix),</a>
+<a class="sourceLine" id="cb528-11" title="11">    <span class="dt">names_to =</span> <span class="kw">c</span>(svr_abfafb_long_name, svr_bisect_iter),</a>
+<a class="sourceLine" id="cb528-12" title="12">    <span class="dt">names_pattern =</span> <span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&quot;(.*)_(.*)&quot;</span>),</a>
+<a class="sourceLine" id="cb528-13" title="13">    <span class="dt">values_to =</span> svr_number_col</a>
+<a class="sourceLine" id="cb528-14" title="14">  )</a>
+<a class="sourceLine" id="cb528-15" title="15"></a>
+<a class="sourceLine" id="cb528-16" title="16"><span class="co"># Print</span></a>
+<a class="sourceLine" id="cb528-17" title="17"><span class="kw">summary</span>(tb_states_choices_bisec_long)</a></code></pre></div>
+<pre><code>##     INDI_ID          fl_A       fl_alpha         p               f_p            
+##  Min.   :1.00   Min.   :-2   Min.   :0.1   Min.   : 1.324   Min.   :-1.259e-03  
+##  1st Qu.:1.75   1st Qu.:-1   1st Qu.:0.3   1st Qu.: 5.800   1st Qu.:-7.714e-04  
+##  Median :2.50   Median : 0   Median :0.5   Median :14.092   Median : 4.364e-06  
+##  Mean   :2.50   Mean   : 0   Mean   :0.5   Mean   :20.901   Mean   : 2.244e-03  
+##  3rd Qu.:3.25   3rd Qu.: 1   3rd Qu.:0.7   3rd Qu.:29.192   3rd Qu.: 3.019e-03  
+##  Max.   :4.00   Max.   : 2   Max.   :0.9   Max.   :54.096   Max.   : 1.022e-02  
+##    f_p_t_f_a            varname           biseciter             value           
+##  Min.   :-5.614e-06   Length:304         Length:304         Min.   :-15057.608  
+##  1st Qu.:-1.437e-06   Class :character   Class :character   1st Qu.:     0.000  
+##  Median : 7.495e-07   Mode  :character   Mode  :character   Median :     1.367  
+##  Mean   : 1.102e-04                                         Mean   :   -82.350  
+##  3rd Qu.: 1.124e-04                                         3rd Qu.:    20.892  
+##  Max.   : 4.451e-04                                         Max.   :   100.000</code></pre>
+<div class="sourceCode" id="cb530"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb530-1" title="1"><span class="kw">head</span>(tb_states_choices_bisec_long <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">30</span>)</a></code></pre></div>
+<pre><code>## # A tibble: 30 x 6
+##    INDI_ID  fl_A fl_alpha varname biseciter   value
+##      &lt;int&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;
+##  1       1    -2      0.1 a       0              0 
+##  2       1    -2      0.1 b       0            100 
+##  3       1    -2      0.1 fa      0            100 
+##  4       1    -2      0.1 fb      0         -15058.
+##  5       1    -2      0.1 a       1              0 
+##  6       1    -2      0.1 b       1             50 
+##  7       1    -2      0.1 fa      1            100 
+##  8       1    -2      0.1 fb      1          -6660.
+##  9       1    -2      0.1 a       2              0 
+## 10       1    -2      0.1 b       2             25 
+## # ... with 20 more rows</code></pre>
+<div class="sourceCode" id="cb532"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb532-1" title="1"><span class="kw">tail</span>(tb_states_choices_bisec_long <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">30</span>)</a></code></pre></div>
+<pre><code>## # A tibble: 30 x 6
+##    INDI_ID  fl_A fl_alpha varname biseciter   value
+##      &lt;int&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;
+##  1       4     2      0.9 fa      11         0.0765
+##  2       4     2      0.9 fb      11        -0.0108
+##  3       4     2      0.9 a       12        54.1   
+##  4       4     2      0.9 b       12        54.1   
+##  5       4     2      0.9 fa      12         0.0328
+##  6       4     2      0.9 fb      12        -0.0108
+##  7       4     2      0.9 a       13        54.1   
+##  8       4     2      0.9 b       13        54.1   
+##  9       4     2      0.9 fa      13         0.0110
+## 10       4     2      0.9 fb      13        -0.0108
+## # ... with 20 more rows</code></pre>
+</div>
+<div id="table-twovery-very-long-to-wider-again" class="section level5">
+<h5><span class="header-section-number">7.1.1.3.3</span> Table Two–Very Very Long to Wider Again</h5>
+<p>But the previous results are too long, with the a, b, fa, and fb all in one column as different categories, they are really not different categories, they are in fact different types of variables. So we want to spread those four categories of this variable into four columns, each one representing the a, b, fa, and fb values. The rows would then be uniquly identified by the iteration counter and individual ID.</p>
+<div class="sourceCode" id="cb534"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb534-1" title="1"><span class="co"># Pivot wide to very long to a little wide</span></a>
+<a class="sourceLine" id="cb534-2" title="2">tb_states_choices_bisec_wider &lt;-<span class="st"> </span>tb_states_choices_bisec_long <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb534-3" title="3"><span class="st">  </span><span class="kw">pivot_wider</span>(</a>
+<a class="sourceLine" id="cb534-4" title="4">    <span class="dt">names_from =</span> <span class="op">!!</span><span class="kw">sym</span>(svr_abfafb_long_name),</a>
+<a class="sourceLine" id="cb534-5" title="5">    <span class="dt">values_from =</span> svr_number_col</a>
+<a class="sourceLine" id="cb534-6" title="6">  )</a>
+<a class="sourceLine" id="cb534-7" title="7"></a>
+<a class="sourceLine" id="cb534-8" title="8"><span class="co"># Print</span></a>
+<a class="sourceLine" id="cb534-9" title="9"><span class="kw">summary</span>(tb_states_choices_bisec_wider)</a></code></pre></div>
+<pre><code>##     INDI_ID          fl_A       fl_alpha         p               f_p            
+##  Min.   :1.00   Min.   :-2   Min.   :0.1   Min.   : 1.324   Min.   :-1.259e-03  
+##  1st Qu.:1.75   1st Qu.:-1   1st Qu.:0.3   1st Qu.: 5.800   1st Qu.:-7.714e-04  
+##  Median :2.50   Median : 0   Median :0.5   Median :14.092   Median : 4.364e-06  
+##  Mean   :2.50   Mean   : 0   Mean   :0.5   Mean   :20.901   Mean   : 2.244e-03  
+##  3rd Qu.:3.25   3rd Qu.: 1   3rd Qu.:0.7   3rd Qu.:29.192   3rd Qu.: 3.019e-03  
+##  Max.   :4.00   Max.   : 2   Max.   :0.9   Max.   :54.096   Max.   : 1.022e-02  
+##    f_p_t_f_a           biseciter               a                b                 fa           
+##  Min.   :-5.614e-06   Length:76          Min.   : 0.000   Min.   :  1.324   Min.   :  0.00007  
+##  1st Qu.:-1.437e-06   Class :character   1st Qu.: 1.306   1st Qu.:  7.294   1st Qu.:  0.06570  
+##  Median : 7.495e-07   Mode  :character   Median : 7.289   Median : 20.898   Median :  0.92799  
+##  Mean   : 1.102e-04                      Mean   :18.356   Mean   : 28.883   Mean   : 22.90627  
+##  3rd Qu.: 1.124e-04                      3rd Qu.:20.891   3rd Qu.: 54.097   3rd Qu.: 15.51699  
+##  Max.   : 4.451e-04                      Max.   :54.095   Max.   :100.000   Max.   :100.00000  
+##        fb            
+##  Min.   :-15057.608  
+##  1st Qu.:   -21.089  
+##  Median :    -1.029  
+##  Mean   :  -399.547  
+##  3rd Qu.:    -0.018  
+##  Max.   :    -0.001</code></pre>
+<div class="sourceCode" id="cb536"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb536-1" title="1"><span class="kw">head</span>(tb_states_choices_bisec_wider <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">30</span>)</a></code></pre></div>
+<pre><code>## # A tibble: 30 x 8
+##    INDI_ID  fl_A fl_alpha biseciter     a      b    fa        fb
+##      &lt;int&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+##  1       1    -2      0.1 0         0     100    100   -15058.  
+##  2       1    -2      0.1 1         0      50    100    -6660.  
+##  3       1    -2      0.1 2         0      25    100    -2918.  
+##  4       1    -2      0.1 3         0      12.5  100    -1248.  
+##  5       1    -2      0.1 4         0       6.25 100     -503.  
+##  6       1    -2      0.1 5         0       3.12 100     -170.  
+##  7       1    -2      0.1 6         0       1.56 100      -21.1 
+##  8       1    -2      0.1 7         0.781   1.56  45.7    -21.1 
+##  9       1    -2      0.1 8         1.17    1.56  13.2    -21.1 
+## 10       1    -2      0.1 9         1.17    1.37  13.2     -3.76
+## # ... with 20 more rows</code></pre>
+<div class="sourceCode" id="cb538"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb538-1" title="1"><span class="kw">tail</span>(tb_states_choices_bisec_wider <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">30</span>)</a></code></pre></div>
+<pre><code>## # A tibble: 30 x 8
+##    INDI_ID  fl_A fl_alpha biseciter     a     b      fa       fb
+##      &lt;int&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
+##  1       3 0.667    0.633 8          20.7  21.1 0.928   -0.999  
+##  2       3 0.667    0.633 9          20.7  20.9 0.928   -0.0351 
+##  3       3 0.667    0.633 10         20.8  20.9 0.446   -0.0351 
+##  4       3 0.667    0.633 11         20.8  20.9 0.206   -0.0351 
+##  5       3 0.667    0.633 12         20.9  20.9 0.0853  -0.0351 
+##  6       3 0.667    0.633 13         20.9  20.9 0.0251  -0.0351 
+##  7       3 0.667    0.633 14         20.9  20.9 0.0251  -0.00503
+##  8       3 0.667    0.633 15         20.9  20.9 0.0100  -0.00503
+##  9       3 0.667    0.633 16         20.9  20.9 0.00250 -0.00503
+## 10       3 0.667    0.633 17         20.9  20.9 0.00250 -0.00126
+## # ... with 20 more rows</code></pre>
+</div>
+</div>
+<div id="graph-bisection-iteration-results" class="section level4">
+<h4><span class="header-section-number">7.1.1.4</span> Graph Bisection Iteration Results</h4>
+<p>Actually we want to graph based on the long results, not the wider. Wider easier to view in table.</p>
+<div class="sourceCode" id="cb540"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb540-1" title="1"><span class="co"># Graph results</span></a>
+<a class="sourceLine" id="cb540-2" title="2">lineplot &lt;-<span class="st"> </span>tb_states_choices_bisec_long <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb540-3" title="3"><span class="st">    </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_bisect_iter) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">as.numeric</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_bisect_iter))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb540-4" title="4"><span class="st">    </span><span class="kw">filter</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_abfafb_long_name) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb540-5" title="5"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="op">!!</span><span class="kw">sym</span>(svr_bisect_iter), <span class="dt">y=</span><span class="op">!!</span><span class="kw">sym</span>(svr_number_col),</a>
+<a class="sourceLine" id="cb540-6" title="6">               <span class="dt">colour=</span><span class="op">!!</span><span class="kw">sym</span>(svr_abfafb_long_name),</a>
+<a class="sourceLine" id="cb540-7" title="7">               <span class="dt">linetype=</span><span class="op">!!</span><span class="kw">sym</span>(svr_abfafb_long_name),</a>
+<a class="sourceLine" id="cb540-8" title="8">               <span class="dt">shape=</span><span class="op">!!</span><span class="kw">sym</span>(svr_abfafb_long_name))) <span class="op">+</span></a>
+<a class="sourceLine" id="cb540-9" title="9"><span class="st">        </span><span class="kw">facet_wrap</span>( <span class="op">~</span><span class="st"> </span>INDI_ID) <span class="op">+</span></a>
+<a class="sourceLine" id="cb540-10" title="10"><span class="st">        </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb540-11" title="11"><span class="st">        </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb540-12" title="12"><span class="st">        </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&#39;Bisection Iteration over individuals Until Convergence&#39;</span>,</a>
+<a class="sourceLine" id="cb540-13" title="13">             <span class="dt">x =</span> <span class="st">&#39;Bisection Iteration&#39;</span>,</a>
+<a class="sourceLine" id="cb540-14" title="14">             <span class="dt">y =</span> <span class="st">&#39;a (left side point) and b (right side point) values&#39;</span>,</a>
+<a class="sourceLine" id="cb540-15" title="15">             <span class="dt">caption =</span> <span class="st">&#39;DPLYR concurrent bisection nonlinear multple individuals&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb540-16" title="16"><span class="st">      </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb540-17" title="17"><span class="kw">print</span>(lineplot)</a></code></pre></div>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/reshape%20solution%20for%20graphing-1.png" width="672" /></p>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="nonlinear-regression.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Panel Data and Optimization with R.pdf", "Panel Data and Optimization with R.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

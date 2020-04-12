@@ -11,6 +11,7 @@
 
 <meta name="author" content="Fan Wang" />
 
+<meta name="date" content="2020-04-01" />
 
 <title>fs_packaging.utf8</title>
 
@@ -365,6 +366,7 @@ summary {
 <h1 class="title toc-ignore"><div class="line-block">Generate R Package Example<br />
 roxygen2 and pkgdown</div></h1>
 <h4 class="author">Fan Wang</h4>
+<h4 class="date">2020-04-01</h4>
 
 </div>
 
@@ -519,20 +521,27 @@ devtools::create(&quot;C:/Users/fan/Tex4Econ/nontex/rprjtemplate&quot;)</code></
 <pre class="r"><code># Step 3
 rm(list = ls(all.names = TRUE))
 setwd(&#39;C:/Users/fan/PrjOptiAlloc&#39;)
-#setwd(&#39;C:/Users/fan/REconTools&#39;)
+# setwd(&#39;C:/Users/fan/REconTools&#39;)
 devtools::document()
 # Step 4
 devtools::run_examples()
-devtools::build_vignettes()
+# devtools::build_vignettes()
 # Step 6
 devtools::check()
 # Step 7
-#devtools::install()
+devtools::install()
 #library(PrjOptiAlloc)
 #ls(&quot;package:PrjOptiAlloc&quot;)
 devtools::reload()
 # Step 8
 pkgdown::build_site()</code></pre>
+<p>During development, after new R functions have been written, testing latested functions in vignette.</p>
+<pre class="r"><code>devtools::load_all()
+library(PrjOptiAlloc)</code></pre>
+<p>bookdown</p>
+<pre class="r"><code>setwd(&#39;C:/Users/fan/R4Econ&#39;)
+bookdown::render_book(&#39;index.Rmd&#39;, &#39;bookdown::gitbook&#39;)
+bookdown::render_book(&#39;index.Rmd&#39;, &#39;bookdown::pdf_book&#39;)</code></pre>
 </div>
 <div id="attach-vs-import" class="section level2">
 <h2><span class="header-section-number">4.2</span> Attach vs Import</h2>

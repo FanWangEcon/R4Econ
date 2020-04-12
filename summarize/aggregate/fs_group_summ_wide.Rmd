@@ -1,0 +1,183 @@
+---
+title: "R Multiple within Individual Groups Variables, Averages for All Numeric Variables within All Groups of All Group Variables (Long to very Wide)"
+date: 2020-04-01
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+always_allow_html: true
+---
+
+### Nested within Group Stats
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+
+By Multiple within Individual Groups Variables, Averages for All Numeric Variables within All Groups of All Group Variables (Long to very Wide). Suppose you have an individual level final outcome. The individual is observed for N periods, where each period the inputs differ. What inputs impacted the final outcome?
+
+Suppose we can divide N periods in which the individual is in the data into a number of years, a number of semi-years, a number of quarters, or uneven-staggered lengths. We might want to generate averages across individuals and within each of these different possible groups averages of inputs.
+
+Then we want to version of the data where each row is an individual, one of the variables is the final outcome, and the other variables are these different averages: averages for the 1st, 2nd, 3rd year in which indivdiual is in data, averages for 1st, ..., final quarter in which indivdiual is in data.
+
+#### Build Function
+
+This function takes as inputs:
+
+1. **vars.not.groups2avg**: a list of variables that are not the within-indivdiual or across-individual grouping variables, but the variables we want to average over. Withnin indivdiual grouping averages will be calculated for these variables using the not-listed variables as within indivdiual groups (excluding vars.indi.grp groups).
+2. **vars.indi.grp**: a list or individual variables, and also perhaps villages, province, etc id variables that are higher than individual ID. Note the groups are are ACROSS individual higher level group variables.
+3. the remaining variables are all within individual grouping variables.
+
+the function output is a dataframe:
+
+1. each row is an individual
+2. initial variables individual ID and across individual groups from *vars.indi.grp*.
+3. other variables are all averages for the variables in *vars.not.groups2avg*
+    + if there are 2 within individual group variables, and the first has 3 groups (years), the second has 6 groups (semi-years), then there would be 9 average variables.
+    + each average variables has the original variable name from vars.not.groups2avg plus the name of the within individual grouping variable, and at the end 'c_x', where x is a integer representing the category within the group (if 3 years, x=1, 2, 3)
+
+```{r}
+# Data Function
+# https://fanwangecon.github.io/R4Econ/summarize/summ/ByGroupsSummWide.html
+f.by.groups.summ.wide <- function(df.groups.to.average,
+                                  vars.not.groups2avg,
+                                  vars.indi.grp = c('S.country','ID'),
+                                  display=TRUE) {
+
+# 1. generate categoricals for full year (m.12), half year (m.6), quarter year (m.4)
+# 2. generate categoricals also for uneven years (m12t14) using stagger (+2 rather than -1)
+# 3. reshape wide to long, so that all categorical date groups appear in var=value,
+    # and categories in var=variable
+# 4. calculate mean for all numeric variables for all date groups
+# 5. combine date categorical variable and value, single var:
+    # m.12.c1= first year average from m.12 averaging
+
+######## ######## ######## ######## #######
+# Step 1
+######## ######## ######## ######## #######
+# 1. generate categoricals for full year (m.12), half year (m.6), quarter year (m.4)
+# 2. generate categoricals also for uneven years (m12t14) using stagger (+2 rather than -1)
+
+######## ######## ######## ######## #######
+# S2: reshape wide to long, so that all categorical date groups appear in var=value,
+    # and categories in var=variable; calculate mean for all numeric variables for all date groups
+######## ######## ######## ######## #######
+df.avg.long <- df.groups.to.average %>%
+       gather(variable, value, -one_of(c(vars.indi.grp,
+                                         vars.not.groups2avg))) %>%
+       group_by(!!!syms(vars.indi.grp), variable, value) %>%
+       summarise_if(is.numeric, funs(mean(., na.rm = TRUE)))
+
+if (display){
+  dim(df.avg.long)
+  options(repr.matrix.max.rows=10, repr.matrix.max.cols=20)
+  print(df.avg.long)
+}
+
+######## ######## ######## ######## #######
+# S3 combine date categorical variable and value, single var:
+#    m.12.c1= first year average from m.12 averaging; to do this make data even longer first
+######## ######## ######## ######## #######
+
+# We already have the averages, but we want them to show up as variables,
+    # mean for each group of each variable.
+df.avg.allvars.wide <- df.avg.long %>%
+   ungroup() %>%
+   mutate(all_m_cate = paste0(variable, '_c', value)) %>%
+   select(all_m_cate, everything(), -variable, -value) %>%
+   gather(variable, value, -one_of(vars.indi.grp), -all_m_cate) %>%
+   unite('var_mcate', variable, all_m_cate) %>%
+   spread(var_mcate, value)
+
+if (display){
+  dim(df.avg.allvars.wide)
+  options(repr.matrix.max.rows=10, repr.matrix.max.cols=10)
+  print(df.avg.allvars.wide)
+}
+
+return(df.avg.allvars.wide)
+}
+```
+
+#### Test Program
+
+In our sample dataset, the number of nutrition/height/income etc information observed within each country and month of age group are different. We have a panel dataset for children observed over different months of age.
+
+We have two key grouping variables:
+1. country: data are observed for guatemala and cebu
+2. month-age (survey month round=svymthRound): different months of age at which each individual child is observed
+
+A child could be observed for many months, or just a few months. A child's height information could be observed for more months-of-age than nutritional intake information. We eventually want to run regressions where the outcome is height/weight and the input is nutrition. The regressions will be at the month-of-age level. We need to know how many times different variables are observed at the month-of-age level.
+
+```{r}
+# Library
+library(tidyverse)
+
+# Load Sample Data
+setwd('C:/Users/fan/R4Econ/_data/')
+df <- read_csv('height_weight.csv')
+```
+
+##### Generate Within Individual Groups
+
+In the data, children are observed for different number of months since birth. We want to calculate quarterly, semi-year, annual, etc average nutritional intakes. First generate these within-individual grouping variables. We can also generate uneven-staggered calendar groups as shown below.
+
+```{r}
+mth.var <- 'svymthRound'
+df.groups.to.average<- df %>%
+        filter(!!sym(mth.var) >= 0 & !!sym(mth.var) <= 24)  %>%
+        mutate(m12t24=(floor((!!sym(mth.var) - 12) %/% 14) + 1),
+               m8t24=(floor((!!sym(mth.var) - 8) %/% 18) + 1),
+               m12 = pmax((floor((!!sym(mth.var)-1) %/% 12) + 1), 1),
+               m6 = pmax((floor((!!sym(mth.var)-1) %/% 6) + 1), 1),
+               m3 = pmax((floor((!!sym(mth.var)-1) %/% 3) + 1), 1))
+```
+
+```{r}
+# Show Results
+options(repr.matrix.max.rows=30, repr.matrix.max.cols=20)
+vars.arrange <- c('S.country','indi.id','svymthRound')
+vars.groups.within.indi <- c('m12t24', 'm8t24', 'm12', 'm6', 'm3')
+as.tibble(df.groups.to.average %>%
+          group_by(!!!syms(vars.arrange)) %>%
+          arrange(!!!syms(vars.arrange)) %>%
+          select(!!!syms(vars.arrange), !!!syms(vars.groups.within.indi)))
+```
+
+##### Within Group Averages
+
+With the within-group averages created, we can generate averages for all variables within these groups.
+
+```{r}
+vars.not.groups2avg <- c('prot', 'cal')
+vars.indi.grp <- c('S.country', 'indi.id')
+vars.groups.within.indi <- c('m12t24', 'm8t24', 'm12', 'm6', 'm3')
+
+df.groups.to.average.select <- df.groups.to.average %>%
+                        select(one_of(c(vars.indi.grp,
+                                        vars.not.groups2avg,
+                                        vars.groups.within.indi)))
+df.avg.allvars.wide <- f.by.groups.summ.wide(df.groups.to.average.select,
+                                             vars.not.groups2avg,
+                                             vars.indi.grp, display=TRUE)
+```
+
+This is the tabular version of results
+
+```{r}
+dim(df.avg.allvars.wide)
+names(df.avg.allvars.wide)
+```
+
+```{r}
+options(repr.matrix.max.rows=30, repr.matrix.max.cols=12)
+df.avg.allvars.wide
+```

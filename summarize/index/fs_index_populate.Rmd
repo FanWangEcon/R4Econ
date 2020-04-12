@@ -1,39 +1,27 @@
 ---
 title: "R Example DPLYR Generate Sorted Index, Ordinal Deviation Negative and Positive Index, and Expand Value from Lowest Index to All Rows"
-author: Fan Wang
+date: 2020-04-01
 output:
-  pdf_document: default
-  word_document: default
-  html_document: default
-  html_notebook: default
-urlcolor: blue
-always_allow_html: yes
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+always_allow_html: true
 ---
 
-Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository, or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
+### Sorting
 
-```{r GlobalOptions, echo = T, results = 'hide', message=F, warning=F}
-rm(list = ls(all.names = TRUE))
-options(knitr.duplicate.label = 'allow')
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
 ```
 
-```{r loadlib, echo = T, results = 'hide', message=F, warning=F}
-library(tidyverse)
-library(knitr)
-library(kableExtra)
-library(REconTools)
-# file name
-st_file_name = 'fs_index_populate'
-# Generate R File
-try(purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2))
-# Generate PDF and HTML
-# rmarkdown::render("C:/Users/fan/R4Econ/summarize/index/fs_index_populate.Rmd", "pdf_document")
-# rmarkdown::render("C:/Users/fan/R4Econ/summarize/index/fs_index_populate.Rmd", "html_document")
-```
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
 
-## Generate Sorted Index within Group and Spread
-
-### Generate Sorted Index within Group with Repeating Values
+#### Generate Sorted Index within Group with Repeating Values
 
 There is a variable, sort by this variable, then generate index from 1 to N representing sorted values of this index. If there are repeating values, still assign index, different index each value.
 
@@ -49,10 +37,10 @@ df_iris <- iris %>% arrange(Sepal.Length) %>%
 # Show results Head 10
 df_iris %>% head(10) %>%
   kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+  kable_styling_fc_wide()
 ```
 
-### Populate Value from Lowest Index to All other Rows
+#### Populate Value from Lowest Index to All other Rows
 
 We would like to calculate for example the ratio of each individual's highest to the the person with the lowest height in a dataset. We first need to generated sorted index from lowest to highest, and then populate the lowest height to all rows, and then divide.
 
@@ -71,7 +59,7 @@ We would like to calculate for example the ratio of each individual's highest to
 - see: dplyr [rank](https://dplyr.tidyverse.org/reference/ranking.html)
 - see: dplyr [case_when](https://dplyr.tidyverse.org/reference/case_when.html)
 
-#### Short Method: mutate and min
+##### Short Method: mutate and min
 
 We just want the lowest value to be in its own column, so that we can compute various statistics using the lowest value variable and the original variable.
 
@@ -84,10 +72,10 @@ df_iris_m1 <- iris %>% mutate(Sepal.Len.Lowest.all = min(Sepal.Length)) %>%
 # Show results Head 10
 df_iris_m1 %>% head(10) %>%
   kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+  kable_styling_fc_wide()
 ```
 
-#### Long Method: row_number and case_when
+##### Long Method: row_number and case_when
 
 This is the long method, using row_number, and case_when. The benefit of this method is that it generates several intermediate variables that might be useful. And the key final step is to set a new variable (A=*Sepal.Len.Lowest.all*) equal to another variable's (B=*Sepal.Length*'s) value at the index that satisfies condition based a third variable (C=*Sepal.Len.Index*).
 
@@ -110,11 +98,12 @@ df_iris_m2 <- iris %>% arrange(Sepal.Length) %>%
 # Show results Head 10
 df_iris_m2 %>% head(10) %>%
   kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+  kable_styling_fc_wide()
 ```
-## Generate Sorted Index based on Deviations
 
-### Generate Positive and Negative Index based on Ordered Deviation from some Number
+#### Generate Sorted Index based on Deviations
+
+Generate Positive and Negative Index based on Ordered Deviation from some Number.
 
 There is a variable that is continuous, substract a number from this variable, and generate index based on deviations. Think of the index as generating intervals indicating where the value lies. 0th index indicates the largest value in sequence that is smaller than or equal to number $x$, 1st index indicates the smallest value in sequence that is larger than number $x$.
 
@@ -152,5 +141,5 @@ df_iris_deviate <- iris %>% arrange(Sepal.Length) %>%
 # Show results Head 10
 df_iris_deviate %>% head(20) %>%
   kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+  kable_styling_fc_wide()
 ```

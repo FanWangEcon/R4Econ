@@ -58,24 +58,25 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 ## 2.1 List and Array Manipulation
 
-1. [Multi-dimensional Named Lists](https://fanwangecon.github.io/R4Econ/support/list/fs_listr.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/list/fs_listr.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/list/fs_listr.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/list/fs_listr.html)
+1. [Multi-dimensional Named Lists](https://fanwangecon.github.io/R4Econ/amto/list/fs_listr.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/list/fs_listr.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/list/fs_listr.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/list/fs_listr.html)
     - Initiate Empty List
     - Named one and two dimensional lists
     - **r**: *vector(mode = "list", length = it_N); names(list) <- paste0('e',seq()); dimnames(ls2d)[[1]] <- paste0('r',seq()); dimnames(ls2d)[[2]] <- paste0('c',seq())*
-2. [Array Combinations as Matrix](https://fanwangecon.github.io/R4Econ/support/array/fs_meshr.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/array/fs_meshr.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/array/fs_meshr.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/array/fs_meshr.html)
+2. [Array Combinations as Matrix](https://fanwangecon.github.io/R4Econ/amto/array/fs_meshr.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/fs_meshr.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/fs_meshr.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/array/fs_meshr.html)
     - combinations of two arrays to matrix form (meshgrid)
     - **tidy**: *expand_grid, expand.grid, dim*
 
 ## 2.2 Matrix Manipulations
 
-1. [Matrix Basics](https://fanwangecon.github.io/R4Econ/support/matrix/fs_genmatrix.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/matrix/fs_genmatrix.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/matrix/fs_genmatrix.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/matrix/fs_genmatrix.html)
+1. [Matrix Basics](https://fanwangecon.github.io/R4Econ/amto/matrix/fs_genmatrix.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/fs_genmatrix.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/fs_genmatrix.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/matrix/fs_genmatrix.html)
     - generate and combine fixed and random matrixes
     - **r**: *rbind, matrix*
 
 ## 2.3 Tibble Manipulations
 
-1. [Tibble Basics](https://fanwangecon.github.io/R4Econ/support/tibble/fs_tib_basics.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/tibble/fs_tib_basics.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/tibble/fs_tib_basics.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/tibble/fs_tib_basics.html)
-    - generate tibbles, rename tibble variables, tibble row and column names, index
+1. [Tibble Basics](https://fanwangecon.github.io/R4Econ/amto/tibble/fs_tib_basics.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/fs_tib_basics.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/fs_tib_basics.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/tibble/fs_tib_basics.html)
+    - generate tibbles, rename tibble variables, tibble row and column names
+    - rename numeric sequential columns with string prefix and suffix
     - tibble statistics
     - **tidy**: *as_tibble(mt_combine) %>% rename_all(~c(ar_st_varnames)); rename_at(vars(starts_with("xx")), funs(str_replace(., "yy", "yyyy")); rename_at(vars(num_range('',ar_it)), funs(paste0(st,.))); rowid_to_column(); colnames, rownames*
 2. [Input Data Text](https://fanwangecon.github.io/R4Econ/summarize/dist/fst_hist_onevar.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/dist/fst_hist_onevar.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/summarize/dist/fst_hist_onevar.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/summarize/dist/fst_hist_onevar.html)
@@ -86,15 +87,15 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 ## 2.4 Function over Arrays, Matrix and Tibble
 
-1. [Evaluate Function each Row of Matrix](https://fanwangecon.github.io/R4Econ/support/function/fs_applysapplymutate.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_applysapplymutate.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_applysapplymutate.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/function/fs_applysapplymutate.html)
+1. [Evaluate Function each Row of Matrix](https://fanwangecon.github.io/R4Econ/function/noloop/fs_applysapplymutate.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop/fs_applysapplymutate.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop/fs_applysapplymutate.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/function/noloop/fs_applysapplymutate.html)
     - evaluate function f(x_i,y_i,c), where c is a constant and x and y vary over each row of a matrix, with index i indicating rows
     - get same results using apply, sapply, and dplyr mutate
     - **tidy**: *tb %>% rowwise() %>% do(out = cur_func(., fl)) %>% unnest(out); tb %>% pmap(func) %>% unlist(); apply(mt, 1, func); sapply(ls_ar, func, ar1, ar2); rowwise() %>% mutate(out = func(inputs))*
-2. [Evaluate Nonlinear Function each Row of Matrix](https://fanwangecon.github.io/R4Econ/support/function/fs_funceval.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_funceval.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_funceval.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/function/fs_funceval.html)
+2. [Evaluate Nonlinear Function each Row of Matrix](https://fanwangecon.github.io/R4Econ/function/mutatef/fs_funceval.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/function/mutatef/fs_funceval.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/function/mutatef/fs_funceval.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/function/mutatef/fs_funceval.html)
     - evaluate nonlinear function f(x_i, y_i, ar_x, ar_y, c, d), where c and d are constants, and ar_x and ar_y are arrays, both fixed. x_i and y_i vary over each row of matrix.
     - get same results using apply, sapply, and dplyr mutate
     - **tidy**: *rowwise() %>% mutate(out = funct(inputs))*
-3. [Evaluate Function Do Anything Group Stack Results](https://fanwangecon.github.io/R4Econ/support/function/fs_funceval_group.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_funceval_group.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/support/function/fs_funceval_group.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/support/function/fs_funceval_group.html)
+3. [Evaluate Function Do Anything Group Stack Results](https://fanwangecon.github.io/R4Econ/function/dof/fs_funceval_group.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/fs_funceval_group.Rmd) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/fs_funceval_group.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/function/dof/fs_funceval_group.html)
     - Group dataframe by categories, compute category specific output scalar or arrays based on within category variable information
     - **tidy**: *df %>% group_by(ID) %>% do(inc = rnorm(.$N, mean=.$mn, sd=.$sd)) %>% unnest(c(inc)) %>% left_join(df, by="ID")*
 

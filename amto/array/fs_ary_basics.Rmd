@@ -1,0 +1,55 @@
+---
+title: "Meshgrid Arrays in R"
+date: 2020-04-01
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+always_allow_html: true
+---
+
+### Array Basics
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+#### Multidimesional Arrays
+
+##### Generate 2 Dimensional Array
+
+```{r amto.array.fs_array_basics.multi.2d}
+# Multidimensional Array
+# 1 is r1c1t1, 1.5 in r2c1t1, 0 in r1c2t1, etc.
+# Three dimensions, row first, column second, and tensor third
+x <- array(c(1, 1.5, 0, 2, 0, 4, 0, 3), dim=c(2, 2, 2))
+dim(x)
+print(x)
+```
+
+#### Array Slicing
+
+##### Remove Elements of Array
+
+```{r amto.array.fs_array_basics.slice.lastelement}
+# Remove last element of array
+vars.group.bydf <- c('23','dfa', 'wer')
+vars.group.bydf[-length(vars.group.bydf)]
+```
+
+#### NA in Array
+
+##### Check if NA is in Array
+
+```{r amto.array.fs_array_basics.NA.check}
+# Convert Inf and -Inf to NA
+x <- c(1, -1, Inf, 10, -Inf)
+na_if(na_if(x, -Inf), Inf)
+```

@@ -1,37 +1,26 @@
 ---
 title: "R Example DPLYR Counting"
 author: Fan Wang
+date: 2020-04-01
 output:
-  pdf_document: default
-  word_document: default
-  html_document: default
-  html_notebook: default
-urlcolor: blue
-always_allow_html: yes
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+always_allow_html: true
 ---
 
-Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository, or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
+### Uncount
 
-```{r GlobalOptions, echo = T, results = 'hide', message=F, warning=F}
-rm(list = ls(all.names = TRUE))
-options(knitr.duplicate.label = 'allow')
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
 ```
 
-```{r loadlib, echo = T, results = 'hide', message=F, warning=F}
-library(tidyverse)
-library(knitr)
-library(kableExtra)
-library(REconTools)
-# file name
-st_file_name = 'fs_count_basics'
-# Generate R File
-try(purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2))
-# Generate PDF and HTML
-# rmarkdown::render("C:/Users/fan/R4Econ/summarize/count/fs_count_basics.Rmd", "pdf_document")
-# rmarkdown::render("C:/Users/fan/R4Econ/summarize/count/fs_count_basics.Rmd", "html_document")
-```
-
-## Uncount
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
 
 In some panel, there are $N$ individuals, each observed for $Y_i$ years. Given a dataset with two variables, the individual index, and the $Y_i$ variable, expand the dataframe so that there is a row for each individual index's each unique year in the survey.
 
@@ -75,5 +64,5 @@ tb_indi_panel <- tb_indi_panel %>%
 # Show results Head 10
 tb_indi_panel %>% head(10) %>%
   kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+  kable_styling_fc_wide()
 ```

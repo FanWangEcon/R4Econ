@@ -1762,9 +1762,9 @@ summary {
 <div id="issue-and-goal" class="section level2">
 <h2>Issue and Goal</h2>
 <p>We want evaluate nonlinear function f(Q_i, y_i, ar_x, ar_y, c_j, d), where c_j is an element of some array, d is a constant, and ar_x and ar_y are arrays, both fixed. x_i and y_i vary over each row of matrix. We would like to evaluate this nonlinear function concurrently across <span class="math inline">\(N\)</span> individuals. The eventual goal is to find the <span class="math inline">\(i\)</span> specific <span class="math inline">\(Q\)</span> that solves the nonlinear equations.</p>
-<p>In <a href="https://fanwangecon.github.io/R4Econ/support/function/fs_funceval.html">Evaluate Nonlinear Function with N arrays of Inputs</a>, we evaluated the function fixing <span class="math inline">\(c\)</span>, the difference here is that we want to evaluate <span class="math inline">\(J\)</span> times the overall matrix of inputs.</p>
+<p>In <a href="https://fanwangecon.github.io/R4Econ/function/mutatef/fs_funceval.html">Evaluate Nonlinear Function with N arrays of Inputs</a>, we evaluated the function fixing <span class="math inline">\(c\)</span>, the difference here is that we want to evaluate <span class="math inline">\(J\)</span> times the overall matrix of inputs.</p>
 <p>The results should be stored in a tibble where each of the <span class="math inline">\(j \in J\)</span> evaluations are stacked together with a variable <span class="math inline">\(c\)</span> that records which <span class="math inline">\(c_j\)</span> value was used for this evaluation.</p>
-<p>This is achieved here by using <a href="https://fanwangecon.github.io/R4Econ/support/array/fs_meshr.html">expand_grid</a>.</p>
+<p>This is achieved here by using <a href="https://fanwangecon.github.io/R4Econ/amto/array/fs_meshr.html">expand_grid</a>.</p>
 </div>
 <div id="set-up" class="section level2">
 <h2>Set Up</h2>
@@ -1787,8 +1787,8 @@ st_file_name = &#39;fs_funceval&#39;
 # Generate R File
 purl(paste0(st_file_name, &quot;.Rmd&quot;), output=paste0(st_file_name, &quot;.R&quot;), documentation = 2)
 # Generate PDF and HTML
-# rmarkdown::render(&quot;C:/Users/fan/R4Econ/support/function/fs_funceval.Rmd&quot;, &quot;pdf_document&quot;)
-# rmarkdown::render(&quot;C:/Users/fan/R4Econ/support/function/fs_funceval.Rmd&quot;, &quot;html_document&quot;)</code></pre>
+# rmarkdown::render(&quot;C:/Users/fan/R4Econ/function/mutatef/fs_funceval.Rmd&quot;, &quot;pdf_document&quot;)
+# rmarkdown::render(&quot;C:/Users/fan/R4Econ/function/mutatef/fs_funceval.Rmd&quot;, &quot;html_document&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1986,7 +1986,7 @@ ffi_nonlin_dplyrdo &lt;- function(fl_A, fl_alpha, fl_N, fl_rho, ar_A, ar_alpha, 
 </div>
 <div id="evaluate-nonlinear-function-using-dplyr-mutate-once" class="section level2">
 <h2>Evaluate Nonlinear Function using dplyr mutate Once</h2>
-<p>Below, repeat what we did in <a href="https://fanwangecon.github.io/R4Econ/support/function/fs_funceval.html">Evaluate Nonlinear Function with N arrays of Inputs</a>.</p>
+<p>Below, repeat what we did in <a href="https://fanwangecon.github.io/R4Econ/function/mutatef/fs_funceval.html">Evaluate Nonlinear Function with N arrays of Inputs</a>.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBDb252ZXJ0IE1hdHJpeCB0byBUaWJibGVcbmFyX3N0X2NvbF9uYW1lcyA9IGMoJ2ZsX0EnLCAnZmxfYWxwaGEnLCAnZmxfTicpXG50Yl9uTl9ieV9uUV9BX2FscGhhIDwtIGFzX3RpYmJsZShtdF9uTl9ieV9uUV9BX2FscGhhKSAlPiUgcmVuYW1lX2FsbCh+Yyhhcl9zdF9jb2xfbmFtZXMpKVxuXG4jIGZsX0EsIGZsX2FscGhhIGFyZSBmcm9tIGNvbHVtbnMgb2YgdGJfbk5fYnlfblFfQV9hbHBoYVxuZmxfcmhvX2hlcmUgPSBhcl9yaG9bMV1cbnRiX25OX2J5X25RX0FfYWxwaGEgPSB0Yl9uTl9ieV9uUV9BX2FscGhhICU+JSByb3d3aXNlKCkgJT4lXG4gICAgICAgICAgICAgICAgICAgICAgICBtdXRhdGUoZHBseXJfZXZhbCA9IGZmaV9ub25saW5fZHBseXJkbyhmbF9BLCBmbF9hbHBoYSwgZmxfTiwgZmxfcmhvX2hlcmUsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBhcl9uTl9BLCBhcl9uTl9hbHBoYSxcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGZsX05fYWdnKSlcbiMgU2hvd1xua2FibGUodGJfbk5fYnlfblFfQV9hbHBoYSkgJT4lXG4gIGthYmxlX3N0eWxpbmcoYm9vdHN0cmFwX29wdGlvbnMgPSBjKFwic3RyaXBlZFwiLCBcImhvdmVyXCIsIFwiY29uZGVuc2VkXCIsIFwicmVzcG9uc2l2ZVwiKSlcbmBgYCJ9 -->

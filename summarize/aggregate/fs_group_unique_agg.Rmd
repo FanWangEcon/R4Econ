@@ -1,39 +1,29 @@
 ---
 title: "R DPLYR Unique Groups and Count"
 author: Fan Wang
+date: 2020-04-01
 output:
-  pdf_document: default
-  word_document: default
-  html_document: default
-  html_notebook: default
-urlcolor: blue
-always_allow_html: yes
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+always_allow_html: true
 ---
 
-## Aggregate Table with Groups
+### Groups Statistics
 
-Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository, or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
-
-```{r GlobalOptions, echo = T, results = 'hide', message=F, warning=F}
-rm(list = ls(all.names = TRUE))
-options(knitr.duplicate.label = 'allow')
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
 ```
 
-```{r loadlib, echo = T, results = 'hide', message=F, warning=F}
-library(tidyverse)
-library(knitr)
-library(kableExtra)
-library(REconTools)
-# file name
-st_file_name = 'fs_group_unique_agg'
-# Generate R File
-try(purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2))
-# Generate PDF and HTML
-# rmarkdown::render("C:/Users/fan/R4Econ/summarize/aggregate/fs_group_unique_agg.Rmd", "pdf_document")
-# rmarkdown::render("C:/Users/fan/R4Econ/summarize/aggregate/fs_group_unique_agg.Rmd", "html_document")
-```
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
 
-### Aggrgate Groups only Unique Group and Count
+
+#### Aggrgate Groups only Unique Group and Count
 
 There are two variables that are numeric, we want to find all the unique groups of these two variables in a dataset and count how many times each unique group occurs
 
@@ -58,10 +48,10 @@ df.group.count <- df_use %>% group_by(!!!syms(vars.group)) %>%
 # Show results Head 10
 df.group.count %>%
   kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+  kable_styling_fc_wide()
 ```
 
-### Aggrgate Groups only Unique Group Show up With Means
+#### Aggrgate Groups only Unique Group Show up With Means
 
 Several variables that are grouping identifiers. Several variables that are values which mean be unique for each group members. For example, a Panel of income for N households over T years with also household education information that is invariant over time. Want to generate a dataset where the unit of observation are households, rather than household years. Take average of all numeric variables that are household and year specific.
 
@@ -92,9 +82,9 @@ df.group <- df_use %>% group_by(!!!syms(vars.group)) %>%
 # Show results Head 10
 df.group %>% head(10) %>%
   kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+  kable_styling_fc_wide()
 # Show results Head 10
 df.group %>% tail(10) %>%
   kable() %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+  kable_styling_fc_wide()
 ```

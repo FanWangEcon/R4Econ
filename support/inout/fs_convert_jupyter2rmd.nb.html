@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -1699,6 +1698,7 @@ summary {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -1752,13 +1752,23 @@ summary {
 <p>Back to <a href="https://fanwangecon.github.io">Fan</a>’s <a href="https://fanwangecon.github.io/R4Econ/">Reusable R Code</a> table of content.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub3B0aW9ucyhrbml0ci5kdXBsaWNhdGUubGFiZWwgPSAnYWxsb3cnKVxuYGBgIn0= -->
-<pre class="r"><code>options(knitr.duplicate.label = &#39;allow&#39;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KHRpZHlyKVxubGlicmFyeShybWFya2Rvd24pXG5saWJyYXJ5KGtuaXRyKVxubGlicmFyeShrYWJsZUV4dHJhKVxuIyBmaWxlIG5hbWVcbnN0X2ZpbGVfbmFtZSA9ICdmc19jb252ZXJ0X2p1cHl0ZXIycm1kJ1xuIyBHZW5lcmF0ZSBSIEZpbGVcbnB1cmwocGFzdGUwKHN0X2ZpbGVfbmFtZSwgXCIuUm1kXCIpLCBvdXRwdXQ9cGFzdGUwKHN0X2ZpbGVfbmFtZSwgXCIuUlwiKSwgZG9jdW1lbnRhdGlvbiA9IDIpXG4jIEdlbmVyYXRlIFBERiBhbmQgSFRNTFxuIyBybWFya2Rvd246OnJlbmRlcihcIkM6L1VzZXJzL2Zhbi9SNEVjb24vc3VwcG9ydC9hcnJheS9mc19tZXNoci5SbWRcIiwgXCJwZGZfZG9jdW1lbnRcIilcbiMgcm1hcmtkb3duOjpyZW5kZXIoXCJDOi9Vc2Vycy9mYW4vUjRFY29uL3N1cHBvcnQvYXJyYXkvZnNfbWVzaHIuUm1kXCIsIFwiaHRtbF9kb2N1bWVudFwiKVxuYGBgIn0= -->
-<pre class="r"><code>library(tidyverse)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxub3B0aW9ucyhrbml0ci5kdXBsaWNhdGUubGFiZWwgPSAnYWxsb3cnKVxuYGBgXG5gYGAifQ== -->
+<pre class="r"><code>```r
+options(knitr.duplicate.label = &#39;allow&#39;)</code></pre>
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KHRpZHlyKVxubGlicmFyeShybWFya2Rvd24pXG5saWJyYXJ5KGtuaXRyKVxubGlicmFyeShrYWJsZUV4dHJhKVxuIyBmaWxlIG5hbWVcbnN0X2ZpbGVfbmFtZSA9ICdmc19jb252ZXJ0X2p1cHl0ZXIycm1kJ1xuIyBHZW5lcmF0ZSBSIEZpbGVcbnB1cmwocGFzdGUwKHN0X2ZpbGVfbmFtZSwgXFwuUm1kXFwpLCBvdXRwdXQ9cGFzdGUwKHN0X2ZpbGVfbmFtZSwgXFwuUlxcKSwgZG9jdW1lbnRhdGlvbiA9IDIpXG4jIEdlbmVyYXRlIFBERiBhbmQgSFRNTFxuIyBybWFya2Rvd246OnJlbmRlcihcXEM6L1VzZXJzL2Zhbi9SNEVjb24vc3VwcG9ydC9hcnJheS9mc19tZXNoci5SbWRcXCwgXFxwZGZfZG9jdW1lbnRcXClcbiMgcm1hcmtkb3duOjpyZW5kZXIoXFxDOi9Vc2Vycy9mYW4vUjRFY29uL3N1cHBvcnQvYXJyYXkvZnNfbWVzaHIuUm1kXFwsIFxcaHRtbF9kb2N1bWVudFxcKVxuYGBgXG5gYGAifQ== --&gt;
+
+```r
+```r
+library(tidyverse)
 library(tidyr)
 library(rmarkdown)
 library(knitr)
@@ -1766,24 +1776,39 @@ library(kableExtra)
 # file name
 st_file_name = &#39;fs_convert_jupyter2rmd&#39;
 # Generate R File
-purl(paste0(st_file_name, &quot;.Rmd&quot;), output=paste0(st_file_name, &quot;.R&quot;), documentation = 2)
+purl(paste0(st_file_name, \.Rmd\), output=paste0(st_file_name, \.R\), documentation = 2)
 # Generate PDF and HTML
-# rmarkdown::render(&quot;C:/Users/fan/R4Econ/support/array/fs_meshr.Rmd&quot;, &quot;pdf_document&quot;)
-# rmarkdown::render(&quot;C:/Users/fan/R4Econ/support/array/fs_meshr.Rmd&quot;, &quot;html_document&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<div id="jupyter-files-and-rmd" class="section level1">
-<h1>Jupyter Files and RMD</h1>
-<p>Rmarkdown in Rstudio is easier for debugging, and allows for easier interaction with current workspace.</p>
-</div>
-<div id="jupyter-to-rmd-conversion" class="section level1">
-<h1>Jupyter to RMD conversion</h1>
-<p>Rmarkdown has a conversion program: <a href="https://rmarkdown.rstudio.com/docs/reference/convert_ipynb.html">convert_ipynb</a>.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBHZW5lcmF0ZSBQYXRoc1xuc3B0X2ZpbGVfcm9vdCA9ICdDOi9Vc2Vycy9mYW4vU3RhdDRFY29uL2Rlc2NyaXB0aXZlLydcbnNwdF9maWxlX25hbWUgPSAnRGF0YUJhc2tldGJhbGwnXG5zcHRfZmlsZV9mdWxsX2lweW5iID0gcGFzdGUwKHNwdF9maWxlX3Jvb3QsIHNwdF9maWxlX25hbWUsICcuaXB5bmInKVxuc3B0X2ZpbGVfZnVsbF9ybWQgPSBwYXN0ZTAoc3B0X2ZpbGVfcm9vdCwgc3B0X2ZpbGVfbmFtZSwgJy5ybWQnKVxuXG4jIENvbnZlcnQgZnJvbSBJUFlOQiB0byBSTURcbmZpbGVfbmJfcm1kID0gcm1hcmtkb3duOjo6Y29udmVydF9pcHluYihzcHRfZmlsZV9mdWxsX2lweW5iKVxuc3RfbmJfcm1kID0geGZ1bjo6ZmlsZV9zdHJpbmcoZmlsZV9uYl9ybWQpXG5cbiMgU2F2ZSBSTURcbmZpbGVDb25uIDwtIGZpbGUoc3B0X2ZpbGVfZnVsbF9ybWQpXG53cml0ZUxpbmVzKHN0X25iX3JtZCwgZmlsZUNvbm4pXG5jbG9zZShmaWxlQ29ubilcblxuIyBDb252ZXJ0IHRvIFBERiBhbmQgSFRNTFxucm1hcmtkb3duOjpyZW5kZXIoc3B0X2ZpbGVfZnVsbF9ybWQsIFwicGRmX2RvY3VtZW50XCIpXG5gYGAifQ== -->
-<pre class="r"><code># Generate Paths
+# rmarkdown::render(\C:/Users/fan/R4Econ/support/array/fs_meshr.Rmd\, \pdf_document\)
+# rmarkdown::render(\C:/Users/fan/R4Econ/support/array/fs_meshr.Rmd\, \html_document\)</code></pre>
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+## Jupyter Files and RMD
+
+Rmarkdown in Rstudio is easier for debugging, and allows for easier interaction with current workspace.
+
+### Single Jupyter to RMD conversion
+
+Rmarkdown has a conversion program: [convert_ipynb](https://rmarkdown.rstudio.com/docs/reference/convert_ipynb.html).
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuIyBHZW5lcmF0ZSBQYXRoc1xuc3B0X2ZpbGVfcm9vdCA9ICdDOi9Vc2Vycy9mYW4vU3RhdDRFY29uL2Rlc2NyaXB0aXZlLydcbnNwdF9maWxlX25hbWUgPSAnRGF0YUJhc2tldGJhbGwnXG5zcHRfZmlsZV9mdWxsX2lweW5iID0gcGFzdGUwKHNwdF9maWxlX3Jvb3QsIHNwdF9maWxlX25hbWUsICcuaXB5bmInKVxuc3B0X2ZpbGVfZnVsbF9ybWQgPSBwYXN0ZTAoc3B0X2ZpbGVfcm9vdCwgc3B0X2ZpbGVfbmFtZSwgJy5ybWQnKVxuXG4jIENvbnZlcnQgZnJvbSBJUFlOQiB0byBSTURcbmZpbGVfbmJfcm1kID0gcm1hcmtkb3duOjo6Y29udmVydF9pcHluYihzcHRfZmlsZV9mdWxsX2lweW5iKVxuc3RfbmJfcm1kID0geGZ1bjo6ZmlsZV9zdHJpbmcoZmlsZV9uYl9ybWQpXG5cbiMgU2F2ZSBSTURcbmZpbGVDb25uIDwtIGZpbGUoc3B0X2ZpbGVfZnVsbF9ybWQpXG53cml0ZUxpbmVzKHN0X25iX3JtZCwgZmlsZUNvbm4pXG5jbG9zZShmaWxlQ29ubilcblxuIyBDb252ZXJ0IHRvIFBERiBhbmQgSFRNTFxucm1hcmtkb3duOjpyZW5kZXIoc3B0X2ZpbGVfZnVsbF9ybWQsIFxccGRmX2RvY3VtZW50XFwpXG5gYGBcbmBgYCJ9 --&gt;
+
+```r
+```r
+# Generate Paths
 spt_file_root = &#39;C:/Users/fan/Stat4Econ/descriptive/&#39;
 spt_file_name = &#39;DataBasketball&#39;
 spt_file_full_ipynb = paste0(spt_file_root, spt_file_name, &#39;.ipynb&#39;)
@@ -1799,125 +1824,108 @@ writeLines(st_nb_rmd, fileConn)
 close(fileConn)
 
 # Convert to PDF and HTML
-rmarkdown::render(spt_file_full_rmd, &quot;pdf_document&quot;)</code></pre>
+rmarkdown::render(spt_file_full_rmd, \pdf_document\)</code></pre>
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-output-begin eyJkYXRhIjoiXG5cbnByb2Nlc3NpbmcgZmlsZTogRGF0YUJhc2tldGJhbGwucm1kXG5cbiAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAwJVxuICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgfC4uLi4uLi4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMTQlXG4gIG9yZGluYXJ5IHRleHQgd2l0aG91dCBSIGNvZGVcblxuXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8Li4uLi4uLi4uLi4uLi4uLi4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyOSVcbmxhYmVsOiB1bm5hbWVkLWNodW5rLTJcbllvdSBjaGFuZ2VkIHRoZSB3b3JraW5nIGRpcmVjdG9yeSB0byBDOi9Vc2Vycy9mYW4vU3RhdDRFY29uL2RhdGEgKHByb2JhYmx5IHZpYSBzZXR3ZCgpKS4gSXQgd2lsbCBiZSByZXN0b3JlZCB0byBDOi9Vc2Vycy9mYW4vU3RhdDRFY29uL2Rlc2NyaXB0aXZlLiBTZWUgdGhlIE5vdGUgc2VjdGlvbiBpbiA/a25pdHI6OmtuaXRcblxuICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgfC4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgNDMlXG4gIG9yZGluYXJ5IHRleHQgd2l0aG91dCBSIGNvZGVcblxuXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA1NyVcbmxhYmVsOiB1bm5hbWVkLWNodW5rLTNcblxuICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgfC4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4gICAgICAgICAgICAgICAgICAgfCAgNzElXG4gIG9yZGluYXJ5IHRleHQgd2l0aG91dCBSIGNvZGVcblxuXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4gICAgICAgICB8ICA4NiVcbmxhYmVsOiB1bm5hbWVkLWNodW5rLTRcblxuICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgfC4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4ufCAxMDAlXG4gIG9yZGluYXJ5IHRleHQgd2l0aG91dCBSIGNvZGVcbm91dHB1dCBmaWxlOiBEYXRhQmFza2V0YmFsbC5rbml0Lm1kXG5cXEM6L1Byb2dyYW0gRmlsZXMvUlN0dWRpby9iaW4vcGFuZG9jL3BhbmRvY1xcICtSVFMgLUs1MTJtIC1SVFMgRGF0YUJhc2tldGJhbGwudXRmOC5tZCAtLXRvIGxhdGV4IC0tZnJvbSBtYXJrZG93bithdXRvbGlua19iYXJlX3VyaXMrYXNjaWlfaWRlbnRpZmllcnMrdGV4X21hdGhfc2luZ2xlX2JhY2tzbGFzaCAtLW91dHB1dCBEYXRhQmFza2V0YmFsbC50ZXggLS10ZW1wbGF0ZSBcXEM6XFxVc2Vyc1xcZmFuXFxEb2N1bWVudHNcXFJcXHdpbi1saWJyYXJ5XFwzLjZcXHJtYXJrZG93blxccm1kXFxsYXRleFxcZGVmYXVsdC0xLjE3LjAuMi50ZXhcXCAtLWhpZ2hsaWdodC1zdHlsZSB0YW5nbyAtLXBkZi1lbmdpbmUgcGRmbGF0ZXggLS12YXJpYWJsZSBncmFwaGljcz15ZXMgLS12YXJpYWJsZSBcXGdlb21ldHJ5Om1hcmdpbj0xaW5cXCAtLXZhcmlhYmxlIFxcY29tcGFjdC10aXRsZTp5ZXNcXCBcblxuT3V0cHV0IGNyZWF0ZWQ6IERhdGFCYXNrZXRiYWxsLnBkZlxuIn0= --&gt;
+</code></pre>
+<p>processing file: DataBasketball.rmd</p>
+<p>|<br />
+| | 0% |<br />
+|……… | 14% ordinary text without R code</p>
+<p>|<br />
+|………………. | 29% label: unnamed-chunk-2 You changed the working directory to C:/Users/fan/Stat4Econ/data (probably via setwd()). It will be restored to C:/Users/fan/Stat4Econ/descriptive. See the Note section in ?knitr::knit</p>
+<p>|<br />
+|………………………. | 43% ordinary text without R code</p>
+<p>|<br />
+|………………………………. | 57% label: unnamed-chunk-3</p>
+<p>|<br />
+|………………………………………. | 71% ordinary text without R code</p>
+<p>|<br />
+|……………………………………………….. | 86% label: unnamed-chunk-4</p>
+<p>|<br />
+|………………………………………………………..| 100% ordinary text without R code output file: DataBasketball.knit.md :/Program Files/RStudio/bin/pandoc/pandoc +RTS -K512m -RTS DataBasketball.utf8.md –to latex –from markdown+autolink_bare_uris+ascii_identifiers+tex_math_single_backslash –output DataBasketball.tex –template :-library\3.6-1.17.0.2.tex –highlight-style tango –pdf-engine pdflatex –variable graphics=yes –variable :margin=1in –variable -title:yes </p>
+<p>Output created: DataBasketball.pdf</p>
+<pre><code>
+
+
+&lt;!-- rnb-output-end --&gt;
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxucm1hcmtkb3duOjpyZW5kZXIoc3B0X2ZpbGVfZnVsbF9ybWQsIFxcaHRtbF9kb2N1bWVudFxcKVxuYGBgXG5gYGAifQ== --&gt;
+
+```r
+```r
+rmarkdown::render(spt_file_full_rmd, \html_document\)</code></pre>
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-output-begin eyJkYXRhIjoiXG5cbnByb2Nlc3NpbmcgZmlsZTogRGF0YUJhc2tldGJhbGwucm1kXG5cbiAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAwJVxuICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgfC4uLi4uLi4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMTQlXG4gIG9yZGluYXJ5IHRleHQgd2l0aG91dCBSIGNvZGVcblxuXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8Li4uLi4uLi4uLi4uLi4uLi4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyOSVcbmxhYmVsOiB1bm5hbWVkLWNodW5rLTFcbllvdSBjaGFuZ2VkIHRoZSB3b3JraW5nIGRpcmVjdG9yeSB0byBDOi9Vc2Vycy9mYW4vU3RhdDRFY29uL2RhdGEgKHByb2JhYmx5IHZpYSBzZXR3ZCgpKS4gSXQgd2lsbCBiZSByZXN0b3JlZCB0byBDOi9Vc2Vycy9mYW4vU3RhdDRFY29uL2Rlc2NyaXB0aXZlLiBTZWUgdGhlIE5vdGUgc2VjdGlvbiBpbiA/a25pdHI6OmtuaXRcblxuICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgfC4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgNDMlXG4gIG9yZGluYXJ5IHRleHQgd2l0aG91dCBSIGNvZGVcblxuXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA1NyVcbmxhYmVsOiB1bm5hbWVkLWNodW5rLTJcblxuICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgfC4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4gICAgICAgICAgICAgICAgICAgfCAgNzElXG4gIG9yZGluYXJ5IHRleHQgd2l0aG91dCBSIGNvZGVcblxuXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4gICAgICAgICB8ICA4NiVcbmxhYmVsOiB1bm5hbWVkLWNodW5rLTNcblxuICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgfC4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4ufCAxMDAlXG4gIG9yZGluYXJ5IHRleHQgd2l0aG91dCBSIGNvZGVcbm91dHB1dCBmaWxlOiBEYXRhQmFza2V0YmFsbC5rbml0Lm1kXG5cXEM6L1Byb2dyYW0gRmlsZXMvUlN0dWRpby9iaW4vcGFuZG9jL3BhbmRvY1xcICtSVFMgLUs1MTJtIC1SVFMgRGF0YUJhc2tldGJhbGwudXRmOC5tZCAtLXRvIGh0bWw0IC0tZnJvbSBtYXJrZG93bithdXRvbGlua19iYXJlX3VyaXMrYXNjaWlfaWRlbnRpZmllcnMrdGV4X21hdGhfc2luZ2xlX2JhY2tzbGFzaCtzbWFydCAtLW91dHB1dCBEYXRhQmFza2V0YmFsbC5odG1sIC0tZW1haWwtb2JmdXNjYXRpb24gbm9uZSAtLXNlbGYtY29udGFpbmVkIC0tc3RhbmRhbG9uZSAtLXNlY3Rpb24tZGl2cyAtLXRlbXBsYXRlIFxcQzpcXFVzZXJzXFxmYW5cXERvY3VtZW50c1xcUlxcd2luLWxpYnJhcnlcXDMuNlxccm1hcmtkb3duXFxybWRcXGhcXGRlZmF1bHQuaHRtbFxcIC0tbm8taGlnaGxpZ2h0IC0tdmFyaWFibGUgaGlnaGxpZ2h0anM9MSAtLXZhcmlhYmxlIFxcdGhlbWU6Ym9vdHN0cmFwXFwgLS1pbmNsdWRlLWluLWhlYWRlciBcXEM6XFxVc2Vyc1xcZmFuXFxBcHBEYXRhXFxMb2NhbFxcVGVtcFxcUnRtcE16NlNDV1xccm1hcmtkb3duLXN0cmU0ZmM2MGZjNjQ0NS5odG1sXFwgLS1tYXRoamF4IC0tdmFyaWFibGUgXFxtYXRoamF4LXVybDpodHRwczovL21hdGhqYXgucnN0dWRpby5jb20vbGF0ZXN0L01hdGhKYXguanM/Y29uZmlnPVRlWC1BTVMtTU1MX0hUTUxvck1NTFxcIFxuXG5PdXRwdXQgY3JlYXRlZDogRGF0YUJhc2tldGJhbGwuaHRtbFxuIn0= --&gt;
+</code></pre>
+<p>processing file: DataBasketball.rmd</p>
+<p>|<br />
+| | 0% |<br />
+|……… | 14% ordinary text without R code</p>
+<p>|<br />
+|………………. | 29% label: unnamed-chunk-1 You changed the working directory to C:/Users/fan/Stat4Econ/data (probably via setwd()). It will be restored to C:/Users/fan/Stat4Econ/descriptive. See the Note section in ?knitr::knit</p>
+<p>|<br />
+|………………………. | 43% ordinary text without R code</p>
+<p>|<br />
+|………………………………. | 57% label: unnamed-chunk-2</p>
+<p>|<br />
+|………………………………………. | 71% ordinary text without R code</p>
+<p>|<br />
+|……………………………………………….. | 86% label: unnamed-chunk-3</p>
+<p>|<br />
+|………………………………………………………..| 100% ordinary text without R code output file: DataBasketball.knit.md :/Program Files/RStudio/bin/pandoc/pandoc +RTS -K512m -RTS DataBasketball.utf8.md –to html4 –from markdown+autolink_bare_uris+ascii_identifiers+tex_math_single_backslash+smart –output DataBasketball.html –email-obfuscation none –self-contained –standalone –section-divs –template :-library\3.6.html –no-highlight –variable highlightjs=1 –variable :bootstrap –include-in-header :6SCW-stre4fc60fc6445.html –mathjax –variable -url:<a href="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\" class="uri">https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\</a></p>
+<p>Output created: DataBasketball.html</p>
+<pre><code>
+
+
+&lt;!-- rnb-output-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+### Multiple Jupyter to RMD conversion
+
+Search in folder for ipynb files, and then convert collectively to Rmd.
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBHZW5lcmF0ZSBQYXRoc1xuc3B0X2ZpbGVfcm9vdCA9ICdDOi9Vc2Vycy9mYW4vU3RhdDRFY29uL2Rlc2NyaXB0aXZlLydcbnNwdF9maWxlX25hbWUgPSAnRGF0YUJhc2tldGJhbGwnXG5zcHRfZmlsZV9mdWxsX2lweW5iID0gcGFzdGUwKHNwdF9maWxlX3Jvb3QsIHNwdF9maWxlX25hbWUsICcuaXB5bmInKVxuc3B0X2ZpbGVfZnVsbF9ybWQgPSBwYXN0ZTAoc3B0X2ZpbGVfcm9vdCwgc3B0X2ZpbGVfbmFtZSwgJy5ybWQnKVxuXG4jIENvbnZlcnQgZnJvbSBJUFlOQiB0byBSTURcbmZpbGVfbmJfcm1kID0gcm1hcmtkb3duOjo6Y29udmVydF9pcHluYihzcHRfZmlsZV9mdWxsX2lweW5iKVxuc3RfbmJfcm1kID0geGZ1bjo6ZmlsZV9zdHJpbmcoZmlsZV9uYl9ybWQpXG5cbiMgU2F2ZSBSTURcbmZpbGVDb25uIDwtIGZpbGUoc3B0X2ZpbGVfZnVsbF9ybWQpXG53cml0ZUxpbmVzKHN0X25iX3JtZCwgZmlsZUNvbm4pXG5jbG9zZShmaWxlQ29ubilcblxuIyBDb252ZXJ0IHRvIFBERiBhbmQgSFRNTFxucm1hcmtkb3duOjpyZW5kZXIoc3B0X2ZpbGVfZnVsbF9ybWQsIFwicGRmX2RvY3VtZW50XCIpXG5ybWFya2Rvd246OnJlbmRlcihzcHRfZmlsZV9mdWxsX3JtZCwgXCJodG1sX2RvY3VtZW50XCIpXG5gYGAifQ== --&gt;
+
+```r
+# Generate Paths
+spt_file_root = &#39;C:/Users/fan/Stat4Econ/descriptive/&#39;
+spt_file_name = &#39;DataBasketball&#39;
+spt_file_full_ipynb = paste0(spt_file_root, spt_file_name, &#39;.ipynb&#39;)
+spt_file_full_rmd = paste0(spt_file_root, spt_file_name, &#39;.rmd&#39;)
+
+# Convert from IPYNB to RMD
+file_nb_rmd = rmarkdown:::convert_ipynb(spt_file_full_ipynb)
+st_nb_rmd = xfun::file_string(file_nb_rmd)
+
+# Save RMD
+fileConn &lt;- file(spt_file_full_rmd)
+writeLines(st_nb_rmd, fileConn)
+close(fileConn)
+
+# Convert to PDF and HTML
+rmarkdown::render(spt_file_full_rmd, &quot;pdf_document&quot;)
+rmarkdown::render(spt_file_full_rmd, &quot;html_document&quot;)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5cbnByb2Nlc3NpbmcgZmlsZTogRGF0YUJhc2tldGJhbGwucm1kXG4ifQ== -->
-<pre><code>
-
-processing file: DataBasketball.rmd</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMCVcbiAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gIHwuLi4uLi4uLi4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDE0JVxuICBvcmRpbmFyeSB0ZXh0IHdpdGhvdXQgUiBjb2RlXG5cblxuICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgfC4uLi4uLi4uLi4uLi4uLi4uLi4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMjklXG5sYWJlbDogdW5uYW1lZC1jaHVuay0yXG4ifQ== -->
-<pre><code>
-  |                                                                       
-  |                                                                 |   0%
-  |                                                                       
-  |.........                                                        |  14%
-  ordinary text without R code
-
-
-  |                                                                       
-  |...................                                              |  29%
-label: unnamed-chunk-2</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWW91IGNoYW5nZWQgdGhlIHdvcmtpbmcgZGlyZWN0b3J5IHRvIEM6L1VzZXJzL2Zhbi9TdGF0NEVjb24vZGF0YSAocHJvYmFibHkgdmlhIHNldHdkKCkpLiBJdCB3aWxsIGJlIHJlc3RvcmVkIHRvIEM6L1VzZXJzL2Zhbi9TdGF0NEVjb24vZGVzY3JpcHRpdmUuIFNlZSB0aGUgTm90ZSBzZWN0aW9uIGluID9rbml0cjo6a25pdFxuIn0= -->
-<pre><code>You changed the working directory to C:/Users/fan/Stat4Econ/data (probably via setwd()). It will be restored to C:/Users/fan/Stat4Econ/descriptive. See the Note section in ?knitr::knit</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA0MyVcbiAgb3JkaW5hcnkgdGV4dCB3aXRob3V0IFIgY29kZVxuXG5cbiAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gIHwuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDU3JVxubGFiZWw6IHVubmFtZWQtY2h1bmstM1xuXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLiAgICAgICAgICAgICAgICAgICB8ICA3MSVcbiAgb3JkaW5hcnkgdGV4dCB3aXRob3V0IFIgY29kZVxuXG5cbiAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gIHwuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLiAgICAgICAgIHwgIDg2JVxubGFiZWw6IHVubmFtZWQtY2h1bmstNFxuXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi58IDEwMCVcbiAgb3JkaW5hcnkgdGV4dCB3aXRob3V0IFIgY29kZVxuIn0= -->
-<pre><code>
-  |                                                                       
-  |............................                                     |  43%
-  ordinary text without R code
-
-
-  |                                                                       
-  |.....................................                            |  57%
-label: unnamed-chunk-3
-
-  |                                                                       
-  |..............................................                   |  71%
-  ordinary text without R code
-
-
-  |                                                                       
-  |........................................................         |  86%
-label: unnamed-chunk-4
-
-  |                                                                       
-  |.................................................................| 100%
-  ordinary text without R code</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoib3V0cHV0IGZpbGU6IERhdGFCYXNrZXRiYWxsLmtuaXQubWRcbiJ9 -->
-<pre><code>output file: DataBasketball.knit.md</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXCJDOi9Qcm9ncmFtIEZpbGVzL1JTdHVkaW8vYmluL3BhbmRvYy9wYW5kb2NcIiArUlRTIC1LNTEybSAtUlRTIERhdGFCYXNrZXRiYWxsLnV0ZjgubWQgLS10byBsYXRleCAtLWZyb20gbWFya2Rvd24rYXV0b2xpbmtfYmFyZV91cmlzK2FzY2lpX2lkZW50aWZpZXJzK3RleF9tYXRoX3NpbmdsZV9iYWNrc2xhc2ggLS1vdXRwdXQgRGF0YUJhc2tldGJhbGwudGV4IC0tdGVtcGxhdGUgXCJDOlxcVXNlcnNcXGZhblxcRG9jdW1lbnRzXFxSXFx3aW4tbGlicmFyeVxcMy42XFxybWFya2Rvd25cXHJtZFxcbGF0ZXhcXGRlZmF1bHQtMS4xNy4wLjIudGV4XCIgLS1oaWdobGlnaHQtc3R5bGUgdGFuZ28gLS1wZGYtZW5naW5lIHBkZmxhdGV4IC0tdmFyaWFibGUgZ3JhcGhpY3M9eWVzIC0tdmFyaWFibGUgXCJnZW9tZXRyeTptYXJnaW49MWluXCIgLS12YXJpYWJsZSBcImNvbXBhY3QtdGl0bGU6eWVzXCIgXG4ifQ== -->
-<pre><code>&quot;C:/Program Files/RStudio/bin/pandoc/pandoc&quot; +RTS -K512m -RTS DataBasketball.utf8.md --to latex --from markdown+autolink_bare_uris+ascii_identifiers+tex_math_single_backslash --output DataBasketball.tex --template &quot;C:\Users\fan\Documents\R\win-library\3.6\rmarkdown\rmd\latex\default-1.17.0.2.tex&quot; --highlight-style tango --pdf-engine pdflatex --variable graphics=yes --variable &quot;geometry:margin=1in&quot; --variable &quot;compact-title:yes&quot; </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5PdXRwdXQgY3JlYXRlZDogRGF0YUJhc2tldGJhbGwucGRmXG4ifQ== -->
-<pre><code>
-Output created: DataBasketball.pdf</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucm1hcmtkb3duOjpyZW5kZXIoc3B0X2ZpbGVfZnVsbF9ybWQsIFwiaHRtbF9kb2N1bWVudFwiKVxuYGBgIn0= -->
-<pre class="r"><code>rmarkdown::render(spt_file_full_rmd, &quot;html_document&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5cbnByb2Nlc3NpbmcgZmlsZTogRGF0YUJhc2tldGJhbGwucm1kXG4ifQ== -->
-<pre><code>
-
-processing file: DataBasketball.rmd</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMCVcbiAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gIHwuLi4uLi4uLi4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDE0JVxuICBvcmRpbmFyeSB0ZXh0IHdpdGhvdXQgUiBjb2RlXG5cblxuICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgfC4uLi4uLi4uLi4uLi4uLi4uLi4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMjklXG5sYWJlbDogdW5uYW1lZC1jaHVuay0xXG4ifQ== -->
-<pre><code>
-  |                                                                       
-  |                                                                 |   0%
-  |                                                                       
-  |.........                                                        |  14%
-  ordinary text without R code
-
-
-  |                                                                       
-  |...................                                              |  29%
-label: unnamed-chunk-1</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWW91IGNoYW5nZWQgdGhlIHdvcmtpbmcgZGlyZWN0b3J5IHRvIEM6L1VzZXJzL2Zhbi9TdGF0NEVjb24vZGF0YSAocHJvYmFibHkgdmlhIHNldHdkKCkpLiBJdCB3aWxsIGJlIHJlc3RvcmVkIHRvIEM6L1VzZXJzL2Zhbi9TdGF0NEVjb24vZGVzY3JpcHRpdmUuIFNlZSB0aGUgTm90ZSBzZWN0aW9uIGluID9rbml0cjo6a25pdFxuIn0= -->
-<pre><code>You changed the working directory to C:/Users/fan/Stat4Econ/data (probably via setwd()). It will be restored to C:/Users/fan/Stat4Econ/descriptive. See the Note section in ?knitr::knit</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA0MyVcbiAgb3JkaW5hcnkgdGV4dCB3aXRob3V0IFIgY29kZVxuXG5cbiAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gIHwuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDU3JVxubGFiZWw6IHVubmFtZWQtY2h1bmstMlxuXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLiAgICAgICAgICAgICAgICAgICB8ICA3MSVcbiAgb3JkaW5hcnkgdGV4dCB3aXRob3V0IFIgY29kZVxuXG5cbiAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gIHwuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLiAgICAgICAgIHwgIDg2JVxubGFiZWw6IHVubmFtZWQtY2h1bmstM1xuXG4gIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICB8Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi58IDEwMCVcbiAgb3JkaW5hcnkgdGV4dCB3aXRob3V0IFIgY29kZVxuIn0= -->
-<pre><code>
-  |                                                                       
-  |............................                                     |  43%
-  ordinary text without R code
-
-
-  |                                                                       
-  |.....................................                            |  57%
-label: unnamed-chunk-2
-
-  |                                                                       
-  |..............................................                   |  71%
-  ordinary text without R code
-
-
-  |                                                                       
-  |........................................................         |  86%
-label: unnamed-chunk-3
-
-  |                                                                       
-  |.................................................................| 100%
-  ordinary text without R code</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoib3V0cHV0IGZpbGU6IERhdGFCYXNrZXRiYWxsLmtuaXQubWRcbiJ9 -->
-<pre><code>output file: DataBasketball.knit.md</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXCJDOi9Qcm9ncmFtIEZpbGVzL1JTdHVkaW8vYmluL3BhbmRvYy9wYW5kb2NcIiArUlRTIC1LNTEybSAtUlRTIERhdGFCYXNrZXRiYWxsLnV0ZjgubWQgLS10byBodG1sNCAtLWZyb20gbWFya2Rvd24rYXV0b2xpbmtfYmFyZV91cmlzK2FzY2lpX2lkZW50aWZpZXJzK3RleF9tYXRoX3NpbmdsZV9iYWNrc2xhc2grc21hcnQgLS1vdXRwdXQgRGF0YUJhc2tldGJhbGwuaHRtbCAtLWVtYWlsLW9iZnVzY2F0aW9uIG5vbmUgLS1zZWxmLWNvbnRhaW5lZCAtLXN0YW5kYWxvbmUgLS1zZWN0aW9uLWRpdnMgLS10ZW1wbGF0ZSBcIkM6XFxVc2Vyc1xcZmFuXFxEb2N1bWVudHNcXFJcXHdpbi1saWJyYXJ5XFwzLjZcXHJtYXJrZG93blxccm1kXFxoXFxkZWZhdWx0Lmh0bWxcIiAtLW5vLWhpZ2hsaWdodCAtLXZhcmlhYmxlIGhpZ2hsaWdodGpzPTEgLS12YXJpYWJsZSBcInRoZW1lOmJvb3RzdHJhcFwiIC0taW5jbHVkZS1pbi1oZWFkZXIgXCJDOlxcVXNlcnNcXGZhblxcQXBwRGF0YVxcTG9jYWxcXFRlbXBcXFJ0bXBNejZTQ1dcXHJtYXJrZG93bi1zdHJlNGZjNjBmYzY0NDUuaHRtbFwiIC0tbWF0aGpheCAtLXZhcmlhYmxlIFwibWF0aGpheC11cmw6aHR0cHM6Ly9tYXRoamF4LnJzdHVkaW8uY29tL2xhdGVzdC9NYXRoSmF4LmpzP2NvbmZpZz1UZVgtQU1TLU1NTF9IVE1Mb3JNTUxcIiBcbiJ9 -->
-<pre><code>&quot;C:/Program Files/RStudio/bin/pandoc/pandoc&quot; +RTS -K512m -RTS DataBasketball.utf8.md --to html4 --from markdown+autolink_bare_uris+ascii_identifiers+tex_math_single_backslash+smart --output DataBasketball.html --email-obfuscation none --self-contained --standalone --section-divs --template &quot;C:\Users\fan\Documents\R\win-library\3.6\rmarkdown\rmd\h\default.html&quot; --no-highlight --variable highlightjs=1 --variable &quot;theme:bootstrap&quot; --include-in-header &quot;C:\Users\fan\AppData\Local\Temp\RtmpMz6SCW\rmarkdown-stre4fc60fc6445.html&quot; --mathjax --variable &quot;mathjax-url:https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot; </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5PdXRwdXQgY3JlYXRlZDogRGF0YUJhc2tldGJhbGwuaHRtbFxuIn0= -->
-<pre><code>
-Output created: DataBasketball.html</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
-</div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkNvbnZlcnQgSnVweXRlciBGaWxlcyB0byBSTUQiDQpvdXRwdXQ6DQogIGh0bWxfbm90ZWJvb2s6IGRlZmF1bHQNCiAgcGRmX2RvY3VtZW50Og0KICAgIGRmX3ByaW50OiBwYWdlZA0KICBodG1sX2RvY3VtZW50Og0KICAgIGRmX3ByaW50OiBwYWdlZA0KICB3b3JkX2RvY3VtZW50OiBkZWZhdWx0DQp1cmxjb2xvcjogYmx1ZQ0KLS0tDQoNCkJhY2sgdG8gW0Zhbl0oaHR0cHM6Ly9mYW53YW5nZWNvbi5naXRodWIuaW8pJ3MgW1JldXNhYmxlIFIgQ29kZV0oaHR0cHM6Ly9mYW53YW5nZWNvbi5naXRodWIuaW8vUjRFY29uLykgdGFibGUgb2YgY29udGVudC4NCg0KYGBge3IgR2xvYmFsT3B0aW9ucywgZWNobyA9IFQsIHJlc3VsdHMgPSAnaGlkZScsIG1lc3NhZ2U9Riwgd2FybmluZz1GfQ0Kb3B0aW9ucyhrbml0ci5kdXBsaWNhdGUubGFiZWwgPSAnYWxsb3cnKQ0KYGBgDQpgYGB7ciBsb2FkbGliLCBlY2hvID0gVCwgcmVzdWx0cyA9ICdoaWRlJywgbWVzc2FnZT1GLCB3YXJuaW5nPUZ9DQpsaWJyYXJ5KHRpZHl2ZXJzZSkNCmxpYnJhcnkodGlkeXIpDQpsaWJyYXJ5KHJtYXJrZG93bikNCmxpYnJhcnkoa25pdHIpDQpsaWJyYXJ5KGthYmxlRXh0cmEpDQojIGZpbGUgbmFtZQ0Kc3RfZmlsZV9uYW1lID0gJ2ZzX2NvbnZlcnRfanVweXRlcjJybWQnDQojIEdlbmVyYXRlIFIgRmlsZQ0KcHVybChwYXN0ZTAoc3RfZmlsZV9uYW1lLCAiLlJtZCIpLCBvdXRwdXQ9cGFzdGUwKHN0X2ZpbGVfbmFtZSwgIi5SIiksIGRvY3VtZW50YXRpb24gPSAyKQ0KIyBHZW5lcmF0ZSBQREYgYW5kIEhUTUwNCiMgcm1hcmtkb3duOjpyZW5kZXIoIkM6L1VzZXJzL2Zhbi9SNEVjb24vc3VwcG9ydC9hcnJheS9mc19tZXNoci5SbWQiLCAicGRmX2RvY3VtZW50IikNCiMgcm1hcmtkb3duOjpyZW5kZXIoIkM6L1VzZXJzL2Zhbi9SNEVjb24vc3VwcG9ydC9hcnJheS9mc19tZXNoci5SbWQiLCAiaHRtbF9kb2N1bWVudCIpDQpgYGANCg0KIyBKdXB5dGVyIEZpbGVzIGFuZCBSTUQNCg0KUm1hcmtkb3duIGluIFJzdHVkaW8gaXMgZWFzaWVyIGZvciBkZWJ1Z2dpbmcsIGFuZCBhbGxvd3MgZm9yIGVhc2llciBpbnRlcmFjdGlvbiB3aXRoIGN1cnJlbnQgd29ya3NwYWNlLg0KDQojIEp1cHl0ZXIgdG8gUk1EIGNvbnZlcnNpb24NCg0KUm1hcmtkb3duIGhhcyBhIGNvbnZlcnNpb24gcHJvZ3JhbTogW2NvbnZlcnRfaXB5bmJdKGh0dHBzOi8vcm1hcmtkb3duLnJzdHVkaW8uY29tL2RvY3MvcmVmZXJlbmNlL2NvbnZlcnRfaXB5bmIuaHRtbCkuDQoNCmBgYHtyfQ0KIyBHZW5lcmF0ZSBQYXRocw0Kc3B0X2ZpbGVfcm9vdCA9ICdDOi9Vc2Vycy9mYW4vU3RhdDRFY29uL2Rlc2NyaXB0aXZlLycNCnNwdF9maWxlX25hbWUgPSAnRGF0YUJhc2tldGJhbGwnDQpzcHRfZmlsZV9mdWxsX2lweW5iID0gcGFzdGUwKHNwdF9maWxlX3Jvb3QsIHNwdF9maWxlX25hbWUsICcuaXB5bmInKQ0Kc3B0X2ZpbGVfZnVsbF9ybWQgPSBwYXN0ZTAoc3B0X2ZpbGVfcm9vdCwgc3B0X2ZpbGVfbmFtZSwgJy5ybWQnKQ0KDQojIENvbnZlcnQgZnJvbSBJUFlOQiB0byBSTUQNCmZpbGVfbmJfcm1kID0gcm1hcmtkb3duOjo6Y29udmVydF9pcHluYihzcHRfZmlsZV9mdWxsX2lweW5iKQ0Kc3RfbmJfcm1kID0geGZ1bjo6ZmlsZV9zdHJpbmcoZmlsZV9uYl9ybWQpDQoNCiMgU2F2ZSBSTUQNCmZpbGVDb25uIDwtIGZpbGUoc3B0X2ZpbGVfZnVsbF9ybWQpDQp3cml0ZUxpbmVzKHN0X25iX3JtZCwgZmlsZUNvbm4pDQpjbG9zZShmaWxlQ29ubikNCg0KIyBDb252ZXJ0IHRvIFBERiBhbmQgSFRNTA0Kcm1hcmtkb3duOjpyZW5kZXIoc3B0X2ZpbGVfZnVsbF9ybWQsICJwZGZfZG9jdW1lbnQiKQ0Kcm1hcmtkb3duOjpyZW5kZXIoc3B0X2ZpbGVfZnVsbF9ybWQsICJodG1sX2RvY3VtZW50IikNCmBgYA0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkNvbnZlcnQgSnVweXRlciBGaWxlcyB0byBSTUQiDQpvdXRwdXQ6DQogIGh0bWxfbm90ZWJvb2s6IGRlZmF1bHQNCiAgcGRmX2RvY3VtZW50Og0KICAgIGRmX3ByaW50OiBwYWdlZA0KICBodG1sX2RvY3VtZW50Og0KICAgIGRmX3ByaW50OiBwYWdlZA0KICB3b3JkX2RvY3VtZW50OiBkZWZhdWx0DQp1cmxjb2xvcjogYmx1ZQ0KYWx3YXlzX2FsbG93X2h0bWw6IHllcw0KLS0tDQoNCkJhY2sgdG8gW0Zhbl0oaHR0cHM6Ly9mYW53YW5nZWNvbi5naXRodWIuaW8pJ3MgW1JldXNhYmxlIFIgQ29kZV0oaHR0cHM6Ly9mYW53YW5nZWNvbi5naXRodWIuaW8vUjRFY29uLykgdGFibGUgb2YgY29udGVudC4NCg0KYGBge3IgR2xvYmFsT3B0aW9ucywgZWNobyA9IFQsIHJlc3VsdHMgPSAnaGlkZScsIG1lc3NhZ2U9Riwgd2FybmluZz1GfQ0Kb3B0aW9ucyhrbml0ci5kdXBsaWNhdGUubGFiZWwgPSAnYWxsb3cnKQ0KYGBgDQpgYGB7ciBsb2FkbGliLCBlY2hvID0gVCwgcmVzdWx0cyA9ICdoaWRlJywgbWVzc2FnZT1GLCB3YXJuaW5nPUZ9DQpsaWJyYXJ5KHRpZHl2ZXJzZSkNCmxpYnJhcnkodGlkeXIpDQpsaWJyYXJ5KHJtYXJrZG93bikNCmxpYnJhcnkoa25pdHIpDQpsaWJyYXJ5KGthYmxlRXh0cmEpDQojIGZpbGUgbmFtZQ0Kc3RfZmlsZV9uYW1lID0gJ2ZzX2NvbnZlcnRfanVweXRlcjJybWQnDQojIEdlbmVyYXRlIFIgRmlsZQ0KdHJ5KHB1cmwocGFzdGUwKHN0X2ZpbGVfbmFtZSwgIi5SbWQiKSwgb3V0cHV0PXBhc3RlMChzdF9maWxlX25hbWUsICIuUiIpLCBkb2N1bWVudGF0aW9uID0gMikpDQojIEdlbmVyYXRlIFBERiBhbmQgSFRNTA0KIyBybWFya2Rvd246OnJlbmRlcigiQzovVXNlcnMvZmFuL1I0RWNvbi9hbXRvL2FycmF5L2ZzX21lc2hyLlJtZCIsICJwZGZfZG9jdW1lbnQiKQ0KIyBybWFya2Rvd246OnJlbmRlcigiQzovVXNlcnMvZmFuL1I0RWNvbi9hbXRvL2FycmF5L2ZzX21lc2hyLlJtZCIsICJodG1sX2RvY3VtZW50IikNCmBgYA0KDQojIyBKdXB5dGVyIEZpbGVzIGFuZCBSTUQNCg0KUm1hcmtkb3duIGluIFJzdHVkaW8gaXMgZWFzaWVyIGZvciBkZWJ1Z2dpbmcsIGFuZCBhbGxvd3MgZm9yIGVhc2llciBpbnRlcmFjdGlvbiB3aXRoIGN1cnJlbnQgd29ya3NwYWNlLg0KDQojIyMgU2luZ2xlIEp1cHl0ZXIgdG8gUk1EIGNvbnZlcnNpb24NCg0KUm1hcmtkb3duIGhhcyBhIGNvbnZlcnNpb24gcHJvZ3JhbTogW2NvbnZlcnRfaXB5bmJdKGh0dHBzOi8vcm1hcmtkb3duLnJzdHVkaW8uY29tL2RvY3MvcmVmZXJlbmNlL2NvbnZlcnRfaXB5bmIuaHRtbCkuDQoNCmBgYHtyfQ0KIyBHZW5lcmF0ZSBQYXRocw0Kc3B0X2ZpbGVfcm9vdCA9ICdDOi9Vc2Vycy9mYW4vUjRFY29uL3N1bW1hcml6ZS9zdW1tLycNCnNwdF9maWxlX25hbWUgPSAnQnlHcm91cFN1bW1PbmUnDQpzcHRfZmlsZV9mdWxsX2lweW5iID0gcGFzdGUwKHNwdF9maWxlX3Jvb3QsIHNwdF9maWxlX25hbWUsICcuaXB5bmInKQ0Kc3B0X2ZpbGVfZnVsbF9ybWQgPSBwYXN0ZTAoc3B0X2ZpbGVfcm9vdCwgc3B0X2ZpbGVfbmFtZSwgJy5ybWQnKQ0KDQojIENvbnZlcnQgZnJvbSBJUFlOQiB0byBSTUQNCmZpbGVfbmJfcm1kID0gcm1hcmtkb3duOjo6Y29udmVydF9pcHluYihzcHRfZmlsZV9mdWxsX2lweW5iKQ0Kc3RfbmJfcm1kID0geGZ1bjo6ZmlsZV9zdHJpbmcoZmlsZV9uYl9ybWQpDQoNCiMgU2F2ZSBSTUQNCmZpbGVDb25uIDwtIGZpbGUoc3B0X2ZpbGVfZnVsbF9ybWQpDQp3cml0ZUxpbmVzKHN0X25iX3JtZCwgZmlsZUNvbm4pDQpjbG9zZShmaWxlQ29ubikNCg0KIyBDb252ZXJ0IHRvIFBERiBhbmQgSFRNTA0KIyBybWFya2Rvd246OnJlbmRlcihzcHRfZmlsZV9mdWxsX3JtZCwgInBkZl9kb2N1bWVudCIpDQojIHJtYXJrZG93bjo6cmVuZGVyKHNwdF9maWxlX2Z1bGxfcm1kLCAiaHRtbF9kb2N1bWVudCIpDQpgYGANCg0KIyMjIE11bHRpcGxlIEp1cHl0ZXIgdG8gUk1EIGNvbnZlcnNpb24NCg0KU2VhcmNoIGluIGZvbGRlciBmb3IgaXB5bmIgZmlsZXMsIGFuZCB0aGVuIGNvbnZlcnQgY29sbGVjdGl2ZWx5IHRvIFJtZC4NCg0KYGBge3J9DQojIEdlbmVyYXRlIFBhdGhzDQpzcHRfZmlsZV9yb290ID0gJ0M6L1VzZXJzL2Zhbi9TdGF0NEVjb24vZGVzY3JpcHRpdmUvJw0Kc3B0X2ZpbGVfbmFtZSA9ICdEYXRhQmFza2V0YmFsbCcNCnNwdF9maWxlX2Z1bGxfaXB5bmIgPSBwYXN0ZTAoc3B0X2ZpbGVfcm9vdCwgc3B0X2ZpbGVfbmFtZSwgJy5pcHluYicpDQpzcHRfZmlsZV9mdWxsX3JtZCA9IHBhc3RlMChzcHRfZmlsZV9yb290LCBzcHRfZmlsZV9uYW1lLCAnLnJtZCcpDQoNCiMgQ29udmVydCBmcm9tIElQWU5CIHRvIFJNRA0KZmlsZV9uYl9ybWQgPSBybWFya2Rvd246Ojpjb252ZXJ0X2lweW5iKHNwdF9maWxlX2Z1bGxfaXB5bmIpDQpzdF9uYl9ybWQgPSB4ZnVuOjpmaWxlX3N0cmluZyhmaWxlX25iX3JtZCkNCg0KIyBTYXZlIFJNRA0KZmlsZUNvbm4gPC0gZmlsZShzcHRfZmlsZV9mdWxsX3JtZCkNCndyaXRlTGluZXMoc3RfbmJfcm1kLCBmaWxlQ29ubikNCmNsb3NlKGZpbGVDb25uKQ0KDQojIENvbnZlcnQgdG8gUERGIGFuZCBIVE1MDQpybWFya2Rvd246OnJlbmRlcihzcHRfZmlsZV9mdWxsX3JtZCwgInBkZl9kb2N1bWVudCIpDQpybWFya2Rvd246OnJlbmRlcihzcHRfZmlsZV9mdWxsX3JtZCwgImh0bWxfZG9jdW1lbnQiKQ0KYGBgDQo=</div>
 
 
 

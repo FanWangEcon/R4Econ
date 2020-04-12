@@ -1,0 +1,42 @@
+---
+title: "R Tibble Dataframe NA Values"
+date: 2020-04-01
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+always_allow_html: true
+---
+
+### Variable NA Values
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+#### Find and Replace
+
+Find and Replace in Dataframe.
+
+```{r, amto.tibble.fs_tib_na.find_replace, eval=FALSE}
+# For dataframe
+df.reg <-df.reg %>% na_if(-Inf) %>% na_if(Inf)
+# For a specific variable in dataframe
+df.reg.use %>% mutate(!!(var.input) := na_if(!!sym(var.input), 0))
+
+# Setting to NA
+df.reg.use <- df.reg.guat %>% filter(!!sym(var.mth) != 0)
+df.reg.use.log <- df.reg.use
+df.reg.use.log[which(is.nan(df.reg.use$prot.imputed.log)),] = NA
+df.reg.use.log[which(df.reg.use$prot.imputed.log==Inf),] = NA
+df.reg.use.log[which(df.reg.use$prot.imputed.log==-Inf),] = NA
+df.reg.use.log <- df.reg.use.log %>% drop_na(prot.imputed.log)
+# df.reg.use.log$prot.imputed.log
+```

@@ -1,30 +1,27 @@
 ---
 title: "R Example Binary Outcome Estimation with Binary Regressor"
-author: Fan Wang
+date: 2020-04-01
 output:
-  pdf_document: default
-  word_document: default
-  html_document: default
-  html_notebook: default
-urlcolor: blue
-always_allow_html: yes
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+always_allow_html: true
 ---
 
-Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository, or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.
+### Binary Logit
 
-```{r GlobalOptions, echo = T, results = 'hide', message=F, warning=F}
-rm(list = ls(all.names = TRUE))
-options(knitr.duplicate.label = 'allow')
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
 ```
 
-```{r loadlib, echo = T, results = 'hide', message=F, warning=F}
-library(tidyverse)
-library(knitr)
-library(kableExtra)
-library(REconTools)
-```
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
 
-# Data Preparation
+*Data Preparation*
 
 ```{r data set up}
 df_mtcars <- mtcars
@@ -49,9 +46,7 @@ df_mtcars <- df_mtcars %>%
                            labels=c(svr_binary_lb0, svr_binary_lb1)))
 ```
 
-# Basic Logit Regression
-
-## Logit Regresion and Prediction
+#### Logit Regresion and Prediction
 
 logit regression with glm, and predict using estimation data. Prediction and estimation with one variable.
 
@@ -67,7 +62,7 @@ summary(rs_logit)
 df_mtcars$p_mpg <- predict(rs_logit, newdata = df_mtcars, type = "response")
 ```
 
-## Prediction with Observed Binary Input
+##### Prediction with Observed Binary Input
 
 Logit regression with a continuous variable and a binary variable. Predict outcome with observed continuous variable as well as observed binary input variable.
 
@@ -95,7 +90,7 @@ scatter <- ggplot(df_mtcars, aes(x=p_mpg_hp, y=p_mpg)) +
 print(scatter)
 ```
 
-## Prediction with Binary set to 0 and 1
+##### Prediction with Binary set to 0 and 1
 
 Now generate two predictions. One set where binary input is equal to 0, and another where the binary inputs are equal to 1. Ignore whether in data binary input is equal to 0 or 1. Use the same regression results as what was just derived.
 
@@ -129,8 +124,7 @@ scatter <- ggplot(df_mtcars, aes(x=p_mpg_hp_bi0)) +
 print(scatter)
 ```
 
-
-## Prediction with Binary set to 0 and 1 Difference
+##### Prediction with Binary set to 0 and 1 Difference
 
 What is the difference in probability between binary = 0 vs binary = 1. How does that relate to the probability of outcome of interest when binary = 0 for all.
 
@@ -153,8 +147,7 @@ scatter <- ggplot(df_mtcars, aes(x=A_i)) +
 print(scatter)
 ```
 
-
-## X variables and A and alpha
+##### X variables and A and alpha
 
 Given the x-variables included in the logit regression, how do they relate to A_i and alpha_i
 

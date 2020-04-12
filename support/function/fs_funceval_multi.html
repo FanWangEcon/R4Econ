@@ -11,6 +11,7 @@
 
 <meta name="author" content="Fan Wang" />
 
+<meta name="date" content="2020-04-01" />
 
 <title>DPLYR Evaluate Function with N Arrays of Inputs J times</title>
 
@@ -373,6 +374,7 @@ summary {
 
 <h1 class="title toc-ignore">DPLYR Evaluate Function with N Arrays of Inputs J times</h1>
 <h4 class="author">Fan Wang</h4>
+<h4 class="date">2020-04-01</h4>
 
 </div>
 
@@ -381,9 +383,9 @@ summary {
 <div id="issue-and-goal" class="section level2">
 <h2>Issue and Goal</h2>
 <p>We want evaluate nonlinear function f(Q_i, y_i, ar_x, ar_y, c_j, d), where c_j is an element of some array, d is a constant, and ar_x and ar_y are arrays, both fixed. x_i and y_i vary over each row of matrix. We would like to evaluate this nonlinear function concurrently across <span class="math inline">\(N\)</span> individuals. The eventual goal is to find the <span class="math inline">\(i\)</span> specific <span class="math inline">\(Q\)</span> that solves the nonlinear equations.</p>
-<p>In <a href="https://fanwangecon.github.io/R4Econ/support/function/fs_funceval.html">Evaluate Nonlinear Function with N arrays of Inputs</a>, we evaluated the function fixing <span class="math inline">\(c\)</span>, the difference here is that we want to evaluate <span class="math inline">\(J\)</span> times the overall matrix of inputs.</p>
+<p>In <a href="https://fanwangecon.github.io/R4Econ/function/mutatef/fs_funceval.html">Evaluate Nonlinear Function with N arrays of Inputs</a>, we evaluated the function fixing <span class="math inline">\(c\)</span>, the difference here is that we want to evaluate <span class="math inline">\(J\)</span> times the overall matrix of inputs.</p>
 <p>The results should be stored in a tibble where each of the <span class="math inline">\(j \in J\)</span> evaluations are stacked together with a variable <span class="math inline">\(c\)</span> that records which <span class="math inline">\(c_j\)</span> value was used for this evaluation.</p>
-<p>This is achieved here by using <a href="https://fanwangecon.github.io/R4Econ/support/array/fs_meshr.html">expand_grid</a>.</p>
+<p>This is achieved here by using <a href="https://fanwangecon.github.io/R4Econ/amto/array/fs_meshr.html">expand_grid</a>.</p>
 </div>
 <div id="set-up" class="section level2">
 <h2>Set Up</h2>
@@ -395,10 +397,10 @@ library(kableExtra)
 # file name
 st_file_name = &#39;fs_funceval&#39;
 # Generate R File
-purl(paste0(st_file_name, &quot;.Rmd&quot;), output=paste0(st_file_name, &quot;.R&quot;), documentation = 2)
+try(purl(paste0(st_file_name, &quot;.Rmd&quot;), output=paste0(st_file_name, &quot;.R&quot;), documentation = 2))
 # Generate PDF and HTML
-# rmarkdown::render(&quot;C:/Users/fan/R4Econ/support/function/fs_funceval.Rmd&quot;, &quot;pdf_document&quot;)
-# rmarkdown::render(&quot;C:/Users/fan/R4Econ/support/function/fs_funceval.Rmd&quot;, &quot;html_document&quot;)</code></pre>
+# rmarkdown::render(&quot;C:/Users/fan/R4Econ/function/mutatef/fs_funceval.Rmd&quot;, &quot;pdf_document&quot;)
+# rmarkdown::render(&quot;C:/Users/fan/R4Econ/function/mutatef/fs_funceval.Rmd&quot;, &quot;html_document&quot;)</code></pre>
 </div>
 <div id="set-up-input-arrays" class="section level2">
 <h2>Set up Input Arrays</h2>
@@ -758,7 +760,7 @@ ffi_nonlin_dplyrdo &lt;- function(fl_A, fl_alpha, fl_N, fl_rho, ar_A, ar_alpha, 
 </div>
 <div id="evaluate-nonlinear-function-using-dplyr-mutate-once" class="section level2">
 <h2>Evaluate Nonlinear Function using dplyr mutate Once</h2>
-<p>Below, repeat what we did in <a href="https://fanwangecon.github.io/R4Econ/support/function/fs_funceval.html">Evaluate Nonlinear Function with N arrays of Inputs</a>.</p>
+<p>Below, repeat what we did in <a href="https://fanwangecon.github.io/R4Econ/function/mutatef/fs_funceval.html">Evaluate Nonlinear Function with N arrays of Inputs</a>.</p>
 <pre class="r"><code># Convert Matrix to Tibble
 ar_st_col_names = c(&#39;fl_A&#39;, &#39;fl_alpha&#39;, &#39;fl_N&#39;)
 tb_nN_by_nQ_A_alpha &lt;- as_tibble(mt_nN_by_nQ_A_alpha) %&gt;% rename_all(~c(ar_st_col_names))

@@ -1,6 +1,7 @@
 ---
 title: "DPLYR Evaluate Function with N Arrays of Inputs J times"
 author: Fan Wang
+date: 2020-04-01
 output:
   pdf_document: default
   word_document: default
@@ -16,11 +17,11 @@ Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangec
 
 We want evaluate nonlinear function f(Q_i, y_i, ar_x, ar_y, c_j, d), where c_j is an element of some array, d is a constant, and ar_x and ar_y are arrays, both fixed. x_i and y_i vary over each row of matrix. We would like to evaluate this nonlinear function concurrently across $N$ individuals. The eventual goal is to find the $i$ specific $Q$ that solves the nonlinear equations.
 
-In [Evaluate Nonlinear Function with N arrays of Inputs](https://fanwangecon.github.io/R4Econ/support/function/fs_funceval.html), we evaluated the function fixing $c$, the difference here is that we want to evaluate $J$ times the overall matrix of inputs.
+In [Evaluate Nonlinear Function with N arrays of Inputs](https://fanwangecon.github.io/R4Econ/function/mutatef/fs_funceval.html), we evaluated the function fixing $c$, the difference here is that we want to evaluate $J$ times the overall matrix of inputs.
 
 The results should be stored in a tibble where each of the $j \in J$ evaluations are stacked together with a variable $c$ that records which $c_j$ value was used for this evaluation.
 
-This is achieved here by using [expand_grid](https://fanwangecon.github.io/R4Econ/support/array/fs_meshr.html).
+This is achieved here by using [expand_grid](https://fanwangecon.github.io/R4Econ/amto/array/fs_meshr.html).
 
 ## Set Up
 
@@ -37,8 +38,8 @@ st_file_name = 'fs_funceval'
 # Generate R File
 try(purl(paste0(st_file_name, ".Rmd"), output=paste0(st_file_name, ".R"), documentation = 2))
 # Generate PDF and HTML
-# rmarkdown::render("C:/Users/fan/R4Econ/support/function/fs_funceval.Rmd", "pdf_document")
-# rmarkdown::render("C:/Users/fan/R4Econ/support/function/fs_funceval.Rmd", "html_document")
+# rmarkdown::render("C:/Users/fan/R4Econ/support/function/fs_funceval_multi.Rmd", "pdf_document")
+# rmarkdown::render("C:/Users/fan/R4Econ/support/function/fs_funceval_multi.Rmd", "html_document")
 ```
 
 ## Set up Input Arrays
@@ -75,10 +76,10 @@ mt_nN_by_nQ_A_alpha_mesh_rho <- as_tibble(mt_nN_by_nQ_A_alpha) %>% expand_grid(r
 
 # Show
 kable(mt_nN_by_nQ_A_alpha_mesh_rho) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+  kable_styling_fc_wide()
 ```
 
-And the aggregate resources available for allocations, along with observed allocations. 
+And the aggregate resources available for allocations, along with observed allocations.
 
 ```{r setup_data total resource}
 # Total Resources available
@@ -116,7 +117,7 @@ ffi_nonlin_dplyrdo <- function(fl_A, fl_alpha, fl_N, fl_rho, ar_A, ar_alpha, fl_
 
 ## Evaluate Nonlinear Function using dplyr mutate Once
 
-Below, repeat what we did in [Evaluate Nonlinear Function with N arrays of Inputs](https://fanwangecon.github.io/R4Econ/support/function/fs_funceval.html).
+Below, repeat what we did in [Evaluate Nonlinear Function with N arrays of Inputs](https://fanwangecon.github.io/R4Econ/function/mutatef/fs_funceval.html).
 
 ```{r nonlinear_dplyr_mutate}
 # Convert Matrix to Tibble
@@ -131,13 +132,13 @@ tb_nN_by_nQ_A_alpha = tb_nN_by_nQ_A_alpha %>% rowwise() %>%
                                                                fl_N_agg))
 # Show
 kable(tb_nN_by_nQ_A_alpha) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+  kable_styling_fc_wide()
 ```
 
 
 ## Evaluate Nonlinear Function using dplyr multiple times and stack results
 
-Evaluate multiple times and stack results. 
+Evaluate multiple times and stack results.
 
 ```{r nonlinear_dplyr_mutate multiple rhos}
 # Convert Matrix to Tibble
@@ -151,6 +152,5 @@ tb_nN_by_nQ_A_alpha_mesh_rho = tb_nN_by_nQ_A_alpha_mesh_rho %>% rowwise() %>%
                                                                fl_N_agg))
 # Show
 kable(tb_nN_by_nQ_A_alpha_mesh_rho) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+  kable_styling_fc_wide()
 ```
-

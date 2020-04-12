@@ -1,0 +1,42 @@
+---
+title: "Resource Allocation and the Youden Function  \nOptimizing Coverage and Leakage"
+date: 2020-04-09
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+always_allow_html: true
+---
+
+<!-- includes:
+  in_header: ../../preamble.tex -->
+
+### The Youden Index
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+The [Youden Index](https://en.wikipedia.org/wiki/Youden%27s_J_statistic) is used in a variety of context, including in determining optimal probability thresholds for determining which individuals should receive allocations.
+
+$$
+\text{YOUDEN INDEX}
+=
+\frac{\text{Number Below Poverty Line Identified}}{\text{True Number Below Poverty Line}}
+-
+\frac{\text{Number Misidentified as Below Poverty Line}}{\text{True Number Above Poverty Line}}
+$$
+
+When we have a poverty alleviation program, there is a threshold for considering what is poor. In some context, this might be a threshold level of resources needed to purchase adequent nutrition based on local prices. In some context, this might be some consumption, income, or wealth bounds. Regardless of what these are, the policy maker is interested in identifying all individuals below the threshold, but that is often not possible because consumption and wealth could be very hard to observe. Income for informal workers could also be hard to come by. And if people know a particular consumption threshold reported will lead to transfers, there could be incentives to misreport to the government or NGOs.
+
+As a result, in any poverty alleviation policy implementaion, there are four groups of individuals. Poor people who we hoped to allocate to but did not receive allocations, non-poor who we did not want to allocate to but did receive allocations. And Poor who actually did receive allocations, as well as non-poor who did not receive allocations. The proportions of these differ depending on how much resources there are to allocate, what observables exist that can help government/NGO identify the poors and what how much unobservables exist that government/NGO don't see matter, what is the mode of allocationg (is the government allocating, or local leaders choosing, or individuals self applying, etc).
+
+
+#### The Equation

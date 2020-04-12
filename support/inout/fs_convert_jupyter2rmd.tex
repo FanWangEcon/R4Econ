@@ -1,0 +1,408 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Convert Jupyter Files to RMD},
+  colorlinks=true,
+  linkcolor=Maroon,
+  filecolor=Maroon,
+  citecolor=Blue,
+  urlcolor=blue,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{Convert Jupyter Files to RMD}
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+\maketitle
+
+Back to \href{https://fanwangecon.github.io}{Fan}'s
+\href{https://fanwangecon.github.io/R4Econ/}{Reusable R Code} table of
+content.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{options}\NormalTok{(}\DataTypeTok{knitr.duplicate.label =} \StringTok{'allow'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(tidyr)}
+\KeywordTok{library}\NormalTok{(rmarkdown)}
+\KeywordTok{library}\NormalTok{(knitr)}
+\KeywordTok{library}\NormalTok{(kableExtra)}
+\CommentTok{# file name}
+\NormalTok{st_file_name =}\StringTok{ 'fs_convert_jupyter2rmd'}
+\CommentTok{# Generate R File}
+\KeywordTok{try}\NormalTok{(}\KeywordTok{purl}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(st_file_name, }\StringTok{".Rmd"}\NormalTok{), }\DataTypeTok{output=}\KeywordTok{paste0}\NormalTok{(st_file_name, }\StringTok{".R"}\NormalTok{), }\DataTypeTok{documentation =} \DecValTok{2}\NormalTok{))}
+\CommentTok{# Generate PDF and HTML}
+\CommentTok{# rmarkdown::render("C:/Users/fan/R4Econ/amto/array/fs_meshr.Rmd", "pdf_document")}
+\CommentTok{# rmarkdown::render("C:/Users/fan/R4Econ/amto/array/fs_meshr.Rmd", "html_document")}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{jupyter-files-and-rmd}{%
+\subsection{Jupyter Files and RMD}\label{jupyter-files-and-rmd}}
+
+Rmarkdown in Rstudio is easier for debugging, and allows for easier
+interaction with current workspace.
+
+\hypertarget{single-jupyter-to-rmd-conversion}{%
+\subsubsection{Single Jupyter to RMD
+conversion}\label{single-jupyter-to-rmd-conversion}}
+
+Rmarkdown has a conversion program:
+\href{https://rmarkdown.rstudio.com/docs/reference/convert_ipynb.html}{convert\_ipynb}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Generate Paths}
+\NormalTok{spt_file_root =}\StringTok{ 'C:/Users/fan/Stat4Econ/descriptive/'}
+\NormalTok{spt_file_name =}\StringTok{ 'DataBasketball'}
+\NormalTok{spt_file_full_ipynb =}\StringTok{ }\KeywordTok{paste0}\NormalTok{(spt_file_root, spt_file_name, }\StringTok{'.ipynb'}\NormalTok{)}
+\NormalTok{spt_file_full_rmd =}\StringTok{ }\KeywordTok{paste0}\NormalTok{(spt_file_root, spt_file_name, }\StringTok{'.rmd'}\NormalTok{)}
+
+\CommentTok{# Convert from IPYNB to RMD}
+\NormalTok{file_nb_rmd =}\StringTok{ }\NormalTok{rmarkdown}\OperatorTok{:::}\KeywordTok{convert_ipynb}\NormalTok{(spt_file_full_ipynb)}
+\NormalTok{st_nb_rmd =}\StringTok{ }\NormalTok{xfun}\OperatorTok{::}\KeywordTok{file_string}\NormalTok{(file_nb_rmd)}
+
+\CommentTok{# Save RMD}
+\NormalTok{fileConn <-}\StringTok{ }\KeywordTok{file}\NormalTok{(spt_file_full_rmd)}
+\KeywordTok{writeLines}\NormalTok{(st_nb_rmd, fileConn)}
+\KeywordTok{close}\NormalTok{(fileConn)}
+
+\CommentTok{# Convert to PDF and HTML}
+\NormalTok{rmarkdown}\OperatorTok{::}\KeywordTok{render}\NormalTok{(spt_file_full_rmd, }\StringTok{"pdf_document"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## 
+## processing file: DataBasketball.rmd
+\end{verbatim}
+
+\begin{verbatim}
+##   |                                                                                              |                                                                                      |   0%  |                                                                                              |............                                                                          |  14%
+##   ordinary text without R code
+## 
+##   |                                                                                              |.........................                                                             |  29%
+## label: unnamed-chunk-1-2
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in in_dir(input_dir(), evaluate(code, envir = env, new_device = FALSE, : You changed the
+## working directory to C:/Users/fan/Stat4Econ/data (probably via setwd()). It will be restored to
+## C:/Users/fan/Stat4Econ/descriptive. See the Note section in ?knitr::knit
+\end{verbatim}
+
+\begin{verbatim}
+##   |                                                                                              |.....................................                                                 |  43%
+##   ordinary text without R code
+## 
+##   |                                                                                              |.................................................                                     |  57%
+## label: unnamed-chunk-3
+##   |                                                                                              |.............................................................                         |  71%
+##   ordinary text without R code
+## 
+##   |                                                                                              |..........................................................................            |  86%
+## label: unnamed-chunk-4
+##   |                                                                                              |......................................................................................| 100%
+##   ordinary text without R code
+\end{verbatim}
+
+\begin{verbatim}
+## output file: DataBasketball.knit.md
+\end{verbatim}
+
+\begin{verbatim}
+## "C:/Program Files/RStudio/bin/pandoc/pandoc" +RTS -K512m -RTS DataBasketball.utf8.md --to latex --from markdown+autolink_bare_uris+tex_math_single_backslash --output DataBasketball.tex --self-contained --highlight-style tango --pdf-engine pdflatex --variable graphics --lua-filter "C:/Users/fan/Documents/R/win-library/3.6/rmarkdown/rmd/lua/pagebreak.lua" --lua-filter "C:/Users/fan/Documents/R/win-library/3.6/rmarkdown/rmd/lua/latex-div.lua" --variable "geometry:margin=1in"
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Output created: DataBasketball.pdf
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rmarkdown}\OperatorTok{::}\KeywordTok{render}\NormalTok{(spt_file_full_rmd, }\StringTok{"html_document"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## 
+## processing file: DataBasketball.rmd
+\end{verbatim}
+
+\begin{verbatim}
+##   |                                                                                              |                                                                                      |   0%  |                                                                                              |............                                                                          |  14%
+##   ordinary text without R code
+## 
+##   |                                                                                              |.........................                                                             |  29%
+## label: unnamed-chunk-1-2
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in in_dir(input_dir(), evaluate(code, envir = env, new_device = FALSE, : You changed the
+## working directory to C:/Users/fan/Stat4Econ/data (probably via setwd()). It will be restored to
+## C:/Users/fan/Stat4Econ/descriptive. See the Note section in ?knitr::knit
+\end{verbatim}
+
+\begin{verbatim}
+##   |                                                                                              |.....................................                                                 |  43%
+##   ordinary text without R code
+## 
+##   |                                                                                              |.................................................                                     |  57%
+## label: unnamed-chunk-3
+##   |                                                                                              |.............................................................                         |  71%
+##   ordinary text without R code
+## 
+##   |                                                                                              |..........................................................................            |  86%
+## label: unnamed-chunk-4
+##   |                                                                                              |......................................................................................| 100%
+##   ordinary text without R code
+\end{verbatim}
+
+\begin{verbatim}
+## output file: DataBasketball.knit.md
+\end{verbatim}
+
+\begin{verbatim}
+## "C:/Program Files/RStudio/bin/pandoc/pandoc" +RTS -K512m -RTS DataBasketball.utf8.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash+smart --output DataBasketball.html --email-obfuscation none --self-contained --standalone --section-divs --template "C:\Users\fan\Documents\R\win-library\3.6\rmarkdown\rmd\h\default.html" --no-highlight --variable highlightjs=1 --variable "theme:bootstrap" --include-in-header "C:\Users\fan\AppData\Local\Temp\RtmpQ5qumo\rmarkdown-str8858638e2dbd.html" --mathjax --variable "mathjax-url:https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" --lua-filter "C:/Users/fan/Documents/R/win-library/3.6/rmarkdown/rmd/lua/pagebreak.lua" --lua-filter "C:/Users/fan/Documents/R/win-library/3.6/rmarkdown/rmd/lua/latex-div.lua"
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Output created: DataBasketball.html
+\end{verbatim}
+
+\hypertarget{multiple-jupyter-to-rmd-conversion}{%
+\subsubsection{Multiple Jupyter to RMD
+conversion}\label{multiple-jupyter-to-rmd-conversion}}
+
+Search in folder for ipynb files, and then convert collectively to Rmd.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Generate Paths}
+\NormalTok{spt_file_root =}\StringTok{ 'C:/Users/fan/Stat4Econ/descriptive/'}
+\NormalTok{spt_file_name =}\StringTok{ 'DataBasketball'}
+\NormalTok{spt_file_full_ipynb =}\StringTok{ }\KeywordTok{paste0}\NormalTok{(spt_file_root, spt_file_name, }\StringTok{'.ipynb'}\NormalTok{)}
+\NormalTok{spt_file_full_rmd =}\StringTok{ }\KeywordTok{paste0}\NormalTok{(spt_file_root, spt_file_name, }\StringTok{'.rmd'}\NormalTok{)}
+
+\CommentTok{# Convert from IPYNB to RMD}
+\NormalTok{file_nb_rmd =}\StringTok{ }\NormalTok{rmarkdown}\OperatorTok{:::}\KeywordTok{convert_ipynb}\NormalTok{(spt_file_full_ipynb)}
+\NormalTok{st_nb_rmd =}\StringTok{ }\NormalTok{xfun}\OperatorTok{::}\KeywordTok{file_string}\NormalTok{(file_nb_rmd)}
+
+\CommentTok{# Save RMD}
+\NormalTok{fileConn <-}\StringTok{ }\KeywordTok{file}\NormalTok{(spt_file_full_rmd)}
+\KeywordTok{writeLines}\NormalTok{(st_nb_rmd, fileConn)}
+\KeywordTok{close}\NormalTok{(fileConn)}
+
+\CommentTok{# Convert to PDF and HTML}
+\NormalTok{rmarkdown}\OperatorTok{::}\KeywordTok{render}\NormalTok{(spt_file_full_rmd, }\StringTok{"pdf_document"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## 
+## processing file: DataBasketball.rmd
+\end{verbatim}
+
+\begin{verbatim}
+##   |                                                                                              |                                                                                      |   0%  |                                                                                              |............                                                                          |  14%
+##   ordinary text without R code
+## 
+##   |                                                                                              |.........................                                                             |  29%
+## label: unnamed-chunk-1-2
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in in_dir(input_dir(), evaluate(code, envir = env, new_device = FALSE, : You changed the
+## working directory to C:/Users/fan/Stat4Econ/data (probably via setwd()). It will be restored to
+## C:/Users/fan/Stat4Econ/descriptive. See the Note section in ?knitr::knit
+\end{verbatim}
+
+\begin{verbatim}
+##   |                                                                                              |.....................................                                                 |  43%
+##   ordinary text without R code
+## 
+##   |                                                                                              |.................................................                                     |  57%
+## label: unnamed-chunk-3
+##   |                                                                                              |.............................................................                         |  71%
+##   ordinary text without R code
+## 
+##   |                                                                                              |..........................................................................            |  86%
+## label: unnamed-chunk-4
+##   |                                                                                              |......................................................................................| 100%
+##   ordinary text without R code
+\end{verbatim}
+
+\begin{verbatim}
+## output file: DataBasketball.knit.md
+\end{verbatim}
+
+\begin{verbatim}
+## "C:/Program Files/RStudio/bin/pandoc/pandoc" +RTS -K512m -RTS DataBasketball.utf8.md --to latex --from markdown+autolink_bare_uris+tex_math_single_backslash --output DataBasketball.tex --self-contained --highlight-style tango --pdf-engine pdflatex --variable graphics --lua-filter "C:/Users/fan/Documents/R/win-library/3.6/rmarkdown/rmd/lua/pagebreak.lua" --lua-filter "C:/Users/fan/Documents/R/win-library/3.6/rmarkdown/rmd/lua/latex-div.lua" --variable "geometry:margin=1in"
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Output created: DataBasketball.pdf
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rmarkdown}\OperatorTok{::}\KeywordTok{render}\NormalTok{(spt_file_full_rmd, }\StringTok{"html_document"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## 
+## processing file: DataBasketball.rmd
+\end{verbatim}
+
+\begin{verbatim}
+##   |                                                                                              |                                                                                      |   0%  |                                                                                              |............                                                                          |  14%
+##   ordinary text without R code
+## 
+##   |                                                                                              |.........................                                                             |  29%
+## label: unnamed-chunk-1-2
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in in_dir(input_dir(), evaluate(code, envir = env, new_device = FALSE, : You changed the
+## working directory to C:/Users/fan/Stat4Econ/data (probably via setwd()). It will be restored to
+## C:/Users/fan/Stat4Econ/descriptive. See the Note section in ?knitr::knit
+\end{verbatim}
+
+\begin{verbatim}
+##   |                                                                                              |.....................................                                                 |  43%
+##   ordinary text without R code
+## 
+##   |                                                                                              |.................................................                                     |  57%
+## label: unnamed-chunk-3
+##   |                                                                                              |.............................................................                         |  71%
+##   ordinary text without R code
+## 
+##   |                                                                                              |..........................................................................            |  86%
+## label: unnamed-chunk-4
+##   |                                                                                              |......................................................................................| 100%
+##   ordinary text without R code
+\end{verbatim}
+
+\begin{verbatim}
+## output file: DataBasketball.knit.md
+\end{verbatim}
+
+\begin{verbatim}
+## "C:/Program Files/RStudio/bin/pandoc/pandoc" +RTS -K512m -RTS DataBasketball.utf8.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash+smart --output DataBasketball.html --email-obfuscation none --self-contained --standalone --section-divs --template "C:\Users\fan\Documents\R\win-library\3.6\rmarkdown\rmd\h\default.html" --no-highlight --variable highlightjs=1 --variable "theme:bootstrap" --include-in-header "C:\Users\fan\AppData\Local\Temp\RtmpQ5qumo\rmarkdown-str8858282e6ba8.html" --mathjax --variable "mathjax-url:https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" --lua-filter "C:/Users/fan/Documents/R/win-library/3.6/rmarkdown/rmd/lua/pagebreak.lua" --lua-filter "C:/Users/fan/Documents/R/win-library/3.6/rmarkdown/rmd/lua/latex-div.lua"
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Output created: DataBasketball.html
+\end{verbatim}
+
+\end{document}

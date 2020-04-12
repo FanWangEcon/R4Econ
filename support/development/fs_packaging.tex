@@ -1,0 +1,692 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdfauthor={Fan Wang},
+  colorlinks=true,
+  linkcolor=Maroon,
+  filecolor=Maroon,
+  citecolor=Blue,
+  urlcolor=blue,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+
+\title{Generate R Package Example\\
+roxygen2 and pkgdown}
+\author{Fan Wang}
+\date{2020-04-01}
+
+\begin{document}
+\maketitle
+
+Go back to \href{http://fanwangecon.github.io/}{fan}'s
+\href{https://fanwangecon.github.io/REconTools/}{REconTools} Package,
+\href{https://fanwangecon.github.io/R4Econ/}{R4Econ} Repository, or
+\href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R}
+Repository.
+
+\hypertarget{objective}{%
+\section{Objective}\label{objective}}
+
+Document and generate sharable R package.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Use \href{https://github.com/hadley/roxygen2}{roxygen2} from
+  \href{https://github.com/hadley}{Hadley} to document package.
+\item
+  Use \href{https://github.com/r-lib/pkgdown}{pkgdown} to package file
+  and publish to github pages.
+\end{enumerate}
+
+\hypertarget{file-structure-and-naming-convention}{%
+\section{File Structure and Naming
+Convention}\label{file-structure-and-naming-convention}}
+
+\textbf{Folders}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  R function functions in the \emph{/R} folder
+\item
+  RData files in the \emph{/data} folder
+\end{enumerate}
+
+\textbf{Naming Conventions}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  functions files and functions all should be \emph{snake\_case\_names}
+\item
+  function name prefix:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{fs\_}: for non-project specific script files
+  \item
+    \emph{ffs\_}: for project specific functions script files
+  \item
+    \emph{fv\_}: for non-project specific vignettes files, generally RMD
+  \item
+    \emph{ffv\_}: for project specific functions vignettes files,
+    generally RMD
+  \item
+    \emph{ff\_}: for non-project specific functions files
+  \item
+    \emph{ffd\_}: for project specific data description files
+  \item
+    \emph{ffp\_}: for project specific functions files
+  \item
+    \emph{ffy\_}: for project specific utility files
+  \item
+    Each function file could be prepared to have multiple functions
+    inside, each file have the root which is the function name.
+  \end{itemize}
+\end{enumerate}
+
+Additionally, follow these general structures for \emph{functions} in
+\emph{/R} folder:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  3 letter/digit project name
+\item
+  3 letter/digit current file name, in R4E, three letter func group
+  name: \emph{ffp\_opt\_lin.R}
+\item
+  5 letter/digit function name within file: \emph{function
+  ffp\_opt\_lin\_solum}
+\end{enumerate}
+
+With this structure, we end up with potentially fairly long names, but
+hopefully also not too long and clear.
+
+Additionally, follow these general structures for \emph{vignettes} in
+\emph{/vignettes} folder:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Follow conventions for function name vignettes should be associated
+  with functions
+\item
+  There should be a core vignette that has the same name as the R
+  function it is trying to provide line by line details or math
+  descriptions of. If the function is called:
+  \emph{ffp\_opt\_lin\_solum.r}, the vignette shold be
+  **ffv\_opt\_lin\_solum.Rmd*.
+\item
+  Append onto existing function name 5 letter/digit to describe what
+  this vignettes is suppose to achieve:
+  \emph{ffv\_opt\_lin\_solum\_vign1.Rmd}.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    note the file starts with \emph{ffv}
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{create-r-project-directory}{%
+\section{Create R Project Directory}\label{create-r-project-directory}}
+
+\hypertarget{folder-does-not-exist-yet}{%
+\subsection{Folder does not exist yet}\label{folder-does-not-exist-yet}}
+
+If the project/folder does not yet exist:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \emph{devtools:create} the folder of interest
+\item
+  Move your files over to \emph{/R} and \emph{/data} folders.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Write files following conventions above and with r descriptions
+  \end{itemize}
+\item
+  \emph{pkgdown::build\_site()}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{devtools}\OperatorTok{::}\KeywordTok{create}\NormalTok{(}\StringTok{"C:/Users/fan/R4Econ"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{folder-already-exists}{%
+\subsection{Folder already exists}\label{folder-already-exists}}
+
+If there is already a folder with a bunch of files including R and not R
+files, and the folder needs to be converted to become a R package and
+was previously not a R package.
+
+The idea is to use a folder somewhere to generate a generic template
+folder. This folder will have files and structure we need for our actual
+folder. Each time, we will just copy that folder's contents into the
+folder that we want to turn into a R folder. And do a global search to
+replace the template folder's folder name with the actual project name.
+To avoid confusion, generate this folder outside of an existing R
+package.
+
+If there is already a R folder in your existing project, delete that or
+rename that and move files back into the \emph{/R} folder after
+completion. Make sure there are no duplicate folder or file names in the
+old and the new project.
+
+Search replace the word \emph{rprjtemplate} inside your old project
+folder with the new files, replace that with your project name. Should
+appear in three different spots.
+
+\hypertarget{r-project-template}{%
+\subsubsection{R project template}\label{r-project-template}}
+
+The
+{[}rprjtemplate{]}{[}\url{https://github.com/FanWangEcon/Tex4Econ/tree/master/nontex/rprjtemplate}{]}
+serves this templating role.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Create project}
+\NormalTok{devtools}\OperatorTok{::}\KeywordTok{create}\NormalTok{(}\StringTok{"C:/Users/fan/Tex4Econ/nontex/rprjtemplate"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Running the \emph{devtools::create()} command will create the core
+needed folder structure with:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  NAMESPACE
+\item
+  DESCRIPTION
+\item
+  \emph{.gitignore}
+\item
+  \emph{.Rbuildignore}
+\item
+  \emph{.Rproj}
+\item
+  Empty R folder
+\end{enumerate}
+
+Now customize this folder for future use with
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  custom \emph{.gitignore}
+\item
+  MIT LICENSE
+\item
+  etc.
+\end{enumerate}
+
+For adding vignette later:
+
+Add these to the DESCRIPTION file: - Suggests: knitr, rmarkdown -
+VignetteBuilder: knitr
+
+\hypertarget{develop-and-package-r-project}{%
+\section{Develop and Package R
+Project}\label{develop-and-package-r-project}}
+
+Developing a package means write various vignettes and functions. My
+process is to write various vignettes first, to basically test out core
+functionalities. Then convert parts of those vignettes to functions.
+
+As functions are developed, some vignettes can be invoked differently,
+taking advantage of newly written functions. Make sure keep the original
+vignette that is not dependent on any other functions for ease of going
+to the initial point and figuring out what is happening. Names could be
+written to indicate vignette vintage.
+
+\hypertarget{development-process}{%
+\subsection{Development Process}\label{development-process}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Write original vignette with dependencies, minimize dependencies, for
+  example, do not import tidyverse, since package will not allow for all
+  tidyverse components to be added, too much space needed.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    this is not really a vignette, it is a function testing sandbox that
+    does not call any package functions but provides line by line
+    descriptions for the core functions with print outputs.
+  \end{itemize}
+\item
+  Test vignette inside Rstudio/VSCode etc. (These vignette do not depend
+  on the function to be written below, they do not exist yet)
+\item
+  When raw vignettes work, start converting vignette components to
+  functions, include minimal dependencies,
+
+  \begin{itemize}
+  \tightlist
+  \item
+    in function: \emph{@import}
+  \item
+    add to DESCRIPTION: \textbf{usethis::use\_package(``tidyr'')} if
+    tidyr is needed as \emph{IMPORT}
+  \item
+    \emph{DEPENDS} vs \emph{IMPORTS}
+  \item
+    \emph{important}: slowly check what does the function depend on, for
+    example \emph{R4Econ} has its own dependencies, when installing as
+    packages, make those dependencies explicit in the new function if it
+    calls \emph{R4Econ}. Otherwise, \emph{test()} might throw error.
+    This is resolved if \emph{R4Econ} add several things under depends.
+  \end{itemize}
+\item
+  Run the documentation tool:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{setwd(`C:/Users/fan/PrjOptiAlloc')}
+  \item
+    \textbf{devtools::document()}
+  \item
+    this updates \emph{NAMESPACE}
+  \item
+    generates new \emph{.Rd} files
+  \end{itemize}
+\item
+  Test @examples from Roxygen documentations
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{devtools::run\_examples()}
+  \item
+    if also want to test vignette, also do:
+    \textbf{devtools::build\_vignettes()}
+  \item
+    this tests if \emph{@examples} are working.
+  \end{itemize}
+\item
+  Continue 3 to 4 - {[} {]} o convert various components of vignette.
+\item
+  Build package and load package using:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{devtools::check()}
+  \item
+    this will run \emph{run\_examples} as well, but at the very end,
+    will test everything for package.\\
+  \end{itemize}
+\item
+  Now install package
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{devtools::install()}
+  \item
+    \emph{library(PrjOptiAlloc)} should work now
+  \item
+    \emph{ls(``package:PrjOptiAlloc'')} to list all objects in package\\
+  \item
+    \textbf{devtools::reload()}
+  \end{itemize}
+\item
+  Publish webpage, review local, using \emph{pkgdown}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{pkgdown::build\_site()}
+  \end{itemize}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Step 3}
+\KeywordTok{rm}\NormalTok{(}\DataTypeTok{list =} \KeywordTok{ls}\NormalTok{(}\DataTypeTok{all.names =} \OtherTok{TRUE}\NormalTok{))}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{'C:/Users/fan/PrjOptiAlloc'}\NormalTok{)}
+\CommentTok{# setwd('C:/Users/fan/REconTools')}
+\NormalTok{devtools}\OperatorTok{::}\KeywordTok{document}\NormalTok{()}
+\CommentTok{# Step 4}
+\NormalTok{devtools}\OperatorTok{::}\KeywordTok{run_examples}\NormalTok{()}
+\CommentTok{# devtools::build_vignettes()}
+\CommentTok{# Step 6}
+\NormalTok{devtools}\OperatorTok{::}\KeywordTok{check}\NormalTok{()}
+\CommentTok{# Step 7}
+\NormalTok{devtools}\OperatorTok{::}\KeywordTok{install}\NormalTok{()}
+\CommentTok{#library(PrjOptiAlloc)}
+\CommentTok{#ls("package:PrjOptiAlloc")}
+\NormalTok{devtools}\OperatorTok{::}\KeywordTok{reload}\NormalTok{()}
+\CommentTok{# Step 8}
+\NormalTok{pkgdown}\OperatorTok{::}\KeywordTok{build_site}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+During development, after new R functions have been written, testing
+latested functions in vignette.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{devtools}\OperatorTok{::}\KeywordTok{load_all}\NormalTok{()}
+\KeywordTok{library}\NormalTok{(PrjOptiAlloc)}
+\end{Highlighting}
+\end{Shaded}
+
+bookdown
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{setwd}\NormalTok{(}\StringTok{'C:/Users/fan/R4Econ'}\NormalTok{)}
+\NormalTok{bookdown}\OperatorTok{::}\KeywordTok{render_book}\NormalTok{(}\StringTok{'index.Rmd'}\NormalTok{, }\StringTok{'bookdown::gitbook'}\NormalTok{)}
+\NormalTok{bookdown}\OperatorTok{::}\KeywordTok{render_book}\NormalTok{(}\StringTok{'index.Rmd'}\NormalTok{, }\StringTok{'bookdown::pdf_book'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{attach-vs-import}{%
+\subsection{Attach vs Import}\label{attach-vs-import}}
+
+Packages that are loaded in under *usethis::use\_package** are imports,
+not attached.
+
+According to \href{http://r-pkgs.had.co.nz/namespace.html}{Wickham}: -
+\emph{apkg::bfnc()}: when packages are loaded, its components can be
+accessed with the \emph{::}. That is, if I want to use the
+\emph{document()} from from \emph{devtools()}, if I first attach, I can
+directly call document(). Without attaching, just loading, I have to do
+\emph{devtools::document()}. - \emph{attach(), library()} : when
+attaching, must first load. After attached, can directly call function
+names, for example, \emph{filter}, it is on the search path.
+
+See
+\href{http://blog.obeautifulcode.com/R/How-R-Searches-And-Finds-Stuff/}{How
+R Searches and Finds Stuff}:
+
+\begin{quote}
+The better solution would have been to stuff reshape's cast() function
+into imports:ggplot2 using the Imports feature. In that case, we would
+have travelled from 2 to 3 and stopped. Now you can see why the choice
+between Imports and Depends is not arbitrary. With so many packages on
+CRAN and so many of us working in related disciplines its no surprise
+that same-named functions appear in multiple packages. Depends is less
+safe. Depends makes a package vulnerable to whatever other packages are
+loaded by the user.
+\end{quote}
+
+This is
+\href{https://stackoverflow.com/questions/8637993/better-explanation-of-when-to-use-imports-depends}{question}
+as well.
+
+\hypertarget{dealing-with-datasets}{%
+\subsection{Dealing with Datasets}\label{dealing-with-datasets}}
+
+Datasets to be used with the project should be in the \emph{/data}
+folder. The name of the data file should appear in several spots and be
+consistent, suppose data is called \emph{abc}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Rdata file name: \emph{/data/abc.Rdata}
+\item
+  Rdata file contains a dataframe inside that has to be called abc as
+  well, so open the Rdata file inside Rstudio or R, what is the file
+  called? is it abc? Look under environment
+\item
+  In the \emph{/R/ffp\_abc.R}, the last line should be ``abc'', but the
+  file name does not need to be.
+\item
+  If any functions uses a dataset, this could be done in two ways:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    a dataset is a parameter for a function. In @example, can load in
+    dataframes declared in dependencies.
+  \item
+    inside a function, if direclty use a dataframe, that data frame
+    should be declared following 1 to 3 here in \emph{/data}, make sure
+    it has the same name, and write: \emph{data(data\_name)} at the
+    beginning of the function to explicitly load the function in.
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{logging-and-printing}{%
+\subsection{Logging and Printing}\label{logging-and-printing}}
+
+Logging and printing control is as usual important. See:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://stackoverflow.com/questions/36699272/why-is-message-a-better-choice-than-print-in-r-for-writing-a-package/36700294\#36700294}{Why
+  is message() a better choice than print() in R for writing a package?}
+\item
+  \href{https://adv-r.hadley.nz/conditions.html}{Conditions}
+\end{enumerate}
+
+For simple package, for regression results, table outputs etc, use
+\emph{print}, print statements can be suppressed by
+\emph{invisible(capture.output(abc \textless-
+ffy\_opt\_dtgch\_cbem4()))}.
+
+\hypertarget{check-and-run-examples}{%
+\subsection{Check and Run Examples}\label{check-and-run-examples}}
+
+\href{http://r-pkgs.had.co.nz/check.html}{check} to make sure file
+structures etc are all correct. Will also test the @examples inside r
+functions in ROxygen comments.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# will check the file structure, but also @example in functions.}
+\NormalTok{devtools}\OperatorTok{::}\KeywordTok{check}\NormalTok{(}\StringTok{'C:/Users/fan/PrjOptiAlloc'}\NormalTok{)}
+\NormalTok{devtools}\OperatorTok{::}\KeywordTok{check}\NormalTok{(}\StringTok{'C:/Users/fan/PrjOptiAlloc'}\NormalTok{, }\DataTypeTok{manual=}\OtherTok{FALSE}\NormalTok{)}
+\NormalTok{devtools}\OperatorTok{::}\KeywordTok{run_examples}\NormalTok{(}\StringTok{'C:/Users/fan/PrjOptiAlloc'}\NormalTok{)}
+\NormalTok{devtools}\OperatorTok{::}\KeywordTok{build}\NormalTok{(}\StringTok{'C:/Users/fan/PrjOptiAlloc'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{add-depenencies}{%
+\subsection{Add Depenencies}\label{add-depenencies}}
+
+Assuming that we have used roxygen2 formats to write functions, now
+generate \emph{.Rd} automatically with the \emph{document()} function.
+This should create a \emph{/man} folder in which various \emph{.Rd}
+files are stored. Note that their .Rd are for specific R functions, not
+for files that contain multiple functions.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# add dependencies:}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{'C:/Users/fan/PrjOptiAlloc'}\NormalTok{)}
+\NormalTok{usethis}\OperatorTok{::}\KeywordTok{use_package}\NormalTok{(}\StringTok{"tidyr"}\NormalTok{)}
+\NormalTok{usethis}\OperatorTok{::}\KeywordTok{use_package}\NormalTok{(}\StringTok{"dplyr"}\NormalTok{)}
+\NormalTok{usethis}\OperatorTok{::}\KeywordTok{use_package}\NormalTok{(}\StringTok{"stringr"}\NormalTok{)}
+\NormalTok{usethis}\OperatorTok{::}\KeywordTok{use_package}\NormalTok{(}\StringTok{"broom"}\NormalTok{)}
+\NormalTok{usethis}\OperatorTok{::}\KeywordTok{use_package}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{)}
+\NormalTok{usethis}\OperatorTok{::}\KeywordTok{use_package}\NormalTok{(}\StringTok{"R4Econ"}\NormalTok{)}
+\CommentTok{# document will generate new NAMESPACE, so after dependencies added, need to document.}
+\CommentTok{# funciton import must be consistent with these}
+\NormalTok{devtools}\OperatorTok{::}\KeywordTok{document}\NormalTok{(}\StringTok{'C:/Users/fan/PrjOptiAlloc'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{vignettes-generation}{%
+\subsubsection{Vignettes Generation}\label{vignettes-generation}}
+
+To generate Vignettes, follow instructions
+\href{https://kbroman.org/pkg_primer/pages/vignettes.html}{here}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  create a vignette directory
+\item
+  put RMD files in there, RMD front matter should look like below
+\item
+  add to DESCRIPTION file:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Suggests: knitr, rmarkdown
+  \item
+    VignetteBuilder: knitr
+  \end{itemize}
+\item
+  run \emph{devtools::build\_vignettes()}. Running build should build
+  all? automatically builds vignette
+\end{enumerate}
+
+\begin{verbatim}
+title: "Put the title of your vignette here"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Put the title of your vignette here}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{devtools}\OperatorTok{::}\KeywordTok{build_vignettes}\NormalTok{(}\StringTok{'C:/Users/fan/PrjOptiAlloc'}\NormalTok{)}
+\NormalTok{devtools}\OperatorTok{::}\KeywordTok{check}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{r-project-build-site-with-pkgdown}{%
+\subsection{R project build site with
+pkgdown}\label{r-project-build-site-with-pkgdown}}
+
+Once we have used \emph{pkgdown::build\_site()}, by default, all html
+and other package presentation files and reference files are saved in
+the \emph{/docs} folder, build\_site is for building site, not for
+generating \emph{/man} documenation. If R files change, need to document
+first, before rebuilding site.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pkgdown}\OperatorTok{::}\KeywordTok{build_site}\NormalTok{(}\StringTok{"C:/Users/fan/PrjOptiAlloc"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{document}
