@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE--------------------------------------------------------------
+## ----global_options, include = FALSE----------------------------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Numeric value combinations unique Groups
 vars.group <- c('hgt0', 'wgt0')
 
@@ -18,12 +18,10 @@ df.group.count <- df_use %>% group_by(!!!syms(vars.group)) %>%
                     summarise(n_obs_group=n())
 
 # Show results Head 10
-df.group.count %>%
-  kable() %>%
-  kable_styling_fc_wide()
+df.group.count %>% kable() %>% kable_styling_fc()
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # In the df_hgt_wgt from R4Econ, there is a country id, village id,
 # and individual id, and various other statistics
 vars.group <- c('S.country', 'vil.id', 'indi.id')

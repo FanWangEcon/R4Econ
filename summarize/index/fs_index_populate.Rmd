@@ -1,5 +1,18 @@
 ---
 title: "R Example DPLYR Generate Sorted Index, Ordinal Deviation Negative and Positive Index, and Expand Value from Lowest Index to All Rows"
+titleshort: "Sorted Index, Interval Index and Expand Value from One Row"
+description: |
+  Sort and generate index for rows
+  Generate negative and positive index based on deviations
+  Populate Values from one row to other rows
+core:
+  - package: dplyr
+    code: |
+      arrange()
+      row_number()
+      mutate(lowest = min(Sepal.Length))
+      case_when(row_number()==x ~ Septal.Length)
+      mutate(Sepal.New = Sepal.Length[Sepal.Index == 1])
 date: 2020-04-01
 output:
   pdf_document:
@@ -8,7 +21,10 @@ output:
       in_header: '../../preamble.tex'
   html_document:
     pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
 always_allow_html: true
+urlcolor: blue
 ---
 
 ### Sorting

@@ -1,5 +1,13 @@
 ---
 title: "R Generate and Combine Fixed and Random Matrix"
+titleshort: "Matrix Basics"
+description: |
+  Generate and combine fixed and random matrixes
+core:
+  - package: R
+    code: |
+      rbind()
+      matrix
 date: 2020-04-01
 output:
   pdf_document:
@@ -8,7 +16,10 @@ output:
       in_header: '../../preamble.tex'
   html_document:
     pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
 always_allow_html: true
+urlcolor: blue
 ---
 
 ### Generate Matrixes
@@ -32,7 +43,7 @@ ar_row_three <- c(0.35,0.75)
 
 mt_n_by_2 <- rbind(ar_row_one, ar_row_two, ar_row_three)
 kable(mt_n_by_2) %>%
-  kable_styling_fc_wide()
+  kable_styling_fc()
 ```
 
 #### Generate Random Matrixes

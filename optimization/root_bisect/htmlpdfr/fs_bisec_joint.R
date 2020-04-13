@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE--------------------------------------------------------------
+## ----global_options, include = FALSE----------------------------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # common prefix to make reshaping easier
 st_bisec_prefix <- 'bisec_'
@@ -13,22 +13,23 @@ svr_fb_lst <- paste0(st_bisec_prefix, 'fb_0')
 
 # Add initial a and b
 tb_states_choices_bisec <- tb_states_choices %>%
-                            mutate(!!sym(svr_a_lst) := fl_N_min, !!sym(svr_b_lst) := fl_N_agg)
+  mutate(!!sym(svr_a_lst) := fl_N_min, !!sym(svr_b_lst) := fl_N_agg)
 
 # Evaluate function f(a_0) and f(b_0)
-tb_states_choices_bisec <- tb_states_choices_bisec %>% rowwise() %>%
-                            mutate(!!sym(svr_fa_lst) := ffi_nonlin_dplyrdo(fl_A, fl_alpha, !!sym(svr_a_lst),
-                                                                          ar_nN_A, ar_nN_alpha,
-                                                                          fl_N_agg, fl_rho),
-                                   !!sym(svr_fb_lst) := ffi_nonlin_dplyrdo(fl_A, fl_alpha, !!sym(svr_b_lst),
-                                                                          ar_nN_A, ar_nN_alpha,
-                                                                          fl_N_agg, fl_rho))
+tb_states_choices_bisec <- tb_states_choices_bisec %>%
+  rowwise() %>%
+  mutate(!!sym(svr_fa_lst) := ffi_nonlin_dplyrdo(fl_A, fl_alpha, !!sym(svr_a_lst),
+                                                ar_nN_A, ar_nN_alpha,
+                                                fl_N_agg, fl_rho),
+         !!sym(svr_fb_lst) := ffi_nonlin_dplyrdo(fl_A, fl_alpha, !!sym(svr_b_lst),
+                                                ar_nN_A, ar_nN_alpha,
+                                                fl_N_agg, fl_rho))
 # Summarize
 dim(tb_states_choices_bisec)
 summary(tb_states_choices_bisec)
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # fl_tol = float tolerance criteria
 # it_tol = number of interations to allow at most
@@ -52,31 +53,32 @@ while (it_cur <= it_tol && fl_p_dist2zr >= fl_tol ) {
   # 1. generate p
   # 2. generate f_p
   # 3. generate f_p*f_a
-  tb_states_choices_bisec <- tb_states_choices_bisec %>% rowwise() %>%
-                              mutate(p = ((!!sym(svr_a_lst) + !!sym(svr_b_lst))/2)) %>%
-                              mutate(f_p = ffi_nonlin_dplyrdo(fl_A, fl_alpha, p,
-                                                              ar_nN_A, ar_nN_alpha,
-                                                              fl_N_agg, fl_rho)) %>%
-                              mutate(f_p_t_f_a = f_p*!!sym(svr_fa_lst))
+  tb_states_choices_bisec <- tb_states_choices_bisec %>%
+    rowwise() %>%
+    mutate(p = ((!!sym(svr_a_lst) + !!sym(svr_b_lst))/2)) %>%
+    mutate(f_p = ffi_nonlin_dplyrdo(fl_A, fl_alpha, p,
+                                    ar_nN_A, ar_nN_alpha,
+                                    fl_N_agg, fl_rho)) %>%
+    mutate(f_p_t_f_a = f_p*!!sym(svr_fa_lst))
   # fl_p_dist2zr = sum(abs(p))
   fl_p_dist2zr <- mean(abs(tb_states_choices_bisec %>% pull(f_p)))
 
   # Update a and b
   tb_states_choices_bisec <- tb_states_choices_bisec %>%
-                              mutate(!!sym(svr_a_cur) :=
-                                       case_when(f_p_t_f_a < 0 ~ !!sym(svr_a_lst),
-                                                 TRUE ~ p)) %>%
-                              mutate(!!sym(svr_b_cur) :=
-                                       case_when(f_p_t_f_a < 0 ~ p,
-                                                 TRUE ~ !!sym(svr_b_lst)))
+    mutate(!!sym(svr_a_cur) :=
+             case_when(f_p_t_f_a < 0 ~ !!sym(svr_a_lst),
+                       TRUE ~ p)) %>%
+    mutate(!!sym(svr_b_cur) :=
+             case_when(f_p_t_f_a < 0 ~ p,
+                       TRUE ~ !!sym(svr_b_lst)))
   # Update f(a) and f(b)
   tb_states_choices_bisec <- tb_states_choices_bisec %>%
-                              mutate(!!sym(svr_fa_cur) :=
-                                       case_when(f_p_t_f_a < 0 ~ !!sym(svr_fa_lst),
-                                                 TRUE ~ f_p)) %>%
-                              mutate(!!sym(svr_fb_cur) :=
-                                       case_when(f_p_t_f_a < 0 ~ f_p,
-                                                 TRUE ~ !!sym(svr_fb_lst)))
+    mutate(!!sym(svr_fa_cur) :=
+             case_when(f_p_t_f_a < 0 ~ !!sym(svr_fa_lst),
+                       TRUE ~ f_p)) %>%
+    mutate(!!sym(svr_fb_cur) :=
+             case_when(f_p_t_f_a < 0 ~ f_p,
+                       TRUE ~ !!sym(svr_fb_lst)))
   # Save from last
   svr_a_lst <- svr_a_cur
   svr_b_lst <- svr_b_cur
@@ -85,16 +87,17 @@ while (it_cur <= it_tol && fl_p_dist2zr >= fl_tol ) {
 
   # Summar current round
   print(paste0('it_cur:', it_cur, ', fl_p_dist2zr:', fl_p_dist2zr))
-  summary(tb_states_choices_bisec %>% select(one_of(svr_a_cur, svr_b_cur, svr_fa_cur, svr_fb_cur)))
+  summary(tb_states_choices_bisec %>%
+            select(one_of(svr_a_cur, svr_b_cur, svr_fa_cur, svr_fb_cur)))
 }
 
 
-## ----very wide table------------------------------------------------------------------------------
+## ----very wide table--------------------------------------------------------------------------------------------------------------------------------------
 head(tb_states_choices_bisec, 10)
 str(tb_states_choices_bisec)
 
 
-## ----reshape solution from wide to very long------------------------------------------------------
+## ----reshape solution from wide to very long--------------------------------------------------------------------------------------------------------------
 # New variables
 svr_bisect_iter <- 'biseciter'
 svr_abfafb_long_name <- 'varname'
@@ -116,7 +119,7 @@ head(tb_states_choices_bisec_long %>% select(-one_of('p','f_p','f_p_t_f_a')), 30
 tail(tb_states_choices_bisec_long %>% select(-one_of('p','f_p','f_p_t_f_a')), 30)
 
 
-## ----reshape solution for table show--------------------------------------------------------------
+## ----reshape solution for table show----------------------------------------------------------------------------------------------------------------------
 # Pivot wide to very long to a little wide
 tb_states_choices_bisec_wider <- tb_states_choices_bisec_long %>%
   pivot_wider(
@@ -126,11 +129,11 @@ tb_states_choices_bisec_wider <- tb_states_choices_bisec_long %>%
 
 # Print
 summary(tb_states_choices_bisec_wider)
-head(tb_states_choices_bisec_wider %>% select(-one_of('p','f_p','f_p_t_f_a')), 30)
-tail(tb_states_choices_bisec_wider %>% select(-one_of('p','f_p','f_p_t_f_a')), 30)
+print(tb_states_choices_bisec_wider %>% select(-one_of('p','f_p','f_p_t_f_a')))
+print(tb_states_choices_bisec_wider %>% select(-one_of('p','f_p','f_p_t_f_a')))
 
 
-## ----reshape solution for graphing----------------------------------------------------------------
+## ----reshape solution for graphing------------------------------------------------------------------------------------------------------------------------
 # Graph results
 lineplot <- tb_states_choices_bisec_long %>%
     mutate(!!sym(svr_bisect_iter) := as.numeric(!!sym(svr_bisect_iter))) %>%

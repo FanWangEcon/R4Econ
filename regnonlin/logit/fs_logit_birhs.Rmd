@@ -1,5 +1,13 @@
 ---
 title: "R Example Binary Outcome Estimation with Binary Regressor"
+titleshort: "Logit Regression"
+description: |
+  Logit regression testing and prediction.
+core:
+  - package: stats
+    code: |
+      glm(as.formula(), data, family='binomial')
+      predict(rs, newdata, type = "response")
 date: 2020-04-01
 output:
   pdf_document:
@@ -8,7 +16,10 @@ output:
       in_header: '../../preamble.tex'
   html_document:
     pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
 always_allow_html: true
+urlcolor: blue
 ---
 
 ### Binary Logit

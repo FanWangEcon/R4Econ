@@ -1,5 +1,15 @@
 ---
-title: "R Instrumental Variable Regression Loop"
+title: "R OLS and Instrumental Variable Regression M Outcomes and N RHS Alternatives"
+titleshort: "M Outcomes and N RHS Alternatives"
+description: |
+  There are M outcome variables and N alternative explanatory variables. Regress all M outcome variables on N endogenous/independent right hand side variables one by one, with controls and/or IVs, collect coefficients.
+core:
+  - package: dplyr
+    code: |
+      bind_rows(lapply(listx, function(x)(bind_rows(lapply(listy, regf.iv)))
+      starts_with()
+      ends_with()
+      reduce(full_join)
 date: 2020-04-01
 output:
   pdf_document:
@@ -8,7 +18,10 @@ output:
       in_header: '../../preamble.tex'
   html_document:
     pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
 always_allow_html: true
+urlcolor: blue
 ---
 
 

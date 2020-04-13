@@ -1,5 +1,15 @@
 ---
-title: "DPLYR Evaluate Function where Input Arrays are Group Specific Rows"
+title: "R dplyr Evaluate Function Do Anything Group Stack Results"
+titleshort: "Evaluate Function Do Anything Group Stack Results"
+description: |
+  Group dataframe by categories, compute category specific output scalar or arrays based on within category variable information.
+core:
+  - package: dplyr
+    code: |
+      group_by(ID)
+      do(inc = rnorm(.$N, mean=.$mn, sd=.$sd))
+      unnest(c(inc))
+      left_join(df, by="ID")
 date: 2020-04-01
 output:
   pdf_document:
@@ -8,7 +18,10 @@ output:
       in_header: '../../preamble.tex'
   html_document:
     pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
 always_allow_html: true
+urlcolor: blue
 ---
 
 ### MxQ to MxP Rows

@@ -34,7 +34,7 @@ ls_path_group <- c(ls_path_group_a, ls_path_group_b, ls_path_group_c)
 
 # Group To Use
 ls_path_group_use <- ls_path_group
-# ls_path_group_use <- spt_math
+# ls_path_group_use <- paste0(spt_root, 'amto/matrix')
 
 # Get Path
 ls_sfls  <- list.files(path=ls_path_group_use, recursive=T, pattern=".Rmd", full.names=T)
@@ -62,6 +62,7 @@ for (spt_file in ls_sfls) {
   sfl_pdf <- paste0(st_fullpath_nosufx, '.pdf')
   sfl_htm <- paste0(st_fullpath_nosufx, '.html')
   sfl_Rla <- paste0(st_fullpath_nosufx, '.R')
+  sfl_log <- paste0(st_fullpath_nosufx, '.log')
 
   sfl_sub_nht <- paste0(sfle_pdf_html, '.nb.html')
   sfl_sub_tex <- paste0(sfle_pdf_html, '.tex')
@@ -76,13 +77,13 @@ for (spt_file in ls_sfls) {
     # rmarkdown::render(spt_file, output_format='pdf_document(includes = includes(in_header = "C:/Users/fan/R4Econ/preamble.tex"))', output_dir = spth_pdf_html)
     # rmarkdown::render(spt_file, output_format='pdf_document(includes = includes(in_header))', output_dir = spth_pdf_html)
 
-    print(paste0('spt_file:',spt_file, ', PDF started'))
+    print(paste0('spt_file:',spth_pdf_html, ', PDF started'))
     rmarkdown::render(spt_file, output_format='pdf_document', output_dir = spth_pdf_html)
-    print(paste0('spt_file:',spt_file, ', PDF finished'))
+    print(paste0('spt_file:',spth_pdf_html, ', PDF finished'))
 
-    print(paste0('spt_file:',spt_file, ', HTML started.'))
+    print(paste0('spt_file:',spth_pdf_html, ', HTML started.'))
     rmarkdown::render(spt_file, output_format='html_document', output_dir = spth_pdf_html)
-    print(paste0('spt_file:',spt_file, ', HTML finished.'))
+    print(paste0('spt_file:',spth_pdf_html, ', HTML finished.'))
 
     print(paste0('purl_to:', paste0(sfle_pdf_html, ".R")))
     knitr::purl(spt_file, output=paste0(sfle_pdf_html, ".R"), documentation = 1)
@@ -94,6 +95,7 @@ for (spt_file in ls_sfls) {
   try(file.remove(sfl_pdf))
   try(file.remove(sfl_htm))
   try(file.remove(sfl_Rla))
+  try(file.remove(sfl_log))
 
   try(file.remove(sfl_sub_nht))
   try(file.remove(sfl_sub_tex))

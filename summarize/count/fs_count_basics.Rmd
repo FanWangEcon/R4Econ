@@ -1,6 +1,14 @@
 ---
 title: "R Example DPLYR Counting"
-author: Fan Wang
+titleshort: "Counting Basics"
+description: |
+  uncount to generate panel skeleton from years in survey
+core:
+  - package: dplyr
+    code: |
+      uncount(yr_n)
+      group_by()
+      mutate(yr = row_number() + start_yr)
 date: 2020-04-01
 output:
   pdf_document:
@@ -9,7 +17,10 @@ output:
       in_header: '../../preamble.tex'
   html_document:
     pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
 always_allow_html: true
+urlcolor: blue
 ---
 
 ### Uncount
@@ -64,5 +75,5 @@ tb_indi_panel <- tb_indi_panel %>%
 # Show results Head 10
 tb_indi_panel %>% head(10) %>%
   kable() %>%
-  kable_styling_fc_wide()
+  kable_styling_fc()
 ```

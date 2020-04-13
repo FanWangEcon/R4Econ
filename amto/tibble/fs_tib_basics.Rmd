@@ -1,5 +1,19 @@
 ---
 title: "R Examples Generate Tibble Dataframes"
+titleshort: "Tibble Basics"
+description: |
+  generate tibbles, rename tibble variables, tibble row and column names
+  rename numeric sequential columns with string prefix and suffix
+core:
+  - package: dplyr
+    code: |
+      as_tibble(mt)
+      rename_all(~c(ar_names))
+      rename_at(vars(starts_with("xx")), funs(str_replace(., "yy", "yyyy"))
+      rename_at(vars(num_range('',ar_it)), funs(paste0(st,.)))
+      rowid_to_column()
+      colnames
+      rownames
 date: 2020-04-01
 output:
   pdf_document:
@@ -8,7 +22,10 @@ output:
       in_header: '../../preamble.tex'
   html_document:
     pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
 always_allow_html: true
+urlcolor: blue
 ---
 
 <!-- includes:

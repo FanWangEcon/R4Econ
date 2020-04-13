@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE--------------------------------------------------------------
+## ----global_options, include = FALSE----------------------------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # parameters, it_M < it_N
 it_N <- 10
 it_M <- 5
@@ -22,15 +22,12 @@ df_rand_sub_b <- df_full[sample(dim(df_full)[1], it_M, replace=FALSE),]
 
 # Print
 # Display
-kable(df_full) %>%
-  kable_styling_fc_wide()
-kable(df_rand_sub_a) %>%
-  kable_styling_fc_wide()
-kable(df_rand_sub_b) %>%
-  kable_styling_fc_wide()
+kable(df_full) %>% kable_styling_fc()
+kable(df_rand_sub_a) %>% kable_styling_fc()
+kable(df_rand_sub_b) %>% kable_styling_fc()
 
 
-## ----rand draws panel random select---------------------------------------------------------------
+## ----rand draws panel random select-----------------------------------------------------------------------------------------------------------------------
 # Define
 it_N <- 3
 it_M <- 10
@@ -47,6 +44,5 @@ df_panel_rand <- as_tibble(matrix(it_M, nrow=it_N, ncol=1)) %>%
   rename(date_in_class = date)
 
 # Print
-kable(df_panel_rand) %>%
-  kable_styling_fc_wide()
+kable(df_panel_rand) %>% kable_styling_fc()
 

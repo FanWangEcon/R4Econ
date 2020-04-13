@@ -9,14 +9,16 @@
 # always_allow_html: yes
 bookdown::gitbook:
   css: style.css
+  includes:
+    in_header: hdga.html
   config:
     toc:
       before: |
         <li><a href="./">Panel Data and Optimization with R</a></li>
       after: |
-        <li><a href="https://fanwangecon.github.io/R4Econ/" target="blank">R4Econ</a></li>
+        <li><a href="https://fanwangecon.github.io/R4Econ/bookdown/index.html" target="blank">R4Econ Bookdown</a></li>
     # edit: https://github.com/FanWangEcon/R4Econ%s
-    download: ["pdf", "epub"]
+    download: [["Panel-Data-and-Optimization-with-R.pdf", "PDF"]]
 bookdown::pdf_book:
   toc: true
   tod_depth: 5
@@ -35,7 +37,7 @@ bookdown::pdf_book:
     toolbar:
       position: fixed
     edit : null
-    download: null
+    download: [["Panel-Data-and-Optimization-with-R.pdf", "PDF"]]
     search: yes
     fontsettings:
       theme: white

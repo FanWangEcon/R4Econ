@@ -1,5 +1,20 @@
 ---
 title: "R use Apply, Sapply and dplyr Mutate to  \nEvaluate one Defined or Anonymous Function  \nAcross Rows of a Matrix or Elements of an Array"
+titleshort: "Apply and Mutate over Rows"
+description: |
+  Evaluate function f(x_i,y_i,c), where c is a constant and x and y vary over each row of a matrix, with index i indicating rows.
+  Get same results using apply, sapply, and dplyr mutate.
+core:
+  - package: r
+    code: |
+      apply(mt, 1, func)
+      sapply(ls_ar, func, ar1, ar2)
+  - package: purrr
+    code: |
+      rowwise()
+      unnest(out)
+      pmap(func)
+      unlist()
 date: 2020-04-10
 output:
   pdf_document:
@@ -8,7 +23,10 @@ output:
       in_header: '../../preamble.tex'
   html_document:
     pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
 always_allow_html: true
+urlcolor: blue
 ---
 
 ### Apply, Sapply, Mutate

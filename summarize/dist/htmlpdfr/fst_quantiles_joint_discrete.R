@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE--------------------------------------------------------------
+## ----global_options, include = FALSE----------------------------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Quantiles for any variable
 gen_quantiles <- function(var, df, prob=c(0.25, 0.50, 0.75)) {
     enframe(quantile(as.numeric(df[[var]]), prob, na.rm=TRUE), 'quant.perc', var)
@@ -47,7 +47,7 @@ f_check_distinct_ingroup <- function(df, vars.group_by, vars.values_in_group) {
 }
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # First Step, given groups, generate quantiles based on group characteristics
 # vars.cts2quantile <- c('wealthIdx', 'hgt0', 'wgt0')
 # seq.quantiles <- c(0, 0.3333, 0.6666, 1.0)
@@ -68,7 +68,7 @@ df_sliced_quantiles <- function(df, vars.cts2quantile, seq.quantiles,
 }
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Cutting Function, Cut Continuous Variables into Quantiles with labeing
 f_cut <- function(var, df.sliced.quantiles, seq.quantiles, include.lowest=TRUE, fan.labels=TRUE, print=FALSE) {
 
@@ -103,7 +103,7 @@ f_cut <- function(var, df.sliced.quantiles, seq.quantiles, include.lowest=TRUE, 
 }
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Combo Quantile Function
 # vars.cts2quantile <- c('wealthIdx', 'hgt0', 'wgt0')
 # seq.quantiles <- c(0, 0.3333, 0.6666, 1.0)
@@ -149,7 +149,7 @@ df_cut_by_sliced_quantiles <- function(df, vars.cts2quantile, seq.quantiles,
 }
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Function to handle list inputs with different quantiles vars and probabilities
 df_cut_by_sliced_quantiles_grps <- function(quantile.grp.list, df, vars.group_by, vars.arrange) {
    vars.cts2quantile <- quantile.grp.list$vars
@@ -173,7 +173,7 @@ df_cut_by_sliced_quantiles_joint_results_grped <- function(df.with.cut.quant.all
 }
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # # Joint Quantile Group Name
 # var.qjnt.grp.idx <- 'group.index'
 # # Generate Categorical Variables of Quantiles
@@ -260,7 +260,7 @@ df_cut_by_sliced_quantiles_joint <- function(df, var.qjnt.grp.idx,
 }
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Library
 library(tidyverse)
 
@@ -269,7 +269,7 @@ setwd('C:/Users/fan/R4Econ/_data/')
 df <- read_csv('height_weight.csv')
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Joint Quantile Group Name
 var.qjnt.grp.idx <- 'group.index'
 list.cts2quantile <- list(list(vars=c('hgt0'), prob=c(0, .3333, 0.6666, 1.0)))
@@ -280,7 +280,7 @@ results <- df_cut_by_sliced_quantiles_joint(df, var.qjnt.grp.idx, list.cts2quant
 results$df.group.slice1.cnt.mean
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Joint Quantile Group Name
 var.qjnt.grp.idx <- 'wltQuintle.index'
 list.cts2quantile <- list(list(vars=c('wealthIdx'), prob=seq(0, 1.0, 0.20)))
@@ -292,7 +292,7 @@ results <- df_cut_by_sliced_quantiles_joint((df %>% filter(S.country == 'Guatema
 results$df.group.slice1.cnt.mean
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Joint Quantile Group Name
 var.qjnt.grp.idx <- 'group.index'
 list.cts2quantile <- list(list(vars=c('hgt0', 'wgt0'), prob=c(0, .5, 1.0)))
@@ -303,7 +303,7 @@ results <- df_cut_by_sliced_quantiles_joint(df, var.qjnt.grp.idx, list.cts2quant
 results$df.group.slice1.cnt.mean
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Joint Quantile Group Name
 var.qjnt.grp.idx <- 'group.index'
 list.cts2quantile <- list(list(vars=c('wealthIdx'), prob=c(0, .5, 1.0)), list(vars=c('hgt0'), prob=c(0, .333, 0.666, 1.0)))
@@ -315,7 +315,7 @@ results <- df_cut_by_sliced_quantiles_joint((df %>% filter(S.country == 'Cebu'))
 results$df.group.slice1.cnt.mean
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Joint Quantile Group Name
 var.qjnt.grp.idx <- 'wltHgt0Wgt0.index'
 list.cts2quantile <- list(list(vars=c('wealthIdx'), prob=c(0, .5, 1.0)), list(vars=c('hgt0', 'wgt0'), prob=c(0, .5, 1.0)))
@@ -327,7 +327,7 @@ results <- df_cut_by_sliced_quantiles_joint((df %>% filter(S.country == 'Cebu'))
 results$df.group.slice1.cnt.mean
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Selected Variables, many Percentiles
 vars.group_by <- c('indi.id')
 vars.arrange <- c('indi.id', 'svymthRound')
@@ -338,16 +338,16 @@ df.sliced.quantiles <- df.sliced$df.sliced.quantiles
 df.grp.L1 <- df.sliced$df.grp.L1
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 df.sliced.quantiles
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Quantiles all Variables
 suppressMessages(lapply(names(df), gen_quantiles, df=df.grp.L1, prob=seq(0.1,0.9,0.10)) %>% reduce(full_join))
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Function Testing
 arr.quantiles <- df.sliced.quantiles[[substitute('wealthIdx')]]
 arr.quantiles
@@ -361,7 +361,7 @@ lapply(arr.sort.unique.quantiles[1:(length(arr.sort.unique.quantiles)-1)],
        seq.quantiles=seq.quantiles)
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Generate Categorical Variables of Quantiles
 vars.group_by <- c('indi.id')
 vars.arrange <- c('indi.id', 'svymthRound')
@@ -373,18 +373,18 @@ df.with.cut.quant <- df.cut$df.with.cut.quant
 df.grp.L1 <- df.cut$df.grp.L1
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Cut Variables Generated
 names(vars.quantile.cut)
 summary(vars.quantile.cut)
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # options(repr.matrix.max.rows=50, repr.matrix.max.cols=20)
 # df.with.cut.quant
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Group By Results
 f.count <- function(df, var.cts, seq.quantiles) {
     df %>% select(S.country, indi.id, svymthRound, matches(paste0(var.cts, collapse='|'))) %>%
@@ -393,25 +393,25 @@ f.count <- function(df, var.cts, seq.quantiles) {
 }
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Full Panel Results
 lapply(vars.cts2quantile, f.count, df=df.with.cut.quant, seq.quantiles=seq.quantiles)
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Results Individual Slice
 lapply(vars.cts2quantile, f.count,
        df=(df.with.cut.quant %>% group_by(!!!syms(vars.group_by)) %>% arrange(!!!syms(vars.arrange)) %>% slice(1L)),
        seq.quantiles = seq.quantiles)
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Generate Categorical Variables of Quantiles
 vars.group_by <- c('indi.id')
 vars.arrange <- c('indi.id', 'svymthRound')
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Quantile Variables and Quantiles
 vars.cts2quantile.wealth <- c('wealthIdx')
 seq.quantiles.wealth <- c(0, .5, 1.0)
@@ -425,12 +425,12 @@ list.cts2quantile <- list(list(vars=vars.cts2quantile.wealth,
                                prob=seq.quantiles.wgthgt))
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 vars.cts2quantile <- unlist(lapply(list.cts2quantile, function(elist) elist$vars))
 f_check_distinct_ingroup(df, vars.group_by, vars.values_in_group=vars.cts2quantile)
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Original dimensions
 dim(df)
 # All Continuous Variables from lists
@@ -443,7 +443,7 @@ if (drop.any.quantile.na) {
 dim(df.select)
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Dealing with a list of quantile variables
 df.cut.wealth <- df_cut_by_sliced_quantiles(df.select, vars.cts2quantile.wealth, seq.quantiles.wealth, vars.group_by, vars.arrange)
 summary(df.cut.wealth$vars.quantile.cut)
@@ -452,12 +452,12 @@ summary(df.cut.wealth$vars.quantile.cut)
 # df.cut.wealth$df.with.cut.quant %>% filter(indi.id == 500)
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 df.cut.wgthgt <- df_cut_by_sliced_quantiles(df.select, vars.cts2quantile.wgthgt, seq.quantiles.wgthgt, vars.group_by, vars.arrange)
 summary(df.cut.wgthgt$vars.quantile.cut)
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Function to handle list inputs with different quantiles vars and probabilities
 df_cut_by_sliced_quantiles_grps <- function(quantile.grp.list, df, vars.group_by, vars.arrange) {
     vars.cts2quantile <- quantile.grp.list$vars
@@ -466,57 +466,57 @@ df_cut_by_sliced_quantiles_grps <- function(quantile.grp.list, df, vars.group_by
 }
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Apply function
 df.cut.list <- lapply(list.cts2quantile, df_cut_by_sliced_quantiles_grps,
                       df=df.select, vars.group_by=vars.group_by, vars.arrange=vars.arrange)
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Reduce Resulting Matrixes Together
 df.with.cut.quant.all <- lapply(df.cut.list, function(elist) elist$df.with.cut.quant) %>% reduce(left_join)
 dim(df.with.cut.quant.all)
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Obrain Newly Created Quantile Group Variables
 vars.quantile.cut.all <- unlist(lapply(df.cut.list, function(elist) names(elist$vars.quantile.cut)))
 vars.quantile.cut.all
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 summary(df.with.cut.quant.all %>% select(one_of(vars.quantile.cut.all)))
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # df.with.cut.quant.all %>%
 #     group_by(!!!syms(vars.quantile.cut.all)) %>%
 #     summarise_at(vars.cts2quantile, funs(mean, n()))
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Generate Joint Quantile Index Variable
 var.qjnt.grp.idx <- 'group.index'
 df.with.cut.quant.all <- df.with.cut.quant.all %>% mutate(!!var.qjnt.grp.idx := group_indices(., !!!syms(vars.quantile.cut.all)))
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 arr.group.idx <- t(sort(unique(df.with.cut.quant.all[[var.qjnt.grp.idx]])))
 arr.group.idx
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 df.with.cut.quant.all %>% group_by(!!!syms(vars.quantile.cut.all), !!sym(var.qjnt.grp.idx)) %>%
         summarise_at(vars.cts2quantile, funs(mean, n()))
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 df.with.cut.quant.all  %>% group_by(!!!syms(vars.group_by)) %>% arrange(!!!syms(vars.arrange)) %>% slice(1L) %>%
         group_by(!!!syms(vars.quantile.cut.all), !!sym(var.qjnt.grp.idx)) %>%
         summarise_at(vars.cts2quantile, funs(mean, n()))
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # arr.group.idx.subsidy <- arr.group.idx*2 - ((arr.group.idx)^2)*0.01
 arr.group.idx.subsidy <- arr.group.idx*2
 df.with.cut.quant.all %>%

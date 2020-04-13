@@ -55,9 +55,55 @@ if (knitr::is_latex_output()) {
   }
 }
 
+# Get Current File Path
+spt_file_current <- knitr::current_input(dir = TRUE)
+sfc_prj='/R4Econ'
+sph_gitpages_root='https://fanwangecon.github.io/'
+sph_github_root='https://github.com/FanWangEcon/'
+sph_branch='/master'
+sph_pdf='/htmlpdfr'
+sph_html='/htmlpdfr'
+sph_r='/htmlpdfr'
+
+spt_root <- 'C:/Users/fan/R4Econ/'
+spn_prj_rmd <- gsub(spt_root, "", spt_file_current)
+spt_rmd_path <- paste0('/',dirname(spn_prj_rmd))
+
+print(paste0('spt_file:',spt_file))
+st_fullpath_noname <- dirname(spt_file_current)
+st_fullpath_nosufx <- sub('\\.Rmd$', '', spt_file_current)
+st_file_wno_suffix <- sub('\\.Rmd$', '', basename(spt_file_current))
+print(paste0('st_fullpath_noname:', st_fullpath_noname))
+print(paste0('st_fullpath_nosufx:', st_fullpath_nosufx))
+print(paste0('st_file_wno_suffix:', st_file_wno_suffix))
+
+spth_pdf_html <- paste0(st_fullpath_noname, '/htmlpdfr/')
+sfle_pdf_html <- paste0(st_fullpath_noname, '/htmlpdfr/', st_file_wno_suffix)
+print(spth_pdf_html)
+
+sph_source_blob_root = paste0(sph_github_root, sfc_prj, '/blob', sph_branch, spt_rmd_path, '/')
+sph_rmd_pdf = paste0(sph_source_blob_root, sph_pdf, '/', st_file_wno_suffix, '.pdf')
+sph_rmd_r = paste0(sph_source_blob_root, sph_r, '/', st_file_wno_suffix, '.R')
+sph_rmd_rmd = paste0(sph_source_blob_root, '/', st_file_wno_suffix, '.Rmd')
+
+sph_source_web_root = paste0(sph_gitpages_root, sfc_prj, spt_rmd_path, '/')
+sph_rmd_html = paste0(sph_source_web_root, sph_html, '/', st_file_wno_suffix, '.html')
+
+st_head_link = '> Go to the'
+st_head_link = paste0(st_head_link, ' [**RMD**](', sph_rmd_rmd ,'),')
+st_head_link = paste0(st_head_link, ' [**R**](', sph_rmd_r ,'),')
+st_head_link = paste0(st_head_link, ' [**PDF**](', sph_rmd_pdf ,'),')
+st_head_link = paste0(st_head_link, ' or [**HTML**](', sph_rmd_html ,')')
+st_head_link = paste0(st_head_link, ' version of this file.')
+
 # Common Shared Text and Strings
 total_area <- (800 * 7) / 2
-text_shared_preamble_one <- "> Go back to [fan](http://fanwangecon.github.io/CodeDynaAsset/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository, or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository."
+if (st_file_wno_suffix == 'Panel-Data-and-Optimization-with-R') {
+  text_shared_preamble_one <- paste0("> Go back to [fan](http://fanwangecon.github.io/CodeDynaAsset/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository ([bookdown site](https://fanwangecon.github.io/R4Econ/bookdown)), or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.")  
+} else {
+  text_shared_preamble_one <- paste0(st_head_link, " Go back to [fan](http://fanwangecon.github.io/CodeDynaAsset/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository ([bookdown site](https://fanwangecon.github.io/R4Econ/bookdown)), or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.")
+}
+
 text_shared_preamble_two <- ""
 text_shared_preamble_thr <- ""
 

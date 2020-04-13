@@ -3,9 +3,11 @@ Fan Naming Conventions:
 To help clarify data types for inputs, add prefix to variable names:
 
 - st = string
-    + spt = string path
+    + spt = string path, path only, does not include name
+    + spn = string path, including name
     + svr = variable string
     + sfc = function string name
+- oj = some kind of generic anything object
 - fl = float
 - it = integer
 - ar = single dimensional array

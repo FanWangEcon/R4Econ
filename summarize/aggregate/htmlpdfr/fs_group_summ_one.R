@@ -1,11 +1,12 @@
-## ----global_options, include = FALSE--------------------------------------------------------------
+## ----global_options, include = FALSE----------------------------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Single Variable Group Statistics (also generate overall statistics)
-ff_summ_by_group_summ_one <- function(df, vars.group, var.numeric, str.stats.group = 'main',
-                                      str.stats.specify = NULL, boo.overall.stats = TRUE){
+ff_summ_by_group_summ_one <- function(
+  df, vars.group, var.numeric, str.stats.group = 'main',
+  str.stats.specify = NULL, boo.overall.stats = TRUE){
 
     # List of statistics
     # https://rdrr.io/cran/dplyr/man/summarise.html
@@ -66,24 +67,27 @@ ff_summ_by_group_summ_one <- function(df, vars.group, var.numeric, str.stats.gro
                 unite(str.vars.group.combine, c(str.vars.group.combine, 'variable')) %>%
                 spread(str.vars.group.combine, value)
     } else {
-        df.row.grp.stats <- df.table.grp.stats %>%
-                                mutate(vars.groups.combine := paste0(paste0(vars.group, collapse='.')),
-                                       !!(str.vars.group.combine) := paste0(interaction(!!!(syms(vars.group))))) %>%
-                                mutate(!!(str.vars.group.combine) := paste0(var.numeric, '.', vars.groups.combine, '.',
-                                                                           (!!sym(str.vars.group.combine)))) %>%
-                                ungroup() %>%
-                                select(-vars.groups.combine, -one_of(vars.group)) %>%
-                gather(variable, value, -one_of(str.vars.group.combine))  %>%
-                unite(str.vars.group.combine, c(str.vars.group.combine, 'variable')) %>%
-                spread(str.vars.group.combine, value)
+        df.row.grp.stats <- df.table.grp.stats %>% 
+          mutate(vars.groups.combine := paste0(paste0(vars.group, collapse='.')),
+                 !!(str.vars.group.combine) := paste0(interaction(!!!(syms(vars.group))))) %>%
+          mutate(!!(str.vars.group.combine) := paste0(var.numeric, '.', vars.groups.combine, '.',
+                                                      (!!sym(str.vars.group.combine)))) %>%
+          ungroup() %>%
+          select(-vars.groups.combine, -one_of(vars.group)) %>%
+          gather(variable, value, -one_of(str.vars.group.combine)) %>%
+          unite(str.vars.group.combine, c(str.vars.group.combine, 'variable')) %>%
+          spread(str.vars.group.combine, value)
     }
 
     # Clean up name strings
-    names(df.table.grp.stats) <- gsub(x = names(df.table.grp.stats),pattern = "_", replacement = "\\.")
-    names(df.row.grp.stats) <- gsub(x = names(df.row.grp.stats),pattern = "_", replacement = "\\.")
+    names(df.table.grp.stats) <- 
+      gsub(x = names(df.table.grp.stats),pattern = "_", replacement = "\\.")
+    names(df.row.grp.stats) <- 
+      gsub(x = names(df.row.grp.stats),pattern = "_", replacement = "\\.")
 
     # Return
-    list.return <- list(df_table_grp_stats = df.table.grp.stats, df_row_grp_stats = df.row.grp.stats)
+    list.return <- 
+      list(df_table_grp_stats = df.table.grp.stats, df_row_grp_stats = df.row.grp.stats)
 
     # Overall Statistics, without grouping
     if (boo.overall.stats) {
@@ -98,7 +102,7 @@ ff_summ_by_group_summ_one <- function(df, vars.group, var.numeric, str.stats.gro
 }
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Library
 library(tidyverse)
 
@@ -107,45 +111,56 @@ setwd('C:/Users/fan/R4Econ/_data/')
 df <- read_csv('height_weight.csv')
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 vars.group <- 'sex'
 var.numeric <- 'hgt'
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 df.select <- df %>% select(one_of(vars.group, var.numeric)) %>% drop_na()
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # Single Variable Group Statistics
-ff_summ_by_group_summ_one(df.select, vars.group = vars.group, var.numeric = var.numeric, str.stats.group = 'main')
+ff_summ_by_group_summ_one(
+  df.select, vars.group = vars.group, var.numeric = var.numeric, 
+  str.stats.group = 'main')
 
 
-## -------------------------------------------------------------------------------------------------
-ff_summ_by_group_summ_one(df.select, vars.group = vars.group, var.numeric = var.numeric, str.stats.specify = c('mean', 'sd'))
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+ff_summ_by_group_summ_one(
+  df.select, vars.group = vars.group, var.numeric = var.numeric, 
+  str.stats.specify = c('mean', 'sd'))
 
 
-## -------------------------------------------------------------------------------------------------
-ff_summ_by_group_summ_one(df.select, vars.group = vars.group, var.numeric = var.numeric, str.stats.specify = c('mean'))
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+ff_summ_by_group_summ_one(
+  df.select, vars.group = vars.group, var.numeric = var.numeric, 
+  str.stats.specify = c('mean'))
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 vars.group <- c('S.country', 'sex')
 var.numeric <- 'hgt'
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 df.select <- df %>% select(one_of(vars.group, var.numeric)) %>% drop_na()
 
 
-## -------------------------------------------------------------------------------------------------
-ff_summ_by_group_summ_one(df.select, vars.group = vars.group, var.numeric = var.numeric, str.stats.group = 'main')
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+ff_summ_by_group_summ_one(
+  df.select, vars.group = vars.group, var.numeric = var.numeric, 
+  str.stats.group = 'main')
 
 
-## -------------------------------------------------------------------------------------------------
-ff_summ_by_group_summ_one(df.select, vars.group = vars.group, var.numeric = var.numeric, str.stats.specify = c('mean', 'sd'))
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+ff_summ_by_group_summ_one(
+  df.select, vars.group = vars.group, var.numeric = var.numeric, 
+  str.stats.specify = c('mean', 'sd'))
 
 
-## -------------------------------------------------------------------------------------------------
-ff_summ_by_group_summ_one(df.select, vars.group = vars.group, var.numeric = var.numeric, str.stats.specify = c('mean'))
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+ff_summ_by_group_summ_one(
+  df.select, vars.group = vars.group, var.numeric = var.numeric, str.stats.specify = c('mean'))
 

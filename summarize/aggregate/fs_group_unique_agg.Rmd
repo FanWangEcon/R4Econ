@@ -1,6 +1,15 @@
 ---
-title: "R DPLYR Unique Groups and Count"
-author: Fan Wang
+title: "R DPLYR Count Unique Groups and Mean within Groups"
+titleshort: "Count Unique Groups and Mean within Groups"
+description: |
+  Unique groups defined by multiple values and count obs within group.
+  Mean, sd, observation count for non-NA within unique groups.
+core:
+  - package: dplyr
+    code: |
+      group_by()
+      summarise(n())
+      summarise_if(is.numeric, funs(mean = mean(., na.rm = TRUE), n = sum(is.na(.)==0)))
 date: 2020-04-01
 output:
   pdf_document:
@@ -9,7 +18,10 @@ output:
       in_header: '../../preamble.tex'
   html_document:
     pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
 always_allow_html: true
+urlcolor: blue
 ---
 
 ### Groups Statistics
@@ -46,9 +58,7 @@ df.group.count <- df_use %>% group_by(!!!syms(vars.group)) %>%
                     summarise(n_obs_group=n())
 
 # Show results Head 10
-df.group.count %>%
-  kable() %>%
-  kable_styling_fc_wide()
+df.group.count %>% kable() %>% kable_styling_fc()
 ```
 
 #### Aggrgate Groups only Unique Group Show up With Means

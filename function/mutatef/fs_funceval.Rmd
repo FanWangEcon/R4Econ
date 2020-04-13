@@ -1,5 +1,13 @@
 ---
 title: "DPLYR Evaluate Function over N Individuals with Individual Specific and Shared Arrays of Parameters"
+titleshort: "Nonlinear Function over Rows"
+description: |
+  Evaluate nonlinear function f(x_i, y_i, ar_x, ar_y, c, d), where c and d are constants, and ar_x and ar_y are arrays, both fixed. x_i and y_i vary over each row of matrix.
+core:
+  - package: dplyr
+    code: |
+      rowwise()
+      mutate(out = funct(inputs))
 date: 2020-04-01
 output:
   pdf_document:
@@ -8,7 +16,10 @@ output:
       in_header: '../../preamble.tex'
   html_document:
     pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
 always_allow_html: true
+urlcolor: blue
 ---
 
 ### Row Input Functions

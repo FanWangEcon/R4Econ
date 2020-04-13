@@ -1,5 +1,13 @@
 ---
 title: "R OLS and Instrumental Variable Regression"
+titleshort: "IV/OLS Regression"
+description: |
+  R Instrumental Variables and Ordinary Least Square Regression store all Coefficients and Diagnostics as Dataframe Row.
+core:
+  - package: aer
+    code: |
+      library(aer)
+      ivreg(as.formula, diagnostics = TRUE) 
 date: 2020-04-01
 output:
   pdf_document:
@@ -8,7 +16,10 @@ output:
       in_header: '../../preamble.tex'
   html_document:
     pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
 always_allow_html: true
+urlcolor: blue
 ---
 
 Back to **[Fan](https://fanwangecon.github.io/)**'s R4Econ Homepage **[Table of Content](https://fanwangecon.github.io/R4Econ/)**

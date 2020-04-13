@@ -1,5 +1,18 @@
 ---
-title: "R Summary One Variable by Groups"
+title: "R Summary By Groups, One Variable All Statistics"
+titleshort: "By Groups, One Variable All Statistics"
+description: |
+  Pick stats, overall, and by multiple groups, stats as matrix or wide row with name=(ctsvar + catevar + catelabel).
+core:
+  - package: tidyr
+    code: |
+      group_by()
+      summarize_at(, funs())
+      rename(!!var := !!sym(var))
+      mutate(!!var := paste0(var,'str',!!!syms(vars)))
+      gather()
+      unite()
+      spread(varcates, value)
 date: 2020-04-01
 output:
   pdf_document:
@@ -8,7 +21,10 @@ output:
       in_header: '../../preamble.tex'
   html_document:
     pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
 always_allow_html: true
+urlcolor: blue
 ---
 
 ### One Variable Group Summary
@@ -31,8 +47,9 @@ Pick which statistics to be included in final wide row
 
 ```{r}
 # Single Variable Group Statistics (also generate overall statistics)
-ff_summ_by_group_summ_one <- function(df, vars.group, var.numeric, str.stats.group = 'main',
-                                      str.stats.specify = NULL, boo.overall.stats = TRUE){
+ff_summ_by_group_summ_one <- function(
+  df, vars.group, var.numeric, str.stats.group = 'main',
+  str.stats.specify = NULL, boo.overall.stats = TRUE){
 
     # List of statistics
     # https://rdrr.io/cran/dplyr/man/summarise.html
@@ -93,24 +110,27 @@ ff_summ_by_group_summ_one <- function(df, vars.group, var.numeric, str.stats.gro
                 unite(str.vars.group.combine, c(str.vars.group.combine, 'variable')) %>%
                 spread(str.vars.group.combine, value)
     } else {
-        df.row.grp.stats <- df.table.grp.stats %>%
-                                mutate(vars.groups.combine := paste0(paste0(vars.group, collapse='.')),
-                                       !!(str.vars.group.combine) := paste0(interaction(!!!(syms(vars.group))))) %>%
-                                mutate(!!(str.vars.group.combine) := paste0(var.numeric, '.', vars.groups.combine, '.',
-                                                                           (!!sym(str.vars.group.combine)))) %>%
-                                ungroup() %>%
-                                select(-vars.groups.combine, -one_of(vars.group)) %>%
-                gather(variable, value, -one_of(str.vars.group.combine))  %>%
-                unite(str.vars.group.combine, c(str.vars.group.combine, 'variable')) %>%
-                spread(str.vars.group.combine, value)
+        df.row.grp.stats <- df.table.grp.stats %>% 
+          mutate(vars.groups.combine := paste0(paste0(vars.group, collapse='.')),
+                 !!(str.vars.group.combine) := paste0(interaction(!!!(syms(vars.group))))) %>%
+          mutate(!!(str.vars.group.combine) := paste0(var.numeric, '.', vars.groups.combine, '.',
+                                                      (!!sym(str.vars.group.combine)))) %>%
+          ungroup() %>%
+          select(-vars.groups.combine, -one_of(vars.group)) %>%
+          gather(variable, value, -one_of(str.vars.group.combine)) %>%
+          unite(str.vars.group.combine, c(str.vars.group.combine, 'variable')) %>%
+          spread(str.vars.group.combine, value)
     }
 
     # Clean up name strings
-    names(df.table.grp.stats) <- gsub(x = names(df.table.grp.stats),pattern = "_", replacement = "\\.")
-    names(df.row.grp.stats) <- gsub(x = names(df.row.grp.stats),pattern = "_", replacement = "\\.")
+    names(df.table.grp.stats) <- 
+      gsub(x = names(df.table.grp.stats),pattern = "_", replacement = "\\.")
+    names(df.row.grp.stats) <- 
+      gsub(x = names(df.row.grp.stats),pattern = "_", replacement = "\\.")
 
     # Return
-    list.return <- list(df_table_grp_stats = df.table.grp.stats, df_row_grp_stats = df.row.grp.stats)
+    list.return <- 
+      list(df_table_grp_stats = df.table.grp.stats, df_row_grp_stats = df.row.grp.stats)
 
     # Overall Statistics, without grouping
     if (boo.overall.stats) {
@@ -155,19 +175,25 @@ Main Statistics:
 
 ```{r}
 # Single Variable Group Statistics
-ff_summ_by_group_summ_one(df.select, vars.group = vars.group, var.numeric = var.numeric, str.stats.group = 'main')
+ff_summ_by_group_summ_one(
+  df.select, vars.group = vars.group, var.numeric = var.numeric, 
+  str.stats.group = 'main')
 ```
 
 Specify Two Specific Statistics:
 
 ```{r}
-ff_summ_by_group_summ_one(df.select, vars.group = vars.group, var.numeric = var.numeric, str.stats.specify = c('mean', 'sd'))
+ff_summ_by_group_summ_one(
+  df.select, vars.group = vars.group, var.numeric = var.numeric, 
+  str.stats.specify = c('mean', 'sd'))
 ```
 
 Specify One Specific Statistics:
 
 ```{r}
-ff_summ_by_group_summ_one(df.select, vars.group = vars.group, var.numeric = var.numeric, str.stats.specify = c('mean'))
+ff_summ_by_group_summ_one(
+  df.select, vars.group = vars.group, var.numeric = var.numeric, 
+  str.stats.specify = c('mean'))
 ```
 
 ##### Function Testing By Country and Gender Groups
@@ -186,17 +212,22 @@ df.select <- df %>% select(one_of(vars.group, var.numeric)) %>% drop_na()
 Main Statistics:
 
 ```{r}
-ff_summ_by_group_summ_one(df.select, vars.group = vars.group, var.numeric = var.numeric, str.stats.group = 'main')
+ff_summ_by_group_summ_one(
+  df.select, vars.group = vars.group, var.numeric = var.numeric, 
+  str.stats.group = 'main')
 ```
 
 Specify Two Specific Statistics:
 
 ```{r}
-ff_summ_by_group_summ_one(df.select, vars.group = vars.group, var.numeric = var.numeric, str.stats.specify = c('mean', 'sd'))
+ff_summ_by_group_summ_one(
+  df.select, vars.group = vars.group, var.numeric = var.numeric, 
+  str.stats.specify = c('mean', 'sd'))
 ```
 
 Specify One Specific Statistics:
 
 ```{r}
-ff_summ_by_group_summ_one(df.select, vars.group = vars.group, var.numeric = var.numeric, str.stats.specify = c('mean'))
+ff_summ_by_group_summ_one(
+  df.select, vars.group = vars.group, var.numeric = var.numeric, str.stats.specify = c('mean'))
 ```

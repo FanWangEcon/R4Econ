@@ -1,5 +1,17 @@
 ---
-title: "Summarize a Quantitative/Continuous Variable with Categorical Groups"
+title: "R Summarize a Quantitative/Continuous Variable with Categorical Groups"
+titleshort: "Tibble Basics"
+description: |
+  input multiple variables with comma separated text strings
+  quantitative/continuous and categorical/discrete variables
+  histogram and summary statistics
+core:
+  - package: tibble
+    code: |
+      ar_one <- c(107.72,101.28)
+      ar_two <- c(101.72,101.28)
+      mt_data <- cbind(ar_one, ar_two)
+      as_tibble(mt_data)
 date: 2020-04-01
 output:
   pdf_document:
@@ -8,7 +20,10 @@ output:
       in_header: '../../preamble.tex'
   html_document:
     pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
 always_allow_html: true
+urlcolor: blue
 ---
 
 ### Histogram

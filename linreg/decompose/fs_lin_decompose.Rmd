@@ -1,5 +1,16 @@
 ---
 title: "Decompose Right Hand Side Variables from Linear Regression"
+titleshort: "Regression Decomposition"
+description: |
+  Post multiple regressions, fraction of outcome variables' variances explained by multiple subsets of right hand side variables.
+core:
+  - package: dplyr
+    code: |
+      gather()
+      group_by(var)
+      mutate_at(vars, funs(mean = mean(.)))
+      rowSums(mat*mat)
+      mutate_if(is.numeric, funs(frac = (./value_var)))
 date: 2020-04-01
 output:
   pdf_document:
@@ -8,7 +19,10 @@ output:
       in_header: '../../preamble.tex'
   html_document:
     pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
 always_allow_html: true
+urlcolor: blue
 ---
 
 ### Decompose RHS
@@ -42,8 +56,9 @@ ff_lr_decompose <- function(df, vars.y, vars.x, vars.c, vars.z, vars.other.keep,
     # Regressions
     # regf.iv from C:\Users\fan\R4Econ\linreg\ivreg\ivregdfrow.R
     if(is.null(df.reg.out)) {
-      df.reg.out <- as_tibble(bind_rows(lapply(vars.y, regf.iv,
-                                               vars.x=vars.x, vars.c=vars.c, vars.z=vars.z, df=df)))
+      df.reg.out <- as_tibble(
+        bind_rows(lapply(vars.y, regf.iv,
+                         vars.x=vars.x, vars.c=vars.c, vars.z=vars.z, df=df)))
     }
 
     # Select Variables
@@ -54,30 +69,33 @@ ff_lr_decompose <- function(df, vars.y, vars.x, vars.c, vars.z, vars.other.keep,
     # arr.columns2select
 
     # Generate dataframe for coefficients
-    df.coef <- df.reg.out[,c(arr.columns2select)] %>% mutate_at(vars(arr.esti.name), as.numeric) %>% column_to_rownames(str.outcome.name)
+    df.coef <- df.reg.out[,c(arr.columns2select)] %>% 
+      mutate_at(vars(arr.esti.name), as.numeric) %>% column_to_rownames(str.outcome.name)
     # df.coef
     # str(df.coef)
 
     # Decomposition Step 1: gather
-    df.decompose <- df %>%
-                            filter(svymthRound %in% c(12, 18, 24)) %>%
-                            select(one_of(c(vars.other.keep, vars.xc, vars.y))) %>%
-                            drop_na() %>%
-                            gather(variable, value, -one_of(c(vars.other.keep, vars.xc)))
+    df.decompose <- df %>% 
+      filter(svymthRound %in% c(12, 18, 24)) %>%
+      select(one_of(c(vars.other.keep, vars.xc, vars.y))) %>%
+      drop_na() %>%
+      gather(variable, value, -one_of(c(vars.other.keep, vars.xc)))
 
     # Decomposition Step 2: mutate_at(vars, funs(mean = mean(.)))
     # the xc averaging could have taken place earlier, no difference in mean across variables
     df.decompose <- df.decompose %>%
-                          group_by(variable) %>%
-                          mutate_at(vars(c(vars.xc, 'value')), funs(mean = mean(.))) %>%
-                          ungroup()
+      group_by(variable) %>%
+      mutate_at(vars(c(vars.xc, 'value')), funs(mean = mean(.))) %>%
+      ungroup()
 
     # Decomposition Step 3 With Loop
     for (i in 1:length(list.vars.tomean)) {
         var.decomp.cur <- (paste0('value', list.vars.tomean.name.suffix[[i]]))
         vars.tomean <- list.vars.tomean[[i]]
         var.decomp.cur
-        df.decompose <- df.decompose %>% mutate((!!var.decomp.cur) := ff_lr_decompose_valadj(., df.coef, vars.tomean, str.esti.suffix))
+        df.decompose <- df.decompose %>% 
+          mutate((!!var.decomp.cur) := 
+                   ff_lr_decompose_valadj(., df.coef, vars.tomean, str.esti.suffix))
     }
 
     # Additional Statistics
@@ -173,11 +191,13 @@ list.vars.tomean.name.suffix <- list(var.tomean.first.name.suffix,
 #### Example Guatemala OLS
 
 ```{r}
-df.use <- df %>% filter(S.country == 'Guatemala') %>% filter(svymthRound %in% c(12, 18, 24))
+df.use <- df %>% filter(S.country == 'Guatemala') %>% 
+  filter(svymthRound %in% c(12, 18, 24))
 vars.z <- NULL
-list.out <- ff_lr_decompose(df=df.use, vars.y, vars.x, vars.c, vars.z, vars.other.keep,
-                            list.vars.tomean, list.vars.tomean.name.suffix,
-                            graph=TRUE, graph.nrow=1)
+list.out <- 
+  ff_lr_decompose(df=df.use, vars.y, vars.x, vars.c, vars.z, vars.other.keep,
+                  list.vars.tomean, list.vars.tomean.name.suffix,
+                  graph=TRUE, graph.nrow=1)
 options(repr.matrix.max.rows=10, repr.matrix.max.cols=50)
 list.out$dfmain
 options(repr.plot.width = 10, repr.plot.height = 4)
@@ -187,11 +207,13 @@ list.out$dfsumm
 #### Example Guatemala IV = vil.id
 
 ```{r}
-df.use <- df %>% filter(S.country == 'Guatemala') %>% filter(svymthRound %in% c(12, 18, 24))
+df.use <- df %>% filter(S.country == 'Guatemala') %>% 
+  filter(svymthRound %in% c(12, 18, 24))
 vars.z <- c('vil.id')
-list.out <- ff_lr_decompose(df=df.use, vars.y, vars.x, vars.c, vars.z, vars.other.keep,
-                            list.vars.tomean, list.vars.tomean.name.suffix,
-                            graph=TRUE, graph.nrow=1)
+list.out <- ff_lr_decompose(
+  df=df.use, vars.y, vars.x, vars.c, vars.z, vars.other.keep,
+  list.vars.tomean, list.vars.tomean.name.suffix,
+  graph=TRUE, graph.nrow=1)
 list.out$dfsumm
 options(repr.plot.width = 10, repr.plot.height = 2)
 list.out$graph
@@ -200,11 +222,13 @@ list.out$graph
 #### Example Cebu OLS
 
 ```{r}
-df.use <- df %>% filter(S.country == 'Cebu') %>% filter(svymthRound %in% c(12, 18, 24))
+df.use <- df %>% filter(S.country == 'Cebu') %>% 
+  filter(svymthRound %in% c(12, 18, 24))
 vars.z <- NULL
-list.out <- ff_lr_decompose(df=df.use, vars.y, vars.x, vars.c, vars.z, vars.other.keep,
-                            list.vars.tomean, list.vars.tomean.name.suffix,
-                            graph=TRUE, graph.nrow=1)
+list.out <- ff_lr_decompose(
+  df=df.use, vars.y, vars.x, vars.c, vars.z, vars.other.keep,
+  list.vars.tomean, list.vars.tomean.name.suffix,
+  graph=TRUE, graph.nrow=1)
 options(repr.matrix.max.rows=10, repr.matrix.max.cols=50)
 list.out$dfmain
 options(repr.plot.width = 10, repr.plot.height = 4)
@@ -214,11 +238,13 @@ list.out$dfsumm
 #### Example Cebu IV
 
 ```{r}
-df.use <- df %>% filter(S.country == 'Cebu') %>% filter(svymthRound %in% c(12, 18, 24))
+df.use <- df %>% filter(S.country == 'Cebu') %>% 
+  filter(svymthRound %in% c(12, 18, 24))
 vars.z <- c('wealthIdx')
-list.out <- ff_lr_decompose(df=df.use, vars.y, vars.x, vars.c, vars.z, vars.other.keep,
-                            list.vars.tomean, list.vars.tomean.name.suffix,
-                            graph=TRUE, graph.nrow=1)
+list.out <- ff_lr_decompose(
+  df=df.use, vars.y, vars.x, vars.c, vars.z, vars.other.keep,
+  list.vars.tomean, list.vars.tomean.name.suffix,
+  graph=TRUE, graph.nrow=1)
 list.out$dfsumm
 options(repr.plot.width = 10, repr.plot.height = 2)
 list.out$graph
@@ -229,7 +255,8 @@ list.out$graph
 The examples are just to test the code with different types of variables.
 
 ```{r}
-df.use <- df %>% filter(S.country == 'Guatemala') %>% filter(svymthRound %in% c(12, 18, 24))
+df.use <- df %>% filter(S.country == 'Guatemala') %>% 
+  filter(svymthRound %in% c(12, 18, 24))
 dim(df.use)
 ```
 
@@ -279,8 +306,9 @@ list.vars.tomean.name.suffix <- list(
 ```{r}
 # Regressions
 # regf.iv from C:\Users\fan\R4Econ\linreg\ivreg\ivregdfrow.R
-df.reg.out <- as_tibble(bind_rows(lapply(vars.y, regf.iv,
-                                         vars.x=vars.x, vars.c=vars.c, vars.z=vars.z, df=df)))
+df.reg.out <- as_tibble(
+  bind_rows(lapply(vars.y, regf.iv,
+                   vars.x=vars.x, vars.c=vars.c, vars.z=vars.z, df=df)))
 # Regressions
 # reg1 <- regf.iv(var.y = var.y1, vars.x, vars.c, vars.z, df.use)
 # reg2 <- regf.iv(var.y = var.y2, vars.x, vars.c, vars.z, df.use)
@@ -369,7 +397,9 @@ for (i in 1:length(list.vars.tomean)) {
     var.decomp.cur <- (paste0('value', list.vars.tomean.name.suffix[[i]]))
     vars.tomean <- list.vars.tomean[[i]]
     var.decomp.cur
-    df.decompose_step3 <- df.decompose_step3 %>% mutate((!!var.decomp.cur) := ff_lr_decompose_valadj(., df.coef, vars.tomean, str.esti.suffix))
+    df.decompose_step3 <- df.decompose_step3 %>% 
+      mutate((!!var.decomp.cur) := 
+               ff_lr_decompose_valadj(., df.coef, vars.tomean, str.esti.suffix))
 
 }
 options(repr.matrix.max.rows=10, repr.matrix.max.cols=20)
@@ -414,11 +444,14 @@ df.decompose_step3 %>%
 ```{r}
 head(df.decompose_step2[vars.tomean.first],3)
 head(df.decompose_step2[paste0(vars.tomean.first, '_mean')], 3)
-head(df.coef[df.decompose_step2$variable, paste0(vars.tomean.first, str.esti.suffix)], 3)
+head(df.coef[df.decompose_step2$variable, 
+             paste0(vars.tomean.first, str.esti.suffix)], 3)
 df.decompose.tomean.first <- df.decompose_step2 %>%
     mutate(pred_new = df.decompose_step2$value +
-        rowSums((df.decompose_step2[paste0(vars.tomean.first, '_mean')] - df.decompose_step2[vars.tomean.first])
-            *df.coef[df.decompose_step2$variable, paste0(vars.tomean.first, str.esti.suffix)])) %>%
+        rowSums((df.decompose_step2[paste0(vars.tomean.first, '_mean')] 
+                 - df.decompose_step2[vars.tomean.first])
+            *df.coef[df.decompose_step2$variable, 
+                     paste0(vars.tomean.first, str.esti.suffix)])) %>%
         select(variable, value, pred_new)
 head(df.decompose.tomean.first, 10)
 df.decompose.tomean.first %>%
@@ -431,8 +464,10 @@ Note the r-square from regression above matches up with the 1 - ratio below. Thi
 ```{r}
 df.decompose_step2 %>%
     mutate(pred_new = df.decompose_step2$value +
-        rowSums((df.decompose_step2[paste0(vars.tomean.second, '_mean')] - df.decompose_step2[vars.tomean.second])
-            *df.coef[df.decompose_step2$variable, paste0(vars.tomean.second, str.esti.suffix)])) %>%
+        rowSums((df.decompose_step2[paste0(vars.tomean.second, '_mean')] 
+                 - df.decompose_step2[vars.tomean.second])
+            *df.coef[df.decompose_step2$variable, 
+                     paste0(vars.tomean.second, str.esti.suffix)])) %>%
         select(variable, value, pred_new) %>%
         group_by(variable) %>%
         summarize_all(funs(mean = mean, var = var)) %>%

@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE--------------------------------------------------------------
+## ----global_options, include = FALSE----------------------------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ----setup----------------------------------------------------------------------------------------
+## ----setup------------------------------------------------------------------------------------------------------------------------------------------------
 # it_child_count = N, the number of children
 it_N_child_cnt = 5
 # it_heter_param = Q, number of parameters that are heterogeneous across children
@@ -21,7 +21,7 @@ kable(mt_nN_by_nQ_A_alpha) %>%
   kable_styling_fc()
 
 
-## ----linear_apply---------------------------------------------------------------------------------
+## ----linear_apply-----------------------------------------------------------------------------------------------------------------------------------------
 
 # Define Implicit Function
 ffi_linear_hardcode <- function(ar_A_alpha){
@@ -37,7 +37,7 @@ ffi_linear_hardcode <- function(ar_A_alpha){
 ar_func_apply = apply(mt_nN_by_nQ_A_alpha, 1, ffi_linear_hardcode)
 
 
-## ----func noloop apply anonymous norm shares------------------------------------------------------
+## ----func noloop apply anonymous norm shares--------------------------------------------------------------------------------------------------------------
 set.seed(1039)
 
 # Define the number of draws each row and total amount
@@ -66,7 +66,7 @@ ls_ar_draws_shares_lvls = apply(cbind(seq(it_N),runif(it_N, min=1,max=10)),
 print(ls_ar_draws_shares_lvls)
 
 
-## ----linear_sapply--------------------------------------------------------------------------------
+## ----linear_sapply----------------------------------------------------------------------------------------------------------------------------------------
 
 ls_ar_nN_by_nQ_A_alpha = as.list(data.frame(t(mt_nN_by_nQ_A_alpha)))
 
@@ -85,7 +85,7 @@ ar_func_sapply = sapply(ls_ar_nN_by_nQ_A_alpha, ffi_linear_sapply,
                         ar_A=ar_nN_A, ar_alpha=ar_nN_alpha)
 
 
-## ----func noloop sapply anonymous norm shares-----------------------------------------------------
+## ----func noloop sapply anonymous norm shares-------------------------------------------------------------------------------------------------------------
 it_N <- 4
 fl_unif_min <- 1
 fl_unif_max <- 2
@@ -114,7 +114,7 @@ sapply(seq(it_N), function(x) {sum(ls_ar_draws[[x]])})
 sapply(seq(it_N), function(x) {sum(ls_ar_draws_shares[[x]])})
 
 
-## ----linear_dplyr---------------------------------------------------------------------------------
+## ----linear_dplyr-----------------------------------------------------------------------------------------------------------------------------------------
 # Convert Matrix to Tibble
 ar_st_col_names = c('fl_A', 'fl_alpha')
 tb_nN_by_nQ_A_alpha <- as_tibble(mt_nN_by_nQ_A_alpha) %>% rename_all(~c(ar_st_col_names))
@@ -142,7 +142,7 @@ kable(tb_nN_by_nQ_A_alpha_show) %>%
   kable_styling_fc()
 
 
-## ----dplyr formula hard code inputs---------------------------------------------------------------
+## ----dplyr formula hard code inputs-----------------------------------------------------------------------------------------------------------------------
 # Define function, fixed inputs are not parameters, but defined earlier as a part of the function
 # ar_nN_A, ar_nN_alpha are fixed, not parameters
 ffi_linear_dplyrdo_func <- function(fl_A, fl_alpha){
@@ -158,7 +158,7 @@ kable(tbfunc_A_nN_by_nQ_A_alpha_rowwise) %>%
   kable_styling_fc()
 
 
-## ----dplyr formula--------------------------------------------------------------------------------
+## ----dplyr formula----------------------------------------------------------------------------------------------------------------------------------------
 # Define function, fixed inputs are not parameters, but defined earlier as a part of the function
 # Rorate fl_alpha and fl_A name compared to before to make sure pmap tracks by names
 ffi_linear_dplyrdo_func <- function(fl_alpha, fl_A){
@@ -185,7 +185,7 @@ kable(tbfunc_A_nN_by_nQ_A_alpha_pmap) %>%
   kable_styling_fc()
 
 
-## -------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ffi_linear_dplyrdo_fdot <- function(ls_row, fl_param){
   # Type 1 Param = ar_nN_A, ar_nN_alpha
   # Type 2 Param = ls_row$fl_A, ls_row$fl_alpha
@@ -206,7 +206,7 @@ kable(tbfunc_B_nN_by_nQ_A_alpha) %>%
   kable_styling_fc()
 
 
-## ----linear_combine-------------------------------------------------------------------------------
+## ----linear_combine---------------------------------------------------------------------------------------------------------------------------------------
 # Show overall Results
 mt_results <- cbind(ar_func_apply, ar_func_sapply,
                     tb_nN_by_nQ_A_alpha_show['dplyr_eval'],
@@ -221,5 +221,5 @@ colnames(mt_results) <- c('eval_lin_apply', 'eval_lin_sapply',
                           'eval_dplyr_mutate_flex',
                           'A_child', 'alpha_child')
 kable(mt_results) %>%
-  kable_styling_fc()
+  kable_styling_fc_wide()
 

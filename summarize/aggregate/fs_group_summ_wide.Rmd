@@ -1,5 +1,18 @@
 ---
-title: "R Multiple within Individual Groups Variables, Averages for All Numeric Variables within All Groups of All Group Variables (Long to very Wide)"
+title: "R By within Individual Groups Variables, Averages"
+titleshort: "By within Individual Groups Variables, Averages"
+description: |
+  By Multiple within Individual Groups Variables.
+  Averages for all numeric variables within all groups of all group variables. Long to Wide to very Wide.
+core:
+  - package: tidyr
+    code: |
+      gather()
+      group_by()
+      summarise_if(is.numeric, funs(mean(., na.rm = TRUE)))
+      mutate(all_m_cate = paste0(variable, '_c', value))
+      unite()
+      spread()
 date: 2020-04-01
 output:
   pdf_document:
@@ -8,7 +21,10 @@ output:
       in_header: '../../preamble.tex'
   html_document:
     pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
 always_allow_html: true
+urlcolor: blue
 ---
 
 ### Nested within Group Stats

@@ -1,5 +1,21 @@
 ---
 title: "Joint Quantiles from Multiple Continuous Variables as a Categorical Variable with Linear Index"
+titleshort: "Quantiles from Multiple Variables"
+description: |
+  Dataframe of Variables' Quantiles by Panel Groups, and quantile categorical variables for panel within Group Observations
+  Quantile cut variable suffix and quantile labeling, and Joint Quantile Categorical Variable with Linear Index.
+core:
+  - package: dplyr
+    code: |
+      group_by()
+      slice(1L)
+      lapply(enframe(quantiles()))
+      reduce(full_join)
+      mutate_at(funs(q=f_cut(.,cut))))
+      levels()
+      rename_at()
+      unlist(lapply)
+      mutate(!!var.jnt.quantile := group_indices(., !!!syms(quantile.cut)))
 date: 2020-04-01
 output:
   pdf_document:
@@ -8,7 +24,10 @@ output:
       in_header: '../../preamble.tex'
   html_document:
     pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
 always_allow_html: true
+urlcolor: blue
 ---
 
 ### Joint Quantiles from Continuous

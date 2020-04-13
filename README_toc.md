@@ -1,15 +1,3 @@
-[![HitCount](http://hits.dwyl.io/fanwangecon/R4Econ.svg)](https://github.com/FanWangEcon/R4Econ)  [![Star](https://img.shields.io/github/stars/fanwangecon/R4Econ?style=social)](https://github.com/FanWangEcon/R4Econ/stargazers) [![Fork](https://img.shields.io/github/forks/fanwangecon/R4Econ?style=social)](https://github.com/FanWangEcon/R4Econ/network/members) [![Star](https://img.shields.io/github/watchers/fanwangecon/R4Econ?style=social)](https://github.com/FanWangEcon/R4Econ/watchers)
-
-This is a work-in-progress [website](https://fanwangecon.github.io/R4Econ/) consisting of R panel data and optimization examples for Statistics/Econometrics/Economic Analysis. Book version: [bookdown site](https://fanwangecon.github.io/R4Econ/bookdown) and [bookdown pdf](https://fanwangecon.github.io/R4Econ/bookdown/Panel-Data-and-Optimization-with-R.pdf). Materials gathered from various [projects](https://fanwangecon.github.io/research) in which R code is used. Files are from [**Fan**](https://fanwangecon.github.io/)'s [R4Econ](https://github.com/FanWangEcon/R4Econ) repository. This is not a R package, but a list of examples in PDF/HTML/Rmd formats. [REconTools](https://fanwangcon.github.com/REconTools) is a package that can be installed with tools used in [projects](https://fanwangecon.github.io/research) involving R.
-
-Bullet points show which [base R](https://www.rdocumentation.org/packages/base/versions/3.5.2), [tidyverse](https://www.tidyverse.org/) or other functions/commands are used to achieve various objectives. An effort is made to use only [base R](https://www.rdocumentation.org/packages/base/versions/3.5.2) and [tidyverse](https://www.tidyverse.org/) packages whenever possible to reduce dependencies. The goal of this repository is to make it easier to find/re-use codes produced for various projects.
-
-From [Fan](https://fanwangecon.github.io/)'s other repositories: For dynamic borrowing and savings problems, see [Dynamic Asset Repository](https://fanwangecon.github.io/CodeDynaAsset/); For code examples, see also [Matlab Example Code](https://fanwangecon.github.io/M4Econ/) and [Stata Example Code](https://fanwangecon.github.io/Stata4Econ/); For intro econ with Matlab, see [Intro Mathematics for Economists](https://fanwangecon.github.io/Math4Econ/), and for intro stat with R, see [Intro Statistics for Undergraduates](https://fanwangecon.github.io/Stat4Econ/). See [here](https://github.com/FanWangEcon) for all of [Fan](https://fanwangecon.github.io/)'s public repositories.
-
-Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or problems.
-
-[![](https://img.shields.io/github/last-commit/fanwangecon/R4Econ)](https://github.com/FanWangEcon/R4Econ/commits/master) [![](https://img.shields.io/github/commit-activity/m/fanwangecon/R4Econ)](https://github.com/FanWangEcon/R4Econ/graphs/commit-activity) [![](https://img.shields.io/github/issues/fanwangecon/R4Econ)](https://github.com/FanWangEcon/R4Econ/issues) [![](https://img.shields.io/github/issues-pr/fanwangecon/R4Econ)](https://github.com/FanWangEcon/R4Econ/pulls)
-
 # 1  Array, Matrix, Dataframe
 
 ## 1.1  List
@@ -158,13 +146,3 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ Post multiple regressions, fraction of outcome variables' variances explained by multiple subsets of right hand side variables.
 	+ **tidyr**: *mutate(!!sym(abc) := case_when(efg < 0 ~ !!sym(opq), TRUE ~ iso)) + pivot_longer(cols = starts_with('abc'), names_to = c('a', 'b'), names_pattern = paste0('prefix', "(.)_(.)"), values_to = val) + pivot_wider(names_from = !!sym(name), values_from = val)*
 	+ **gglot2**: *geom_line() + facet_wrap() + geom_hline()*
-
-
-----
-Please contact [![](https://img.shields.io/github/followers/fanwangecon?label=FanWangEcon&style=social)](https://github.com/FanWangEcon) [![](https://img.shields.io/twitter/follow/fanwangecon?label=%20&style=social)](https://twitter.com/fanwangecon) for issues or problems.
-
-![RepoSize](https://img.shields.io/github/repo-size/fanwangecon/R4Econ)
-![CodeSize](https://img.shields.io/github/languages/code-size/fanwangecon/R4Econ)
-![Language](https://img.shields.io/github/languages/top/fanwangecon/R4Econ)
-![Release](https://img.shields.io/github/downloads/fanwangecon/R4Econ/total)
-![License](https://img.shields.io/github/license/fanwangecon/R4Econ)
