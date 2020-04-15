@@ -653,7 +653,7 @@ summary {
 <div id="generate-replace-variables" class="section level3">
 <h3>Generate Replace Variables</h3>
 <blockquote>
-<p>Go to the <a href="https://github.com/FanWangEcon//R4Econ/blob/master/summarize/multivar//fs_func_multivar.Rmd"><strong>RMD</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/summarize/multivar//htmlpdfr/fs_func_multivar.R"><strong>R</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/summarize/multivar//htmlpdfr/fs_func_multivar.pdf"><strong>PDF</strong></a>, or <a href="https://fanwangecon.github.io//R4Econ/summarize/multivar//htmlpdfr/fs_func_multivar.html"><strong>HTML</strong></a> version of this file. Go back to <a href="http://fanwangecon.github.io/CodeDynaAsset/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository.</p>
+<p>Go to the <a href="https://github.com/FanWangEcon//R4Econ/blob/master/summarize/multivar//fs_func_multivar.Rmd"><strong>RMD</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/summarize/multivar//htmlpdfr/fs_func_multivar.R"><strong>R</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/summarize/multivar//htmlpdfr/fs_func_multivar.pdf"><strong>PDF</strong></a>, or <a href="https://fanwangecon.github.io//R4Econ/summarize/multivar//htmlpdfr/fs_func_multivar.html"><strong>HTML</strong></a> version of this file. Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository.</p>
 </blockquote>
 <div id="replace-na-for-multiple-variables" class="section level4">
 <h4>Replace NA for Multiple Variables</h4>
@@ -865,8 +865,7 @@ df_daily_profit &lt;- as_tibble(matrix(rnorm(it_N*it_M), nrow=it_N, ncol=it_M)) 
   rename_at(vars(starts_with(&quot;V&quot;)),
             funs(str_replace(., &quot;V&quot;, &quot;dp_f&quot;)))
 kable(df_daily_profit) %&gt;%
-  kable_styling_fc_wide()</code></pre>
-<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
+  kable_styling_fc()</code></pre>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -953,7 +952,6 @@ dp_f5
 </tr>
 </tbody>
 </table>
-</div>
 <pre class="r"><code># cumulative sum with suffix
 df_cumu_profit_suffix &lt;- df_daily_profit %&gt;%
   mutate_at(vars(contains(&#39;dp_f&#39;)), .funs = list(cumu = ~cumsum(.)))

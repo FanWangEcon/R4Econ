@@ -1,6 +1,18 @@
 ---
 title: "R DPLYR Join Multiple Dataframes Together"
-date: 2020-04-01
+description: |
+  Join dataframes together with one or multiple keys. Stack dataframes together.
+core:
+  - package: dplyr
+    code: |
+      filter()
+      rename(!!sym(vsta) := !!sym(vstb))
+      mutate(var = rnom(n()))
+      left_join(df, by=(c('id'='id', 'vt'='vt')))
+      left_join(df, by=setNames(c('id', 'vt'), c('id', 'vt')))
+      bind_rows()
+date: 2020-04-14
+date_start: 2020-04-01
 output:
   pdf_document:
     pandoc_args: '../../_output_kniti_pdf.yaml'

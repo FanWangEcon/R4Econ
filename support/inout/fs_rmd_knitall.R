@@ -29,12 +29,23 @@ spt_opti <- paste0(spt_root, 'optimization')
 spt_dyna <- paste0(spt_root, 'dynamic')
 ls_path_group_c <- c(spt_opti, spt_regn, spt_linr)
 
+# Group TEMP
+spt_one <- paste0(spt_root, 'amto')
+spt_two <- paste0(spt_root, 'summarize/dist')
+spt_thr <- paste0(spt_root, 'summarize/aggregate')
+spt_fou <- paste0(spt_root, 'function/noloop')
+spt_fiv <- paste0(spt_root, 'math')
+spt_six <- paste0(spt_root, 'panel')
+ls_path_group_temp <- c(spt_one, spt_two, spt_thr)
+ls_path_group_temp <- c(ls_path_group_temp, spt_fou, spt_fiv, spt_six)
+
 # All ls_path_group_use
 ls_path_group <- c(ls_path_group_a, ls_path_group_b, ls_path_group_c)
 
 # Group To Use
 ls_path_group_use <- ls_path_group
-# ls_path_group_use <- paste0(spt_root, 'amto/matrix')
+# ls_path_group_use <- paste0(spt_root, 'amto/tibble')
+# ls_path_group_use <- ls_path_group_temp
 
 # Get Path
 ls_sfls  <- list.files(path=ls_path_group_use, recursive=T, pattern=".Rmd", full.names=T)

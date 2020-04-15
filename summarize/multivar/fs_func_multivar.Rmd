@@ -69,7 +69,7 @@ df_daily_profit <- as_tibble(matrix(rnorm(it_N*it_M), nrow=it_N, ncol=it_M)) %>%
   rename_at(vars(starts_with("V")),
             funs(str_replace(., "V", "dp_f")))
 kable(df_daily_profit) %>%
-  kable_styling_fc_wide()
+  kable_styling_fc()
 
 # cumulative sum with suffix
 df_cumu_profit_suffix <- df_daily_profit %>%

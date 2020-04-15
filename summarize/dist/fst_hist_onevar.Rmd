@@ -230,8 +230,11 @@ txt_test_data <- "init_prof, later_prof, class_id, exam_score
  'CA', 'SN', 4, 18"
 
 csv_test_data = read.csv(text=txt_test_data, header=TRUE)
-ar_st_varnames <- c('first_half_professor', 'second_half_professor', 'course_id', 'exam_score')
-tb_test_data <- as_tibble(csv_test_data) %>% rename_all(~c(ar_st_varnames))
+ar_st_varnames <- c('first_half_professor',
+                    'second_half_professor',
+                    'course_id', 'exam_score')
+tb_test_data <- as_tibble(csv_test_data) %>% 
+  rename_all(~c(ar_st_varnames))
 summary(tb_test_data)
 ```
 
@@ -243,7 +246,10 @@ summary(tb_test_data)
 ggplot(tb_final_twovar, aes(x=ar_test_scores_ec3)) +
   geom_histogram(bins=25) +
   labs(title = paste0('Sandbox: Final Distribution (Econ 2370, FW)'),
-       caption = 'FW Section, formula: 0.3*exam1Perc + 0.3*exam2Perc + 0.42*HWtotalPerc + 0.03*AttendancePerc \n+ perfect attendance + 0.03 per Extra Credit') +
+       caption = paste0('FW Section, formula:',
+                        '0.3*exam1Perc + 0.3*exam2Perc + ',
+                        '0.42*HWtotalPerc + 0.03*AttendancePerc \n',
+                        '+ perfect attendance + 0.03 per Extra Credit')) +
   theme_bw()
 ```
 

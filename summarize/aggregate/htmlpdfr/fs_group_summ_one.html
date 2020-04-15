@@ -644,7 +644,7 @@ summary {
 <div id="one-variable-group-summary" class="section level3">
 <h3>One Variable Group Summary</h3>
 <blockquote>
-<p>Go to the <a href="https://github.com/FanWangEcon//R4Econ/blob/master/summarize/aggregate//fs_group_summ_one.Rmd"><strong>RMD</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/summarize/aggregate//htmlpdfr/fs_group_summ_one.R"><strong>R</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/summarize/aggregate//htmlpdfr/fs_group_summ_one.pdf"><strong>PDF</strong></a>, or <a href="https://fanwangecon.github.io//R4Econ/summarize/aggregate//htmlpdfr/fs_group_summ_one.html"><strong>HTML</strong></a> version of this file. Go back to <a href="http://fanwangecon.github.io/CodeDynaAsset/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository.</p>
+<p>Go to the <a href="https://github.com/FanWangEcon//R4Econ/blob/master/summarize/aggregate//fs_group_summ_one.Rmd"><strong>RMD</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/summarize/aggregate//htmlpdfr/fs_group_summ_one.R"><strong>R</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/summarize/aggregate//htmlpdfr/fs_group_summ_one.pdf"><strong>PDF</strong></a>, or <a href="https://fanwangecon.github.io//R4Econ/summarize/aggregate//htmlpdfr/fs_group_summ_one.html"><strong>HTML</strong></a> version of this file. Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository.</p>
 </blockquote>
 <p>There is a categorical variable (based on one or the interaction of multiple variables), there is a continuous variable, obtain statistics for the continuous variable conditional on the categorical variable, but also unconditionally.</p>
 <p>Store results in a matrix, but also flatten results wide to row with appropriate keys/variable-names for all group statistics.</p>
@@ -655,97 +655,110 @@ summary {
 ff_summ_by_group_summ_one &lt;- function(
   df, vars.group, var.numeric, str.stats.group = &#39;main&#39;,
   str.stats.specify = NULL, boo.overall.stats = TRUE){
-
-    # List of statistics
-    # https://rdrr.io/cran/dplyr/man/summarise.html
-    strs.center &lt;- c(&#39;mean&#39;, &#39;median&#39;)
-    strs.spread &lt;- c(&#39;sd&#39;, &#39;IQR&#39;, &#39;mad&#39;)
-    strs.range &lt;- c(&#39;min&#39;, &#39;max&#39;)
-    strs.pos &lt;- c(&#39;first&#39;, &#39;last&#39;)
-    strs.count &lt;- c(&#39;n_distinct&#39;)
-
-    # Grouping of Statistics
-    if (missing(str.stats.specify)) {
-        if (str.stats.group == &#39;main&#39;) {
-            strs.all &lt;- c(&#39;mean&#39;, &#39;min&#39;, &#39;max&#39;, &#39;sd&#39;)
-        }
-        if (str.stats.group == &#39;all&#39;) {
-            strs.all &lt;- c(strs.center, strs.spread, strs.range, strs.pos, strs.count)
-        }
-    } else {
-        strs.all &lt;- str.stats.specify
+  
+  # List of statistics
+  # https://rdrr.io/cran/dplyr/man/summarise.html
+  strs.center &lt;- c(&#39;mean&#39;, &#39;median&#39;)
+  strs.spread &lt;- c(&#39;sd&#39;, &#39;IQR&#39;, &#39;mad&#39;)
+  strs.range &lt;- c(&#39;min&#39;, &#39;max&#39;)
+  strs.pos &lt;- c(&#39;first&#39;, &#39;last&#39;)
+  strs.count &lt;- c(&#39;n_distinct&#39;)
+  
+  # Grouping of Statistics
+  if (missing(str.stats.specify)) {
+    if (str.stats.group == &#39;main&#39;) {
+      strs.all &lt;- c(&#39;mean&#39;, &#39;min&#39;, &#39;max&#39;, &#39;sd&#39;)
     }
-
-    # Start Transform
-    df &lt;- df %&gt;% drop_na() %&gt;% mutate(!!(var.numeric) := as.numeric(!!sym(var.numeric)))
-
-    # Overall Statistics
-    if (boo.overall.stats) {
-        df.overall.stats &lt;- df %&gt;% summarize_at(vars(var.numeric), funs(!!!strs.all))
-        if (length(strs.all) == 1) {
-            # give it a name, otherwise if only one stat, name of stat not saved
-            df.overall.stats &lt;- df.overall.stats %&gt;% rename(!!strs.all := !!sym(var.numeric))
-        }
-        names(df.overall.stats) &lt;- paste0(var.numeric, &#39;.&#39;, names(df.overall.stats))
+    if (str.stats.group == &#39;all&#39;) {
+      strs.all &lt;- c(strs.center, strs.spread, strs.range, strs.pos, strs.count)
     }
-
-    # Group Sort
-    df.select &lt;- df %&gt;%
-                  group_by(!!!syms(vars.group)) %&gt;%
-                  arrange(!!!syms(c(vars.group, var.numeric)))
-
-    # Table of Statistics
-    df.table.grp.stats &lt;- df.select %&gt;% summarize_at(vars(var.numeric), funs(!!!strs.all))
-
-    # Add Stat Name
+  } else {
+    strs.all &lt;- str.stats.specify
+  }
+  
+  # Start Transform
+  df &lt;- df %&gt;% drop_na() %&gt;% 
+    mutate(!!(var.numeric) := as.numeric(!!sym(var.numeric)))
+  
+  # Overall Statistics
+  if (boo.overall.stats) {
+    df.overall.stats &lt;- df %&gt;% 
+      summarize_at(vars(var.numeric), funs(!!!strs.all))
     if (length(strs.all) == 1) {
-        # give it a name, otherwise if only one stat, name of stat not saved
-        df.table.grp.stats &lt;- df.table.grp.stats %&gt;% rename(!!strs.all := !!sym(var.numeric))
+      # give it a name, otherwise if only one stat, name of stat not saved
+      df.overall.stats &lt;- df.overall.stats %&gt;% 
+        rename(!!strs.all := !!sym(var.numeric))
     }
-
-    # Row of Statistics
-    str.vars.group.combine &lt;- paste0(vars.group, collapse=&#39;_&#39;)
-    if (length(vars.group) == 1) {
-        df.row.grp.stats &lt;- df.table.grp.stats %&gt;%
-                mutate(!!(str.vars.group.combine) := paste0(var.numeric, &#39;.&#39;,
-                                               vars.group, &#39;.g&#39;,
-                                               (!!!syms(vars.group)))) %&gt;%
-                gather(variable, value, -one_of(vars.group)) %&gt;%
-                unite(str.vars.group.combine, c(str.vars.group.combine, &#39;variable&#39;)) %&gt;%
-                spread(str.vars.group.combine, value)
-    } else {
-        df.row.grp.stats &lt;- df.table.grp.stats %&gt;% 
-          mutate(vars.groups.combine := paste0(paste0(vars.group, collapse=&#39;.&#39;)),
-                 !!(str.vars.group.combine) := paste0(interaction(!!!(syms(vars.group))))) %&gt;%
-          mutate(!!(str.vars.group.combine) := paste0(var.numeric, &#39;.&#39;, vars.groups.combine, &#39;.&#39;,
-                                                      (!!sym(str.vars.group.combine)))) %&gt;%
-          ungroup() %&gt;%
-          select(-vars.groups.combine, -one_of(vars.group)) %&gt;%
-          gather(variable, value, -one_of(str.vars.group.combine)) %&gt;%
-          unite(str.vars.group.combine, c(str.vars.group.combine, &#39;variable&#39;)) %&gt;%
-          spread(str.vars.group.combine, value)
-    }
-
-    # Clean up name strings
-    names(df.table.grp.stats) &lt;- 
-      gsub(x = names(df.table.grp.stats),pattern = &quot;_&quot;, replacement = &quot;\\.&quot;)
-    names(df.row.grp.stats) &lt;- 
-      gsub(x = names(df.row.grp.stats),pattern = &quot;_&quot;, replacement = &quot;\\.&quot;)
-
-    # Return
-    list.return &lt;- 
-      list(df_table_grp_stats = df.table.grp.stats, df_row_grp_stats = df.row.grp.stats)
-
-    # Overall Statistics, without grouping
-    if (boo.overall.stats) {
-        df.row.stats.all &lt;- c(df.row.grp.stats, df.overall.stats)
-        list.return &lt;- append(list.return, list(df_overall_stats = df.overall.stats,
-                                                df_row_stats_all = df.row.stats.all))
-    }
-
-    # Return
-    return(list.return)
-
+    names(df.overall.stats) &lt;- 
+      paste0(var.numeric, &#39;.&#39;, names(df.overall.stats))
+  }
+  
+  # Group Sort
+  df.select &lt;- df %&gt;%
+    group_by(!!!syms(vars.group)) %&gt;%
+    arrange(!!!syms(c(vars.group, var.numeric)))
+  
+  # Table of Statistics
+  df.table.grp.stats &lt;- df.select %&gt;% 
+    summarize_at(vars(var.numeric), funs(!!!strs.all))
+  
+  # Add Stat Name
+  if (length(strs.all) == 1) {
+    # give it a name, otherwise if only one stat, name of stat not saved
+    df.table.grp.stats &lt;- df.table.grp.stats %&gt;% 
+      rename(!!strs.all := !!sym(var.numeric))
+  }
+  
+  
+  # Row of Statistics
+  str.vars.group.combine &lt;- paste0(vars.group, collapse=&#39;_&#39;)
+  if (length(vars.group) == 1) {
+    df.row.grp.stats &lt;- df.table.grp.stats %&gt;%
+      mutate(!!(str.vars.group.combine) := 
+               paste0(var.numeric, &#39;.&#39;,
+                      vars.group, &#39;.g&#39;,
+                      (!!!syms(vars.group)))) %&gt;%
+      gather(variable, value, -one_of(vars.group)) %&gt;%
+      unite(str.vars.group.combine, c(str.vars.group.combine, &#39;variable&#39;)) %&gt;%
+      spread(str.vars.group.combine, value)
+  } else {
+    df.row.grp.stats &lt;- df.table.grp.stats %&gt;% 
+      mutate(vars.groups.combine := 
+               paste0(paste0(vars.group, collapse=&#39;.&#39;)),
+             !!(str.vars.group.combine) := 
+               paste0(interaction(!!!(syms(vars.group))))) %&gt;%
+      mutate(!!(str.vars.group.combine) := 
+               paste0(var.numeric, &#39;.&#39;, vars.groups.combine, &#39;.&#39;,
+                      (!!sym(str.vars.group.combine)))) %&gt;%
+      ungroup() %&gt;%
+      select(-vars.groups.combine, -one_of(vars.group)) %&gt;%
+      gather(variable, value, -one_of(str.vars.group.combine)) %&gt;%
+      unite(str.vars.group.combine, c(str.vars.group.combine, &#39;variable&#39;)) %&gt;%
+      spread(str.vars.group.combine, value)
+  }
+  
+  # Clean up name strings
+  names(df.table.grp.stats) &lt;- 
+    gsub(x = names(df.table.grp.stats),pattern = &quot;_&quot;, replacement = &quot;\\.&quot;)
+  names(df.row.grp.stats) &lt;- 
+    gsub(x = names(df.row.grp.stats),pattern = &quot;_&quot;, replacement = &quot;\\.&quot;)
+  
+  # Return
+  list.return &lt;- 
+    list(df_table_grp_stats = df.table.grp.stats, 
+         df_row_grp_stats = df.row.grp.stats)
+  
+  # Overall Statistics, without grouping
+  if (boo.overall.stats) {
+    df.row.stats.all &lt;- c(df.row.grp.stats, df.overall.stats)
+    list.return &lt;- append(list.return, 
+                          list(df_overall_stats = df.overall.stats,
+                               df_row_stats_all = df.row.stats.all))
+  }
+  
+  # Return
+  return(list.return)
+  
 }</code></pre>
 </div>
 <div id="test" class="section level4">
@@ -785,135 +798,30 @@ var.numeric &lt;- &#39;hgt&#39;</code></pre>
 <pre class="r"><code># Single Variable Group Statistics
 ff_summ_by_group_summ_one(
   df.select, vars.group = vars.group, var.numeric = var.numeric, 
-  str.stats.group = &#39;main&#39;)</code></pre>
-<pre><code>## $df_table_grp_stats
-## # A tibble: 2 x 5
+  str.stats.group = &#39;main&#39;)$df_table_grp_stats</code></pre>
+<pre><code>## # A tibble: 2 x 5
 ##   sex     mean   min   max    sd
 ##   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1 Female  82.8  41.2  171.  29.8
-## 2 Male    84.7  41.3  183.  31.8
-## 
-## $df_row_grp_stats
-## # A tibble: 1 x 8
-##   hgt.sex.gFemale.max hgt.sex.gFemale.mean hgt.sex.gFemale.min hgt.sex.gFemale.sd hgt.sex.gMale.max hgt.sex.gMale.mean hgt.sex.gMale.min hgt.sex.gMale.sd
-##                 &lt;dbl&gt;                &lt;dbl&gt;               &lt;dbl&gt;              &lt;dbl&gt;             &lt;dbl&gt;              &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;
-## 1                171.                 82.8                41.2               29.8              183.               84.7              41.3             31.8
-## 
-## $df_overall_stats
-## # A tibble: 1 x 4
-##   hgt.mean hgt.min hgt.max hgt.sd
-##      &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
-## 1     83.8    41.2    183.   30.9
-## 
-## $df_row_stats_all
-## $df_row_stats_all$hgt.sex.gFemale.max
-## [1] 170.6
-## 
-## $df_row_stats_all$hgt.sex.gFemale.mean
-## [1] 82.81198
-## 
-## $df_row_stats_all$hgt.sex.gFemale.min
-## [1] 41.2
-## 
-## $df_row_stats_all$hgt.sex.gFemale.sd
-## [1] 29.79351
-## 
-## $df_row_stats_all$hgt.sex.gMale.max
-## [1] 182.9
-## 
-## $df_row_stats_all$hgt.sex.gMale.mean
-## [1] 84.68152
-## 
-## $df_row_stats_all$hgt.sex.gMale.min
-## [1] 41.3
-## 
-## $df_row_stats_all$hgt.sex.gMale.sd
-## [1] 31.75037
-## 
-## $df_row_stats_all$hgt.mean
-## [1] 83.80921
-## 
-## $df_row_stats_all$hgt.min
-## [1] 41.2
-## 
-## $df_row_stats_all$hgt.max
-## [1] 182.9
-## 
-## $df_row_stats_all$hgt.sd
-## [1] 30.86631</code></pre>
+## 2 Male    84.7  41.3  183.  31.8</code></pre>
 <p>Specify Two Specific Statistics:</p>
 <pre class="r"><code>ff_summ_by_group_summ_one(
   df.select, vars.group = vars.group, var.numeric = var.numeric, 
-  str.stats.specify = c(&#39;mean&#39;, &#39;sd&#39;))</code></pre>
-<pre><code>## $df_table_grp_stats
-## # A tibble: 2 x 3
+  str.stats.specify = c(&#39;mean&#39;, &#39;sd&#39;))$df_table_grp_stats</code></pre>
+<pre><code>## # A tibble: 2 x 3
 ##   sex     mean    sd
 ##   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;
 ## 1 Female  82.8  29.8
-## 2 Male    84.7  31.8
-## 
-## $df_row_grp_stats
-## # A tibble: 1 x 4
-##   hgt.sex.gFemale.mean hgt.sex.gFemale.sd hgt.sex.gMale.mean hgt.sex.gMale.sd
-##                  &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;            &lt;dbl&gt;
-## 1                 82.8               29.8               84.7             31.8
-## 
-## $df_overall_stats
-## # A tibble: 1 x 2
-##   hgt.mean hgt.sd
-##      &lt;dbl&gt;  &lt;dbl&gt;
-## 1     83.8   30.9
-## 
-## $df_row_stats_all
-## $df_row_stats_all$hgt.sex.gFemale.mean
-## [1] 82.81198
-## 
-## $df_row_stats_all$hgt.sex.gFemale.sd
-## [1] 29.79351
-## 
-## $df_row_stats_all$hgt.sex.gMale.mean
-## [1] 84.68152
-## 
-## $df_row_stats_all$hgt.sex.gMale.sd
-## [1] 31.75037
-## 
-## $df_row_stats_all$hgt.mean
-## [1] 83.80921
-## 
-## $df_row_stats_all$hgt.sd
-## [1] 30.86631</code></pre>
+## 2 Male    84.7  31.8</code></pre>
 <p>Specify One Specific Statistics:</p>
 <pre class="r"><code>ff_summ_by_group_summ_one(
   df.select, vars.group = vars.group, var.numeric = var.numeric, 
-  str.stats.specify = c(&#39;mean&#39;))</code></pre>
-<pre><code>## $df_table_grp_stats
-## # A tibble: 2 x 2
+  str.stats.specify = c(&#39;mean&#39;))$df_table_grp_stats</code></pre>
+<pre><code>## # A tibble: 2 x 2
 ##   sex     mean
 ##   &lt;chr&gt;  &lt;dbl&gt;
 ## 1 Female  82.8
-## 2 Male    84.7
-## 
-## $df_row_grp_stats
-## # A tibble: 1 x 2
-##   hgt.sex.gFemale.mean hgt.sex.gMale.mean
-##                  &lt;dbl&gt;              &lt;dbl&gt;
-## 1                 82.8               84.7
-## 
-## $df_overall_stats
-## # A tibble: 1 x 1
-##   hgt.mean
-##      &lt;dbl&gt;
-## 1     83.8
-## 
-## $df_row_stats_all
-## $df_row_stats_all$hgt.sex.gFemale.mean
-## [1] 82.81198
-## 
-## $df_row_stats_all$hgt.sex.gMale.mean
-## [1] 84.68152
-## 
-## $df_row_stats_all$hgt.mean
-## [1] 83.80921</code></pre>
+## 2 Male    84.7</code></pre>
 </div>
 <div id="function-testing-by-country-and-gender-groups" class="section level5">
 <h5>Function Testing By Country and Gender Groups</h5>
@@ -924,188 +832,39 @@ var.numeric &lt;- &#39;hgt&#39;</code></pre>
 <p>Main Statistics:</p>
 <pre class="r"><code>ff_summ_by_group_summ_one(
   df.select, vars.group = vars.group, var.numeric = var.numeric, 
-  str.stats.group = &#39;main&#39;)</code></pre>
-<pre><code>## $df_table_grp_stats
-## # A tibble: 4 x 6
+  str.stats.group = &#39;main&#39;)$df_table_grp_stats</code></pre>
+<pre><code>## # A tibble: 4 x 6
 ## # Groups:   S.country [2]
 ##   S.country sex     mean   min   max    sd
 ##   &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1 Cebu      Female  84.6  41.3  171.  32.5
 ## 2 Cebu      Male    87.0  41.3  183.  35.0
 ## 3 Guatemala Female  76.6  41.2  120.  15.7
-## 4 Guatemala Male    77.0  41.5  125.  15.1
-## 
-## $df_row_grp_stats
-## # A tibble: 1 x 16
-##   hgt.S.country.s~ hgt.S.country.s~ hgt.S.country.s~ hgt.S.country.s~ hgt.S.country.s~ hgt.S.country.s~ hgt.S.country.s~ hgt.S.country.s~ hgt.S.country.s~
-##              &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
-## 1             171.             84.6             41.3             32.5             183.             87.0             41.3             35.0             120.
-## # ... with 7 more variables: hgt.S.country.sex.Guatemala.Female.mean &lt;dbl&gt;, hgt.S.country.sex.Guatemala.Female.min &lt;dbl&gt;,
-## #   hgt.S.country.sex.Guatemala.Female.sd &lt;dbl&gt;, hgt.S.country.sex.Guatemala.Male.max &lt;dbl&gt;, hgt.S.country.sex.Guatemala.Male.mean &lt;dbl&gt;,
-## #   hgt.S.country.sex.Guatemala.Male.min &lt;dbl&gt;, hgt.S.country.sex.Guatemala.Male.sd &lt;dbl&gt;
-## 
-## $df_overall_stats
-## # A tibble: 1 x 4
-##   hgt.mean hgt.min hgt.max hgt.sd
-##      &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
-## 1     83.8    41.2    183.   30.9
-## 
-## $df_row_stats_all
-## $df_row_stats_all$hgt.S.country.sex.Cebu.Female.max
-## [1] 170.6
-## 
-## $df_row_stats_all$hgt.S.country.sex.Cebu.Female.mean
-## [1] 84.61326
-## 
-## $df_row_stats_all$hgt.S.country.sex.Cebu.Female.min
-## [1] 41.3
-## 
-## $df_row_stats_all$hgt.S.country.sex.Cebu.Female.sd
-## [1] 32.53651
-## 
-## $df_row_stats_all$hgt.S.country.sex.Cebu.Male.max
-## [1] 182.9
-## 
-## $df_row_stats_all$hgt.S.country.sex.Cebu.Male.mean
-## [1] 87.02836
-## 
-## $df_row_stats_all$hgt.S.country.sex.Cebu.Male.min
-## [1] 41.3
-## 
-## $df_row_stats_all$hgt.S.country.sex.Cebu.Male.sd
-## [1] 34.9909
-## 
-## $df_row_stats_all$hgt.S.country.sex.Guatemala.Female.max
-## [1] 119.9
-## 
-## $df_row_stats_all$hgt.S.country.sex.Guatemala.Female.mean
-## [1] 76.58771
-## 
-## $df_row_stats_all$hgt.S.country.sex.Guatemala.Female.min
-## [1] 41.2
-## 
-## $df_row_stats_all$hgt.S.country.sex.Guatemala.Female.sd
-## [1] 15.71801
-## 
-## $df_row_stats_all$hgt.S.country.sex.Guatemala.Male.max
-## [1] 124.7
-## 
-## $df_row_stats_all$hgt.S.country.sex.Guatemala.Male.mean
-## [1] 77.0471
-## 
-## $df_row_stats_all$hgt.S.country.sex.Guatemala.Male.min
-## [1] 41.5
-## 
-## $df_row_stats_all$hgt.S.country.sex.Guatemala.Male.sd
-## [1] 15.11444
-## 
-## $df_row_stats_all$hgt.mean
-## [1] 83.80921
-## 
-## $df_row_stats_all$hgt.min
-## [1] 41.2
-## 
-## $df_row_stats_all$hgt.max
-## [1] 182.9
-## 
-## $df_row_stats_all$hgt.sd
-## [1] 30.86631</code></pre>
+## 4 Guatemala Male    77.0  41.5  125.  15.1</code></pre>
 <p>Specify Two Specific Statistics:</p>
 <pre class="r"><code>ff_summ_by_group_summ_one(
   df.select, vars.group = vars.group, var.numeric = var.numeric, 
-  str.stats.specify = c(&#39;mean&#39;, &#39;sd&#39;))</code></pre>
-<pre><code>## $df_table_grp_stats
-## # A tibble: 4 x 4
+  str.stats.specify = c(&#39;mean&#39;, &#39;sd&#39;))$df_table_grp_stats</code></pre>
+<pre><code>## # A tibble: 4 x 4
 ## # Groups:   S.country [2]
 ##   S.country sex     mean    sd
 ##   &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;
 ## 1 Cebu      Female  84.6  32.5
 ## 2 Cebu      Male    87.0  35.0
 ## 3 Guatemala Female  76.6  15.7
-## 4 Guatemala Male    77.0  15.1
-## 
-## $df_row_grp_stats
-## # A tibble: 1 x 8
-##   hgt.S.country.sex.~ hgt.S.country.sex.~ hgt.S.country.sex.~ hgt.S.country.sex~ hgt.S.country.sex~ hgt.S.country.sex~ hgt.S.country.sex~ hgt.S.country.sex~
-##                 &lt;dbl&gt;               &lt;dbl&gt;               &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;
-## 1                84.6                32.5                87.0               35.0               76.6               15.7               77.0               15.1
-## 
-## $df_overall_stats
-## # A tibble: 1 x 2
-##   hgt.mean hgt.sd
-##      &lt;dbl&gt;  &lt;dbl&gt;
-## 1     83.8   30.9
-## 
-## $df_row_stats_all
-## $df_row_stats_all$hgt.S.country.sex.Cebu.Female.mean
-## [1] 84.61326
-## 
-## $df_row_stats_all$hgt.S.country.sex.Cebu.Female.sd
-## [1] 32.53651
-## 
-## $df_row_stats_all$hgt.S.country.sex.Cebu.Male.mean
-## [1] 87.02836
-## 
-## $df_row_stats_all$hgt.S.country.sex.Cebu.Male.sd
-## [1] 34.9909
-## 
-## $df_row_stats_all$hgt.S.country.sex.Guatemala.Female.mean
-## [1] 76.58771
-## 
-## $df_row_stats_all$hgt.S.country.sex.Guatemala.Female.sd
-## [1] 15.71801
-## 
-## $df_row_stats_all$hgt.S.country.sex.Guatemala.Male.mean
-## [1] 77.0471
-## 
-## $df_row_stats_all$hgt.S.country.sex.Guatemala.Male.sd
-## [1] 15.11444
-## 
-## $df_row_stats_all$hgt.mean
-## [1] 83.80921
-## 
-## $df_row_stats_all$hgt.sd
-## [1] 30.86631</code></pre>
+## 4 Guatemala Male    77.0  15.1</code></pre>
 <p>Specify One Specific Statistics:</p>
 <pre class="r"><code>ff_summ_by_group_summ_one(
-  df.select, vars.group = vars.group, var.numeric = var.numeric, str.stats.specify = c(&#39;mean&#39;))</code></pre>
-<pre><code>## $df_table_grp_stats
-## # A tibble: 4 x 3
+  df.select, vars.group = vars.group, var.numeric = var.numeric, 
+  str.stats.specify = c(&#39;mean&#39;))$df_table_grp_stats</code></pre>
+<pre><code>## # A tibble: 4 x 3
 ## # Groups:   S.country [2]
 ##   S.country sex     mean
 ##   &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt;
 ## 1 Cebu      Female  84.6
 ## 2 Cebu      Male    87.0
 ## 3 Guatemala Female  76.6
-## 4 Guatemala Male    77.0
-## 
-## $df_row_grp_stats
-## # A tibble: 1 x 4
-##   hgt.S.country.sex.Cebu.Female.mean hgt.S.country.sex.Cebu.Male.mean hgt.S.country.sex.Guatemala.Female.mean hgt.S.country.sex.Guatemala.Male.mean
-##                                &lt;dbl&gt;                            &lt;dbl&gt;                                   &lt;dbl&gt;                                 &lt;dbl&gt;
-## 1                               84.6                             87.0                                    76.6                                  77.0
-## 
-## $df_overall_stats
-## # A tibble: 1 x 1
-##   hgt.mean
-##      &lt;dbl&gt;
-## 1     83.8
-## 
-## $df_row_stats_all
-## $df_row_stats_all$hgt.S.country.sex.Cebu.Female.mean
-## [1] 84.61326
-## 
-## $df_row_stats_all$hgt.S.country.sex.Cebu.Male.mean
-## [1] 87.02836
-## 
-## $df_row_stats_all$hgt.S.country.sex.Guatemala.Female.mean
-## [1] 76.58771
-## 
-## $df_row_stats_all$hgt.S.country.sex.Guatemala.Male.mean
-## [1] 77.0471
-## 
-## $df_row_stats_all$hgt.mean
-## [1] 83.80921</code></pre>
+## 4 Guatemala Male    77.0</code></pre>
 </div>
 </div>
 </div>

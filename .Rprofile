@@ -1,12 +1,14 @@
 # Load Libraries
 library(tidyverse)
 library(tidyr)
+library(forcats)
 library(knitr)
 library(kableExtra)
 library(REconTools)
 
 # RMD Options
 options(knitr.duplicate.label = "allow")
+knitr::opts_chunk$set(fig.width=7, fig.height=4, fig.align="center")
 
 # Output HTML or Latex
 if (knitr::is_latex_output()) {
@@ -57,6 +59,8 @@ if (knitr::is_latex_output()) {
 
 # Get Current File Path
 spt_file_current <- knitr::current_input(dir = TRUE)
+print(paste0('spt_file_current:',spt_file_current))
+
 sfc_prj='/R4Econ'
 sph_gitpages_root='https://fanwangecon.github.io/'
 sph_github_root='https://github.com/FanWangEcon/'
@@ -69,7 +73,6 @@ spt_root <- 'C:/Users/fan/R4Econ/'
 spn_prj_rmd <- gsub(spt_root, "", spt_file_current)
 spt_rmd_path <- paste0('/',dirname(spn_prj_rmd))
 
-print(paste0('spt_file:',spt_file))
 st_fullpath_noname <- dirname(spt_file_current)
 st_fullpath_nosufx <- sub('\\.Rmd$', '', spt_file_current)
 st_file_wno_suffix <- sub('\\.Rmd$', '', basename(spt_file_current))
@@ -99,9 +102,9 @@ st_head_link = paste0(st_head_link, ' version of this file.')
 # Common Shared Text and Strings
 total_area <- (800 * 7) / 2
 if (st_file_wno_suffix == 'Panel-Data-and-Optimization-with-R') {
-  text_shared_preamble_one <- paste0("> Go back to [fan](http://fanwangecon.github.io/CodeDynaAsset/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository ([bookdown site](https://fanwangecon.github.io/R4Econ/bookdown)), or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.")  
+  text_shared_preamble_one <- paste0("> Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository ([bookdown site](https://fanwangecon.github.io/R4Econ/bookdown)), or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.")
 } else {
-  text_shared_preamble_one <- paste0(st_head_link, " Go back to [fan](http://fanwangecon.github.io/CodeDynaAsset/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository ([bookdown site](https://fanwangecon.github.io/R4Econ/bookdown)), or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.")
+  text_shared_preamble_one <- paste0(st_head_link, " Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository ([bookdown site](https://fanwangecon.github.io/R4Econ/bookdown)), or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.")
 }
 
 text_shared_preamble_two <- ""

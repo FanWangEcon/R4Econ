@@ -199,9 +199,13 @@ list.out <-
                   list.vars.tomean, list.vars.tomean.name.suffix,
                   graph=TRUE, graph.nrow=1)
 options(repr.matrix.max.rows=10, repr.matrix.max.cols=50)
-list.out$dfmain
+head(list.out$dfmain,10) %>%
+  kable() %>%
+  kable_styling_fc_wide()
 options(repr.plot.width = 10, repr.plot.height = 4)
-list.out$dfsumm
+list.out$dfsumm %>%
+  kable() %>%
+  kable_styling_fc_wide()
 ```
 
 #### Example Guatemala IV = vil.id
@@ -214,7 +218,9 @@ list.out <- ff_lr_decompose(
   df=df.use, vars.y, vars.x, vars.c, vars.z, vars.other.keep,
   list.vars.tomean, list.vars.tomean.name.suffix,
   graph=TRUE, graph.nrow=1)
-list.out$dfsumm
+list.out$dfsumm %>%
+  kable() %>%
+  kable_styling_fc_wide()
 options(repr.plot.width = 10, repr.plot.height = 2)
 list.out$graph
 ```
@@ -230,9 +236,13 @@ list.out <- ff_lr_decompose(
   list.vars.tomean, list.vars.tomean.name.suffix,
   graph=TRUE, graph.nrow=1)
 options(repr.matrix.max.rows=10, repr.matrix.max.cols=50)
-list.out$dfmain
+head(list.out$dfmain, 10) %>%
+  kable() %>%
+  kable_styling_fc_wide()
 options(repr.plot.width = 10, repr.plot.height = 4)
-list.out$dfsumm
+list.out$dfsumm %>%
+  kable() %>%
+  kable_styling_fc_wide()
 ```
 
 #### Example Cebu IV
@@ -245,7 +255,9 @@ list.out <- ff_lr_decompose(
   df=df.use, vars.y, vars.x, vars.c, vars.z, vars.other.keep,
   list.vars.tomean, list.vars.tomean.name.suffix,
   graph=TRUE, graph.nrow=1)
-list.out$dfsumm
+list.out$dfsumm %>%
+  kable() %>%
+  kable_styling_fc_wide()
 options(repr.plot.width = 10, repr.plot.height = 2)
 list.out$graph
 ```
@@ -316,8 +328,7 @@ df.reg.out <- as_tibble(
 ```
 
 ```{r}
-options(repr.matrix.max.rows=50, repr.matrix.max.cols=50)
-df.reg.out
+# df.reg.out 
 ```
 
 ```{r}
@@ -332,7 +343,9 @@ arr.columns2select
 ```{r}
 # Generate dataframe for coefficients
 df.coef <- df.reg.out[,c(arr.columns2select)] %>% mutate_at(vars(arr.esti.name), as.numeric) %>% column_to_rownames(str.outcome.name)
-df.coef
+df.coef %>%
+  kable() %>%
+  kable_styling_fc()
 str(df.coef)
 ```
 
@@ -347,7 +360,9 @@ df.decompose_step1 <- df.use %>%
                         gather(variable, value, -one_of(c(vars.other.keep, vars.xc)))
 options(repr.matrix.max.rows=20, repr.matrix.max.cols=20)
 dim(df.decompose_step1)
-df.decompose_step1
+head(df.decompose_step1, 10) %>%
+  kable() %>%
+  kable_styling_fc()
 ```
 
 ##### Decomposition Step 2
@@ -362,7 +377,9 @@ df.decompose_step2 <- df.decompose_step1 %>%
 
 options(repr.matrix.max.rows=20, repr.matrix.max.cols=20)
 dim(df.decompose_step2)
-df.decompose_step2
+head(df.decompose_step2,10) %>%
+  kable() %>%
+  kable_styling_fc_wide()
 ```
 
 ##### Decomposition Step 3 Non-Loop
@@ -404,7 +421,9 @@ for (i in 1:length(list.vars.tomean)) {
 }
 options(repr.matrix.max.rows=10, repr.matrix.max.cols=20)
 dim(df.decompose_step3)
-df.decompose_step3
+head(df.decompose_step3, 10) %>%
+  kable() %>%
+  kable_styling_fc_wide()
 ```
 
 ##### Decomposition Step 4 Variance
@@ -416,7 +435,9 @@ df.decompose_step3 %>%
         summarize_all(funs(mean = mean, var = var)) %>%
         select(matches('value')) %>% select(ends_with("_var")) %>%
         mutate_if(is.numeric, funs( frac = (./value_var))) %>%
-        mutate_if(is.numeric, round, 3)
+        mutate_if(is.numeric, round, 3) %>%
+  kable() %>%
+  kable_styling_fc()
 ```
 
 ##### Graphical Results
@@ -424,8 +445,10 @@ df.decompose_step3 %>%
 Graphically, difficult to pick up exact differences in variance, a 50 percent reduction in variance visually does not look like 50 percent. Intuitively, we are kind of seeing standard deviation, not variance on the graph if we think abou the x-scale.
 
 ```{r}
-df.decompose_step3 %>%
-    select(variable, contains('value'), -value_mean)
+head(df.decompose_step3 %>%
+    select(variable, contains('value'), -value_mean), 10) %>%
+  kable() %>%
+  kable_styling_fc_wide()
 ```
 
 ```{r}
@@ -456,7 +479,9 @@ df.decompose.tomean.first <- df.decompose_step2 %>%
 head(df.decompose.tomean.first, 10)
 df.decompose.tomean.first %>%
         group_by(variable) %>%
-        summarize_all(funs(mean = mean, sd = sd))
+        summarize_all(funs(mean = mean, sd = sd))  %>%
+  kable() %>%
+  kable_styling_fc()
 ```
 
 Note the r-square from regression above matches up with the 1 - ratio below. This is the proper decomposition method that is equivalent to r2.
@@ -471,5 +496,7 @@ df.decompose_step2 %>%
         select(variable, value, pred_new) %>%
         group_by(variable) %>%
         summarize_all(funs(mean = mean, var = var)) %>%
-        mutate(ratio = (pred_new_var/value_var))
+        mutate(ratio = (pred_new_var/value_var))  %>%
+  kable() %>%
+  kable_styling_fc()
 ```

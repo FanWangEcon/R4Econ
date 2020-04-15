@@ -10,7 +10,11 @@ core:
       names(list) <- paste0('e',seq())
       dimnames(ls2d)[[1]] <- paste0('r',seq())
       dimnames(ls2d)[[2]] <- paste0('c',seq())
-date: 2020-04-01
+  - package: tidyr
+    code: |
+      unnest()
+date: 2020-04-13
+date_start: 2020-04-01
 output:
   pdf_document:
     pandoc_args: '../../_output_kniti_pdf.yaml'
@@ -103,7 +107,11 @@ ls_2d_named <- ls_2d_flat_named
 dim(ls_2d) <- c(it_M, it_Q)
 # named 2d list can not carry 1d name after reshape
 dim(ls_2d_named) <- c(it_M, it_Q)
+```
 
+Print Various objects generated above:
+
+```{r}
 # display
 print('ls_2d_flat')
 print(ls_2d_flat)
@@ -116,7 +124,11 @@ print(ls_2d)
 
 print('ls_2d_named')
 print(ls_2d_named)
+```
 
+Select element from list:
+
+```{r}
 # Select Values, double bracket to select from 2dim list
 print('ls_2d[[1,2]]')
 print(ls_2d[[1,2]])
@@ -131,6 +143,7 @@ How to select an element of a two dimensional list:
 1. row and column names: *dimnames*, *ls_2d_flat_named[['row2','col2']]*
 2. named elements: *names*, *ls_2d_flat_named[['e5']]*
 3. select by index: *index*, *ls_2d_flat_named[[5]]*
+4. converted two dimensional named list to tibble/matrix
 
 Neither *dimnames* nor *names* are required, but both can be used to select elements.
 
@@ -159,13 +172,29 @@ dimnames(ls_2d_flat_named)[[2]] <- paste0('col',seq(1,it_Q))
 # Element Specific Names
 names(ls_2d_flat_named) <- paste0('e',seq(1,it_N))
 
+# Convert to Matrix
+tb_2d_flat_named <- as_tibble(ls_2d_flat_named) %>% unnest()
+mt_2d_flat_named <- as.matrix(tb_2d_flat_named)
+```
+
+Print various objects generated above:
+
+```{r}
 # These are not element names, can still name each element
 # display
 print('ls_2d_flat_named')
 print(ls_2d_flat_named)
 print('str(ls_2d_flat_named)')
 print(str(ls_2d_flat_named))
+print('tb_2d_flat_named')
+print(tb_2d_flat_named)
+print('mt_2d_flat_named')
+print(mt_2d_flat_named)
+```
 
+Select elements from list: 
+
+```{r}
 # Select elements with with dimnames
 print('ls_2d_flat_named[[\'row2\',\'col2\']]')
 print(ls_2d_flat_named[['row2','col2']])
@@ -177,7 +206,6 @@ print(ls_2d_flat_named[['e5']])
 # Select elements with index
 print('ls_2d_flat_named[[5]]')
 print(ls_2d_flat_named[[5]])
-
 ```
 
 <!-- # Fill values

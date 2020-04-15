@@ -1,0 +1,60 @@
+---
+title: "Solutions to One Equation One Unknown Problems"
+titleshort: "linear solve x with f(x) = 0"
+description: |
+  Evaluate and solve statistically relevant problems with one equation and one unknown that permit analytical solutions.
+date: 2020-04-13
+date_start: 2020-04-13
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+### Linear Scalar f(x)=0 Solutions
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+#### Ratio
+
+Here are some common ratios.
+
+##### Unif Draw Min and Max Ratio
+
+We want to draw numbers such that we have some mean $b$, and that the possible maximum and minimum value drawn are at most $a$ times apart. Given $b$ and $a$, solve for $x$.
+
+$$
+f(x) = \frac{b+x}{b-x} - a = 0
+$$
+
+
+$$
+b \cdot a - x \cdot a = b + x \\
+b \cdot a - b = x + x \cdot a  \\
+b \left(a - 1\right) = x \left( a+ 1\right)  \\
+x = \frac{b\left(a-1\right)}{a+1}\\
+$$
+
+Uniformly draw
+
+```{r, math.solutions.fs_solu_x_lin.ratio.expand}
+b <- 100
+a <- 2
+x <- (b*(a-1))/(a+1)
+ar_unif_draws <- runif(100, min=b-x, max=b+x)
+fl_max_min_ratio <- max(ar_unif_draws)/min(ar_unif_draws)
+cat('fl_max_min_ratio =', fl_max_min_ratio, 'is close to a =', a, '\n')
+```

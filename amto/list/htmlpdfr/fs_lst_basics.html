@@ -11,7 +11,7 @@
 
 <meta name="author" content="Fan Wang" />
 
-<meta name="date" content="2020-04-01" />
+<meta name="date" content="2020-04-13" />
 
 <title>Examples of Lists and Named One and Two Dimensional Lists in R</title>
 
@@ -636,7 +636,7 @@ summary {
 
 <h1 class="title toc-ignore">Examples of Lists and Named One and Two Dimensional Lists in R</h1>
 <h4 class="author">Fan Wang</h4>
-<h4 class="date">2020-04-01</h4>
+<h4 class="date">2020-04-13</h4>
 
 </div>
 
@@ -644,7 +644,7 @@ summary {
 <div id="multiple-dimensional-list" class="section level3">
 <h3>Multiple Dimensional List</h3>
 <blockquote>
-<p>Go to the <a href="https://github.com/FanWangEcon//R4Econ/blob/master/amto/list//fs_lst_basics.Rmd"><strong>RMD</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/amto/list//htmlpdfr/fs_lst_basics.R"><strong>R</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/amto/list//htmlpdfr/fs_lst_basics.pdf"><strong>PDF</strong></a>, or <a href="https://fanwangecon.github.io//R4Econ/amto/list//htmlpdfr/fs_lst_basics.html"><strong>HTML</strong></a> version of this file. Go back to <a href="http://fanwangecon.github.io/CodeDynaAsset/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository.</p>
+<p>Go to the <a href="https://github.com/FanWangEcon//R4Econ/blob/master/amto/list//fs_lst_basics.Rmd"><strong>RMD</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/amto/list//htmlpdfr/fs_lst_basics.R"><strong>R</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/amto/list//htmlpdfr/fs_lst_basics.pdf"><strong>PDF</strong></a>, or <a href="https://fanwangecon.github.io//R4Econ/amto/list//htmlpdfr/fs_lst_basics.html"><strong>HTML</strong></a> version of this file. Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository.</p>
 </blockquote>
 <ul>
 <li>r list tutorial</li>
@@ -750,9 +750,9 @@ ls_2d_named &lt;- ls_2d_flat_named
 # Reshape
 dim(ls_2d) &lt;- c(it_M, it_Q)
 # named 2d list can not carry 1d name after reshape
-dim(ls_2d_named) &lt;- c(it_M, it_Q)
-
-# display
+dim(ls_2d_named) &lt;- c(it_M, it_Q)</code></pre>
+<p>Print Various objects generated above:</p>
+<pre class="r"><code># display
 print(&#39;ls_2d_flat&#39;)</code></pre>
 <pre><code>## [1] &quot;ls_2d_flat&quot;</code></pre>
 <pre class="r"><code>print(ls_2d_flat)</code></pre>
@@ -805,6 +805,7 @@ print(&#39;ls_2d_flat&#39;)</code></pre>
 <pre><code>##      [,1] [,2] [,3]
 ## [1,] NULL NULL NULL
 ## [2,] NULL NULL NULL</code></pre>
+<p>Select element from list:</p>
 <pre class="r"><code># Select Values, double bracket to select from 2dim list
 print(&#39;ls_2d[[1,2]]&#39;)</code></pre>
 <pre><code>## [1] &quot;ls_2d[[1,2]]&quot;</code></pre>
@@ -819,6 +820,7 @@ print(&#39;ls_2d[[1,2]]&#39;)</code></pre>
 <li>row and column names: <em>dimnames</em>, <em>ls_2d_flat_named[[‘row2’,‘col2’]]</em></li>
 <li>named elements: <em>names</em>, <em>ls_2d_flat_named[[‘e5’]]</em></li>
 <li>select by index: <em>index</em>, <em>ls_2d_flat_named[[5]]</em></li>
+<li>converted two dimensional named list to tibble/matrix</li>
 </ol>
 <p>Neither <em>dimnames</em> nor <em>names</em> are required, but both can be used to select elements.</p>
 <pre class="r"><code># Dimensions
@@ -845,7 +847,13 @@ dimnames(ls_2d_flat_named)[[2]] &lt;- paste0(&#39;col&#39;,seq(1,it_Q))
 # Element Specific Names
 names(ls_2d_flat_named) &lt;- paste0(&#39;e&#39;,seq(1,it_N))
 
-# These are not element names, can still name each element
+# Convert to Matrix
+tb_2d_flat_named &lt;- as_tibble(ls_2d_flat_named) %&gt;% unnest()</code></pre>
+<pre><code>## Warning: `cols` is now required.
+## Please use `cols = c(col1, col2, col3, col4)`</code></pre>
+<pre class="r"><code>mt_2d_flat_named &lt;- as.matrix(tb_2d_flat_named)</code></pre>
+<p>Print various objects generated above:</p>
+<pre class="r"><code># These are not element names, can still name each element
 # display
 print(&#39;ls_2d_flat_named&#39;)</code></pre>
 <pre><code>## [1] &quot;ls_2d_flat_named&quot;</code></pre>
@@ -877,6 +885,23 @@ print(&#39;ls_2d_flat_named&#39;)</code></pre>
 ##   ..$ : chr [1:3] &quot;row1&quot; &quot;row2&quot; &quot;row3&quot;
 ##   ..$ : chr [1:4] &quot;col1&quot; &quot;col2&quot; &quot;col3&quot; &quot;col4&quot;
 ## NULL</code></pre>
+<pre class="r"><code>print(&#39;tb_2d_flat_named&#39;)</code></pre>
+<pre><code>## [1] &quot;tb_2d_flat_named&quot;</code></pre>
+<pre class="r"><code>print(tb_2d_flat_named)</code></pre>
+<pre><code>## # A tibble: 3 x 4
+##    col1  col2  col3  col4
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     1     4     7    10
+## 2     2     5     8    11
+## 3     3     6     9    12</code></pre>
+<pre class="r"><code>print(&#39;mt_2d_flat_named&#39;)</code></pre>
+<pre><code>## [1] &quot;mt_2d_flat_named&quot;</code></pre>
+<pre class="r"><code>print(mt_2d_flat_named)</code></pre>
+<pre><code>##      col1 col2 col3 col4
+## [1,]    1    4    7   10
+## [2,]    2    5    8   11
+## [3,]    3    6    9   12</code></pre>
+<p>Select elements from list:</p>
 <pre class="r"><code># Select elements with with dimnames
 print(&#39;ls_2d_flat_named[[\&#39;row2\&#39;,\&#39;col2\&#39;]]&#39;)</code></pre>
 <pre><code>## [1] &quot;ls_2d_flat_named[[&#39;row2&#39;,&#39;col2&#39;]]&quot;</code></pre>

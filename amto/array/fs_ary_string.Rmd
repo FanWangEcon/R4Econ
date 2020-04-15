@@ -1,5 +1,20 @@
 ---
 title: "R String Arrays"
+titleshort: "String Operations"
+description: |
+  Split, concatenate, subset strings
+core:
+  - package: r
+    code: |
+      paste0()
+      sub()
+      gsub()
+      grepl()
+      sprintf()
+      tail()
+      strsplit()
+      basename()
+      dirname()
 date: 2020-04-11
 output:
   pdf_document:
@@ -80,7 +95,7 @@ st_example <- 'C:/Users/fan/R4Econ/amto/tibble/fs_tib_basics.Rmd'
 st_file_wth_suffix <- tail(strsplit(st_example, "/")[[1]],n=1)
 st_file_wno_suffix <- sub('\\.Rmd$', '', basename(st_example))
 st_fullpath_nosufx <- sub('\\.Rmd$', '', st_example)
-st_lastpath_noname <- basename(dirname(st_example))
+st_lastpath_noname <- (dirname(st_example))
 st_fullpath_noname <- dirname(st_example)
 
 print(strsplit(st_example, "/"))

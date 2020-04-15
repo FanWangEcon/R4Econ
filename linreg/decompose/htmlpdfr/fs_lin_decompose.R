@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE----------------------------------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE---------------------------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 ff_lr_decompose <- function(df, vars.y, vars.x, vars.c, vars.z, vars.other.keep,
                             list.vars.tomean, list.vars.tomean.name.suffix,
                             df.reg.out = NULL,
@@ -92,7 +92,7 @@ ff_lr_decompose_valadj <- function(df, df.coef, vars.tomean, str.esti.suffix) {
 }
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 # Library
 library(tidyverse)
 library(AER)
@@ -108,7 +108,7 @@ source('C:/Users/fan/R4Econ/linreg/ivreg/ivregdfrow.R')
 options(repr.matrix.max.rows=50, repr.matrix.max.cols=50)
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 # Convert Variable for Sex which is categorical to Numeric
 df <- df
 df$male <- (as.numeric(factor(df$sex)) - 1)
@@ -116,7 +116,7 @@ summary(factor(df$sex))
 summary(df$male)
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 var.y1 <- c('hgt')
 var.y2 <- c('wgt')
 vars.y <- c(var.y1, var.y2)
@@ -139,7 +139,7 @@ list.vars.tomean.name.suffix <- list(var.tomean.first.name.suffix,
                                      var.tomean.fourth.name.suffix)
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 df.use <- df %>% filter(S.country == 'Guatemala') %>% 
   filter(svymthRound %in% c(12, 18, 24))
 vars.z <- NULL
@@ -148,12 +148,16 @@ list.out <-
                   list.vars.tomean, list.vars.tomean.name.suffix,
                   graph=TRUE, graph.nrow=1)
 options(repr.matrix.max.rows=10, repr.matrix.max.cols=50)
-list.out$dfmain
+head(list.out$dfmain,10) %>%
+  kable() %>%
+  kable_styling_fc_wide()
 options(repr.plot.width = 10, repr.plot.height = 4)
-list.out$dfsumm
+list.out$dfsumm %>%
+  kable() %>%
+  kable_styling_fc_wide()
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 df.use <- df %>% filter(S.country == 'Guatemala') %>% 
   filter(svymthRound %in% c(12, 18, 24))
 vars.z <- c('vil.id')
@@ -161,12 +165,14 @@ list.out <- ff_lr_decompose(
   df=df.use, vars.y, vars.x, vars.c, vars.z, vars.other.keep,
   list.vars.tomean, list.vars.tomean.name.suffix,
   graph=TRUE, graph.nrow=1)
-list.out$dfsumm
+list.out$dfsumm %>%
+  kable() %>%
+  kable_styling_fc_wide()
 options(repr.plot.width = 10, repr.plot.height = 2)
 list.out$graph
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 df.use <- df %>% filter(S.country == 'Cebu') %>% 
   filter(svymthRound %in% c(12, 18, 24))
 vars.z <- NULL
@@ -175,12 +181,16 @@ list.out <- ff_lr_decompose(
   list.vars.tomean, list.vars.tomean.name.suffix,
   graph=TRUE, graph.nrow=1)
 options(repr.matrix.max.rows=10, repr.matrix.max.cols=50)
-list.out$dfmain
+head(list.out$dfmain, 10) %>%
+  kable() %>%
+  kable_styling_fc_wide()
 options(repr.plot.width = 10, repr.plot.height = 4)
-list.out$dfsumm
+list.out$dfsumm %>%
+  kable() %>%
+  kable_styling_fc_wide()
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 df.use <- df %>% filter(S.country == 'Cebu') %>% 
   filter(svymthRound %in% c(12, 18, 24))
 vars.z <- c('wealthIdx')
@@ -188,18 +198,20 @@ list.out <- ff_lr_decompose(
   df=df.use, vars.y, vars.x, vars.c, vars.z, vars.other.keep,
   list.vars.tomean, list.vars.tomean.name.suffix,
   graph=TRUE, graph.nrow=1)
-list.out$dfsumm
+list.out$dfsumm %>%
+  kable() %>%
+  kable_styling_fc_wide()
 options(repr.plot.width = 10, repr.plot.height = 2)
 list.out$graph
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 df.use <- df %>% filter(S.country == 'Guatemala') %>% 
   filter(svymthRound %in% c(12, 18, 24))
 dim(df.use)
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 # Define Left Hand Side Variables
 var.y1 <- c('hgt')
 var.y2 <- c('wgt')
@@ -238,7 +250,7 @@ list.vars.tomean.name.suffix <- list(
                                     )
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 # Regressions
 # regf.iv from C:\Users\fan\R4Econ\linreg\ivreg\ivregdfrow.R
 df.reg.out <- as_tibble(
@@ -250,12 +262,11 @@ df.reg.out <- as_tibble(
 # df.reg.out <- as_tibble(bind_rows(reg1, reg2))
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
-options(repr.matrix.max.rows=50, repr.matrix.max.cols=50)
-df.reg.out
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
+# df.reg.out 
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 # Select Variables
 str.esti.suffix <- '_Estimate'
 arr.esti.name <- paste0(vars.xc, str.esti.suffix)
@@ -264,14 +275,16 @@ arr.columns2select <- c(arr.esti.name, str.outcome.name)
 arr.columns2select
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 # Generate dataframe for coefficients
 df.coef <- df.reg.out[,c(arr.columns2select)] %>% mutate_at(vars(arr.esti.name), as.numeric) %>% column_to_rownames(str.outcome.name)
-df.coef
+df.coef %>%
+  kable() %>%
+  kable_styling_fc()
 str(df.coef)
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 # Decomposition Step 1: gather
 df.decompose_step1 <- df.use %>%
                         filter(svymthRound %in% c(12, 18, 24)) %>%
@@ -280,10 +293,12 @@ df.decompose_step1 <- df.use %>%
                         gather(variable, value, -one_of(c(vars.other.keep, vars.xc)))
 options(repr.matrix.max.rows=20, repr.matrix.max.cols=20)
 dim(df.decompose_step1)
-df.decompose_step1
+head(df.decompose_step1, 10) %>%
+  kable() %>%
+  kable_styling_fc()
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 # Decomposition Step 2: mutate_at(vars, funs(mean = mean(.)))
 # the xc averaging could have taken place earlier, no difference in mean across variables
 df.decompose_step2 <- df.decompose_step1 %>%
@@ -293,10 +308,12 @@ df.decompose_step2 <- df.decompose_step1 %>%
 
 options(repr.matrix.max.rows=20, repr.matrix.max.cols=20)
 dim(df.decompose_step2)
-df.decompose_step2
+head(df.decompose_step2,10) %>%
+  kable() %>%
+  kable_styling_fc_wide()
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 ff_lr_decompose_valadj <- function(df, df.coef, vars.tomean, str.esti.suffix) {
     new_value <- (df$value +
                   rowSums((df[paste0(vars.tomean, '_mean')] - df[vars.tomean])
@@ -318,7 +335,7 @@ ff_lr_decompose_valadj <- function(df, df.coef, vars.tomean, str.esti.suffix) {
 # df.decompose_step3
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 df.decompose_step3 <- df.decompose_step2
 for (i in 1:length(list.vars.tomean)) {
     var.decomp.cur <- (paste0('value', list.vars.tomean.name.suffix[[i]]))
@@ -331,25 +348,31 @@ for (i in 1:length(list.vars.tomean)) {
 }
 options(repr.matrix.max.rows=10, repr.matrix.max.cols=20)
 dim(df.decompose_step3)
-df.decompose_step3
+head(df.decompose_step3, 10) %>%
+  kable() %>%
+  kable_styling_fc_wide()
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 df.decompose_step3 %>%
         select(variable, contains('value')) %>%
         group_by(variable) %>%
         summarize_all(funs(mean = mean, var = var)) %>%
         select(matches('value')) %>% select(ends_with("_var")) %>%
         mutate_if(is.numeric, funs( frac = (./value_var))) %>%
-        mutate_if(is.numeric, round, 3)
+        mutate_if(is.numeric, round, 3) %>%
+  kable() %>%
+  kable_styling_fc()
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
-df.decompose_step3 %>%
-    select(variable, contains('value'), -value_mean)
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
+head(df.decompose_step3 %>%
+    select(variable, contains('value'), -value_mean), 10) %>%
+  kable() %>%
+  kable_styling_fc_wide()
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 options(repr.plot.width = 10, repr.plot.height = 4)
 df.decompose_step3 %>%
     select(variable, contains('value'), -value_mean) %>%
@@ -360,7 +383,7 @@ df.decompose_step3 %>%
         facet_wrap(~ outcome, scales='free', nrow=2)
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 head(df.decompose_step2[vars.tomean.first],3)
 head(df.decompose_step2[paste0(vars.tomean.first, '_mean')], 3)
 head(df.coef[df.decompose_step2$variable, 
@@ -375,10 +398,12 @@ df.decompose.tomean.first <- df.decompose_step2 %>%
 head(df.decompose.tomean.first, 10)
 df.decompose.tomean.first %>%
         group_by(variable) %>%
-        summarize_all(funs(mean = mean, sd = sd))
+        summarize_all(funs(mean = mean, sd = sd))  %>%
+  kable() %>%
+  kable_styling_fc()
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 df.decompose_step2 %>%
     mutate(pred_new = df.decompose_step2$value +
         rowSums((df.decompose_step2[paste0(vars.tomean.second, '_mean')] 
@@ -388,5 +413,7 @@ df.decompose_step2 %>%
         select(variable, value, pred_new) %>%
         group_by(variable) %>%
         summarize_all(funs(mean = mean, var = var)) %>%
-        mutate(ratio = (pred_new_var/value_var))
+        mutate(ratio = (pred_new_var/value_var))  %>%
+  kable() %>%
+  kable_styling_fc()
 

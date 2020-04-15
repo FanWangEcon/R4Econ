@@ -1,0 +1,1502 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Joint Quantiles from Multiple Continuous Variables as a Categorical Variable with Linear Index},
+  pdfauthor={Fan Wang},
+  colorlinks=true,
+  linkcolor=Maroon,
+  filecolor=Maroon,
+  citecolor=Blue,
+  urlcolor=blue,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{bbm}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+% \setcounter{secnumdepth}{5}
+% \setcounter{tocdepth}{5}
+
+\title{Joint Quantiles from Multiple Continuous Variables as a Categorical
+Variable with Linear Index}
+\author{Fan Wang}
+\date{2020-04-01}
+
+\begin{document}
+\maketitle
+
+{
+\hypersetup{linkcolor=}
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+\hypertarget{joint-quantiles-from-continuous}{%
+\subsubsection{Joint Quantiles from
+Continuous}\label{joint-quantiles-from-continuous}}
+
+\begin{quote}
+Go to the
+\href{https://github.com/FanWangEcon//R4Econ/blob/master/summarize/dist//fst_quantiles_joint_discrete.Rmd}{\textbf{RMD}},
+\href{https://github.com/FanWangEcon//R4Econ/blob/master/summarize/dist//htmlpdfr/fst_quantiles_joint_discrete.R}{\textbf{R}},
+\href{https://github.com/FanWangEcon//R4Econ/blob/master/summarize/dist//htmlpdfr/fst_quantiles_joint_discrete.pdf}{\textbf{PDF}},
+or
+\href{https://fanwangecon.github.io//R4Econ/summarize/dist//htmlpdfr/fst_quantiles_joint_discrete.html}{\textbf{HTML}}
+version of this file. Go back to
+\href{http://fanwangecon.github.io/}{fan}'s
+\href{https://fanwangecon.github.io/REconTools/}{REconTools} Package,
+\href{https://fanwangecon.github.io/R4Econ/}{R4Econ} Repository
+(\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}),
+or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R}
+Repository.
+\end{quote}
+
+There are multiple or a single continuous variables. Find which quantile
+each observation belongs to for each of the variables. Then also
+generate a joint/interaction variable of all combinations of quantiles
+from different variables.
+
+The program has these features:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Quantiles breaks are generated based on group\_by characteristics,
+  meaning quantiles for individual level characteristics when data is
+  panel
+\item
+  Quantiles variables apply to full panel at within-group observation
+  levels.
+\item
+  Robust to non-unique breaks for quantiles (non-unique grouped
+  together)
+\item
+  Quantile categories have detailed labeling (specifying which
+  non-unique groupings belong to quantile)
+\end{enumerate}
+
+When joining multiple quantile variables together:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  First check if only calculate quantiles at observations where all
+  quantile base variables are not null
+\item
+  Calculate Quantiles for each variable, with different quantile levels
+  for sub-groups of variables
+\item
+  Summary statistics by mulltiple quantile-categorical variables,
+  summary
+\end{enumerate}
+
+\hypertarget{build-program}{%
+\paragraph{Build Program}\label{build-program}}
+
+\hypertarget{support-functions}{%
+\subparagraph{Support Functions}\label{support-functions}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Quantiles for any variable}
+\NormalTok{gen_quantiles <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(var, df, }\DataTypeTok{prob=}\KeywordTok{c}\NormalTok{(}\FloatTok{0.25}\NormalTok{, }\FloatTok{0.50}\NormalTok{, }\FloatTok{0.75}\NormalTok{)) \{}
+  \KeywordTok{enframe}\NormalTok{(}\KeywordTok{quantile}\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(df[[var]]), }
+\NormalTok{                   prob, }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{), }\StringTok{'quant.perc'}\NormalTok{, var)}
+\NormalTok{\}}
+\CommentTok{# Support Functions for Variable Suffix}
+\NormalTok{f_Q_suffix <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(seq.quantiles) \{}
+\NormalTok{  quantile.suffix <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'Qs'}\NormalTok{, }\KeywordTok{min}\NormalTok{(seq.quantiles),}
+                            \StringTok{'e'}\NormalTok{, }\KeywordTok{max}\NormalTok{(seq.quantiles),}
+                            \StringTok{'n'}\NormalTok{, (}\KeywordTok{length}\NormalTok{(seq.quantiles)}\OperatorTok{-}\DecValTok{1}\NormalTok{))}
+\NormalTok{\}}
+\CommentTok{# Support Functions for Quantile Labeling}
+\NormalTok{f_Q_label <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(arr.quantiles,}
+\NormalTok{                      arr.sort.unique.quantile,}
+\NormalTok{                      seq.quantiles) \{}
+  \KeywordTok{paste0}\NormalTok{(}\StringTok{'('}\NormalTok{,}
+         \KeywordTok{paste0}\NormalTok{(}\KeywordTok{which}\NormalTok{(arr.quantiles }\OperatorTok{%in%}\StringTok{ }
+\StringTok{                        }\NormalTok{arr.sort.unique.quantile), }\DataTypeTok{collapse=}\StringTok{','}\NormalTok{),}
+         \StringTok{') of '}\NormalTok{, }\KeywordTok{f_Q_suffix}\NormalTok{(seq.quantiles))}
+\NormalTok{\}}
+\CommentTok{# Generate New Variable Names with Quantile Suffix}
+\NormalTok{f_var_rename <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(name, seq.quantiles) \{}
+\NormalTok{  quantile.suffix <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'_'}\NormalTok{, }\KeywordTok{f_Q_suffix}\NormalTok{(seq.quantiles))}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{sub}\NormalTok{(}\StringTok{'_q'}\NormalTok{, quantile.suffix, name))}
+\NormalTok{\}}
+
+\CommentTok{# Check Are Values within Group By Unique? If not, STOP}
+\NormalTok{f_check_distinct_ingroup <-}\StringTok{ }
+\StringTok{  }\ControlFlowTok{function}\NormalTok{(df, vars.group_by, vars.values_in_group) \{}
+  
+\NormalTok{  df.uniqus.in.group <-}\StringTok{ }\NormalTok{df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(}\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(vars.group_by)) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{quant_vars_paste =} 
+             \KeywordTok{paste}\NormalTok{(}\OperatorTok{!!!}\NormalTok{(}\KeywordTok{syms}\NormalTok{(vars.values_in_group)), }\DataTypeTok{sep=}\StringTok{'-'}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{unique_in_group =} \KeywordTok{n_distinct}\NormalTok{(quant_vars_paste)) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{slice}\NormalTok{(1L) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{ungroup}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{group_by}\NormalTok{(unique_in_group) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{n=}\KeywordTok{n}\NormalTok{())}
+  
+  \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{sum}\NormalTok{(df.uniqus.in.group}\OperatorTok{$}\NormalTok{unique_in_group) }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{) \{}
+    \KeywordTok{print}\NormalTok{(df.uniqus.in.group)}
+    \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{'vars.values_in_group'}\NormalTok{, vars.values_in_group, }\DataTypeTok{sep=}\StringTok{':'}\NormalTok{))}
+    \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{'vars.group_by'}\NormalTok{, vars.group_by, }\DataTypeTok{sep=}\StringTok{':'}\NormalTok{))}
+    \KeywordTok{stop}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{"The variables for which quantiles are to be',}
+\StringTok{                'taken are not identical within the group variables"}\NormalTok{))}
+\NormalTok{  \}}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{data-slicing-and-quantile-generation}{%
+\subparagraph{Data Slicing and Quantile
+Generation}\label{data-slicing-and-quantile-generation}}
+
+\begin{itemize}
+\tightlist
+\item
+  Function 1: generate quantiles based on group-specific
+  characteristics. the groups could be at the panel observation level as
+  well.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# First Step, given groups, generate quantiles based on group characteristics}
+\CommentTok{# vars.cts2quantile <- c('wealthIdx', 'hgt0', 'wgt0')}
+\CommentTok{# seq.quantiles <- c(0, 0.3333, 0.6666, 1.0)}
+\CommentTok{# vars.group_by <- c('indi.id')}
+\CommentTok{# vars.arrange <- c('indi.id', 'svymthRound')}
+\CommentTok{# vars.continuous <- c('wealthIdx', 'hgt0', 'wgt0')}
+\NormalTok{df_sliced_quantiles <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(df, vars.cts2quantile, seq.quantiles,}
+\NormalTok{                                vars.group_by, vars.arrange) \{}
+
+    \CommentTok{# Slicing data}
+\NormalTok{    df.grp.L1 <-}\StringTok{ }\NormalTok{df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(}\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(vars.group_by)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{      }\KeywordTok{arrange}\NormalTok{(}\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(vars.arrange)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{slice}\NormalTok{(1L) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{ungroup}\NormalTok{()}
+
+    \CommentTok{# Quantiles based on sliced data}
+\NormalTok{    df.sliced.quantiles <-}\StringTok{ }
+\StringTok{      }\KeywordTok{lapply}\NormalTok{(vars.cts2quantile, gen_quantiles, }\DataTypeTok{df=}\NormalTok{df.grp.L1, }\DataTypeTok{prob=}\NormalTok{seq.quantiles) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{      }\KeywordTok{reduce}\NormalTok{(full_join)}
+
+    \KeywordTok{return}\NormalTok{(}\KeywordTok{list}\NormalTok{(}\DataTypeTok{df.sliced.quantiles=}\NormalTok{df.sliced.quantiles,}
+                \DataTypeTok{df.grp.L1=}\NormalTok{df.grp.L1))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{data-cutting}{%
+\subparagraph{Data Cutting}\label{data-cutting}}
+
+\begin{itemize}
+\tightlist
+\item
+  Function 2: cut groups for full panel dataframe based on
+  group-specific characteristics quantiles.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Cutting Function, Cut Continuous Variables into Quantiles with labeing}
+\NormalTok{f_cut <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(var, df.sliced.quantiles, seq.quantiles, }
+                  \DataTypeTok{include.lowest=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{fan.labels=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{print=}\OtherTok{FALSE}\NormalTok{) \{}
+  
+  \CommentTok{# unparsed string variable name}
+\NormalTok{  var.str <-}\StringTok{ }\KeywordTok{substitute}\NormalTok{(var)}
+  
+  \CommentTok{# Breaks}
+\NormalTok{  arr.quantiles <-}\StringTok{ }\NormalTok{df.sliced.quantiles[[var.str]]}
+\NormalTok{  arr.sort.unique.quantiles <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(}\KeywordTok{unique}\NormalTok{(arr.quantiles))}
+  \ControlFlowTok{if}\NormalTok{ (print) \{}
+    \KeywordTok{print}\NormalTok{(arr.sort.unique.quantiles)}
+\NormalTok{  \}}
+  
+  \CommentTok{# Regular cutting With Standard Labels}
+  \CommentTok{# TRUE, means the lowest group has closed bracket left and right}
+\NormalTok{  var.quantile <-}\StringTok{ }\KeywordTok{cut}\NormalTok{(var, }\DataTypeTok{breaks=}\NormalTok{arr.sort.unique.quantiles, }
+                      \DataTypeTok{include.lowest=}\NormalTok{include.lowest)}
+  
+  \CommentTok{# Use my custom labels}
+  \ControlFlowTok{if}\NormalTok{ (fan.labels) \{}
+\NormalTok{    levels.suffix <-}\StringTok{ }
+\StringTok{      }\KeywordTok{lapply}\NormalTok{(arr.sort.unique.quantiles[}\DecValTok{1}\OperatorTok{:}\NormalTok{(}\KeywordTok{length}\NormalTok{(arr.sort.unique.quantiles)}\OperatorTok{-}\DecValTok{1}\NormalTok{)],}
+\NormalTok{             f_Q_label,}
+             \DataTypeTok{arr.quantiles=}\NormalTok{arr.quantiles,}
+             \DataTypeTok{seq.quantiles=}\NormalTok{seq.quantiles)}
+    \ControlFlowTok{if}\NormalTok{ (print) \{}
+      \KeywordTok{print}\NormalTok{(levels.suffix)}
+\NormalTok{    \}}
+    \KeywordTok{levels}\NormalTok{(var.quantile) <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\KeywordTok{levels}\NormalTok{(var.quantile), }\StringTok{'; '}\NormalTok{, levels.suffix)}
+\NormalTok{  \}}
+  
+  \CommentTok{# Return}
+  \KeywordTok{return}\NormalTok{(var.quantile)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Combo Quantile Function}
+\CommentTok{# vars.cts2quantile <- c('wealthIdx', 'hgt0', 'wgt0')}
+\CommentTok{# seq.quantiles <- c(0, 0.3333, 0.6666, 1.0)}
+\CommentTok{# vars.group_by <- c('indi.id')}
+\CommentTok{# vars.arrange <- c('indi.id', 'svymthRound')}
+\CommentTok{# vars.continuous <- c('wealthIdx', 'hgt0', 'wgt0')}
+\NormalTok{df_cut_by_sliced_quantiles <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(df, vars.cts2quantile, seq.quantiles,}
+\NormalTok{                                       vars.group_by, vars.arrange) \{}
+  
+  
+  \CommentTok{# Check Are Values within Group By Unique? If not, STOP}
+  \KeywordTok{f_check_distinct_ingroup}\NormalTok{(df, vars.group_by, }\DataTypeTok{vars.values_in_group=}\NormalTok{vars.cts2quantile)}
+  
+  \CommentTok{# First Step Slicing}
+\NormalTok{  df.sliced <-}\StringTok{ }\KeywordTok{df_sliced_quantiles}\NormalTok{(df, vars.cts2quantile, }
+\NormalTok{                                   seq.quantiles, vars.group_by, vars.arrange)}
+  
+  \CommentTok{# Second Step Generate Categorical Variables of Quantiles}
+\NormalTok{  df.with.cut.quant <-}\StringTok{ }\NormalTok{df }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{mutate_at}\NormalTok{(vars.cts2quantile,}
+              \KeywordTok{funs}\NormalTok{(}\DataTypeTok{q=}\KeywordTok{f_cut}\NormalTok{(., df.sliced}\OperatorTok{$}\NormalTok{df.sliced.quantiles,}
+                           \DataTypeTok{seq.quantiles=}\NormalTok{seq.quantiles,}
+                           \DataTypeTok{include.lowest=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{fan.labels=}\OtherTok{TRUE}\NormalTok{)))}
+  
+  \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{length}\NormalTok{(vars.cts2quantile) }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{) \{}
+\NormalTok{    df.with.cut.quant <-}\StringTok{ }
+\StringTok{      }\NormalTok{df.with.cut.quant }\OperatorTok{%>%}
+\StringTok{      }\KeywordTok{rename_at}\NormalTok{(}\KeywordTok{vars}\NormalTok{(}\KeywordTok{contains}\NormalTok{(}\StringTok{'_q'}\NormalTok{)), }
+                \KeywordTok{funs}\NormalTok{(}\KeywordTok{f_var_rename}\NormalTok{(., }\DataTypeTok{seq.quantiles=}\NormalTok{seq.quantiles)))}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{    new.var.name <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(vars.cts2quantile[}\DecValTok{1}\NormalTok{], }\StringTok{'_'}\NormalTok{, }\KeywordTok{f_Q_suffix}\NormalTok{(seq.quantiles))}
+\NormalTok{    df.with.cut.quant <-}\StringTok{ }\NormalTok{df.with.cut.quant }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rename}\NormalTok{(}\OperatorTok{!!}\DataTypeTok{new.var.name :=}\NormalTok{ q)}
+\NormalTok{  \}}
+  
+  \CommentTok{# Newly Generated Quantile-Cut Variables}
+\NormalTok{  vars.quantile.cut <-}\StringTok{ }\NormalTok{df.with.cut.quant }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{select}\NormalTok{(}\KeywordTok{matches}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(vars.cts2quantile, }\DataTypeTok{collapse=}\StringTok{'|'}\NormalTok{))) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{select}\NormalTok{(}\KeywordTok{matches}\NormalTok{(}\KeywordTok{f_Q_suffix}\NormalTok{(seq.quantiles)))}
+  
+  \CommentTok{# Return}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{list}\NormalTok{(}\DataTypeTok{df.with.cut.quant =}\NormalTok{ df.with.cut.quant,}
+              \DataTypeTok{df.sliced.quantiles=}\NormalTok{df.sliced}\OperatorTok{$}\NormalTok{df.sliced.quantiles,}
+              \DataTypeTok{df.grp.L1=}\NormalTok{df.sliced}\OperatorTok{$}\NormalTok{df.grp.L1,}
+              \DataTypeTok{vars.quantile.cut=}\NormalTok{vars.quantile.cut))}
+  
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{different-vars-different-probabilities-joint-quantiles}{%
+\subparagraph{Different Vars Different Probabilities Joint
+Quantiles}\label{different-vars-different-probabilities-joint-quantiles}}
+
+\begin{itemize}
+\tightlist
+\item
+  Accomondate multiple continuousv ariables
+\item
+  Different percentiles
+\item
+  list of lists
+\item
+  generate joint categorical variables
+\item
+  keep only values that exist for all quantile base vars
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Function to handle list inputs with different quantiles vars and probabilities}
+\NormalTok{df_cut_by_sliced_quantiles_grps <-}\StringTok{ }
+\StringTok{  }\ControlFlowTok{function}\NormalTok{(quantile.grp.list, df, vars.group_by, vars.arrange) \{}
+\NormalTok{    vars.cts2quantile <-}\StringTok{ }\NormalTok{quantile.grp.list}\OperatorTok{$}\NormalTok{vars}
+\NormalTok{    seq.quantiles <-}\StringTok{ }\NormalTok{quantile.grp.list}\OperatorTok{$}\NormalTok{prob}
+    \KeywordTok{return}\NormalTok{(}\KeywordTok{df_cut_by_sliced_quantiles}\NormalTok{(}
+\NormalTok{      df, vars.cts2quantile, seq.quantiles, vars.group_by, vars.arrange))}
+\NormalTok{  \}}
+\CommentTok{# Show Results}
+\NormalTok{df_cut_by_sliced_quantiles_joint_results_grped <-}\StringTok{ }
+\StringTok{  }\ControlFlowTok{function}\NormalTok{(df.with.cut.quant.all, vars.cts2quantile, vars.group_by, vars.arrange,}
+\NormalTok{           vars.quantile.cut.all, var.qjnt.grp.idx) \{}
+    \CommentTok{# Show ALL}
+\NormalTok{    df.group.panel.cnt.mean <-}\StringTok{ }\NormalTok{df.with.cut.quant.all }\OperatorTok{%>%}\StringTok{ }
+\StringTok{      }\KeywordTok{group_by}\NormalTok{(}\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(vars.quantile.cut.all), }
+               \OperatorTok{!!}\KeywordTok{sym}\NormalTok{(var.qjnt.grp.idx)) }\OperatorTok{%>%}
+\StringTok{      }\KeywordTok{summarise_at}\NormalTok{(vars.cts2quantile, }\KeywordTok{funs}\NormalTok{(mean, }\KeywordTok{n}\NormalTok{()))}
+    
+    \CommentTok{# Show Based on SLicing first}
+\NormalTok{    df.group.slice1.cnt.mean <-}\StringTok{ }\NormalTok{df.with.cut.quant.all }\OperatorTok{%>%}\StringTok{ }
+\StringTok{      }\KeywordTok{group_by}\NormalTok{(}\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(vars.group_by)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{      }\KeywordTok{arrange}\NormalTok{(}\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(vars.arrange)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{slice}\NormalTok{(1L) }\OperatorTok{%>%}
+\StringTok{      }\KeywordTok{group_by}\NormalTok{(}\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(vars.quantile.cut.all), }\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(var.qjnt.grp.idx)) }\OperatorTok{%>%}
+\StringTok{      }\KeywordTok{summarise_at}\NormalTok{(vars.cts2quantile, }\KeywordTok{funs}\NormalTok{(mean, }\KeywordTok{n}\NormalTok{()))}
+    
+    \KeywordTok{return}\NormalTok{(}\KeywordTok{list}\NormalTok{(}\DataTypeTok{df.group.panel.cnt.mean=}\NormalTok{df.group.panel.cnt.mean,}
+                \DataTypeTok{df.group.slice1.cnt.mean=}\NormalTok{df.group.slice1.cnt.mean))}
+\NormalTok{  \}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# # Joint Quantile Group Name}
+\CommentTok{# var.qjnt.grp.idx <- 'group.index'}
+\CommentTok{# # Generate Categorical Variables of Quantiles}
+\CommentTok{# vars.group_by <- c('indi.id')}
+\CommentTok{# vars.arrange <- c('indi.id', 'svymthRound')}
+\CommentTok{# # Quantile Variables and Quantiles}
+\CommentTok{# vars.cts2quantile.wealth <- c('wealthIdx')}
+\CommentTok{# seq.quantiles.wealth <- c(0, .5, 1.0)}
+\CommentTok{# vars.cts2quantile.wgthgt <- c('hgt0', 'wgt0')}
+\CommentTok{# seq.quantiles.wgthgt <- c(0, .3333, 0.6666, 1.0)}
+\CommentTok{# drop.any.quantile.na <- TRUE}
+\CommentTok{# # collect to list}
+\CommentTok{# list.cts2quantile <- list(list(vars=vars.cts2quantile.wealth,}
+\CommentTok{#                                prob=seq.quantiles.wealth),}
+\CommentTok{#                           list(vars=vars.cts2quantile.wgthgt,}
+\CommentTok{#                                prob=seq.quantiles.wgthgt))}
+
+\NormalTok{df_cut_by_sliced_quantiles_joint <-}\StringTok{ }
+\StringTok{  }\ControlFlowTok{function}\NormalTok{(df, var.qjnt.grp.idx,}
+\NormalTok{           list.cts2quantile,}
+\NormalTok{           vars.group_by, vars.arrange,}
+           \DataTypeTok{drop.any.quantile.na =} \OtherTok{TRUE}\NormalTok{,}
+           \DataTypeTok{toprint =} \OtherTok{TRUE}\NormalTok{) \{}
+    
+    \CommentTok{#  Original dimensions}
+    \ControlFlowTok{if}\NormalTok{(toprint) \{}
+      \KeywordTok{print}\NormalTok{(}\KeywordTok{dim}\NormalTok{(df))}
+\NormalTok{    \}}
+    
+    \CommentTok{# All Continuous Variables from lists}
+\NormalTok{    vars.cts2quantile <-}\StringTok{ }\KeywordTok{unlist}\NormalTok{(}\KeywordTok{lapply}\NormalTok{(list.cts2quantile, }
+                                       \ControlFlowTok{function}\NormalTok{(elist) elist}\OperatorTok{$}\NormalTok{vars))}
+\NormalTok{    vars.cts2quantile}
+    
+    \CommentTok{# Keep only if not NA for all Quantile variables}
+    \ControlFlowTok{if}\NormalTok{ (drop.any.quantile.na) \{}
+\NormalTok{      df.select <-}\StringTok{ }\NormalTok{df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{drop_na}\NormalTok{(}\KeywordTok{c}\NormalTok{(vars.group_by, vars.arrange, vars.cts2quantile))}
+\NormalTok{    \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{      df.select <-}\StringTok{ }\NormalTok{df}
+\NormalTok{    \}}
+    
+    \ControlFlowTok{if}\NormalTok{(toprint) \{}
+      \KeywordTok{print}\NormalTok{(}\KeywordTok{dim}\NormalTok{(df.select))}
+\NormalTok{    \}}
+    
+    \CommentTok{# Apply qunatile function to all elements of list of list}
+\NormalTok{    df.cut.list <-}\StringTok{ }
+\StringTok{      }\KeywordTok{lapply}\NormalTok{(list.cts2quantile, df_cut_by_sliced_quantiles_grps,}
+             \DataTypeTok{df=}\NormalTok{df.select, }\DataTypeTok{vars.group_by=}\NormalTok{vars.group_by, }\DataTypeTok{vars.arrange=}\NormalTok{vars.arrange)}
+    
+    \CommentTok{# Reduce Resulting Core Panel Matrix Together}
+\NormalTok{    df.with.cut.quant.all <-}\StringTok{ }
+\StringTok{      }\KeywordTok{lapply}\NormalTok{(df.cut.list, }\ControlFlowTok{function}\NormalTok{(elist) elist}\OperatorTok{$}\NormalTok{df.with.cut.quant) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{reduce}\NormalTok{(left_join)}
+\NormalTok{    df.sliced.quantiles.all <-}\StringTok{ }
+\StringTok{      }\KeywordTok{lapply}\NormalTok{(df.cut.list, }\ControlFlowTok{function}\NormalTok{(elist) elist}\OperatorTok{$}\NormalTok{df.sliced.quantiles)}
+    
+    \ControlFlowTok{if}\NormalTok{(toprint) \{}
+      \KeywordTok{print}\NormalTok{(}\KeywordTok{dim}\NormalTok{(df.with.cut.quant.all))}
+\NormalTok{    \}}
+    
+    \CommentTok{# Obrain Newly Created Quantile Group Variables}
+\NormalTok{    vars.quantile.cut.all <-}\StringTok{ }
+\StringTok{      }\KeywordTok{unlist}\NormalTok{(}\KeywordTok{lapply}\NormalTok{(df.cut.list, }\ControlFlowTok{function}\NormalTok{(elist) }\KeywordTok{names}\NormalTok{(elist}\OperatorTok{$}\NormalTok{vars.quantile.cut)))}
+    \ControlFlowTok{if}\NormalTok{(toprint) \{}
+      \KeywordTok{print}\NormalTok{(vars.quantile.cut.all)}
+      \KeywordTok{print}\NormalTok{(}\KeywordTok{summary}\NormalTok{(df.with.cut.quant.all }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\KeywordTok{one_of}\NormalTok{(vars.quantile.cut.all))))}
+\NormalTok{    \}}
+    
+    \CommentTok{# Generate Joint Quantile Index Variable}
+\NormalTok{    df.with.cut.quant.all <-}\StringTok{ }\NormalTok{df.with.cut.quant.all }\OperatorTok{%>%}\StringTok{ }
+\StringTok{      }\KeywordTok{mutate}\NormalTok{(}\OperatorTok{!!}\DataTypeTok{var.qjnt.grp.idx :=} \KeywordTok{group_indices}\NormalTok{(., }\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(vars.quantile.cut.all)))}
+    
+    \CommentTok{# Quantile Groups}
+\NormalTok{    arr.group.idx <-}\StringTok{ }\KeywordTok{t}\NormalTok{(}\KeywordTok{sort}\NormalTok{(}\KeywordTok{unique}\NormalTok{(df.with.cut.quant.all[[var.qjnt.grp.idx]])))}
+    
+    \CommentTok{# Results Display}
+\NormalTok{    df.group.print <-}\StringTok{ }\KeywordTok{df_cut_by_sliced_quantiles_joint_results_grped}\NormalTok{(}
+\NormalTok{      df.with.cut.quant.all, vars.cts2quantile,}
+\NormalTok{      vars.group_by, vars.arrange,}
+\NormalTok{      vars.quantile.cut.all, var.qjnt.grp.idx)}
+    
+    \CommentTok{# list to Return}
+    \CommentTok{# These returns are the same as returns earlier: df_cut_by_sliced_quantiles}
+    \CommentTok{# Except that they are combined together}
+    \KeywordTok{return}\NormalTok{(}\KeywordTok{list}\NormalTok{(}\DataTypeTok{df.with.cut.quant =}\NormalTok{ df.with.cut.quant.all,}
+                \DataTypeTok{df.sliced.quantiles =}\NormalTok{ df.sliced.quantiles.all,}
+                \DataTypeTok{df.grp.L1 =}\NormalTok{ (df.cut.list[[}\DecValTok{1}\NormalTok{]])}\OperatorTok{$}\NormalTok{df.grp.L1,}
+                \DataTypeTok{vars.quantile.cut =} 
+\NormalTok{                  vars.quantile.cut.all,}
+                \DataTypeTok{df.group.panel.cnt.mean =} 
+\NormalTok{                  df.group.print}\OperatorTok{$}\NormalTok{df.group.panel.cnt.mean,}
+                \DataTypeTok{df.group.slice1.cnt.mean =} 
+\NormalTok{                  df.group.print}\OperatorTok{$}\NormalTok{df.group.slice1.cnt.mean))}
+    
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{program-testing}{%
+\paragraph{Program Testing}\label{program-testing}}
+
+Load Data
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Library}
+\KeywordTok{library}\NormalTok{(tidyverse)}
+
+\CommentTok{# Load Sample Data}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{'C:/Users/fan/R4Econ/_data/'}\NormalTok{)}
+\NormalTok{df <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{'height_weight.csv'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Parsed with column specification:
+## cols(
+##   S.country = col_character(),
+##   vil.id = col_double(),
+##   indi.id = col_double(),
+##   sex = col_character(),
+##   svymthRound = col_double(),
+##   momEdu = col_double(),
+##   wealthIdx = col_double(),
+##   hgt = col_double(),
+##   wgt = col_double(),
+##   hgt0 = col_double(),
+##   wgt0 = col_double(),
+##   prot = col_double(),
+##   cal = col_double(),
+##   p.A.prot = col_double(),
+##   p.A.nProt = col_double()
+## )
+\end{verbatim}
+
+\hypertarget{hgt0-3-groups}{%
+\subparagraph{Hgt0 3 Groups}\label{hgt0-3-groups}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Joint Quantile Group Name}
+\NormalTok{var.qjnt.grp.idx <-}\StringTok{ 'group.index'}
+\NormalTok{list.cts2quantile <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\KeywordTok{list}\NormalTok{(}\DataTypeTok{vars=}\KeywordTok{c}\NormalTok{(}\StringTok{'hgt0'}\NormalTok{), }\DataTypeTok{prob=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{.3333}\NormalTok{, }\FloatTok{0.6666}\NormalTok{, }\FloatTok{1.0}\NormalTok{)))}
+\NormalTok{results <-}\StringTok{ }\KeywordTok{df_cut_by_sliced_quantiles_joint}\NormalTok{(}
+\NormalTok{  df, var.qjnt.grp.idx, list.cts2quantile,}
+  \DataTypeTok{vars.group_by =} \KeywordTok{c}\NormalTok{(}\StringTok{'indi.id'}\NormalTok{), }\DataTypeTok{vars.arrange =} \KeywordTok{c}\NormalTok{(}\StringTok{'indi.id'}\NormalTok{, }\StringTok{'svymthRound'}\NormalTok{),}
+  \DataTypeTok{drop.any.quantile.na =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{toprint =} \OtherTok{FALSE}\NormalTok{)}
+\CommentTok{# Show Results}
+\NormalTok{results}\OperatorTok{$}\NormalTok{df.group.slice1.cnt.mean}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 3 x 4
+## # Groups:   hgt0_Qs0e1n3 [3]
+##   hgt0_Qs0e1n3                group.index  mean     n
+##   <fct>                             <int> <dbl> <int>
+## 1 [40.6,48.5]; (1) of Qs0e1n3           1  47.0   580
+## 2 (48.5,50.2]; (2) of Qs0e1n3           2  49.4   561
+## 3 (50.2,58]; (3) of Qs0e1n3             3  51.7   568
+\end{verbatim}
+
+\hypertarget{wealth-5-groups-guatemala}{%
+\subparagraph{Wealth 5 Groups
+Guatemala}\label{wealth-5-groups-guatemala}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Joint Quantile Group Name}
+\NormalTok{var.qjnt.grp.idx <-}\StringTok{ 'wltQuintle.index'}
+\NormalTok{list.cts2quantile <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\KeywordTok{list}\NormalTok{(}\DataTypeTok{vars=}\KeywordTok{c}\NormalTok{(}\StringTok{'wealthIdx'}\NormalTok{), }\DataTypeTok{prob=}\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{1.0}\NormalTok{, }\FloatTok{0.20}\NormalTok{)))}
+\NormalTok{results <-}\StringTok{ }\KeywordTok{df_cut_by_sliced_quantiles_joint}\NormalTok{((}
+\NormalTok{  df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(S.country }\OperatorTok{==}\StringTok{ 'Guatemala'}\NormalTok{)),}
+\NormalTok{  var.qjnt.grp.idx, list.cts2quantile,}
+  \DataTypeTok{vars.group_by =} \KeywordTok{c}\NormalTok{(}\StringTok{'indi.id'}\NormalTok{), }\DataTypeTok{vars.arrange =} \KeywordTok{c}\NormalTok{(}\StringTok{'indi.id'}\NormalTok{, }\StringTok{'svymthRound'}\NormalTok{),}
+  \DataTypeTok{drop.any.quantile.na =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{toprint =} \OtherTok{FALSE}\NormalTok{)}
+\CommentTok{# Show Results}
+\NormalTok{results}\OperatorTok{$}\NormalTok{df.group.slice1.cnt.mean}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 5 x 4
+## # Groups:   wealthIdx_Qs0e1n5 [5]
+##   wealthIdx_Qs0e1n5         wltQuintle.index  mean     n
+##   <fct>                                <int> <dbl> <int>
+## 1 [1,1.6]; (1) of Qs0e1n5                  1  1.25   151
+## 2 (1.6,2.1]; (2) of Qs0e1n5                2  1.82   139
+## 3 (2.1,2.3]; (3) of Qs0e1n5                3  2.25   139
+## 4 (2.3,2.9]; (4) of Qs0e1n5                4  2.70   134
+## 5 (2.9,6.6]; (5) of Qs0e1n5                5  3.77   111
+\end{verbatim}
+
+\hypertarget{hgt0-2-groups-wgt0-2-groups-too}{%
+\subparagraph{Hgt0 2 groups, Wgt0 2 groups
+too}\label{hgt0-2-groups-wgt0-2-groups-too}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Joint Quantile Group Name}
+\NormalTok{var.qjnt.grp.idx <-}\StringTok{ 'group.index'}
+\NormalTok{list.cts2quantile <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\KeywordTok{list}\NormalTok{(}\DataTypeTok{vars=}\KeywordTok{c}\NormalTok{(}\StringTok{'hgt0'}\NormalTok{, }\StringTok{'wgt0'}\NormalTok{), }\DataTypeTok{prob=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{.5}\NormalTok{, }\FloatTok{1.0}\NormalTok{)))}
+\NormalTok{results <-}\StringTok{ }\KeywordTok{df_cut_by_sliced_quantiles_joint}\NormalTok{(}
+\NormalTok{  df, var.qjnt.grp.idx, list.cts2quantile,}
+  \DataTypeTok{vars.group_by =} \KeywordTok{c}\NormalTok{(}\StringTok{'indi.id'}\NormalTok{), }\DataTypeTok{vars.arrange =} \KeywordTok{c}\NormalTok{(}\StringTok{'indi.id'}\NormalTok{, }\StringTok{'svymthRound'}\NormalTok{),}
+  \DataTypeTok{drop.any.quantile.na =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{toprint =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Joining, by = "quant.perc"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Show Results}
+\NormalTok{results}\OperatorTok{$}\NormalTok{df.group.slice1.cnt.mean}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 4 x 7
+## # Groups:   hgt0_Qs0e1n2, wgt0_Qs0e1n2 [4]
+##   hgt0_Qs0e1n2                wgt0_Qs0e1n2                        group.index hgt0_mean wgt0_mean hgt0_n wgt0_n
+##   <fct>                       <fct>                                     <int>     <dbl>     <dbl>  <int>  <int>
+## 1 [40.6,49.4]; (1) of Qs0e1n2 [1.4e+03,3.01e+03]; (1) of Qs0e1n2            1      47.4     2650.    652    652
+## 2 [40.6,49.4]; (1) of Qs0e1n2 (3.01e+03,5.49e+03]; (2) of Qs0e1n2           2      48.5     3244.    228    228
+## 3 (49.4,58]; (2) of Qs0e1n2   [1.4e+03,3.01e+03]; (1) of Qs0e1n2            3      50.4     2829.    202    202
+## 4 (49.4,58]; (2) of Qs0e1n2   (3.01e+03,5.49e+03]; (2) of Qs0e1n2           4      51.3     3483.    626    626
+\end{verbatim}
+
+\hypertarget{hgt0-2-groups-wealth-2-groups-cebu-only}{%
+\subparagraph{Hgt0 2 groups, Wealth 2 groups, Cebu
+Only}\label{hgt0-2-groups-wealth-2-groups-cebu-only}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Joint Quantile Group Name}
+\NormalTok{var.qjnt.grp.idx <-}\StringTok{ 'group.index'}
+\NormalTok{list.cts2quantile <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}
+  \KeywordTok{list}\NormalTok{(}\DataTypeTok{vars=}\KeywordTok{c}\NormalTok{(}\StringTok{'wealthIdx'}\NormalTok{), }\DataTypeTok{prob=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{.5}\NormalTok{, }\FloatTok{1.0}\NormalTok{)), }
+  \KeywordTok{list}\NormalTok{(}\DataTypeTok{vars=}\KeywordTok{c}\NormalTok{(}\StringTok{'hgt0'}\NormalTok{), }\DataTypeTok{prob=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{.333}\NormalTok{, }\FloatTok{0.666}\NormalTok{, }\FloatTok{1.0}\NormalTok{)))}
+\NormalTok{results <-}\StringTok{ }\KeywordTok{df_cut_by_sliced_quantiles_joint}\NormalTok{(}
+\NormalTok{  (df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(S.country }\OperatorTok{==}\StringTok{ 'Cebu'}\NormalTok{)),}
+\NormalTok{  var.qjnt.grp.idx, list.cts2quantile,}
+  \DataTypeTok{vars.group_by =} \KeywordTok{c}\NormalTok{(}\StringTok{'indi.id'}\NormalTok{), }\DataTypeTok{vars.arrange =} \KeywordTok{c}\NormalTok{(}\StringTok{'indi.id'}\NormalTok{, }\StringTok{'svymthRound'}\NormalTok{),}
+  \DataTypeTok{drop.any.quantile.na =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{toprint =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Joining, by = c("S.country", "vil.id", "indi.id", "sex", "svymthRound", "momEdu", "wealthIdx", "hgt", "wgt", "hgt0", "wgt0", "prot", "cal", "p.A.prot",
+## "p.A.nProt")
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Show Results}
+\NormalTok{results}\OperatorTok{$}\NormalTok{df.group.slice1.cnt.mean}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 7
+## # Groups:   wealthIdx_Qs0e1n2, hgt0_Qs0e1n3 [6]
+##   wealthIdx_Qs0e1n2          hgt0_Qs0e1n3                group.index wealthIdx_mean hgt0_mean wealthIdx_n hgt0_n
+##   <fct>                      <fct>                             <int>          <dbl>     <dbl>       <int>  <int>
+## 1 [5.2,8.3]; (1) of Qs0e1n2  [41.1,48.4]; (1) of Qs0e1n3           1           7.15      46.9         270    270
+## 2 [5.2,8.3]; (1) of Qs0e1n2  (48.4,50.1]; (2) of Qs0e1n3           2           7.18      49.2         269    269
+## 3 [5.2,8.3]; (1) of Qs0e1n2  (50.1,58]; (3) of Qs0e1n3             3           7.13      51.3         236    236
+## 4 (8.3,19.3]; (2) of Qs0e1n2 [41.1,48.4]; (1) of Qs0e1n3           4          11.1       47.2         179    179
+## 5 (8.3,19.3]; (2) of Qs0e1n2 (48.4,50.1]; (2) of Qs0e1n3           5          11.2       49.3         185    185
+## 6 (8.3,19.3]; (2) of Qs0e1n2 (50.1,58]; (3) of Qs0e1n3             6          11.6       51.7         207    207
+\end{verbatim}
+
+\hypertarget{results-of-income-wgt0-hgt0-joint-gruops-in-cebu}{%
+\subparagraph{Results of income + Wgt0 + Hgt0 joint Gruops in
+Cebu}\label{results-of-income-wgt0-hgt0-joint-gruops-in-cebu}}
+
+Weight at month 0 below and above median, height at month zero into
+three terciles.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Joint Quantile Group Name}
+\NormalTok{var.qjnt.grp.idx <-}\StringTok{ 'wltHgt0Wgt0.index'}
+\NormalTok{list.cts2quantile <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}
+  \KeywordTok{list}\NormalTok{(}\DataTypeTok{vars=}\KeywordTok{c}\NormalTok{(}\StringTok{'wealthIdx'}\NormalTok{), }\DataTypeTok{prob=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{.5}\NormalTok{, }\FloatTok{1.0}\NormalTok{)), }
+  \KeywordTok{list}\NormalTok{(}\DataTypeTok{vars=}\KeywordTok{c}\NormalTok{(}\StringTok{'hgt0'}\NormalTok{, }\StringTok{'wgt0'}\NormalTok{), }\DataTypeTok{prob=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{.5}\NormalTok{, }\FloatTok{1.0}\NormalTok{)))}
+\NormalTok{results <-}\StringTok{ }\KeywordTok{df_cut_by_sliced_quantiles_joint}\NormalTok{(}
+\NormalTok{  (df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(S.country }\OperatorTok{==}\StringTok{ 'Cebu'}\NormalTok{)),}
+\NormalTok{  var.qjnt.grp.idx, list.cts2quantile,}
+  \DataTypeTok{vars.group_by =} \KeywordTok{c}\NormalTok{(}\StringTok{'indi.id'}\NormalTok{), }\DataTypeTok{vars.arrange =} \KeywordTok{c}\NormalTok{(}\StringTok{'indi.id'}\NormalTok{, }\StringTok{'svymthRound'}\NormalTok{),}
+  \DataTypeTok{drop.any.quantile.na =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{toprint =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Joining, by = "quant.perc"Joining, by = c("S.country", "vil.id", "indi.id", "sex", "svymthRound", "momEdu", "wealthIdx", "hgt", "wgt", "hgt0", "wgt0",
+## "prot", "cal", "p.A.prot", "p.A.nProt")
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Show Results}
+\NormalTok{results}\OperatorTok{$}\NormalTok{df.group.slice1.cnt.mean}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 8 x 10
+## # Groups:   wealthIdx_Qs0e1n2, hgt0_Qs0e1n2, wgt0_Qs0e1n2 [8]
+##   wealthIdx_Qs0e1n2       hgt0_Qs0e1n2            wgt0_Qs0e1n2                wltHgt0Wgt0.ind~ wealthIdx_mean hgt0_mean wgt0_mean wealthIdx_n hgt0_n wgt0_n
+##   <fct>                   <fct>                   <fct>                                  <int>          <dbl>     <dbl>     <dbl>       <int>  <int>  <int>
+## 1 [5.2,8.3]; (1) of Qs0e~ [41.1,49.2]; (1) of Qs~ [1.4e+03,2.98e+03]; (1) of~                1           7.16      47.3     2607.         308    308    308
+## 2 [5.2,8.3]; (1) of Qs0e~ [41.1,49.2]; (1) of Qs~ (2.98e+03,5.49e+03]; (2) o~                2           7.27      48.4     3156.         102    102    102
+## 3 [5.2,8.3]; (1) of Qs0e~ (49.2,58]; (2) of Qs0e~ [1.4e+03,2.98e+03]; (1) of~                3           7.00      50.2     2781.          97     97     97
+## 4 [5.2,8.3]; (1) of Qs0e~ (49.2,58]; (2) of Qs0e~ (2.98e+03,5.49e+03]; (2) o~                4           7.16      51.0     3328.         268    268    268
+## 5 (8.3,19.3]; (2) of Qs0~ [41.1,49.2]; (1) of Qs~ [1.4e+03,2.98e+03]; (1) of~                5          10.9       47.4     2632.         186    186    186
+## 6 (8.3,19.3]; (2) of Qs0~ [41.1,49.2]; (1) of Qs~ (2.98e+03,5.49e+03]; (2) o~                6          11.3       48.5     3196.          81     81     81
+## 7 (8.3,19.3]; (2) of Qs0~ (49.2,58]; (2) of Qs0e~ [1.4e+03,2.98e+03]; (1) of~                7          11.3       50.2     2779.          82     82     82
+## 8 (8.3,19.3]; (2) of Qs0~ (49.2,58]; (2) of Qs0e~ (2.98e+03,5.49e+03]; (2) o~                8          11.7       51.4     3431.         222    222    222
+\end{verbatim}
+
+\hypertarget{line-by-linequantiles-var-by-var}{%
+\paragraph{Line by Line--Quantiles Var by
+Var}\label{line-by-linequantiles-var-by-var}}
+
+The idea of the function is to generate quantiles levels first, and then
+use those to generate the categories based on quantiles. Rather than
+doing this in one step. These are done in two steps, to increase clarity
+in the quantiles used for quantile category generation. And a dataframe
+with these quantiles are saved as a separate output of the function.
+
+\hypertarget{dataframe-of-variables-group-by-level-quantiles}{%
+\subparagraph{Dataframe of Variables' Group-by Level
+Quantiles}\label{dataframe-of-variables-group-by-level-quantiles}}
+
+Quantiles from Different Variables. Note that these variables are
+specific to the individual, not individual/month. So we need to first
+slick the data, so that we only get the first rows.
+
+Do this in several steps to clarify group\_by level. No speed loss.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Selected Variables, many Percentiles}
+\NormalTok{vars.group_by <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'indi.id'}\NormalTok{)}
+\NormalTok{vars.arrange <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'indi.id'}\NormalTok{, }\StringTok{'svymthRound'}\NormalTok{)}
+\NormalTok{vars.cts2quantile <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'wealthIdx'}\NormalTok{, }\StringTok{'hgt0'}\NormalTok{, }\StringTok{'wgt0'}\NormalTok{)}
+\NormalTok{seq.quantiles <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{0.3333}\NormalTok{, }\FloatTok{0.6666}\NormalTok{, }\FloatTok{1.0}\NormalTok{)}
+\NormalTok{df.sliced <-}\StringTok{ }\KeywordTok{df_sliced_quantiles}\NormalTok{(}
+\NormalTok{  df, vars.cts2quantile, seq.quantiles, vars.group_by, vars.arrange)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Joining, by = "quant.perc"Joining, by = "quant.perc"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df.sliced.quantiles <-}\StringTok{ }\NormalTok{df.sliced}\OperatorTok{$}\NormalTok{df.sliced.quantiles}
+\NormalTok{df.grp.L1 <-}\StringTok{ }\NormalTok{df.sliced}\OperatorTok{$}\NormalTok{df.grp.L1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df.sliced.quantiles}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 4 x 4
+##   quant.perc wealthIdx  hgt0  wgt0
+##   <chr>          <dbl> <dbl> <dbl>
+## 1 0%               1    40.6 1402.
+## 2 33.33%           5.2  48.5 2843.
+## 3 66.66%           8.3  50.2 3209.
+## 4 100%            19.3  58   5494.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Quantiles all Variables}
+\KeywordTok{suppressMessages}\NormalTok{(}\KeywordTok{lapply}\NormalTok{(}
+  \KeywordTok{names}\NormalTok{(df), gen_quantiles, }\DataTypeTok{df=}\NormalTok{df.grp.L1, }
+  \DataTypeTok{prob=}\KeywordTok{seq}\NormalTok{(}\FloatTok{0.1}\NormalTok{,}\FloatTok{0.9}\NormalTok{,}\FloatTok{0.10}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{reduce}\NormalTok{(full_join)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable_styling_fc_wide}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in quantile(as.numeric(df[[var]]), prob, na.rm = TRUE): NAs introduced by coercion
+
+## Warning in quantile(as.numeric(df[[var]]), prob, na.rm = TRUE): NAs introduced by coercion
+\end{verbatim}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{l|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r}
+\hline
+quant.perc & S.country & vil.id & indi.id & sex & svymthRound & momEdu & wealthIdx & hgt & wgt & hgt0 & wgt0 & prot & cal & p.A.prot & p.A.nProt\\
+\hline
+\rowcolor{gray!6}  10\% & NA & 3 & 203.2 & NA & 0 & 5.70 & 1.7 & 46.3 & 1396.94 & 46.60 & 2500.28 & 0.5 & 0.50 & 24.28 & 0.50\\
+\hline
+20\% & NA & 4 & 405.4 & NA & 0 & 6.90 & 2.3 & 47.3 & 1839.64 & 47.70 & 2686.28 & 0.5 & 0.50 & 172.30 & 0.50\\
+\hline
+\rowcolor{gray!6}  30\% & NA & 6 & 607.6 & NA & 0 & 7.70 & 3.3 & 48.0 & 2271.69 & 48.30 & 2803.89 & 0.5 & 0.50 & 721.08 & 1.06\\
+\hline
+40\% & NA & 8 & 809.8 & NA & 0 & 8.60 & 6.3 & 48.7 & 2669.16 & 48.80 & 2909.68 & 0.5 & 0.50 & 1009.88 & 19.00\\
+\hline
+\rowcolor{gray!6}  50\% & NA & 9 & 1012.0 & NA & 0 & 9.30 & 7.3 & 49.4 & 3050.10 & 49.40 & 3013.00 & 0.5 & 0.50 & 1273.30 & 110.95\\
+\hline
+60\% & NA & 13 & 1214.2 & NA & 0 & 10.40 & 8.3 & 49.9 & 3439.50 & 49.90 & 3126.08 & 0.5 & 3.88 & 1614.40 & 221.92\\
+\hline
+\rowcolor{gray!6}  70\% & NA & 14 & 1416.4 & NA & 0 & 11.36 & 8.3 & 50.5 & 3857.28 & 50.40 & 3249.52 & 0.7 & 8.26 & 2679.54 & 256.80\\
+\hline
+80\% & NA & 17 & 1618.6 & NA & 0 & 12.70 & 9.3 & 51.2 & 4258.12 & 51.04 & 3417.86 & 1.2 & 11.50 & 4761.14 & 298.12\\
+\hline
+\rowcolor{gray!6}  90\% & NA & 26 & 1820.8 & NA & 0 & 14.60 & 11.3 & 52.3 & 4703.62 & 52.00 & 3682.83 & 1.6 & 15.60 & 10867.72 & 365.46\\
+\hline
+\end{tabular}}
+\end{table}
+
+\hypertarget{cut-quantile-categorical-variables}{%
+\subparagraph{Cut Quantile Categorical
+Variables}\label{cut-quantile-categorical-variables}}
+
+Using the Quantiles we have generate, cut the continuous variables to
+generate categorical quantile variables in the full dataframe.
+
+Note that we can only cut based on unique breaks, but sometimes quantile
+break-points are the same if some values are often observed, and also if
+there are too few observations with respect to quantile groups.
+
+To resolve this issue, we only look at unique quantiles.
+
+We need several support Functions: 1. support functions to generate
+suffix for quantile variables based on quantile cuts 2. support for
+labeling variables of resulting quantiles beyond bracketing
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Function Testing}
+\NormalTok{arr.quantiles <-}\StringTok{ }\NormalTok{df.sliced.quantiles[[}\KeywordTok{substitute}\NormalTok{(}\StringTok{'wealthIdx'}\NormalTok{)]]}
+\NormalTok{arr.quantiles}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1]  1.0  5.2  8.3 19.3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{arr.sort.unique.quantiles <-}\StringTok{ }
+\StringTok{  }\KeywordTok{sort}\NormalTok{(}\KeywordTok{unique}\NormalTok{(df.sliced.quantiles[[}\KeywordTok{substitute}\NormalTok{(}\StringTok{'wealthIdx'}\NormalTok{)]]))}
+\NormalTok{arr.sort.unique.quantiles}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1]  1.0  5.2  8.3 19.3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{f_Q_label}\NormalTok{(arr.quantiles, arr.sort.unique.quantiles[}\DecValTok{1}\NormalTok{], seq.quantiles)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "(1) of Qs0e1n3"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{f_Q_label}\NormalTok{(arr.quantiles, arr.sort.unique.quantiles[}\DecValTok{2}\NormalTok{], seq.quantiles)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "(2) of Qs0e1n3"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{lapply}\NormalTok{(arr.sort.unique.quantiles[}\DecValTok{1}\OperatorTok{:}\NormalTok{(}\KeywordTok{length}\NormalTok{(arr.sort.unique.quantiles)}\OperatorTok{-}\DecValTok{1}\NormalTok{)],}
+\NormalTok{       f_Q_label,}
+       \DataTypeTok{arr.quantiles=}\NormalTok{arr.quantiles,}
+       \DataTypeTok{seq.quantiles=}\NormalTok{seq.quantiles)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [[1]]
+## [1] "(1) of Qs0e1n3"
+## 
+## [[2]]
+## [1] "(2) of Qs0e1n3"
+## 
+## [[3]]
+## [1] "(3) of Qs0e1n3"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Generate Categorical Variables of Quantiles}
+\NormalTok{vars.group_by <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'indi.id'}\NormalTok{)}
+\NormalTok{vars.arrange <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'indi.id'}\NormalTok{, }\StringTok{'svymthRound'}\NormalTok{)}
+\NormalTok{vars.cts2quantile <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'wealthIdx'}\NormalTok{, }\StringTok{'hgt0'}\NormalTok{, }\StringTok{'wgt0'}\NormalTok{)}
+\NormalTok{seq.quantiles <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{0.3333}\NormalTok{, }\FloatTok{0.6666}\NormalTok{, }\FloatTok{1.0}\NormalTok{)}
+\NormalTok{df.cut <-}\StringTok{ }\KeywordTok{df_cut_by_sliced_quantiles}\NormalTok{(}
+\NormalTok{  df, vars.cts2quantile, seq.quantiles, vars.group_by, vars.arrange)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Joining, by = "quant.perc"Joining, by = "quant.perc"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vars.quantile.cut <-}\StringTok{ }\NormalTok{df.cut}\OperatorTok{$}\NormalTok{vars.quantile.cut}
+\NormalTok{df.with.cut.quant <-}\StringTok{ }\NormalTok{df.cut}\OperatorTok{$}\NormalTok{df.with.cut.quant}
+\NormalTok{df.grp.L1 <-}\StringTok{ }\NormalTok{df.cut}\OperatorTok{$}\NormalTok{df.grp.L1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Cut Variables Generated}
+\KeywordTok{names}\NormalTok{(vars.quantile.cut)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "wealthIdx_Qs0e1n3" "hgt0_Qs0e1n3"      "wgt0_Qs0e1n3"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(vars.quantile.cut)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                   wealthIdx_Qs0e1n3                      hgt0_Qs0e1n3                                wgt0_Qs0e1n3  
+##  [1,5.2]; (1) of Qs0e1n3   :10958   [40.6,48.5]; (1) of Qs0e1n3:10232   [1.4e+03,2.84e+03]; (1) of Qs0e1n3 :10105  
+##  (5.2,8.3]; (2) of Qs0e1n3 :13812   (48.5,50.2]; (2) of Qs0e1n3: 9895   (2.84e+03,3.21e+03]; (2) of Qs0e1n3:10056  
+##  (8.3,19.3]; (3) of Qs0e1n3:10295   (50.2,58]; (3) of Qs0e1n3  : 9908   (3.21e+03,5.49e+03]; (3) of Qs0e1n3: 9858  
+##                                     NA's                       : 5030   NA's                               : 5046
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# options(repr.matrix.max.rows=50, repr.matrix.max.cols=20)}
+\CommentTok{# df.with.cut.quant}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{individual-variables-quantile-cuts-review-results}{%
+\subparagraph{Individual Variables' Quantile Cuts Review
+Results}\label{individual-variables-quantile-cuts-review-results}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Group By Results}
+\NormalTok{f.count <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(df, var.cts, seq.quantiles) \{}
+\NormalTok{    df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(S.country, indi.id, }
+\NormalTok{                  svymthRound, }\KeywordTok{matches}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(var.cts, }\DataTypeTok{collapse=}\StringTok{'|'}\NormalTok{))) }\OperatorTok{%>%}
+\StringTok{        }\KeywordTok{group_by}\NormalTok{(}\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(}\KeywordTok{f_var_rename}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(var.cts,}\StringTok{'_q'}\NormalTok{), seq.quantiles))) }\OperatorTok{%>%}
+\StringTok{        }\KeywordTok{summarise_all}\NormalTok{(}\KeywordTok{funs}\NormalTok{(}\DataTypeTok{n=}\KeywordTok{n}\NormalTok{()))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Full Panel Results}
+\KeywordTok{lapply}\NormalTok{(vars.cts2quantile, f.count, }
+       \DataTypeTok{df=}\NormalTok{df.with.cut.quant, }\DataTypeTok{seq.quantiles=}\NormalTok{seq.quantiles)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Factor `hgt0_Qs0e1n3` contains implicit NA, consider using `forcats::fct_explicit_na`
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Factor `wgt0_Qs0e1n3` contains implicit NA, consider using `forcats::fct_explicit_na`
+\end{verbatim}
+
+\begin{verbatim}
+## [[1]]
+## # A tibble: 3 x 5
+##   wealthIdx_Qs0e1n3          S.country_n indi.id_n svymthRound_n wealthIdx_n
+##   <fct>                            <int>     <int>         <int>       <int>
+## 1 [1,5.2]; (1) of Qs0e1n3          10958     10958         10958       10958
+## 2 (5.2,8.3]; (2) of Qs0e1n3        13812     13812         13812       13812
+## 3 (8.3,19.3]; (3) of Qs0e1n3       10295     10295         10295       10295
+## 
+## [[2]]
+## # A tibble: 4 x 5
+##   hgt0_Qs0e1n3                S.country_n indi.id_n svymthRound_n hgt0_n
+##   <fct>                             <int>     <int>         <int>  <int>
+## 1 [40.6,48.5]; (1) of Qs0e1n3       10232     10232         10232  10232
+## 2 (48.5,50.2]; (2) of Qs0e1n3        9895      9895          9895   9895
+## 3 (50.2,58]; (3) of Qs0e1n3          9908      9908          9908   9908
+## 4 <NA>                               5030      5030          5030   5030
+## 
+## [[3]]
+## # A tibble: 4 x 5
+##   wgt0_Qs0e1n3                        S.country_n indi.id_n svymthRound_n wgt0_n
+##   <fct>                                     <int>     <int>         <int>  <int>
+## 1 [1.4e+03,2.84e+03]; (1) of Qs0e1n3        10105     10105         10105  10105
+## 2 (2.84e+03,3.21e+03]; (2) of Qs0e1n3       10056     10056         10056  10056
+## 3 (3.21e+03,5.49e+03]; (3) of Qs0e1n3        9858      9858          9858   9858
+## 4 <NA>                                       5046      5046          5046   5046
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Results Individual Slice}
+\KeywordTok{lapply}\NormalTok{(vars.cts2quantile, f.count,}
+       \DataTypeTok{df=}\NormalTok{(df.with.cut.quant }\OperatorTok{%>%}\StringTok{ }
+\StringTok{             }\KeywordTok{group_by}\NormalTok{(}\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(vars.group_by)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{             }\KeywordTok{arrange}\NormalTok{(}\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(vars.arrange)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{slice}\NormalTok{(1L)),}
+       \DataTypeTok{seq.quantiles =}\NormalTok{ seq.quantiles)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Factor `hgt0_Qs0e1n3` contains implicit NA, consider using `forcats::fct_explicit_na`
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Factor `wgt0_Qs0e1n3` contains implicit NA, consider using `forcats::fct_explicit_na`
+\end{verbatim}
+
+\begin{verbatim}
+## [[1]]
+## # A tibble: 3 x 5
+##   wealthIdx_Qs0e1n3          S.country_n indi.id_n svymthRound_n wealthIdx_n
+##   <fct>                            <int>     <int>         <int>       <int>
+## 1 [1,5.2]; (1) of Qs0e1n3            683       683           683         683
+## 2 (5.2,8.3]; (2) of Qs0e1n3          768       768           768         768
+## 3 (8.3,19.3]; (3) of Qs0e1n3         572       572           572         572
+## 
+## [[2]]
+## # A tibble: 4 x 5
+##   hgt0_Qs0e1n3                S.country_n indi.id_n svymthRound_n hgt0_n
+##   <fct>                             <int>     <int>         <int>  <int>
+## 1 [40.6,48.5]; (1) of Qs0e1n3         580       580           580    580
+## 2 (48.5,50.2]; (2) of Qs0e1n3         561       561           561    561
+## 3 (50.2,58]; (3) of Qs0e1n3           568       568           568    568
+## 4 <NA>                                314       314           314    314
+## 
+## [[3]]
+## # A tibble: 4 x 5
+##   wgt0_Qs0e1n3                        S.country_n indi.id_n svymthRound_n wgt0_n
+##   <fct>                                     <int>     <int>         <int>  <int>
+## 1 [1.4e+03,2.84e+03]; (1) of Qs0e1n3          569       569           569    569
+## 2 (2.84e+03,3.21e+03]; (2) of Qs0e1n3         569       569           569    569
+## 3 (3.21e+03,5.49e+03]; (3) of Qs0e1n3         570       570           570    570
+## 4 <NA>                                        315       315           315    315
+\end{verbatim}
+
+\hypertarget{differential-quantiles-for-different-variables-then-combine-to-form-new-groups}{%
+\paragraph{Differential Quantiles for Different Variables Then Combine
+to Form New
+Groups}\label{differential-quantiles-for-different-variables-then-combine-to-form-new-groups}}
+
+Collect together different quantile base variables and their percentile
+cuttings quantile rules. Input Parameters.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Generate Categorical Variables of Quantiles}
+\NormalTok{vars.group_by <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'indi.id'}\NormalTok{)}
+\NormalTok{vars.arrange <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'indi.id'}\NormalTok{, }\StringTok{'svymthRound'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Quantile Variables and Quantiles}
+\NormalTok{vars.cts2quantile.wealth <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'wealthIdx'}\NormalTok{)}
+\NormalTok{seq.quantiles.wealth <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{.5}\NormalTok{, }\FloatTok{1.0}\NormalTok{)}
+\NormalTok{vars.cts2quantile.wgthgt <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'hgt0'}\NormalTok{, }\StringTok{'wgt0'}\NormalTok{)}
+\NormalTok{seq.quantiles.wgthgt <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{.3333}\NormalTok{, }\FloatTok{0.6666}\NormalTok{, }\FloatTok{1.0}\NormalTok{)}
+\NormalTok{drop.any.quantile.na <-}\StringTok{ }\OtherTok{TRUE}
+\CommentTok{# collect to list}
+\NormalTok{list.cts2quantile <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\KeywordTok{list}\NormalTok{(}\DataTypeTok{vars=}\NormalTok{vars.cts2quantile.wealth,}
+                               \DataTypeTok{prob=}\NormalTok{seq.quantiles.wealth),}
+                          \KeywordTok{list}\NormalTok{(}\DataTypeTok{vars=}\NormalTok{vars.cts2quantile.wgthgt,}
+                               \DataTypeTok{prob=}\NormalTok{seq.quantiles.wgthgt))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{check-if-within-group-variables-are-the-same}{%
+\paragraph{Check if Within Group Variables Are The
+Same}\label{check-if-within-group-variables-are-the-same}}
+
+Need to make sure quantile variables are unique within groups
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vars.cts2quantile <-}\StringTok{ }\KeywordTok{unlist}\NormalTok{(}\KeywordTok{lapply}\NormalTok{(list.cts2quantile, }\ControlFlowTok{function}\NormalTok{(elist) elist}\OperatorTok{$}\NormalTok{vars))}
+\KeywordTok{f_check_distinct_ingroup}\NormalTok{(df, vars.group_by, }\DataTypeTok{vars.values_in_group=}\NormalTok{vars.cts2quantile)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{keep-only-non-na-for-all-quantile-variables}{%
+\subparagraph{Keep only non-NA for all Quantile
+Variables}\label{keep-only-non-na-for-all-quantile-variables}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Original dimensions}
+\KeywordTok{dim}\NormalTok{(df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 35065    15
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# All Continuous Variables from lists}
+\NormalTok{vars.cts2quantile <-}\StringTok{ }\KeywordTok{unlist}\NormalTok{(}\KeywordTok{lapply}\NormalTok{(list.cts2quantile, }\ControlFlowTok{function}\NormalTok{(elist) elist}\OperatorTok{$}\NormalTok{vars))}
+\NormalTok{vars.cts2quantile}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "wealthIdx" "hgt0"      "wgt0"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Keep only if not NA for all Quantile variables}
+\ControlFlowTok{if}\NormalTok{ (drop.any.quantile.na) \{}
+\NormalTok{    df.select <-}\StringTok{ }\NormalTok{df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{drop_na}\NormalTok{(}\KeywordTok{c}\NormalTok{(vars.group_by, vars.arrange, vars.cts2quantile))}
+\NormalTok{\}}
+\KeywordTok{dim}\NormalTok{(df.select)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 30019    15
+\end{verbatim}
+
+\hypertarget{apply-quantiles-for-each-quantile-variable}{%
+\subparagraph{Apply Quantiles for Each Quantile
+Variable}\label{apply-quantiles-for-each-quantile-variable}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Dealing with a list of quantile variables}
+\NormalTok{df.cut.wealth <-}\StringTok{ }\KeywordTok{df_cut_by_sliced_quantiles}\NormalTok{(}
+\NormalTok{  df.select, vars.cts2quantile.wealth, seq.quantiles.wealth, vars.group_by, vars.arrange)}
+\KeywordTok{summary}\NormalTok{(df.cut.wealth}\OperatorTok{$}\NormalTok{vars.quantile.cut)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                   wealthIdx_Qs0e1n2
+##  [1,7.3]; (1) of Qs0e1n2   :14936  
+##  (7.3,19.3]; (2) of Qs0e1n2:15083
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# summary((df.cut.wealth$df.with.cut.quant)[['wealthIdx_Qs0e1n2']])}
+\CommentTok{# df.cut.wealth$df.with.cut.quant %>% filter(is.na(wealthIdx_Qs0e1n2))}
+\CommentTok{# df.cut.wealth$df.with.cut.quant %>% filter(indi.id == 500)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df.cut.wgthgt <-}\StringTok{ }\KeywordTok{df_cut_by_sliced_quantiles}\NormalTok{(}
+\NormalTok{  df.select, vars.cts2quantile.wgthgt, seq.quantiles.wgthgt, vars.group_by, vars.arrange)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Joining, by = "quant.perc"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(df.cut.wgthgt}\OperatorTok{$}\NormalTok{vars.quantile.cut)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                       hgt0_Qs0e1n3                                wgt0_Qs0e1n3  
+##  [40.6,48.5]; (1) of Qs0e1n3:10216   [1.4e+03,2.84e+03]; (1) of Qs0e1n3 :10105  
+##  (48.5,50.2]; (2) of Qs0e1n3: 9895   (2.84e+03,3.21e+03]; (2) of Qs0e1n3:10056  
+##  (50.2,58]; (3) of Qs0e1n3  : 9908   (3.21e+03,5.49e+03]; (3) of Qs0e1n3: 9858
+\end{verbatim}
+
+\hypertarget{apply-quantiles-functionally}{%
+\subparagraph{Apply Quantiles
+Functionally}\label{apply-quantiles-functionally}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Function to handle list inputs with different quantiles vars and probabilities}
+\NormalTok{df_cut_by_sliced_quantiles_grps <-}\StringTok{ }
+\StringTok{  }\ControlFlowTok{function}\NormalTok{(quantile.grp.list, df, vars.group_by, vars.arrange) \{}
+\NormalTok{    vars.cts2quantile <-}\StringTok{ }\NormalTok{quantile.grp.list}\OperatorTok{$}\NormalTok{vars}
+\NormalTok{    seq.quantiles <-}\StringTok{ }\NormalTok{quantile.grp.list}\OperatorTok{$}\NormalTok{prob}
+    \KeywordTok{return}\NormalTok{(}\KeywordTok{df_cut_by_sliced_quantiles}\NormalTok{(}
+\NormalTok{      df, vars.cts2quantile, seq.quantiles, vars.group_by, vars.arrange))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Apply function}
+\NormalTok{df.cut.list <-}\StringTok{ }\KeywordTok{lapply}\NormalTok{(}
+\NormalTok{  list.cts2quantile, df_cut_by_sliced_quantiles_grps,}
+  \DataTypeTok{df=}\NormalTok{df.select, }\DataTypeTok{vars.group_by=}\NormalTok{vars.group_by, }\DataTypeTok{vars.arrange=}\NormalTok{vars.arrange)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Joining, by = "quant.perc"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Reduce Resulting Matrixes Together}
+\NormalTok{df.with.cut.quant.all <-}\StringTok{ }\KeywordTok{lapply}\NormalTok{(}
+\NormalTok{  df.cut.list, }\ControlFlowTok{function}\NormalTok{(elist) elist}\OperatorTok{$}\NormalTok{df.with.cut.quant) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{reduce}\NormalTok{(left_join)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Joining, by = c("S.country", "vil.id", "indi.id", "sex", "svymthRound", "momEdu", "wealthIdx", "hgt", "wgt", "hgt0", "wgt0", "prot", "cal", "p.A.prot",
+## "p.A.nProt")
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dim}\NormalTok{(df.with.cut.quant.all)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 30019    18
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Obrain Newly Created Quantile Group Variables}
+\NormalTok{vars.quantile.cut.all <-}\StringTok{ }\KeywordTok{unlist}\NormalTok{(}
+  \KeywordTok{lapply}\NormalTok{(df.cut.list, }\ControlFlowTok{function}\NormalTok{(elist) }\KeywordTok{names}\NormalTok{(elist}\OperatorTok{$}\NormalTok{vars.quantile.cut)))}
+\NormalTok{vars.quantile.cut.all}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "wealthIdx_Qs0e1n2" "hgt0_Qs0e1n3"      "wgt0_Qs0e1n3"
+\end{verbatim}
+
+\hypertarget{summarize-by-groups}{%
+\subparagraph{Summarize by Groups}\label{summarize-by-groups}}
+
+Summarize by all groups.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(df.with.cut.quant.all }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\KeywordTok{one_of}\NormalTok{(vars.quantile.cut.all)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                   wealthIdx_Qs0e1n2                      hgt0_Qs0e1n3                                wgt0_Qs0e1n3  
+##  [1,7.3]; (1) of Qs0e1n2   :14936   [40.6,48.5]; (1) of Qs0e1n3:10216   [1.4e+03,2.84e+03]; (1) of Qs0e1n3 :10105  
+##  (7.3,19.3]; (2) of Qs0e1n2:15083   (48.5,50.2]; (2) of Qs0e1n3: 9895   (2.84e+03,3.21e+03]; (2) of Qs0e1n3:10056  
+##                                     (50.2,58]; (3) of Qs0e1n3  : 9908   (3.21e+03,5.49e+03]; (3) of Qs0e1n3: 9858
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# df.with.cut.quant.all %>%}
+\CommentTok{#     group_by(!!!syms(vars.quantile.cut.all)) %>%}
+\CommentTok{#     summarise_at(vars.cts2quantile, funs(mean, n()))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{generate-joint-quantile-vars-unique-groups}{%
+\subparagraph{Generate Joint Quantile Vars Unique
+Groups}\label{generate-joint-quantile-vars-unique-groups}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Generate Joint Quantile Index Variable}
+\NormalTok{var.qjnt.grp.idx <-}\StringTok{ 'group.index'}
+\NormalTok{df.with.cut.quant.all <-}\StringTok{ }\NormalTok{df.with.cut.quant.all }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\OperatorTok{!!}\DataTypeTok{var.qjnt.grp.idx :=} \KeywordTok{group_indices}\NormalTok{(., }\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(vars.quantile.cut.all)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{arr.group.idx <-}\StringTok{ }\KeywordTok{t}\NormalTok{(}\KeywordTok{sort}\NormalTok{(}\KeywordTok{unique}\NormalTok{(df.with.cut.quant.all[[var.qjnt.grp.idx]])))}
+\NormalTok{arr.group.idx}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14] [,15] [,16] [,17] [,18]
+## [1,]    1    2    3    4    5    6    7    8    9    10    11    12    13    14    15    16    17    18
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(df.with.cut.quant.all }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(}\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(vars.quantile.cut.all), }\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(var.qjnt.grp.idx)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise_at}\NormalTok{(vars.cts2quantile, }\KeywordTok{funs}\NormalTok{(mean, }\KeywordTok{n}\NormalTok{())), }\DecValTok{10}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable_styling_fc_wide}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{l|l|l|r|r|r|r|r|r|r}
+\hline
+wealthIdx\_Qs0e1n2 & hgt0\_Qs0e1n3 & wgt0\_Qs0e1n3 & group.index & wealthIdx\_mean & hgt0\_mean & wgt0\_mean & wealthIdx\_n & hgt0\_n & wgt0\_n\\
+\hline
+\rowcolor{gray!6}  [1,7.3]; (1) of Qs0e1n2 & [40.6,48.5]; (1) of Qs0e1n3 & [1.4e+03,2.84e+03]; (1) of Qs0e1n3 & 1 & 5.306477 & 46.56259 & 2497.543 & 3304 & 3304 & 3304\\
+\hline
+[1,7.3]; (1) of Qs0e1n2 & [40.6,48.5]; (1) of Qs0e1n3 & (2.84e+03,3.21e+03]; (2) of Qs0e1n3 & 2 & 5.077300 & 47.61424 & 2992.620 & 1348 & 1348 & 1348\\
+\hline
+\rowcolor{gray!6}  [1,7.3]; (1) of Qs0e1n2 & [40.6,48.5]; (1) of Qs0e1n3 & (3.21e+03,5.49e+03]; (3) of Qs0e1n3 & 3 & 3.639226 & 47.74586 & 3428.613 & 362 & 362 & 362\\
+\hline
+[1,7.3]; (1) of Qs0e1n2 & (48.5,50.2]; (2) of Qs0e1n3 & [1.4e+03,2.84e+03]; (1) of Qs0e1n3 & 4 & 6.042504 & 49.24233 & 2671.040 & 1134 & 1134 & 1134\\
+\hline
+\rowcolor{gray!6}  [1,7.3]; (1) of Qs0e1n2 & (48.5,50.2]; (2) of Qs0e1n3 & (2.84e+03,3.21e+03]; (2) of Qs0e1n3 & 5 & 5.355494 & 49.34579 & 3030.472 & 2184 & 2184 & 2184\\
+\hline
+[1,7.3]; (1) of Qs0e1n2 & (48.5,50.2]; (2) of Qs0e1n3 & (3.21e+03,5.49e+03]; (3) of Qs0e1n3 & 6 & 4.360647 & 49.61496 & 3480.880 & 1484 & 1484 & 1484\\
+\hline
+\rowcolor{gray!6}  [1,7.3]; (1) of Qs0e1n2 & (50.2,58]; (3) of Qs0e1n3 & [1.4e+03,2.84e+03]; (1) of Qs0e1n3 & 7 & 6.254082 & 51.16327 & 2665.767 & 196 & 196 & 196\\
+\hline
+[1,7.3]; (1) of Qs0e1n2 & (50.2,58]; (3) of Qs0e1n3 & (2.84e+03,3.21e+03]; (2) of Qs0e1n3 & 8 & 5.451433 & 50.96835 & 3047.780 & 1466 & 1466 & 1466\\
+\hline
+\rowcolor{gray!6}  [1,7.3]; (1) of Qs0e1n2 & (50.2,58]; (3) of Qs0e1n3 & (3.21e+03,5.49e+03]; (3) of Qs0e1n3 & 9 & 4.055986 & 51.83008 & 3660.124 & 3458 & 3458 & 3458\\
+\hline
+(7.3,19.3]; (2) of Qs0e1n2 & [40.6,48.5]; (1) of Qs0e1n3 & [1.4e+03,2.84e+03]; (1) of Qs0e1n3 & 10 & 9.860733 & 46.79267 & 2539.984 & 3438 & 3438 & 3438\\
+\hline
+\end{tabular}}
+\end{table}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(df.with.cut.quant.all }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(}\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(vars.group_by)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(vars.arrange)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{slice}\NormalTok{(1L) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(}\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(vars.quantile.cut.all), }\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(var.qjnt.grp.idx)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise_at}\NormalTok{(vars.cts2quantile, }\KeywordTok{funs}\NormalTok{(mean, }\KeywordTok{n}\NormalTok{())), }\DecValTok{10}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable_styling_fc_wide}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{l|l|l|r|r|r|r|r|r|r}
+\hline
+wealthIdx\_Qs0e1n2 & hgt0\_Qs0e1n3 & wgt0\_Qs0e1n3 & group.index & wealthIdx\_mean & hgt0\_mean & wgt0\_mean & wealthIdx\_n & hgt0\_n & wgt0\_n\\
+\hline
+\rowcolor{gray!6}  [1,7.3]; (1) of Qs0e1n2 & [40.6,48.5]; (1) of Qs0e1n3 & [1.4e+03,2.84e+03]; (1) of Qs0e1n3 & 1 & 5.200526 & 46.55632 & 2498.762 & 190 & 190 & 190\\
+\hline
+[1,7.3]; (1) of Qs0e1n2 & [40.6,48.5]; (1) of Qs0e1n3 & (2.84e+03,3.21e+03]; (2) of Qs0e1n3 & 2 & 4.958974 & 47.60256 & 2992.736 & 78 & 78 & 78\\
+\hline
+\rowcolor{gray!6}  [1,7.3]; (1) of Qs0e1n2 & [40.6,48.5]; (1) of Qs0e1n3 & (3.21e+03,5.49e+03]; (3) of Qs0e1n3 & 3 & 3.563636 & 47.73182 & 3430.941 & 22 & 22 & 22\\
+\hline
+[1,7.3]; (1) of Qs0e1n2 & (48.5,50.2]; (2) of Qs0e1n3 & [1.4e+03,2.84e+03]; (1) of Qs0e1n3 & 4 & 5.989063 & 49.24375 & 2671.014 & 64 & 64 & 64\\
+\hline
+\rowcolor{gray!6}  [1,7.3]; (1) of Qs0e1n2 & (48.5,50.2]; (2) of Qs0e1n3 & (2.84e+03,3.21e+03]; (2) of Qs0e1n3 & 5 & 5.246032 & 49.34603 & 3031.429 & 126 & 126 & 126\\
+\hline
+[1,7.3]; (1) of Qs0e1n2 & (48.5,50.2]; (2) of Qs0e1n3 & (3.21e+03,5.49e+03]; (3) of Qs0e1n3 & 6 & 4.235227 & 49.61136 & 3484.544 & 88 & 88 & 88\\
+\hline
+\rowcolor{gray!6}  [1,7.3]; (1) of Qs0e1n2 & (50.2,58]; (3) of Qs0e1n3 & [1.4e+03,2.84e+03]; (1) of Qs0e1n3 & 7 & 6.218182 & 51.15455 & 2665.818 & 11 & 11 & 11\\
+\hline
+[1,7.3]; (1) of Qs0e1n2 & (50.2,58]; (3) of Qs0e1n3 & (2.84e+03,3.21e+03]; (2) of Qs0e1n3 & 8 & 5.360714 & 50.96905 & 3048.073 & 84 & 84 & 84\\
+\hline
+\rowcolor{gray!6}  [1,7.3]; (1) of Qs0e1n2 & (50.2,58]; (3) of Qs0e1n3 & (3.21e+03,5.49e+03]; (3) of Qs0e1n3 & 9 & 3.944927 & 51.83623 & 3667.147 & 207 & 207 & 207\\
+\hline
+(7.3,19.3]; (2) of Qs0e1n2 & [40.6,48.5]; (1) of Qs0e1n3 & [1.4e+03,2.84e+03]; (1) of Qs0e1n3 & 10 & 9.860733 & 46.79267 & 2539.984 & 191 & 191 & 191\\
+\hline
+\end{tabular}}
+\end{table}
+
+\hypertarget{change-values-based-on-index}{%
+\subparagraph{Change values Based on
+Index}\label{change-values-based-on-index}}
+
+Index from 1 to 18, change input values based on index
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# arr.group.idx.subsidy <- arr.group.idx*2 - ((arr.group.idx)^2)*0.01}
+\NormalTok{arr.group.idx.subsidy <-}\StringTok{ }\NormalTok{arr.group.idx}\OperatorTok{*}\DecValTok{2}
+\KeywordTok{head}\NormalTok{(df.with.cut.quant.all }\OperatorTok{%>%}
+\StringTok{        }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{more_prot =}\NormalTok{ prot }\OperatorTok{+}\StringTok{ }\NormalTok{arr.group.idx.subsidy[}\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(var.qjnt.grp.idx)]) }\OperatorTok{%>%}
+\StringTok{        }\KeywordTok{group_by}\NormalTok{(}\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(vars.quantile.cut.all), }\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(var.qjnt.grp.idx))  }\OperatorTok{%>%}
+\StringTok{        }\KeywordTok{summarise_at}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{'more_prot'}\NormalTok{, }\StringTok{'prot'}\NormalTok{), }\KeywordTok{funs}\NormalTok{(}\KeywordTok{mean}\NormalTok{(., }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{))), }\DecValTok{10}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable_styling_fc_wide}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{l|l|l|r|r|r}
+\hline
+wealthIdx\_Qs0e1n2 & hgt0\_Qs0e1n3 & wgt0\_Qs0e1n3 & group.index & more\_prot & prot\\
+\hline
+\rowcolor{gray!6}  [1,7.3]; (1) of Qs0e1n2 & [40.6,48.5]; (1) of Qs0e1n3 & [1.4e+03,2.84e+03]; (1) of Qs0e1n3 & 1 & 14.08242 & 12.08242\\
+\hline
+[1,7.3]; (1) of Qs0e1n2 & [40.6,48.5]; (1) of Qs0e1n3 & (2.84e+03,3.21e+03]; (2) of Qs0e1n3 & 2 & 15.89847 & 11.89847\\
+\hline
+\rowcolor{gray!6}  [1,7.3]; (1) of Qs0e1n2 & [40.6,48.5]; (1) of Qs0e1n3 & (3.21e+03,5.49e+03]; (3) of Qs0e1n3 & 3 & 27.15484 & 21.15484\\
+\hline
+[1,7.3]; (1) of Qs0e1n2 & (48.5,50.2]; (2) of Qs0e1n3 & [1.4e+03,2.84e+03]; (1) of Qs0e1n3 & 4 & 18.90528 & 10.90528\\
+\hline
+\rowcolor{gray!6}  [1,7.3]; (1) of Qs0e1n2 & (48.5,50.2]; (2) of Qs0e1n3 & (2.84e+03,3.21e+03]; (2) of Qs0e1n3 & 5 & 22.32498 & 12.32498\\
+\hline
+[1,7.3]; (1) of Qs0e1n2 & (48.5,50.2]; (2) of Qs0e1n3 & (3.21e+03,5.49e+03]; (3) of Qs0e1n3 & 6 & 28.63120 & 16.63120\\
+\hline
+\rowcolor{gray!6}  [1,7.3]; (1) of Qs0e1n2 & (50.2,58]; (3) of Qs0e1n3 & [1.4e+03,2.84e+03]; (1) of Qs0e1n3 & 7 & 25.47638 & 11.47638\\
+\hline
+[1,7.3]; (1) of Qs0e1n2 & (50.2,58]; (3) of Qs0e1n3 & (2.84e+03,3.21e+03]; (2) of Qs0e1n3 & 8 & 28.02607 & 12.02607\\
+\hline
+\rowcolor{gray!6}  [1,7.3]; (1) of Qs0e1n2 & (50.2,58]; (3) of Qs0e1n3 & (3.21e+03,5.49e+03]; (3) of Qs0e1n3 & 9 & 34.69356 & 16.69356\\
+\hline
+(7.3,19.3]; (2) of Qs0e1n2 & [40.6,48.5]; (1) of Qs0e1n3 & [1.4e+03,2.84e+03]; (1) of Qs0e1n3 & 10 & 30.73473 & 10.73473\\
+\hline
+\end{tabular}}
+\end{table}
+
+\end{document}

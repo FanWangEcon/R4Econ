@@ -1,6 +1,16 @@
 ---
 title: "TIDYR Pivot Wider and Pivot Longer Examples"
-date: 2020-04-01
+description: |
+  Long roster to wide roster and cumulative sum attendance by date.
+core:
+  - package: dplyr
+    code: |
+      mutate(var = case_when(rnorm(n()) < 0 ~ 1, TRUE ~ 0))
+      rename_at(vars(num_range('', ar_it)), list(~paste0(st_prefix, . , '')))
+      mutate_at(vars(contains(str)), list(~replace_na(., 0)))
+      mutate_at(vars(contains(str)), list(~cumsum(.)))
+date: 2020-04-14
+date_start: 2020-04-01
 output:
   pdf_document:
     pandoc_args: '../../_output_kniti_pdf.yaml'

@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE----------------------------------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE---------------------------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # common prefix to make reshaping easier
 st_bisec_prefix <- 'bisec_'
@@ -26,10 +26,10 @@ tb_states_choices_bisec <- tb_states_choices_bisec %>%
                                                 fl_N_agg, fl_rho))
 # Summarize
 dim(tb_states_choices_bisec)
-summary(tb_states_choices_bisec)
+# summary(tb_states_choices_bisec)
 
 
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # fl_tol = float tolerance criteria
 # it_tol = number of interations to allow at most
@@ -92,12 +92,12 @@ while (it_cur <= it_tol && fl_p_dist2zr >= fl_tol ) {
 }
 
 
-## ----very wide table--------------------------------------------------------------------------------------------------------------------------------------
-head(tb_states_choices_bisec, 10)
-str(tb_states_choices_bisec)
+## ----very wide table-------------------------------------------------------------------------------------------------------------------------------------
+# head(tb_states_choices_bisec, 10)
+# str(tb_states_choices_bisec)
 
 
-## ----reshape solution from wide to very long--------------------------------------------------------------------------------------------------------------
+## ----reshape solution from wide to very long-------------------------------------------------------------------------------------------------------------
 # New variables
 svr_bisect_iter <- 'biseciter'
 svr_abfafb_long_name <- 'varname'
@@ -114,12 +114,12 @@ tb_states_choices_bisec_long <- tb_states_choices_bisec %>%
   )
 
 # Print
-summary(tb_states_choices_bisec_long)
+# summary(tb_states_choices_bisec_long)
 head(tb_states_choices_bisec_long %>% select(-one_of('p','f_p','f_p_t_f_a')), 30)
 tail(tb_states_choices_bisec_long %>% select(-one_of('p','f_p','f_p_t_f_a')), 30)
 
 
-## ----reshape solution for table show----------------------------------------------------------------------------------------------------------------------
+## ----reshape solution for table show---------------------------------------------------------------------------------------------------------------------
 # Pivot wide to very long to a little wide
 tb_states_choices_bisec_wider <- tb_states_choices_bisec_long %>%
   pivot_wider(
@@ -128,12 +128,12 @@ tb_states_choices_bisec_wider <- tb_states_choices_bisec_long %>%
   )
 
 # Print
-summary(tb_states_choices_bisec_wider)
+# summary(tb_states_choices_bisec_wider)
 print(tb_states_choices_bisec_wider %>% select(-one_of('p','f_p','f_p_t_f_a')))
 print(tb_states_choices_bisec_wider %>% select(-one_of('p','f_p','f_p_t_f_a')))
 
 
-## ----reshape solution for graphing------------------------------------------------------------------------------------------------------------------------
+## ----reshape solution for graphing-----------------------------------------------------------------------------------------------------------------------
 # Graph results
 lineplot <- tb_states_choices_bisec_long %>%
     mutate(!!sym(svr_bisect_iter) := as.numeric(!!sym(svr_bisect_iter))) %>%

@@ -6,9 +6,9 @@ description: |
 core:
   - package: tidyr
     code: |
-      mutate(!!sym(abc) := case_when(efg < 0 ~ !!sym(opq), TRUE ~ iso))
       pivot_longer(cols = starts_with('abc'), names_to = c('a', 'b'), names_pattern = paste0('prefix', "(.)_(.)"), values_to = val)
       pivot_wider(names_from = !!sym(name), values_from = val)
+      mutate(!!sym(abc) := case_when(efg < 0 ~ !!sym(opq), TRUE ~ iso))
   - package: gglot2
     code: |
       geom_line()
@@ -16,14 +16,14 @@ core:
       geom_hline()
 author: Fan Wang
 output:
-  pdf_document:
-    pandoc_args: '../../_output_kniti_pdf.yaml'
-    includes:
-      in_header: '../../preamble.tex'
   html_document:
     pandoc_args: '../../_output_kniti_html.yaml'
     includes:
       in_header: "../../hdga.html"
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
 always_allow_html: true
 urlcolor: blue
 ---
@@ -83,7 +83,7 @@ tb_states_choices_bisec <- tb_states_choices_bisec %>%
                                                 fl_N_agg, fl_rho))
 # Summarize
 dim(tb_states_choices_bisec)
-summary(tb_states_choices_bisec)
+# summary(tb_states_choices_bisec)
 ```
 
 #### Iterate and Solve for f(p), update f(a) and f(b)
@@ -166,8 +166,8 @@ Show what the *tb_states_choices_bisec* looks like.
 Variables are formatted like: *bisec_xx_yy*, where yy is the iteration indicator, and xx is either a, b, fa, or fb.
 
 ```{r very wide table}
-head(tb_states_choices_bisec, 10)
-str(tb_states_choices_bisec)
+# head(tb_states_choices_bisec, 10)
+# str(tb_states_choices_bisec)
 ```
 
 ##### Table Two--Very Wide to Very Long
@@ -193,7 +193,7 @@ tb_states_choices_bisec_long <- tb_states_choices_bisec %>%
   )
 
 # Print
-summary(tb_states_choices_bisec_long)
+# summary(tb_states_choices_bisec_long)
 head(tb_states_choices_bisec_long %>% select(-one_of('p','f_p','f_p_t_f_a')), 30)
 tail(tb_states_choices_bisec_long %>% select(-one_of('p','f_p','f_p_t_f_a')), 30)
 ```
@@ -211,7 +211,7 @@ tb_states_choices_bisec_wider <- tb_states_choices_bisec_long %>%
   )
 
 # Print
-summary(tb_states_choices_bisec_wider)
+# summary(tb_states_choices_bisec_wider)
 print(tb_states_choices_bisec_wider %>% select(-one_of('p','f_p','f_p_t_f_a')))
 print(tb_states_choices_bisec_wider %>% select(-one_of('p','f_p','f_p_t_f_a')))
 ```

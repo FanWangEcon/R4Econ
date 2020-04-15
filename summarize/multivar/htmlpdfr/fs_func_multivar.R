@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE----------------------------------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE---------------------------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ----support function multivar cumsum---------------------------------------------------------------------------------------------------------------------
+## ----support function multivar cumsum--------------------------------------------------------------------------------------------------------------------
 # Define
 it_N <- 3
 it_M <- 5
@@ -24,7 +24,7 @@ kable(df_NA_replace) %>%
   kable_styling_fc()
 
 
-## ----support function multivar cumsum---------------------------------------------------------------------------------------------------------------------
+## ----support function multivar cumsum--------------------------------------------------------------------------------------------------------------------
 # Define
 it_N <- 3
 it_M <- 5
@@ -38,7 +38,7 @@ df_daily_profit <- as_tibble(matrix(rnorm(it_N*it_M), nrow=it_N, ncol=it_M)) %>%
   rename_at(vars(starts_with("V")),
             funs(str_replace(., "V", "dp_f")))
 kable(df_daily_profit) %>%
-  kable_styling_fc_wide()
+  kable_styling_fc()
 
 # cumulative sum with suffix
 df_cumu_profit_suffix <- df_daily_profit %>%

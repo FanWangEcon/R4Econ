@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE----------------------------------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE---------------------------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ---- amto.tibble.fs_tib_string.find_replace, eval=FALSE--------------------------------------------------------------------------------------------------
+## ---- amto.tibble.fs_tib_string.find_replace, eval=FALSE-------------------------------------------------------------------------------------------------
 ## # if string value is contained in variable
 ## ("bridex.B" %in% (df.reg.out.all$vars_var.y))
 ## # if string value is not contained in variable:

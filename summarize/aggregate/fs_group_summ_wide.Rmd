@@ -69,7 +69,8 @@ f.by.groups.summ.wide <- function(df.groups.to.average,
                                   display=TRUE) {
 
 # 1. generate categoricals for full year (m.12), half year (m.6), quarter year (m.4)
-# 2. generate categoricals also for uneven years (m12t14) using stagger (+2 rather than -1)
+# 2. generate categoricals also for uneven years (m12t14) using 
+#  stagger (+2 rather than -1)
 # 3. reshape wide to long, so that all categorical date groups appear in var=value,
     # and categories in var=variable
 # 4. calculate mean for all numeric variables for all date groups
@@ -80,11 +81,13 @@ f.by.groups.summ.wide <- function(df.groups.to.average,
 # Step 1
 ######## ######## ######## ######## #######
 # 1. generate categoricals for full year (m.12), half year (m.6), quarter year (m.4)
-# 2. generate categoricals also for uneven years (m12t14) using stagger (+2 rather than -1)
+# 2. generate categoricals also for uneven years (m12t14) using stagger 
+#  (+2 rather than -1)
 
 ######## ######## ######## ######## #######
 # S2: reshape wide to long, so that all categorical date groups appear in var=value,
-    # and categories in var=variable; calculate mean for all numeric variables for all date groups
+# and categories in var=variable; calculate mean for all 
+# numeric variables for all date groups
 ######## ######## ######## ######## #######
 df.avg.long <- df.groups.to.average %>%
        gather(variable, value, -one_of(c(vars.indi.grp,
@@ -100,7 +103,8 @@ if (display){
 
 ######## ######## ######## ######## #######
 # S3 combine date categorical variable and value, single var:
-#    m.12.c1= first year average from m.12 averaging; to do this make data even longer first
+# m.12.c1= first year average from m.12 averaging; to do this make 
+# data even longer first
 ######## ######## ######## ######## #######
 
 # We already have the averages, but we want them to show up as variables,
@@ -183,7 +187,7 @@ df.groups.to.average.select <- df.groups.to.average %>%
                                         vars.groups.within.indi)))
 df.avg.allvars.wide <- f.by.groups.summ.wide(df.groups.to.average.select,
                                              vars.not.groups2avg,
-                                             vars.indi.grp, display=TRUE)
+                                             vars.indi.grp, display=FALSE)
 ```
 
 This is the tabular version of results
@@ -194,6 +198,5 @@ names(df.avg.allvars.wide)
 ```
 
 ```{r}
-options(repr.matrix.max.rows=30, repr.matrix.max.cols=12)
-df.avg.allvars.wide
+df.avg.allvars.wide[1:20,] %>% kable() %>% kable_styling_fc_wide()
 ```

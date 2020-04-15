@@ -1,5 +1,13 @@
 ---
-title: "Meshgrid Arrays in R"
+title: "Arrays Operations in R"
+description: |
+  Basic array operations in R.
+core:
+  - package: r
+    code: |
+      head()
+      tail()
+      na_if()
 date: 2020-04-01
 output:
   pdf_document:
@@ -41,10 +49,26 @@ print(x)
 
 ##### Remove Elements of Array
 
+Select elements with direct indexing, or with head and tail functions. Get the first two elements of three elements array.
+
 ```{r amto.array.fs_array_basics.slice.lastelement}
 # Remove last element of array
 vars.group.bydf <- c('23','dfa', 'wer')
 vars.group.bydf[-length(vars.group.bydf)]
+# Use the head function to remove last element
+head(vars.group.bydf, -1)
+head(vars.group.bydf, 2)
+```
+
+Get last two elements of array. 
+
+```{r}
+# Remove first element of array
+vars.group.bydf <- c('23','dfa', 'wer')
+vars.group.bydf[2:length(vars.group.bydf)]
+# Use Tail function
+tail(vars.group.bydf, -1)
+tail(vars.group.bydf, 2)
 ```
 
 #### NA in Array
