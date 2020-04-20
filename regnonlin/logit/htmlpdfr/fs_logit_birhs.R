@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE---------------------------------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE-----------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ----data set up-----------------------------------------------------------------------------------------------------------------------------------------
+## ----data set up-------------------------------------------------------------------------------------
 df_mtcars <- mtcars
 
 # X-variables to use on RHS
@@ -25,7 +25,7 @@ df_mtcars <- df_mtcars %>%
                            labels=c(svr_binary_lb0, svr_binary_lb1)))
 
 
-## ----logit test basic------------------------------------------------------------------------------------------------------------------------------------
+## ----logit test basic--------------------------------------------------------------------------------
 # Regress
 rs_logit <- glm(as.formula(paste(svr_outcome, "~", paste(ls_st_xs, collapse="+")))
                 ,data = df_mtcars, family = "binomial")
@@ -34,7 +34,7 @@ summary(rs_logit)
 df_mtcars$p_mpg <- predict(rs_logit, newdata = df_mtcars, type = "response")
 
 
-## ----logit with binary and continuous RHS----------------------------------------------------------------------------------------------------------------
+## ----logit with binary and continuous RHS------------------------------------------------------------
 # Regress
 rs_logit_bi <- glm(as.formula(paste(svr_outcome,
                                     "~ factor(", svr_binary,") + ",
@@ -58,7 +58,7 @@ scatter <- ggplot(df_mtcars, aes(x=p_mpg_hp, y=p_mpg)) +
 print(scatter)
 
 
-## ----logit prediction 0 vs 1-----------------------------------------------------------------------------------------------------------------------------
+## ----logit prediction 0 vs 1-------------------------------------------------------------------------
 # Previous regression results
 summary(rs_logit_bi)
 
@@ -86,7 +86,7 @@ scatter <- ggplot(df_mtcars, aes(x=p_mpg_hp_bi0)) +
 print(scatter)
 
 
-## ----logit prediction marginal vs base-------------------------------------------------------------------------------------------------------------------
+## ----logit prediction marginal vs base---------------------------------------------------------------
 # Generate Gap Variable
 df_mtcars <- df_mtcars %>% mutate(alpha_i = p_mpg_hp_bi1 - p_mpg_hp_bi0) %>%
                 mutate(A_i = p_mpg_hp_bi0)
@@ -103,7 +103,7 @@ scatter <- ggplot(df_mtcars, aes(x=A_i)) +
 print(scatter)
 
 
-## --------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------
 # Generate Gap Variable
 df_mtcars <- df_mtcars %>% mutate(alpha_i = p_mpg_hp_bi1 - p_mpg_hp_bi0) %>%
                 mutate(A_i = p_mpg_hp_bi0)

@@ -1,14 +1,18 @@
 # source('C:/Users/fan/R4Econ/support/inout/fs_rmd_knitall.R')
-
-library(tidyverse)
-library(tidyr)
-library(knitr)
-library(kableExtra)
+#
+# library(tidyverse)
+# library(tidyr)
+# library(knitr)
+# library(kableExtra)
 
 # Knit all Rmd Files stored in folders
 # I maintain both bookdown as well as individually compiled PDFs for each page
 # This file finds all Rmd files in R4Eon and knits them all to pdf and html.
 spt_root <- 'C:/Users/fan/R4Econ/'
+# if the path contains these skip
+
+spn_skip <- c('summarize', 'panel', 'support')
+spn_skip <- c('')
 
 # Group A
 spt_amto <- paste0(spt_root, 'amto')
@@ -44,71 +48,98 @@ ls_path_group <- c(ls_path_group_a, ls_path_group_b, ls_path_group_c)
 
 # Group To Use
 ls_path_group_use <- ls_path_group
-# ls_path_group_use <- paste0(spt_root, 'amto/tibble')
+ls_path_group_use <- paste0(spt_root, '')
 # ls_path_group_use <- ls_path_group_temp
 
 # Get Path
-ls_sfls  <- list.files(path=ls_path_group_use, recursive=T, pattern=".Rmd", full.names=T)
+ls_sfls <- list.files(path=ls_path_group_use, recursive=T, pattern=".Rmd", full.names=T)
+
+# Excludes elements of path that have exclusion strings
+if (spn_skip != '') {
+  ls_sfls <- ls_sfls[!grepl(paste(spn_skip, collapse = "|"), ls_sfls)]
+}
 
 # print
 for (spt_file in ls_sfls) {
-# 1. store pdf and html files in a subfolder
-# 2. main folder keeps only Rmd file
-# 3. delete tex and other files
+  # 1. Check if the RMD file has been modified or is new, if neither, do not generate pdf html
+  # 2. store pdf and html files in a subfolder
+  # 3. main folder keeps only Rmd file
+  # 4. delete tex and other files
 
-  print(paste0('spt_file:',spt_file))
   st_fullpath_noname <- dirname(spt_file)
   st_fullpath_nosufx <- sub('\\.Rmd$', '', spt_file)
   st_file_wno_suffix <- sub('\\.Rmd$', '', basename(spt_file))
-  print(paste0('st_fullpath_noname:', st_fullpath_noname))
-  print(paste0('st_fullpath_nosufx:', st_fullpath_nosufx))
-  print(paste0('st_file_wno_suffix:', st_file_wno_suffix))
 
-  spth_pdf_html <- paste0(st_fullpath_noname, '/htmlpdfr/')
-  sfle_pdf_html <- paste0(st_fullpath_noname, '/htmlpdfr/', st_file_wno_suffix)
-  print(spth_pdf_html)
+  setwd(st_fullpath_noname)
 
-  sfl_nht <- paste0(st_fullpath_nosufx, '.nb.html')
-  sfl_tex <- paste0(st_fullpath_nosufx, '.tex')
-  sfl_pdf <- paste0(st_fullpath_nosufx, '.pdf')
-  sfl_htm <- paste0(st_fullpath_nosufx, '.html')
-  sfl_Rla <- paste0(st_fullpath_nosufx, '.R')
-  sfl_log <- paste0(st_fullpath_nosufx, '.log')
+  # Check if the RMD file has been modified or is new, if neither, do not generate pdf html
+  spg_check_git_status <- paste0('git status -s ', spt_file)
+  st_git_status <- toString(system(spg_check_git_status, intern=TRUE))
+  bl_modified <- grepl(' M ', st_git_status, fixed=TRUE)
+  bl_anewfile <- grepl('?? ', st_git_status, fixed=TRUE)
+  bl_nochange <- (st_git_status == "")
 
-  sfl_sub_nht <- paste0(sfle_pdf_html, '.nb.html')
-  sfl_sub_tex <- paste0(sfle_pdf_html, '.tex')
-
-  if (grepl('_main', spt_file)) {
-
-    # try(file.remove(paste0(st_fullpath_nosufx, '.pdf')))
-    # try(file.remove(paste0(st_fullpath_nosufx, '.html')))
-
+  if (bl_modified == 1) {
+    print(paste0('MODIFIED: ', spt_file))
+  } else if (bl_anewfile == 1) {
+    print(paste0('A NEW FL: ', spt_file))
   } else {
-
-    # rmarkdown::render(spt_file, output_format='pdf_document(includes = includes(in_header = "C:/Users/fan/R4Econ/preamble.tex"))', output_dir = spth_pdf_html)
-    # rmarkdown::render(spt_file, output_format='pdf_document(includes = includes(in_header))', output_dir = spth_pdf_html)
-
-    print(paste0('spt_file:',spth_pdf_html, ', PDF started'))
-    rmarkdown::render(spt_file, output_format='pdf_document', output_dir = spth_pdf_html)
-    print(paste0('spt_file:',spth_pdf_html, ', PDF finished'))
-
-    print(paste0('spt_file:',spth_pdf_html, ', HTML started.'))
-    rmarkdown::render(spt_file, output_format='html_document', output_dir = spth_pdf_html)
-    print(paste0('spt_file:',spth_pdf_html, ', HTML finished.'))
-
-    print(paste0('purl_to:', paste0(sfle_pdf_html, ".R")))
-    knitr::purl(spt_file, output=paste0(sfle_pdf_html, ".R"), documentation = 1)
-
+    print(paste0('NO CHNGE: ', spt_file))
   }
 
-  try(file.remove(sfl_nht))
-  try(file.remove(sfl_tex))
-  try(file.remove(sfl_pdf))
-  try(file.remove(sfl_htm))
-  try(file.remove(sfl_Rla))
-  try(file.remove(sfl_log))
+  if (bl_modified + bl_anewfile == 10) {
+    print(paste0('spt_file:',spt_file))
 
-  try(file.remove(sfl_sub_nht))
-  try(file.remove(sfl_sub_tex))
+    print(paste0('st_fullpath_noname:', st_fullpath_noname))
+    print(paste0('st_fullpath_nosufx:', st_fullpath_nosufx))
+    print(paste0('st_file_wno_suffix:', st_file_wno_suffix))
 
+    spth_pdf_html <- paste0(st_fullpath_noname, '/htmlpdfr/')
+    sfle_pdf_html <- paste0(st_fullpath_noname, '/htmlpdfr/', st_file_wno_suffix)
+    print(spth_pdf_html)
+
+    sfl_nht <- paste0(st_fullpath_nosufx, '.nb.html')
+    sfl_tex <- paste0(st_fullpath_nosufx, '.tex')
+    sfl_pdf <- paste0(st_fullpath_nosufx, '.pdf')
+    sfl_htm <- paste0(st_fullpath_nosufx, '.html')
+    sfl_Rla <- paste0(st_fullpath_nosufx, '.R')
+    sfl_log <- paste0(st_fullpath_nosufx, '.log')
+
+    sfl_sub_nht <- paste0(sfle_pdf_html, '.nb.html')
+    sfl_sub_tex <- paste0(sfle_pdf_html, '.tex')
+
+    if (grepl('_main', spt_file)) {
+
+      # try(file.remove(paste0(st_fullpath_nosufx, '.pdf')))
+      # try(file.remove(paste0(st_fullpath_nosufx, '.html')))
+
+    } else {
+
+      # rmarkdown::render(spt_file, output_format='pdf_document(includes = includes(in_header = "C:/Users/fan/R4Econ/preamble.tex"))', output_dir = spth_pdf_html)
+      # rmarkdown::render(spt_file, output_format='pdf_document(includes = includes(in_header))', output_dir = spth_pdf_html)
+
+      print(paste0('spt_file:',spth_pdf_html, ', PDF started'))
+      rmarkdown::render(spt_file, output_format='pdf_document', output_dir = spth_pdf_html)
+      print(paste0('spt_file:',spth_pdf_html, ', PDF finished'))
+
+      print(paste0('spt_file:',spth_pdf_html, ', HTML started.'))
+      rmarkdown::render(spt_file, output_format='html_document', output_dir = spth_pdf_html)
+      print(paste0('spt_file:',spth_pdf_html, ', HTML finished.'))
+
+      print(paste0('purl_to:', paste0(sfle_pdf_html, ".R")))
+      knitr::purl(spt_file, output=paste0(sfle_pdf_html, ".R"), documentation = 1)
+
+    }
+
+    try(file.remove(sfl_nht))
+    try(file.remove(sfl_tex))
+    try(file.remove(sfl_pdf))
+    try(file.remove(sfl_htm))
+    try(file.remove(sfl_Rla))
+    try(file.remove(sfl_log))
+
+    try(file.remove(sfl_sub_nht))
+    try(file.remove(sfl_sub_tex))
+
+  }
 }

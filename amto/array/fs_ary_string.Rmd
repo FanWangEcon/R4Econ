@@ -51,9 +51,13 @@ gsub(x = var,  pattern = "\n", replacement = "")
 gsub(x = var.input,  pattern = "\\.", replacement = "_")
 ```
 
-##### String Contains
+##### Search If and Which String Contains
 
 - r if string contains
+- r if string contains either or grepl
+- [Use grepl to search either of multiple substrings in a text](https://stackoverflow.com/a/26319765/8280804)
+
+Search for a single substring in a single string:
 
 ```{r support dtype string if contains}
 st_example_a <- 'C:/Users/fan/R4Econ/amto/tibble/fs_tib_basics.Rmd'
@@ -61,6 +65,19 @@ st_example_b <- 'C:/Users/fan/R4Econ/amto/tibble/_main.html'
 grepl('_main', st_example_a)
 grepl('_main', st_example_b)
 ```
+
+Search for if one of a set of substring exists in a set of strings. In particular which one of the elements of *ls_spn* contains at least one of the elements of *ls_str_if_contains*. In the example below, only the first path does not contain either the word *aggregate* or *index* in the path. This can be used after all paths have been found recursively in some folder to select only desired paths from the full set of possibilities:
+
+```{r}
+ls_spn <- c("C:/Users/fan/R4Econ//panel/basic/fs_genpanel.Rmd",
+            "C:/Users/fan/R4Econ//summarize/aggregate/_main.Rmd",
+            "C:/Users/fan/R4Econ//summarize/index/fs_index_populate.Rmd")
+ls_str_if_contains <- c("aggregate", "index")
+str_if_contains <- paste(ls_str_if_contains, collapse = "|")
+grepl(str_if_contains, ls_spn)
+```
+
+
 
 #### String Concatenate
 

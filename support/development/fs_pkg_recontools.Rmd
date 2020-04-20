@@ -1,0 +1,108 @@
+---
+title: "REconTools Refreshes Package, Generates RMD based PDF, HTML and R Files"
+titleshort: "Knit PDF, HTML and Curl R based on RMD"
+description: |
+  Knit PDF, HTML and Curl R based on RMD.
+core:
+  - package: REconTools
+    code: |
+      ff_sup_clean_rmd()
+date: 2020-04-18
+date_start: 2020-04-18
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+### Process RMD Files
+
+```{r global_options, include = FALSE}
+rm(list = ls(all.names = TRUE))
+library(tidyr)
+library(dplyr)
+library(reticulate)
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+REconTools Packaging and Rmd to PDF and HTML.
+
+```{r}
+# file_path_root <- 'C:/Users/fan/R4Econ/support/development/fs_pkg_recontools'
+# file_path_r <- paste0(file_path_root, '.R')
+# file_path_rmd <- paste0(file_path_root, '.Rmd')
+# knitr::purl(file_path_rmd, output=file_path_r, documentation = 1)
+```
+
+#### Packaging to Site
+
+To load in latest files in R folder:
+
+```{r}
+spt_root <- 'C:/Users/fan/REconTools'
+spt_log <- 'C:/Users/fan/REconTools/log/devtools/'
+sink(paste0(spt_log, 'devtools_load_all.log'))
+start_time <- Sys.time()
+setwd(spt_root)
+devtools::load_all()
+library(REconTools)
+end_time <- Sys.time()
+print(paste0('devtools::load_all() took:', end_time - start_time))
+sink()
+```
+
+Document and run exmaples:
+
+```{r}
+# run examples
+spt_root <- 'C:/Users/fan/REconTools'
+spt_log <- 'C:/Users/fan/REconTools/log/devtools/'
+sink(paste0(spt_log, 'devtools_run_examples.log'))
+start_time <- Sys.time()
+setwd(spt_root)
+devtools::document()
+try(devtools::run_examples())
+end_time <- Sys.time()
+print(paste0('Document and devtools::run_examples() took:', end_time - start_time))
+sink()
+```
+
+Devtool checks:
+
+```{r, echo = T, results = 'hide'}
+# check
+spt_root <- 'C:/Users/fan/REconTools'
+spt_log <- 'C:/Users/fan/REconTools/log/devtools/'
+sink(paste0(spt_log, 'devtools_check.log'))
+start_time <- Sys.time()
+setwd(spt_root)
+devtools::check()
+end_time <- Sys.time()
+print(paste0('devtools::check() took:', end_time - start_time))
+sink()
+```
+
+Publish Site:
+
+```{r, echo = T, results = 'hide'}
+# check
+spt_root <- 'C:/Users/fan/REconTools'
+spt_log <- 'C:/Users/fan/REconTools/log/devtools/'
+setwd(spt_root)
+start_time <- Sys.time()
+sink(paste0(spt_log, 'pkgdown_build_site.log'))
+pkgdown::build_site()
+end_time <- Sys.time()
+print(paste0('pkgdown::build_site() took:', end_time - start_time))
+sink()
+```

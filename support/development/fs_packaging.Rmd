@@ -33,6 +33,8 @@ Document and generate sharable R package.
 
 # File Structure and Naming Convention
 
+## Folder and File Naming Conventions 
+
 **Folders**:
 
 1. R function functions in the */R* folder
@@ -66,6 +68,12 @@ Additionally, follow these general structures for *vignettes* in */vignettes* fo
 2. There should be a core vignette that has the same name as the R function it is trying to provide line by line details or math descriptions of. If the function is called: *ffp_opt_lin_solum.r*, the vignette shold be **ffv_opt_lin_solum.Rmd*. 
 3. Append onto existing function name 5 letter/digit to describe what this vignettes is suppose to achieve: *ffv_opt_lin_solum_vign1.Rmd*.
     + note the file starts with *ffv*
+
+## Coding Conventions inside File
+
+### Message, Warning, Verbose
+
+Functions should generally print key messages as *message*, and extra outputs that show full results, full df outputs etc, or intermediary outputs, that are not core information that are shown quickly, but details regarding outputs should be turned on and off by *bl_verbose* parameter. 
 
 # Create R Project Directory
 
@@ -129,6 +137,13 @@ Developing a package means write various vignettes and functions. My process is 
 
 As functions are developed, some vignettes can be invoked differently, taking advantage of newly written functions. Make sure keep the original vignette that is not dependent on any other functions for ease of going to the initial point and figuring out what is happening. Names could be written to indicate vignette vintage.
 
+## RMD vs R 
+
+1. Generate RMD files first, to work through entire procedures line by line and understand details and show outputs point by point. 
+2. *curl* file to R.
+3. functionalize componenents, continuous run and test, divide ingredients into separate functions.
+4. document and save as */R* folder file.
+
 ## Development Process
 
 1. Write original vignette with dependencies, minimize dependencies, for example, do not import tidyverse, since package will not allow for all tidyverse components to be added, too much space needed.
@@ -163,8 +178,8 @@ As functions are developed, some vignettes can be invoked differently, taking ad
 ```{r}
 # Step 3
 rm(list = ls(all.names = TRUE))
-setwd('C:/Users/fan/PrjOptiAlloc')
-# setwd('C:/Users/fan/REconTools')
+# setwd('C:/Users/fan/PrjOptiAlloc')
+setwd('C:/Users/fan/REconTools')
 devtools::document()
 # Step 4
 devtools::run_examples()
@@ -182,8 +197,10 @@ pkgdown::build_site()
 During development, after new R functions have been written, testing latested functions in vignette. Note that this simulates realoading files in R folder. When building package and checking, need to do *devtools::install*.
 
 ```{r}
+setwd('C:/Users/fan/REconTools')
 devtools::load_all()
-library(PrjOptiAlloc)
+library(REconTools)
+# library(PrjOptiAlloc)
 # devtools::install(build_vignette = FALSE)
 ```
 
@@ -197,7 +214,7 @@ bookdown::render_book('index.Rmd', 'bookdown::pdf_book')
 
 ## Attach vs Import
 
-Packages that are loaded in under *usethis::use_package** are imports, not attached.
+Packages that are loaded in under *usethis::use_package* are imports, not attached.
 
 According to [Wickham](http://r-pkgs.had.co.nz/namespace.html):
     - *apkg::bfnc()*: when packages are loaded, its components can be accessed with the *::*. That is, if I want to use the *document()* from from *devtools()*, if I first attach, I can directly call document(). Without attaching, just loading, I have to do *devtools::document()*.

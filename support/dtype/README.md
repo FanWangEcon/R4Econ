@@ -1,12 +1,36 @@
-Fan Naming Conventions:
+# Naming Conventions
+
+Try to use the same naming convention across languages, fan varible naming Conventions:
 
 To help clarify data types for inputs, add prefix to variable names:
 
-- st = string
-    + spt = string path, path only, does not include name
-    + spn = string path, including name
-    + svr = variable string
-    + sfc = function string name
+## Strings
+
+Various string prefixes:
+
+**Time**
+
+- *tm*: time variables values etc that can used for calculations
+
+**Dataset Variable Names**
+
+- *svr*: variable string, as in data variable name
+- *slb*: string variables labels etc
+-
+**Function Names and Path**
+
+- *spt*: string path, path only, does not include name
+- *spn*: string path, including name
+- *sfc*: function string name
+
+**String Code**
+
+- *spg* = not string, but code, to be interpreted as code later
+
+**Graph String**
+
+- *stg*
+
 - oj = some kind of generic anything object
 - fl = float
 - it = integer

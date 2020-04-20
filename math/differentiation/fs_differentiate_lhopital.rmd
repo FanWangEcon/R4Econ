@@ -1,0 +1,53 @@
+---
+title: "R Test and Check L'Hopital's Rule In Some Context"
+titleshort: "Analyzing Some Equations with L'Hopital's Rule"
+description: |
+  L'Hôpital's analytical and numerical checks. 
+date: 2020-04-13
+date_start: 2020-04-13
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+### Solve Using L'Hopital's Rule
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+
+#### Discrete Optimal Allocation Problem
+
+What is the discrete allocation queue rank equation from [PrjOptiAlloc](https://fanwangecon.github.io/PrjOptiAlloc/) given Cobb-Douglas Preference over two individuals?
+
+$$
+  \lim_{\lambda \rightarrow 0}
+  \left(
+      \sigma
+    \cdot
+      \frac{
+            \left( A + \alpha \right)^{\lambda}
+            -
+            \left( A \right)^{\lambda}
+            }{
+            \left( B + \beta \right)^{\lambda}
+            -
+            \left( B \right)^{\lambda}
+            }
+    \right)
+  = 
+  
+$$

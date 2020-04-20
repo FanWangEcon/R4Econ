@@ -1,6 +1,20 @@
 ---
-title: "Examples of Random Draws in R"
-date: 2020-04-01
+title: "Randomly Draw Subsets of Rows from Matrix in R"
+titleshort: "Randomly Draw Subsets of Rows from Matrix"
+description: |
+  Given matrix, randomly sample rows, or select if random value is below threshold.
+core:
+  - package: r
+    code: |
+      rnorm()
+      sample()
+      df[sample(dim(df)[1], it_M, replace=FALSE),]
+  - package: dplyr
+    code: |
+      case_when()
+      mutate(var = case_when(rnorm(n(),mean=0,sd=1) < 0 ~ 1, TRUE ~ 0)) %>% filter(var == 1)
+date: 2020-04-19
+date_start: 2020-04-01
 output:
   pdf_document:
     pandoc_args: '../../_output_kniti_pdf.yaml'
@@ -14,7 +28,7 @@ always_allow_html: true
 urlcolor: blue
 ---
 
-### Draw Random Rows
+### Drawly Random Rows
 
 ```{r global_options, include = FALSE}
 try(source("../../.Rprofile"))

@@ -119,6 +119,8 @@
 \usepackage{multirow}
 \usepackage{wrapfig}
 \usepackage{float}
+% \floatplacement{figure}{H}
+\usepackage[labelformat = empty]{caption}
 \usepackage{colortbl}
 \usepackage{pdflscape}
 \usepackage{tabu}
@@ -142,7 +144,7 @@
 
 \title{Panel Data and Optimization with R}
 \author{Fan Wang}
-\date{2020-04-14}
+\date{2020-04-20}
 
 \begin{document}
 \maketitle
@@ -569,16 +571,6 @@ Neither \emph{dimnames} nor \emph{names} are required, but both can be used to s
 
 \CommentTok{# Convert to Matrix}
 \NormalTok{tb_2d_flat_named <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(ls_2d_flat_named) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{unnest}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: `cols` is now required.
-## Please use `cols = c(col1, col2, col3, col4)`
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \NormalTok{mt_2d_flat_named <-}\StringTok{ }\KeywordTok{as.matrix}\NormalTok{(tb_2d_flat_named)}
 \end{Highlighting}
 \end{Shaded}
@@ -662,20 +654,6 @@ Print various objects generated above:
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{print}\NormalTok{(tb_2d_flat_named)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## # A tibble: 3 x 4
-##    col1  col2  col3  col4
-##   <dbl> <dbl> <dbl> <dbl>
-## 1     1     4     7    10
-## 2     2     5     8    11
-## 3     3     6     9    12
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{print}\NormalTok{(}\StringTok{'mt_2d_flat_named'}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -966,14 +944,20 @@ Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{string-contains}{%
-\paragraph{String Contains}\label{string-contains}}
+\hypertarget{search-if-and-which-string-contains}{%
+\paragraph{Search If and Which String Contains}\label{search-if-and-which-string-contains}}
 
 \begin{itemize}
 \tightlist
 \item
   r if string contains
+\item
+  r if string contains either or grepl
+\item
+  \href{https://stackoverflow.com/a/26319765/8280804}{Use grepl to search either of multiple substrings in a text}
 \end{itemize}
+
+Search for a single substring in a single string:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -995,6 +979,23 @@ Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon
 
 \begin{verbatim}
 ## [1] TRUE
+\end{verbatim}
+
+Search for if one of a set of substring exists in a set of strings. In particular which one of the elements of \emph{ls\_spn} contains at least one of the elements of \emph{ls\_str\_if\_contains}. In the example below, only the first path does not contain either the word \emph{aggregate} or \emph{index} in the path. This can be used after all paths have been found recursively in some folder to select only desired paths from the full set of possibilities:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ls_spn <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"C:/Users/fan/R4Econ//panel/basic/fs_genpanel.Rmd"}\NormalTok{,}
+            \StringTok{"C:/Users/fan/R4Econ//summarize/aggregate/_main.Rmd"}\NormalTok{,}
+            \StringTok{"C:/Users/fan/R4Econ//summarize/index/fs_index_populate.Rmd"}\NormalTok{)}
+\NormalTok{ls_str_if_contains <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"aggregate"}\NormalTok{, }\StringTok{"index"}\NormalTok{)}
+\NormalTok{str_if_contains <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(ls_str_if_contains, }\DataTypeTok{collapse =} \StringTok{"|"}\NormalTok{)}
+\KeywordTok{grepl}\NormalTok{(str_if_contains, ls_spn)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] FALSE  TRUE  TRUE
 \end{verbatim}
 
 \hypertarget{string-concatenate}{%
@@ -1124,8 +1125,8 @@ From path, get file name without suffix.
 ## [1] "C:/Users/fan/R4Econ/amto/tibble"
 \end{verbatim}
 
-\hypertarget{mesh-matrix-and-vector}{%
-\subsection{Mesh Matrix and Vector}\label{mesh-matrix-and-vector}}
+\hypertarget{mesh-matrices-arrays-and-scalars}{%
+\subsection{Mesh Matrices, Arrays and Scalars}\label{mesh-matrices-arrays-and-scalars}}
 
 \begin{quote}
 Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R4Econ} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository.
@@ -1147,92 +1148,132 @@ Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon
   tidyr expand\_grid mesh matrix and vector
 \end{itemize}
 
-In the example below, we have a matrix that is 5 by 2, and a vector that is 1 by 3. We want to generate a tibble dataset that meshes the matrix and the vector, so that all combinations show up.
+\hypertarget{mesh-two-or-more-vectors-with-expand_grid}{%
+\subsubsection{Mesh Two or More Vectors with expand\_grid}\label{mesh-two-or-more-vectors-with-expand_grid}}
+
+In the example below, we have a matrix that is 2 by 2 (endogenous states), a vector that is 3 by 1 (choices), and another matrix that is 4 by 3 (exogenous states shocks).
+
+We want to generate a tibble dataset that meshes the matrix and the vector, so that all combinations show up. Additionally, we want to add some additional values that are common across all rows to the meshed dataframe.
 
 Note \emph{expand\_grid} is a from tidyr 1.0.0.
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{# A. Generate the 5 by 2 Matrix (ENDO STATES)}
 \CommentTok{# it_child_count = N, the number of children}
-\NormalTok{it_N_child_cnt =}\StringTok{ }\DecValTok{5}
+\NormalTok{it_N_child_cnt =}\StringTok{ }\DecValTok{2}
 \CommentTok{# P fixed parameters, nN is N dimensional, nP is P dimensional}
 \NormalTok{ar_nN_A =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\OperatorTok{-}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DataTypeTok{length.out =}\NormalTok{ it_N_child_cnt)}
 \NormalTok{ar_nN_alpha =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\FloatTok{0.9}\NormalTok{, }\DataTypeTok{length.out =}\NormalTok{ it_N_child_cnt)}
-\NormalTok{mt_nP_A_alpha =}\StringTok{ }\KeywordTok{cbind}\NormalTok{(ar_nN_A, ar_nN_alpha)}
+\NormalTok{fl_rho =}\StringTok{ }\FloatTok{0.1}
+\NormalTok{fl_lambda =}\StringTok{ }\FloatTok{1.1}
+\NormalTok{mt_nP_A_alpha =}\StringTok{ }\KeywordTok{cbind}\NormalTok{(ar_nN_A, ar_nN_alpha, fl_rho, fl_lambda)}
+\NormalTok{ar_st_varnames <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'s_A'}\NormalTok{, }\StringTok{'s_alpha'}\NormalTok{, }\StringTok{'p_rho'}\NormalTok{, }\StringTok{'p_lambda'}\NormalTok{)}
+\NormalTok{tb_states_endo <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(mt_nP_A_alpha) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{rename_all}\NormalTok{(}\OperatorTok{~}\KeywordTok{c}\NormalTok{(ar_st_varnames)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{rowid_to_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"state_id"}\NormalTok{) }
 
-\CommentTok{# Choice Grid}
+\CommentTok{# B. Choice Grid}
 \NormalTok{it_N_choice_cnt =}\StringTok{ }\DecValTok{3}
 \NormalTok{fl_max =}\StringTok{ }\DecValTok{10}
 \NormalTok{fl_min =}\StringTok{ }\DecValTok{0}
-\NormalTok{ar_nN_alpha =}\StringTok{ }\KeywordTok{seq}\NormalTok{(fl_min, fl_max, }\DataTypeTok{length.out =}\NormalTok{ it_N_choice_cnt)}
+\NormalTok{ar_nN_d =}\StringTok{ }\KeywordTok{seq}\NormalTok{(fl_min, fl_max, }\DataTypeTok{length.out =}\NormalTok{ it_N_choice_cnt)}
+\NormalTok{ar_st_varnames <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'c_food'}\NormalTok{)}
+\NormalTok{tb_choices <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(ar_nN_d) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{rename_all}\NormalTok{(}\OperatorTok{~}\KeywordTok{c}\NormalTok{(ar_st_varnames)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{rowid_to_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"choice_id"}\NormalTok{) }
 
-\CommentTok{# expand grid with dplyr}
-\KeywordTok{expand_grid}\NormalTok{(}\DataTypeTok{x =} \DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{, }\DataTypeTok{y =} \DecValTok{1}\OperatorTok{:}\DecValTok{2}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+\CommentTok{# C. Shock Grid}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{it_N_shock_cnt =}\StringTok{ }\DecValTok{4}
+\NormalTok{ar_nQ_shocks =}\StringTok{ }\KeywordTok{exp}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(it_N_shock_cnt, }\DataTypeTok{mean=}\DecValTok{0}\NormalTok{, }\DataTypeTok{sd=}\DecValTok{1}\NormalTok{))}
+\NormalTok{ar_st_varnames <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'s_eps'}\NormalTok{)}
+\NormalTok{tb_states_exo <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(ar_nQ_shocks) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{rename_all}\NormalTok{(}\OperatorTok{~}\KeywordTok{c}\NormalTok{(ar_st_varnames)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{rowid_to_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"shock_id"}\NormalTok{) }
 
-\begin{verbatim}
-## # A tibble: 6 x 2
-##       x     y
-##   <int> <int>
-## 1     1     1
-## 2     1     2
-## 3     2     1
-## 4     2     2
-## 5     3     1
-## 6     3     2
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{tb_expanded <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(mt_nP_A_alpha) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{expand_grid}\NormalTok{(}\DataTypeTok{choices =}\NormalTok{ ar_nN_alpha)}
-
+\CommentTok{# dataframe expand with other non expanded variables}
+\NormalTok{ar_st_varnames <-}\StringTok{ }
+\NormalTok{tb_states_shk_choices <-}\StringTok{ }\NormalTok{tb_states_endo }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{expand_grid}\NormalTok{(tb_choices) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{expand_grid}\NormalTok{(tb_states_exo) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{select}\NormalTok{(state_id, choice_id, shock_id, }
+\NormalTok{         s_A, s_alpha, s_eps, c_food,}
+\NormalTok{         p_rho, p_lambda)}
+  
 \CommentTok{# display}
-\KeywordTok{kable}\NormalTok{(tb_expanded) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable_styling_fc}\NormalTok{()}
+\KeywordTok{kable}\NormalTok{(tb_states_shk_choices) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable_styling_fc}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{table}[!h]
 \centering
-\begin{tabular}{r|r|r}
+\begin{tabular}{r|r|r|r|r|r|r|r|r}
 \hline
-ar\_nN\_A & ar\_nN\_alpha & choices\\
+state\_id & choice\_id & shock\_id & s\_A & s\_alpha & s\_eps & c\_food & p\_rho & p\_lambda\\
 \hline
-\rowcolor{gray!6}  -2 & 0.1 & 0\\
+\rowcolor{gray!6}  1 & 1 & 1 & -2 & 0.1 & 0.5709374 & 0 & 0.1 & 1.1\\
 \hline
--2 & 0.1 & 5\\
+1 & 1 & 2 & -2 & 0.1 & 0.7943926 & 0 & 0.1 & 1.1\\
 \hline
-\rowcolor{gray!6}  -2 & 0.1 & 10\\
+\rowcolor{gray!6}  1 & 1 & 3 & -2 & 0.1 & 4.7526783 & 0 & 0.1 & 1.1\\
 \hline
--1 & 0.3 & 0\\
+1 & 1 & 4 & -2 & 0.1 & 1.0730536 & 0 & 0.1 & 1.1\\
 \hline
-\rowcolor{gray!6}  -1 & 0.3 & 5\\
+\rowcolor{gray!6}  1 & 2 & 1 & -2 & 0.1 & 0.5709374 & 5 & 0.1 & 1.1\\
 \hline
--1 & 0.3 & 10\\
+1 & 2 & 2 & -2 & 0.1 & 0.7943926 & 5 & 0.1 & 1.1\\
 \hline
-\rowcolor{gray!6}  0 & 0.5 & 0\\
+\rowcolor{gray!6}  1 & 2 & 3 & -2 & 0.1 & 4.7526783 & 5 & 0.1 & 1.1\\
 \hline
-0 & 0.5 & 5\\
+1 & 2 & 4 & -2 & 0.1 & 1.0730536 & 5 & 0.1 & 1.1\\
 \hline
-\rowcolor{gray!6}  0 & 0.5 & 10\\
+\rowcolor{gray!6}  1 & 3 & 1 & -2 & 0.1 & 0.5709374 & 10 & 0.1 & 1.1\\
 \hline
-1 & 0.7 & 0\\
+1 & 3 & 2 & -2 & 0.1 & 0.7943926 & 10 & 0.1 & 1.1\\
 \hline
-\rowcolor{gray!6}  1 & 0.7 & 5\\
+\rowcolor{gray!6}  1 & 3 & 3 & -2 & 0.1 & 4.7526783 & 10 & 0.1 & 1.1\\
 \hline
-1 & 0.7 & 10\\
+1 & 3 & 4 & -2 & 0.1 & 1.0730536 & 10 & 0.1 & 1.1\\
 \hline
-\rowcolor{gray!6}  2 & 0.9 & 0\\
+\rowcolor{gray!6}  2 & 1 & 1 & 2 & 0.9 & 0.5709374 & 0 & 0.1 & 1.1\\
 \hline
-2 & 0.9 & 5\\
+2 & 1 & 2 & 2 & 0.9 & 0.7943926 & 0 & 0.1 & 1.1\\
 \hline
-\rowcolor{gray!6}  2 & 0.9 & 10\\
+\rowcolor{gray!6}  2 & 1 & 3 & 2 & 0.9 & 4.7526783 & 0 & 0.1 & 1.1\\
+\hline
+2 & 1 & 4 & 2 & 0.9 & 1.0730536 & 0 & 0.1 & 1.1\\
+\hline
+\rowcolor{gray!6}  2 & 2 & 1 & 2 & 0.9 & 0.5709374 & 5 & 0.1 & 1.1\\
+\hline
+2 & 2 & 2 & 2 & 0.9 & 0.7943926 & 5 & 0.1 & 1.1\\
+\hline
+\rowcolor{gray!6}  2 & 2 & 3 & 2 & 0.9 & 4.7526783 & 5 & 0.1 & 1.1\\
+\hline
+2 & 2 & 4 & 2 & 0.9 & 1.0730536 & 5 & 0.1 & 1.1\\
+\hline
+\rowcolor{gray!6}  2 & 3 & 1 & 2 & 0.9 & 0.5709374 & 10 & 0.1 & 1.1\\
+\hline
+2 & 3 & 2 & 2 & 0.9 & 0.7943926 & 10 & 0.1 & 1.1\\
+\hline
+\rowcolor{gray!6}  2 & 3 & 3 & 2 & 0.9 & 4.7526783 & 10 & 0.1 & 1.1\\
+\hline
+2 & 3 & 4 & 2 & 0.9 & 1.0730536 & 10 & 0.1 & 1.1\\
 \hline
 \end{tabular}
 \end{table}
 
-\hypertarget{define-two-arrays-and-mesh-them-using-expand.grid}{%
-\subsubsection{Define Two Arrays and Mesh Them using expand.grid}\label{define-two-arrays-and-mesh-them-using-expand.grid}}
+Using expand\_grid directly over arrays
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# expand grid with dplyr}
+\KeywordTok{expand_grid}\NormalTok{(}\DataTypeTok{x =} \DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{, }\DataTypeTok{y =} \DecValTok{1}\OperatorTok{:}\DecValTok{2}\NormalTok{, }\DataTypeTok{z =} \DecValTok{-3}\OperatorTok{:-}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{mesh-arrays-with-expand.grid}{%
+\subsubsection{Mesh Arrays with expand.grid}\label{mesh-arrays-with-expand.grid}}
 
 Given two arrays, mesh the two arrays together.
 
@@ -1302,10 +1343,7 @@ Given two arrays, mesh the two arrays together.
 \end{tabular}}
 \end{table}
 
-\hypertarget{two-identical-arrays-mesh-to-generate-square-using-expand.grid}{%
-\subsubsection{Two Identical Arrays, Mesh to Generate Square using expand.grid}\label{two-identical-arrays-mesh-to-generate-square-using-expand.grid}}
-
-Two Identical Arrays, individual attributes, each column is an individual for a matrix, and each row is also an individual
+Two Identical Arrays, individual attributes, each column is an individual for a matrix, and each row is also an individual.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1434,15 +1472,15 @@ Random draw from the normal distribution, random draw from the uniform distribut
 \resizebox{\linewidth}{!}{
 \begin{tabular}{r|r|r|r|r|r|r|r}
 \hline
--0.9453838 & 0.7635994 & 1.2740310 & 0.3112232 & 0.8221379 & 0.0341220 & 0.3112232 & 0.8221379\\
+0.1292877 & -0.4456620 & -0.5558411 & 0.3181810 & 0.3688455 & 0.2659726 & 0.3181810 & 0.3688455\\
 \hline
-\rowcolor{gray!6}  1.6740934 & 1.0163546 & -0.2660679 & 0.2556918 & 0.4832825 & 0.8689931 & 0.2556918 & 0.4832825\\
+\rowcolor{gray!6}  1.7150650 & 1.2240818 & 1.7869131 & 0.2316258 & 0.1524447 & 0.8578277 & 0.2316258 & 0.1524447\\
 \hline
-0.9906241 & -1.4880550 & 1.3920327 & 0.8835966 & 0.2126780 & 0.5405587 & 0.8835966 & 0.2126780\\
+0.4609162 & 0.3598138 & 0.4978505 & 0.1428000 & 0.1388061 & 0.0458312 & 0.1428000 & 0.1388061\\
 \hline
-\rowcolor{gray!6}  -0.5932284 & 1.5907415 & -0.2087109 & 0.3076419 & 0.1163842 & 0.2666046 & 0.3076419 & 0.1163842\\
+\rowcolor{gray!6}  -1.2650612 & 0.4007715 & -1.9666172 & 0.4145463 & 0.2330341 & 0.4422001 & 0.4145463 & 0.2330341\\
 \hline
-2.4771568 & 0.2896318 & 0.8775317 & 0.1691353 & 0.1733660 & 0.5139974 & 0.1691353 & 0.1733660\\
+-0.6868529 & 0.1106827 & 0.7013559 & 0.4137243 & 0.4659625 & 0.7989248 & 0.4137243 & 0.4659625\\
 \hline
 \end{tabular}}
 \end{table}
@@ -1581,9 +1619,9 @@ Given Arrays and Matrixes, Generate Tibble and Name Variables/Columns
 \hline
 ar\_col & matcolvar\_grpa\_1 & matcolvar\_grpa\_2 & matcolvar\_grpb\_1 & matcolvar\_grpb\_2 & matcolvar\_grpb\_3 & matcolvar\_grpb\_4\\
 \hline
-\rowcolor{gray!6}  -1 & 2.0737835 & 1.2469403 & -0.7814914 & -0.6592099 & -0.7814914 & -0.6592099\\
+\rowcolor{gray!6}  -1 & -1.1655448 & 0.6849361 & -1.3115224 & -0.1294107 & -1.3115224 & -0.1294107\\
 \hline
-1 & 0.1636428 & -0.2581466 & 1.5367323 & 1.8210046 & 1.5367323 & 1.8210046\\
+1 & -0.8185157 & -0.3200564 & -0.5996083 & 0.8867361 & -0.5996083 & 0.8867361\\
 \hline
 \end{tabular}}
 \end{table}
@@ -1601,9 +1639,9 @@ ar\_col & matcolvar\_grpa\_1 & matcolvar\_grpa\_2 & matcolvar\_grpb\_1 & matcolv
 \hline
 ID & var\_one & tibcolvar\_ga\_1 & tibcolvar\_ga\_2 & tibcolvar\_gbrenamed\_1 & tibcolvar\_gbrenamed\_2 & tibcolvar\_gbrenamed\_3 & tibcolvar\_gbrenamed\_4\\
 \hline
-\rowcolor{gray!6}  1 & -1 & 2.0737835 & 1.2469403 & -0.7814914 & -0.6592099 & -0.7814914 & -0.6592099\\
+\rowcolor{gray!6}  1 & -1 & -1.1655448 & 0.6849361 & -1.3115224 & -0.1294107 & -1.3115224 & -0.1294107\\
 \hline
-2 & 1 & 0.1636428 & -0.2581466 & 1.5367323 & 1.8210046 & 1.5367323 & 1.8210046\\
+2 & 1 & -0.8185157 & -0.3200564 & -0.5996083 & 0.8867361 & -0.5996083 & 0.8867361\\
 \hline
 \end{tabular}}
 \end{table}
@@ -1621,9 +1659,9 @@ ID & var\_one & tibcolvar\_ga\_1 & tibcolvar\_ga\_2 & tibcolvar\_gbrenamed\_1 & 
 \hline
 ID & var\_one & tibcolvar\_ga\_1 & tibcolvar\_ga\_2 & tibcolvar\_gbrenamed\_1 & tibcolvar\_gbrenamed\_2 & tibcolvar\_gbrenamed\_3 & tibcolvar\_gbrenamed\_4\\
 \hline
-\rowcolor{gray!6}  1 & -1 & 2.0737835 & 1.2469403 & -0.7814914 & -0.6592099 & -0.7814914 & -0.6592099\\
+\rowcolor{gray!6}  1 & -1 & -1.1655448 & 0.6849361 & -1.3115224 & -0.1294107 & -1.3115224 & -0.1294107\\
 \hline
-2 & 1 & 0.1636428 & -0.2581466 & 1.5367323 & 1.8210046 & 1.5367323 & 1.8210046\\
+2 & 1 & -0.8185157 & -0.3200564 & -0.5996083 & 0.8867361 & -0.5996083 & 0.8867361\\
 \hline
 \end{tabular}}
 \end{table}
@@ -1638,25 +1676,8 @@ After reshaping, often could end up with variable names that are all numeric, in
 \CommentTok{# Base Inputs}
 \NormalTok{ar_col <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{1}\NormalTok{,}\OperatorTok{+}\DecValTok{1}\NormalTok{)}
 \NormalTok{mt_rnorm_c <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{4}\NormalTok{,}\DataTypeTok{mean=}\DecValTok{0}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{1}\NormalTok{), }\DataTypeTok{nrow=}\DecValTok{5}\NormalTok{, }\DataTypeTok{ncol=}\DecValTok{10}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning in matrix(rnorm(4, mean = 0, sd = 1), nrow = 5, ncol = 10): data length [4] is not a sub-multiple or multiple of the number of rows [5]
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \NormalTok{mt_combine <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(ar_col, mt_rnorm_c)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{verbatim}
-## Warning in cbind(ar_col, mt_rnorm_c): number of rows of result is not a multiple of vector length (arg 1)
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{# Variable Names}
 \NormalTok{ar_it_cols_ctr <-}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{dim}\NormalTok{(mt_rnorm_c)[}\DecValTok{2}\NormalTok{])}
 \NormalTok{ar_st_varnames <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'var_one'}\NormalTok{, ar_it_cols_ctr)}
@@ -1686,15 +1707,15 @@ After reshaping, often could end up with variable names that are all numeric, in
 \hline
 ID & var\_one & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10\\
 \hline
-\rowcolor{gray!6}  1 & -1 & -0.0953407 & -1.5841931 & -0.3204670 & 1.7420153 & -0.0953407 & -1.5841931 & -0.3204670 & 1.7420153 & -0.0953407 & -1.5841931\\
+\rowcolor{gray!6}  1 & -1 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912\\
 \hline
-2 & 1 & -1.5841931 & -0.3204670 & 1.7420153 & -0.0953407 & -1.5841931 & -0.3204670 & 1.7420153 & -0.0953407 & -1.5841931 & -0.3204670\\
+2 & 1 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228\\
 \hline
-\rowcolor{gray!6}  3 & -1 & -0.3204670 & 1.7420153 & -0.0953407 & -1.5841931 & -0.3204670 & 1.7420153 & -0.0953407 & -1.5841931 & -0.3204670 & 1.7420153\\
+\rowcolor{gray!6}  3 & -1 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918\\
 \hline
-4 & 1 & 1.7420153 & -0.0953407 & -1.5841931 & -0.3204670 & 1.7420153 & -0.0953407 & -1.5841931 & -0.3204670 & 1.7420153 & -0.0953407\\
+4 & 1 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960\\
 \hline
-\rowcolor{gray!6}  5 & -1 & -0.0953407 & -1.5841931 & -0.3204670 & 1.7420153 & -0.0953407 & -1.5841931 & -0.3204670 & 1.7420153 & -0.0953407 & -1.5841931\\
+\rowcolor{gray!6}  5 & -1 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912\\
 \hline
 \end{tabular}}
 \end{table}
@@ -1712,15 +1733,15 @@ ID & var\_one & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10\\
 \hline
 ID & var\_one & rho1var & rho2var & rho3var & rho4var & rho5var & rho6var & rho7var & rho8var & rho9var & rho10var\\
 \hline
-\rowcolor{gray!6}  1 & -1 & -0.0953407 & -1.5841931 & -0.3204670 & 1.7420153 & -0.0953407 & -1.5841931 & -0.3204670 & 1.7420153 & -0.0953407 & -1.5841931\\
+\rowcolor{gray!6}  1 & -1 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912\\
 \hline
-2 & 1 & -1.5841931 & -0.3204670 & 1.7420153 & -0.0953407 & -1.5841931 & -0.3204670 & 1.7420153 & -0.0953407 & -1.5841931 & -0.3204670\\
+2 & 1 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228\\
 \hline
-\rowcolor{gray!6}  3 & -1 & -0.3204670 & 1.7420153 & -0.0953407 & -1.5841931 & -0.3204670 & 1.7420153 & -0.0953407 & -1.5841931 & -0.3204670 & 1.7420153\\
+\rowcolor{gray!6}  3 & -1 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918\\
 \hline
-4 & 1 & 1.7420153 & -0.0953407 & -1.5841931 & -0.3204670 & 1.7420153 & -0.0953407 & -1.5841931 & -0.3204670 & 1.7420153 & -0.0953407\\
+4 & 1 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960\\
 \hline
-\rowcolor{gray!6}  5 & -1 & -0.0953407 & -1.5841931 & -0.3204670 & 1.7420153 & -0.0953407 & -1.5841931 & -0.3204670 & 1.7420153 & -0.0953407 & -1.5841931\\
+\rowcolor{gray!6}  5 & -1 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912\\
 \hline
 \end{tabular}}
 \end{table}
@@ -1738,12 +1759,12 @@ Show what is in the table: 1, column and row names; 2, contents inside table.
 \end{Shaded}
 
 \begin{verbatim}
-##   [1] "1"   "2"   "3"   "4"   "5"   "6"   "7"   "8"   "9"   "10"  "11"  "12"  "13"  "14"  "15"  "16"  "17"  "18"  "19"  "20"  "21"  "22"  "23"  "24"  "25" 
-##  [26] "26"  "27"  "28"  "29"  "30"  "31"  "32"  "33"  "34"  "35"  "36"  "37"  "38"  "39"  "40"  "41"  "42"  "43"  "44"  "45"  "46"  "47"  "48"  "49"  "50" 
-##  [51] "51"  "52"  "53"  "54"  "55"  "56"  "57"  "58"  "59"  "60"  "61"  "62"  "63"  "64"  "65"  "66"  "67"  "68"  "69"  "70"  "71"  "72"  "73"  "74"  "75" 
-##  [76] "76"  "77"  "78"  "79"  "80"  "81"  "82"  "83"  "84"  "85"  "86"  "87"  "88"  "89"  "90"  "91"  "92"  "93"  "94"  "95"  "96"  "97"  "98"  "99"  "100"
-## [101] "101" "102" "103" "104" "105" "106" "107" "108" "109" "110" "111" "112" "113" "114" "115" "116" "117" "118" "119" "120" "121" "122" "123" "124" "125"
-## [126] "126" "127" "128" "129" "130" "131" "132" "133" "134" "135" "136" "137" "138" "139" "140" "141" "142" "143" "144" "145" "146" "147" "148" "149" "150"
+##   [1] "1"   "2"   "3"   "4"   "5"   "6"   "7"   "8"   "9"   "10"  "11"  "12"  "13"  "14"  "15"  "16"  "17"  "18"  "19"  "20"  "21"  "22"  "23"  "24"  "25"  "26"  "27" 
+##  [28] "28"  "29"  "30"  "31"  "32"  "33"  "34"  "35"  "36"  "37"  "38"  "39"  "40"  "41"  "42"  "43"  "44"  "45"  "46"  "47"  "48"  "49"  "50"  "51"  "52"  "53"  "54" 
+##  [55] "55"  "56"  "57"  "58"  "59"  "60"  "61"  "62"  "63"  "64"  "65"  "66"  "67"  "68"  "69"  "70"  "71"  "72"  "73"  "74"  "75"  "76"  "77"  "78"  "79"  "80"  "81" 
+##  [82] "82"  "83"  "84"  "85"  "86"  "87"  "88"  "89"  "90"  "91"  "92"  "93"  "94"  "95"  "96"  "97"  "98"  "99"  "100" "101" "102" "103" "104" "105" "106" "107" "108"
+## [109] "109" "110" "111" "112" "113" "114" "115" "116" "117" "118" "119" "120" "121" "122" "123" "124" "125" "126" "127" "128" "129" "130" "131" "132" "133" "134" "135"
+## [136] "136" "137" "138" "139" "140" "141" "142" "143" "144" "145" "146" "147" "148" "149" "150"
 \end{verbatim}
 
 \begin{Shaded}
@@ -1946,23 +1967,6 @@ We combine here the \emph{vs} and \emph{am} variables from the \emph{mtcars} dat
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## # A tibble: 32 x 3
-##      mpg  qsec vs_am                       
-##    <dbl> <dbl> <fct>                       
-##  1  21    16.5 vshaped_engine_manual_shift 
-##  2  21    17.0 vshaped_engine_manual_shift 
-##  3  22.8  18.6 straight_engine_manual_shift
-##  4  21.4  19.4 straight_engine_auto_shift  
-##  5  18.7  17.0 vshaped_engine_auto_shift   
-##  6  18.1  20.2 straight_engine_auto_shift  
-##  7  14.3  15.8 vshaped_engine_auto_shift   
-##  8  24.4  20   straight_engine_auto_shift  
-##  9  22.8  22.9 straight_engine_auto_shift  
-## 10  19.2  18.3 straight_engine_auto_shift  
-## # ... with 22 more rows
-\end{verbatim}
-
 Now we generate scatter plot based on the combined factors
 
 \begin{Shaded}
@@ -1990,10 +1994,10 @@ Now we generate scatter plot based on the combined factors
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-27-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-30-1} \end{center}
 
-\hypertarget{draw-random-rows}{%
-\subsection{Draw Random Rows}\label{draw-random-rows}}
+\hypertarget{drawly-random-rows}{%
+\subsection{Drawly Random Rows}\label{drawly-random-rows}}
 
 \begin{quote}
 Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R4Econ} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository.
@@ -2980,27 +2984,6 @@ Load data and test
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## Parsed with column specification:
-## cols(
-##   S.country = col_character(),
-##   vil.id = col_double(),
-##   indi.id = col_double(),
-##   sex = col_character(),
-##   svymthRound = col_double(),
-##   momEdu = col_double(),
-##   wealthIdx = col_double(),
-##   hgt = col_double(),
-##   wgt = col_double(),
-##   hgt0 = col_double(),
-##   wgt0 = col_double(),
-##   prot = col_double(),
-##   cal = col_double(),
-##   p.A.prot = col_double(),
-##   p.A.nProt = col_double()
-## )
-\end{verbatim}
-
 \hypertarget{function-testing-by-gender-groups}{%
 \paragraph{Function Testing By Gender Groups}\label{function-testing-by-gender-groups}}
 
@@ -3030,14 +3013,6 @@ Main Statistics:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## # A tibble: 2 x 5
-##   sex     mean   min   max    sd
-##   <chr>  <dbl> <dbl> <dbl> <dbl>
-## 1 Female  82.8  41.2  171.  29.8
-## 2 Male    84.7  41.3  183.  31.8
-\end{verbatim}
-
 Specify Two Specific Statistics:
 
 \begin{Shaded}
@@ -3048,14 +3023,6 @@ Specify Two Specific Statistics:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## # A tibble: 2 x 3
-##   sex     mean    sd
-##   <chr>  <dbl> <dbl>
-## 1 Female  82.8  29.8
-## 2 Male    84.7  31.8
-\end{verbatim}
-
 Specify One Specific Statistics:
 
 \begin{Shaded}
@@ -3065,14 +3032,6 @@ Specify One Specific Statistics:
   \DataTypeTok{str.stats.specify =} \KeywordTok{c}\NormalTok{(}\StringTok{'mean'}\NormalTok{))}\OperatorTok{$}\NormalTok{df_table_grp_stats}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-## # A tibble: 2 x 2
-##   sex     mean
-##   <chr>  <dbl>
-## 1 Female  82.8
-## 2 Male    84.7
-\end{verbatim}
 
 \hypertarget{function-testing-by-country-and-gender-groups}{%
 \paragraph{Function Testing By Country and Gender Groups}\label{function-testing-by-country-and-gender-groups}}
@@ -3102,17 +3061,6 @@ Main Statistics:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## # A tibble: 4 x 6
-## # Groups:   S.country [2]
-##   S.country sex     mean   min   max    sd
-##   <chr>     <chr>  <dbl> <dbl> <dbl> <dbl>
-## 1 Cebu      Female  84.6  41.3  171.  32.5
-## 2 Cebu      Male    87.0  41.3  183.  35.0
-## 3 Guatemala Female  76.6  41.2  120.  15.7
-## 4 Guatemala Male    77.0  41.5  125.  15.1
-\end{verbatim}
-
 Specify Two Specific Statistics:
 
 \begin{Shaded}
@@ -3123,17 +3071,6 @@ Specify Two Specific Statistics:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## # A tibble: 4 x 4
-## # Groups:   S.country [2]
-##   S.country sex     mean    sd
-##   <chr>     <chr>  <dbl> <dbl>
-## 1 Cebu      Female  84.6  32.5
-## 2 Cebu      Male    87.0  35.0
-## 3 Guatemala Female  76.6  15.7
-## 4 Guatemala Male    77.0  15.1
-\end{verbatim}
-
 Specify One Specific Statistics:
 
 \begin{Shaded}
@@ -3143,17 +3080,6 @@ Specify One Specific Statistics:
   \DataTypeTok{str.stats.specify =} \KeywordTok{c}\NormalTok{(}\StringTok{'mean'}\NormalTok{))}\OperatorTok{$}\NormalTok{df_table_grp_stats}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-## # A tibble: 4 x 3
-## # Groups:   S.country [2]
-##   S.country sex     mean
-##   <chr>     <chr>  <dbl>
-## 1 Cebu      Female  84.6
-## 2 Cebu      Male    87.0
-## 3 Guatemala Female  76.6
-## 4 Guatemala Male    77.0
-\end{verbatim}
 
 \hypertarget{nested-within-group-stats}{%
 \subsection{Nested within Group Stats}\label{nested-within-group-stats}}
@@ -3296,27 +3222,6 @@ A child could be observed for many months, or just a few months. A child's heigh
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## Parsed with column specification:
-## cols(
-##   S.country = col_character(),
-##   vil.id = col_double(),
-##   indi.id = col_double(),
-##   sex = col_character(),
-##   svymthRound = col_double(),
-##   momEdu = col_double(),
-##   wealthIdx = col_double(),
-##   hgt = col_double(),
-##   wgt = col_double(),
-##   hgt0 = col_double(),
-##   wgt0 = col_double(),
-##   prot = col_double(),
-##   cal = col_double(),
-##   p.A.prot = col_double(),
-##   p.A.nProt = col_double()
-## )
-\end{verbatim}
-
 \hypertarget{generate-within-individual-groups}{%
 \paragraph{Generate Within Individual Groups}\label{generate-within-individual-groups}}
 
@@ -3347,23 +3252,6 @@ In the data, children are observed for different number of months since birth. W
 \StringTok{          }\KeywordTok{select}\NormalTok{(}\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(vars.arrange), }\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(vars.groups.within.indi)))}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-## # A tibble: 23,603 x 8
-##    S.country indi.id svymthRound m12t24 m8t24   m12    m6    m3
-##    <chr>       <dbl>       <dbl>  <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1 Cebu            1           0      0     0     1     1     1
-##  2 Cebu            1           2      0     0     1     1     1
-##  3 Cebu            1           4      0     0     1     1     2
-##  4 Cebu            1           6      0     0     1     1     2
-##  5 Cebu            1           8      0     1     1     2     3
-##  6 Cebu            1          10      0     1     1     2     4
-##  7 Cebu            1          12      1     1     1     2     4
-##  8 Cebu            1          14      1     1     2     3     5
-##  9 Cebu            1          16      1     1     2     3     6
-## 10 Cebu            1          18      1     1     2     3     6
-## # ... with 23,593 more rows
-\end{verbatim}
 
 \hypertarget{within-group-averages}{%
 \paragraph{Within Group Averages}\label{within-group-averages}}
@@ -3405,11 +3293,11 @@ This is the tabular version of results
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] "S.country"      "indi.id"        "cal_m12_c1"     "cal_m12_c2"     "cal_m12t24_c0"  "cal_m12t24_c1"  "cal_m3_c1"      "cal_m3_c2"     
-##  [9] "cal_m3_c3"      "cal_m3_c4"      "cal_m3_c5"      "cal_m3_c6"      "cal_m3_c7"      "cal_m3_c8"      "cal_m6_c1"      "cal_m6_c2"     
-## [17] "cal_m6_c3"      "cal_m6_c4"      "cal_m8t24_c0"   "cal_m8t24_c1"   "prot_m12_c1"    "prot_m12_c2"    "prot_m12t24_c0" "prot_m12t24_c1"
-## [25] "prot_m3_c1"     "prot_m3_c2"     "prot_m3_c3"     "prot_m3_c4"     "prot_m3_c5"     "prot_m3_c6"     "prot_m3_c7"     "prot_m3_c8"    
-## [33] "prot_m6_c1"     "prot_m6_c2"     "prot_m6_c3"     "prot_m6_c4"     "prot_m8t24_c0"  "prot_m8t24_c1"
+##  [1] "S.country"      "indi.id"        "cal_m12_c1"     "cal_m12_c2"     "cal_m12t24_c0"  "cal_m12t24_c1"  "cal_m3_c1"      "cal_m3_c2"      "cal_m3_c3"     
+## [10] "cal_m3_c4"      "cal_m3_c5"      "cal_m3_c6"      "cal_m3_c7"      "cal_m3_c8"      "cal_m6_c1"      "cal_m6_c2"      "cal_m6_c3"      "cal_m6_c4"     
+## [19] "cal_m8t24_c0"   "cal_m8t24_c1"   "prot_m12_c1"    "prot_m12_c2"    "prot_m12t24_c0" "prot_m12t24_c1" "prot_m3_c1"     "prot_m3_c2"     "prot_m3_c3"    
+## [28] "prot_m3_c4"     "prot_m3_c5"     "prot_m3_c6"     "prot_m3_c7"     "prot_m3_c8"     "prot_m6_c1"     "prot_m6_c2"     "prot_m6_c3"     "prot_m6_c4"    
+## [37] "prot_m8t24_c0"  "prot_m8t24_c1"
 \end{verbatim}
 
 \begin{Shaded}
@@ -3521,29 +3409,6 @@ First, we will generate a test score dataset, directly from string. Below we typ
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## # A tibble: 17 x 3
-##    stats   course.total.ec1p course.total.ec3p
-##    <chr>   <chr>             <chr>            
-##  1 n       46                46               
-##  2 NAobs   0                 0                
-##  3 ZEROobs 0                 0                
-##  4 mean    83.87572          87.90239         
-##  5 sd      15.87272          16.76041         
-##  6 cv      0.1892409         0.1906706        
-##  7 min     40.475            44.225           
-##  8 p01     42.14434          45.82202         
-##  9 p05     56.9650           57.1575          
-## 10 p10     63.05462          66.07500         
-## 11 p25     76.45616          79.90500         
-## 12 p50     86.35236          89.27923         
-## 13 p75     " 95.89054"       100.75250        
-## 14 p90     100.8137          106.8200         
-## 15 p95     102.9125          109.2343         
-## 16 p99     103.8946          111.3439         
-## 17 max     104.2700          112.2225
-\end{verbatim}
-
 \hypertarget{a-dataset-with-one-continuous-variable-and-histogram}{%
 \paragraph{A Dataset with one Continuous Variable and Histogram}\label{a-dataset-with-one-continuous-variable-and-histogram}}
 
@@ -3572,29 +3437,6 @@ First, we will generate a test score dataset, directly from string. Below we typ
 \KeywordTok{ff_summ_percentiles}\NormalTok{(}\DataTypeTok{df =}\NormalTok{ tb_onevar, }\DataTypeTok{bl_statsasrows =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{col2varname =} \OtherTok{FALSE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-## # A tibble: 17 x 3
-##    stats   course.final index     
-##    <chr>   <chr>        <chr>     
-##  1 n       47           47        
-##  2 NAobs   0            0         
-##  3 ZEROobs 0            0         
-##  4 mean    82.41501     24.00000  
-##  5 sd      18.35476     13.71131  
-##  6 cv      0.2227113    0.5713046 
-##  7 min     2.292683     1.000000  
-##  8 p01     18.67401     " 1.46000"
-##  9 p05     49.72075     " 3.30000"
-## 10 p10     66.28051     " 5.60000"
-## 11 p25     76.37177     12.50000  
-## 12 p50     86.95932     24.00000  
-## 13 p75     94.68619     35.50000  
-## 14 p90     97.52332     42.40000  
-## 15 p95     99.47459     44.70000  
-## 16 p99     100.5244     " 46.5400"
-## 17 max     100.898      " 47.000"
-\end{verbatim}
 
 \hypertarget{a-dataset-with-multiple-variables}{%
 \paragraph{A Dataset with Multiple Variables}\label{a-dataset-with-multiple-variables}}
@@ -3800,7 +3642,7 @@ First, we will generate a test score dataset, directly from string. Below we typ
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-68-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-71-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -3812,7 +3654,7 @@ First, we will generate a test score dataset, directly from string. Below we typ
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-69-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-72-1} \end{center}
 
 \hypertarget{summarize-multiple-variables}{%
 \section{Summarize Multiple Variables}\label{summarize-multiple-variables}}
@@ -4438,6 +4280,15 @@ Same as above, but now we evaluate the function over the individuals at many cho
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{# Labeling}
+\NormalTok{st_title <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'Evaluate Non-Linear Functions to Search for Roots'}\NormalTok{)}
+\NormalTok{st_subtitle <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'https://fanwangecon.github.io/'}\NormalTok{,}
+                      \StringTok{'R4Econ/function/mutatef/htmlpdfr/fs_func_choice_states.html'}\NormalTok{)}
+\NormalTok{st_caption <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'Evaluating the function, '}\NormalTok{,}
+                     \StringTok{'https://fanwangecon.github.io/R4Econ/'}\NormalTok{)}
+\NormalTok{st_x_label <-}\StringTok{ 'x values'}
+\NormalTok{st_y_label <-}\StringTok{ 'f(x)'}
+
 \CommentTok{# Show}
 \KeywordTok{dim}\NormalTok{(tb_states_choices_dense_eval)}
 \end{Highlighting}
@@ -4470,33 +4321,12 @@ Same as above, but now we evaluate the function over the individuals at many cho
 \StringTok{        }\KeywordTok{geom_line}\NormalTok{() }\OperatorTok{+}
 \StringTok{        }\KeywordTok{facet_wrap}\NormalTok{( . }\OperatorTok{~}\StringTok{ }\NormalTok{INDI_ID, }\DataTypeTok{scales =} \StringTok{"free"}\NormalTok{) }\OperatorTok{+}
 \StringTok{        }\KeywordTok{geom_hline}\NormalTok{(}\DataTypeTok{yintercept=}\DecValTok{0}\NormalTok{, }\DataTypeTok{linetype=}\StringTok{"dashed"}\NormalTok{,}
-                \DataTypeTok{color =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{size=}\DecValTok{1}\NormalTok{)}
-        \KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{'Evaluate Non-Linear Functions to Search for Roots'}\NormalTok{,}
-             \DataTypeTok{x =} \StringTok{'X values'}\NormalTok{,}
-             \DataTypeTok{y =} \StringTok{'f(x)'}\NormalTok{,}
-             \DataTypeTok{caption =} \StringTok{'Evaluating the Function'}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## $x
-## [1] "X values"
-## 
-## $y
-## [1] "f(x)"
-## 
-## $title
-## [1] "Evaluate Non-Linear Functions to Search for Roots"
-## 
-## $caption
-## [1] "Evaluating the Function"
-## 
-## attr(,"class")
-## [1] "labels"
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
+                \DataTypeTok{color =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{size=}\DecValTok{1}\NormalTok{) }\OperatorTok{+}
+\StringTok{        }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =}\NormalTok{ st_title,}
+             \DataTypeTok{subtitle =}\NormalTok{ st_subtitle,}
+             \DataTypeTok{x =}\NormalTok{ st_x_label,}
+             \DataTypeTok{y =}\NormalTok{ st_y_label,}
+             \DataTypeTok{caption =}\NormalTok{ st_caption)}
 \KeywordTok{print}\NormalTok{(lineplot)}
 \end{Highlighting}
 \end{Shaded}
@@ -4612,32 +4442,6 @@ Note that there are three ways of referring to variable names with dot, which ar
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## # A tibble: 20 x 5
-##       ID income     Q    sd  mean
-##    <int>  <dbl> <dbl> <dbl> <dbl>
-##  1     1  0.994  9982  0.01     1
-##  2     1  0.998  9982  0.01     1
-##  3     1  1.02   9982  0.01     1
-##  4     1  1.00   9982  0.01     1
-##  5     1  1.00   9982  0.01     1
-##  6     1  1.02   9982  0.01     1
-##  7     1  1.00   9982  0.01     1
-##  8     1  0.987  9982  0.01     1
-##  9     1  0.993  9982  0.01     1
-## 10     1  0.996  9982  0.01     1
-## 11     1  1.01   9982  0.01     1
-## 12     1  1.00   9982  0.01     1
-## 13     1  1.00   9982  0.01     1
-## 14     1  1.00   9982  0.01     1
-## 15     1  0.994  9982  0.01     1
-## 16     1  1.02   9982  0.01     1
-## 17     1  1.00   9982  0.01     1
-## 18     1  0.980  9982  0.01     1
-## 19     1  1.01   9982  0.01     1
-## 20     1  0.995  9982  0.01     1
-\end{verbatim}
-
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Gini by Group}
@@ -4645,24 +4449,7 @@ Note that there are three ways of referring to variable names with dot, which ar
 \StringTok{  }\KeywordTok{do}\NormalTok{(}\DataTypeTok{inc_gini_norm =} \KeywordTok{ff_dist_gini_vector_pos}\NormalTok{(.}\OperatorTok{$}\NormalTok{income)) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{unnest}\NormalTok{(}\KeywordTok{c}\NormalTok{(inc_gini_norm)) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{left_join}\NormalTok{(tb_M, }\DataTypeTok{by=}\StringTok{"ID"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{verbatim}
-## see REconTools for formula: DIST GINI--Compute Gini Inequality Coefficient Given Data Vector (One Variable)
-## see REconTools for formula: DIST GINI--Compute Gini Inequality Coefficient Given Data Vector (One Variable)
-## see REconTools for formula: DIST GINI--Compute Gini Inequality Coefficient Given Data Vector (One Variable)
-## see REconTools for formula: DIST GINI--Compute Gini Inequality Coefficient Given Data Vector (One Variable)
-## see REconTools for formula: DIST GINI--Compute Gini Inequality Coefficient Given Data Vector (One Variable)
-## see REconTools for formula: DIST GINI--Compute Gini Inequality Coefficient Given Data Vector (One Variable)
-## see REconTools for formula: DIST GINI--Compute Gini Inequality Coefficient Given Data Vector (One Variable)
-## see REconTools for formula: DIST GINI--Compute Gini Inequality Coefficient Given Data Vector (One Variable)
-## see REconTools for formula: DIST GINI--Compute Gini Inequality Coefficient Given Data Vector (One Variable)
-## see REconTools for formula: DIST GINI--Compute Gini Inequality Coefficient Given Data Vector (One Variable)
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{# display}
 \KeywordTok{kable}\NormalTok{(tb_gini_norm) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{kable_styling_fc}\NormalTok{()}
@@ -4782,15 +4569,7 @@ Use dot dollar to get variables
 \CommentTok{# Merge back with tb_M}
 \NormalTok{tb_income_full_dd <-}\StringTok{ }\NormalTok{tb_income }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{left_join}\NormalTok{(tb_M)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{verbatim}
-## Joining, by = "ID"
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{# display}
 \KeywordTok{kable}\NormalTok{(tb_income) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{kable_styling_fc}\NormalTok{()}
@@ -4990,21 +4769,7 @@ The anonymous function has hard coded parameters. Using an anonymous function he
 \NormalTok{tb_draw_define <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(mt_draw_define) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{rowid_to_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"draw_group"}\NormalTok{)}
 \KeywordTok{print}\NormalTok{(tb_draw_define)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{verbatim}
-## # A tibble: 4 x 3
-##   draw_group    V1    V2
-##        <int> <dbl> <dbl>
-## 1          1     4  5.36
-## 2          2     2  7.65
-## 3          3     1  9.57
-## 4          4     3  9.62
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{# apply row by row, anonymous function has hard}
 \CommentTok{# coded min and max}
 \NormalTok{ls_ar_draws_shares_lvls =}
@@ -6242,36 +6007,9 @@ The structure above is also a function in Fan's \href{https://fanwangecon.github
 
 \CommentTok{# Print}
 \KeywordTok{print}\NormalTok{(df_roster_wide_func)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## # A tibble: 5 x 4
-##   date_in_class sid_1 sid_2 sid_3
-##           <int> <dbl> <dbl> <dbl>
-## 1             1    NA     1    NA
-## 2             2     1     1     1
-## 3             3    NA    NA     1
-## 4             4     1    NA    NA
-## 5             5    NA     1     1
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{print}\NormalTok{(df_roster_wide_cumu_func)}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-## # A tibble: 5 x 4
-##   date_in_class sid_1 sid_2 sid_3
-##           <int> <dbl> <dbl> <dbl>
-## 1             1     0     1     0
-## 2             2     1     2     1
-## 3             3     1     2     2
-## 4             4     2     2     2
-## 5             5     2     3     3
-\end{verbatim}
 
 \hypertarget{linear-regression}{%
 \chapter{Linear Regression}\label{linear-regression}}
@@ -6403,27 +6141,6 @@ Load Data
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## Parsed with column specification:
-## cols(
-##   S.country = col_character(),
-##   vil.id = col_double(),
-##   indi.id = col_double(),
-##   sex = col_character(),
-##   svymthRound = col_double(),
-##   momEdu = col_double(),
-##   wealthIdx = col_double(),
-##   hgt = col_double(),
-##   wgt = col_double(),
-##   hgt0 = col_double(),
-##   wgt0 = col_double(),
-##   prot = col_double(),
-##   cal = col_double(),
-##   p.A.prot = col_double(),
-##   p.A.nProt = col_double()
-## )
-\end{verbatim}
-
 \hypertarget{example-no-instrument-ols}{%
 \paragraph{Example No Instrument, OLS}\label{example-no-instrument-ols}}
 
@@ -6525,11 +6242,6 @@ vars\_vars.x & prot\\
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
-\end{verbatim}
-
 \begin{table}[!h]
 \centering
 \begin{tabular}{l|l}
@@ -6621,11 +6333,6 @@ vars\_vars.z & momEdu\\
 \StringTok{  }\KeywordTok{kable_styling_fc}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
-\end{verbatim}
 
 \begin{table}[!h]
 \centering
@@ -6722,11 +6429,6 @@ vars\_vars.z & momEdu+wealthIdx+p.A.prot+p.A.nProt\\
 \StringTok{  }\KeywordTok{kable_styling_fc}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
-\end{verbatim}
 
 \begin{table}[!h]
 \centering
@@ -6954,11 +6656,6 @@ The examples are just to test the code with different types of variables.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
-\end{verbatim}
-
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# F. Results as Single Colum}
@@ -7007,39 +6704,39 @@ The program relies on double lapply. lapply is used for convenience, not speed.
 \NormalTok{                        vars.c, vars.z, df,}
                         \DataTypeTok{return_all =} \OtherTok{FALSE}\NormalTok{,}
                         \DataTypeTok{stats_ends =} \StringTok{'value'}\NormalTok{, }\DataTypeTok{time =} \OtherTok{FALSE}\NormalTok{) \{}
-  
+
   \CommentTok{# regf.iv() function is from C:\textbackslash{}Users\textbackslash{}fan\textbackslash{}R4Econ\textbackslash{}linreg\textbackslash{}ivreg\textbackslash{}ivregdfrow.R}
   \ControlFlowTok{if}\NormalTok{ (time) \{}
 \NormalTok{    start_time <-}\StringTok{ }\KeywordTok{Sys.time}\NormalTok{()}
 \NormalTok{  \}}
-  
+
   \ControlFlowTok{if}\NormalTok{ (return_all) \{}
-\NormalTok{    df.reg.out.all <-}\StringTok{ }
+\NormalTok{    df.reg.out.all <-}
 \StringTok{      }\KeywordTok{bind_rows}\NormalTok{(}\KeywordTok{lapply}\NormalTok{(list.vars.x,}
                        \ControlFlowTok{function}\NormalTok{(x) (}
                          \KeywordTok{bind_rows}\NormalTok{(}
-                           \KeywordTok{lapply}\NormalTok{(list.vars.y, regf.iv, }
+                           \KeywordTok{lapply}\NormalTok{(list.vars.y, regf.iv,}
                                   \DataTypeTok{vars.x=}\NormalTok{x, }\DataTypeTok{vars.c=}\NormalTok{vars.c, }\DataTypeTok{vars.z=}\NormalTok{vars.z, }\DataTypeTok{df=}\NormalTok{df))}
 \NormalTok{                       )))}
-    
+
 \NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
-\NormalTok{    df.reg.out.all <-}\StringTok{ }
+\NormalTok{    df.reg.out.all <-}
 \StringTok{      }\NormalTok{(}\KeywordTok{lapply}\NormalTok{(list.vars.x,}
               \ControlFlowTok{function}\NormalTok{(x) (}
                 \KeywordTok{bind_rows}\NormalTok{(}
-                  \KeywordTok{lapply}\NormalTok{(list.vars.y, regf.iv, }
+                  \KeywordTok{lapply}\NormalTok{(list.vars.y, regf.iv,}
                          \DataTypeTok{vars.x=}\NormalTok{x, }\DataTypeTok{vars.c=}\NormalTok{vars.c, }\DataTypeTok{vars.z=}\NormalTok{vars.z, }\DataTypeTok{df=}\NormalTok{df)) }\OperatorTok{%>%}
 \StringTok{                  }\KeywordTok{select}\NormalTok{(vars_var.y, }\KeywordTok{starts_with}\NormalTok{(x)) }\OperatorTok{%>%}
 \StringTok{                  }\KeywordTok{select}\NormalTok{(vars_var.y, }\KeywordTok{ends_with}\NormalTok{(stats_ends))}
 \NormalTok{              ))) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{reduce}\NormalTok{(full_join)}
 \NormalTok{  \}}
-  
+
   \ControlFlowTok{if}\NormalTok{ (time) \{}
 \NormalTok{    end_time <-}\StringTok{ }\KeywordTok{Sys.time}\NormalTok{()}
-    \KeywordTok{print}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{'Estimation for all ys and xs took (seconds):'}\NormalTok{, }
+    \KeywordTok{print}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{'Estimation for all ys and xs took (seconds):'}\NormalTok{,}
 \NormalTok{                 end_time }\OperatorTok{-}\StringTok{ }\NormalTok{start_time))}
 \NormalTok{  \}}
-  
+
   \KeywordTok{return}\NormalTok{(df.reg.out.all)}
 \NormalTok{\}}
 \end{Highlighting}
@@ -7057,32 +6754,7 @@ The program relies on double lapply. lapply is used for convenience, not speed.
 \CommentTok{# Load Sample Data}
 \KeywordTok{setwd}\NormalTok{(}\StringTok{'C:/Users/fan/R4Econ/_data/'}\NormalTok{)}
 \NormalTok{df <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{'height_weight.csv'}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{verbatim}
-## Parsed with column specification:
-## cols(
-##   S.country = col_character(),
-##   vil.id = col_double(),
-##   indi.id = col_double(),
-##   sex = col_character(),
-##   svymthRound = col_double(),
-##   momEdu = col_double(),
-##   wealthIdx = col_double(),
-##   hgt = col_double(),
-##   wgt = col_double(),
-##   hgt0 = col_double(),
-##   wgt0 = col_double(),
-##   prot = col_double(),
-##   cal = col_double(),
-##   p.A.prot = col_double(),
-##   p.A.nProt = col_double()
-## )
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{# Source Dependency}
 \KeywordTok{source}\NormalTok{(}\StringTok{'C:/Users/fan/R4Econ/linreg/ivreg/ivregdfrow.R'}\NormalTok{)}
 
@@ -7514,7 +7186,7 @@ Set Up Parameters
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{df.reg.out <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(}
-  \KeywordTok{bind_rows}\NormalTok{(}\KeywordTok{lapply}\NormalTok{(list.vars.y, regf.iv, }
+  \KeywordTok{bind_rows}\NormalTok{(}\KeywordTok{lapply}\NormalTok{(list.vars.y, regf.iv,}
                    \DataTypeTok{vars.x=}\NormalTok{var.x1, }\DataTypeTok{vars.c=}\NormalTok{vars.c, }\DataTypeTok{vars.z=}\NormalTok{vars.z, }\DataTypeTok{df=}\NormalTok{df)))}
 \end{Highlighting}
 \end{Shaded}
@@ -7524,7 +7196,7 @@ Set Up Parameters
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{lapply}\NormalTok{(list.vars.y, }\ControlFlowTok{function}\NormalTok{(y) (}\KeywordTok{mean}\NormalTok{(df[[var.x1]], }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\KeywordTok{lapply}\NormalTok{(list.vars.y, }\ControlFlowTok{function}\NormalTok{(y) (}\KeywordTok{mean}\NormalTok{(df[[var.x1]], }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{) }\OperatorTok{+}
 \StringTok{                                   }\KeywordTok{mean}\NormalTok{(df[[y]], }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{)))}
 \end{Highlighting}
 \end{Shaded}
@@ -7544,7 +7216,7 @@ Set Up Parameters
 \begin{Highlighting}[]
 \NormalTok{lapplytwice <-}\StringTok{ }\KeywordTok{lapply}\NormalTok{(}
 \NormalTok{  list.vars.x, }\ControlFlowTok{function}\NormalTok{(x) (}
-    \KeywordTok{lapply}\NormalTok{(list.vars.y, }\ControlFlowTok{function}\NormalTok{(y) (}\KeywordTok{mean}\NormalTok{(df[[x]], }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+    \KeywordTok{lapply}\NormalTok{(list.vars.y, }\ControlFlowTok{function}\NormalTok{(y) (}\KeywordTok{mean}\NormalTok{(df[[x]], }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{) }\OperatorTok{+}
 \StringTok{                                       }\KeywordTok{mean}\NormalTok{(df[[y]], }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{)))))}
 \CommentTok{# lapplytwice}
 \end{Highlighting}
@@ -7559,7 +7231,7 @@ Set Up Parameters
   \KeywordTok{lapply}\NormalTok{(list.vars.x,}
          \ControlFlowTok{function}\NormalTok{(x) (}
            \KeywordTok{bind_rows}\NormalTok{(}
-             \KeywordTok{lapply}\NormalTok{(list.vars.y, regf.iv, }
+             \KeywordTok{lapply}\NormalTok{(list.vars.y, regf.iv,}
                     \DataTypeTok{vars.x=}\NormalTok{x, }\DataTypeTok{vars.c=}\NormalTok{vars.c, }\DataTypeTok{vars.z=}\NormalTok{vars.z, }\DataTypeTok{df=}\NormalTok{df))}
 \NormalTok{         )))}
 \end{Highlighting}
@@ -7578,20 +7250,16 @@ Set Up Parameters
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{df.reg.out.all <-}\StringTok{ }
+\NormalTok{df.reg.out.all <-}
 \StringTok{  }\NormalTok{(}\KeywordTok{lapply}\NormalTok{(list.vars.x,}
           \ControlFlowTok{function}\NormalTok{(x) (}
-            \KeywordTok{bind_rows}\NormalTok{(}\KeywordTok{lapply}\NormalTok{(list.vars.y, regf.iv, }
+            \KeywordTok{bind_rows}\NormalTok{(}\KeywordTok{lapply}\NormalTok{(list.vars.y, regf.iv,}
                              \DataTypeTok{vars.x=}\NormalTok{x, }\DataTypeTok{vars.c=}\NormalTok{vars.c, }\DataTypeTok{vars.z=}\NormalTok{vars.z, }\DataTypeTok{df=}\NormalTok{df)) }\OperatorTok{%>%}
 \StringTok{              }\KeywordTok{select}\NormalTok{(vars_var.y, }\KeywordTok{starts_with}\NormalTok{(x)) }\OperatorTok{%>%}
 \StringTok{              }\KeywordTok{select}\NormalTok{(vars_var.y, }\KeywordTok{ends_with}\NormalTok{(}\StringTok{'value'}\NormalTok{))}
 \NormalTok{          ))) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{reduce}\NormalTok{(full_join)}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-## Joining, by = "vars_var.y"Joining, by = "vars_var.y"Joining, by = "vars_var.y"Joining, by = "vars_var.y"
-\end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7637,105 +7305,7 @@ What is the remaining variation in the left hand side variable if right hand sid
   Dependency: \emph{R4Econ/linreg/ivreg/ivregdfrow.R}
 \end{itemize}
 
-The code below does not work with categorical variables (except for dummies). Dummy variable inputs need to be converted to zero/one first.
-
-\hypertarget{decomposition-program}{%
-\subsubsection{Decomposition Program}\label{decomposition-program}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{ff_lr_decompose <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(df, vars.y, vars.x, vars.c, vars.z, vars.other.keep,}
-\NormalTok{                            list.vars.tomean, list.vars.tomean.name.suffix,}
-                            \DataTypeTok{df.reg.out =} \OtherTok{NULL}\NormalTok{,}
-                            \DataTypeTok{graph=}\OtherTok{FALSE}\NormalTok{, }\DataTypeTok{graph.nrow=}\DecValTok{2}\NormalTok{) \{}
-
-\NormalTok{    vars.xc <-}\StringTok{ }\KeywordTok{c}\NormalTok{(vars.x, vars.c)}
-
-    \CommentTok{# Regressions}
-    \CommentTok{# regf.iv from C:\textbackslash{}Users\textbackslash{}fan\textbackslash{}R4Econ\textbackslash{}linreg\textbackslash{}ivreg\textbackslash{}ivregdfrow.R}
-    \ControlFlowTok{if}\NormalTok{(}\KeywordTok{is.null}\NormalTok{(df.reg.out)) \{}
-\NormalTok{      df.reg.out <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(}
-        \KeywordTok{bind_rows}\NormalTok{(}\KeywordTok{lapply}\NormalTok{(vars.y, regf.iv,}
-                         \DataTypeTok{vars.x=}\NormalTok{vars.x, }\DataTypeTok{vars.c=}\NormalTok{vars.c, }\DataTypeTok{vars.z=}\NormalTok{vars.z, }\DataTypeTok{df=}\NormalTok{df)))}
-\NormalTok{    \}}
-
-    \CommentTok{# Select Variables}
-\NormalTok{    str.esti.suffix <-}\StringTok{ '_Estimate'}
-\NormalTok{    arr.esti.name <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(vars.xc, str.esti.suffix)}
-\NormalTok{    str.outcome.name <-}\StringTok{ 'vars_var.y'}
-\NormalTok{    arr.columns2select <-}\StringTok{ }\KeywordTok{c}\NormalTok{(arr.esti.name, str.outcome.name)}
-    \CommentTok{# arr.columns2select}
-
-    \CommentTok{# Generate dataframe for coefficients}
-\NormalTok{    df.coef <-}\StringTok{ }\NormalTok{df.reg.out[,}\KeywordTok{c}\NormalTok{(arr.columns2select)] }\OperatorTok{%>%}\StringTok{ }
-\StringTok{      }\KeywordTok{mutate_at}\NormalTok{(}\KeywordTok{vars}\NormalTok{(arr.esti.name), as.numeric) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{column_to_rownames}\NormalTok{(str.outcome.name)}
-    \CommentTok{# df.coef}
-    \CommentTok{# str(df.coef)}
-
-    \CommentTok{# Decomposition Step 1: gather}
-\NormalTok{    df.decompose <-}\StringTok{ }\NormalTok{df }\OperatorTok{%>%}\StringTok{ }
-\StringTok{      }\KeywordTok{filter}\NormalTok{(svymthRound }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{12}\NormalTok{, }\DecValTok{18}\NormalTok{, }\DecValTok{24}\NormalTok{)) }\OperatorTok{%>%}
-\StringTok{      }\KeywordTok{select}\NormalTok{(}\KeywordTok{one_of}\NormalTok{(}\KeywordTok{c}\NormalTok{(vars.other.keep, vars.xc, vars.y))) }\OperatorTok{%>%}
-\StringTok{      }\KeywordTok{drop_na}\NormalTok{() }\OperatorTok{%>%}
-\StringTok{      }\KeywordTok{gather}\NormalTok{(variable, value, }\OperatorTok{-}\KeywordTok{one_of}\NormalTok{(}\KeywordTok{c}\NormalTok{(vars.other.keep, vars.xc)))}
-
-    \CommentTok{# Decomposition Step 2: mutate_at(vars, funs(mean = mean(.)))}
-    \CommentTok{# the xc averaging could have taken place earlier, no difference in mean across variables}
-\NormalTok{    df.decompose <-}\StringTok{ }\NormalTok{df.decompose }\OperatorTok{%>%}
-\StringTok{      }\KeywordTok{group_by}\NormalTok{(variable) }\OperatorTok{%>%}
-\StringTok{      }\KeywordTok{mutate_at}\NormalTok{(}\KeywordTok{vars}\NormalTok{(}\KeywordTok{c}\NormalTok{(vars.xc, }\StringTok{'value'}\NormalTok{)), }\KeywordTok{funs}\NormalTok{(}\DataTypeTok{mean =} \KeywordTok{mean}\NormalTok{(.))) }\OperatorTok{%>%}
-\StringTok{      }\KeywordTok{ungroup}\NormalTok{()}
-
-    \CommentTok{# Decomposition Step 3 With Loop}
-    \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(list.vars.tomean)) \{}
-\NormalTok{        var.decomp.cur <-}\StringTok{ }\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{'value'}\NormalTok{, list.vars.tomean.name.suffix[[i]]))}
-\NormalTok{        vars.tomean <-}\StringTok{ }\NormalTok{list.vars.tomean[[i]]}
-\NormalTok{        var.decomp.cur}
-\NormalTok{        df.decompose <-}\StringTok{ }\NormalTok{df.decompose }\OperatorTok{%>%}\StringTok{ }
-\StringTok{          }\KeywordTok{mutate}\NormalTok{((}\OperatorTok{!!}\NormalTok{var.decomp.cur) }\OperatorTok{:}\ErrorTok{=}\StringTok{ }
-\StringTok{                   }\KeywordTok{ff_lr_decompose_valadj}\NormalTok{(., df.coef, vars.tomean, str.esti.suffix))}
-\NormalTok{    \}}
-
-    \CommentTok{# Additional Statistics}
-\NormalTok{    df.decompose.var.frac <-}\StringTok{ }\NormalTok{df.decompose }\OperatorTok{%>%}
-\StringTok{            }\KeywordTok{select}\NormalTok{(variable, }\KeywordTok{contains}\NormalTok{(}\StringTok{'value'}\NormalTok{)) }\OperatorTok{%>%}
-\StringTok{            }\KeywordTok{group_by}\NormalTok{(variable) }\OperatorTok{%>%}
-\StringTok{            }\KeywordTok{summarize_all}\NormalTok{(}\KeywordTok{funs}\NormalTok{(}\DataTypeTok{mean =}\NormalTok{ mean, }\DataTypeTok{var =}\NormalTok{ var)) }\OperatorTok{%>%}
-\StringTok{            }\KeywordTok{select}\NormalTok{(variable, }\KeywordTok{matches}\NormalTok{(}\StringTok{'value'}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(variable, }\KeywordTok{ends_with}\NormalTok{(}\StringTok{"_var"}\NormalTok{)) }\OperatorTok{%>%}
-\StringTok{            }\KeywordTok{mutate_if}\NormalTok{(is.numeric, }\KeywordTok{funs}\NormalTok{( }\DataTypeTok{frac =}\NormalTok{ (.}\OperatorTok{/}\NormalTok{value_var))) }\OperatorTok{%>%}
-\StringTok{            }\KeywordTok{mutate_if}\NormalTok{(is.numeric, round, }\DecValTok{3}\NormalTok{)}
-
-    \CommentTok{# Graph}
-\NormalTok{    g.graph.dist <-}\StringTok{ }\OtherTok{NULL}
-    \ControlFlowTok{if}\NormalTok{ (graph) \{}
-\NormalTok{      g.graph.dist <-}\StringTok{ }\NormalTok{df.decompose }\OperatorTok{%>%}
-\StringTok{          }\KeywordTok{select}\NormalTok{(variable, }\KeywordTok{contains}\NormalTok{(}\StringTok{'value'}\NormalTok{), }\OperatorTok{-}\NormalTok{value_mean) }\OperatorTok{%>%}
-\StringTok{          }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{outcome =}\NormalTok{ variable) }\OperatorTok{%>%}
-\StringTok{          }\KeywordTok{gather}\NormalTok{(variable, value, }\OperatorTok{-}\NormalTok{outcome) }\OperatorTok{%>%}
-\StringTok{          }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{value, }\DataTypeTok{color =}\NormalTok{ variable, }\DataTypeTok{fill =}\NormalTok{ variable)) }\OperatorTok{+}
-\StringTok{              }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{stat =} \StringTok{"density"}\NormalTok{) }\OperatorTok{+}
-\StringTok{              }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\StringTok{ }\NormalTok{outcome, }\DataTypeTok{scales=}\StringTok{'free'}\NormalTok{, }\DataTypeTok{nrow=}\NormalTok{graph.nrow)}
-\NormalTok{    \}}
-
-    \CommentTok{# Return}
-    \KeywordTok{return}\NormalTok{(}\KeywordTok{list}\NormalTok{(}\DataTypeTok{dfmain =}\NormalTok{ df.decompose,}
-                \DataTypeTok{dfsumm =}\NormalTok{ df.decompose.var.frac,}
-                \DataTypeTok{graph =}\NormalTok{ g.graph.dist))}
-
-\NormalTok{\}}
-
-\CommentTok{# Support Function}
-\NormalTok{ff_lr_decompose_valadj <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(df, df.coef, vars.tomean, str.esti.suffix) \{}
-\NormalTok{    new_value <-}\StringTok{ }\NormalTok{(df}\OperatorTok{$}\NormalTok{value }\OperatorTok{+}
-\StringTok{                  }\KeywordTok{rowSums}\NormalTok{((df[}\KeywordTok{paste0}\NormalTok{(vars.tomean, }\StringTok{'_mean'}\NormalTok{)] }\OperatorTok{-}\StringTok{ }\NormalTok{df[vars.tomean])}
-                          \OperatorTok{*}\NormalTok{df.coef[df}\OperatorTok{$}\NormalTok{variable, }\KeywordTok{paste0}\NormalTok{(vars.tomean, str.esti.suffix)]))}
-    \KeywordTok{return}\NormalTok{(new_value)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{prepare-decomposition-data}{%
-\subsubsection{Prepare Decomposition Data}\label{prepare-decomposition-data}}
+The code below does not work with categorical variables (except for dummies). Dummy variable inputs need to be converted to zero/one first. The examples are just to test the code with different types of variables.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7746,37 +7316,9 @@ The code below does not work with categorical variables (except for dummies). Du
 \CommentTok{# Load Sample Data}
 \KeywordTok{setwd}\NormalTok{(}\StringTok{'C:/Users/fan/R4Econ/_data/'}\NormalTok{)}
 \NormalTok{df <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{'height_weight.csv'}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{verbatim}
-## Parsed with column specification:
-## cols(
-##   S.country = col_character(),
-##   vil.id = col_double(),
-##   indi.id = col_double(),
-##   sex = col_character(),
-##   svymthRound = col_double(),
-##   momEdu = col_double(),
-##   wealthIdx = col_double(),
-##   hgt = col_double(),
-##   wgt = col_double(),
-##   hgt0 = col_double(),
-##   wgt0 = col_double(),
-##   prot = col_double(),
-##   cal = col_double(),
-##   p.A.prot = col_double(),
-##   p.A.nProt = col_double()
-## )
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{# Source Dependency}
 \KeywordTok{source}\NormalTok{(}\StringTok{'C:/Users/fan/R4Econ/linreg/ivreg/ivregdfrow.R'}\NormalTok{)}
-
-\CommentTok{# Setting}
-\KeywordTok{options}\NormalTok{(}\DataTypeTok{repr.matrix.max.rows=}\DecValTok{50}\NormalTok{, }\DataTypeTok{repr.matrix.max.cols=}\DecValTok{50}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -7807,293 +7349,9 @@ Data Cleaning.
 ##   0.000   0.000   1.000   0.531   1.000   1.000
 \end{verbatim}
 
-Parameters.
-
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{var.y1 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'hgt'}\NormalTok{)}
-\NormalTok{var.y2 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'wgt'}\NormalTok{)}
-\NormalTok{vars.y <-}\StringTok{ }\KeywordTok{c}\NormalTok{(var.y1, var.y2)}
-\NormalTok{vars.x <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'prot'}\NormalTok{)}
-\NormalTok{vars.c <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'male'}\NormalTok{, }\StringTok{'wgt0'}\NormalTok{, }\StringTok{'hgt0'}\NormalTok{, }\StringTok{'svymthRound'}\NormalTok{)}
-\NormalTok{vars.other.keep <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'S.country'}\NormalTok{, }\StringTok{'vil.id'}\NormalTok{, }\StringTok{'indi.id'}\NormalTok{, }\StringTok{'svymthRound'}\NormalTok{)}
-
-\CommentTok{# Decompose sequence}
-\NormalTok{vars.tomean.first <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'male'}\NormalTok{, }\StringTok{'hgt0'}\NormalTok{)}
-\NormalTok{var.tomean.first.name.suffix <-}\StringTok{ '_A'}
-\NormalTok{vars.tomean.third <-}\StringTok{ }\KeywordTok{c}\NormalTok{(vars.tomean.first, }\StringTok{'prot'}\NormalTok{)}
-\NormalTok{var.tomean.third.name.suffix <-}\StringTok{ '_B'}
-\NormalTok{vars.tomean.fourth <-}\StringTok{ }\KeywordTok{c}\NormalTok{(vars.tomean.third, }\StringTok{'svymthRound'}\NormalTok{)}
-\NormalTok{var.tomean.fourth.name.suffix <-}\StringTok{ '_C'}
-\NormalTok{list.vars.tomean =}\StringTok{ }\KeywordTok{list}\NormalTok{(vars.tomean.first,}
-\NormalTok{                        vars.tomean.third,}
-\NormalTok{                        vars.tomean.fourth)}
-\NormalTok{list.vars.tomean.name.suffix <-}\StringTok{ }\KeywordTok{list}\NormalTok{(var.tomean.first.name.suffix,}
-\NormalTok{                                     var.tomean.third.name.suffix,}
-\NormalTok{                                     var.tomean.fourth.name.suffix)}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{example-guatemala-ols}{%
-\subsubsection{Example Guatemala OLS}\label{example-guatemala-ols}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{df.use <-}\StringTok{ }\NormalTok{df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(S.country }\OperatorTok{==}\StringTok{ 'Guatemala'}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{filter}\NormalTok{(svymthRound }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{12}\NormalTok{, }\DecValTok{18}\NormalTok{, }\DecValTok{24}\NormalTok{))}
-\NormalTok{vars.z <-}\StringTok{ }\OtherTok{NULL}
-\NormalTok{list.out <-}\StringTok{ }
-\StringTok{  }\KeywordTok{ff_lr_decompose}\NormalTok{(}\DataTypeTok{df=}\NormalTok{df.use, vars.y, vars.x, vars.c, vars.z, vars.other.keep,}
-\NormalTok{                  list.vars.tomean, list.vars.tomean.name.suffix,}
-                  \DataTypeTok{graph=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{graph.nrow=}\DecValTok{1}\NormalTok{)}
-\KeywordTok{options}\NormalTok{(}\DataTypeTok{repr.matrix.max.rows=}\DecValTok{10}\NormalTok{, }\DataTypeTok{repr.matrix.max.cols=}\DecValTok{50}\NormalTok{)}
-\KeywordTok{head}\NormalTok{(list.out}\OperatorTok{$}\NormalTok{dfmain,}\DecValTok{10}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{kable}\NormalTok{() }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{kable_styling_fc_wide}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{table}[!h]
-\centering
-\resizebox{\linewidth}{!}{
-\begin{tabular}{l|r|r|r|r|r|r|r|l|r|r|r|r|r|r|r|r|r|r}
-\hline
-S.country & vil.id & indi.id & svymthRound & prot & male & wgt0 & hgt0 & variable & value & prot\_mean & male\_mean & wgt0\_mean & hgt0\_mean & svymthRound\_mean & value\_mean & value\_A & value\_B & value\_C\\
-\hline
-\rowcolor{gray!6}  Guatemala & 3 & 1352 & 18 & 13.3 & 1 & 2545.2 & 47.4 & hgt & 70.2 & 20.64819 & 0.5499276 & 3312.297 & 49.75137 & 18.42547 & 73.41216 & 71.37891 & 71.70649 & 71.99313\\
-\hline
-Guatemala & 3 & 1352 & 24 & 46.3 & 1 & 2545.2 & 47.4 & hgt & 75.8 & 20.64819 & 0.5499276 & 3312.297 & 49.75137 & 18.42547 & 73.41216 & 76.97891 & 75.83533 & 72.07980\\
-\hline
-\rowcolor{gray!6}  Guatemala & 3 & 1354 & 12 & 1.0 & 1 & 3634.3 & 51.2 & hgt & 66.3 & 20.64819 & 0.5499276 & 3312.297 & 49.75137 & 18.42547 & 73.41216 & 65.24416 & 66.12009 & 70.44889\\
-\hline
-Guatemala & 3 & 1354 & 18 & 9.8 & 1 & 3634.3 & 51.2 & hgt & 69.2 & 20.64819 & 0.5499276 & 3312.297 & 49.75137 & 18.42547 & 73.41216 & 68.14416 & 68.62778 & 68.91442\\
-\hline
-\rowcolor{gray!6}  Guatemala & 3 & 1354 & 24 & 15.4 & 1 & 3634.3 & 51.2 & hgt & 75.3 & 20.64819 & 0.5499276 & 3312.297 & 49.75137 & 18.42547 & 73.41216 & 74.24416 & 74.47813 & 70.72260\\
-\hline
-Guatemala & 3 & 1356 & 12 & 8.6 & 1 & 3911.8 & 51.9 & hgt & 68.1 & 20.64819 & 0.5499276 & 3312.297 & 49.75137 & 18.42547 & 73.41216 & 66.63250 & 67.16961 & 71.49842\\
-\hline
-\rowcolor{gray!6}  Guatemala & 3 & 1356 & 18 & 17.8 & 1 & 3911.8 & 51.9 & hgt & 74.1 & 20.64819 & 0.5499276 & 3312.297 & 49.75137 & 18.42547 & 73.41216 & 72.63250 & 72.75947 & 73.04611\\
-\hline
-Guatemala & 3 & 1356 & 24 & 30.5 & 1 & 3911.8 & 51.9 & hgt & 77.1 & 20.64819 & 0.5499276 & 3312.297 & 49.75137 & 18.42547 & 73.41216 & 75.63250 & 75.19330 & 71.43777\\
-\hline
-\rowcolor{gray!6}  Guatemala & 3 & 1357 & 12 & 1.0 & 1 & 3791.4 & 52.6 & hgt & 71.5 & 20.64819 & 0.5499276 & 3312.297 & 49.75137 & 18.42547 & 73.41216 & 69.62083 & 70.49676 & 74.82557\\
-\hline
-Guatemala & 3 & 1357 & 18 & 12.7 & 1 & 3791.4 & 52.6 & hgt & 77.8 & 20.64819 & 0.5499276 & 3312.297 & 49.75137 & 18.42547 & 73.41216 & 75.92083 & 76.27517 & 76.56181\\
-\hline
-\end{tabular}}
-\end{table}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{options}\NormalTok{(}\DataTypeTok{repr.plot.width =} \DecValTok{10}\NormalTok{, }\DataTypeTok{repr.plot.height =} \DecValTok{4}\NormalTok{)}
-\NormalTok{list.out}\OperatorTok{$}\NormalTok{dfsumm }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{kable}\NormalTok{() }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{kable_styling_fc_wide}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{table}[!h]
-\centering
-\resizebox{\linewidth}{!}{
-\begin{tabular}{l|r|r|r|r|r|r|r|r|r|r}
-\hline
-variable & value\_var & value\_mean\_var & value\_A\_var & value\_B\_var & value\_C\_var & value\_var\_frac & value\_mean\_var\_frac & value\_A\_var\_frac & value\_B\_var\_frac & value\_C\_var\_frac\\
-\hline
-\rowcolor{gray!6}  hgt & 21.864 & NA & 20.264 & 18.384 & 8.395 & 1 & NA & 0.927 & 0.841 & 0.384\\
-\hline
-wgt & 2965693.245 & NA & 2863501.267 & 2659434.374 & 2346296.982 & 1 & NA & 0.966 & 0.897 & 0.791\\
-\hline
-\end{tabular}}
-\end{table}
-
-\hypertarget{example-guatemala-iv-vil.id}{%
-\subsubsection{Example Guatemala IV = vil.id}\label{example-guatemala-iv-vil.id}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{df.use <-}\StringTok{ }\NormalTok{df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(S.country }\OperatorTok{==}\StringTok{ 'Guatemala'}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{filter}\NormalTok{(svymthRound }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{12}\NormalTok{, }\DecValTok{18}\NormalTok{, }\DecValTok{24}\NormalTok{))}
-\NormalTok{vars.z <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'vil.id'}\NormalTok{)}
-\NormalTok{list.out <-}\StringTok{ }\KeywordTok{ff_lr_decompose}\NormalTok{(}
-  \DataTypeTok{df=}\NormalTok{df.use, vars.y, vars.x, vars.c, vars.z, vars.other.keep,}
-\NormalTok{  list.vars.tomean, list.vars.tomean.name.suffix,}
-  \DataTypeTok{graph=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{graph.nrow=}\DecValTok{1}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
-
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{list.out}\OperatorTok{$}\NormalTok{dfsumm }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{kable}\NormalTok{() }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{kable_styling_fc_wide}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{table}[!h]
-\centering
-\resizebox{\linewidth}{!}{
-\begin{tabular}{l|r|r|r|r|r|r|r|r|r|r}
-\hline
-variable & value\_var & value\_mean\_var & value\_A\_var & value\_B\_var & value\_C\_var & value\_var\_frac & value\_mean\_var\_frac & value\_A\_var\_frac & value\_B\_var\_frac & value\_C\_var\_frac\\
-\hline
-\rowcolor{gray!6}  hgt & 21.864 & NA & 20.235 & 16.323 & 10.03 & 1 & NA & 0.926 & 0.747 & 0.459\\
-\hline
-wgt & 2965693.245 & NA & 2876682.895 & 2676220.156 & 2583301.29 & 1 & NA & 0.970 & 0.902 & 0.871\\
-\hline
-\end{tabular}}
-\end{table}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{options}\NormalTok{(}\DataTypeTok{repr.plot.width =} \DecValTok{10}\NormalTok{, }\DataTypeTok{repr.plot.height =} \DecValTok{2}\NormalTok{)}
-\NormalTok{list.out}\OperatorTok{$}\NormalTok{graph}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-130-1} \end{center}
-
-\hypertarget{example-cebu-ols}{%
-\subsubsection{Example Cebu OLS}\label{example-cebu-ols}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{df.use <-}\StringTok{ }\NormalTok{df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(S.country }\OperatorTok{==}\StringTok{ 'Cebu'}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{filter}\NormalTok{(svymthRound }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{12}\NormalTok{, }\DecValTok{18}\NormalTok{, }\DecValTok{24}\NormalTok{))}
-\NormalTok{vars.z <-}\StringTok{ }\OtherTok{NULL}
-\NormalTok{list.out <-}\StringTok{ }\KeywordTok{ff_lr_decompose}\NormalTok{(}
-  \DataTypeTok{df=}\NormalTok{df.use, vars.y, vars.x, vars.c, vars.z, vars.other.keep,}
-\NormalTok{  list.vars.tomean, list.vars.tomean.name.suffix,}
-  \DataTypeTok{graph=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{graph.nrow=}\DecValTok{1}\NormalTok{)}
-\KeywordTok{options}\NormalTok{(}\DataTypeTok{repr.matrix.max.rows=}\DecValTok{10}\NormalTok{, }\DataTypeTok{repr.matrix.max.cols=}\DecValTok{50}\NormalTok{)}
-\KeywordTok{head}\NormalTok{(list.out}\OperatorTok{$}\NormalTok{dfmain, }\DecValTok{10}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{kable}\NormalTok{() }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{kable_styling_fc_wide}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{table}[!h]
-\centering
-\resizebox{\linewidth}{!}{
-\begin{tabular}{l|r|r|r|r|r|r|r|l|r|r|r|r|r|r|r|r|r|r}
-\hline
-S.country & vil.id & indi.id & svymthRound & prot & male & wgt0 & hgt0 & variable & value & prot\_mean & male\_mean & wgt0\_mean & hgt0\_mean & svymthRound\_mean & value\_mean & value\_A & value\_B & value\_C\\
-\hline
-\rowcolor{gray!6}  Cebu & 1 & 1 & 12 & 11.3 & 1 & 2043.8 & 44.2 & hgt & 70.8 & 16.95957 & 0.5263013 & 2988.773 & 49.23897 & 17.87441 & 74.99584 & 72.12171 & 72.33074 & 76.35522\\
-\hline
-Cebu & 1 & 2 & 12 & 5.9 & 0 & 2839.9 & 49.7 & hgt & 72.2 & 16.95957 & 0.5263013 & 2988.773 & 49.23897 & 17.87441 & 74.99584 & 72.64812 & 73.05659 & 77.08108\\
-\hline
-\rowcolor{gray!6}  Cebu & 1 & 2 & 18 & 0.5 & 0 & 2839.9 & 49.7 & hgt & 76.5 & 16.95957 & 0.5263013 & 2988.773 & 49.23897 & 17.87441 & 74.99584 & 76.94812 & 77.55604 & 77.47000\\
-\hline
-Cebu & 1 & 2 & 24 & 14.1 & 0 & 2839.9 & 49.7 & hgt & 79.2 & 16.95957 & 0.5263013 & 2988.773 & 49.23897 & 17.87441 & 74.99584 & 79.64812 & 79.75374 & 75.55718\\
-\hline
-\rowcolor{gray!6}  Cebu & 1 & 3 & 12 & 21.4 & 0 & 3445.6 & 51.7 & hgt & 68.0 & 16.95957 & 0.5263013 & 2988.773 & 49.23897 & 17.87441 & 74.99584 & 67.70200 & 67.53800 & 71.56248\\
-\hline
-Cebu & 1 & 3 & 18 & 23.6 & 0 & 3445.6 & 51.7 & hgt & 71.6 & 16.95957 & 0.5263013 & 2988.773 & 49.23897 & 17.87441 & 74.99584 & 71.30200 & 71.05674 & 70.97071\\
-\hline
-\rowcolor{gray!6}  Cebu & 1 & 3 & 24 & 20.6 & 0 & 3445.6 & 51.7 & hgt & 76.7 & 16.95957 & 0.5263013 & 2988.773 & 49.23897 & 17.87441 & 74.99584 & 76.40200 & 76.26754 & 72.07099\\
-\hline
-Cebu & 1 & 4 & 12 & 0.7 & 0 & 3090.9 & 50.2 & hgt & 69.1 & 16.95957 & 0.5263013 & 2988.773 & 49.23897 & 17.87441 & 74.99584 & 69.36159 & 69.96212 & 73.98660\\
-\hline
-\rowcolor{gray!6}  Cebu & 1 & 4 & 18 & 7.2 & 0 & 3090.9 & 50.2 & hgt & 74.3 & 16.95957 & 0.5263013 & 2988.773 & 49.23897 & 17.87441 & 74.99584 & 74.56159 & 74.92205 & 74.83601\\
-\hline
-Cebu & 1 & 4 & 24 & 10.3 & 0 & 3090.9 & 50.2 & hgt & 78.1 & 16.95957 & 0.5263013 & 2988.773 & 49.23897 & 17.87441 & 74.99584 & 78.36159 & 78.60755 & 74.41100\\
-\hline
-\end{tabular}}
-\end{table}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{options}\NormalTok{(}\DataTypeTok{repr.plot.width =} \DecValTok{10}\NormalTok{, }\DataTypeTok{repr.plot.height =} \DecValTok{4}\NormalTok{)}
-\NormalTok{list.out}\OperatorTok{$}\NormalTok{dfsumm }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{kable}\NormalTok{() }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{kable_styling_fc_wide}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{table}[!h]
-\centering
-\resizebox{\linewidth}{!}{
-\begin{tabular}{l|r|r|r|r|r|r|r|r|r|r}
-\hline
-variable & value\_var & value\_mean\_var & value\_A\_var & value\_B\_var & value\_C\_var & value\_var\_frac & value\_mean\_var\_frac & value\_A\_var\_frac & value\_B\_var\_frac & value\_C\_var\_frac\\
-\hline
-\rowcolor{gray!6}  hgt & 24.375 & NA & 22.561 & 21.309 & 10.001 & 1 & NA & 0.926 & 0.874 & 0.410\\
-\hline
-wgt & 3337460.957 & NA & 3218987.397 & 3039513.634 & 2558514.368 & 1 & NA & 0.965 & 0.911 & 0.767\\
-\hline
-\end{tabular}}
-\end{table}
-
-\hypertarget{example-cebu-iv}{%
-\subsubsection{Example Cebu IV}\label{example-cebu-iv}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{df.use <-}\StringTok{ }\NormalTok{df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(S.country }\OperatorTok{==}\StringTok{ 'Cebu'}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{filter}\NormalTok{(svymthRound }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{12}\NormalTok{, }\DecValTok{18}\NormalTok{, }\DecValTok{24}\NormalTok{))}
-\NormalTok{vars.z <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'wealthIdx'}\NormalTok{)}
-\NormalTok{list.out <-}\StringTok{ }\KeywordTok{ff_lr_decompose}\NormalTok{(}
-  \DataTypeTok{df=}\NormalTok{df.use, vars.y, vars.x, vars.c, vars.z, vars.other.keep,}
-\NormalTok{  list.vars.tomean, list.vars.tomean.name.suffix,}
-  \DataTypeTok{graph=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{graph.nrow=}\DecValTok{1}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
-
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{list.out}\OperatorTok{$}\NormalTok{dfsumm }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{kable}\NormalTok{() }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{kable_styling_fc_wide}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{table}[!h]
-\centering
-\resizebox{\linewidth}{!}{
-\begin{tabular}{l|r|r|r|r|r|r|r|r|r|r}
-\hline
-variable & value\_var & value\_mean\_var & value\_A\_var & value\_B\_var & value\_C\_var & value\_var\_frac & value\_mean\_var\_frac & value\_A\_var\_frac & value\_B\_var\_frac & value\_C\_var\_frac\\
-\hline
-\rowcolor{gray!6}  hgt & 24.375 & NA & 22.625 & 22.194 & 14.392 & 1 & NA & 0.928 & 0.911 & 0.590\\
-\hline
-wgt & 3337460.957 & NA & 3237415.252 & 3385814.742 & 3158659.340 & 1 & NA & 0.970 & 1.014 & 0.946\\
-\hline
-\end{tabular}}
-\end{table}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{options}\NormalTok{(}\DataTypeTok{repr.plot.width =} \DecValTok{10}\NormalTok{, }\DataTypeTok{repr.plot.height =} \DecValTok{2}\NormalTok{)}
-\NormalTok{list.out}\OperatorTok{$}\NormalTok{graph}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-132-1} \end{center}
-
-\hypertarget{examples-line-by-line-1}{%
-\subsubsection{Examples Line by Line}\label{examples-line-by-line-1}}
-
-The examples are just to test the code with different types of variables.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{df.use <-}\StringTok{ }\NormalTok{df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(S.country }\OperatorTok{==}\StringTok{ 'Guatemala'}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\NormalTok{df.use <-}\StringTok{ }\NormalTok{df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(S.country }\OperatorTok{==}\StringTok{ 'Guatemala'}\NormalTok{) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{filter}\NormalTok{(svymthRound }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{12}\NormalTok{, }\DecValTok{18}\NormalTok{, }\DecValTok{24}\NormalTok{))}
 \KeywordTok{dim}\NormalTok{(df.use)}
 \end{Highlighting}
@@ -8107,7 +7365,7 @@ Setting Up Parameters.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# Define Left Hand Side Variables}
+\CommentTok{# Define Left Hand Side Variab les}
 \NormalTok{var.y1 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'hgt'}\NormalTok{)}
 \NormalTok{var.y2 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'wgt'}\NormalTok{)}
 \NormalTok{vars.y <-}\StringTok{ }\KeywordTok{c}\NormalTok{(var.y1, var.y2)}
@@ -8147,7 +7405,7 @@ Setting Up Parameters.
 \end{Shaded}
 
 \hypertarget{obtain-regression-coefficients-from-somewhere}{%
-\paragraph{Obtain Regression Coefficients from somewhere}\label{obtain-regression-coefficients-from-somewhere}}
+\subsubsection{Obtain Regression Coefficients from somewhere}\label{obtain-regression-coefficients-from-somewhere}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8156,19 +7414,6 @@ Setting Up Parameters.
 \NormalTok{df.reg.out <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(}
   \KeywordTok{bind_rows}\NormalTok{(}\KeywordTok{lapply}\NormalTok{(vars.y, regf.iv,}
                    \DataTypeTok{vars.x=}\NormalTok{vars.x, }\DataTypeTok{vars.c=}\NormalTok{vars.c, }\DataTypeTok{vars.z=}\NormalTok{vars.z, }\DataTypeTok{df=}\NormalTok{df)))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
-
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{# Regressions}
 \CommentTok{# reg1 <- regf.iv(var.y = var.y1, vars.x, vars.c, vars.z, df.use)}
 \CommentTok{# reg2 <- regf.iv(var.y = var.y2, vars.x, vars.c, vars.z, df.use)}
@@ -8178,7 +7423,7 @@ Setting Up Parameters.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# df.reg.out }
+\CommentTok{# df.reg.out}
 \end{Highlighting}
 \end{Shaded}
 
@@ -8200,7 +7445,8 @@ Setting Up Parameters.
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Generate dataframe for coefficients}
-\NormalTok{df.coef <-}\StringTok{ }\NormalTok{df.reg.out[,}\KeywordTok{c}\NormalTok{(arr.columns2select)] }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_at}\NormalTok{(}\KeywordTok{vars}\NormalTok{(arr.esti.name), as.numeric) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{column_to_rownames}\NormalTok{(str.outcome.name)}
+\NormalTok{df.coef <-}\StringTok{ }\NormalTok{df.reg.out[,}\KeywordTok{c}\NormalTok{(arr.columns2select)] }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate_at}\NormalTok{(}\KeywordTok{vars}\NormalTok{(arr.esti.name), as.numeric) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{column_to_rownames}\NormalTok{(str.outcome.name)}
 \NormalTok{df.coef }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{kable}\NormalTok{() }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{kable_styling_fc}\NormalTok{()}
@@ -8236,7 +7482,7 @@ wgt & -59.0727542 & 489.852902 & 0.7696158 & 75.4867897 & 250.778883\\
 \end{verbatim}
 
 \hypertarget{decomposition-step-1}{%
-\paragraph{Decomposition Step 1}\label{decomposition-step-1}}
+\subsubsection{Decomposition Step 1}\label{decomposition-step-1}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8293,7 +7539,7 @@ Guatemala & 3 & 1357 & 18 & 12.7 & 1 & 3791.4 & 52.6 & hgt & 77.8\\
 \end{table}
 
 \hypertarget{decomposition-step-2}{%
-\paragraph{Decomposition Step 2}\label{decomposition-step-2}}
+\subsubsection{Decomposition Step 2}\label{decomposition-step-2}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8352,34 +7598,21 @@ Guatemala & 3 & 1357 & 18 & 12.7 & 1 & 3791.4 & 52.6 & hgt & 77.8 & 20.64819 & 0
 \end{table}
 
 \hypertarget{decomposition-step-3-non-loop}{%
-\paragraph{Decomposition Step 3 Non-Loop}\label{decomposition-step-3-non-loop}}
+\subsubsection{Decomposition Step 3 Non-Loop}\label{decomposition-step-3-non-loop}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{ff_lr_decompose_valadj <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(df, df.coef, vars.tomean, str.esti.suffix) \{}
-\NormalTok{    new_value <-}\StringTok{ }\NormalTok{(df}\OperatorTok{$}\NormalTok{value }\OperatorTok{+}
+\NormalTok{  new_value <-}\StringTok{ }\NormalTok{(df}\OperatorTok{$}\NormalTok{value }\OperatorTok{+}
 \StringTok{                  }\KeywordTok{rowSums}\NormalTok{((df[}\KeywordTok{paste0}\NormalTok{(vars.tomean, }\StringTok{'_mean'}\NormalTok{)] }\OperatorTok{-}\StringTok{ }\NormalTok{df[vars.tomean])}
                           \OperatorTok{*}\NormalTok{df.coef[df}\OperatorTok{$}\NormalTok{variable, }\KeywordTok{paste0}\NormalTok{(vars.tomean, str.esti.suffix)]))}
-    \KeywordTok{return}\NormalTok{(new_value)}
+  \KeywordTok{return}\NormalTok{(new_value)}
 \NormalTok{\}}
-
-\CommentTok{# # Decomposition Step 3: mutate_at(vars, funs(mean = mean(.)))}
-\CommentTok{# var.decomp.one <- (paste0('value', list.vars.tomean.name.suffix[[1]]))}
-\CommentTok{# var.decomp.two <- (paste0('value', list.vars.tomean.name.suffix[[2]]))}
-\CommentTok{# var.decomp.thr <- (paste0('value', list.vars.tomean.name.suffix[[3]]))}
-\CommentTok{# df.decompose_step3 <- df.decompose_step2 %>%}
-\CommentTok{#                         mutate((!!var.decomp.one) := f_decompose_here(., df.coef, list.vars.tomean[[1]], str.esti.suffix),}
-\CommentTok{#                                (!!var.decomp.two) := f_decompose_here(., df.coef, list.vars.tomean[[2]], str.esti.suffix),}
-\CommentTok{#                                (!!var.decomp.thr) := f_decompose_here(., df.coef, list.vars.tomean[[3]], str.esti.suffix))}
-
-\CommentTok{# options(repr.matrix.max.rows=10, repr.matrix.max.cols=20)}
-\CommentTok{# dim(df.decompose_step3)}
-\CommentTok{# df.decompose_step3}
 \end{Highlighting}
 \end{Shaded}
 
 \hypertarget{decomposition-step-3-with-loop}{%
-\paragraph{Decomposition Step 3 With Loop}\label{decomposition-step-3-with-loop}}
+\subsubsection{Decomposition Step 3 With Loop}\label{decomposition-step-3-with-loop}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8388,12 +7621,12 @@ Guatemala & 3 & 1357 & 18 & 12.7 & 1 & 3791.4 & 52.6 & hgt & 77.8 & 20.64819 & 0
 \NormalTok{    var.decomp.cur <-}\StringTok{ }\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{'value'}\NormalTok{, list.vars.tomean.name.suffix[[i]]))}
 \NormalTok{    vars.tomean <-}\StringTok{ }\NormalTok{list.vars.tomean[[i]]}
 \NormalTok{    var.decomp.cur}
-\NormalTok{    df.decompose_step3 <-}\StringTok{ }\NormalTok{df.decompose_step3 }\OperatorTok{%>%}\StringTok{ }
-\StringTok{      }\KeywordTok{mutate}\NormalTok{((}\OperatorTok{!!}\NormalTok{var.decomp.cur) }\OperatorTok{:}\ErrorTok{=}\StringTok{ }
+\NormalTok{    df.decompose_step3 <-}\StringTok{ }\NormalTok{df.decompose_step3 }\OperatorTok{%>%}
+\StringTok{      }\KeywordTok{mutate}\NormalTok{((}\OperatorTok{!!}\NormalTok{var.decomp.cur) }\OperatorTok{:}\ErrorTok{=}
 \StringTok{               }\KeywordTok{ff_lr_decompose_valadj}\NormalTok{(., df.coef, vars.tomean, str.esti.suffix))}
 
 \NormalTok{\}}
-\KeywordTok{options}\NormalTok{(}\DataTypeTok{repr.matrix.max.rows=}\DecValTok{10}\NormalTok{, }\DataTypeTok{repr.matrix.max.cols=}\DecValTok{20}\NormalTok{)}
+
 \KeywordTok{dim}\NormalTok{(df.decompose_step3)}
 \end{Highlighting}
 \end{Shaded}
@@ -8441,7 +7674,7 @@ Guatemala & 3 & 1357 & 18 & 12.7 & 1 & 3791.4 & 52.6 & hgt & 77.8 & 20.64819 & 0
 \end{table}
 
 \hypertarget{decomposition-step-4-variance}{%
-\paragraph{Decomposition Step 4 Variance}\label{decomposition-step-4-variance}}
+\subsubsection{Decomposition Step 4 Variance}\label{decomposition-step-4-variance}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8453,12 +7686,13 @@ Guatemala & 3 & 1357 & 18 & 12.7 & 1 & 3791.4 & 52.6 & hgt & 77.8 & 20.64819 & 0
 \StringTok{        }\KeywordTok{mutate_if}\NormalTok{(is.numeric, }\KeywordTok{funs}\NormalTok{( }\DataTypeTok{frac =}\NormalTok{ (.}\OperatorTok{/}\NormalTok{value_var))) }\OperatorTok{%>%}
 \StringTok{        }\KeywordTok{mutate_if}\NormalTok{(is.numeric, round, }\DecValTok{3}\NormalTok{) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{kable}\NormalTok{() }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{kable_styling_fc}\NormalTok{()}
+\StringTok{  }\KeywordTok{kable_styling_fc_wide}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{table}[!h]
 \centering
+\resizebox{\linewidth}{!}{
 \begin{tabular}{r|r|r|r|r|r|r|r|r|r}
 \hline
 value\_var & value\_mean\_var & value\_mh0me2m\_var & value\_mh0mep2m\_var & value\_mh0mepm2m\_var & value\_var\_frac & value\_mean\_var\_frac & value\_mh0me2m\_var\_frac & value\_mh0mep2m\_var\_frac & value\_mh0mepm2m\_var\_frac\\
@@ -8467,11 +7701,11 @@ value\_var & value\_mean\_var & value\_mh0me2m\_var & value\_mh0mep2m\_var & val
 \hline
 2965693.245 & NA & 2949187.64 & 4192769.518 & 3147506.60 & 1 & NA & 0.994 & 1.414 & 1.061\\
 \hline
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \hypertarget{graphical-results}{%
-\paragraph{Graphical Results}\label{graphical-results}}
+\subsubsection{Graphical Results}\label{graphical-results}}
 
 Graphically, difficult to pick up exact differences in variance, a 50 percent reduction in variance visually does not look like 50 percent. Intuitively, we are kind of seeing standard deviation, not variance on the graph if we think abou the x-scale.
 
@@ -8480,13 +7714,12 @@ Graphically, difficult to pick up exact differences in variance, a 50 percent re
 \KeywordTok{head}\NormalTok{(df.decompose_step3 }\OperatorTok{%>%}
 \StringTok{    }\KeywordTok{select}\NormalTok{(variable, }\KeywordTok{contains}\NormalTok{(}\StringTok{'value'}\NormalTok{), }\OperatorTok{-}\NormalTok{value_mean), }\DecValTok{10}\NormalTok{) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{kable}\NormalTok{() }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{kable_styling_fc_wide}\NormalTok{()}
+\StringTok{  }\KeywordTok{kable_styling_fc}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{table}[!h]
 \centering
-\resizebox{\linewidth}{!}{
 \begin{tabular}{l|r|r|r|r}
 \hline
 variable & value & value\_mh0me2m & value\_mh0mep2m & value\_mh0mepm2m\\
@@ -8511,12 +7744,11 @@ hgt & 77.1 & 73.33707 & 76.01161 & 69.69055\\
 \hline
 hgt & 77.8 & 73.13353 & 70.97578 & 71.45823\\
 \hline
-\end{tabular}}
+\end{tabular}
 \end{table}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{options}\NormalTok{(}\DataTypeTok{repr.plot.width =} \DecValTok{10}\NormalTok{, }\DataTypeTok{repr.plot.height =} \DecValTok{4}\NormalTok{)}
 \NormalTok{df.decompose_step3 }\OperatorTok{%>%}
 \StringTok{    }\KeywordTok{select}\NormalTok{(variable, }\KeywordTok{contains}\NormalTok{(}\StringTok{'value'}\NormalTok{), }\OperatorTok{-}\NormalTok{value_mean) }\OperatorTok{%>%}
 \StringTok{    }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{outcome =}\NormalTok{ variable) }\OperatorTok{%>%}
@@ -8527,7 +7759,7 @@ hgt & 77.8 & 73.13353 & 70.97578 & 71.45823\\
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-145-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-141-1} \end{center}
 
 \hypertarget{additional-decomposition-testings}{%
 \subsubsection{Additional Decomposition Testings}\label{additional-decomposition-testings}}
@@ -8535,78 +7767,17 @@ hgt & 77.8 & 73.13353 & 70.97578 & 71.45823\\
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{head}\NormalTok{(df.decompose_step2[vars.tomean.first],}\DecValTok{3}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## # A tibble: 3 x 2
-##    male  hgt0
-##   <dbl> <dbl>
-## 1     1  47.4
-## 2     1  47.4
-## 3     1  51.2
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{head}\NormalTok{(df.decompose_step2[}\KeywordTok{paste0}\NormalTok{(vars.tomean.first, }\StringTok{'_mean'}\NormalTok{)], }\DecValTok{3}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## # A tibble: 3 x 2
-##   male_mean hgt0_mean
-##       <dbl>     <dbl>
-## 1     0.550      49.8
-## 2     0.550      49.8
-## 3     0.550      49.8
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{head}\NormalTok{(df.coef[df.decompose_step2}\OperatorTok{$}\NormalTok{variable, }
+\KeywordTok{head}\NormalTok{(df.coef[df.decompose_step2}\OperatorTok{$}\NormalTok{variable,}
              \KeywordTok{paste0}\NormalTok{(vars.tomean.first, str.esti.suffix)], }\DecValTok{3}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-##       male_Estimate hgt0_Estimate
-## hgt        1.244735     0.6834853
-## hgt.1      1.244735     0.6834853
-## hgt.2      1.244735     0.6834853
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \NormalTok{df.decompose.tomean.first <-}\StringTok{ }\NormalTok{df.decompose_step2 }\OperatorTok{%>%}
 \StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{pred_new =}\NormalTok{ df.decompose_step2}\OperatorTok{$}\NormalTok{value }\OperatorTok{+}
-\StringTok{        }\KeywordTok{rowSums}\NormalTok{((df.decompose_step2[}\KeywordTok{paste0}\NormalTok{(vars.tomean.first, }\StringTok{'_mean'}\NormalTok{)] }
+\StringTok{        }\KeywordTok{rowSums}\NormalTok{((df.decompose_step2[}\KeywordTok{paste0}\NormalTok{(vars.tomean.first, }\StringTok{'_mean'}\NormalTok{)]}
                  \OperatorTok{-}\StringTok{ }\NormalTok{df.decompose_step2[vars.tomean.first])}
-            \OperatorTok{*}\NormalTok{df.coef[df.decompose_step2}\OperatorTok{$}\NormalTok{variable, }
+            \OperatorTok{*}\NormalTok{df.coef[df.decompose_step2}\OperatorTok{$}\NormalTok{variable,}
                      \KeywordTok{paste0}\NormalTok{(vars.tomean.first, str.esti.suffix)])) }\OperatorTok{%>%}
 \StringTok{        }\KeywordTok{select}\NormalTok{(variable, value, pred_new)}
 \KeywordTok{head}\NormalTok{(df.decompose.tomean.first, }\DecValTok{10}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## # A tibble: 10 x 3
-##    variable value pred_new
-##    <chr>    <dbl>    <dbl>
-##  1 hgt       70.2     71.2
-##  2 hgt       75.8     76.8
-##  3 hgt       66.3     64.7
-##  4 hgt       69.2     67.6
-##  5 hgt       75.3     73.7
-##  6 hgt       68.1     66.1
-##  7 hgt       74.1     72.1
-##  8 hgt       77.1     75.1
-##  9 hgt       71.5     69.0
-## 10 hgt       77.8     75.3
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \NormalTok{df.decompose.tomean.first }\OperatorTok{%>%}
 \StringTok{        }\KeywordTok{group_by}\NormalTok{(variable) }\OperatorTok{%>%}
 \StringTok{        }\KeywordTok{summarize_all}\NormalTok{(}\KeywordTok{funs}\NormalTok{(}\DataTypeTok{mean =}\NormalTok{ mean, }\DataTypeTok{sd =}\NormalTok{ sd))  }\OperatorTok{%>%}
@@ -8634,9 +7805,9 @@ Note the r-square from regression above matches up with the 1 - ratio below. Thi
 \begin{Highlighting}[]
 \NormalTok{df.decompose_step2 }\OperatorTok{%>%}
 \StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{pred_new =}\NormalTok{ df.decompose_step2}\OperatorTok{$}\NormalTok{value }\OperatorTok{+}
-\StringTok{        }\KeywordTok{rowSums}\NormalTok{((df.decompose_step2[}\KeywordTok{paste0}\NormalTok{(vars.tomean.second, }\StringTok{'_mean'}\NormalTok{)] }
+\StringTok{        }\KeywordTok{rowSums}\NormalTok{((df.decompose_step2[}\KeywordTok{paste0}\NormalTok{(vars.tomean.second, }\StringTok{'_mean'}\NormalTok{)]}
                  \OperatorTok{-}\StringTok{ }\NormalTok{df.decompose_step2[vars.tomean.second])}
-            \OperatorTok{*}\NormalTok{df.coef[df.decompose_step2}\OperatorTok{$}\NormalTok{variable, }
+            \OperatorTok{*}\NormalTok{df.coef[df.decompose_step2}\OperatorTok{$}\NormalTok{variable,}
                      \KeywordTok{paste0}\NormalTok{(vars.tomean.second, str.esti.suffix)])) }\OperatorTok{%>%}
 \StringTok{        }\KeywordTok{select}\NormalTok{(variable, value, pred_new) }\OperatorTok{%>%}
 \StringTok{        }\KeywordTok{group_by}\NormalTok{(variable) }\OperatorTok{%>%}
@@ -8964,21 +8135,21 @@ Given the x-variables included in the logit regression, how do they relate to A\
 ## [[1]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-149-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-145-1} \end{center}
 
 \begin{verbatim}
 ## 
 ## [[2]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-149-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-145-2} \end{center}
 
 \begin{verbatim}
 ## 
 ## [[3]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-149-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-145-3} \end{center}
 
 \hypertarget{optimization}{%
 \chapter{Optimization}\label{optimization}}
@@ -9029,7 +8200,53 @@ Generate New columns of a and b as we iteratre, do not need to store p, p is tem
 \hypertarget{initialize-matrix}{%
 \subsubsection{Initialize Matrix}\label{initialize-matrix}}
 
-First, initialize the matrix with \(a_0\) and \(b_0\), the initial min and max points:
+Prepare Input Data:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Parameters}
+\NormalTok{fl_rho =}\StringTok{ }\FloatTok{0.20}
+\NormalTok{svr_id_var =}\StringTok{ 'INDI_ID'}
+
+\CommentTok{# P fixed parameters, nN is N dimensional, nP is P dimensional}
+\NormalTok{ar_nN_A =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\OperatorTok{-}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DataTypeTok{length.out =} \DecValTok{4}\NormalTok{)}
+\NormalTok{ar_nN_alpha =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\FloatTok{0.9}\NormalTok{, }\DataTypeTok{length.out =} \DecValTok{4}\NormalTok{)}
+
+\CommentTok{# Choice Grid for nutritional feasible choices for each}
+\NormalTok{fl_N_agg =}\StringTok{ }\DecValTok{100}
+\NormalTok{fl_N_min =}\StringTok{ }\DecValTok{0}
+
+\CommentTok{# Mesh Expand}
+\NormalTok{tb_states_choices <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(ar_nN_A, ar_nN_alpha)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{rowid_to_column}\NormalTok{(}\DataTypeTok{var=}\NormalTok{svr_id_var)}
+
+\CommentTok{# Convert Matrix to Tibble}
+\NormalTok{ar_st_col_names =}\StringTok{ }\KeywordTok{c}\NormalTok{(svr_id_var,}\StringTok{'fl_A'}\NormalTok{, }\StringTok{'fl_alpha'}\NormalTok{)}
+\NormalTok{tb_states_choices <-}\StringTok{ }\NormalTok{tb_states_choices }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rename_all}\NormalTok{(}\OperatorTok{~}\KeywordTok{c}\NormalTok{(ar_st_col_names))}
+\end{Highlighting}
+\end{Shaded}
+
+Prepare Function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Define Implicit Function}
+\NormalTok{ffi_nonlin_dplyrdo <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, fl_rho)\{}
+
+\NormalTok{  ar_p1_s1 =}\StringTok{ }\KeywordTok{exp}\NormalTok{((fl_A }\OperatorTok{-}\StringTok{ }\NormalTok{ar_A)}\OperatorTok{*}\NormalTok{fl_rho)}
+\NormalTok{  ar_p1_s2 =}\StringTok{ }\NormalTok{(fl_alpha}\OperatorTok{/}\NormalTok{ar_alpha)}
+\NormalTok{  ar_p1_s3 =}\StringTok{ }\NormalTok{(}\DecValTok{1}\OperatorTok{/}\NormalTok{(ar_alpha}\OperatorTok{*}\NormalTok{fl_rho }\OperatorTok{-}\StringTok{ }\DecValTok{1}\NormalTok{))}
+\NormalTok{  ar_p1 =}\StringTok{ }\NormalTok{(ar_p1_s1}\OperatorTok{*}\NormalTok{ar_p1_s2)}\OperatorTok{^}\NormalTok{ar_p1_s3}
+\NormalTok{  ar_p2 =}\StringTok{ }\NormalTok{fl_N}\OperatorTok{^}\NormalTok{((fl_alpha}\OperatorTok{*}\NormalTok{fl_rho}\DecValTok{-1}\NormalTok{)}\OperatorTok{/}\NormalTok{(ar_alpha}\OperatorTok{*}\NormalTok{fl_rho}\DecValTok{-1}\NormalTok{))}
+\NormalTok{  ar_overall =}\StringTok{ }\NormalTok{ar_p1}\OperatorTok{*}\NormalTok{ar_p2}
+\NormalTok{  fl_overall =}\StringTok{ }\NormalTok{fl_N_agg }\OperatorTok{-}\StringTok{ }\KeywordTok{sum}\NormalTok{(ar_overall)}
+
+  \KeywordTok{return}\NormalTok{(fl_overall)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Initialize the matrix with \(a_0\) and \(b_0\), the initial min and max points:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9138,24 +8355,23 @@ Implement the DPLYR based Concurrent bisection algorithm.
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "it_cur:1, fl_p_dist2zr:1884.20860322127"
-## [1] "it_cur:2, fl_p_dist2zr:815.07213515036"
-## [1] "it_cur:3, fl_p_dist2zr:346.193951089409"
-## [1] "it_cur:4, fl_p_dist2zr:133.268318242343"
-## [1] "it_cur:5, fl_p_dist2zr:52.0759336601643"
-## [1] "it_cur:6, fl_p_dist2zr:8.2057326579422"
-## [1] "it_cur:7, fl_p_dist2zr:12.7240911320081"
-## [1] "it_cur:8, fl_p_dist2zr:4.10100732130902"
-## [1] "it_cur:9, fl_p_dist2zr:1.19915237247596"
-## [1] "it_cur:10, fl_p_dist2zr:1.46089191924225"
-## [1] "it_cur:11, fl_p_dist2zr:0.261965457555881"
-## [1] "it_cur:12, fl_p_dist2zr:0.462901483859291"
-## [1] "it_cur:13, fl_p_dist2zr:0.166336071560483"
-## [1] "it_cur:14, fl_p_dist2zr:0.011649263648799"
-## [1] "it_cur:15, fl_p_dist2zr:0.0715183716517558"
-## [1] "it_cur:16, fl_p_dist2zr:0.0299376539319738"
-## [1] "it_cur:17, fl_p_dist2zr:0.0132655999120672"
-## [1] "it_cur:18, fl_p_dist2zr:0.00317751042553027"
+## [1] "it_cur:1, fl_p_dist2zr:1597.93916362849"
+## [1] "it_cur:2, fl_p_dist2zr:676.06602535902"
+## [1] "it_cur:3, fl_p_dist2zr:286.850590132782"
+## [1] "it_cur:4, fl_p_dist2zr:117.225493866655"
+## [1] "it_cur:5, fl_p_dist2zr:37.570593471664"
+## [1] "it_cur:6, fl_p_dist2zr:4.60826664896022"
+## [1] "it_cur:7, fl_p_dist2zr:14.4217689135683"
+## [1] "it_cur:8, fl_p_dist2zr:8.38950830086659"
+## [1] "it_cur:9, fl_p_dist2zr:3.93347761455868"
+## [1] "it_cur:10, fl_p_dist2zr:1.88261338941038"
+## [1] "it_cur:11, fl_p_dist2zr:0.744478952222305"
+## [1] "it_cur:12, fl_p_dist2zr:0.187061801237917"
+## [1] "it_cur:13, fl_p_dist2zr:0.117844913432613"
+## [1] "it_cur:14, fl_p_dist2zr:0.0275365951418891"
+## [1] "it_cur:15, fl_p_dist2zr:0.0515488156908255"
+## [1] "it_cur:16, fl_p_dist2zr:0.0191152349149135"
+## [1] "it_cur:17, fl_p_dist2zr:0.00385372194545752"
 \end{verbatim}
 
 \hypertarget{reshape-wide-to-long-to-wide}{%
@@ -9174,7 +8390,70 @@ Variables are formatted like: \emph{bisec\_xx\_yy}, where yy is the iteration in
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# head(tb_states_choices_bisec, 10)}
+\KeywordTok{kable}\NormalTok{(}\KeywordTok{head}\NormalTok{(}\KeywordTok{t}\NormalTok{(tb_states_choices_bisec), }\DecValTok{25}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable_styling_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{l|r|r|r|r}
+\hline
+INDI\_ID & 1.000000e+00 & 2.0000000 & 3.0000000 & 4.0000000\\
+\hline
+\rowcolor{gray!6}  fl\_A & -2.000000e+00 & -0.6666667 & 0.6666667 & 2.0000000\\
+\hline
+fl\_alpha & 1.000000e-01 & 0.3666667 & 0.6333333 & 0.9000000\\
+\hline
+\rowcolor{gray!6}  bisec\_a\_0 & 0.000000e+00 & 0.0000000 & 0.0000000 & 0.0000000\\
+\hline
+bisec\_b\_0 & 1.000000e+02 & 100.0000000 & 100.0000000 & 100.0000000\\
+\hline
+\rowcolor{gray!6}  bisec\_fa\_0 & 1.000000e+02 & 100.0000000 & 100.0000000 & 100.0000000\\
+\hline
+bisec\_fb\_0 & -1.288028e+04 & -1394.7069782 & -323.9421599 & -51.9716069\\
+\hline
+\rowcolor{gray!6}  p & 1.544952e+00 & 8.5838318 & 24.8359680 & 65.0367737\\
+\hline
+f\_p & -7.637200e-03 & -0.0052211 & -0.0016162 & -0.0009405\\
+\hline
+\rowcolor{gray!6}  f\_p\_t\_f\_a & -3.800000e-04 & -0.0000237 & -0.0000025 & -0.0000002\\
+\hline
+bisec\_a\_1 & 0.000000e+00 & 0.0000000 & 0.0000000 & 50.0000000\\
+\hline
+\rowcolor{gray!6}  bisec\_b\_1 & 5.000000e+01 & 50.0000000 & 50.0000000 & 100.0000000\\
+\hline
+bisec\_fa\_1 & 1.000000e+02 & 100.0000000 & 100.0000000 & 22.5557704\\
+\hline
+\rowcolor{gray!6}  bisec\_fb\_1 & -5.666956e+03 & -595.7345364 & -106.5105843 & -51.9716069\\
+\hline
+bisec\_a\_2 & 0.000000e+00 & 0.0000000 & 0.0000000 & 50.0000000\\
+\hline
+\rowcolor{gray!6}  bisec\_b\_2 & 2.500000e+01 & 25.0000000 & 25.0000000 & 75.0000000\\
+\hline
+bisec\_fa\_2 & 1.000000e+02 & 100.0000000 & 100.0000000 & 22.5557704\\
+\hline
+\rowcolor{gray!6}  bisec\_fb\_2 & -2.464562e+03 & -224.1460032 & -0.6857375 & -14.8701831\\
+\hline
+bisec\_a\_3 & 0.000000e+00 & 0.0000000 & 12.5000000 & 62.5000000\\
+\hline
+\rowcolor{gray!6}  bisec\_b\_3 & 1.250000e+01 & 12.5000000 & 25.0000000 & 75.0000000\\
+\hline
+bisec\_fa\_3 & 1.000000e+02 & 100.0000000 & 50.8640414 & 3.7940196\\
+\hline
+\rowcolor{gray!6}  bisec\_fb\_3 & -1.041574e+03 & -51.1700464 & -0.6857375 & -14.8701831\\
+\hline
+bisec\_a\_4 & 0.000000e+00 & 6.2500000 & 18.7500000 & 62.5000000\\
+\hline
+\rowcolor{gray!6}  bisec\_b\_4 & 6.250000e+00 & 12.5000000 & 25.0000000 & 68.7500000\\
+\hline
+bisec\_fa\_4 & 1.000000e+02 & 29.4271641 & 25.2510409 & 3.7940196\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{# str(tb_states_choices_bisec)}
 \end{Highlighting}
 \end{Shaded}
@@ -9205,49 +8484,97 @@ Here we use the very nice \emph{pivot\_longer} function. Note that to achieve th
 
 \CommentTok{# Print}
 \CommentTok{# summary(tb_states_choices_bisec_long)}
-\KeywordTok{head}\NormalTok{(tb_states_choices_bisec_long }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{one_of}\NormalTok{(}\StringTok{'p'}\NormalTok{,}\StringTok{'f_p'}\NormalTok{,}\StringTok{'f_p_t_f_a'}\NormalTok{)), }\DecValTok{30}\NormalTok{)}
+\KeywordTok{kable}\NormalTok{(}\KeywordTok{head}\NormalTok{(tb_states_choices_bisec_long }\OperatorTok{%>%}\StringTok{ }
+\StringTok{             }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{one_of}\NormalTok{(}\StringTok{'p'}\NormalTok{,}\StringTok{'f_p'}\NormalTok{,}\StringTok{'f_p_t_f_a'}\NormalTok{)), }\DecValTok{15}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable_styling_fc}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## # A tibble: 30 x 6
-##    INDI_ID  fl_A fl_alpha varname biseciter   value
-##      <int> <dbl>    <dbl> <chr>   <chr>       <dbl>
-##  1       1    -2      0.1 a       0              0 
-##  2       1    -2      0.1 b       0            100 
-##  3       1    -2      0.1 fa      0            100 
-##  4       1    -2      0.1 fb      0         -15058.
-##  5       1    -2      0.1 a       1              0 
-##  6       1    -2      0.1 b       1             50 
-##  7       1    -2      0.1 fa      1            100 
-##  8       1    -2      0.1 fb      1          -6660.
-##  9       1    -2      0.1 a       2              0 
-## 10       1    -2      0.1 b       2             25 
-## # ... with 20 more rows
-\end{verbatim}
+\begin{table}[!h]
+\centering
+\begin{tabular}{r|r|r|l|l|r}
+\hline
+INDI\_ID & fl\_A & fl\_alpha & varname & biseciter & value\\
+\hline
+\rowcolor{gray!6}  1 & -2 & 0.1 & a & 0 & 0.000\\
+\hline
+1 & -2 & 0.1 & b & 0 & 100.000\\
+\hline
+\rowcolor{gray!6}  1 & -2 & 0.1 & fa & 0 & 100.000\\
+\hline
+1 & -2 & 0.1 & fb & 0 & -12880.284\\
+\hline
+\rowcolor{gray!6}  1 & -2 & 0.1 & a & 1 & 0.000\\
+\hline
+1 & -2 & 0.1 & b & 1 & 50.000\\
+\hline
+\rowcolor{gray!6}  1 & -2 & 0.1 & fa & 1 & 100.000\\
+\hline
+1 & -2 & 0.1 & fb & 1 & -5666.956\\
+\hline
+\rowcolor{gray!6}  1 & -2 & 0.1 & a & 2 & 0.000\\
+\hline
+1 & -2 & 0.1 & b & 2 & 25.000\\
+\hline
+\rowcolor{gray!6}  1 & -2 & 0.1 & fa & 2 & 100.000\\
+\hline
+1 & -2 & 0.1 & fb & 2 & -2464.562\\
+\hline
+\rowcolor{gray!6}  1 & -2 & 0.1 & a & 3 & 0.000\\
+\hline
+1 & -2 & 0.1 & b & 3 & 12.500\\
+\hline
+\rowcolor{gray!6}  1 & -2 & 0.1 & fa & 3 & 100.000\\
+\hline
+\end{tabular}
+\end{table}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{tail}\NormalTok{(tb_states_choices_bisec_long }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{one_of}\NormalTok{(}\StringTok{'p'}\NormalTok{,}\StringTok{'f_p'}\NormalTok{,}\StringTok{'f_p_t_f_a'}\NormalTok{)), }\DecValTok{30}\NormalTok{)}
+\KeywordTok{kable}\NormalTok{(}\KeywordTok{tail}\NormalTok{(tb_states_choices_bisec_long }\OperatorTok{%>%}\StringTok{ }
+\StringTok{             }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{one_of}\NormalTok{(}\StringTok{'p'}\NormalTok{,}\StringTok{'f_p'}\NormalTok{,}\StringTok{'f_p_t_f_a'}\NormalTok{)), }\DecValTok{15}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable_styling_fc}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## # A tibble: 30 x 6
-##    INDI_ID  fl_A fl_alpha varname biseciter   value
-##      <int> <dbl>    <dbl> <chr>   <chr>       <dbl>
-##  1       4     2      0.9 fa      11         0.0765
-##  2       4     2      0.9 fb      11        -0.0108
-##  3       4     2      0.9 a       12        54.1   
-##  4       4     2      0.9 b       12        54.1   
-##  5       4     2      0.9 fa      12         0.0328
-##  6       4     2      0.9 fb      12        -0.0108
-##  7       4     2      0.9 a       13        54.1   
-##  8       4     2      0.9 b       13        54.1   
-##  9       4     2      0.9 fa      13         0.0110
-## 10       4     2      0.9 fb      13        -0.0108
-## # ... with 20 more rows
-\end{verbatim}
+\begin{table}[!h]
+\centering
+\begin{tabular}{r|r|r|l|l|r}
+\hline
+INDI\_ID & fl\_A & fl\_alpha & varname & biseciter & value\\
+\hline
+\rowcolor{gray!6}  4 & 2 & 0.9 & b & 14 & 65.0390625\\
+\hline
+4 & 2 & 0.9 & fa & 14 & 0.0047633\\
+\hline
+\rowcolor{gray!6}  4 & 2 & 0.9 & fb & 14 & -0.0043628\\
+\hline
+4 & 2 & 0.9 & a & 15 & 65.0360107\\
+\hline
+\rowcolor{gray!6}  4 & 2 & 0.9 & b & 15 & 65.0390625\\
+\hline
+4 & 2 & 0.9 & fa & 15 & 0.0002003\\
+\hline
+\rowcolor{gray!6}  4 & 2 & 0.9 & fb & 15 & -0.0043628\\
+\hline
+4 & 2 & 0.9 & a & 16 & 65.0360107\\
+\hline
+\rowcolor{gray!6}  4 & 2 & 0.9 & b & 16 & 65.0375366\\
+\hline
+4 & 2 & 0.9 & fa & 16 & 0.0002003\\
+\hline
+\rowcolor{gray!6}  4 & 2 & 0.9 & fb & 16 & -0.0020812\\
+\hline
+4 & 2 & 0.9 & a & 17 & 65.0360107\\
+\hline
+\rowcolor{gray!6}  4 & 2 & 0.9 & b & 17 & 65.0367737\\
+\hline
+4 & 2 & 0.9 & fa & 17 & 0.0002003\\
+\hline
+\rowcolor{gray!6}  4 & 2 & 0.9 & fb & 17 & -0.0009405\\
+\hline
+\end{tabular}
+\end{table}
 
 \hypertarget{table-twovery-very-long-to-wider-again}{%
 \paragraph{Table Two--Very Very Long to Wider Again}\label{table-twovery-very-long-to-wider-again}}
@@ -9265,49 +8592,79 @@ But the previous results are too long, with the a, b, fa, and fb all in one colu
 
 \CommentTok{# Print}
 \CommentTok{# summary(tb_states_choices_bisec_wider)}
-\KeywordTok{print}\NormalTok{(tb_states_choices_bisec_wider }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{one_of}\NormalTok{(}\StringTok{'p'}\NormalTok{,}\StringTok{'f_p'}\NormalTok{,}\StringTok{'f_p_t_f_a'}\NormalTok{)))}
+\KeywordTok{kable}\NormalTok{(}\KeywordTok{head}\NormalTok{(tb_states_choices_bisec_wider }\OperatorTok{%>%}\StringTok{ }
+\StringTok{              }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{one_of}\NormalTok{(}\StringTok{'p'}\NormalTok{,}\StringTok{'f_p'}\NormalTok{,}\StringTok{'f_p_t_f_a'}\NormalTok{)), }\DecValTok{10}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable_styling_fc_wide}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## # A tibble: 76 x 8
-##    INDI_ID  fl_A fl_alpha biseciter     a      b    fa        fb
-##      <int> <dbl>    <dbl> <chr>     <dbl>  <dbl> <dbl>     <dbl>
-##  1       1    -2      0.1 0         0     100    100   -15058.  
-##  2       1    -2      0.1 1         0      50    100    -6660.  
-##  3       1    -2      0.1 2         0      25    100    -2918.  
-##  4       1    -2      0.1 3         0      12.5  100    -1248.  
-##  5       1    -2      0.1 4         0       6.25 100     -503.  
-##  6       1    -2      0.1 5         0       3.12 100     -170.  
-##  7       1    -2      0.1 6         0       1.56 100      -21.1 
-##  8       1    -2      0.1 7         0.781   1.56  45.7    -21.1 
-##  9       1    -2      0.1 8         1.17    1.56  13.2    -21.1 
-## 10       1    -2      0.1 9         1.17    1.37  13.2     -3.76
-## # ... with 66 more rows
-\end{verbatim}
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{r|r|r|l|r|r|r|r}
+\hline
+INDI\_ID & fl\_A & fl\_alpha & biseciter & a & b & fa & fb\\
+\hline
+\rowcolor{gray!6}  1 & -2 & 0.1 & 0 & 0.000000 & 100.0000 & 100.00000 & -12880.283918\\
+\hline
+1 & -2 & 0.1 & 1 & 0.000000 & 50.0000 & 100.00000 & -5666.955763\\
+\hline
+\rowcolor{gray!6}  1 & -2 & 0.1 & 2 & 0.000000 & 25.0000 & 100.00000 & -2464.562178\\
+\hline
+1 & -2 & 0.1 & 3 & 0.000000 & 12.5000 & 100.00000 & -1041.574253\\
+\hline
+\rowcolor{gray!6}  1 & -2 & 0.1 & 4 & 0.000000 & 6.2500 & 100.00000 & -408.674764\\
+\hline
+1 & -2 & 0.1 & 5 & 0.000000 & 3.1250 & 100.00000 & -126.904283\\
+\hline
+\rowcolor{gray!6}  1 & -2 & 0.1 & 6 & 0.000000 & 1.5625 & 100.00000 & -1.328965\\
+\hline
+1 & -2 & 0.1 & 7 & 0.781250 & 1.5625 & 54.69612 & -1.328965\\
+\hline
+\rowcolor{gray!6}  1 & -2 & 0.1 & 8 & 1.171875 & 1.5625 & 27.46061 & -1.328965\\
+\hline
+1 & -2 & 0.1 & 9 & 1.367188 & 1.5625 & 13.23495 & -1.328965\\
+\hline
+\end{tabular}}
+\end{table}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{print}\NormalTok{(tb_states_choices_bisec_wider }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{one_of}\NormalTok{(}\StringTok{'p'}\NormalTok{,}\StringTok{'f_p'}\NormalTok{,}\StringTok{'f_p_t_f_a'}\NormalTok{)))}
+\KeywordTok{kable}\NormalTok{(}\KeywordTok{head}\NormalTok{(tb_states_choices_bisec_wider }\OperatorTok{%>%}\StringTok{ }
+\StringTok{              }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{one_of}\NormalTok{(}\StringTok{'p'}\NormalTok{,}\StringTok{'f_p'}\NormalTok{,}\StringTok{'f_p_t_f_a'}\NormalTok{)), }\DecValTok{10}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable_styling_fc_wide}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## # A tibble: 76 x 8
-##    INDI_ID  fl_A fl_alpha biseciter     a      b    fa        fb
-##      <int> <dbl>    <dbl> <chr>     <dbl>  <dbl> <dbl>     <dbl>
-##  1       1    -2      0.1 0         0     100    100   -15058.  
-##  2       1    -2      0.1 1         0      50    100    -6660.  
-##  3       1    -2      0.1 2         0      25    100    -2918.  
-##  4       1    -2      0.1 3         0      12.5  100    -1248.  
-##  5       1    -2      0.1 4         0       6.25 100     -503.  
-##  6       1    -2      0.1 5         0       3.12 100     -170.  
-##  7       1    -2      0.1 6         0       1.56 100      -21.1 
-##  8       1    -2      0.1 7         0.781   1.56  45.7    -21.1 
-##  9       1    -2      0.1 8         1.17    1.56  13.2    -21.1 
-## 10       1    -2      0.1 9         1.17    1.37  13.2     -3.76
-## # ... with 66 more rows
-\end{verbatim}
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{r|r|r|l|r|r|r|r}
+\hline
+INDI\_ID & fl\_A & fl\_alpha & biseciter & a & b & fa & fb\\
+\hline
+\rowcolor{gray!6}  1 & -2 & 0.1 & 0 & 0.000000 & 100.0000 & 100.00000 & -12880.283918\\
+\hline
+1 & -2 & 0.1 & 1 & 0.000000 & 50.0000 & 100.00000 & -5666.955763\\
+\hline
+\rowcolor{gray!6}  1 & -2 & 0.1 & 2 & 0.000000 & 25.0000 & 100.00000 & -2464.562178\\
+\hline
+1 & -2 & 0.1 & 3 & 0.000000 & 12.5000 & 100.00000 & -1041.574253\\
+\hline
+\rowcolor{gray!6}  1 & -2 & 0.1 & 4 & 0.000000 & 6.2500 & 100.00000 & -408.674764\\
+\hline
+1 & -2 & 0.1 & 5 & 0.000000 & 3.1250 & 100.00000 & -126.904283\\
+\hline
+\rowcolor{gray!6}  1 & -2 & 0.1 & 6 & 0.000000 & 1.5625 & 100.00000 & -1.328965\\
+\hline
+1 & -2 & 0.1 & 7 & 0.781250 & 1.5625 & 54.69612 & -1.328965\\
+\hline
+\rowcolor{gray!6}  1 & -2 & 0.1 & 8 & 1.171875 & 1.5625 & 27.46061 & -1.328965\\
+\hline
+1 & -2 & 0.1 & 9 & 1.367188 & 1.5625 & 13.23495 & -1.328965\\
+\hline
+\end{tabular}}
+\end{table}
 
 \hypertarget{graph-bisection-iteration-results}{%
 \subsubsection{Graph Bisection Iteration Results}\label{graph-bisection-iteration-results}}
@@ -9404,7 +8761,7 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-155-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-153-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9423,11 +8780,7 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## Warning: Removed 1 rows containing missing values (geom_path).
-\end{verbatim}
-
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-155-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-153-2} \end{center}
 
 \hypertarget{integration-by-symmetric-uneven-rectangle}{%
 \subsubsection{Integration By Symmetric Uneven Rectangle}\label{integration-by-symmetric-uneven-rectangle}}
@@ -9458,16 +8811,6 @@ Resulting integration is rectangle based, but rectangle width differ. Th rectang
 \NormalTok{  \})}
 
 \NormalTok{mt_sample_means <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(ar_it_draws, }\KeywordTok{as_tibble}\NormalTok{(}\KeywordTok{t}\NormalTok{(mt_fl_means)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{unnest}\NormalTok{())}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: `cols` is now required.
-## Please use `cols = c(cdf, mean, sd)`
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{colnames}\NormalTok{(mt_sample_means) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'draw_count'}\NormalTok{, }\StringTok{'cdf'}\NormalTok{, }\StringTok{'mean'}\NormalTok{, }\StringTok{'sd'}\NormalTok{)}
 \NormalTok{tb_sample_means <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(mt_sample_means)}
 
@@ -9492,7 +8835,7 @@ Resulting integration is rectangle based, but rectangle width differ. Th rectang
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-156-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-154-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9511,7 +8854,7 @@ Resulting integration is rectangle based, but rectangle width differ. Th rectang
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-156-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-154-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9530,7 +8873,7 @@ Resulting integration is rectangle based, but rectangle width differ. Th rectang
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-156-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-154-3} \end{center}
 
 \hypertarget{integration-by-constant-width-rectangle-trapezoidal-rule}{%
 \subsubsection{Integration By Constant Width Rectangle (Trapezoidal rule)}\label{integration-by-constant-width-rectangle-trapezoidal-rule}}
@@ -9557,16 +8900,6 @@ This is implementing even width recentagle, even along x-axis take points, and m
 \NormalTok{  \})}
 
 \NormalTok{mt_sample_means <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(ar_it_draws, }\KeywordTok{as_tibble}\NormalTok{(}\KeywordTok{t}\NormalTok{(mt_fl_means)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{unnest}\NormalTok{())}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: `cols` is now required.
-## Please use `cols = c(cdf, mean, sd)`
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{colnames}\NormalTok{(mt_sample_means) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'draw_count'}\NormalTok{, }\StringTok{'cdf'}\NormalTok{, }\StringTok{'mean'}\NormalTok{, }\StringTok{'sd'}\NormalTok{)}
 \NormalTok{tb_sample_means <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(mt_sample_means)}
 
@@ -9591,7 +8924,7 @@ This is implementing even width recentagle, even along x-axis take points, and m
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-157-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-155-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9610,7 +8943,7 @@ This is implementing even width recentagle, even along x-axis take points, and m
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-157-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-155-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9629,7 +8962,7 @@ This is implementing even width recentagle, even along x-axis take points, and m
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-157-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-155-3} \end{center}
 
 \hypertarget{analytical-solutions}{%
 \section{Analytical Solutions}\label{analytical-solutions}}
@@ -9865,15 +9198,7 @@ Now test the example arrays above using the function based no our formula:
 \end{verbatim}
 
 \begin{verbatim}
-## Warning in fv_dist_gini_vector_pos_test(ar_equal_n1): Data vector has n=1, max-inequality/max-gini=0
-\end{verbatim}
-
-\begin{verbatim}
 ## ar_equal_n1: 0
-\end{verbatim}
-
-\begin{verbatim}
-## Warning in fv_dist_gini_vector_pos_test(ar_ineql_n1): Data vector has n=1, max-inequality/max-gini=0
 \end{verbatim}
 
 \begin{verbatim}
@@ -9886,15 +9211,7 @@ Now test the example arrays above using the function based no our formula:
 \end{verbatim}
 
 \begin{verbatim}
-## Warning in fv_dist_gini_vector_pos_test(ar_ineql_alittle_n2): Data vector has n=2, max-inequality/max-gini=0.333333333333333
-\end{verbatim}
-
-\begin{verbatim}
 ## ar_ineql_alittle_n2: 0.1111111
-\end{verbatim}
-
-\begin{verbatim}
-## Warning in fv_dist_gini_vector_pos_test(ar_ineql_somewht_n2): Data vector has n=2, max-inequality/max-gini=0.333333333333333
 \end{verbatim}
 
 \begin{verbatim}
@@ -9902,15 +9219,7 @@ Now test the example arrays above using the function based no our formula:
 \end{verbatim}
 
 \begin{verbatim}
-## Warning in fv_dist_gini_vector_pos_test(ar_ineql_alotine_n2): Data vector has n=2, max-inequality/max-gini=0.333333333333333
-\end{verbatim}
-
-\begin{verbatim}
 ## ar_ineql_alotine_n2: 0.3131313
-\end{verbatim}
-
-\begin{verbatim}
-## Warning in fv_dist_gini_vector_pos_test(ar_ineql_veryvry_n2): Data vector has n=2, max-inequality/max-gini=0.333333333333333
 \end{verbatim}
 
 \begin{verbatim}
@@ -9923,15 +9232,7 @@ Now test the example arrays above using the function based no our formula:
 \end{verbatim}
 
 \begin{verbatim}
-## Warning in fv_dist_gini_vector_pos_test(ar_equal_n10): Data vector has n=10, max-inequality/max-gini=0.818181818181818
-\end{verbatim}
-
-\begin{verbatim}
 ## ar_equal_n10: 0
-\end{verbatim}
-
-\begin{verbatim}
-## Warning in fv_dist_gini_vector_pos_test(ar_ineql_some_n10): Data vector has n=10, max-inequality/max-gini=0.818181818181818
 \end{verbatim}
 
 \begin{verbatim}
@@ -9939,15 +9240,7 @@ Now test the example arrays above using the function based no our formula:
 \end{verbatim}
 
 \begin{verbatim}
-## Warning in fv_dist_gini_vector_pos_test(ar_ineql_very_n10): Data vector has n=10, max-inequality/max-gini=0.818181818181818
-\end{verbatim}
-
-\begin{verbatim}
 ## ar_ineql_very_n10: 0.7059554
-\end{verbatim}
-
-\begin{verbatim}
-## Warning in fv_dist_gini_vector_pos_test(ar_ineql_extr_n10): Data vector has n=10, max-inequality/max-gini=0.818181818181818
 \end{verbatim}
 
 \begin{verbatim}
@@ -10148,7 +9441,588 @@ Note that many more A grid points are needed to fully plot out the leontief line
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-165-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-163-1} \end{center}
+
+\hypertarget{appendix-appendix}{%
+\appendix}
+
+
+\hypertarget{index-and-code-links}{%
+\chapter{Index and Code Links}\label{index-and-code-links}}
+
+\hypertarget{array-matrix-dataframe-links}{%
+\section{Array, Matrix, Dataframe links}\label{array-matrix-dataframe-links}}
+
+\hypertarget{section-1.1-listlist-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{list}{Section 1.1 List} links}{Section 1.1 List links}}\label{section-1.1-listlist-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/amto/list/htmlpdfr/fs_lst_basics.html}{Multi-dimensional Named Lists}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/list//fs_lst_basics.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/list/htmlpdfr/fs_lst_basics.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/list/htmlpdfr/fs_lst_basics.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/list/htmlpdfr/fs_lst_basics.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Initiate Empty List. Named one and two dimensional lists.
+  \item
+    \textbf{r}: \emph{vector(mode = ``list'', length = it\_N) + names(list) \textless- paste0(`e',seq()) + dimnames(ls2d){[}{[}1{]}{]} \textless- paste0(`r',seq()) + dimnames(ls2d){[}{[}2{]}{]} \textless- paste0(`c',seq())}
+  \item
+    \textbf{tidyr}: \emph{unnest()}
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{section-1.2-arrayarray-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{array}{Section 1.2 Array} links}{Section 1.2 Array links}}\label{section-1.2-arrayarray-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_basics.html}{Arrays Operations in R}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_basics.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_basics.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_basics.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_basics.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Basic array operations in R.
+  \item
+    \textbf{r}: \emph{head() + tail() + na\_if()}
+  \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_generate.html}{Generate Special Arrays}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_generate.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_generate.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_generate.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_generate.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Generate special arrays: log spaced array
+  \item
+    \textbf{r}: \emph{seq()}
+  \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_string.html}{String Operations}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_string.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_string.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_string.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_string.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Split, concatenate, subset strings
+  \item
+    \textbf{r}: \emph{paste0() + sub() + gsub() + grepl() + sprintf() + tail() + strsplit() + basename() + dirname()}
+  \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_mesh.html}{Meshgrid Matrices, Arrays and Scalars}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_mesh.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_mesh.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_mesh.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_mesh.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Meshgrid Matrices, Arrays and Scalars to form all combination dataframe.
+  \item
+    \textbf{tidyr}: \emph{expand\_grid() + expand.grid()}
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{section-1.3-matrixmatrix-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{matrix}{Section 1.3 Matrix} links}{Section 1.3 Matrix links}}\label{section-1.3-matrixmatrix-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/amto/matrix/htmlpdfr/fs_mat_generate.html}{Matrix Basics}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix//fs_mat_generate.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/htmlpdfr/fs_mat_generate.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/htmlpdfr/fs_mat_generate.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/matrix/htmlpdfr/fs_mat_generate.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Generate and combine fixed and random matrixes
+  \item
+    \textbf{R}: \emph{rbind() + matrix}
+  \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/amto/matrix/htmlpdfr/fs_mat_linear_algebra.html}{Linear Algebra Operations}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix//fs_mat_linear_algebra.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/htmlpdfr/fs_mat_linear_algebra.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/htmlpdfr/fs_mat_linear_algebra.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/matrix/htmlpdfr/fs_mat_linear_algebra.html}{\textbf{html}}
+\end{enumerate}
+
+\hypertarget{section-1.4-variables-in-dataframesvariables-in-dataframes-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{variables-in-dataframes}{Section 1.4 Variables in Dataframes} links}{Section 1.4 Variables in Dataframes links}}\label{section-1.4-variables-in-dataframesvariables-in-dataframes-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_basics.html}{Tibble Basics}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_basics.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_basics.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_basics.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_basics.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    generate tibbles, rename tibble variables, tibble row and column names
+  \item
+    rename numeric sequential columns with string prefix and suffix
+  \item
+    \textbf{dplyr}: \emph{as\_tibble(mt) + rename\_all(\textasciitilde c(ar\_names)) + rename\_at(vars(starts\_with(``xx'')), funs(str\_replace(., ``yy'', ``yyyy'')) + rename\_at(vars(num\_range('',ar\_it)), funs(paste0(st,.))) + rowid\_to\_column() + colnames + rownames}
+  \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_factors.html}{Label and Combine Factor Variables}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_factors.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_factors.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_factors.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_factors.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Convert numeric variables to factor variables, generate joint factors, and label factors.
+  \item
+    Graph MPG and 1/4 Miles Time (qsec) from the mtcars dataset over joint shift-type (am) and engine-type (vs) categories.
+  \item
+    \textbf{forcats}: \emph{as\_factor() + fct\_recode() + fct\_cross()}
+  \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_random_draws.html}{Randomly Draw Subsets of Rows from Matrix}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_random_draws.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_random_draws.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_random_draws.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_random_draws.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Given matrix, randomly sample rows, or select if random value is below threshold.
+  \item
+    \textbf{r}: \emph{rnorm() + sample() + df{[}sample(dim(df){[}1{]}, it\_M, replace=FALSE),{]}}
+  \item
+    \textbf{dplyr}: \emph{case\_when() + mutate(var = case\_when(rnorm(n(),mean=0,sd=1) \textless{} 0 \textasciitilde{} 1, TRUE \textasciitilde{} 0)) \%\textgreater\% filter(var == 1)}
+  \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html}{R Tibble Dataframe NA Values}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_na.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_na.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_na.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html}{\textbf{html}}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_string.html}{R Tibble Dataframe String Manipulations}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_string.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_string.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_string.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_string.html}{\textbf{html}}
+\end{enumerate}
+
+\hypertarget{summarize-data-links}{%
+\section{Summarize Data links}\label{summarize-data-links}}
+
+\hypertarget{section-2.1-counting-observationcounting-observation-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{counting-observation}{Section 2.1 Counting Observation} links}{Section 2.1 Counting Observation links}}\label{section-2.1-counting-observationcounting-observation-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/summarize/count/htmlpdfr/fs_count_basics.html}{Counting Basics}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count//fs_count_basics.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/htmlpdfr/fs_count_basics.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/htmlpdfr/fs_count_basics.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/summarize/count/htmlpdfr/fs_count_basics.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    uncount to generate panel skeleton from years in survey
+  \item
+    \textbf{dplyr}: \emph{uncount(yr\_n) + group\_by() + mutate(yr = row\_number() + start\_yr)}
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{section-2.2-sorting-indexing-slicingsorting-indexing-slicing-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{sorting-indexing-slicing}{Section 2.2 Sorting, Indexing, Slicing} links}{Section 2.2 Sorting, Indexing, Slicing links}}\label{section-2.2-sorting-indexing-slicingsorting-indexing-slicing-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/summarize/index/htmlpdfr/fs_index_populate.html}{Sorted Index, Interval Index and Expand Value from One Row}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index//fs_index_populate.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index/htmlpdfr/fs_index_populate.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index/htmlpdfr/fs_index_populate.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/summarize/index/htmlpdfr/fs_index_populate.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Sort and generate index for rows
+  \item
+    Generate negative and positive index based on deviations
+  \item
+    Populate Values from one row to other rows
+  \item
+    \textbf{dplyr}: \emph{arrange() + row\_number() + mutate(lowest = min(Sepal.Length)) + case\_when(row\_number()==x \textasciitilde{} Septal.Length) + mutate(Sepal.New = Sepal.Length{[}Sepal.Index == 1{]})}
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{section-2.3-group-statisticsgroup-statistics-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{group-statistics}{Section 2.3 Group Statistics} links}{Section 2.3 Group Statistics links}}\label{section-2.3-group-statisticsgroup-statistics-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_unique_agg.html}{Count Unique Groups and Mean within Groups}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate//fs_group_unique_agg.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_unique_agg.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_unique_agg.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_unique_agg.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Unique groups defined by multiple values and count obs within group.
+  \item
+    Mean, sd, observation count for non-NA within unique groups.
+  \item
+    \textbf{dplyr}: \emph{group\_by() + summarise(n()) + summarise\_if(is.numeric, funs(mean = mean(., na.rm = TRUE), n = sum(is.na(.)==0)))}
+  \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_summ_one.html}{By Groups, One Variable All Statistics}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate//fs_group_summ_one.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_summ_one.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_summ_one.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_summ_one.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Pick stats, overall, and by multiple groups, stats as matrix or wide row with name=(ctsvar + catevar + catelabel).
+  \item
+    \textbf{tidyr}: \emph{group\_by() + summarize\_at(, funs()) + rename(!!var := !!sym(var)) + mutate(!!var := paste0(var,`str',!!!syms(vars))) + gather() + unite() + spread(varcates, value)}
+  \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_summ_wide.html}{By within Individual Groups Variables, Averages}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate//fs_group_summ_wide.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_summ_wide.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_summ_wide.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_summ_wide.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    By Multiple within Individual Groups Variables.
+  \item
+    Averages for all numeric variables within all groups of all group variables. Long to Wide to very Wide.
+  \item
+    \textbf{tidyr}: *gather() + group\_by() + summarise\_if(is.numeric, funs(mean(., na.rm = TRUE))) + mutate(all\_m\_cate = paste0(variable, '\_c', value)) + unite() + spread()*
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{section-2.4-distributional-statisticsdistributional-statistics-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{distributional-statistics}{Section 2.4 Distributional Statistics} links}{Section 2.4 Distributional Statistics links}}\label{section-2.4-distributional-statisticsdistributional-statistics-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/summarize/dist/htmlpdfr/fst_hist_onevar.html}{Tibble Basics}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/dist//fst_hist_onevar.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/dist/htmlpdfr/fst_hist_onevar.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/dist/htmlpdfr/fst_hist_onevar.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/summarize/dist/htmlpdfr/fst_hist_onevar.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    input multiple variables with comma separated text strings
+  \item
+    quantitative/continuous and categorical/discrete variables
+  \item
+    histogram and summary statistics
+  \item
+    \textbf{tibble}: \emph{ar\_one \textless- c(107.72,101.28) + ar\_two \textless- c(101.72,101.28) + mt\_data \textless- cbind(ar\_one, ar\_two) + as\_tibble(mt\_data)}
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{section-2.5-summarize-multiple-variablessummarize-multiple-variables-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{summarize-multiple-variables}{Section 2.5 Summarize Multiple Variables} links}{Section 2.5 Summarize Multiple Variables links}}\label{section-2.5-summarize-multiple-variablessummarize-multiple-variables-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/summarize/multivar/htmlpdfr/fs_func_multivar.html}{Apply the Same Function over Columns of Matrix}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/multivar//fs_func_multivar.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/multivar/htmlpdfr/fs_func_multivar.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/multivar/htmlpdfr/fs_func_multivar.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/summarize/multivar/htmlpdfr/fs_func_multivar.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Replace NA values in selected columns by alternative values.
+  \item
+    Cumulative sum over multiple variables.
+  \item
+    Rename various various with common prefix and suffix appended.
+  \item
+    \textbf{r}: \emph{cumsum() + gsub() + mutate\_at(vars(contains(`V')), .funs = list(cumu = \textasciitilde cumsum(.))) + rename\_at(vars(contains(``V'') ), list(\textasciitilde gsub(``M'', "", .)))}
+  \item
+    \textbf{dplyr}: \emph{rename\_at() + mutate\_at() + rename\_at(vars(starts\_with(``V'')), funs(str\_replace(., ``V'', ``var''))) + mutate\_at(vars(one\_of(c(`var1', `var2'))), list(\textasciitilde replace\_na(., 99)))}
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{functions-links}{%
+\section{Functions links}\label{functions-links}}
+
+\hypertarget{section-3.1-dataframe-mutatedataframe-mutate-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{dataframe-mutate}{Section 3.1 Dataframe Mutate} links}{Section 3.1 Dataframe Mutate links}}\label{section-3.1-dataframe-mutatedataframe-mutate-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/function/mutatef/htmlpdfr/fs_funceval.html}{Nonlinear Function over Rows}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/mutatef//fs_funceval.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/mutatef/htmlpdfr/fs_funceval.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/mutatef/htmlpdfr/fs_funceval.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/function/mutatef/htmlpdfr/fs_funceval.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Evaluate nonlinear function f(x\_i, y\_i, ar\_x, ar\_y, c, d), where c and d are constants, and ar\_x and ar\_y are arrays, both fixed. x\_i and y\_i vary over each row of matrix.
+  \item
+    \textbf{dplyr}: \emph{rowwise() + mutate(out = funct(inputs))}
+  \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/function/mutatef/htmlpdfr/fs_func_choice_states.html}{Evaluate Functions over Rows of Meshes Matrices}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/mutatef//fs_func_choice_states.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/mutatef/htmlpdfr/fs_func_choice_states.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/mutatef/htmlpdfr/fs_func_choice_states.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/function/mutatef/htmlpdfr/fs_func_choice_states.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Mesh states and choices together and rowwise evaluate many matrixes.
+  \item
+    Cumulative sum over multiple variables.
+  \item
+    Rename various various with common prefix and suffix appended.
+  \item
+    \textbf{r}: \emph{ffi \textless- function(fl\_A, ar\_B)}
+  \item
+    \textbf{tidyr}: \emph{expand\_grid() + rowwise() + df \%\textgreater\% rowwise() \%\textgreater\% mutate(var = ffi(fl\_A, ar\_B))}
+  \item
+    \textbf{ggplot2}: \emph{geom\_line() + facet\_wrap() + geom\_hline() + facet\_wrap(. \textasciitilde{} var\_id, scales = `free') + geom\_hline(yintercept=0, linetype=``dashed'', color=``red'', size=1) +}
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{section-3.2-dataframe-do-anythingdataframe-do-anything-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{dataframe-do-anything}{Section 3.2 Dataframe Do Anything} links}{Section 3.2 Dataframe Do Anything links}}\label{section-3.2-dataframe-do-anythingdataframe-do-anything-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_group.html}{Evaluate Function Do Anything Group Stack Results}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof//fs_funceval_group.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_group.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_group.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_group.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Group dataframe by categories, compute category specific output scalar or arrays based on within category variable information.
+  \item
+    \textbf{dplyr}: \emph{group\_by(ID) + do(inc = rnorm(.\(N, mean=.\)mn, sd=.\$sd)) + unnest(c(inc)) + left\_join(df, by=``ID'')}
+  \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_expand.html}{Expand Each Dataframe Row into More Rows}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof//fs_funceval_expand.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_expand.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_expand.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_expand.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Generate row value specific arrays of varying Length, and stack expanded dataframe.
+  \item
+    \textbf{dplyr}: \emph{do() + unnest() + left\_join() + df \%\textgreater\% group\_by(ID) \%\textgreater\% do(inc = rnorm(.\(Q, mean=.\)mean, sd=.\$sd)) \%\textgreater\% unnest(c(inc))}
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{section-3.3-apply-and-pmapapply-and-pmap-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{apply-and-pmap}{Section 3.3 Apply and pmap} links}{Section 3.3 Apply and pmap links}}\label{section-3.3-apply-and-pmapapply-and-pmap-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/function/noloop/htmlpdfr/fs_applysapplymutate.html}{Apply and Mutate over Rows}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop//fs_applysapplymutate.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop/htmlpdfr/fs_applysapplymutate.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop/htmlpdfr/fs_applysapplymutate.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/function/noloop/htmlpdfr/fs_applysapplymutate.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Evaluate function f(x\_i,y\_i,c), where c is a constant and x and y vary over each row of a matrix, with index i indicating rows.
+  \item
+    Get same results using apply, sapply, and dplyr mutate.
+  \item
+    \textbf{r}: \emph{do.call() + apply(mt, 1, func) + sapply(ls\_ar, func, ar1, ar2)}
+  \item
+    \textbf{purrr}: \emph{rowwise() + unnest(out) + pmap(func) + unlist()}
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{panel-links}{%
+\section{Panel links}\label{panel-links}}
+
+\hypertarget{section-4.1-generate-and-joingenerate-and-join-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{generate-and-join}{Section 4.1 Generate and Join} links}{Section 4.1 Generate and Join links}}\label{section-4.1-generate-and-joingenerate-and-join-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_genpanel.html}{TIDYVERSE Generate Panel Data Structures}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic//fs_genpanel.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_genpanel.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_genpanel.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_genpanel.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Build skeleton panel frame with N observations and T periods.
+  \item
+    \textbf{tidyr}: \emph{rowid\_to\_column() + uncount() + group\_by() + row\_number() + ungroup()}
+  \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_joining.html}{R DPLYR Join Multiple Dataframes Together}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic//fs_joining.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_joining.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_joining.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_joining.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Join dataframes together with one or multiple keys. Stack dataframes together.
+  \item
+    \textbf{dplyr}: \emph{filter() + rename(!!sym(vsta) := !!sym(vstb)) + mutate(var = rnom(n())) + left\_join(df, by=(c(`id'=`id', `vt'=`vt'))) + left\_join(df, by=setNames(c(`id', `vt'), c(`id', `vt'))) + bind\_rows()}
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{section-4.2-wide-and-longwide-and-long-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{wide-and-long}{Section 4.2 Wide and Long} links}{Section 4.2 Wide and Long links}}\label{section-4.2-wide-and-longwide-and-long-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/panel/widelong/htmlpdfr/fs_pivotwider.html}{TIDYR Pivot Wider and Pivot Longer Examples}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong//fs_pivotwider.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong/htmlpdfr/fs_pivotwider.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong/htmlpdfr/fs_pivotwider.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/panel/widelong/htmlpdfr/fs_pivotwider.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Long roster to wide roster and cumulative sum attendance by date.
+  \item
+    \textbf{dplyr}: \emph{mutate(var = case\_when(rnorm(n()) \textless{} 0 \textasciitilde{} 1, TRUE \textasciitilde{} 0)) + rename\_at(vars(num\_range('`, ar\_it)), list(\textasciitilde paste0(st\_prefix, . ,''))) + mutate\_at(vars(contains(str)), list(\textasciitilde replace\_na(., 0))) + mutate\_at(vars(contains(str)), list(\textasciitilde cumsum(.)))}
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{linear-regression-links}{%
+\section{Linear Regression links}\label{linear-regression-links}}
+
+\hypertarget{section-5.1-ols-and-ivols-and-iv-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{ols-and-iv}{Section 5.1 OLS and IV} links}{Section 5.1 OLS and IV links}}\label{section-5.1-ols-and-ivols-and-iv-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/linreg/ivreg/htmlpdfr/fs_lin_ivregrow.html}{IV/OLS Regression}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg//fs_lin_ivregrow.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/htmlpdfr/fs_lin_ivregrow.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/htmlpdfr/fs_lin_ivregrow.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/linreg/ivreg/htmlpdfr/fs_lin_ivregrow.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    R Instrumental Variables and Ordinary Least Square Regression store all Coefficients and Diagnostics as Dataframe Row.
+  \item
+    \textbf{aer}: \emph{library(aer) + ivreg(as.formula, diagnostics = TRUE) }
+  \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/linreg/ivreg/htmlpdfr/fs_lin_ivloop.html}{M Outcomes and N RHS Alternatives}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg//fs_lin_ivloop.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/htmlpdfr/fs_lin_ivloop.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/htmlpdfr/fs_lin_ivloop.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/linreg/ivreg/htmlpdfr/fs_lin_ivloop.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    There are M outcome variables and N alternative explanatory variables. Regress all M outcome variables on N endogenous/independent right hand side variables one by one, with controls and/or IVs, collect coefficients.
+  \item
+    \textbf{dplyr}: \emph{bind\_rows(lapply(listx, function(x)(bind\_rows(lapply(listy, regf.iv))) + starts\_with() + ends\_with() + reduce(full\_join)}
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{section-5.2-decompositiondecomposition-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{decomposition}{Section 5.2 Decomposition} links}{Section 5.2 Decomposition links}}\label{section-5.2-decompositiondecomposition-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/linreg/decompose/htmlpdfr/fs_lin_decompose.html}{Regression Decomposition}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose//fs_lin_decompose.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose/htmlpdfr/fs_lin_decompose.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose/htmlpdfr/fs_lin_decompose.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/linreg/decompose/htmlpdfr/fs_lin_decompose.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Post multiple regressions, fraction of outcome variables' variances explained by multiple subsets of right hand side variables.
+  \item
+    \textbf{dplyr}: \emph{gather() + group\_by(var) + mutate\_at(vars, funs(mean = mean(.))) + rowSums(mat}mat) + mutate\_if(is.numeric, funs(frac = (./value\_var)))*
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{nonlinear-regression-links}{%
+\section{Nonlinear Regression links}\label{nonlinear-regression-links}}
+
+\hypertarget{section-6.1-logit-regressionlogit-regression-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{logit-regression}{Section 6.1 Logit Regression} links}{Section 6.1 Logit Regression links}}\label{section-6.1-logit-regressionlogit-regression-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/regnonlin/logit/htmlpdfr/fs_logit_birhs.html}{Logit Regression}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/logit//fs_logit_birhs.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/logit/htmlpdfr/fs_logit_birhs.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/logit/htmlpdfr/fs_logit_birhs.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/regnonlin/logit/htmlpdfr/fs_logit_birhs.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Logit regression testing and prediction.
+  \item
+    \textbf{stats}: \emph{glm(as.formula(), data, family=`binomial') + predict(rs, newdata, type = ``response'')}
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{optimization-links}{%
+\section{Optimization links}\label{optimization-links}}
+
+\hypertarget{section-7.1-bisectionbisection-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{bisection-1}{Section 7.1 Bisection} links}{Section 7.1 Bisection links}}\label{section-7.1-bisectionbisection-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/optimization/root_bisect/htmlpdfr/fs_bisec_joint.html}{Concurrent Bisection over Dataframe Rows}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/optimization/root_bisect//fs_bisec_joint.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/optimization/root_bisect/htmlpdfr/fs_bisec_joint.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/optimization/root_bisect/htmlpdfr/fs_bisec_joint.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/optimization/root_bisect/htmlpdfr/fs_bisec_joint.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Post multiple regressions, fraction of outcome variables' variances explained by multiple subsets of right hand side variables.
+  \item
+    \textbf{tidyr}: *pivot\_longer(cols = starts\_with(`abc'), names\_to = c(`a', `b'), names\_pattern = paste0(`prefix', "(.)\_(.)"), values\_to = val) + pivot\_wider(names\_from = !!sym(name), values\_from = val) + mutate(!!sym(abc) := case\_when(efg \textless{} 0 \textasciitilde{} !!sym(opq), TRUE \textasciitilde{} iso))*
+  \item
+    \textbf{gglot2}: \emph{geom\_line() + facet\_wrap() + geom\_hline()}
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{mathmatics-and-statistics-links}{%
+\section{Mathmatics and Statistics links}\label{mathmatics-and-statistics-links}}
+
+\hypertarget{section-8.1-distributionsdistributions-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{distributions}{Section 8.1 Distributions} links}{Section 8.1 Distributions links}}\label{section-8.1-distributionsdistributions-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/math/integration/htmlpdfr/fs_integrate_normal.html}{Integrate Normal Shocks}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/integration//fs_integrate_normal.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/integration/htmlpdfr/fs_integrate_normal.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/integration/htmlpdfr/fs_integrate_normal.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/math/integration/htmlpdfr/fs_integrate_normal.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Random Sampling (Monte Carlo) integrate shocks.
+  \item
+    Trapezoidal rule (symmetric rectangles) integrate normal shock.
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{section-8.2-analytical-solutionsanalytical-solutions-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{analytical-solutions}{Section 8.2 Analytical Solutions} links}{Section 8.2 Analytical Solutions links}}\label{section-8.2-analytical-solutionsanalytical-solutions-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_solu_x_lin.html}{linear solve x with f(x) = 0}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_solu_x_lin.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_solu_x_lin.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_solu_x_lin.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_solu_x_lin.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Evaluate and solve statistically relevant problems with one equation and one unknown that permit analytical solutions.
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{section-8.3-inequality-modelsinequality-models-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{inequality-models}{Section 8.3 Inequality Models} links}{Section 8.3 Inequality Models links}}\label{section-8.3-inequality-modelsinequality-models-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_gini_disc.html}{Gini for Discrete Samples}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_gini_disc.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_gini_disc.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_gini_disc.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_gini_disc.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Given sample of data points that are discrete, compute the approximate gini coefficient.
+  \item
+    \textbf{r}: \emph{sort() + cumsum() + sum()}
+  \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_atkinson_ces.html}{CES abd Atkinson Utility}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_atkinson_ces.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_atkinson_ces.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_atkinson_ces.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_atkinson_ces.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Analyze how changing individual outcomes shift utility given inequality preference parameters.
+  \item
+    Draw Cobb-Douglas, Utilitarian and Leontief indifference curve
+  \item
+    \textbf{r}: \emph{apply(mt, 1, funct(x)\{\}) + do.call(rbind, ls\_mt)}
+  \item
+    \textbf{tidyr}: \emph{expand\_grid()}
+  \item
+    \textbf{ggplot2}: \emph{geom\_line() + facet\_wrap()}
+  \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ//htmlpdfr/README_appendix.html}{README\_appendix}: \href{https://github.com/FanWangEcon/R4Econ/blob/master///README_appendix.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master//htmlpdfr/README_appendix.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master//htmlpdfr/README_appendix.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ//htmlpdfr/README_appendix.html}{\textbf{html}}
+\end{enumerate}
 
   \bibliography{book.bib,packages.bib}
 

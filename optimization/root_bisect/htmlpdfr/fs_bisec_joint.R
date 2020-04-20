@@ -1,9 +1,46 @@
-## ----global_options, include = FALSE---------------------------------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE-----------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## --------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------
+# Parameters
+fl_rho = 0.20
+svr_id_var = 'INDI_ID'
 
+# P fixed parameters, nN is N dimensional, nP is P dimensional
+ar_nN_A = seq(-2, 2, length.out = 4)
+ar_nN_alpha = seq(0.1, 0.9, length.out = 4)
+
+# Choice Grid for nutritional feasible choices for each
+fl_N_agg = 100
+fl_N_min = 0
+
+# Mesh Expand
+tb_states_choices <- as_tibble(cbind(ar_nN_A, ar_nN_alpha)) %>% 
+  rowid_to_column(var=svr_id_var)
+
+# Convert Matrix to Tibble
+ar_st_col_names = c(svr_id_var,'fl_A', 'fl_alpha')
+tb_states_choices <- tb_states_choices %>% rename_all(~c(ar_st_col_names))
+
+
+## ----------------------------------------------------------------------------------------------------
+# Define Implicit Function
+ffi_nonlin_dplyrdo <- function(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, fl_rho){
+
+  ar_p1_s1 = exp((fl_A - ar_A)*fl_rho)
+  ar_p1_s2 = (fl_alpha/ar_alpha)
+  ar_p1_s3 = (1/(ar_alpha*fl_rho - 1))
+  ar_p1 = (ar_p1_s1*ar_p1_s2)^ar_p1_s3
+  ar_p2 = fl_N^((fl_alpha*fl_rho-1)/(ar_alpha*fl_rho-1))
+  ar_overall = ar_p1*ar_p2
+  fl_overall = fl_N_agg - sum(ar_overall)
+
+  return(fl_overall)
+}
+
+
+## ----------------------------------------------------------------------------------------------------
 # common prefix to make reshaping easier
 st_bisec_prefix <- 'bisec_'
 svr_a_lst <- paste0(st_bisec_prefix, 'a_0')
@@ -29,7 +66,7 @@ dim(tb_states_choices_bisec)
 # summary(tb_states_choices_bisec)
 
 
-## --------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------
 
 # fl_tol = float tolerance criteria
 # it_tol = number of interations to allow at most
@@ -92,12 +129,13 @@ while (it_cur <= it_tol && fl_p_dist2zr >= fl_tol ) {
 }
 
 
-## ----very wide table-------------------------------------------------------------------------------------------------------------------------------------
-# head(tb_states_choices_bisec, 10)
+## ----very wide table---------------------------------------------------------------------------------
+kable(head(t(tb_states_choices_bisec), 25)) %>% 
+  kable_styling_fc()
 # str(tb_states_choices_bisec)
 
 
-## ----reshape solution from wide to very long-------------------------------------------------------------------------------------------------------------
+## ----reshape solution from wide to very long---------------------------------------------------------
 # New variables
 svr_bisect_iter <- 'biseciter'
 svr_abfafb_long_name <- 'varname'
@@ -115,11 +153,15 @@ tb_states_choices_bisec_long <- tb_states_choices_bisec %>%
 
 # Print
 # summary(tb_states_choices_bisec_long)
-head(tb_states_choices_bisec_long %>% select(-one_of('p','f_p','f_p_t_f_a')), 30)
-tail(tb_states_choices_bisec_long %>% select(-one_of('p','f_p','f_p_t_f_a')), 30)
+kable(head(tb_states_choices_bisec_long %>% 
+             select(-one_of('p','f_p','f_p_t_f_a')), 15)) %>% 
+  kable_styling_fc()
+kable(tail(tb_states_choices_bisec_long %>% 
+             select(-one_of('p','f_p','f_p_t_f_a')), 15)) %>% 
+  kable_styling_fc()
 
 
-## ----reshape solution for table show---------------------------------------------------------------------------------------------------------------------
+## ----reshape solution for table show-----------------------------------------------------------------
 # Pivot wide to very long to a little wide
 tb_states_choices_bisec_wider <- tb_states_choices_bisec_long %>%
   pivot_wider(
@@ -129,11 +171,15 @@ tb_states_choices_bisec_wider <- tb_states_choices_bisec_long %>%
 
 # Print
 # summary(tb_states_choices_bisec_wider)
-print(tb_states_choices_bisec_wider %>% select(-one_of('p','f_p','f_p_t_f_a')))
-print(tb_states_choices_bisec_wider %>% select(-one_of('p','f_p','f_p_t_f_a')))
+kable(head(tb_states_choices_bisec_wider %>% 
+              select(-one_of('p','f_p','f_p_t_f_a')), 10)) %>% 
+  kable_styling_fc_wide()
+kable(head(tb_states_choices_bisec_wider %>% 
+              select(-one_of('p','f_p','f_p_t_f_a')), 10)) %>% 
+  kable_styling_fc_wide()
 
 
-## ----reshape solution for graphing-----------------------------------------------------------------------------------------------------------------------
+## ----reshape solution for graphing-------------------------------------------------------------------
 # Graph results
 lineplot <- tb_states_choices_bisec_long %>%
     mutate(!!sym(svr_bisect_iter) := as.numeric(!!sym(svr_bisect_iter))) %>%

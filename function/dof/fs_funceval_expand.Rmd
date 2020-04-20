@@ -1,6 +1,17 @@
 ---
-title: "DPLYR Expand Dataframe with Function"
-date: 2020-04-01
+title: "R Expand Each Dataframe Row into More Rows"
+titleshort: "Expand Each Dataframe Row into More Rows"
+description: |
+  Generate row value specific arrays of varying Length, and stack expanded dataframe.
+core:
+  - package: dplyr
+    code: |
+      do()
+      unnest()
+      left_join()
+      df %>% group_by(ID) %>% do(inc = rnorm(.$Q, mean=.$mean, sd=.$sd)) %>% unnest(c(inc))
+date: 2020-04-19
+date_start: 2020-04-01
 output:
   pdf_document:
     pandoc_args: '../../_output_kniti_pdf.yaml'

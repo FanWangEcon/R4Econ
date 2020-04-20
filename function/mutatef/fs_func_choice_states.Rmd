@@ -1,6 +1,28 @@
 ---
-title: "DPLYR Evaluate Functions at Many States and Choices Each State"
-author: Fan Wang
+title: "Evaluate Functions over Rows of Meshes Matrices in R"
+titleshort: "Evaluate Functions over Rows of Meshes Matrices"
+description: |
+  Mesh states and choices together and rowwise evaluate many matrixes.
+  Cumulative sum over multiple variables.
+  Rename various various with common prefix and suffix appended.
+core:
+  - package: r
+    code: |
+      ffi <- function(fl_A, ar_B)
+  - package: tidyr
+    code: |
+      expand_grid()
+      rowwise()
+      df %>% rowwise() %>% mutate(var = ffi(fl_A, ar_B))
+  - package: ggplot2
+    code: |
+      geom_line()
+      facet_wrap()
+      geom_hline()
+      facet_wrap(. ~ var_id, scales = 'free')
+      geom_hline(yintercept=0, linetype="dashed", color="red", size=1) +
+date: 2020-04-19
+date_start: 2020-04-01
 output:
   pdf_document:
     pandoc_args: '../../_output_kniti_pdf.yaml'
@@ -153,7 +175,17 @@ tb_states_choices_dense_eval = tb_states_choices_dense %>% rowwise() %>%
                                                                fl_N_agg, fl_rho))
 ```
 
+
 ```{r graph many evaluations}
+# Labeling
+st_title <- paste0('Evaluate Non-Linear Functions to Search for Roots')
+st_subtitle <- paste0('https://fanwangecon.github.io/',
+                      'R4Econ/function/mutatef/htmlpdfr/fs_func_choice_states.html')
+st_caption <- paste0('Evaluating the function, ',
+                     'https://fanwangecon.github.io/R4Econ/')
+st_x_label <- 'x values'
+st_y_label <- 'f(x)'
+
 # Show
 dim(tb_states_choices_dense_eval)
 summary(tb_states_choices_dense_eval)
@@ -162,10 +194,11 @@ lineplot <- tb_states_choices_dense_eval %>%
         geom_line() +
         facet_wrap( . ~ INDI_ID, scales = "free") +
         geom_hline(yintercept=0, linetype="dashed",
-                color = "red", size=1)
-        labs(title = 'Evaluate Non-Linear Functions to Search for Roots',
-             x = 'X values',
-             y = 'f(x)',
-             caption = 'Evaluating the Function')
+                color = "red", size=1) +
+        labs(title = st_title,
+             subtitle = st_subtitle,
+             x = st_x_label,
+             y = st_y_label,
+             caption = st_caption)
 print(lineplot)
 ```

@@ -1,7 +1,25 @@
 ---
 title: "R Example Apply the Same Function Over Multiple Variables"
-author: Fan Wang
-date: 2020-04-01
+titleshort: "Apply the Same Function over Columns of Matrix"
+description: |
+  Replace NA values in selected columns by alternative values.
+  Cumulative sum over multiple variables.
+  Rename various various with common prefix and suffix appended.
+core:
+  - package: r
+    code: |
+      cumsum()
+      gsub()
+      mutate_at(vars(contains('V')), .funs = list(cumu = ~cumsum(.)))
+      rename_at(vars(contains("V") ), list(~gsub("M", "", .)))
+  - package: dplyr
+    code: |
+      rename_at()
+      mutate_at()
+      rename_at(vars(starts_with("V")), funs(str_replace(., "V", "var")))
+      mutate_at(vars(one_of(c('var1', 'var2'))), list(~replace_na(., 99)))
+date: 2020-04-19
+date_start: 2020-04-01
 output:
   pdf_document:
     pandoc_args: '../../_output_kniti_pdf.yaml'
