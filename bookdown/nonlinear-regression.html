@@ -24,7 +24,7 @@
 <meta name="author" content="Fan Wang" />
 
 
-<meta name="date" content="2020-04-20" />
+<meta name="date" content="2020-04-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -160,7 +160,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.4.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-dataframe"><i class="fa fa-check"></i><b>1.4.1</b> Generate Dataframe</a></li>
 <li class="chapter" data-level="1.4.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#factor-label-and-combine"><i class="fa fa-check"></i><b>1.4.2</b> Factor Label and Combine</a></li>
 <li class="chapter" data-level="1.4.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#drawly-random-rows"><i class="fa fa-check"></i><b>1.4.3</b> Drawly Random Rows</a></li>
-<li class="chapter" data-level="1.4.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#variable-na-values"><i class="fa fa-check"></i><b>1.4.4</b> Variable NA Values</a></li>
+<li class="chapter" data-level="1.4.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-variables-conditional-on-others"><i class="fa fa-check"></i><b>1.4.4</b> Generate Variables Conditional On Others</a></li>
 <li class="chapter" data-level="1.4.5" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-values"><i class="fa fa-check"></i><b>1.4.5</b> String Values</a></li>
 </ul></li>
 </ul></li>
@@ -308,26 +308,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository.</p>
 </blockquote>
 <p><em>Data Preparation</em></p>
-<div class="sourceCode" id="cb331"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb331-1" title="1">df_mtcars &lt;-<span class="st"> </span>mtcars</a>
-<a class="sourceLine" id="cb331-2" title="2"></a>
-<a class="sourceLine" id="cb331-3" title="3"><span class="co"># X-variables to use on RHS</span></a>
-<a class="sourceLine" id="cb331-4" title="4">ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;mpg&#39;</span>, <span class="st">&#39;qsec&#39;</span>)</a>
-<a class="sourceLine" id="cb331-5" title="5">ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;mpg&#39;</span>)</a>
-<a class="sourceLine" id="cb331-6" title="6">ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;qsec&#39;</span>)</a>
-<a class="sourceLine" id="cb331-7" title="7">ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;wt&#39;</span>)</a>
-<a class="sourceLine" id="cb331-8" title="8">ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;mpg&#39;</span>, <span class="st">&#39;wt&#39;</span>, <span class="st">&#39;vs&#39;</span>)</a>
-<a class="sourceLine" id="cb331-9" title="9"></a>
-<a class="sourceLine" id="cb331-10" title="10">svr_binary &lt;-<span class="st"> &#39;hpLowHigh&#39;</span></a>
-<a class="sourceLine" id="cb331-11" title="11">svr_binary_lb0 &lt;-<span class="st"> &#39;LowHP&#39;</span></a>
-<a class="sourceLine" id="cb331-12" title="12">svr_binary_lb1 &lt;-<span class="st"> &#39;HighHP&#39;</span></a>
-<a class="sourceLine" id="cb331-13" title="13">svr_outcome &lt;-<span class="st"> &#39;am&#39;</span></a>
-<a class="sourceLine" id="cb331-14" title="14">sdt_name &lt;-<span class="st"> &#39;mtcars&#39;</span></a>
-<a class="sourceLine" id="cb331-15" title="15"></a>
-<a class="sourceLine" id="cb331-16" title="16"><span class="co"># Discretize hp</span></a>
-<a class="sourceLine" id="cb331-17" title="17">df_mtcars &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb331-18" title="18"><span class="st">    </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_binary) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">cut</span>(hp,</a>
-<a class="sourceLine" id="cb331-19" title="19">                           <span class="dt">breaks=</span><span class="kw">c</span>(<span class="op">-</span><span class="ot">Inf</span>, <span class="dv">210</span>, <span class="ot">Inf</span>),</a>
-<a class="sourceLine" id="cb331-20" title="20">                           <span class="dt">labels=</span><span class="kw">c</span>(svr_binary_lb0, svr_binary_lb1)))</a></code></pre></div>
+<div class="sourceCode" id="cb336"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb336-1" title="1">df_mtcars &lt;-<span class="st"> </span>mtcars</a>
+<a class="sourceLine" id="cb336-2" title="2"></a>
+<a class="sourceLine" id="cb336-3" title="3"><span class="co"># X-variables to use on RHS</span></a>
+<a class="sourceLine" id="cb336-4" title="4">ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;mpg&#39;</span>, <span class="st">&#39;qsec&#39;</span>)</a>
+<a class="sourceLine" id="cb336-5" title="5">ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;mpg&#39;</span>)</a>
+<a class="sourceLine" id="cb336-6" title="6">ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;qsec&#39;</span>)</a>
+<a class="sourceLine" id="cb336-7" title="7">ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;wt&#39;</span>)</a>
+<a class="sourceLine" id="cb336-8" title="8">ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;mpg&#39;</span>, <span class="st">&#39;wt&#39;</span>, <span class="st">&#39;vs&#39;</span>)</a>
+<a class="sourceLine" id="cb336-9" title="9"></a>
+<a class="sourceLine" id="cb336-10" title="10">svr_binary &lt;-<span class="st"> &#39;hpLowHigh&#39;</span></a>
+<a class="sourceLine" id="cb336-11" title="11">svr_binary_lb0 &lt;-<span class="st"> &#39;LowHP&#39;</span></a>
+<a class="sourceLine" id="cb336-12" title="12">svr_binary_lb1 &lt;-<span class="st"> &#39;HighHP&#39;</span></a>
+<a class="sourceLine" id="cb336-13" title="13">svr_outcome &lt;-<span class="st"> &#39;am&#39;</span></a>
+<a class="sourceLine" id="cb336-14" title="14">sdt_name &lt;-<span class="st"> &#39;mtcars&#39;</span></a>
+<a class="sourceLine" id="cb336-15" title="15"></a>
+<a class="sourceLine" id="cb336-16" title="16"><span class="co"># Discretize hp</span></a>
+<a class="sourceLine" id="cb336-17" title="17">df_mtcars &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb336-18" title="18"><span class="st">    </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_binary) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">cut</span>(hp,</a>
+<a class="sourceLine" id="cb336-19" title="19">                           <span class="dt">breaks=</span><span class="kw">c</span>(<span class="op">-</span><span class="ot">Inf</span>, <span class="dv">210</span>, <span class="ot">Inf</span>),</a>
+<a class="sourceLine" id="cb336-20" title="20">                           <span class="dt">labels=</span><span class="kw">c</span>(svr_binary_lb0, svr_binary_lb1)))</a></code></pre></div>
 <div id="logit-regresion-and-prediction" class="section level4">
 <h4><span class="header-section-number">6.1.1.1</span> Logit Regresion and Prediction</h4>
 <p>logit regression with glm, and predict using estimation data. Prediction and estimation with one variable.</p>
@@ -335,10 +335,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="https://stats.idre.ucla.edu/r/dae/logit-regression/">LOGIT REGRESSION R DATA ANALYSIS EXAMPLES</a></li>
 <li><a href="https://www.statmethods.net/advstats/glm.html">Generalized Linear Models</a></li>
 </ul>
-<div class="sourceCode" id="cb332"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb332-1" title="1"><span class="co"># Regress</span></a>
-<a class="sourceLine" id="cb332-2" title="2">rs_logit &lt;-<span class="st"> </span><span class="kw">glm</span>(<span class="kw">as.formula</span>(<span class="kw">paste</span>(svr_outcome, <span class="st">&quot;~&quot;</span>, <span class="kw">paste</span>(ls_st_xs, <span class="dt">collapse=</span><span class="st">&quot;+&quot;</span>)))</a>
-<a class="sourceLine" id="cb332-3" title="3">                ,<span class="dt">data =</span> df_mtcars, <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)</a>
-<a class="sourceLine" id="cb332-4" title="4"><span class="kw">summary</span>(rs_logit)</a></code></pre></div>
+<div class="sourceCode" id="cb337"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb337-1" title="1"><span class="co"># Regress</span></a>
+<a class="sourceLine" id="cb337-2" title="2">rs_logit &lt;-<span class="st"> </span><span class="kw">glm</span>(<span class="kw">as.formula</span>(<span class="kw">paste</span>(svr_outcome, <span class="st">&quot;~&quot;</span>, <span class="kw">paste</span>(ls_st_xs, <span class="dt">collapse=</span><span class="st">&quot;+&quot;</span>)))</a>
+<a class="sourceLine" id="cb337-3" title="3">                ,<span class="dt">data =</span> df_mtcars, <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)</a>
+<a class="sourceLine" id="cb337-4" title="4"><span class="kw">summary</span>(rs_logit)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## glm(formula = as.formula(paste(svr_outcome, &quot;~&quot;, paste(ls_st_xs, 
@@ -364,17 +364,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## AIC: 21.092
 ## 
 ## Number of Fisher Scoring iterations: 7</code></pre>
-<div class="sourceCode" id="cb334"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb334-1" title="1"><span class="co"># Predcit Using Regression Data</span></a>
-<a class="sourceLine" id="cb334-2" title="2">df_mtcars<span class="op">$</span>p_mpg &lt;-<span class="st"> </span><span class="kw">predict</span>(rs_logit, <span class="dt">newdata =</span> df_mtcars, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb339"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb339-1" title="1"><span class="co"># Predcit Using Regression Data</span></a>
+<a class="sourceLine" id="cb339-2" title="2">df_mtcars<span class="op">$</span>p_mpg &lt;-<span class="st"> </span><span class="kw">predict</span>(rs_logit, <span class="dt">newdata =</span> df_mtcars, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a></code></pre></div>
 <div id="prediction-with-observed-binary-input" class="section level5">
 <h5><span class="header-section-number">6.1.1.1.1</span> Prediction with Observed Binary Input</h5>
 <p>Logit regression with a continuous variable and a binary variable. Predict outcome with observed continuous variable as well as observed binary input variable.</p>
-<div class="sourceCode" id="cb335"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb335-1" title="1"><span class="co"># Regress</span></a>
-<a class="sourceLine" id="cb335-2" title="2">rs_logit_bi &lt;-<span class="st"> </span><span class="kw">glm</span>(<span class="kw">as.formula</span>(<span class="kw">paste</span>(svr_outcome,</a>
-<a class="sourceLine" id="cb335-3" title="3">                                    <span class="st">&quot;~ factor(&quot;</span>, svr_binary,<span class="st">&quot;) + &quot;</span>,</a>
-<a class="sourceLine" id="cb335-4" title="4">                                    <span class="kw">paste</span>(ls_st_xs, <span class="dt">collapse=</span><span class="st">&quot;+&quot;</span>)))</a>
-<a class="sourceLine" id="cb335-5" title="5">                   , <span class="dt">data =</span> df_mtcars, <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)</a>
-<a class="sourceLine" id="cb335-6" title="6"><span class="kw">summary</span>(rs_logit_bi)</a></code></pre></div>
+<div class="sourceCode" id="cb340"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb340-1" title="1"><span class="co"># Regress</span></a>
+<a class="sourceLine" id="cb340-2" title="2">rs_logit_bi &lt;-<span class="st"> </span><span class="kw">glm</span>(<span class="kw">as.formula</span>(<span class="kw">paste</span>(svr_outcome,</a>
+<a class="sourceLine" id="cb340-3" title="3">                                    <span class="st">&quot;~ factor(&quot;</span>, svr_binary,<span class="st">&quot;) + &quot;</span>,</a>
+<a class="sourceLine" id="cb340-4" title="4">                                    <span class="kw">paste</span>(ls_st_xs, <span class="dt">collapse=</span><span class="st">&quot;+&quot;</span>)))</a>
+<a class="sourceLine" id="cb340-5" title="5">                   , <span class="dt">data =</span> df_mtcars, <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)</a>
+<a class="sourceLine" id="cb340-6" title="6"><span class="kw">summary</span>(rs_logit_bi)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## glm(formula = as.formula(paste(svr_outcome, &quot;~ factor(&quot;, svr_binary, 
@@ -402,28 +402,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## AIC: 18.978
 ## 
 ## Number of Fisher Scoring iterations: 9</code></pre>
-<div class="sourceCode" id="cb337"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb337-1" title="1"><span class="co"># Predcit Using Regresion Data</span></a>
-<a class="sourceLine" id="cb337-2" title="2">df_mtcars<span class="op">$</span>p_mpg_hp &lt;-<span class="st"> </span><span class="kw">predict</span>(rs_logit_bi, <span class="dt">newdata =</span> df_mtcars, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb337-3" title="3"></a>
-<a class="sourceLine" id="cb337-4" title="4"><span class="co"># Predicted Probabilities am on mgp with or without hp binary</span></a>
-<a class="sourceLine" id="cb337-5" title="5">scatter &lt;-<span class="st"> </span><span class="kw">ggplot</span>(df_mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>p_mpg_hp, <span class="dt">y=</span>p_mpg)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb337-6" title="6"><span class="st">      </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb337-7" title="7"><span class="st">      </span><span class="co"># geom_smooth(method=lm) + # Trend line</span></a>
-<a class="sourceLine" id="cb337-8" title="8"><span class="st">      </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">slope =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="co"># 45 degree line</span></a>
-<a class="sourceLine" id="cb337-9" title="9"><span class="st">      </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Predicted Probabilities &#39;</span>, svr_outcome, <span class="st">&#39; on &#39;</span>, ls_st_xs, <span class="st">&#39; with or without hp binary&#39;</span>),</a>
-<a class="sourceLine" id="cb337-10" title="10">           <span class="dt">x =</span> <span class="kw">paste0</span>(<span class="st">&#39;prediction with &#39;</span>, ls_st_xs, <span class="st">&#39; and binary &#39;</span>, svr_binary, <span class="st">&#39; indicator, 1 is high&#39;</span>),</a>
-<a class="sourceLine" id="cb337-11" title="11">           <span class="dt">y =</span> <span class="kw">paste0</span>(<span class="st">&#39;prediction with only &#39;</span>, ls_st_xs),</a>
-<a class="sourceLine" id="cb337-12" title="12">           <span class="dt">caption =</span> <span class="st">&#39;mtcars; prediction based on observed data&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb337-13" title="13"><span class="st">      </span><span class="kw">theme_bw</span>()</a>
-<a class="sourceLine" id="cb337-14" title="14"><span class="kw">print</span>(scatter)</a></code></pre></div>
+<div class="sourceCode" id="cb342"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb342-1" title="1"><span class="co"># Predcit Using Regresion Data</span></a>
+<a class="sourceLine" id="cb342-2" title="2">df_mtcars<span class="op">$</span>p_mpg_hp &lt;-<span class="st"> </span><span class="kw">predict</span>(rs_logit_bi, <span class="dt">newdata =</span> df_mtcars, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a>
+<a class="sourceLine" id="cb342-3" title="3"></a>
+<a class="sourceLine" id="cb342-4" title="4"><span class="co"># Predicted Probabilities am on mgp with or without hp binary</span></a>
+<a class="sourceLine" id="cb342-5" title="5">scatter &lt;-<span class="st"> </span><span class="kw">ggplot</span>(df_mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>p_mpg_hp, <span class="dt">y=</span>p_mpg)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb342-6" title="6"><span class="st">      </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb342-7" title="7"><span class="st">      </span><span class="co"># geom_smooth(method=lm) + # Trend line</span></a>
+<a class="sourceLine" id="cb342-8" title="8"><span class="st">      </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">slope =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="co"># 45 degree line</span></a>
+<a class="sourceLine" id="cb342-9" title="9"><span class="st">      </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Predicted Probabilities &#39;</span>, svr_outcome, <span class="st">&#39; on &#39;</span>, ls_st_xs, <span class="st">&#39; with or without hp binary&#39;</span>),</a>
+<a class="sourceLine" id="cb342-10" title="10">           <span class="dt">x =</span> <span class="kw">paste0</span>(<span class="st">&#39;prediction with &#39;</span>, ls_st_xs, <span class="st">&#39; and binary &#39;</span>, svr_binary, <span class="st">&#39; indicator, 1 is high&#39;</span>),</a>
+<a class="sourceLine" id="cb342-11" title="11">           <span class="dt">y =</span> <span class="kw">paste0</span>(<span class="st">&#39;prediction with only &#39;</span>, ls_st_xs),</a>
+<a class="sourceLine" id="cb342-12" title="12">           <span class="dt">caption =</span> <span class="st">&#39;mtcars; prediction based on observed data&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb342-13" title="13"><span class="st">      </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb342-14" title="14"><span class="kw">print</span>(scatter)</a></code></pre></div>
 <p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/logit%20with%20binary%20and%20continuous%20RHS-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="prediction-with-binary-set-to-0-and-1" class="section level5">
 <h5><span class="header-section-number">6.1.1.1.2</span> Prediction with Binary set to 0 and 1</h5>
 <p>Now generate two predictions. One set where binary input is equal to 0, and another where the binary inputs are equal to 1. Ignore whether in data binary input is equal to 0 or 1. Use the same regression results as what was just derived.</p>
 <p>Note that given the example here, the probability changes a lot when we</p>
-<div class="sourceCode" id="cb338"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb338-1" title="1"><span class="co"># Previous regression results</span></a>
-<a class="sourceLine" id="cb338-2" title="2"><span class="kw">summary</span>(rs_logit_bi)</a></code></pre></div>
+<div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb343-1" title="1"><span class="co"># Previous regression results</span></a>
+<a class="sourceLine" id="cb343-2" title="2"><span class="kw">summary</span>(rs_logit_bi)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## glm(formula = as.formula(paste(svr_outcome, &quot;~ factor(&quot;, svr_binary, 
@@ -451,86 +451,86 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## AIC: 18.978
 ## 
 ## Number of Fisher Scoring iterations: 9</code></pre>
-<div class="sourceCode" id="cb340"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb340-1" title="1"><span class="co"># Two different dataframes, mutate the binary regressor</span></a>
-<a class="sourceLine" id="cb340-2" title="2">df_mtcars_bi0 &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_binary) <span class="op">:</span><span class="er">=</span><span class="st"> </span>svr_binary_lb0)</a>
-<a class="sourceLine" id="cb340-3" title="3">df_mtcars_bi1 &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_binary) <span class="op">:</span><span class="er">=</span><span class="st"> </span>svr_binary_lb1)</a>
-<a class="sourceLine" id="cb340-4" title="4"></a>
-<a class="sourceLine" id="cb340-5" title="5"><span class="co"># Predcit Using Regresion Data</span></a>
-<a class="sourceLine" id="cb340-6" title="6">df_mtcars<span class="op">$</span>p_mpg_hp_bi0 &lt;-<span class="st"> </span><span class="kw">predict</span>(rs_logit_bi, <span class="dt">newdata =</span> df_mtcars_bi0, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb340-7" title="7">df_mtcars<span class="op">$</span>p_mpg_hp_bi1 &lt;-<span class="st"> </span><span class="kw">predict</span>(rs_logit_bi, <span class="dt">newdata =</span> df_mtcars_bi1, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb340-8" title="8"></a>
-<a class="sourceLine" id="cb340-9" title="9"><span class="co"># Predicted Probabilities and Binary Input</span></a>
-<a class="sourceLine" id="cb340-10" title="10">scatter &lt;-<span class="st"> </span><span class="kw">ggplot</span>(df_mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>p_mpg_hp_bi0)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb340-11" title="11"><span class="st">      </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>p_mpg_hp), <span class="dt">size=</span><span class="dv">4</span>, <span class="dt">shape=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb340-12" title="12"><span class="st">      </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>p_mpg_hp_bi1), <span class="dt">size=</span><span class="dv">2</span>, <span class="dt">shape=</span><span class="dv">8</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb340-13" title="13"><span class="st">      </span><span class="co"># geom_smooth(method=lm) + # Trend line</span></a>
-<a class="sourceLine" id="cb340-14" title="14"><span class="st">      </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">slope =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="co"># 45 degree line</span></a>
-<a class="sourceLine" id="cb340-15" title="15"><span class="st">      </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Predicted Probabilities and Binary Input&#39;</span>,</a>
-<a class="sourceLine" id="cb340-16" title="16">                          <span class="st">&#39;</span><span class="ch">\n</span><span class="st">cross(shape=4)/red is predict actual binary data&#39;</span>,</a>
-<a class="sourceLine" id="cb340-17" title="17">                          <span class="st">&#39;</span><span class="ch">\n</span><span class="st">star(shape=8)/black is predict set binary = 1 for all&#39;</span>),</a>
-<a class="sourceLine" id="cb340-18" title="18">            <span class="dt">x =</span> <span class="kw">paste0</span>(<span class="st">&#39;prediction with &#39;</span>, ls_st_xs, <span class="st">&#39; and binary &#39;</span>, svr_binary, <span class="st">&#39; = 0 for all&#39;</span>),</a>
-<a class="sourceLine" id="cb340-19" title="19">            <span class="dt">y =</span> <span class="kw">paste0</span>(<span class="st">&#39;prediction with &#39;</span>, ls_st_xs, <span class="st">&#39; and binary &#39;</span>, svr_binary, <span class="st">&#39; = 1&#39;</span>),</a>
-<a class="sourceLine" id="cb340-20" title="20">           <span class="dt">caption =</span> <span class="kw">paste0</span>(sdt_name)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb340-21" title="21"><span class="st">      </span><span class="kw">theme_bw</span>()</a>
-<a class="sourceLine" id="cb340-22" title="22"><span class="kw">print</span>(scatter)</a></code></pre></div>
+<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb345-1" title="1"><span class="co"># Two different dataframes, mutate the binary regressor</span></a>
+<a class="sourceLine" id="cb345-2" title="2">df_mtcars_bi0 &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_binary) <span class="op">:</span><span class="er">=</span><span class="st"> </span>svr_binary_lb0)</a>
+<a class="sourceLine" id="cb345-3" title="3">df_mtcars_bi1 &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_binary) <span class="op">:</span><span class="er">=</span><span class="st"> </span>svr_binary_lb1)</a>
+<a class="sourceLine" id="cb345-4" title="4"></a>
+<a class="sourceLine" id="cb345-5" title="5"><span class="co"># Predcit Using Regresion Data</span></a>
+<a class="sourceLine" id="cb345-6" title="6">df_mtcars<span class="op">$</span>p_mpg_hp_bi0 &lt;-<span class="st"> </span><span class="kw">predict</span>(rs_logit_bi, <span class="dt">newdata =</span> df_mtcars_bi0, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a>
+<a class="sourceLine" id="cb345-7" title="7">df_mtcars<span class="op">$</span>p_mpg_hp_bi1 &lt;-<span class="st"> </span><span class="kw">predict</span>(rs_logit_bi, <span class="dt">newdata =</span> df_mtcars_bi1, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a>
+<a class="sourceLine" id="cb345-8" title="8"></a>
+<a class="sourceLine" id="cb345-9" title="9"><span class="co"># Predicted Probabilities and Binary Input</span></a>
+<a class="sourceLine" id="cb345-10" title="10">scatter &lt;-<span class="st"> </span><span class="kw">ggplot</span>(df_mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>p_mpg_hp_bi0)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb345-11" title="11"><span class="st">      </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>p_mpg_hp), <span class="dt">size=</span><span class="dv">4</span>, <span class="dt">shape=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb345-12" title="12"><span class="st">      </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>p_mpg_hp_bi1), <span class="dt">size=</span><span class="dv">2</span>, <span class="dt">shape=</span><span class="dv">8</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb345-13" title="13"><span class="st">      </span><span class="co"># geom_smooth(method=lm) + # Trend line</span></a>
+<a class="sourceLine" id="cb345-14" title="14"><span class="st">      </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">slope =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="co"># 45 degree line</span></a>
+<a class="sourceLine" id="cb345-15" title="15"><span class="st">      </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Predicted Probabilities and Binary Input&#39;</span>,</a>
+<a class="sourceLine" id="cb345-16" title="16">                          <span class="st">&#39;</span><span class="ch">\n</span><span class="st">cross(shape=4)/red is predict actual binary data&#39;</span>,</a>
+<a class="sourceLine" id="cb345-17" title="17">                          <span class="st">&#39;</span><span class="ch">\n</span><span class="st">star(shape=8)/black is predict set binary = 1 for all&#39;</span>),</a>
+<a class="sourceLine" id="cb345-18" title="18">            <span class="dt">x =</span> <span class="kw">paste0</span>(<span class="st">&#39;prediction with &#39;</span>, ls_st_xs, <span class="st">&#39; and binary &#39;</span>, svr_binary, <span class="st">&#39; = 0 for all&#39;</span>),</a>
+<a class="sourceLine" id="cb345-19" title="19">            <span class="dt">y =</span> <span class="kw">paste0</span>(<span class="st">&#39;prediction with &#39;</span>, ls_st_xs, <span class="st">&#39; and binary &#39;</span>, svr_binary, <span class="st">&#39; = 1&#39;</span>),</a>
+<a class="sourceLine" id="cb345-20" title="20">           <span class="dt">caption =</span> <span class="kw">paste0</span>(sdt_name)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb345-21" title="21"><span class="st">      </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb345-22" title="22"><span class="kw">print</span>(scatter)</a></code></pre></div>
 <p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/logit%20prediction%200%20vs%201-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="prediction-with-binary-set-to-0-and-1-difference" class="section level5">
 <h5><span class="header-section-number">6.1.1.1.3</span> Prediction with Binary set to 0 and 1 Difference</h5>
 <p>What is the difference in probability between binary = 0 vs binary = 1. How does that relate to the probability of outcome of interest when binary = 0 for all.</p>
 <p>In the binary logit case, the relationship will be hump–shaped by construction between <span class="math inline">\(A_i\)</span> and <span class="math inline">\(\alpha_i\)</span>. In the exponential wage cases, the relationship is convex upwards.</p>
-<div class="sourceCode" id="cb341"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb341-1" title="1"><span class="co"># Generate Gap Variable</span></a>
-<a class="sourceLine" id="cb341-2" title="2">df_mtcars &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">alpha_i =</span> p_mpg_hp_bi1 <span class="op">-</span><span class="st"> </span>p_mpg_hp_bi0) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb341-3" title="3"><span class="st">                </span><span class="kw">mutate</span>(<span class="dt">A_i =</span> p_mpg_hp_bi0)</a>
-<a class="sourceLine" id="cb341-4" title="4"></a>
-<a class="sourceLine" id="cb341-5" title="5"><span class="co"># Binary Marginal Effects and Prediction without Binary</span></a>
-<a class="sourceLine" id="cb341-6" title="6">scatter &lt;-<span class="st"> </span><span class="kw">ggplot</span>(df_mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>A_i)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb341-7" title="7"><span class="st">      </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>alpha_i), <span class="dt">size=</span><span class="dv">4</span>, <span class="dt">shape=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb341-8" title="8"><span class="st">      </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">slope =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="co"># 45 degree line</span></a>
-<a class="sourceLine" id="cb341-9" title="9"><span class="st">      </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Binary Marginal Effects and Prediction without Binary&#39;</span>),</a>
-<a class="sourceLine" id="cb341-10" title="10">           <span class="dt">x =</span> <span class="st">&#39;P(binary=0) for all&#39;</span>,</a>
-<a class="sourceLine" id="cb341-11" title="11">           <span class="dt">y =</span> <span class="st">&#39;P(binary=1) - P(binary=0) gap&#39;</span>,</a>
-<a class="sourceLine" id="cb341-12" title="12">           <span class="dt">caption =</span> <span class="kw">paste0</span>(sdt_name)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb341-13" title="13"><span class="st">      </span><span class="kw">theme_bw</span>()</a>
-<a class="sourceLine" id="cb341-14" title="14"><span class="kw">print</span>(scatter)</a></code></pre></div>
+<div class="sourceCode" id="cb346"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb346-1" title="1"><span class="co"># Generate Gap Variable</span></a>
+<a class="sourceLine" id="cb346-2" title="2">df_mtcars &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">alpha_i =</span> p_mpg_hp_bi1 <span class="op">-</span><span class="st"> </span>p_mpg_hp_bi0) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb346-3" title="3"><span class="st">                </span><span class="kw">mutate</span>(<span class="dt">A_i =</span> p_mpg_hp_bi0)</a>
+<a class="sourceLine" id="cb346-4" title="4"></a>
+<a class="sourceLine" id="cb346-5" title="5"><span class="co"># Binary Marginal Effects and Prediction without Binary</span></a>
+<a class="sourceLine" id="cb346-6" title="6">scatter &lt;-<span class="st"> </span><span class="kw">ggplot</span>(df_mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>A_i)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb346-7" title="7"><span class="st">      </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>alpha_i), <span class="dt">size=</span><span class="dv">4</span>, <span class="dt">shape=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb346-8" title="8"><span class="st">      </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">slope =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="co"># 45 degree line</span></a>
+<a class="sourceLine" id="cb346-9" title="9"><span class="st">      </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Binary Marginal Effects and Prediction without Binary&#39;</span>),</a>
+<a class="sourceLine" id="cb346-10" title="10">           <span class="dt">x =</span> <span class="st">&#39;P(binary=0) for all&#39;</span>,</a>
+<a class="sourceLine" id="cb346-11" title="11">           <span class="dt">y =</span> <span class="st">&#39;P(binary=1) - P(binary=0) gap&#39;</span>,</a>
+<a class="sourceLine" id="cb346-12" title="12">           <span class="dt">caption =</span> <span class="kw">paste0</span>(sdt_name)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb346-13" title="13"><span class="st">      </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb346-14" title="14"><span class="kw">print</span>(scatter)</a></code></pre></div>
 <p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/logit%20prediction%20marginal%20vs%20base-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="x-variables-and-a-and-alpha" class="section level5">
 <h5><span class="header-section-number">6.1.1.1.4</span> X variables and A and alpha</h5>
 <p>Given the x-variables included in the logit regression, how do they relate to A_i and alpha_i</p>
-<div class="sourceCode" id="cb342"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb342-1" title="1"><span class="co"># Generate Gap Variable</span></a>
-<a class="sourceLine" id="cb342-2" title="2">df_mtcars &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">alpha_i =</span> p_mpg_hp_bi1 <span class="op">-</span><span class="st"> </span>p_mpg_hp_bi0) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb342-3" title="3"><span class="st">                </span><span class="kw">mutate</span>(<span class="dt">A_i =</span> p_mpg_hp_bi0)</a>
-<a class="sourceLine" id="cb342-4" title="4"></a>
-<a class="sourceLine" id="cb342-5" title="5"><span class="co"># Binary Marginal Effects and Prediction without Binary</span></a>
-<a class="sourceLine" id="cb342-6" title="6">ggplot.A.alpha.x &lt;-<span class="st"> </span><span class="cf">function</span>(svr_x, df,</a>
-<a class="sourceLine" id="cb342-7" title="7">                             <span class="dt">svr_alpha =</span> <span class="st">&#39;alpha_i&#39;</span>, <span class="dt">svr_A =</span> <span class="st">&quot;A_i&quot;</span>){</a>
-<a class="sourceLine" id="cb342-8" title="8"></a>
-<a class="sourceLine" id="cb342-9" title="9">  scatter &lt;-<span class="st"> </span><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(<span class="dt">x=</span><span class="op">!!</span><span class="kw">sym</span>(svr_x))) <span class="op">+</span></a>
-<a class="sourceLine" id="cb342-10" title="10"><span class="st">        </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>alpha_i), <span class="dt">size=</span><span class="dv">4</span>, <span class="dt">shape=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb342-11" title="11"><span class="st">        </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>A_i), <span class="dt">size=</span><span class="dv">2</span>, <span class="dt">shape=</span><span class="dv">8</span>, <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb342-12" title="12"><span class="st">        </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">slope =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="co"># 45 degree line</span></a>
-<a class="sourceLine" id="cb342-13" title="13"><span class="st">        </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;A (blue) and alpha (red) vs x variables=&#39;</span>, svr_x),</a>
-<a class="sourceLine" id="cb342-14" title="14">             <span class="dt">x =</span> svr_x,</a>
-<a class="sourceLine" id="cb342-15" title="15">             <span class="dt">y =</span> <span class="st">&#39;Probabilities&#39;</span>,</a>
-<a class="sourceLine" id="cb342-16" title="16">             <span class="dt">caption =</span> <span class="kw">paste0</span>(sdt_name)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb342-17" title="17"><span class="st">        </span><span class="kw">theme_bw</span>()</a>
-<a class="sourceLine" id="cb342-18" title="18"></a>
-<a class="sourceLine" id="cb342-19" title="19"><span class="kw">return</span>(scatter)</a>
-<a class="sourceLine" id="cb342-20" title="20">}</a>
-<a class="sourceLine" id="cb342-21" title="21"></a>
-<a class="sourceLine" id="cb342-22" title="22"><span class="co"># Plot over multiple</span></a>
-<a class="sourceLine" id="cb342-23" title="23"><span class="kw">lapply</span>(ls_st_xs,</a>
-<a class="sourceLine" id="cb342-24" title="24">       ggplot.A.alpha.x,</a>
-<a class="sourceLine" id="cb342-25" title="25">       <span class="dt">df =</span> df_mtcars)</a></code></pre></div>
+<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb347-1" title="1"><span class="co"># Generate Gap Variable</span></a>
+<a class="sourceLine" id="cb347-2" title="2">df_mtcars &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">alpha_i =</span> p_mpg_hp_bi1 <span class="op">-</span><span class="st"> </span>p_mpg_hp_bi0) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb347-3" title="3"><span class="st">                </span><span class="kw">mutate</span>(<span class="dt">A_i =</span> p_mpg_hp_bi0)</a>
+<a class="sourceLine" id="cb347-4" title="4"></a>
+<a class="sourceLine" id="cb347-5" title="5"><span class="co"># Binary Marginal Effects and Prediction without Binary</span></a>
+<a class="sourceLine" id="cb347-6" title="6">ggplot.A.alpha.x &lt;-<span class="st"> </span><span class="cf">function</span>(svr_x, df,</a>
+<a class="sourceLine" id="cb347-7" title="7">                             <span class="dt">svr_alpha =</span> <span class="st">&#39;alpha_i&#39;</span>, <span class="dt">svr_A =</span> <span class="st">&quot;A_i&quot;</span>){</a>
+<a class="sourceLine" id="cb347-8" title="8"></a>
+<a class="sourceLine" id="cb347-9" title="9">  scatter &lt;-<span class="st"> </span><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(<span class="dt">x=</span><span class="op">!!</span><span class="kw">sym</span>(svr_x))) <span class="op">+</span></a>
+<a class="sourceLine" id="cb347-10" title="10"><span class="st">        </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>alpha_i), <span class="dt">size=</span><span class="dv">4</span>, <span class="dt">shape=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb347-11" title="11"><span class="st">        </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>A_i), <span class="dt">size=</span><span class="dv">2</span>, <span class="dt">shape=</span><span class="dv">8</span>, <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb347-12" title="12"><span class="st">        </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">slope =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="co"># 45 degree line</span></a>
+<a class="sourceLine" id="cb347-13" title="13"><span class="st">        </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;A (blue) and alpha (red) vs x variables=&#39;</span>, svr_x),</a>
+<a class="sourceLine" id="cb347-14" title="14">             <span class="dt">x =</span> svr_x,</a>
+<a class="sourceLine" id="cb347-15" title="15">             <span class="dt">y =</span> <span class="st">&#39;Probabilities&#39;</span>,</a>
+<a class="sourceLine" id="cb347-16" title="16">             <span class="dt">caption =</span> <span class="kw">paste0</span>(sdt_name)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb347-17" title="17"><span class="st">        </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb347-18" title="18"></a>
+<a class="sourceLine" id="cb347-19" title="19"><span class="kw">return</span>(scatter)</a>
+<a class="sourceLine" id="cb347-20" title="20">}</a>
+<a class="sourceLine" id="cb347-21" title="21"></a>
+<a class="sourceLine" id="cb347-22" title="22"><span class="co"># Plot over multiple</span></a>
+<a class="sourceLine" id="cb347-23" title="23"><span class="kw">lapply</span>(ls_st_xs,</a>
+<a class="sourceLine" id="cb347-24" title="24">       ggplot.A.alpha.x,</a>
+<a class="sourceLine" id="cb347-25" title="25">       <span class="dt">df =</span> df_mtcars)</a></code></pre></div>
 <pre><code>## [[1]]</code></pre>
-<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-147-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-151-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code>## 
 ## [[2]]</code></pre>
-<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-147-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-151-2.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code>## 
 ## [[3]]</code></pre>
-<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-147-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-151-3.png" width="672" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>

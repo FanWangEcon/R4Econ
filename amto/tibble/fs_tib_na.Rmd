@@ -1,17 +1,36 @@
 ---
-title: "R Tibble Dataframe NA Values"
-date: 2020-04-01
+title: "R Generate Variables Conditional on Other Variables with elseif, Approximate all.equals(), na_if() and is.na(), etc (dplyr)"
+titleshort: "Generate Variables Conditional on Other Variables"
+description: |
+  Use case_when to generate elseif conditional variables: NA, approximate difference, etc.
+core:
+  - package: dplyr
+    code: |
+      case_when()
+      na_if()
+      mutate(var = na_if(case_when(rnorm(n())< 0 ~ -99, TRUE ~ mpg), -99))
+  - package: r
+    code: |
+      e-notation
+      all.equal()
+      isTRUE(all.equal(a,b,tol))
+      is.na()
+      NA_real_
+      NA_character_
+      NA_integer_
+date: 2020-04-22
+date_start: 2020-04-01
 output:
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
   pdf_document:
     pandoc_args: '../../_output_kniti_pdf.yaml'
     includes:
       in_header: '../../preamble.tex'
-  html_document:
-    pandoc_args: '../../_output_kniti_html.yaml'
 always_allow_html: true
 ---
 
-### Variable NA Values
+### Generate Variables Conditional On Others
 
 ```{r global_options, include = FALSE}
 try(source("../../.Rprofile"))
@@ -21,22 +40,195 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
 
-#### Find and Replace
+#### case_when Basic Example
 
-Find and Replace in Dataframe.
+Given several other variables, and generate a new variable when these varaibles satisfy conditions. Note that case_when are ifelse type statements. So below
 
-```{r, amto.tibble.fs_tib_na.find_replace, eval=FALSE}
-# For dataframe
-df.reg <-df.reg %>% na_if(-Inf) %>% na_if(Inf)
-# For a specific variable in dataframe
-df.reg.use %>% mutate(!!(var.input) := na_if(!!sym(var.input), 0))
+1. group one is below 16 MPG
+2. when do *qsec >= 20* second line that is elseif, only those that are *>=16* are considered here
+3. then think about two dimensional mpg and qsec grid, the lower-right area, give another category to manual cars in that group
 
-# Setting to NA
-df.reg.use <- df.reg.guat %>% filter(!!sym(var.mth) != 0)
-df.reg.use.log <- df.reg.use
-df.reg.use.log[which(is.nan(df.reg.use$prot.imputed.log)),] = NA
-df.reg.use.log[which(df.reg.use$prot.imputed.log==Inf),] = NA
-df.reg.use.log[which(df.reg.use$prot.imputed.log==-Inf),] = NA
-df.reg.use.log <- df.reg.use.log %>% drop_na(prot.imputed.log)
-# df.reg.use.log$prot.imputed.log
+```{r}
+# Get mtcars
+df_mtcars <- mtcars
+
+# case_when with mtcars
+df_mtcars <- df_mtcars %>%
+  mutate(mpg_qsec_am_grp = 
+           case_when(mpg < 16 ~ "< 16 MPG",
+                     qsec >= 20 ~ "> 16 MPG & qsec >= 20",
+                     am == 1 ~ "> 16 MPG & asec < 20 & manual",
+                     TRUE ~ "Others"))
+
+# # For dataframe
+# df.reg <-df.reg %>% na_if(-Inf) %>% na_if(Inf)
+# # For a specific variable in dataframe
+# df.reg.use %>% mutate(!!(var.input) := na_if(!!sym(var.input), 0))
+# 
+# # Setting to NA
+# df.reg.use <- df.reg.guat %>% filter(!!sym(var.mth) != 0)
+# df.reg.use.log <- df.reg.use
+# df.reg.use.log[which(is.nan(df.reg.use$prot.imputed.log)),] = NA
+# df.reg.use.log[which(df.reg.use$prot.imputed.log==Inf),] = NA
+# df.reg.use.log[which(df.reg.use$prot.imputed.log==-Inf),] = NA
+# df.reg.use.log <- df.reg.use.log %>% drop_na(prot.imputed.log)
+# # df.reg.use.log$prot.imputed.log
+```
+
+Now we generate scatter plot based on the combined factors
+```{r}
+# Labeling
+st_title <- paste0('Use case_when To Generate ifelse Groupings')
+st_subtitle <- paste0('https://fanwangecon.github.io/',
+                      'R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html')
+st_caption <- paste0('mtcars dataset, ',
+                     'https://fanwangecon.github.io/R4Econ/')
+st_x_label <- 'MPG = Miles per Gallon'
+st_y_label <- 'QSEC = time for 1/4 Miles'
+
+# Graphing
+plt_mtcars_casewhen_scatter <- 
+  ggplot(df_mtcars, 
+         aes(x=mpg, y=qsec, 
+             colour=mpg_qsec_am_grp, 
+             shape=mpg_qsec_am_grp)) +
+  geom_jitter(size=3, width = 0.15) +
+  labs(title = st_title, subtitle = st_subtitle,
+       x = st_x_label, y = st_y_label, caption = st_caption) +
+  theme_bw()
+
+# show
+print(plt_mtcars_casewhen_scatter)
+```
+
+#### Generate NA values if Variables have Certain Value
+
+In the example below, in one line:
+
+1. generate a random standard normal vector
+2. two set na methods: 
+    + if the value of the standard normal is negative, set value to -999, otherwise MPG, replace the value *-999* with *NA*
+    + case_when only with type specific NA values
+    + [Assigning NA yields error in case_when](https://github.com/tidyverse/dplyr/issues/3202#issuecomment-343601409)
+    + note we need to conform NA to type
+4. generate new categorical variable based on NA condition using is.na with both string and numeric NAs jointly considered. 
+    + fake NA string to be printed on chart
+
+```{r}
+# Get mtcars
+df_mtcars <- mtcars
+
+# Make some values of mpg randomly NA
+# the NA has to conform to the type of the remaining values for the new variable
+# NA_real_, NA_character_, NA_integer_, NA_complex_
+set.seed(2341)
+df_mtcars <- df_mtcars %>% 
+  mutate(mpg_wth_NA1 = na_if(
+    case_when(
+      rnorm(n(),mean=0,sd=1) < 0 ~ -999, 
+      TRUE ~ mpg), 
+    -999)) %>%
+  mutate(mpg_wth_NA2 = case_when(
+    rnorm(n(),mean=0,sd=1) < 0 ~ NA_real_, 
+    TRUE ~ mpg)) %>%
+  mutate(mpg_wth_NA3 = case_when(
+    rnorm(n(),mean=0,sd=1) < 0 ~ NA_character_, 
+    TRUE ~ "shock > 0 string"))
+  
+# Generate New Variables based on if mpg_wth_NA is NA or not
+# same variable as above, but now first a category based on if NA
+# And we generate a fake string "NA" variable, this is not NA
+# the String NA allows for it to be printed on figure
+df_mtcars <- df_mtcars %>%
+  mutate(group_with_na = 
+           case_when(is.na(mpg_wth_NA2) & is.na(mpg_wth_NA3) ~ 
+                       "Rand String and Rand Numeric both NA", 
+                     mpg < 16 ~ "< 16 MPG",
+                     qsec >= 20 ~ "> 16 MPG & qsec >= 20",
+                     am == 1 ~ "> 16 MPG & asec < 20 & manual",
+                     TRUE ~ "Fake String NA"))
+
+# show
+kable(head(df_mtcars %>% select(starts_with('mpg')),13)) %>%
+  kable_styling_fc()
+# # Setting to NA
+# df.reg.use <- df.reg.guat %>% filter(!!sym(var.mth) != 0)
+# df.reg.use.log <- df.reg.use
+# df.reg.use.log[which(is.nan(df.reg.use$prot.imputed.log)),] = NA
+# df.reg.use.log[which(df.reg.use$prot.imputed.log==Inf),] = NA
+# df.reg.use.log[which(df.reg.use$prot.imputed.log==-Inf),] = NA
+# df.reg.use.log <- df.reg.use.log %>% drop_na(prot.imputed.log)
+# # df.reg.use.log$prot.imputed.log
+```
+
+Now we generate scatter plot based on the combined factors, but now with the NA category
+
+```{r}
+# Labeling
+st_title <- paste0('Use na_if and is.na to Generate and Distinguish NA Values\n',
+                   'NA_real_, NA_character_, NA_integer_, NA_complex_')
+st_subtitle <- paste0('https://fanwangecon.github.io/',
+                      'R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html')
+st_caption <- paste0('mtcars dataset, ',
+                     'https://fanwangecon.github.io/R4Econ/')
+st_x_label <- 'MPG = Miles per Gallon'
+st_y_label <- 'QSEC = time for 1/4 Miles'
+
+# Graphing
+plt_mtcars_ifisna_scatter <- 
+  ggplot(df_mtcars, 
+         aes(x=mpg, y=qsec, 
+             colour=group_with_na, 
+             shape=group_with_na)) +
+  geom_jitter(size=3, width = 0.15) +
+  labs(title = st_title, subtitle = st_subtitle,
+       x = st_x_label, y = st_y_label, caption = st_caption) +
+  theme_bw()
+
+# show
+print(plt_mtcars_ifisna_scatter)
+```
+
+#### Approximate Values Comparison
+
+- r values almost the same
+- [all.equal](https://stat.ethz.ch/R-manual/R-patched/library/base/html/all.equal.html)
+
+From numeric approximation, often values are very close, and should be set to equal. Use *isTRUE(all.equal)*. In the example below, we randomly generates four arrays. Two of the arrays have slightly higher variance, two arrays have slightly lower variance. They sd are to be 10 times below or 10 times above the tolerance comparison level. The values are not the same in any of the columns, but by allowing for almost true given some tolerance level, in the low standard deviation case, the values differences are within tolerance, so they are equal. 
+
+This is an essential issue when dealing with optimization results. 
+
+
+```{r}
+# Set tolerance 
+tol_lvl = 1.5e-3
+sd_lower_than_tol = tol_lvl/10
+sd_higher_than_tol = tol_lvl*10
+
+# larger SD
+set.seed(123)
+mt_runif_standard <- matrix(rnorm(10,mean=0,sd=sd_higher_than_tol), nrow=5, ncol=2)
+
+# small SD
+set.seed(123)
+mt_rnorm_small_sd <- matrix(rnorm(10,mean=0,sd=sd_lower_than_tol), nrow=5, ncol=2)
+
+# Generates Random Matirx
+tb_rnorm_runif <- as_tibble(cbind(mt_rnorm_small_sd, mt_runif_standard))
+
+# Are Variables the same, not for strict comparison
+tb_rnorm_runif_approxi_same <- tb_rnorm_runif %>%
+  mutate(V1_V2_ALMOST_SAME = 
+           case_when(isTRUE(all.equal(V1, V2, tolerance=tol_lvl)) ~ 
+                       paste0('TOL=',sd_lower_than_tol,', SAME ALMOST'),
+                     TRUE ~ 
+                       paste0('TOL=',sd_lower_than_tol,', NOT SAME ALMOST'))) %>%
+  mutate(V3_V4_ALMOST_SAME =
+           case_when(isTRUE(all.equal(V3, V4, tolerance=tol_lvl)) ~ 
+                       paste0('TOL=',sd_higher_than_tol,', SAME ALMOST'),
+                     TRUE ~ 
+                       paste0('TOL=',sd_higher_than_tol,', NOT SAME ALMOST')))
+
+# Pring
+kable(tb_rnorm_runif_approxi_same) %>% kable_styling_fc_wide()
 ```

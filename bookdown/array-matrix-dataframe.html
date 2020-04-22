@@ -24,7 +24,7 @@
 <meta name="author" content="Fan Wang" />
 
 
-<meta name="date" content="2020-04-20" />
+<meta name="date" content="2020-04-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -160,7 +160,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.4.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-dataframe"><i class="fa fa-check"></i><b>1.4.1</b> Generate Dataframe</a></li>
 <li class="chapter" data-level="1.4.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#factor-label-and-combine"><i class="fa fa-check"></i><b>1.4.2</b> Factor Label and Combine</a></li>
 <li class="chapter" data-level="1.4.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#drawly-random-rows"><i class="fa fa-check"></i><b>1.4.3</b> Drawly Random Rows</a></li>
-<li class="chapter" data-level="1.4.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#variable-na-values"><i class="fa fa-check"></i><b>1.4.4</b> Variable NA Values</a></li>
+<li class="chapter" data-level="1.4.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-variables-conditional-on-others"><i class="fa fa-check"></i><b>1.4.4</b> Generate Variables Conditional On Others</a></li>
 <li class="chapter" data-level="1.4.5" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-values"><i class="fa fa-check"></i><b>1.4.5</b> String Values</a></li>
 </ul></li>
 </ul></li>
@@ -4539,27 +4539,524 @@ date_in_class
 
 </div>
 </div>
-<div id="variable-na-values" class="section level3">
-<h3><span class="header-section-number">1.4.4</span> Variable NA Values</h3>
+<div id="generate-variables-conditional-on-others" class="section level3">
+<h3><span class="header-section-number">1.4.4</span> Generate Variables Conditional On Others</h3>
 <blockquote>
 <p>Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository.</p>
 </blockquote>
-<div id="find-and-replace" class="section level4">
-<h4><span class="header-section-number">1.4.4.1</span> Find and Replace</h4>
-<p>Find and Replace in Dataframe.</p>
-<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb146-1" title="1"><span class="co"># For dataframe</span></a>
-<a class="sourceLine" id="cb146-2" title="2">df.reg &lt;-df.reg <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">na_if</span>(<span class="op">-</span><span class="ot">Inf</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">na_if</span>(<span class="ot">Inf</span>)</a>
-<a class="sourceLine" id="cb146-3" title="3"><span class="co"># For a specific variable in dataframe</span></a>
-<a class="sourceLine" id="cb146-4" title="4">df.reg.use <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span>(var.input) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">na_if</span>(<span class="op">!!</span><span class="kw">sym</span>(var.input), <span class="dv">0</span>))</a>
-<a class="sourceLine" id="cb146-5" title="5"></a>
-<a class="sourceLine" id="cb146-6" title="6"><span class="co"># Setting to NA</span></a>
-<a class="sourceLine" id="cb146-7" title="7">df.reg.use &lt;-<span class="st"> </span>df.reg.guat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="op">!!</span><span class="kw">sym</span>(var.mth) <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb146-8" title="8">df.reg.use.log &lt;-<span class="st"> </span>df.reg.use</a>
-<a class="sourceLine" id="cb146-9" title="9">df.reg.use.log[<span class="kw">which</span>(<span class="kw">is.nan</span>(df.reg.use<span class="op">$</span>prot.imputed.log)),] =<span class="st"> </span><span class="ot">NA</span></a>
-<a class="sourceLine" id="cb146-10" title="10">df.reg.use.log[<span class="kw">which</span>(df.reg.use<span class="op">$</span>prot.imputed.log<span class="op">==</span><span class="ot">Inf</span>),] =<span class="st"> </span><span class="ot">NA</span></a>
-<a class="sourceLine" id="cb146-11" title="11">df.reg.use.log[<span class="kw">which</span>(df.reg.use<span class="op">$</span>prot.imputed.log<span class="op">==-</span><span class="ot">Inf</span>),] =<span class="st"> </span><span class="ot">NA</span></a>
-<a class="sourceLine" id="cb146-12" title="12">df.reg.use.log &lt;-<span class="st"> </span>df.reg.use.log <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">drop_na</span>(prot.imputed.log)</a>
-<a class="sourceLine" id="cb146-13" title="13"><span class="co"># df.reg.use.log$prot.imputed.log</span></a></code></pre></div>
+<div id="case_when-basic-example" class="section level4">
+<h4><span class="header-section-number">1.4.4.1</span> case_when Basic Example</h4>
+<p>Given several other variables, and generate a new variable when these varaibles satisfy conditions. Note that case_when are ifelse type statements. So below</p>
+<ol style="list-style-type: decimal">
+<li>group one is below 16 MPG</li>
+<li>when do <em>qsec &gt;= 20</em> second line that is elseif, only those that are <em>&gt;=16</em> are considered here</li>
+<li>then think about two dimensional mpg and qsec grid, the lower-right area, give another category to manual cars in that group</li>
+</ol>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb146-1" title="1"><span class="co"># Get mtcars</span></a>
+<a class="sourceLine" id="cb146-2" title="2">df_mtcars &lt;-<span class="st"> </span>mtcars</a>
+<a class="sourceLine" id="cb146-3" title="3"></a>
+<a class="sourceLine" id="cb146-4" title="4"><span class="co"># case_when with mtcars</span></a>
+<a class="sourceLine" id="cb146-5" title="5">df_mtcars &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb146-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mpg_qsec_am_grp =</span> </a>
+<a class="sourceLine" id="cb146-7" title="7">           <span class="kw">case_when</span>(mpg <span class="op">&lt;</span><span class="st"> </span><span class="dv">16</span> <span class="op">~</span><span class="st"> &quot;&lt; 16 MPG&quot;</span>,</a>
+<a class="sourceLine" id="cb146-8" title="8">                     qsec <span class="op">&gt;=</span><span class="st"> </span><span class="dv">20</span> <span class="op">~</span><span class="st"> &quot;&gt; 16 MPG &amp; qsec &gt;= 20&quot;</span>,</a>
+<a class="sourceLine" id="cb146-9" title="9">                     am <span class="op">==</span><span class="st"> </span><span class="dv">1</span> <span class="op">~</span><span class="st"> &quot;&gt; 16 MPG &amp; asec &lt; 20 &amp; manual&quot;</span>,</a>
+<a class="sourceLine" id="cb146-10" title="10">                     <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> &quot;Others&quot;</span>))</a>
+<a class="sourceLine" id="cb146-11" title="11"></a>
+<a class="sourceLine" id="cb146-12" title="12"><span class="co"># # For dataframe</span></a>
+<a class="sourceLine" id="cb146-13" title="13"><span class="co"># df.reg &lt;-df.reg %&gt;% na_if(-Inf) %&gt;% na_if(Inf)</span></a>
+<a class="sourceLine" id="cb146-14" title="14"><span class="co"># # For a specific variable in dataframe</span></a>
+<a class="sourceLine" id="cb146-15" title="15"><span class="co"># df.reg.use %&gt;% mutate(!!(var.input) := na_if(!!sym(var.input), 0))</span></a>
+<a class="sourceLine" id="cb146-16" title="16"><span class="co"># </span></a>
+<a class="sourceLine" id="cb146-17" title="17"><span class="co"># # Setting to NA</span></a>
+<a class="sourceLine" id="cb146-18" title="18"><span class="co"># df.reg.use &lt;- df.reg.guat %&gt;% filter(!!sym(var.mth) != 0)</span></a>
+<a class="sourceLine" id="cb146-19" title="19"><span class="co"># df.reg.use.log &lt;- df.reg.use</span></a>
+<a class="sourceLine" id="cb146-20" title="20"><span class="co"># df.reg.use.log[which(is.nan(df.reg.use$prot.imputed.log)),] = NA</span></a>
+<a class="sourceLine" id="cb146-21" title="21"><span class="co"># df.reg.use.log[which(df.reg.use$prot.imputed.log==Inf),] = NA</span></a>
+<a class="sourceLine" id="cb146-22" title="22"><span class="co"># df.reg.use.log[which(df.reg.use$prot.imputed.log==-Inf),] = NA</span></a>
+<a class="sourceLine" id="cb146-23" title="23"><span class="co"># df.reg.use.log &lt;- df.reg.use.log %&gt;% drop_na(prot.imputed.log)</span></a>
+<a class="sourceLine" id="cb146-24" title="24"><span class="co"># # df.reg.use.log$prot.imputed.log</span></a></code></pre></div>
+<p>Now we generate scatter plot based on the combined factors</p>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb147-1" title="1"><span class="co"># Labeling</span></a>
+<a class="sourceLine" id="cb147-2" title="2">st_title &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;Use case_when To Generate ifelse Groupings&#39;</span>)</a>
+<a class="sourceLine" id="cb147-3" title="3">st_subtitle &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;https://fanwangecon.github.io/&#39;</span>,</a>
+<a class="sourceLine" id="cb147-4" title="4">                      <span class="st">&#39;R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html&#39;</span>)</a>
+<a class="sourceLine" id="cb147-5" title="5">st_caption &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;mtcars dataset, &#39;</span>,</a>
+<a class="sourceLine" id="cb147-6" title="6">                     <span class="st">&#39;https://fanwangecon.github.io/R4Econ/&#39;</span>)</a>
+<a class="sourceLine" id="cb147-7" title="7">st_x_label &lt;-<span class="st"> &#39;MPG = Miles per Gallon&#39;</span></a>
+<a class="sourceLine" id="cb147-8" title="8">st_y_label &lt;-<span class="st"> &#39;QSEC = time for 1/4 Miles&#39;</span></a>
+<a class="sourceLine" id="cb147-9" title="9"></a>
+<a class="sourceLine" id="cb147-10" title="10"><span class="co"># Graphing</span></a>
+<a class="sourceLine" id="cb147-11" title="11">plt_mtcars_casewhen_scatter &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb147-12" title="12"><span class="st">  </span><span class="kw">ggplot</span>(df_mtcars, </a>
+<a class="sourceLine" id="cb147-13" title="13">         <span class="kw">aes</span>(<span class="dt">x=</span>mpg, <span class="dt">y=</span>qsec, </a>
+<a class="sourceLine" id="cb147-14" title="14">             <span class="dt">colour=</span>mpg_qsec_am_grp, </a>
+<a class="sourceLine" id="cb147-15" title="15">             <span class="dt">shape=</span>mpg_qsec_am_grp)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb147-16" title="16"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">size=</span><span class="dv">3</span>, <span class="dt">width =</span> <span class="fl">0.15</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb147-17" title="17"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> st_title, <span class="dt">subtitle =</span> st_subtitle,</a>
+<a class="sourceLine" id="cb147-18" title="18">       <span class="dt">x =</span> st_x_label, <span class="dt">y =</span> st_y_label, <span class="dt">caption =</span> st_caption) <span class="op">+</span></a>
+<a class="sourceLine" id="cb147-19" title="19"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb147-20" title="20"></a>
+<a class="sourceLine" id="cb147-21" title="21"><span class="co"># show</span></a>
+<a class="sourceLine" id="cb147-22" title="22"><span class="kw">print</span>(plt_mtcars_casewhen_scatter)</a></code></pre></div>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-37-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="generate-na-values-if-variables-have-certain-value" class="section level4">
+<h4><span class="header-section-number">1.4.4.2</span> Generate NA values if Variables have Certain Value</h4>
+<p>In the example below, in one line:</p>
+<ol style="list-style-type: decimal">
+<li>generate a random standard normal vector</li>
+<li>two set na methods:
+<ul>
+<li>if the value of the standard normal is negative, set value to -999, otherwise MPG, replace the value <em>-999</em> with <em>NA</em></li>
+<li>case_when only with type specific NA values</li>
+<li><a href="https://github.com/tidyverse/dplyr/issues/3202#issuecomment-343601409">Assigning NA yields error in case_when</a></li>
+<li>note we need to conform NA to type</li>
+</ul></li>
+<li>generate new categorical variable based on NA condition using is.na with both string and numeric NAs jointly considered.
+<ul>
+<li>fake NA string to be printed on chart</li>
+</ul></li>
+</ol>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb148-1" title="1"><span class="co"># Get mtcars</span></a>
+<a class="sourceLine" id="cb148-2" title="2">df_mtcars &lt;-<span class="st"> </span>mtcars</a>
+<a class="sourceLine" id="cb148-3" title="3"></a>
+<a class="sourceLine" id="cb148-4" title="4"><span class="co"># Make some values of mpg randomly NA</span></a>
+<a class="sourceLine" id="cb148-5" title="5"><span class="co"># the NA has to conform to the type of the remaining values for the new variable</span></a>
+<a class="sourceLine" id="cb148-6" title="6"><span class="co"># NA_real_, NA_character_, NA_integer_, NA_complex_</span></a>
+<a class="sourceLine" id="cb148-7" title="7"><span class="kw">set.seed</span>(<span class="dv">2341</span>)</a>
+<a class="sourceLine" id="cb148-8" title="8">df_mtcars &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb148-9" title="9"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mpg_wth_NA1 =</span> <span class="kw">na_if</span>(</a>
+<a class="sourceLine" id="cb148-10" title="10">    <span class="kw">case_when</span>(</a>
+<a class="sourceLine" id="cb148-11" title="11">      <span class="kw">rnorm</span>(<span class="kw">n</span>(),<span class="dt">mean=</span><span class="dv">0</span>,<span class="dt">sd=</span><span class="dv">1</span>) <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="dv">-999</span>, </a>
+<a class="sourceLine" id="cb148-12" title="12">      <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>mpg), </a>
+<a class="sourceLine" id="cb148-13" title="13">    <span class="dv">-999</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb148-14" title="14"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mpg_wth_NA2 =</span> <span class="kw">case_when</span>(</a>
+<a class="sourceLine" id="cb148-15" title="15">    <span class="kw">rnorm</span>(<span class="kw">n</span>(),<span class="dt">mean=</span><span class="dv">0</span>,<span class="dt">sd=</span><span class="dv">1</span>) <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="ot">NA_real_</span>, </a>
+<a class="sourceLine" id="cb148-16" title="16">    <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>mpg)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb148-17" title="17"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mpg_wth_NA3 =</span> <span class="kw">case_when</span>(</a>
+<a class="sourceLine" id="cb148-18" title="18">    <span class="kw">rnorm</span>(<span class="kw">n</span>(),<span class="dt">mean=</span><span class="dv">0</span>,<span class="dt">sd=</span><span class="dv">1</span>) <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="ot">NA_character_</span>, </a>
+<a class="sourceLine" id="cb148-19" title="19">    <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> &quot;shock &gt; 0 string&quot;</span>))</a>
+<a class="sourceLine" id="cb148-20" title="20">  </a>
+<a class="sourceLine" id="cb148-21" title="21"><span class="co"># Generate New Variables based on if mpg_wth_NA is NA or not</span></a>
+<a class="sourceLine" id="cb148-22" title="22"><span class="co"># same variable as above, but now first a category based on if NA</span></a>
+<a class="sourceLine" id="cb148-23" title="23"><span class="co"># And we generate a fake string &quot;NA&quot; variable, this is not NA</span></a>
+<a class="sourceLine" id="cb148-24" title="24"><span class="co"># the String NA allows for it to be printed on figure</span></a>
+<a class="sourceLine" id="cb148-25" title="25">df_mtcars &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb148-26" title="26"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">group_with_na =</span> </a>
+<a class="sourceLine" id="cb148-27" title="27">           <span class="kw">case_when</span>(<span class="kw">is.na</span>(mpg_wth_NA2) <span class="op">&amp;</span><span class="st"> </span><span class="kw">is.na</span>(mpg_wth_NA3) <span class="op">~</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb148-28" title="28"><span class="st">                       &quot;Rand String and Rand Numeric both NA&quot;</span>, </a>
+<a class="sourceLine" id="cb148-29" title="29">                     mpg <span class="op">&lt;</span><span class="st"> </span><span class="dv">16</span> <span class="op">~</span><span class="st"> &quot;&lt; 16 MPG&quot;</span>,</a>
+<a class="sourceLine" id="cb148-30" title="30">                     qsec <span class="op">&gt;=</span><span class="st"> </span><span class="dv">20</span> <span class="op">~</span><span class="st"> &quot;&gt; 16 MPG &amp; qsec &gt;= 20&quot;</span>,</a>
+<a class="sourceLine" id="cb148-31" title="31">                     am <span class="op">==</span><span class="st"> </span><span class="dv">1</span> <span class="op">~</span><span class="st"> &quot;&gt; 16 MPG &amp; asec &lt; 20 &amp; manual&quot;</span>,</a>
+<a class="sourceLine" id="cb148-32" title="32">                     <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> &quot;Fake String NA&quot;</span>))</a>
+<a class="sourceLine" id="cb148-33" title="33"></a>
+<a class="sourceLine" id="cb148-34" title="34"><span class="co"># show</span></a>
+<a class="sourceLine" id="cb148-35" title="35"><span class="kw">kable</span>(<span class="kw">head</span>(df_mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&#39;mpg&#39;</span>)),<span class="dv">13</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb148-36" title="36"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+mpg
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+mpg_wth_NA1
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+mpg_wth_NA2
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+mpg_wth_NA3
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+21.0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+shock &gt; 0 string
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+21.0
+</td>
+<td style="text-align:right;">
+21.0
+</td>
+<td style="text-align:right;">
+21.0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+22.8
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+21.4
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+21.4
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+18.7
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+18.7
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+18.1
+</td>
+<td style="text-align:right;">
+18.1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+shock &gt; 0 string
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+14.3
+</td>
+<td style="text-align:right;">
+14.3
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+shock &gt; 0 string
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+24.4
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+24.4
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+22.8
+</td>
+<td style="text-align:right;">
+22.8
+</td>
+<td style="text-align:right;">
+22.8
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+19.2
+</td>
+<td style="text-align:right;">
+19.2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+17.8
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+16.4
+</td>
+<td style="text-align:right;">
+16.4
+</td>
+<td style="text-align:right;">
+16.4
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+17.3
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+shock &gt; 0 string
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb149-1" title="1"><span class="co"># # Setting to NA</span></a>
+<a class="sourceLine" id="cb149-2" title="2"><span class="co"># df.reg.use &lt;- df.reg.guat %&gt;% filter(!!sym(var.mth) != 0)</span></a>
+<a class="sourceLine" id="cb149-3" title="3"><span class="co"># df.reg.use.log &lt;- df.reg.use</span></a>
+<a class="sourceLine" id="cb149-4" title="4"><span class="co"># df.reg.use.log[which(is.nan(df.reg.use$prot.imputed.log)),] = NA</span></a>
+<a class="sourceLine" id="cb149-5" title="5"><span class="co"># df.reg.use.log[which(df.reg.use$prot.imputed.log==Inf),] = NA</span></a>
+<a class="sourceLine" id="cb149-6" title="6"><span class="co"># df.reg.use.log[which(df.reg.use$prot.imputed.log==-Inf),] = NA</span></a>
+<a class="sourceLine" id="cb149-7" title="7"><span class="co"># df.reg.use.log &lt;- df.reg.use.log %&gt;% drop_na(prot.imputed.log)</span></a>
+<a class="sourceLine" id="cb149-8" title="8"><span class="co"># # df.reg.use.log$prot.imputed.log</span></a></code></pre></div>
+<p>Now we generate scatter plot based on the combined factors, but now with the NA category</p>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb150-1" title="1"><span class="co"># Labeling</span></a>
+<a class="sourceLine" id="cb150-2" title="2">st_title &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;Use na_if and is.na to Generate and Distinguish NA Values</span><span class="ch">\n</span><span class="st">&#39;</span>,</a>
+<a class="sourceLine" id="cb150-3" title="3">                   <span class="st">&#39;NA_real_, NA_character_, NA_integer_, NA_complex_&#39;</span>)</a>
+<a class="sourceLine" id="cb150-4" title="4">st_subtitle &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;https://fanwangecon.github.io/&#39;</span>,</a>
+<a class="sourceLine" id="cb150-5" title="5">                      <span class="st">&#39;R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html&#39;</span>)</a>
+<a class="sourceLine" id="cb150-6" title="6">st_caption &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;mtcars dataset, &#39;</span>,</a>
+<a class="sourceLine" id="cb150-7" title="7">                     <span class="st">&#39;https://fanwangecon.github.io/R4Econ/&#39;</span>)</a>
+<a class="sourceLine" id="cb150-8" title="8">st_x_label &lt;-<span class="st"> &#39;MPG = Miles per Gallon&#39;</span></a>
+<a class="sourceLine" id="cb150-9" title="9">st_y_label &lt;-<span class="st"> &#39;QSEC = time for 1/4 Miles&#39;</span></a>
+<a class="sourceLine" id="cb150-10" title="10"></a>
+<a class="sourceLine" id="cb150-11" title="11"><span class="co"># Graphing</span></a>
+<a class="sourceLine" id="cb150-12" title="12">plt_mtcars_ifisna_scatter &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb150-13" title="13"><span class="st">  </span><span class="kw">ggplot</span>(df_mtcars, </a>
+<a class="sourceLine" id="cb150-14" title="14">         <span class="kw">aes</span>(<span class="dt">x=</span>mpg, <span class="dt">y=</span>qsec, </a>
+<a class="sourceLine" id="cb150-15" title="15">             <span class="dt">colour=</span>group_with_na, </a>
+<a class="sourceLine" id="cb150-16" title="16">             <span class="dt">shape=</span>group_with_na)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb150-17" title="17"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">size=</span><span class="dv">3</span>, <span class="dt">width =</span> <span class="fl">0.15</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb150-18" title="18"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> st_title, <span class="dt">subtitle =</span> st_subtitle,</a>
+<a class="sourceLine" id="cb150-19" title="19">       <span class="dt">x =</span> st_x_label, <span class="dt">y =</span> st_y_label, <span class="dt">caption =</span> st_caption) <span class="op">+</span></a>
+<a class="sourceLine" id="cb150-20" title="20"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb150-21" title="21"></a>
+<a class="sourceLine" id="cb150-22" title="22"><span class="co"># show</span></a>
+<a class="sourceLine" id="cb150-23" title="23"><span class="kw">print</span>(plt_mtcars_ifisna_scatter)</a></code></pre></div>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-39-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="approximate-values-comparison" class="section level4">
+<h4><span class="header-section-number">1.4.4.3</span> Approximate Values Comparison</h4>
+<ul>
+<li>r values almost the same</li>
+<li><a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/all.equal.html">all.equal</a></li>
+</ul>
+<p>From numeric approximation, often values are very close, and should be set to equal. Use <em>isTRUE(all.equal)</em>. In the example below, we randomly generates four arrays. Two of the arrays have slightly higher variance, two arrays have slightly lower variance. They sd are to be 10 times below or 10 times above the tolerance comparison level. The values are not the same in any of the columns, but by allowing for almost true given some tolerance level, in the low standard deviation case, the values differences are within tolerance, so they are equal.</p>
+<p>This is an essential issue when dealing with optimization results.</p>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb151-1" title="1"><span class="co"># Set tolerance </span></a>
+<a class="sourceLine" id="cb151-2" title="2">tol_lvl =<span class="st"> </span><span class="fl">1.5e-3</span></a>
+<a class="sourceLine" id="cb151-3" title="3">sd_lower_than_tol =<span class="st"> </span>tol_lvl<span class="op">/</span><span class="dv">10</span></a>
+<a class="sourceLine" id="cb151-4" title="4">sd_higher_than_tol =<span class="st"> </span>tol_lvl<span class="op">*</span><span class="dv">10</span></a>
+<a class="sourceLine" id="cb151-5" title="5"></a>
+<a class="sourceLine" id="cb151-6" title="6"><span class="co"># larger SD</span></a>
+<a class="sourceLine" id="cb151-7" title="7"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb151-8" title="8">mt_runif_standard &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dt">mean=</span><span class="dv">0</span>,<span class="dt">sd=</span>sd_higher_than_tol), <span class="dt">nrow=</span><span class="dv">5</span>, <span class="dt">ncol=</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb151-9" title="9"></a>
+<a class="sourceLine" id="cb151-10" title="10"><span class="co"># small SD</span></a>
+<a class="sourceLine" id="cb151-11" title="11"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb151-12" title="12">mt_rnorm_small_sd &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dt">mean=</span><span class="dv">0</span>,<span class="dt">sd=</span>sd_lower_than_tol), <span class="dt">nrow=</span><span class="dv">5</span>, <span class="dt">ncol=</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb151-13" title="13"></a>
+<a class="sourceLine" id="cb151-14" title="14"><span class="co"># Generates Random Matirx</span></a>
+<a class="sourceLine" id="cb151-15" title="15">tb_rnorm_runif &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">cbind</span>(mt_rnorm_small_sd, mt_runif_standard))</a>
+<a class="sourceLine" id="cb151-16" title="16"></a>
+<a class="sourceLine" id="cb151-17" title="17"><span class="co"># Are Variables the same, not for strict comparison</span></a>
+<a class="sourceLine" id="cb151-18" title="18">tb_rnorm_runif_approxi_same &lt;-<span class="st"> </span>tb_rnorm_runif <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb151-19" title="19"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">V1_V2_ALMOST_SAME =</span> </a>
+<a class="sourceLine" id="cb151-20" title="20">           <span class="kw">case_when</span>(<span class="kw">isTRUE</span>(<span class="kw">all.equal</span>(V1, V2, <span class="dt">tolerance=</span>tol_lvl)) <span class="op">~</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb151-21" title="21"><span class="st">                       </span><span class="kw">paste0</span>(<span class="st">&#39;TOL=&#39;</span>,sd_lower_than_tol,<span class="st">&#39;, SAME ALMOST&#39;</span>),</a>
+<a class="sourceLine" id="cb151-22" title="22">                     <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb151-23" title="23"><span class="st">                       </span><span class="kw">paste0</span>(<span class="st">&#39;TOL=&#39;</span>,sd_lower_than_tol,<span class="st">&#39;, NOT SAME ALMOST&#39;</span>))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb151-24" title="24"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">V3_V4_ALMOST_SAME =</span></a>
+<a class="sourceLine" id="cb151-25" title="25">           <span class="kw">case_when</span>(<span class="kw">isTRUE</span>(<span class="kw">all.equal</span>(V3, V4, <span class="dt">tolerance=</span>tol_lvl)) <span class="op">~</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb151-26" title="26"><span class="st">                       </span><span class="kw">paste0</span>(<span class="st">&#39;TOL=&#39;</span>,sd_higher_than_tol,<span class="st">&#39;, SAME ALMOST&#39;</span>),</a>
+<a class="sourceLine" id="cb151-27" title="27">                     <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb151-28" title="28"><span class="st">                       </span><span class="kw">paste0</span>(<span class="st">&#39;TOL=&#39;</span>,sd_higher_than_tol,<span class="st">&#39;, NOT SAME ALMOST&#39;</span>)))</a>
+<a class="sourceLine" id="cb151-29" title="29"></a>
+<a class="sourceLine" id="cb151-30" title="30"><span class="co"># Pring</span></a>
+<a class="sourceLine" id="cb151-31" title="31"><span class="kw">kable</span>(tb_rnorm_runif_approxi_same) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
+<table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+V1
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+V2
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+V3
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+V4
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+V1_V2_ALMOST_SAME
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+V3_V4_ALMOST_SAME
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+-0.0000841
+</td>
+<td style="text-align:right;">
+0.0002573
+</td>
+<td style="text-align:right;">
+-0.0084071
+</td>
+<td style="text-align:right;">
+0.0257260
+</td>
+<td style="text-align:left;">
+TOL=0.00015, SAME ALMOST
+</td>
+<td style="text-align:left;">
+TOL=0.015, NOT SAME ALMOST
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-0.0000345
+</td>
+<td style="text-align:right;">
+0.0000691
+</td>
+<td style="text-align:right;">
+-0.0034527
+</td>
+<td style="text-align:right;">
+0.0069137
+</td>
+<td style="text-align:left;">
+TOL=0.00015, SAME ALMOST
+</td>
+<td style="text-align:left;">
+TOL=0.015, NOT SAME ALMOST
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.0002338
+</td>
+<td style="text-align:right;">
+-0.0001898
+</td>
+<td style="text-align:right;">
+0.0233806
+</td>
+<td style="text-align:right;">
+-0.0189759
+</td>
+<td style="text-align:left;">
+TOL=0.00015, SAME ALMOST
+</td>
+<td style="text-align:left;">
+TOL=0.015, NOT SAME ALMOST
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.0000106
+</td>
+<td style="text-align:right;">
+-0.0001030
+</td>
+<td style="text-align:right;">
+0.0010576
+</td>
+<td style="text-align:right;">
+-0.0103028
+</td>
+<td style="text-align:left;">
+TOL=0.00015, SAME ALMOST
+</td>
+<td style="text-align:left;">
+TOL=0.015, NOT SAME ALMOST
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.0000194
+</td>
+<td style="text-align:right;">
+-0.0000668
+</td>
+<td style="text-align:right;">
+0.0019393
+</td>
+<td style="text-align:right;">
+-0.0066849
+</td>
+<td style="text-align:left;">
+TOL=0.00015, SAME ALMOST
+</td>
+<td style="text-align:left;">
+TOL=0.015, NOT SAME ALMOST
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 </div>
 </div>
@@ -4568,18 +5065,18 @@ date_in_class
 <blockquote>
 <p>Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository.</p>
 </blockquote>
-<div id="find-and-replace-1" class="section level4">
+<div id="find-and-replace" class="section level4">
 <h4><span class="header-section-number">1.4.5.1</span> Find and Replace</h4>
 <p>Find and Replace in Dataframe.</p>
-<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb147-1" title="1"><span class="co"># if string value is contained in variable</span></a>
-<a class="sourceLine" id="cb147-2" title="2">(<span class="st">&quot;bridex.B&quot;</span> <span class="op">%in%</span><span class="st"> </span>(df.reg.out.all<span class="op">$</span>vars_var.y))</a>
-<a class="sourceLine" id="cb147-3" title="3"><span class="co"># if string value is not contained in variable:</span></a>
-<a class="sourceLine" id="cb147-4" title="4"><span class="co"># 1. type is variable name</span></a>
-<a class="sourceLine" id="cb147-5" title="5"><span class="co"># 2. Toyota|Mazda are strings to be excluded</span></a>
-<a class="sourceLine" id="cb147-6" title="6"><span class="kw">filter</span>(mtcars, <span class="op">!</span><span class="kw">grepl</span>(<span class="st">&#39;Toyota|Mazda&#39;</span>, type))</a>
-<a class="sourceLine" id="cb147-7" title="7"></a>
-<a class="sourceLine" id="cb147-8" title="8"><span class="co"># filter does not contain string</span></a>
-<a class="sourceLine" id="cb147-9" title="9">rs_hgt_prot_log_tidy <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">str_detect</span>(term, <span class="st">&#39;prot&#39;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb152-1" title="1"><span class="co"># if string value is contained in variable</span></a>
+<a class="sourceLine" id="cb152-2" title="2">(<span class="st">&quot;bridex.B&quot;</span> <span class="op">%in%</span><span class="st"> </span>(df.reg.out.all<span class="op">$</span>vars_var.y))</a>
+<a class="sourceLine" id="cb152-3" title="3"><span class="co"># if string value is not contained in variable:</span></a>
+<a class="sourceLine" id="cb152-4" title="4"><span class="co"># 1. type is variable name</span></a>
+<a class="sourceLine" id="cb152-5" title="5"><span class="co"># 2. Toyota|Mazda are strings to be excluded</span></a>
+<a class="sourceLine" id="cb152-6" title="6"><span class="kw">filter</span>(mtcars, <span class="op">!</span><span class="kw">grepl</span>(<span class="st">&#39;Toyota|Mazda&#39;</span>, type))</a>
+<a class="sourceLine" id="cb152-7" title="7"></a>
+<a class="sourceLine" id="cb152-8" title="8"><span class="co"># filter does not contain string</span></a>
+<a class="sourceLine" id="cb152-9" title="9">rs_hgt_prot_log_tidy <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">str_detect</span>(term, <span class="st">&#39;prot&#39;</span>))</a></code></pre></div>
 
 </div>
 </div>

@@ -24,7 +24,7 @@
 <meta name="author" content="Fan Wang" />
 
 
-<meta name="date" content="2020-04-20" />
+<meta name="date" content="2020-04-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -160,7 +160,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.4.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-dataframe"><i class="fa fa-check"></i><b>1.4.1</b> Generate Dataframe</a></li>
 <li class="chapter" data-level="1.4.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#factor-label-and-combine"><i class="fa fa-check"></i><b>1.4.2</b> Factor Label and Combine</a></li>
 <li class="chapter" data-level="1.4.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#drawly-random-rows"><i class="fa fa-check"></i><b>1.4.3</b> Drawly Random Rows</a></li>
-<li class="chapter" data-level="1.4.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#variable-na-values"><i class="fa fa-check"></i><b>1.4.4</b> Variable NA Values</a></li>
+<li class="chapter" data-level="1.4.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-variables-conditional-on-others"><i class="fa fa-check"></i><b>1.4.4</b> Generate Variables Conditional On Others</a></li>
 <li class="chapter" data-level="1.4.5" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-values"><i class="fa fa-check"></i><b>1.4.5</b> String Values</a></li>
 </ul></li>
 </ul></li>
@@ -313,22 +313,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h4><span class="header-section-number">3.1.1.1</span> Set up Input Arrays</h4>
 <p>There is a function that takes <span class="math inline">\(M=Q+P\)</span> inputs, we want to evaluate this function <span class="math inline">\(N\)</span> times. Each time, there are <span class="math inline">\(M\)</span> inputs, where all but <span class="math inline">\(Q\)</span> of the <span class="math inline">\(M\)</span> inputs, meaning <span class="math inline">\(P\)</span> of the <span class="math inline">\(M\)</span> inputs, are the same. In particular, <span class="math inline">\(P=Q*N\)</span>.</p>
 <p><span class="math display">\[M = Q+P = Q + Q*N\]</span></p>
-<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb193-1" title="1"><span class="co"># it_child_count = N, the number of children</span></a>
-<a class="sourceLine" id="cb193-2" title="2">it_N_child_cnt =<span class="st"> </span><span class="dv">5</span></a>
-<a class="sourceLine" id="cb193-3" title="3"><span class="co"># it_heter_param = Q, number of parameters that are heterogeneous across children</span></a>
-<a class="sourceLine" id="cb193-4" title="4">it_Q_hetpa_cnt =<span class="st"> </span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb193-5" title="5"></a>
-<a class="sourceLine" id="cb193-6" title="6"><span class="co"># P fixed parameters, nN is N dimensional, nP is P dimensional</span></a>
-<a class="sourceLine" id="cb193-7" title="7">ar_nN_A =<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dt">length.out =</span> it_N_child_cnt)</a>
-<a class="sourceLine" id="cb193-8" title="8">ar_nN_alpha =<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="dt">length.out =</span> it_N_child_cnt)</a>
-<a class="sourceLine" id="cb193-9" title="9">ar_nP_A_alpha =<span class="st"> </span><span class="kw">c</span>(ar_nN_A, ar_nN_alpha)</a>
-<a class="sourceLine" id="cb193-10" title="10">ar_nN_N_choice =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>,it_N_child_cnt)<span class="op">/</span><span class="kw">sum</span>(<span class="kw">seq</span>(<span class="dv">1</span>,it_N_child_cnt))</a>
-<a class="sourceLine" id="cb193-11" title="11"></a>
-<a class="sourceLine" id="cb193-12" title="12"><span class="co"># N by Q varying parameters</span></a>
-<a class="sourceLine" id="cb193-13" title="13">mt_nN_by_nQ_A_alpha =<span class="st"> </span><span class="kw">cbind</span>(ar_nN_A, ar_nN_alpha, ar_nN_N_choice)</a>
-<a class="sourceLine" id="cb193-14" title="14"><span class="co"># Show</span></a>
-<a class="sourceLine" id="cb193-15" title="15"><span class="kw">kable</span>(mt_nN_by_nQ_A_alpha) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb193-16" title="16"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb198-1" title="1"><span class="co"># it_child_count = N, the number of children</span></a>
+<a class="sourceLine" id="cb198-2" title="2">it_N_child_cnt =<span class="st"> </span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb198-3" title="3"><span class="co"># it_heter_param = Q, number of parameters that are heterogeneous across children</span></a>
+<a class="sourceLine" id="cb198-4" title="4">it_Q_hetpa_cnt =<span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb198-5" title="5"></a>
+<a class="sourceLine" id="cb198-6" title="6"><span class="co"># P fixed parameters, nN is N dimensional, nP is P dimensional</span></a>
+<a class="sourceLine" id="cb198-7" title="7">ar_nN_A =<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dt">length.out =</span> it_N_child_cnt)</a>
+<a class="sourceLine" id="cb198-8" title="8">ar_nN_alpha =<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="dt">length.out =</span> it_N_child_cnt)</a>
+<a class="sourceLine" id="cb198-9" title="9">ar_nP_A_alpha =<span class="st"> </span><span class="kw">c</span>(ar_nN_A, ar_nN_alpha)</a>
+<a class="sourceLine" id="cb198-10" title="10">ar_nN_N_choice =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>,it_N_child_cnt)<span class="op">/</span><span class="kw">sum</span>(<span class="kw">seq</span>(<span class="dv">1</span>,it_N_child_cnt))</a>
+<a class="sourceLine" id="cb198-11" title="11"></a>
+<a class="sourceLine" id="cb198-12" title="12"><span class="co"># N by Q varying parameters</span></a>
+<a class="sourceLine" id="cb198-13" title="13">mt_nN_by_nQ_A_alpha =<span class="st"> </span><span class="kw">cbind</span>(ar_nN_A, ar_nN_alpha, ar_nN_N_choice)</a>
+<a class="sourceLine" id="cb198-14" title="14"><span class="co"># Show</span></a>
+<a class="sourceLine" id="cb198-15" title="15"><span class="kw">kable</span>(mt_nN_by_nQ_A_alpha) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb198-16" title="16"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -405,60 +405,60 @@ ar_nN_N_choice
 <div id="testing-function" class="section level4">
 <h4><span class="header-section-number">3.1.1.2</span> Testing Function</h4>
 <p>Test non-linear Equation.</p>
-<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb194-1" title="1"><span class="co"># Test Parameters</span></a>
-<a class="sourceLine" id="cb194-2" title="2">fl_N_agg =<span class="st"> </span><span class="dv">100</span></a>
-<a class="sourceLine" id="cb194-3" title="3">fl_rho =<span class="st"> </span><span class="dv">-1</span></a>
-<a class="sourceLine" id="cb194-4" title="4">fl_N_q =<span class="st"> </span>ar_nN_N_choice[<span class="dv">4</span>]<span class="op">*</span>fl_N_agg</a>
-<a class="sourceLine" id="cb194-5" title="5">ar_A_alpha =<span class="st"> </span>mt_nN_by_nQ_A_alpha[<span class="dv">4</span>,]</a>
-<a class="sourceLine" id="cb194-6" title="6"><span class="co"># Apply Function</span></a>
-<a class="sourceLine" id="cb194-7" title="7">ar_p1_s1 =<span class="st"> </span><span class="kw">exp</span>((ar_A_alpha[<span class="dv">1</span>] <span class="op">-</span><span class="st"> </span>ar_nN_A)<span class="op">*</span>fl_rho)</a>
-<a class="sourceLine" id="cb194-8" title="8">ar_p1_s2 =<span class="st"> </span>(ar_A_alpha[<span class="dv">2</span>]<span class="op">/</span>ar_nN_alpha)</a>
-<a class="sourceLine" id="cb194-9" title="9">ar_p1_s3 =<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>(ar_nN_alpha<span class="op">*</span>fl_rho <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb194-10" title="10">ar_p1 =<span class="st"> </span>(ar_p1_s1<span class="op">*</span>ar_p1_s2)<span class="op">^</span>ar_p1_s3</a>
-<a class="sourceLine" id="cb194-11" title="11">ar_p2 =<span class="st"> </span>fl_N_q<span class="op">^</span>((ar_A_alpha[<span class="dv">2</span>]<span class="op">*</span>fl_rho<span class="dv">-1</span>)<span class="op">/</span>(ar_nN_alpha<span class="op">*</span>fl_rho<span class="dv">-1</span>))</a>
-<a class="sourceLine" id="cb194-12" title="12">ar_overall =<span class="st"> </span>ar_p1<span class="op">*</span>ar_p2</a>
-<a class="sourceLine" id="cb194-13" title="13">fl_overall =<span class="st"> </span>fl_N_agg <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(ar_overall)</a>
-<a class="sourceLine" id="cb194-14" title="14"><span class="kw">print</span>(fl_overall)</a></code></pre></div>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb199-1" title="1"><span class="co"># Test Parameters</span></a>
+<a class="sourceLine" id="cb199-2" title="2">fl_N_agg =<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb199-3" title="3">fl_rho =<span class="st"> </span><span class="dv">-1</span></a>
+<a class="sourceLine" id="cb199-4" title="4">fl_N_q =<span class="st"> </span>ar_nN_N_choice[<span class="dv">4</span>]<span class="op">*</span>fl_N_agg</a>
+<a class="sourceLine" id="cb199-5" title="5">ar_A_alpha =<span class="st"> </span>mt_nN_by_nQ_A_alpha[<span class="dv">4</span>,]</a>
+<a class="sourceLine" id="cb199-6" title="6"><span class="co"># Apply Function</span></a>
+<a class="sourceLine" id="cb199-7" title="7">ar_p1_s1 =<span class="st"> </span><span class="kw">exp</span>((ar_A_alpha[<span class="dv">1</span>] <span class="op">-</span><span class="st"> </span>ar_nN_A)<span class="op">*</span>fl_rho)</a>
+<a class="sourceLine" id="cb199-8" title="8">ar_p1_s2 =<span class="st"> </span>(ar_A_alpha[<span class="dv">2</span>]<span class="op">/</span>ar_nN_alpha)</a>
+<a class="sourceLine" id="cb199-9" title="9">ar_p1_s3 =<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>(ar_nN_alpha<span class="op">*</span>fl_rho <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb199-10" title="10">ar_p1 =<span class="st"> </span>(ar_p1_s1<span class="op">*</span>ar_p1_s2)<span class="op">^</span>ar_p1_s3</a>
+<a class="sourceLine" id="cb199-11" title="11">ar_p2 =<span class="st"> </span>fl_N_q<span class="op">^</span>((ar_A_alpha[<span class="dv">2</span>]<span class="op">*</span>fl_rho<span class="dv">-1</span>)<span class="op">/</span>(ar_nN_alpha<span class="op">*</span>fl_rho<span class="dv">-1</span>))</a>
+<a class="sourceLine" id="cb199-12" title="12">ar_overall =<span class="st"> </span>ar_p1<span class="op">*</span>ar_p2</a>
+<a class="sourceLine" id="cb199-13" title="13">fl_overall =<span class="st"> </span>fl_N_agg <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(ar_overall)</a>
+<a class="sourceLine" id="cb199-14" title="14"><span class="kw">print</span>(fl_overall)</a></code></pre></div>
 <pre><code>## [1] -598.2559</code></pre>
 <p>Implement the non-linear problem’s evaluation using apply over all <span class="math inline">\(N\)</span> individuals.</p>
-<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb196-1" title="1"><span class="co"># Define Implicit Function</span></a>
-<a class="sourceLine" id="cb196-2" title="2">ffi_nonlin_dplyrdo &lt;-<span class="st"> </span><span class="cf">function</span>(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, fl_rho){</a>
-<a class="sourceLine" id="cb196-3" title="3">  <span class="co"># ar_A_alpha[1] is A</span></a>
-<a class="sourceLine" id="cb196-4" title="4">  <span class="co"># ar_A_alpha[2] is alpha</span></a>
-<a class="sourceLine" id="cb196-5" title="5"></a>
-<a class="sourceLine" id="cb196-6" title="6">  <span class="co"># # Test Parameters</span></a>
-<a class="sourceLine" id="cb196-7" title="7">  <span class="co"># fl_N = 100</span></a>
-<a class="sourceLine" id="cb196-8" title="8">  <span class="co"># fl_rho = -1</span></a>
-<a class="sourceLine" id="cb196-9" title="9">  <span class="co"># fl_N_q = 10</span></a>
-<a class="sourceLine" id="cb196-10" title="10"></a>
-<a class="sourceLine" id="cb196-11" title="11">  <span class="co"># Apply Function</span></a>
-<a class="sourceLine" id="cb196-12" title="12">  ar_p1_s1 =<span class="st"> </span><span class="kw">exp</span>((fl_A <span class="op">-</span><span class="st"> </span>ar_A)<span class="op">*</span>fl_rho)</a>
-<a class="sourceLine" id="cb196-13" title="13">  ar_p1_s2 =<span class="st"> </span>(fl_alpha<span class="op">/</span>ar_alpha)</a>
-<a class="sourceLine" id="cb196-14" title="14">  ar_p1_s3 =<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>(ar_alpha<span class="op">*</span>fl_rho <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb196-15" title="15">  ar_p1 =<span class="st"> </span>(ar_p1_s1<span class="op">*</span>ar_p1_s2)<span class="op">^</span>ar_p1_s3</a>
-<a class="sourceLine" id="cb196-16" title="16">  ar_p2 =<span class="st"> </span>fl_N<span class="op">^</span>((fl_alpha<span class="op">*</span>fl_rho<span class="dv">-1</span>)<span class="op">/</span>(ar_alpha<span class="op">*</span>fl_rho<span class="dv">-1</span>))</a>
-<a class="sourceLine" id="cb196-17" title="17">  ar_overall =<span class="st"> </span>ar_p1<span class="op">*</span>ar_p2</a>
-<a class="sourceLine" id="cb196-18" title="18">  fl_overall =<span class="st"> </span>fl_N_agg <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(ar_overall)</a>
-<a class="sourceLine" id="cb196-19" title="19"></a>
-<a class="sourceLine" id="cb196-20" title="20">  <span class="kw">return</span>(fl_overall)</a>
-<a class="sourceLine" id="cb196-21" title="21">}</a>
-<a class="sourceLine" id="cb196-22" title="22"></a>
-<a class="sourceLine" id="cb196-23" title="23"><span class="co"># Parameters</span></a>
-<a class="sourceLine" id="cb196-24" title="24">fl_rho =<span class="st"> </span><span class="dv">-1</span></a>
-<a class="sourceLine" id="cb196-25" title="25"></a>
-<a class="sourceLine" id="cb196-26" title="26"><span class="co"># Evaluate Function</span></a>
-<a class="sourceLine" id="cb196-27" title="27"><span class="kw">print</span>(<span class="kw">ffi_nonlin_dplyrdo</span>(mt_nN_by_nQ_A_alpha[<span class="dv">1</span>,<span class="dv">1</span>],</a>
-<a class="sourceLine" id="cb196-28" title="28">                         mt_nN_by_nQ_A_alpha[<span class="dv">1</span>,<span class="dv">2</span>],</a>
-<a class="sourceLine" id="cb196-29" title="29">                         mt_nN_by_nQ_A_alpha[<span class="dv">1</span>,<span class="dv">3</span>]<span class="op">*</span>fl_N_agg,</a>
-<a class="sourceLine" id="cb196-30" title="30">                         ar_nN_A, ar_nN_alpha, fl_N_agg, fl_rho))</a></code></pre></div>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb201-1" title="1"><span class="co"># Define Implicit Function</span></a>
+<a class="sourceLine" id="cb201-2" title="2">ffi_nonlin_dplyrdo &lt;-<span class="st"> </span><span class="cf">function</span>(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, fl_rho){</a>
+<a class="sourceLine" id="cb201-3" title="3">  <span class="co"># ar_A_alpha[1] is A</span></a>
+<a class="sourceLine" id="cb201-4" title="4">  <span class="co"># ar_A_alpha[2] is alpha</span></a>
+<a class="sourceLine" id="cb201-5" title="5"></a>
+<a class="sourceLine" id="cb201-6" title="6">  <span class="co"># # Test Parameters</span></a>
+<a class="sourceLine" id="cb201-7" title="7">  <span class="co"># fl_N = 100</span></a>
+<a class="sourceLine" id="cb201-8" title="8">  <span class="co"># fl_rho = -1</span></a>
+<a class="sourceLine" id="cb201-9" title="9">  <span class="co"># fl_N_q = 10</span></a>
+<a class="sourceLine" id="cb201-10" title="10"></a>
+<a class="sourceLine" id="cb201-11" title="11">  <span class="co"># Apply Function</span></a>
+<a class="sourceLine" id="cb201-12" title="12">  ar_p1_s1 =<span class="st"> </span><span class="kw">exp</span>((fl_A <span class="op">-</span><span class="st"> </span>ar_A)<span class="op">*</span>fl_rho)</a>
+<a class="sourceLine" id="cb201-13" title="13">  ar_p1_s2 =<span class="st"> </span>(fl_alpha<span class="op">/</span>ar_alpha)</a>
+<a class="sourceLine" id="cb201-14" title="14">  ar_p1_s3 =<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>(ar_alpha<span class="op">*</span>fl_rho <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb201-15" title="15">  ar_p1 =<span class="st"> </span>(ar_p1_s1<span class="op">*</span>ar_p1_s2)<span class="op">^</span>ar_p1_s3</a>
+<a class="sourceLine" id="cb201-16" title="16">  ar_p2 =<span class="st"> </span>fl_N<span class="op">^</span>((fl_alpha<span class="op">*</span>fl_rho<span class="dv">-1</span>)<span class="op">/</span>(ar_alpha<span class="op">*</span>fl_rho<span class="dv">-1</span>))</a>
+<a class="sourceLine" id="cb201-17" title="17">  ar_overall =<span class="st"> </span>ar_p1<span class="op">*</span>ar_p2</a>
+<a class="sourceLine" id="cb201-18" title="18">  fl_overall =<span class="st"> </span>fl_N_agg <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(ar_overall)</a>
+<a class="sourceLine" id="cb201-19" title="19"></a>
+<a class="sourceLine" id="cb201-20" title="20">  <span class="kw">return</span>(fl_overall)</a>
+<a class="sourceLine" id="cb201-21" title="21">}</a>
+<a class="sourceLine" id="cb201-22" title="22"></a>
+<a class="sourceLine" id="cb201-23" title="23"><span class="co"># Parameters</span></a>
+<a class="sourceLine" id="cb201-24" title="24">fl_rho =<span class="st"> </span><span class="dv">-1</span></a>
+<a class="sourceLine" id="cb201-25" title="25"></a>
+<a class="sourceLine" id="cb201-26" title="26"><span class="co"># Evaluate Function</span></a>
+<a class="sourceLine" id="cb201-27" title="27"><span class="kw">print</span>(<span class="kw">ffi_nonlin_dplyrdo</span>(mt_nN_by_nQ_A_alpha[<span class="dv">1</span>,<span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb201-28" title="28">                         mt_nN_by_nQ_A_alpha[<span class="dv">1</span>,<span class="dv">2</span>],</a>
+<a class="sourceLine" id="cb201-29" title="29">                         mt_nN_by_nQ_A_alpha[<span class="dv">1</span>,<span class="dv">3</span>]<span class="op">*</span>fl_N_agg,</a>
+<a class="sourceLine" id="cb201-30" title="30">                         ar_nN_A, ar_nN_alpha, fl_N_agg, fl_rho))</a></code></pre></div>
 <pre><code>## [1] 81.86645</code></pre>
-<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb198-1" title="1"><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq</span>(<span class="dv">1</span>,<span class="kw">dim</span>(mt_nN_by_nQ_A_alpha)[<span class="dv">1</span>])){</a>
-<a class="sourceLine" id="cb198-2" title="2">  fl_eval =<span class="st"> </span><span class="kw">ffi_nonlin_dplyrdo</span>(mt_nN_by_nQ_A_alpha[i,<span class="dv">1</span>],</a>
-<a class="sourceLine" id="cb198-3" title="3">                               mt_nN_by_nQ_A_alpha[i,<span class="dv">2</span>],</a>
-<a class="sourceLine" id="cb198-4" title="4">                               mt_nN_by_nQ_A_alpha[i,<span class="dv">3</span>]<span class="op">*</span>fl_N_agg,</a>
-<a class="sourceLine" id="cb198-5" title="5">                               ar_nN_A, ar_nN_alpha, fl_N_agg, fl_rho)</a>
-<a class="sourceLine" id="cb198-6" title="6">  <span class="kw">print</span>(fl_eval)</a>
-<a class="sourceLine" id="cb198-7" title="7">}</a></code></pre></div>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb203-1" title="1"><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq</span>(<span class="dv">1</span>,<span class="kw">dim</span>(mt_nN_by_nQ_A_alpha)[<span class="dv">1</span>])){</a>
+<a class="sourceLine" id="cb203-2" title="2">  fl_eval =<span class="st"> </span><span class="kw">ffi_nonlin_dplyrdo</span>(mt_nN_by_nQ_A_alpha[i,<span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb203-3" title="3">                               mt_nN_by_nQ_A_alpha[i,<span class="dv">2</span>],</a>
+<a class="sourceLine" id="cb203-4" title="4">                               mt_nN_by_nQ_A_alpha[i,<span class="dv">3</span>]<span class="op">*</span>fl_N_agg,</a>
+<a class="sourceLine" id="cb203-5" title="5">                               ar_nN_A, ar_nN_alpha, fl_N_agg, fl_rho)</a>
+<a class="sourceLine" id="cb203-6" title="6">  <span class="kw">print</span>(fl_eval)</a>
+<a class="sourceLine" id="cb203-7" title="7">}</a></code></pre></div>
 <pre><code>## [1] 81.86645
 ## [1] 54.48885
 ## [1] -65.5619
@@ -467,40 +467,40 @@ ar_nN_N_choice
 </div>
 <div id="evaluate-nonlinear-function-using-dplyr-mutate" class="section level4">
 <h4><span class="header-section-number">3.1.1.3</span> Evaluate Nonlinear Function using dplyr mutate</h4>
-<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb200-1" title="1"><span class="co"># Convert Matrix to Tibble</span></a>
-<a class="sourceLine" id="cb200-2" title="2">ar_st_col_names =<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;fl_A&#39;</span>, <span class="st">&#39;fl_alpha&#39;</span>, <span class="st">&#39;fl_N&#39;</span>)</a>
-<a class="sourceLine" id="cb200-3" title="3">tb_nN_by_nQ_A_alpha &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mt_nN_by_nQ_A_alpha) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename_all</span>(<span class="op">~</span><span class="kw">c</span>(ar_st_col_names))</a>
-<a class="sourceLine" id="cb200-4" title="4"></a>
-<a class="sourceLine" id="cb200-5" title="5"><span class="co"># Define Implicit Function</span></a>
-<a class="sourceLine" id="cb200-6" title="6">ffi_nonlin_dplyrdo &lt;-<span class="st"> </span><span class="cf">function</span>(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, fl_rho){</a>
-<a class="sourceLine" id="cb200-7" title="7"></a>
-<a class="sourceLine" id="cb200-8" title="8">  <span class="co"># Test Parameters</span></a>
-<a class="sourceLine" id="cb200-9" title="9">  <span class="co"># ar_A = ar_nN_A</span></a>
-<a class="sourceLine" id="cb200-10" title="10">  <span class="co"># ar_alpha = ar_nN_alpha</span></a>
-<a class="sourceLine" id="cb200-11" title="11">  <span class="co"># fl_N = 100</span></a>
-<a class="sourceLine" id="cb200-12" title="12">  <span class="co"># fl_rho = -1</span></a>
-<a class="sourceLine" id="cb200-13" title="13">  <span class="co"># fl_N_q = 10</span></a>
-<a class="sourceLine" id="cb200-14" title="14"></a>
-<a class="sourceLine" id="cb200-15" title="15">  <span class="co"># Apply Function</span></a>
-<a class="sourceLine" id="cb200-16" title="16">  ar_p1_s1 =<span class="st"> </span><span class="kw">exp</span>((fl_A <span class="op">-</span><span class="st"> </span>ar_A)<span class="op">*</span>fl_rho)</a>
-<a class="sourceLine" id="cb200-17" title="17">  ar_p1_s2 =<span class="st"> </span>(fl_alpha<span class="op">/</span>ar_alpha)</a>
-<a class="sourceLine" id="cb200-18" title="18">  ar_p1_s3 =<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>(ar_alpha<span class="op">*</span>fl_rho <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb200-19" title="19">  ar_p1 =<span class="st"> </span>(ar_p1_s1<span class="op">*</span>ar_p1_s2)<span class="op">^</span>ar_p1_s3</a>
-<a class="sourceLine" id="cb200-20" title="20">  ar_p2 =<span class="st"> </span>(fl_N<span class="op">*</span>fl_N_agg)<span class="op">^</span>((fl_alpha<span class="op">*</span>fl_rho<span class="dv">-1</span>)<span class="op">/</span>(ar_alpha<span class="op">*</span>fl_rho<span class="dv">-1</span>))</a>
-<a class="sourceLine" id="cb200-21" title="21">  ar_overall =<span class="st"> </span>ar_p1<span class="op">*</span>ar_p2</a>
-<a class="sourceLine" id="cb200-22" title="22">  fl_overall =<span class="st"> </span>fl_N_agg <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(ar_overall)</a>
-<a class="sourceLine" id="cb200-23" title="23"></a>
-<a class="sourceLine" id="cb200-24" title="24">  <span class="kw">return</span>(fl_overall)</a>
-<a class="sourceLine" id="cb200-25" title="25">}</a>
-<a class="sourceLine" id="cb200-26" title="26"></a>
-<a class="sourceLine" id="cb200-27" title="27"><span class="co"># fl_A, fl_alpha are from columns of tb_nN_by_nQ_A_alpha</span></a>
-<a class="sourceLine" id="cb200-28" title="28">tb_nN_by_nQ_A_alpha =<span class="st"> </span>tb_nN_by_nQ_A_alpha <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb200-29" title="29"><span class="st">                        </span><span class="kw">mutate</span>(<span class="dt">dplyr_eval =</span> <span class="kw">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, fl_N,</a>
-<a class="sourceLine" id="cb200-30" title="30">                                                               ar_nN_A, ar_nN_alpha,</a>
-<a class="sourceLine" id="cb200-31" title="31">                                                               fl_N_agg, fl_rho))</a>
-<a class="sourceLine" id="cb200-32" title="32"><span class="co"># Show</span></a>
-<a class="sourceLine" id="cb200-33" title="33"><span class="kw">kable</span>(tb_nN_by_nQ_A_alpha) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb200-34" title="34"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb205-1" title="1"><span class="co"># Convert Matrix to Tibble</span></a>
+<a class="sourceLine" id="cb205-2" title="2">ar_st_col_names =<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;fl_A&#39;</span>, <span class="st">&#39;fl_alpha&#39;</span>, <span class="st">&#39;fl_N&#39;</span>)</a>
+<a class="sourceLine" id="cb205-3" title="3">tb_nN_by_nQ_A_alpha &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mt_nN_by_nQ_A_alpha) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename_all</span>(<span class="op">~</span><span class="kw">c</span>(ar_st_col_names))</a>
+<a class="sourceLine" id="cb205-4" title="4"></a>
+<a class="sourceLine" id="cb205-5" title="5"><span class="co"># Define Implicit Function</span></a>
+<a class="sourceLine" id="cb205-6" title="6">ffi_nonlin_dplyrdo &lt;-<span class="st"> </span><span class="cf">function</span>(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, fl_rho){</a>
+<a class="sourceLine" id="cb205-7" title="7"></a>
+<a class="sourceLine" id="cb205-8" title="8">  <span class="co"># Test Parameters</span></a>
+<a class="sourceLine" id="cb205-9" title="9">  <span class="co"># ar_A = ar_nN_A</span></a>
+<a class="sourceLine" id="cb205-10" title="10">  <span class="co"># ar_alpha = ar_nN_alpha</span></a>
+<a class="sourceLine" id="cb205-11" title="11">  <span class="co"># fl_N = 100</span></a>
+<a class="sourceLine" id="cb205-12" title="12">  <span class="co"># fl_rho = -1</span></a>
+<a class="sourceLine" id="cb205-13" title="13">  <span class="co"># fl_N_q = 10</span></a>
+<a class="sourceLine" id="cb205-14" title="14"></a>
+<a class="sourceLine" id="cb205-15" title="15">  <span class="co"># Apply Function</span></a>
+<a class="sourceLine" id="cb205-16" title="16">  ar_p1_s1 =<span class="st"> </span><span class="kw">exp</span>((fl_A <span class="op">-</span><span class="st"> </span>ar_A)<span class="op">*</span>fl_rho)</a>
+<a class="sourceLine" id="cb205-17" title="17">  ar_p1_s2 =<span class="st"> </span>(fl_alpha<span class="op">/</span>ar_alpha)</a>
+<a class="sourceLine" id="cb205-18" title="18">  ar_p1_s3 =<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>(ar_alpha<span class="op">*</span>fl_rho <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb205-19" title="19">  ar_p1 =<span class="st"> </span>(ar_p1_s1<span class="op">*</span>ar_p1_s2)<span class="op">^</span>ar_p1_s3</a>
+<a class="sourceLine" id="cb205-20" title="20">  ar_p2 =<span class="st"> </span>(fl_N<span class="op">*</span>fl_N_agg)<span class="op">^</span>((fl_alpha<span class="op">*</span>fl_rho<span class="dv">-1</span>)<span class="op">/</span>(ar_alpha<span class="op">*</span>fl_rho<span class="dv">-1</span>))</a>
+<a class="sourceLine" id="cb205-21" title="21">  ar_overall =<span class="st"> </span>ar_p1<span class="op">*</span>ar_p2</a>
+<a class="sourceLine" id="cb205-22" title="22">  fl_overall =<span class="st"> </span>fl_N_agg <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(ar_overall)</a>
+<a class="sourceLine" id="cb205-23" title="23"></a>
+<a class="sourceLine" id="cb205-24" title="24">  <span class="kw">return</span>(fl_overall)</a>
+<a class="sourceLine" id="cb205-25" title="25">}</a>
+<a class="sourceLine" id="cb205-26" title="26"></a>
+<a class="sourceLine" id="cb205-27" title="27"><span class="co"># fl_A, fl_alpha are from columns of tb_nN_by_nQ_A_alpha</span></a>
+<a class="sourceLine" id="cb205-28" title="28">tb_nN_by_nQ_A_alpha =<span class="st"> </span>tb_nN_by_nQ_A_alpha <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb205-29" title="29"><span class="st">                        </span><span class="kw">mutate</span>(<span class="dt">dplyr_eval =</span> <span class="kw">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, fl_N,</a>
+<a class="sourceLine" id="cb205-30" title="30">                                                               ar_nN_A, ar_nN_alpha,</a>
+<a class="sourceLine" id="cb205-31" title="31">                                                               fl_N_agg, fl_rho))</a>
+<a class="sourceLine" id="cb205-32" title="32"><span class="co"># Show</span></a>
+<a class="sourceLine" id="cb205-33" title="33"><span class="kw">kable</span>(tb_nN_by_nQ_A_alpha) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb205-34" title="34"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -613,38 +613,38 @@ dplyr_eval
 <p><span class="math display">\[M = Q+P = Q + Q*N\]</span></p>
 <p>Now we need to expand this by the number of choice grid. Each row, representing one equation, is expanded by the number of choice grids. We are graphically searching, or rather brute force searching, which means if we have 100 individuals, we want to plot out the nonlinear equation for each of these lines, and show graphically where each line crosses zero. We achieve this, by evaluating the equation for each of the 100 individuals along a grid of feasible choices.</p>
 <p>In this problem here, the feasible choices are shared across individuals.</p>
-<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb201-1" title="1"><span class="co"># Parameters</span></a>
-<a class="sourceLine" id="cb201-2" title="2">fl_rho =<span class="st"> </span><span class="fl">0.20</span></a>
-<a class="sourceLine" id="cb201-3" title="3">svr_id_var =<span class="st"> &#39;INDI_ID&#39;</span></a>
-<a class="sourceLine" id="cb201-4" title="4"></a>
-<a class="sourceLine" id="cb201-5" title="5"><span class="co"># it_child_count = N, the number of children</span></a>
-<a class="sourceLine" id="cb201-6" title="6">it_N_child_cnt =<span class="st"> </span><span class="dv">4</span></a>
-<a class="sourceLine" id="cb201-7" title="7"><span class="co"># it_heter_param = Q, number of parameters that are heterogeneous across children</span></a>
-<a class="sourceLine" id="cb201-8" title="8">it_Q_hetpa_cnt =<span class="st"> </span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb201-9" title="9"></a>
-<a class="sourceLine" id="cb201-10" title="10"><span class="co"># P fixed parameters, nN is N dimensional, nP is P dimensional</span></a>
-<a class="sourceLine" id="cb201-11" title="11">ar_nN_A =<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dt">length.out =</span> it_N_child_cnt)</a>
-<a class="sourceLine" id="cb201-12" title="12">ar_nN_alpha =<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="dt">length.out =</span> it_N_child_cnt)</a>
-<a class="sourceLine" id="cb201-13" title="13">ar_nP_A_alpha =<span class="st"> </span><span class="kw">c</span>(ar_nN_A, ar_nN_alpha)</a>
-<a class="sourceLine" id="cb201-14" title="14"></a>
-<a class="sourceLine" id="cb201-15" title="15"><span class="co"># N by Q varying parameters</span></a>
-<a class="sourceLine" id="cb201-16" title="16">mt_nN_by_nQ_A_alpha =<span class="st"> </span><span class="kw">cbind</span>(ar_nN_A, ar_nN_alpha)</a>
-<a class="sourceLine" id="cb201-17" title="17"></a>
-<a class="sourceLine" id="cb201-18" title="18"><span class="co"># Choice Grid for nutritional feasible choices for each</span></a>
-<a class="sourceLine" id="cb201-19" title="19">fl_N_agg =<span class="st"> </span><span class="dv">100</span></a>
-<a class="sourceLine" id="cb201-20" title="20">fl_N_min =<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb201-21" title="21">it_N_choice_cnt_ttest =<span class="st"> </span><span class="dv">3</span></a>
-<a class="sourceLine" id="cb201-22" title="22">it_N_choice_cnt_dense =<span class="st"> </span><span class="dv">100</span></a>
-<a class="sourceLine" id="cb201-23" title="23">ar_N_choices_ttest =<span class="st"> </span><span class="kw">seq</span>(fl_N_min, fl_N_agg, <span class="dt">length.out =</span> it_N_choice_cnt_ttest)</a>
-<a class="sourceLine" id="cb201-24" title="24">ar_N_choices_dense =<span class="st"> </span><span class="kw">seq</span>(fl_N_min, fl_N_agg, <span class="dt">length.out =</span> it_N_choice_cnt_dense)</a>
-<a class="sourceLine" id="cb201-25" title="25"></a>
-<a class="sourceLine" id="cb201-26" title="26"><span class="co"># Mesh Expand</span></a>
-<a class="sourceLine" id="cb201-27" title="27">tb_states_choices &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mt_nN_by_nQ_A_alpha) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowid_to_column</span>(<span class="dt">var=</span>svr_id_var)</a>
-<a class="sourceLine" id="cb201-28" title="28">tb_states_choices_ttest &lt;-<span class="st"> </span>tb_states_choices <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">expand_grid</span>(<span class="dt">choices =</span> ar_N_choices_ttest)</a>
-<a class="sourceLine" id="cb201-29" title="29">tb_states_choices_dense &lt;-<span class="st"> </span>tb_states_choices <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">expand_grid</span>(<span class="dt">choices =</span> ar_N_choices_dense)</a>
-<a class="sourceLine" id="cb201-30" title="30"></a>
-<a class="sourceLine" id="cb201-31" title="31"><span class="co"># display</span></a>
-<a class="sourceLine" id="cb201-32" title="32"><span class="kw">summary</span>(tb_states_choices_dense)</a></code></pre></div>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb206-1" title="1"><span class="co"># Parameters</span></a>
+<a class="sourceLine" id="cb206-2" title="2">fl_rho =<span class="st"> </span><span class="fl">0.20</span></a>
+<a class="sourceLine" id="cb206-3" title="3">svr_id_var =<span class="st"> &#39;INDI_ID&#39;</span></a>
+<a class="sourceLine" id="cb206-4" title="4"></a>
+<a class="sourceLine" id="cb206-5" title="5"><span class="co"># it_child_count = N, the number of children</span></a>
+<a class="sourceLine" id="cb206-6" title="6">it_N_child_cnt =<span class="st"> </span><span class="dv">4</span></a>
+<a class="sourceLine" id="cb206-7" title="7"><span class="co"># it_heter_param = Q, number of parameters that are heterogeneous across children</span></a>
+<a class="sourceLine" id="cb206-8" title="8">it_Q_hetpa_cnt =<span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb206-9" title="9"></a>
+<a class="sourceLine" id="cb206-10" title="10"><span class="co"># P fixed parameters, nN is N dimensional, nP is P dimensional</span></a>
+<a class="sourceLine" id="cb206-11" title="11">ar_nN_A =<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dt">length.out =</span> it_N_child_cnt)</a>
+<a class="sourceLine" id="cb206-12" title="12">ar_nN_alpha =<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="dt">length.out =</span> it_N_child_cnt)</a>
+<a class="sourceLine" id="cb206-13" title="13">ar_nP_A_alpha =<span class="st"> </span><span class="kw">c</span>(ar_nN_A, ar_nN_alpha)</a>
+<a class="sourceLine" id="cb206-14" title="14"></a>
+<a class="sourceLine" id="cb206-15" title="15"><span class="co"># N by Q varying parameters</span></a>
+<a class="sourceLine" id="cb206-16" title="16">mt_nN_by_nQ_A_alpha =<span class="st"> </span><span class="kw">cbind</span>(ar_nN_A, ar_nN_alpha)</a>
+<a class="sourceLine" id="cb206-17" title="17"></a>
+<a class="sourceLine" id="cb206-18" title="18"><span class="co"># Choice Grid for nutritional feasible choices for each</span></a>
+<a class="sourceLine" id="cb206-19" title="19">fl_N_agg =<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb206-20" title="20">fl_N_min =<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb206-21" title="21">it_N_choice_cnt_ttest =<span class="st"> </span><span class="dv">3</span></a>
+<a class="sourceLine" id="cb206-22" title="22">it_N_choice_cnt_dense =<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb206-23" title="23">ar_N_choices_ttest =<span class="st"> </span><span class="kw">seq</span>(fl_N_min, fl_N_agg, <span class="dt">length.out =</span> it_N_choice_cnt_ttest)</a>
+<a class="sourceLine" id="cb206-24" title="24">ar_N_choices_dense =<span class="st"> </span><span class="kw">seq</span>(fl_N_min, fl_N_agg, <span class="dt">length.out =</span> it_N_choice_cnt_dense)</a>
+<a class="sourceLine" id="cb206-25" title="25"></a>
+<a class="sourceLine" id="cb206-26" title="26"><span class="co"># Mesh Expand</span></a>
+<a class="sourceLine" id="cb206-27" title="27">tb_states_choices &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mt_nN_by_nQ_A_alpha) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowid_to_column</span>(<span class="dt">var=</span>svr_id_var)</a>
+<a class="sourceLine" id="cb206-28" title="28">tb_states_choices_ttest &lt;-<span class="st"> </span>tb_states_choices <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">expand_grid</span>(<span class="dt">choices =</span> ar_N_choices_ttest)</a>
+<a class="sourceLine" id="cb206-29" title="29">tb_states_choices_dense &lt;-<span class="st"> </span>tb_states_choices <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">expand_grid</span>(<span class="dt">choices =</span> ar_N_choices_dense)</a>
+<a class="sourceLine" id="cb206-30" title="30"></a>
+<a class="sourceLine" id="cb206-31" title="31"><span class="co"># display</span></a>
+<a class="sourceLine" id="cb206-32" title="32"><span class="kw">summary</span>(tb_states_choices_dense)</a></code></pre></div>
 <pre><code>##     INDI_ID        ar_nN_A    ar_nN_alpha     choices   
 ##  Min.   :1.00   Min.   :-2   Min.   :0.1   Min.   :  0  
 ##  1st Qu.:1.75   1st Qu.:-1   1st Qu.:0.3   1st Qu.: 25  
@@ -652,8 +652,8 @@ dplyr_eval
 ##  Mean   :2.50   Mean   : 0   Mean   :0.5   Mean   : 50  
 ##  3rd Qu.:3.25   3rd Qu.: 1   3rd Qu.:0.7   3rd Qu.: 75  
 ##  Max.   :4.00   Max.   : 2   Max.   :0.9   Max.   :100</code></pre>
-<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb203-1" title="1"><span class="kw">kable</span>(tb_states_choices_ttest) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb203-2" title="2"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb208-1" title="1"><span class="kw">kable</span>(tb_states_choices_ttest) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb208-2" title="2"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -854,48 +854,48 @@ choices
 <p>The function looks within group, finds min/max etc that are relevant.</p>
 <div id="points-and-denser-dataframs-and-define-function" class="section level5">
 <h5><span class="header-section-number">3.1.2.2.1</span> 3 Points and Denser Dataframs and Define Function</h5>
-<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb204-1" title="1"><span class="co"># Convert Matrix to Tibble</span></a>
-<a class="sourceLine" id="cb204-2" title="2">ar_st_col_names =<span class="st"> </span><span class="kw">c</span>(svr_id_var,<span class="st">&#39;fl_A&#39;</span>, <span class="st">&#39;fl_alpha&#39;</span>)</a>
-<a class="sourceLine" id="cb204-3" title="3">tb_states_choices &lt;-<span class="st"> </span>tb_states_choices <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename_all</span>(<span class="op">~</span><span class="kw">c</span>(ar_st_col_names))</a>
-<a class="sourceLine" id="cb204-4" title="4">ar_st_col_names =<span class="st"> </span><span class="kw">c</span>(svr_id_var,<span class="st">&#39;fl_A&#39;</span>, <span class="st">&#39;fl_alpha&#39;</span>, <span class="st">&#39;fl_N&#39;</span>)</a>
-<a class="sourceLine" id="cb204-5" title="5">tb_states_choices_ttest &lt;-<span class="st"> </span>tb_states_choices_ttest <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename_all</span>(<span class="op">~</span><span class="kw">c</span>(ar_st_col_names))</a>
-<a class="sourceLine" id="cb204-6" title="6">tb_states_choices_dense &lt;-<span class="st"> </span>tb_states_choices_dense <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename_all</span>(<span class="op">~</span><span class="kw">c</span>(ar_st_col_names))</a>
-<a class="sourceLine" id="cb204-7" title="7"></a>
-<a class="sourceLine" id="cb204-8" title="8"><span class="co"># Define Implicit Function</span></a>
-<a class="sourceLine" id="cb204-9" title="9">ffi_nonlin_dplyrdo &lt;-<span class="st"> </span><span class="cf">function</span>(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, fl_rho){</a>
-<a class="sourceLine" id="cb204-10" title="10">  <span class="co"># scalar value that are row-specific, in dataframe already: *fl_A*, *fl_alpha*, *fl_N*</span></a>
-<a class="sourceLine" id="cb204-11" title="11">  <span class="co"># array and scalars not in dataframe, common all rows: *ar_A*, *ar_alpha*, *fl_N_agg*, *fl_rho*</span></a>
-<a class="sourceLine" id="cb204-12" title="12"></a>
-<a class="sourceLine" id="cb204-13" title="13">  <span class="co"># Test Parameters</span></a>
-<a class="sourceLine" id="cb204-14" title="14">  <span class="co"># ar_A = ar_nN_A</span></a>
-<a class="sourceLine" id="cb204-15" title="15">  <span class="co"># ar_alpha = ar_nN_alpha</span></a>
-<a class="sourceLine" id="cb204-16" title="16">  <span class="co"># fl_N = 100</span></a>
-<a class="sourceLine" id="cb204-17" title="17">  <span class="co"># fl_rho = -1</span></a>
-<a class="sourceLine" id="cb204-18" title="18">  <span class="co"># fl_N_q = 10</span></a>
-<a class="sourceLine" id="cb204-19" title="19"></a>
-<a class="sourceLine" id="cb204-20" title="20">  <span class="co"># Apply Function</span></a>
-<a class="sourceLine" id="cb204-21" title="21">  ar_p1_s1 =<span class="st"> </span><span class="kw">exp</span>((fl_A <span class="op">-</span><span class="st"> </span>ar_A)<span class="op">*</span>fl_rho)</a>
-<a class="sourceLine" id="cb204-22" title="22">  ar_p1_s2 =<span class="st"> </span>(fl_alpha<span class="op">/</span>ar_alpha)</a>
-<a class="sourceLine" id="cb204-23" title="23">  ar_p1_s3 =<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>(ar_alpha<span class="op">*</span>fl_rho <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb204-24" title="24">  ar_p1 =<span class="st"> </span>(ar_p1_s1<span class="op">*</span>ar_p1_s2)<span class="op">^</span>ar_p1_s3</a>
-<a class="sourceLine" id="cb204-25" title="25">  ar_p2 =<span class="st"> </span>fl_N<span class="op">^</span>((fl_alpha<span class="op">*</span>fl_rho<span class="dv">-1</span>)<span class="op">/</span>(ar_alpha<span class="op">*</span>fl_rho<span class="dv">-1</span>))</a>
-<a class="sourceLine" id="cb204-26" title="26">  ar_overall =<span class="st"> </span>ar_p1<span class="op">*</span>ar_p2</a>
-<a class="sourceLine" id="cb204-27" title="27">  fl_overall =<span class="st"> </span>fl_N_agg <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(ar_overall)</a>
-<a class="sourceLine" id="cb204-28" title="28"></a>
-<a class="sourceLine" id="cb204-29" title="29">  <span class="kw">return</span>(fl_overall)</a>
-<a class="sourceLine" id="cb204-30" title="30">}</a></code></pre></div>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb209-1" title="1"><span class="co"># Convert Matrix to Tibble</span></a>
+<a class="sourceLine" id="cb209-2" title="2">ar_st_col_names =<span class="st"> </span><span class="kw">c</span>(svr_id_var,<span class="st">&#39;fl_A&#39;</span>, <span class="st">&#39;fl_alpha&#39;</span>)</a>
+<a class="sourceLine" id="cb209-3" title="3">tb_states_choices &lt;-<span class="st"> </span>tb_states_choices <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename_all</span>(<span class="op">~</span><span class="kw">c</span>(ar_st_col_names))</a>
+<a class="sourceLine" id="cb209-4" title="4">ar_st_col_names =<span class="st"> </span><span class="kw">c</span>(svr_id_var,<span class="st">&#39;fl_A&#39;</span>, <span class="st">&#39;fl_alpha&#39;</span>, <span class="st">&#39;fl_N&#39;</span>)</a>
+<a class="sourceLine" id="cb209-5" title="5">tb_states_choices_ttest &lt;-<span class="st"> </span>tb_states_choices_ttest <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename_all</span>(<span class="op">~</span><span class="kw">c</span>(ar_st_col_names))</a>
+<a class="sourceLine" id="cb209-6" title="6">tb_states_choices_dense &lt;-<span class="st"> </span>tb_states_choices_dense <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename_all</span>(<span class="op">~</span><span class="kw">c</span>(ar_st_col_names))</a>
+<a class="sourceLine" id="cb209-7" title="7"></a>
+<a class="sourceLine" id="cb209-8" title="8"><span class="co"># Define Implicit Function</span></a>
+<a class="sourceLine" id="cb209-9" title="9">ffi_nonlin_dplyrdo &lt;-<span class="st"> </span><span class="cf">function</span>(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, fl_rho){</a>
+<a class="sourceLine" id="cb209-10" title="10">  <span class="co"># scalar value that are row-specific, in dataframe already: *fl_A*, *fl_alpha*, *fl_N*</span></a>
+<a class="sourceLine" id="cb209-11" title="11">  <span class="co"># array and scalars not in dataframe, common all rows: *ar_A*, *ar_alpha*, *fl_N_agg*, *fl_rho*</span></a>
+<a class="sourceLine" id="cb209-12" title="12"></a>
+<a class="sourceLine" id="cb209-13" title="13">  <span class="co"># Test Parameters</span></a>
+<a class="sourceLine" id="cb209-14" title="14">  <span class="co"># ar_A = ar_nN_A</span></a>
+<a class="sourceLine" id="cb209-15" title="15">  <span class="co"># ar_alpha = ar_nN_alpha</span></a>
+<a class="sourceLine" id="cb209-16" title="16">  <span class="co"># fl_N = 100</span></a>
+<a class="sourceLine" id="cb209-17" title="17">  <span class="co"># fl_rho = -1</span></a>
+<a class="sourceLine" id="cb209-18" title="18">  <span class="co"># fl_N_q = 10</span></a>
+<a class="sourceLine" id="cb209-19" title="19"></a>
+<a class="sourceLine" id="cb209-20" title="20">  <span class="co"># Apply Function</span></a>
+<a class="sourceLine" id="cb209-21" title="21">  ar_p1_s1 =<span class="st"> </span><span class="kw">exp</span>((fl_A <span class="op">-</span><span class="st"> </span>ar_A)<span class="op">*</span>fl_rho)</a>
+<a class="sourceLine" id="cb209-22" title="22">  ar_p1_s2 =<span class="st"> </span>(fl_alpha<span class="op">/</span>ar_alpha)</a>
+<a class="sourceLine" id="cb209-23" title="23">  ar_p1_s3 =<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>(ar_alpha<span class="op">*</span>fl_rho <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb209-24" title="24">  ar_p1 =<span class="st"> </span>(ar_p1_s1<span class="op">*</span>ar_p1_s2)<span class="op">^</span>ar_p1_s3</a>
+<a class="sourceLine" id="cb209-25" title="25">  ar_p2 =<span class="st"> </span>fl_N<span class="op">^</span>((fl_alpha<span class="op">*</span>fl_rho<span class="dv">-1</span>)<span class="op">/</span>(ar_alpha<span class="op">*</span>fl_rho<span class="dv">-1</span>))</a>
+<a class="sourceLine" id="cb209-26" title="26">  ar_overall =<span class="st"> </span>ar_p1<span class="op">*</span>ar_p2</a>
+<a class="sourceLine" id="cb209-27" title="27">  fl_overall =<span class="st"> </span>fl_N_agg <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(ar_overall)</a>
+<a class="sourceLine" id="cb209-28" title="28"></a>
+<a class="sourceLine" id="cb209-29" title="29">  <span class="kw">return</span>(fl_overall)</a>
+<a class="sourceLine" id="cb209-30" title="30">}</a></code></pre></div>
 </div>
 <div id="evaluate-at-three-choice-points-and-show-table" class="section level5">
 <h5><span class="header-section-number">3.1.2.2.2</span> Evaluate at Three Choice Points and Show Table</h5>
 <p>In the example below, just show results evaluating over three choice points and show table.</p>
-<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb205-1" title="1"><span class="co"># fl_A, fl_alpha are from columns of tb_nN_by_nQ_A_alpha</span></a>
-<a class="sourceLine" id="cb205-2" title="2">tb_states_choices_ttest_eval =<span class="st"> </span>tb_states_choices_ttest <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb205-3" title="3"><span class="st">                        </span><span class="kw">mutate</span>(<span class="dt">dplyr_eval =</span> <span class="kw">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, fl_N,</a>
-<a class="sourceLine" id="cb205-4" title="4">                                                               ar_nN_A, ar_nN_alpha,</a>
-<a class="sourceLine" id="cb205-5" title="5">                                                               fl_N_agg, fl_rho))</a>
-<a class="sourceLine" id="cb205-6" title="6"><span class="co"># Show</span></a>
-<a class="sourceLine" id="cb205-7" title="7"><span class="kw">kable</span>(tb_states_choices_ttest_eval) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb205-8" title="8"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb210-1" title="1"><span class="co"># fl_A, fl_alpha are from columns of tb_nN_by_nQ_A_alpha</span></a>
+<a class="sourceLine" id="cb210-2" title="2">tb_states_choices_ttest_eval =<span class="st"> </span>tb_states_choices_ttest <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb210-3" title="3"><span class="st">                        </span><span class="kw">mutate</span>(<span class="dt">dplyr_eval =</span> <span class="kw">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, fl_N,</a>
+<a class="sourceLine" id="cb210-4" title="4">                                                               ar_nN_A, ar_nN_alpha,</a>
+<a class="sourceLine" id="cb210-5" title="5">                                                               fl_N_agg, fl_rho))</a>
+<a class="sourceLine" id="cb210-6" title="6"><span class="co"># Show</span></a>
+<a class="sourceLine" id="cb210-7" title="7"><span class="kw">kable</span>(tb_states_choices_ttest_eval) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb210-8" title="8"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1127,24 +1127,24 @@ dplyr_eval
 <div id="evaluate-at-many-choice-points-and-show-graphically" class="section level5">
 <h5><span class="header-section-number">3.1.2.2.3</span> Evaluate at Many Choice Points and Show Graphically</h5>
 <p>Same as above, but now we evaluate the function over the individuals at many choice points so that we can graph things out.</p>
-<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb206-1" title="1"><span class="co"># fl_A, fl_alpha are from columns of tb_nN_by_nQ_A_alpha</span></a>
-<a class="sourceLine" id="cb206-2" title="2">tb_states_choices_dense_eval =<span class="st"> </span>tb_states_choices_dense <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb206-3" title="3"><span class="st">                        </span><span class="kw">mutate</span>(<span class="dt">dplyr_eval =</span> <span class="kw">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, fl_N,</a>
-<a class="sourceLine" id="cb206-4" title="4">                                                               ar_nN_A, ar_nN_alpha,</a>
-<a class="sourceLine" id="cb206-5" title="5">                                                               fl_N_agg, fl_rho))</a></code></pre></div>
-<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb207-1" title="1"><span class="co"># Labeling</span></a>
-<a class="sourceLine" id="cb207-2" title="2">st_title &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;Evaluate Non-Linear Functions to Search for Roots&#39;</span>)</a>
-<a class="sourceLine" id="cb207-3" title="3">st_subtitle &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;https://fanwangecon.github.io/&#39;</span>,</a>
-<a class="sourceLine" id="cb207-4" title="4">                      <span class="st">&#39;R4Econ/function/mutatef/htmlpdfr/fs_func_choice_states.html&#39;</span>)</a>
-<a class="sourceLine" id="cb207-5" title="5">st_caption &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;Evaluating the function, &#39;</span>,</a>
-<a class="sourceLine" id="cb207-6" title="6">                     <span class="st">&#39;https://fanwangecon.github.io/R4Econ/&#39;</span>)</a>
-<a class="sourceLine" id="cb207-7" title="7">st_x_label &lt;-<span class="st"> &#39;x values&#39;</span></a>
-<a class="sourceLine" id="cb207-8" title="8">st_y_label &lt;-<span class="st"> &#39;f(x)&#39;</span></a>
-<a class="sourceLine" id="cb207-9" title="9"></a>
-<a class="sourceLine" id="cb207-10" title="10"><span class="co"># Show</span></a>
-<a class="sourceLine" id="cb207-11" title="11"><span class="kw">dim</span>(tb_states_choices_dense_eval)</a></code></pre></div>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb211-1" title="1"><span class="co"># fl_A, fl_alpha are from columns of tb_nN_by_nQ_A_alpha</span></a>
+<a class="sourceLine" id="cb211-2" title="2">tb_states_choices_dense_eval =<span class="st"> </span>tb_states_choices_dense <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb211-3" title="3"><span class="st">                        </span><span class="kw">mutate</span>(<span class="dt">dplyr_eval =</span> <span class="kw">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, fl_N,</a>
+<a class="sourceLine" id="cb211-4" title="4">                                                               ar_nN_A, ar_nN_alpha,</a>
+<a class="sourceLine" id="cb211-5" title="5">                                                               fl_N_agg, fl_rho))</a></code></pre></div>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb212-1" title="1"><span class="co"># Labeling</span></a>
+<a class="sourceLine" id="cb212-2" title="2">st_title &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;Evaluate Non-Linear Functions to Search for Roots&#39;</span>)</a>
+<a class="sourceLine" id="cb212-3" title="3">st_subtitle &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;https://fanwangecon.github.io/&#39;</span>,</a>
+<a class="sourceLine" id="cb212-4" title="4">                      <span class="st">&#39;R4Econ/function/mutatef/htmlpdfr/fs_func_choice_states.html&#39;</span>)</a>
+<a class="sourceLine" id="cb212-5" title="5">st_caption &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;Evaluating the function, &#39;</span>,</a>
+<a class="sourceLine" id="cb212-6" title="6">                     <span class="st">&#39;https://fanwangecon.github.io/R4Econ/&#39;</span>)</a>
+<a class="sourceLine" id="cb212-7" title="7">st_x_label &lt;-<span class="st"> &#39;x values&#39;</span></a>
+<a class="sourceLine" id="cb212-8" title="8">st_y_label &lt;-<span class="st"> &#39;f(x)&#39;</span></a>
+<a class="sourceLine" id="cb212-9" title="9"></a>
+<a class="sourceLine" id="cb212-10" title="10"><span class="co"># Show</span></a>
+<a class="sourceLine" id="cb212-11" title="11"><span class="kw">dim</span>(tb_states_choices_dense_eval)</a></code></pre></div>
 <pre><code>## [1] 400   5</code></pre>
-<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb209-1" title="1"><span class="kw">summary</span>(tb_states_choices_dense_eval)</a></code></pre></div>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb214-1" title="1"><span class="kw">summary</span>(tb_states_choices_dense_eval)</a></code></pre></div>
 <pre><code>##     INDI_ID          fl_A       fl_alpha        fl_N       dplyr_eval       
 ##  Min.   :1.00   Min.   :-2   Min.   :0.1   Min.   :  0   Min.   :-12880.28  
 ##  1st Qu.:1.75   1st Qu.:-1   1st Qu.:0.3   1st Qu.: 25   1st Qu.: -1167.29  
@@ -1152,18 +1152,18 @@ dplyr_eval
 ##  Mean   :2.50   Mean   : 0   Mean   :0.5   Mean   : 50   Mean   : -1645.65  
 ##  3rd Qu.:3.25   3rd Qu.: 1   3rd Qu.:0.7   3rd Qu.: 75   3rd Qu.:     0.96  
 ##  Max.   :4.00   Max.   : 2   Max.   :0.9   Max.   :100   Max.   :   100.00</code></pre>
-<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb211-1" title="1">lineplot &lt;-<span class="st"> </span>tb_states_choices_dense_eval <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb211-2" title="2"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>fl_N, <span class="dt">y=</span>dplyr_eval)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb211-3" title="3"><span class="st">        </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb211-4" title="4"><span class="st">        </span><span class="kw">facet_wrap</span>( . <span class="op">~</span><span class="st"> </span>INDI_ID, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb211-5" title="5"><span class="st">        </span><span class="kw">geom_hline</span>(<span class="dt">yintercept=</span><span class="dv">0</span>, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>,</a>
-<a class="sourceLine" id="cb211-6" title="6">                <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size=</span><span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb211-7" title="7"><span class="st">        </span><span class="kw">labs</span>(<span class="dt">title =</span> st_title,</a>
-<a class="sourceLine" id="cb211-8" title="8">             <span class="dt">subtitle =</span> st_subtitle,</a>
-<a class="sourceLine" id="cb211-9" title="9">             <span class="dt">x =</span> st_x_label,</a>
-<a class="sourceLine" id="cb211-10" title="10">             <span class="dt">y =</span> st_y_label,</a>
-<a class="sourceLine" id="cb211-11" title="11">             <span class="dt">caption =</span> st_caption)</a>
-<a class="sourceLine" id="cb211-12" title="12"><span class="kw">print</span>(lineplot)</a></code></pre></div>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb216-1" title="1">lineplot &lt;-<span class="st"> </span>tb_states_choices_dense_eval <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb216-2" title="2"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>fl_N, <span class="dt">y=</span>dplyr_eval)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb216-3" title="3"><span class="st">        </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb216-4" title="4"><span class="st">        </span><span class="kw">facet_wrap</span>( . <span class="op">~</span><span class="st"> </span>INDI_ID, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb216-5" title="5"><span class="st">        </span><span class="kw">geom_hline</span>(<span class="dt">yintercept=</span><span class="dv">0</span>, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>,</a>
+<a class="sourceLine" id="cb216-6" title="6">                <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size=</span><span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb216-7" title="7"><span class="st">        </span><span class="kw">labs</span>(<span class="dt">title =</span> st_title,</a>
+<a class="sourceLine" id="cb216-8" title="8">             <span class="dt">subtitle =</span> st_subtitle,</a>
+<a class="sourceLine" id="cb216-9" title="9">             <span class="dt">x =</span> st_x_label,</a>
+<a class="sourceLine" id="cb216-10" title="10">             <span class="dt">y =</span> st_y_label,</a>
+<a class="sourceLine" id="cb216-11" title="11">             <span class="dt">caption =</span> st_caption)</a>
+<a class="sourceLine" id="cb216-12" title="12"><span class="kw">print</span>(lineplot)</a></code></pre></div>
 <p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/graph%20many%20evaluations-1.png" width="672" style="display: block; margin: auto;" /></p>
 
 </div>
@@ -1187,18 +1187,18 @@ dplyr_eval
 <div id="large-dataframe" class="section level5">
 <h5><span class="header-section-number">3.2.1.1.1</span> Large Dataframe</h5>
 <p>There are up to ten thousand income observation per person. And there are ten people.</p>
-<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb212-1" title="1"><span class="co"># Parameter Setups</span></a>
-<a class="sourceLine" id="cb212-2" title="2">it_M &lt;-<span class="st"> </span><span class="dv">10</span></a>
-<a class="sourceLine" id="cb212-3" title="3">it_Q_max &lt;-<span class="st"> </span><span class="dv">10000</span></a>
-<a class="sourceLine" id="cb212-4" title="4">fl_rnorm_mu &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb212-5" title="5">ar_rnorm_sd &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dt">length.out=</span>it_M)</a>
-<a class="sourceLine" id="cb212-6" title="6">ar_it_q &lt;-<span class="st"> </span><span class="kw">sample.int</span>(it_Q_max, it_M, <span class="dt">replace=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb212-7" title="7"></a>
-<a class="sourceLine" id="cb212-8" title="8"><span class="co"># N by Q varying parameters</span></a>
-<a class="sourceLine" id="cb212-9" title="9">mt_data =<span class="st"> </span><span class="kw">cbind</span>(ar_it_q, ar_rnorm_sd)</a>
-<a class="sourceLine" id="cb212-10" title="10">tb_M &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mt_data) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> <span class="st">&quot;ID&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb212-11" title="11"><span class="st">                </span><span class="kw">rename</span>(<span class="dt">sd =</span> ar_rnorm_sd, <span class="dt">Q =</span> ar_it_q) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb212-12" title="12"><span class="st">                </span><span class="kw">mutate</span>(<span class="dt">mean =</span> fl_rnorm_mu)</a></code></pre></div>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb217-1" title="1"><span class="co"># Parameter Setups</span></a>
+<a class="sourceLine" id="cb217-2" title="2">it_M &lt;-<span class="st"> </span><span class="dv">10</span></a>
+<a class="sourceLine" id="cb217-3" title="3">it_Q_max &lt;-<span class="st"> </span><span class="dv">10000</span></a>
+<a class="sourceLine" id="cb217-4" title="4">fl_rnorm_mu &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb217-5" title="5">ar_rnorm_sd &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dt">length.out=</span>it_M)</a>
+<a class="sourceLine" id="cb217-6" title="6">ar_it_q &lt;-<span class="st"> </span><span class="kw">sample.int</span>(it_Q_max, it_M, <span class="dt">replace=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb217-7" title="7"></a>
+<a class="sourceLine" id="cb217-8" title="8"><span class="co"># N by Q varying parameters</span></a>
+<a class="sourceLine" id="cb217-9" title="9">mt_data =<span class="st"> </span><span class="kw">cbind</span>(ar_it_q, ar_rnorm_sd)</a>
+<a class="sourceLine" id="cb217-10" title="10">tb_M &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mt_data) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> <span class="st">&quot;ID&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb217-11" title="11"><span class="st">                </span><span class="kw">rename</span>(<span class="dt">sd =</span> ar_rnorm_sd, <span class="dt">Q =</span> ar_it_q) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb217-12" title="12"><span class="st">                </span><span class="kw">mutate</span>(<span class="dt">mean =</span> fl_rnorm_mu)</a></code></pre></div>
 </div>
 <div id="compute-group-specific-gini-normal" class="section level5">
 <h5><span class="header-section-number">3.2.1.1.2</span> Compute Group specific gini, NORMAL</h5>
@@ -1209,50 +1209,50 @@ dplyr_eval
 <li>We can use the <a href="https://stackoverflow.com/a/18228613/8280804">dollar dot structure</a> to use string variable names in do anything.</li>
 <li>We can use dot bracket, this is the only option that works with string variable names</li>
 </ol>
-<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb213-1" title="1"><span class="co"># A. Normal Draw Expansion, Explicitly Name</span></a>
-<a class="sourceLine" id="cb213-2" title="2"><span class="kw">set.seed</span>(<span class="st">&#39;123&#39;</span>)</a>
-<a class="sourceLine" id="cb213-3" title="3">tb_income_norm_dot_dollar &lt;-<span class="st"> </span>tb_M <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(ID) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb213-4" title="4"><span class="st">  </span><span class="kw">do</span>(<span class="dt">income =</span> <span class="kw">rnorm</span>(.<span class="op">$</span>Q,</a>
-<a class="sourceLine" id="cb213-5" title="5">                    <span class="dt">mean=</span>.<span class="op">$</span>mean,</a>
-<a class="sourceLine" id="cb213-6" title="6">                    <span class="dt">sd=</span>.<span class="op">$</span>sd)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb213-7" title="7"><span class="st">  </span><span class="kw">unnest</span>(<span class="kw">c</span>(income)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb213-8" title="8"><span class="st">  </span><span class="kw">left_join</span>(tb_M, <span class="dt">by=</span><span class="st">&quot;ID&quot;</span>)</a>
-<a class="sourceLine" id="cb213-9" title="9"></a>
-<a class="sourceLine" id="cb213-10" title="10"><span class="co"># Normal Draw Expansion again, dot dollar differently with string variable name</span></a>
-<a class="sourceLine" id="cb213-11" title="11"><span class="kw">set.seed</span>(<span class="st">&#39;123&#39;</span>)</a>
-<a class="sourceLine" id="cb213-12" title="12">tb_income_norm_dollar_dot &lt;-<span class="st"> </span>tb_M <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(ID) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb213-13" title="13"><span class="st">  </span><span class="kw">do</span>(<span class="dt">income =</span> <span class="kw">rnorm</span>(<span class="st">`</span><span class="dt">$</span><span class="st">`</span>(., <span class="st">&#39;Q&#39;</span>),</a>
-<a class="sourceLine" id="cb213-14" title="14">                    <span class="dt">mean =</span> <span class="st">`</span><span class="dt">$</span><span class="st">`</span>(., <span class="st">&#39;mean&#39;</span>),</a>
-<a class="sourceLine" id="cb213-15" title="15">                    <span class="dt">sd =</span> <span class="st">`</span><span class="dt">$</span><span class="st">`</span>(., <span class="st">&#39;sd&#39;</span>))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb213-16" title="16"><span class="st">  </span><span class="kw">unnest</span>(<span class="kw">c</span>(income)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb213-17" title="17"><span class="st">  </span><span class="kw">left_join</span>(tb_M, <span class="dt">by=</span><span class="st">&quot;ID&quot;</span>)</a>
-<a class="sourceLine" id="cb213-18" title="18"></a>
-<a class="sourceLine" id="cb213-19" title="19"><span class="co"># Normal Draw Expansion again, dot double bracket</span></a>
-<a class="sourceLine" id="cb213-20" title="20"><span class="kw">set.seed</span>(<span class="st">&#39;123&#39;</span>)</a>
-<a class="sourceLine" id="cb213-21" title="21">svr_mean &lt;-<span class="st"> &#39;mean&#39;</span></a>
-<a class="sourceLine" id="cb213-22" title="22">svr_sd &lt;-<span class="st"> &#39;sd&#39;</span></a>
-<a class="sourceLine" id="cb213-23" title="23">svr_Q &lt;-<span class="st"> &#39;Q&#39;</span></a>
-<a class="sourceLine" id="cb213-24" title="24">tb_income_norm_dot_bracket_db &lt;-<span class="st"> </span>tb_M <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(ID) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb213-25" title="25"><span class="st">  </span><span class="kw">do</span>(<span class="dt">income =</span> <span class="kw">rnorm</span>(.[[svr_Q]],</a>
-<a class="sourceLine" id="cb213-26" title="26">                    <span class="dt">mean =</span> .[[svr_mean]],</a>
-<a class="sourceLine" id="cb213-27" title="27">                    <span class="dt">sd =</span> .[[svr_sd]])) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb213-28" title="28"><span class="st">  </span><span class="kw">unnest</span>(<span class="kw">c</span>(income)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb213-29" title="29"><span class="st">  </span><span class="kw">left_join</span>(tb_M, <span class="dt">by=</span><span class="st">&quot;ID&quot;</span>)</a>
-<a class="sourceLine" id="cb213-30" title="30"></a>
-<a class="sourceLine" id="cb213-31" title="31"><span class="co"># display</span></a>
-<a class="sourceLine" id="cb213-32" title="32"><span class="kw">sum</span>(<span class="kw">sum</span>(tb_income_norm_dollar_dot <span class="op">-</span><span class="st"> </span>tb_income_norm_dot_dollar <span class="op">-</span><span class="st"> </span>tb_income_norm_dot_bracket_db))</a></code></pre></div>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb218-1" title="1"><span class="co"># A. Normal Draw Expansion, Explicitly Name</span></a>
+<a class="sourceLine" id="cb218-2" title="2"><span class="kw">set.seed</span>(<span class="st">&#39;123&#39;</span>)</a>
+<a class="sourceLine" id="cb218-3" title="3">tb_income_norm_dot_dollar &lt;-<span class="st"> </span>tb_M <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(ID) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb218-4" title="4"><span class="st">  </span><span class="kw">do</span>(<span class="dt">income =</span> <span class="kw">rnorm</span>(.<span class="op">$</span>Q,</a>
+<a class="sourceLine" id="cb218-5" title="5">                    <span class="dt">mean=</span>.<span class="op">$</span>mean,</a>
+<a class="sourceLine" id="cb218-6" title="6">                    <span class="dt">sd=</span>.<span class="op">$</span>sd)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb218-7" title="7"><span class="st">  </span><span class="kw">unnest</span>(<span class="kw">c</span>(income)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb218-8" title="8"><span class="st">  </span><span class="kw">left_join</span>(tb_M, <span class="dt">by=</span><span class="st">&quot;ID&quot;</span>)</a>
+<a class="sourceLine" id="cb218-9" title="9"></a>
+<a class="sourceLine" id="cb218-10" title="10"><span class="co"># Normal Draw Expansion again, dot dollar differently with string variable name</span></a>
+<a class="sourceLine" id="cb218-11" title="11"><span class="kw">set.seed</span>(<span class="st">&#39;123&#39;</span>)</a>
+<a class="sourceLine" id="cb218-12" title="12">tb_income_norm_dollar_dot &lt;-<span class="st"> </span>tb_M <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(ID) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb218-13" title="13"><span class="st">  </span><span class="kw">do</span>(<span class="dt">income =</span> <span class="kw">rnorm</span>(<span class="st">`</span><span class="dt">$</span><span class="st">`</span>(., <span class="st">&#39;Q&#39;</span>),</a>
+<a class="sourceLine" id="cb218-14" title="14">                    <span class="dt">mean =</span> <span class="st">`</span><span class="dt">$</span><span class="st">`</span>(., <span class="st">&#39;mean&#39;</span>),</a>
+<a class="sourceLine" id="cb218-15" title="15">                    <span class="dt">sd =</span> <span class="st">`</span><span class="dt">$</span><span class="st">`</span>(., <span class="st">&#39;sd&#39;</span>))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb218-16" title="16"><span class="st">  </span><span class="kw">unnest</span>(<span class="kw">c</span>(income)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb218-17" title="17"><span class="st">  </span><span class="kw">left_join</span>(tb_M, <span class="dt">by=</span><span class="st">&quot;ID&quot;</span>)</a>
+<a class="sourceLine" id="cb218-18" title="18"></a>
+<a class="sourceLine" id="cb218-19" title="19"><span class="co"># Normal Draw Expansion again, dot double bracket</span></a>
+<a class="sourceLine" id="cb218-20" title="20"><span class="kw">set.seed</span>(<span class="st">&#39;123&#39;</span>)</a>
+<a class="sourceLine" id="cb218-21" title="21">svr_mean &lt;-<span class="st"> &#39;mean&#39;</span></a>
+<a class="sourceLine" id="cb218-22" title="22">svr_sd &lt;-<span class="st"> &#39;sd&#39;</span></a>
+<a class="sourceLine" id="cb218-23" title="23">svr_Q &lt;-<span class="st"> &#39;Q&#39;</span></a>
+<a class="sourceLine" id="cb218-24" title="24">tb_income_norm_dot_bracket_db &lt;-<span class="st"> </span>tb_M <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(ID) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb218-25" title="25"><span class="st">  </span><span class="kw">do</span>(<span class="dt">income =</span> <span class="kw">rnorm</span>(.[[svr_Q]],</a>
+<a class="sourceLine" id="cb218-26" title="26">                    <span class="dt">mean =</span> .[[svr_mean]],</a>
+<a class="sourceLine" id="cb218-27" title="27">                    <span class="dt">sd =</span> .[[svr_sd]])) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb218-28" title="28"><span class="st">  </span><span class="kw">unnest</span>(<span class="kw">c</span>(income)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb218-29" title="29"><span class="st">  </span><span class="kw">left_join</span>(tb_M, <span class="dt">by=</span><span class="st">&quot;ID&quot;</span>)</a>
+<a class="sourceLine" id="cb218-30" title="30"></a>
+<a class="sourceLine" id="cb218-31" title="31"><span class="co"># display</span></a>
+<a class="sourceLine" id="cb218-32" title="32"><span class="kw">sum</span>(<span class="kw">sum</span>(tb_income_norm_dollar_dot <span class="op">-</span><span class="st"> </span>tb_income_norm_dot_dollar <span class="op">-</span><span class="st"> </span>tb_income_norm_dot_bracket_db))</a></code></pre></div>
 <pre><code>## [1] -463785175</code></pre>
-<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb215-1" title="1"><span class="co"># display</span></a>
-<a class="sourceLine" id="cb215-2" title="2"><span class="kw">head</span>(tb_income_norm_dot_dollar, <span class="dv">20</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb216-1" title="1"><span class="co"># Gini by Group</span></a>
-<a class="sourceLine" id="cb216-2" title="2">tb_gini_norm &lt;-<span class="st"> </span>tb_income_norm_dollar_dot <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(ID) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb216-3" title="3"><span class="st">  </span><span class="kw">do</span>(<span class="dt">inc_gini_norm =</span> <span class="kw">ff_dist_gini_vector_pos</span>(.<span class="op">$</span>income)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb216-4" title="4"><span class="st">  </span><span class="kw">unnest</span>(<span class="kw">c</span>(inc_gini_norm)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb216-5" title="5"><span class="st">  </span><span class="kw">left_join</span>(tb_M, <span class="dt">by=</span><span class="st">&quot;ID&quot;</span>)</a>
-<a class="sourceLine" id="cb216-6" title="6"></a>
-<a class="sourceLine" id="cb216-7" title="7"><span class="co"># display</span></a>
-<a class="sourceLine" id="cb216-8" title="8"><span class="kw">kable</span>(tb_gini_norm) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb216-9" title="9"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb220-1" title="1"><span class="co"># display</span></a>
+<a class="sourceLine" id="cb220-2" title="2"><span class="kw">head</span>(tb_income_norm_dot_dollar, <span class="dv">20</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb221-1" title="1"><span class="co"># Gini by Group</span></a>
+<a class="sourceLine" id="cb221-2" title="2">tb_gini_norm &lt;-<span class="st"> </span>tb_income_norm_dollar_dot <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(ID) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb221-3" title="3"><span class="st">  </span><span class="kw">do</span>(<span class="dt">inc_gini_norm =</span> <span class="kw">ff_dist_gini_vector_pos</span>(.<span class="op">$</span>income)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb221-4" title="4"><span class="st">  </span><span class="kw">unnest</span>(<span class="kw">c</span>(inc_gini_norm)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb221-5" title="5"><span class="st">  </span><span class="kw">left_join</span>(tb_M, <span class="dt">by=</span><span class="st">&quot;ID&quot;</span>)</a>
+<a class="sourceLine" id="cb221-6" title="6"></a>
+<a class="sourceLine" id="cb221-7" title="7"><span class="co"># display</span></a>
+<a class="sourceLine" id="cb221-8" title="8"><span class="kw">kable</span>(tb_gini_norm) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb221-9" title="9"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1460,22 +1460,22 @@ mean
 <div id="generate-dataframe-with-m-rows." class="section level4">
 <h4><span class="header-section-number">3.2.2.1</span> Generate Dataframe with M Rows.</h4>
 <p>This is the first step, generate <span class="math inline">\(M\)</span> rows of data, to be expanded. Each row contains the number of normal draws to make and the mean and the standard deviation for normal daraws that are <span class="math inline">\(m\)</span> specific.</p>
-<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb217-1" title="1"><span class="co"># Parameter Setups</span></a>
-<a class="sourceLine" id="cb217-2" title="2">it_M &lt;-<span class="st"> </span><span class="dv">3</span></a>
-<a class="sourceLine" id="cb217-3" title="3">it_Q_max &lt;-<span class="st"> </span><span class="dv">5</span></a>
-<a class="sourceLine" id="cb217-4" title="4">fl_rnorm_mu &lt;-<span class="st"> </span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb217-5" title="5">ar_rnorm_sd &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.01</span>, <span class="dv">200</span>, <span class="dt">length.out=</span>it_M)</a>
-<a class="sourceLine" id="cb217-6" title="6">ar_it_q &lt;-<span class="st"> </span><span class="kw">sample.int</span>(it_Q_max, it_M, <span class="dt">replace=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb217-7" title="7"></a>
-<a class="sourceLine" id="cb217-8" title="8"><span class="co"># N by Q varying parameters</span></a>
-<a class="sourceLine" id="cb217-9" title="9">mt_data =<span class="st"> </span><span class="kw">cbind</span>(ar_it_q, ar_rnorm_sd)</a>
-<a class="sourceLine" id="cb217-10" title="10">tb_M &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mt_data) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> <span class="st">&quot;ID&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb217-11" title="11"><span class="st">                </span><span class="kw">rename</span>(<span class="dt">sd =</span> ar_rnorm_sd, <span class="dt">Q =</span> ar_it_q) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb217-12" title="12"><span class="st">                </span><span class="kw">mutate</span>(<span class="dt">mean =</span> fl_rnorm_mu)</a>
-<a class="sourceLine" id="cb217-13" title="13"></a>
-<a class="sourceLine" id="cb217-14" title="14"><span class="co"># display</span></a>
-<a class="sourceLine" id="cb217-15" title="15"><span class="kw">kable</span>(tb_M) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb217-16" title="16"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb222-1" title="1"><span class="co"># Parameter Setups</span></a>
+<a class="sourceLine" id="cb222-2" title="2">it_M &lt;-<span class="st"> </span><span class="dv">3</span></a>
+<a class="sourceLine" id="cb222-3" title="3">it_Q_max &lt;-<span class="st"> </span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb222-4" title="4">fl_rnorm_mu &lt;-<span class="st"> </span><span class="dv">1000</span></a>
+<a class="sourceLine" id="cb222-5" title="5">ar_rnorm_sd &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.01</span>, <span class="dv">200</span>, <span class="dt">length.out=</span>it_M)</a>
+<a class="sourceLine" id="cb222-6" title="6">ar_it_q &lt;-<span class="st"> </span><span class="kw">sample.int</span>(it_Q_max, it_M, <span class="dt">replace=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb222-7" title="7"></a>
+<a class="sourceLine" id="cb222-8" title="8"><span class="co"># N by Q varying parameters</span></a>
+<a class="sourceLine" id="cb222-9" title="9">mt_data =<span class="st"> </span><span class="kw">cbind</span>(ar_it_q, ar_rnorm_sd)</a>
+<a class="sourceLine" id="cb222-10" title="10">tb_M &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mt_data) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> <span class="st">&quot;ID&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb222-11" title="11"><span class="st">                </span><span class="kw">rename</span>(<span class="dt">sd =</span> ar_rnorm_sd, <span class="dt">Q =</span> ar_it_q) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb222-12" title="12"><span class="st">                </span><span class="kw">mutate</span>(<span class="dt">mean =</span> fl_rnorm_mu)</a>
+<a class="sourceLine" id="cb222-13" title="13"></a>
+<a class="sourceLine" id="cb222-14" title="14"><span class="co"># display</span></a>
+<a class="sourceLine" id="cb222-15" title="15"><span class="kw">kable</span>(tb_M) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb222-16" title="16"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1550,18 +1550,18 @@ mean
 </ol>
 <p>Note these all give the same results</p>
 <p>Use dot dollar to get variables</p>
-<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb218-1" title="1"><span class="co"># Generate $Q_m$ individual specific incomes, expanded different number of times for each m</span></a>
-<a class="sourceLine" id="cb218-2" title="2">tb_income &lt;-<span class="st"> </span>tb_M <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(ID) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb218-3" title="3"><span class="st">  </span><span class="kw">do</span>(<span class="dt">income =</span> <span class="kw">rnorm</span>(.<span class="op">$</span>Q, <span class="dt">mean=</span>.<span class="op">$</span>mean, <span class="dt">sd=</span>.<span class="op">$</span>sd)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb218-4" title="4"><span class="st">  </span><span class="kw">unnest</span>(<span class="kw">c</span>(income))</a>
-<a class="sourceLine" id="cb218-5" title="5"></a>
-<a class="sourceLine" id="cb218-6" title="6"><span class="co"># Merge back with tb_M</span></a>
-<a class="sourceLine" id="cb218-7" title="7">tb_income_full_dd &lt;-<span class="st"> </span>tb_income <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb218-8" title="8"><span class="st">  </span><span class="kw">left_join</span>(tb_M)</a>
-<a class="sourceLine" id="cb218-9" title="9"></a>
-<a class="sourceLine" id="cb218-10" title="10"><span class="co"># display</span></a>
-<a class="sourceLine" id="cb218-11" title="11"><span class="kw">kable</span>(tb_income) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb218-12" title="12"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb223-1" title="1"><span class="co"># Generate $Q_m$ individual specific incomes, expanded different number of times for each m</span></a>
+<a class="sourceLine" id="cb223-2" title="2">tb_income &lt;-<span class="st"> </span>tb_M <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(ID) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb223-3" title="3"><span class="st">  </span><span class="kw">do</span>(<span class="dt">income =</span> <span class="kw">rnorm</span>(.<span class="op">$</span>Q, <span class="dt">mean=</span>.<span class="op">$</span>mean, <span class="dt">sd=</span>.<span class="op">$</span>sd)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb223-4" title="4"><span class="st">  </span><span class="kw">unnest</span>(<span class="kw">c</span>(income))</a>
+<a class="sourceLine" id="cb223-5" title="5"></a>
+<a class="sourceLine" id="cb223-6" title="6"><span class="co"># Merge back with tb_M</span></a>
+<a class="sourceLine" id="cb223-7" title="7">tb_income_full_dd &lt;-<span class="st"> </span>tb_income <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb223-8" title="8"><span class="st">  </span><span class="kw">left_join</span>(tb_M)</a>
+<a class="sourceLine" id="cb223-9" title="9"></a>
+<a class="sourceLine" id="cb223-10" title="10"><span class="co"># display</span></a>
+<a class="sourceLine" id="cb223-11" title="11"><span class="kw">kable</span>(tb_income) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb223-12" title="12"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1632,8 +1632,8 @@ income
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb219-1" title="1"><span class="kw">kable</span>(tb_income_full_dd) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb219-2" title="2"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb224-1" title="1"><span class="kw">kable</span>(tb_income_full_dd) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb224-2" title="2"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1807,23 +1807,23 @@ mean
 <h4><span class="header-section-number">3.3.1.1</span> Set up Input Arrays</h4>
 <p>There is a function that takes <span class="math inline">\(M=Q+P\)</span> inputs, we want to evaluate this function <span class="math inline">\(N\)</span> times. Each time, there are <span class="math inline">\(M\)</span> inputs, where all but <span class="math inline">\(Q\)</span> of the <span class="math inline">\(M\)</span> inputs, meaning <span class="math inline">\(P\)</span> of the <span class="math inline">\(M\)</span> inputs, are the same. In particular, <span class="math inline">\(P=Q*N\)</span>.</p>
 <p><span class="math display">\[M = Q+P = Q + Q*N\]</span></p>
-<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb220-1" title="1"><span class="co"># it_child_count = N, the number of children</span></a>
-<a class="sourceLine" id="cb220-2" title="2">it_N_child_cnt =<span class="st"> </span><span class="dv">5</span></a>
-<a class="sourceLine" id="cb220-3" title="3"><span class="co"># it_heter_param = Q, number of parameters that are</span></a>
-<a class="sourceLine" id="cb220-4" title="4"><span class="co"># heterogeneous across children</span></a>
-<a class="sourceLine" id="cb220-5" title="5">it_Q_hetpa_cnt =<span class="st"> </span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb220-6" title="6"></a>
-<a class="sourceLine" id="cb220-7" title="7"><span class="co"># P fixed parameters, nN is N dimensional, nP is P dimensional</span></a>
-<a class="sourceLine" id="cb220-8" title="8">ar_nN_A =<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dt">length.out =</span> it_N_child_cnt)</a>
-<a class="sourceLine" id="cb220-9" title="9">ar_nN_alpha =<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="dt">length.out =</span> it_N_child_cnt)</a>
-<a class="sourceLine" id="cb220-10" title="10">ar_nP_A_alpha =<span class="st"> </span><span class="kw">c</span>(ar_nN_A, ar_nN_alpha)</a>
-<a class="sourceLine" id="cb220-11" title="11"></a>
-<a class="sourceLine" id="cb220-12" title="12"><span class="co"># N by Q varying parameters</span></a>
-<a class="sourceLine" id="cb220-13" title="13">mt_nN_by_nQ_A_alpha =<span class="st"> </span><span class="kw">cbind</span>(ar_nN_A, ar_nN_alpha)</a>
-<a class="sourceLine" id="cb220-14" title="14"></a>
-<a class="sourceLine" id="cb220-15" title="15"><span class="co"># display</span></a>
-<a class="sourceLine" id="cb220-16" title="16"><span class="kw">kable</span>(mt_nN_by_nQ_A_alpha) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb220-17" title="17"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb225-1" title="1"><span class="co"># it_child_count = N, the number of children</span></a>
+<a class="sourceLine" id="cb225-2" title="2">it_N_child_cnt =<span class="st"> </span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb225-3" title="3"><span class="co"># it_heter_param = Q, number of parameters that are</span></a>
+<a class="sourceLine" id="cb225-4" title="4"><span class="co"># heterogeneous across children</span></a>
+<a class="sourceLine" id="cb225-5" title="5">it_Q_hetpa_cnt =<span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb225-6" title="6"></a>
+<a class="sourceLine" id="cb225-7" title="7"><span class="co"># P fixed parameters, nN is N dimensional, nP is P dimensional</span></a>
+<a class="sourceLine" id="cb225-8" title="8">ar_nN_A =<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dt">length.out =</span> it_N_child_cnt)</a>
+<a class="sourceLine" id="cb225-9" title="9">ar_nN_alpha =<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="dt">length.out =</span> it_N_child_cnt)</a>
+<a class="sourceLine" id="cb225-10" title="10">ar_nP_A_alpha =<span class="st"> </span><span class="kw">c</span>(ar_nN_A, ar_nN_alpha)</a>
+<a class="sourceLine" id="cb225-11" title="11"></a>
+<a class="sourceLine" id="cb225-12" title="12"><span class="co"># N by Q varying parameters</span></a>
+<a class="sourceLine" id="cb225-13" title="13">mt_nN_by_nQ_A_alpha =<span class="st"> </span><span class="kw">cbind</span>(ar_nN_A, ar_nN_alpha)</a>
+<a class="sourceLine" id="cb225-14" title="14"></a>
+<a class="sourceLine" id="cb225-15" title="15"><span class="co"># display</span></a>
+<a class="sourceLine" id="cb225-16" title="16"><span class="kw">kable</span>(mt_nN_by_nQ_A_alpha) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb225-17" title="17"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1884,19 +1884,19 @@ ar_nN_alpha
 <div id="apply-with-named-function" class="section level5">
 <h5><span class="header-section-number">3.3.1.2.1</span> Apply with Named Function</h5>
 <p>First we use the apply function, we have to hard-code the arrays that are fixed for each of the <span class="math inline">\(N\)</span> individuals. Then apply allows us to loop over the matrix that is <span class="math inline">\(N\)</span> by <span class="math inline">\(Q\)</span>, each row one at a time, from <span class="math inline">\(1\)</span> to <span class="math inline">\(N\)</span>.</p>
-<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb221-1" title="1"><span class="co"># Define Implicit Function</span></a>
-<a class="sourceLine" id="cb221-2" title="2">ffi_linear_hardcode &lt;-<span class="st"> </span><span class="cf">function</span>(ar_A_alpha){</a>
-<a class="sourceLine" id="cb221-3" title="3">  <span class="co"># ar_A_alpha[1] is A</span></a>
-<a class="sourceLine" id="cb221-4" title="4">  <span class="co"># ar_A_alpha[2] is alpha</span></a>
-<a class="sourceLine" id="cb221-5" title="5"></a>
-<a class="sourceLine" id="cb221-6" title="6">  fl_out =<span class="st"> </span><span class="kw">sum</span>(ar_A_alpha[<span class="dv">1</span>]<span class="op">*</span>ar_nN_A <span class="op">+</span></a>
-<a class="sourceLine" id="cb221-7" title="7"><span class="st">                 </span><span class="dv">1</span><span class="op">/</span>(ar_A_alpha[<span class="dv">2</span>] <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>ar_nN_alpha))</a>
-<a class="sourceLine" id="cb221-8" title="8"></a>
-<a class="sourceLine" id="cb221-9" title="9">  <span class="kw">return</span>(fl_out)</a>
-<a class="sourceLine" id="cb221-10" title="10">}</a>
-<a class="sourceLine" id="cb221-11" title="11"></a>
-<a class="sourceLine" id="cb221-12" title="12"><span class="co"># Evaluate function row by row</span></a>
-<a class="sourceLine" id="cb221-13" title="13">ar_func_apply =<span class="st"> </span><span class="kw">apply</span>(mt_nN_by_nQ_A_alpha, <span class="dv">1</span>, ffi_linear_hardcode)</a></code></pre></div>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb226-1" title="1"><span class="co"># Define Implicit Function</span></a>
+<a class="sourceLine" id="cb226-2" title="2">ffi_linear_hardcode &lt;-<span class="st"> </span><span class="cf">function</span>(ar_A_alpha){</a>
+<a class="sourceLine" id="cb226-3" title="3">  <span class="co"># ar_A_alpha[1] is A</span></a>
+<a class="sourceLine" id="cb226-4" title="4">  <span class="co"># ar_A_alpha[2] is alpha</span></a>
+<a class="sourceLine" id="cb226-5" title="5"></a>
+<a class="sourceLine" id="cb226-6" title="6">  fl_out =<span class="st"> </span><span class="kw">sum</span>(ar_A_alpha[<span class="dv">1</span>]<span class="op">*</span>ar_nN_A <span class="op">+</span></a>
+<a class="sourceLine" id="cb226-7" title="7"><span class="st">                 </span><span class="dv">1</span><span class="op">/</span>(ar_A_alpha[<span class="dv">2</span>] <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>ar_nN_alpha))</a>
+<a class="sourceLine" id="cb226-8" title="8"></a>
+<a class="sourceLine" id="cb226-9" title="9">  <span class="kw">return</span>(fl_out)</a>
+<a class="sourceLine" id="cb226-10" title="10">}</a>
+<a class="sourceLine" id="cb226-11" title="11"></a>
+<a class="sourceLine" id="cb226-12" title="12"><span class="co"># Evaluate function row by row</span></a>
+<a class="sourceLine" id="cb226-13" title="13">ar_func_apply =<span class="st"> </span><span class="kw">apply</span>(mt_nN_by_nQ_A_alpha, <span class="dv">1</span>, ffi_linear_hardcode)</a></code></pre></div>
 </div>
 <div id="apply-using-anonymous-function" class="section level5">
 <h5><span class="header-section-number">3.3.1.2.2</span> Apply using Anonymous Function</h5>
@@ -1905,37 +1905,37 @@ ar_nN_alpha
 </ul>
 <p>Apply with anonymous function generating a list of arrays of different lengths. In the example below, we want to drawn <span class="math inline">\(N\)</span> sets of random uniform numbers, but for each set the number of draws we want to have is <span class="math inline">\(Q_i\)</span>. Furthermore, we want to rescale the random uniform draws so that they all become proportions that sum u pto one for each <span class="math inline">\(i\)</span>, but then we multply each row’s values by the row specific aggregates.</p>
 <p>The anonymous function has hard coded parameters. Using an anonymous function here allows for parameters to be provided inside the function that are shared across each looped evaluation. This is perhaps more convenient than sapply with additional parameters.</p>
-<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb222-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1039</span>)</a>
-<a class="sourceLine" id="cb222-2" title="2"></a>
-<a class="sourceLine" id="cb222-3" title="3"><span class="co"># Define the number of draws each row and total amount</span></a>
-<a class="sourceLine" id="cb222-4" title="4">it_N &lt;-<span class="st"> </span><span class="dv">4</span></a>
-<a class="sourceLine" id="cb222-5" title="5">fl_unif_min &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb222-6" title="6">fl_unif_max &lt;-<span class="st"> </span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb222-7" title="7">mt_draw_define &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">sample</span>(it_N, it_N, <span class="dt">replace=</span><span class="ot">TRUE</span>),</a>
-<a class="sourceLine" id="cb222-8" title="8">                        <span class="kw">runif</span>(it_N, <span class="dt">min=</span><span class="dv">1</span>, <span class="dt">max=</span><span class="dv">10</span>))</a>
-<a class="sourceLine" id="cb222-9" title="9">tb_draw_define &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mt_draw_define) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb222-10" title="10"><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> <span class="st">&quot;draw_group&quot;</span>)</a>
-<a class="sourceLine" id="cb222-11" title="11"><span class="kw">print</span>(tb_draw_define)</a>
-<a class="sourceLine" id="cb222-12" title="12"></a>
-<a class="sourceLine" id="cb222-13" title="13"><span class="co"># apply row by row, anonymous function has hard</span></a>
-<a class="sourceLine" id="cb222-14" title="14"><span class="co"># coded min and max</span></a>
-<a class="sourceLine" id="cb222-15" title="15">ls_ar_draws_shares_lvls =</a>
-<a class="sourceLine" id="cb222-16" title="16"><span class="st">  </span><span class="kw">apply</span>(tb_draw_define,</a>
-<a class="sourceLine" id="cb222-17" title="17">        <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb222-18" title="18">        <span class="cf">function</span>(row) {</a>
-<a class="sourceLine" id="cb222-19" title="19">          it_draw &lt;-<span class="st"> </span>row[<span class="dv">2</span>]</a>
-<a class="sourceLine" id="cb222-20" title="20">          fl_sum &lt;-<span class="st"> </span>row[<span class="dv">3</span>]</a>
-<a class="sourceLine" id="cb222-21" title="21">          ar_unif &lt;-<span class="st"> </span><span class="kw">runif</span>(it_draw,</a>
-<a class="sourceLine" id="cb222-22" title="22">                           <span class="dt">min=</span>fl_unif_min,</a>
-<a class="sourceLine" id="cb222-23" title="23">                           <span class="dt">max=</span>fl_unif_max)</a>
-<a class="sourceLine" id="cb222-24" title="24">          ar_share &lt;-<span class="st"> </span>ar_unif<span class="op">/</span><span class="kw">sum</span>(ar_unif)</a>
-<a class="sourceLine" id="cb222-25" title="25">          ar_levels &lt;-<span class="st"> </span>ar_share<span class="op">*</span>fl_sum</a>
-<a class="sourceLine" id="cb222-26" title="26">          <span class="kw">return</span>(<span class="kw">list</span>(<span class="dt">ar_share=</span>ar_share,</a>
-<a class="sourceLine" id="cb222-27" title="27">                      <span class="dt">ar_levels=</span>ar_levels))</a>
-<a class="sourceLine" id="cb222-28" title="28">        })</a>
-<a class="sourceLine" id="cb222-29" title="29"></a>
-<a class="sourceLine" id="cb222-30" title="30"><span class="co"># Show Results</span></a>
-<a class="sourceLine" id="cb222-31" title="31"><span class="kw">print</span>(ls_ar_draws_shares_lvls)</a></code></pre></div>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb227-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1039</span>)</a>
+<a class="sourceLine" id="cb227-2" title="2"></a>
+<a class="sourceLine" id="cb227-3" title="3"><span class="co"># Define the number of draws each row and total amount</span></a>
+<a class="sourceLine" id="cb227-4" title="4">it_N &lt;-<span class="st"> </span><span class="dv">4</span></a>
+<a class="sourceLine" id="cb227-5" title="5">fl_unif_min &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb227-6" title="6">fl_unif_max &lt;-<span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb227-7" title="7">mt_draw_define &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">sample</span>(it_N, it_N, <span class="dt">replace=</span><span class="ot">TRUE</span>),</a>
+<a class="sourceLine" id="cb227-8" title="8">                        <span class="kw">runif</span>(it_N, <span class="dt">min=</span><span class="dv">1</span>, <span class="dt">max=</span><span class="dv">10</span>))</a>
+<a class="sourceLine" id="cb227-9" title="9">tb_draw_define &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mt_draw_define) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb227-10" title="10"><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> <span class="st">&quot;draw_group&quot;</span>)</a>
+<a class="sourceLine" id="cb227-11" title="11"><span class="kw">print</span>(tb_draw_define)</a>
+<a class="sourceLine" id="cb227-12" title="12"></a>
+<a class="sourceLine" id="cb227-13" title="13"><span class="co"># apply row by row, anonymous function has hard</span></a>
+<a class="sourceLine" id="cb227-14" title="14"><span class="co"># coded min and max</span></a>
+<a class="sourceLine" id="cb227-15" title="15">ls_ar_draws_shares_lvls =</a>
+<a class="sourceLine" id="cb227-16" title="16"><span class="st">  </span><span class="kw">apply</span>(tb_draw_define,</a>
+<a class="sourceLine" id="cb227-17" title="17">        <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb227-18" title="18">        <span class="cf">function</span>(row) {</a>
+<a class="sourceLine" id="cb227-19" title="19">          it_draw &lt;-<span class="st"> </span>row[<span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb227-20" title="20">          fl_sum &lt;-<span class="st"> </span>row[<span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb227-21" title="21">          ar_unif &lt;-<span class="st"> </span><span class="kw">runif</span>(it_draw,</a>
+<a class="sourceLine" id="cb227-22" title="22">                           <span class="dt">min=</span>fl_unif_min,</a>
+<a class="sourceLine" id="cb227-23" title="23">                           <span class="dt">max=</span>fl_unif_max)</a>
+<a class="sourceLine" id="cb227-24" title="24">          ar_share &lt;-<span class="st"> </span>ar_unif<span class="op">/</span><span class="kw">sum</span>(ar_unif)</a>
+<a class="sourceLine" id="cb227-25" title="25">          ar_levels &lt;-<span class="st"> </span>ar_share<span class="op">*</span>fl_sum</a>
+<a class="sourceLine" id="cb227-26" title="26">          <span class="kw">return</span>(<span class="kw">list</span>(<span class="dt">ar_share=</span>ar_share,</a>
+<a class="sourceLine" id="cb227-27" title="27">                      <span class="dt">ar_levels=</span>ar_levels))</a>
+<a class="sourceLine" id="cb227-28" title="28">        })</a>
+<a class="sourceLine" id="cb227-29" title="29"></a>
+<a class="sourceLine" id="cb227-30" title="30"><span class="co"># Show Results</span></a>
+<a class="sourceLine" id="cb227-31" title="31"><span class="kw">print</span>(ls_ar_draws_shares_lvls)</a></code></pre></div>
 <pre><code>## [[1]]
 ## [[1]]$ar_share
 ## [1] 0.2783638 0.2224140 0.2797840 0.2194381
@@ -1968,33 +1968,33 @@ ar_nN_alpha
 ## [[4]]$ar_levels
 ## [1] 4.051971 2.799640 2.769765</code></pre>
 <p>We will try to do the same thing as above, but now the output will be a stacked dataframe. Note that within each element of the apply row by row loop, we are generating two variables <em>ar_share</em> and <em>ar_levels</em>. We will not generate a dataframe with multiple columns, storing <em>ar_share</em>, <em>ar_levels</em> as well as information on <em>min</em>, <em>max</em>, number of draws and rescale total sum.</p>
-<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb224-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1039</span>)</a>
-<a class="sourceLine" id="cb224-2" title="2"><span class="co"># apply row by row, anonymous function has hard coded min and max</span></a>
-<a class="sourceLine" id="cb224-3" title="3">ls_mt_draws_shares_lvls =</a>
-<a class="sourceLine" id="cb224-4" title="4"><span class="st">  </span><span class="kw">apply</span>(tb_draw_define, <span class="dv">1</span>, <span class="cf">function</span>(row) {</a>
-<a class="sourceLine" id="cb224-5" title="5"></a>
-<a class="sourceLine" id="cb224-6" title="6">    it_draw_group &lt;-<span class="st"> </span>row[<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb224-7" title="7">    it_draw &lt;-<span class="st"> </span>row[<span class="dv">2</span>]</a>
-<a class="sourceLine" id="cb224-8" title="8">    fl_sum &lt;-<span class="st"> </span>row[<span class="dv">3</span>]</a>
-<a class="sourceLine" id="cb224-9" title="9"></a>
-<a class="sourceLine" id="cb224-10" title="10">    ar_unif &lt;-<span class="st"> </span><span class="kw">runif</span>(it_draw,</a>
-<a class="sourceLine" id="cb224-11" title="11">                     <span class="dt">min=</span>fl_unif_min,</a>
-<a class="sourceLine" id="cb224-12" title="12">                     <span class="dt">max=</span>fl_unif_max)</a>
-<a class="sourceLine" id="cb224-13" title="13">    ar_share &lt;-<span class="st"> </span>ar_unif<span class="op">/</span><span class="kw">sum</span>(ar_unif)</a>
-<a class="sourceLine" id="cb224-14" title="14">    ar_levels &lt;-<span class="st"> </span>ar_share<span class="op">*</span>fl_sum</a>
-<a class="sourceLine" id="cb224-15" title="15"></a>
-<a class="sourceLine" id="cb224-16" title="16">    mt_all_res &lt;-<span class="st"> </span><span class="kw">cbind</span>(it_draw_group, it_draw, fl_sum,</a>
-<a class="sourceLine" id="cb224-17" title="17">                        ar_unif, ar_share, ar_levels)</a>
-<a class="sourceLine" id="cb224-18" title="18">    <span class="kw">colnames</span>(mt_all_res) &lt;-</a>
-<a class="sourceLine" id="cb224-19" title="19"><span class="st">      </span><span class="kw">c</span>(<span class="st">&#39;draw_group&#39;</span>, <span class="st">&#39;draw_count&#39;</span>, <span class="st">&#39;sum&#39;</span>,</a>
-<a class="sourceLine" id="cb224-20" title="20">        <span class="st">&#39;unif_draw&#39;</span>, <span class="st">&#39;share&#39;</span>, <span class="st">&#39;rescale&#39;</span>)</a>
-<a class="sourceLine" id="cb224-21" title="21">    <span class="kw">rownames</span>(mt_all_res) &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb224-22" title="22"></a>
-<a class="sourceLine" id="cb224-23" title="23">    <span class="kw">return</span>(mt_all_res)</a>
-<a class="sourceLine" id="cb224-24" title="24">  })</a>
-<a class="sourceLine" id="cb224-25" title="25">mt_draws_shares_lvls_all &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, ls_mt_draws_shares_lvls)</a>
-<a class="sourceLine" id="cb224-26" title="26"><span class="co"># Show Results</span></a>
-<a class="sourceLine" id="cb224-27" title="27"><span class="kw">kable</span>(mt_draws_shares_lvls_all) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb229-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1039</span>)</a>
+<a class="sourceLine" id="cb229-2" title="2"><span class="co"># apply row by row, anonymous function has hard coded min and max</span></a>
+<a class="sourceLine" id="cb229-3" title="3">ls_mt_draws_shares_lvls =</a>
+<a class="sourceLine" id="cb229-4" title="4"><span class="st">  </span><span class="kw">apply</span>(tb_draw_define, <span class="dv">1</span>, <span class="cf">function</span>(row) {</a>
+<a class="sourceLine" id="cb229-5" title="5"></a>
+<a class="sourceLine" id="cb229-6" title="6">    it_draw_group &lt;-<span class="st"> </span>row[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb229-7" title="7">    it_draw &lt;-<span class="st"> </span>row[<span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb229-8" title="8">    fl_sum &lt;-<span class="st"> </span>row[<span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb229-9" title="9"></a>
+<a class="sourceLine" id="cb229-10" title="10">    ar_unif &lt;-<span class="st"> </span><span class="kw">runif</span>(it_draw,</a>
+<a class="sourceLine" id="cb229-11" title="11">                     <span class="dt">min=</span>fl_unif_min,</a>
+<a class="sourceLine" id="cb229-12" title="12">                     <span class="dt">max=</span>fl_unif_max)</a>
+<a class="sourceLine" id="cb229-13" title="13">    ar_share &lt;-<span class="st"> </span>ar_unif<span class="op">/</span><span class="kw">sum</span>(ar_unif)</a>
+<a class="sourceLine" id="cb229-14" title="14">    ar_levels &lt;-<span class="st"> </span>ar_share<span class="op">*</span>fl_sum</a>
+<a class="sourceLine" id="cb229-15" title="15"></a>
+<a class="sourceLine" id="cb229-16" title="16">    mt_all_res &lt;-<span class="st"> </span><span class="kw">cbind</span>(it_draw_group, it_draw, fl_sum,</a>
+<a class="sourceLine" id="cb229-17" title="17">                        ar_unif, ar_share, ar_levels)</a>
+<a class="sourceLine" id="cb229-18" title="18">    <span class="kw">colnames</span>(mt_all_res) &lt;-</a>
+<a class="sourceLine" id="cb229-19" title="19"><span class="st">      </span><span class="kw">c</span>(<span class="st">&#39;draw_group&#39;</span>, <span class="st">&#39;draw_count&#39;</span>, <span class="st">&#39;sum&#39;</span>,</a>
+<a class="sourceLine" id="cb229-20" title="20">        <span class="st">&#39;unif_draw&#39;</span>, <span class="st">&#39;share&#39;</span>, <span class="st">&#39;rescale&#39;</span>)</a>
+<a class="sourceLine" id="cb229-21" title="21">    <span class="kw">rownames</span>(mt_all_res) &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb229-22" title="22"></a>
+<a class="sourceLine" id="cb229-23" title="23">    <span class="kw">return</span>(mt_all_res)</a>
+<a class="sourceLine" id="cb229-24" title="24">  })</a>
+<a class="sourceLine" id="cb229-25" title="25">mt_draws_shares_lvls_all &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, ls_mt_draws_shares_lvls)</a>
+<a class="sourceLine" id="cb229-26" title="26"><span class="co"># Show Results</span></a>
+<a class="sourceLine" id="cb229-27" title="27"><span class="kw">kable</span>(mt_draws_shares_lvls_all) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -2233,22 +2233,22 @@ rescale
 </ul>
 <p>Sapply allows us to not have tohard code in the A and alpha arrays. But Sapply works over List or Vector, not Matrix. So we have to convert the <span class="math inline">\(N\)</span> by <span class="math inline">\(Q\)</span> matrix to a N element list
 Now update the function with sapply.</p>
-<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb225-1" title="1">ls_ar_nN_by_nQ_A_alpha =<span class="st"> </span><span class="kw">as.list</span>(<span class="kw">data.frame</span>(<span class="kw">t</span>(mt_nN_by_nQ_A_alpha)))</a>
-<a class="sourceLine" id="cb225-2" title="2"></a>
-<a class="sourceLine" id="cb225-3" title="3"><span class="co"># Define Implicit Function</span></a>
-<a class="sourceLine" id="cb225-4" title="4">ffi_linear_sapply &lt;-<span class="st"> </span><span class="cf">function</span>(ar_A_alpha, ar_A, ar_alpha){</a>
-<a class="sourceLine" id="cb225-5" title="5">  <span class="co"># ar_A_alpha[1] is A</span></a>
-<a class="sourceLine" id="cb225-6" title="6">  <span class="co"># ar_A_alpha[2] is alpha</span></a>
-<a class="sourceLine" id="cb225-7" title="7"></a>
-<a class="sourceLine" id="cb225-8" title="8">  fl_out =<span class="st"> </span><span class="kw">sum</span>(ar_A_alpha[<span class="dv">1</span>]<span class="op">*</span>ar_nN_A <span class="op">+</span></a>
-<a class="sourceLine" id="cb225-9" title="9"><span class="st">                 </span><span class="dv">1</span><span class="op">/</span>(ar_A_alpha[<span class="dv">2</span>] <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>ar_nN_alpha))</a>
-<a class="sourceLine" id="cb225-10" title="10"></a>
-<a class="sourceLine" id="cb225-11" title="11">  <span class="kw">return</span>(fl_out)</a>
-<a class="sourceLine" id="cb225-12" title="12">}</a>
-<a class="sourceLine" id="cb225-13" title="13"></a>
-<a class="sourceLine" id="cb225-14" title="14"><span class="co"># Evaluate function row by row</span></a>
-<a class="sourceLine" id="cb225-15" title="15">ar_func_sapply =<span class="st"> </span><span class="kw">sapply</span>(ls_ar_nN_by_nQ_A_alpha, ffi_linear_sapply,</a>
-<a class="sourceLine" id="cb225-16" title="16">                        <span class="dt">ar_A=</span>ar_nN_A, <span class="dt">ar_alpha=</span>ar_nN_alpha)</a></code></pre></div>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb230-1" title="1">ls_ar_nN_by_nQ_A_alpha =<span class="st"> </span><span class="kw">as.list</span>(<span class="kw">data.frame</span>(<span class="kw">t</span>(mt_nN_by_nQ_A_alpha)))</a>
+<a class="sourceLine" id="cb230-2" title="2"></a>
+<a class="sourceLine" id="cb230-3" title="3"><span class="co"># Define Implicit Function</span></a>
+<a class="sourceLine" id="cb230-4" title="4">ffi_linear_sapply &lt;-<span class="st"> </span><span class="cf">function</span>(ar_A_alpha, ar_A, ar_alpha){</a>
+<a class="sourceLine" id="cb230-5" title="5">  <span class="co"># ar_A_alpha[1] is A</span></a>
+<a class="sourceLine" id="cb230-6" title="6">  <span class="co"># ar_A_alpha[2] is alpha</span></a>
+<a class="sourceLine" id="cb230-7" title="7"></a>
+<a class="sourceLine" id="cb230-8" title="8">  fl_out =<span class="st"> </span><span class="kw">sum</span>(ar_A_alpha[<span class="dv">1</span>]<span class="op">*</span>ar_nN_A <span class="op">+</span></a>
+<a class="sourceLine" id="cb230-9" title="9"><span class="st">                 </span><span class="dv">1</span><span class="op">/</span>(ar_A_alpha[<span class="dv">2</span>] <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>ar_nN_alpha))</a>
+<a class="sourceLine" id="cb230-10" title="10"></a>
+<a class="sourceLine" id="cb230-11" title="11">  <span class="kw">return</span>(fl_out)</a>
+<a class="sourceLine" id="cb230-12" title="12">}</a>
+<a class="sourceLine" id="cb230-13" title="13"></a>
+<a class="sourceLine" id="cb230-14" title="14"><span class="co"># Evaluate function row by row</span></a>
+<a class="sourceLine" id="cb230-15" title="15">ar_func_sapply =<span class="st"> </span><span class="kw">sapply</span>(ls_ar_nN_by_nQ_A_alpha, ffi_linear_sapply,</a>
+<a class="sourceLine" id="cb230-16" title="16">                        <span class="dt">ar_A=</span>ar_nN_A, <span class="dt">ar_alpha=</span>ar_nN_alpha)</a></code></pre></div>
 </div>
 <div id="sapply-using-anonymous-function" class="section level5">
 <h5><span class="header-section-number">3.3.1.3.2</span> sapply using anonymous function</h5>
@@ -2257,16 +2257,16 @@ Now update the function with sapply.</p>
 <li>r anoymous function multiple lines</li>
 </ul>
 <p>Sapply with anonymous function generating a list of arrays of different lengths. In the example below, we want to drawn <span class="math inline">\(N\)</span> sets of random uniform numbers, but for each set the number of draws we want to have is <span class="math inline">\(Q_i\)</span>. Furthermore, we want to rescale the random uniform draws so that they all become proportions that sum u pto one for each <span class="math inline">\(i\)</span>.</p>
-<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb226-1" title="1">it_N &lt;-<span class="st"> </span><span class="dv">4</span></a>
-<a class="sourceLine" id="cb226-2" title="2">fl_unif_min &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb226-3" title="3">fl_unif_max &lt;-<span class="st"> </span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb226-4" title="4"></a>
-<a class="sourceLine" id="cb226-5" title="5"><span class="co"># Generate using runif without anonymous function</span></a>
-<a class="sourceLine" id="cb226-6" title="6"><span class="kw">set.seed</span>(<span class="dv">1039</span>)</a>
-<a class="sourceLine" id="cb226-7" title="7">ls_ar_draws =<span class="st"> </span><span class="kw">sapply</span>(<span class="kw">seq</span>(it_N),</a>
-<a class="sourceLine" id="cb226-8" title="8">                     runif,</a>
-<a class="sourceLine" id="cb226-9" title="9">                     <span class="dt">min=</span>fl_unif_min, <span class="dt">max=</span>fl_unif_max)</a>
-<a class="sourceLine" id="cb226-10" title="10"><span class="kw">print</span>(ls_ar_draws)</a></code></pre></div>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb231-1" title="1">it_N &lt;-<span class="st"> </span><span class="dv">4</span></a>
+<a class="sourceLine" id="cb231-2" title="2">fl_unif_min &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb231-3" title="3">fl_unif_max &lt;-<span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb231-4" title="4"></a>
+<a class="sourceLine" id="cb231-5" title="5"><span class="co"># Generate using runif without anonymous function</span></a>
+<a class="sourceLine" id="cb231-6" title="6"><span class="kw">set.seed</span>(<span class="dv">1039</span>)</a>
+<a class="sourceLine" id="cb231-7" title="7">ls_ar_draws =<span class="st"> </span><span class="kw">sapply</span>(<span class="kw">seq</span>(it_N),</a>
+<a class="sourceLine" id="cb231-8" title="8">                     runif,</a>
+<a class="sourceLine" id="cb231-9" title="9">                     <span class="dt">min=</span>fl_unif_min, <span class="dt">max=</span>fl_unif_max)</a>
+<a class="sourceLine" id="cb231-10" title="10"><span class="kw">print</span>(ls_ar_draws)</a></code></pre></div>
 <pre><code>## [[1]]
 ## [1] 1.125668
 ## 
@@ -2278,17 +2278,17 @@ Now update the function with sapply.</p>
 ## 
 ## [[4]]
 ## [1] 1.952468 1.957931 1.926995 1.539678</code></pre>
-<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb228-1" title="1"><span class="co"># Generate Using Anonymous Function</span></a>
-<a class="sourceLine" id="cb228-2" title="2"><span class="kw">set.seed</span>(<span class="dv">1039</span>)</a>
-<a class="sourceLine" id="cb228-3" title="3">ls_ar_draws_shares =<span class="st"> </span><span class="kw">sapply</span>(<span class="kw">seq</span>(it_N),</a>
-<a class="sourceLine" id="cb228-4" title="4">                            <span class="cf">function</span>(n, min, max) {</a>
-<a class="sourceLine" id="cb228-5" title="5">                              ar_unif &lt;-<span class="st"> </span><span class="kw">runif</span>(n,min,max)</a>
-<a class="sourceLine" id="cb228-6" title="6">                              ar_share &lt;-<span class="st"> </span>ar_unif<span class="op">/</span><span class="kw">sum</span>(ar_unif)</a>
-<a class="sourceLine" id="cb228-7" title="7">                              <span class="kw">return</span>(ar_share)</a>
-<a class="sourceLine" id="cb228-8" title="8">                            },</a>
-<a class="sourceLine" id="cb228-9" title="9">                            <span class="dt">min=</span>fl_unif_min, <span class="dt">max=</span>fl_unif_max)</a>
-<a class="sourceLine" id="cb228-10" title="10"><span class="co"># Print Share</span></a>
-<a class="sourceLine" id="cb228-11" title="11"><span class="kw">print</span>(ls_ar_draws_shares)</a></code></pre></div>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb233-1" title="1"><span class="co"># Generate Using Anonymous Function</span></a>
+<a class="sourceLine" id="cb233-2" title="2"><span class="kw">set.seed</span>(<span class="dv">1039</span>)</a>
+<a class="sourceLine" id="cb233-3" title="3">ls_ar_draws_shares =<span class="st"> </span><span class="kw">sapply</span>(<span class="kw">seq</span>(it_N),</a>
+<a class="sourceLine" id="cb233-4" title="4">                            <span class="cf">function</span>(n, min, max) {</a>
+<a class="sourceLine" id="cb233-5" title="5">                              ar_unif &lt;-<span class="st"> </span><span class="kw">runif</span>(n,min,max)</a>
+<a class="sourceLine" id="cb233-6" title="6">                              ar_share &lt;-<span class="st"> </span>ar_unif<span class="op">/</span><span class="kw">sum</span>(ar_unif)</a>
+<a class="sourceLine" id="cb233-7" title="7">                              <span class="kw">return</span>(ar_share)</a>
+<a class="sourceLine" id="cb233-8" title="8">                            },</a>
+<a class="sourceLine" id="cb233-9" title="9">                            <span class="dt">min=</span>fl_unif_min, <span class="dt">max=</span>fl_unif_max)</a>
+<a class="sourceLine" id="cb233-10" title="10"><span class="co"># Print Share</span></a>
+<a class="sourceLine" id="cb233-11" title="11"><span class="kw">print</span>(ls_ar_draws_shares)</a></code></pre></div>
 <pre><code>## [[1]]
 ## [1] 1
 ## 
@@ -2300,10 +2300,10 @@ Now update the function with sapply.</p>
 ## 
 ## [[4]]
 ## [1] 0.2646671 0.2654076 0.2612141 0.2087113</code></pre>
-<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb230-1" title="1"><span class="co"># Sapply with anonymous function to check sums</span></a>
-<a class="sourceLine" id="cb230-2" title="2"><span class="kw">sapply</span>(<span class="kw">seq</span>(it_N), <span class="cf">function</span>(x) {<span class="kw">sum</span>(ls_ar_draws[[x]])})</a></code></pre></div>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb235-1" title="1"><span class="co"># Sapply with anonymous function to check sums</span></a>
+<a class="sourceLine" id="cb235-2" title="2"><span class="kw">sapply</span>(<span class="kw">seq</span>(it_N), <span class="cf">function</span>(x) {<span class="kw">sum</span>(ls_ar_draws[[x]])})</a></code></pre></div>
 <pre><code>## [1] 1.125668 3.087918 4.670717 7.377071</code></pre>
-<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb232-1" title="1"><span class="kw">sapply</span>(<span class="kw">seq</span>(it_N), <span class="cf">function</span>(x) {<span class="kw">sum</span>(ls_ar_draws_shares[[x]])})</a></code></pre></div>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb237-1" title="1"><span class="kw">sapply</span>(<span class="kw">seq</span>(it_N), <span class="cf">function</span>(x) {<span class="kw">sum</span>(ls_ar_draws_shares[[x]])})</a></code></pre></div>
 <pre><code>## [1] 1 1 1 1</code></pre>
 </div>
 </div>
@@ -2317,13 +2317,13 @@ Now update the function with sapply.</p>
 <li>applying a function to every row of a table using dplyr</li>
 <li>dplyr rowwise</li>
 </ul>
-<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb234-1" title="1"><span class="co"># Convert Matrix to Tibble</span></a>
-<a class="sourceLine" id="cb234-2" title="2">ar_st_col_names =<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;fl_A&#39;</span>, <span class="st">&#39;fl_alpha&#39;</span>)</a>
-<a class="sourceLine" id="cb234-3" title="3">tb_nN_by_nQ_A_alpha &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mt_nN_by_nQ_A_alpha) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb234-4" title="4"><span class="st">  </span><span class="kw">rename_all</span>(<span class="op">~</span><span class="kw">c</span>(ar_st_col_names))</a>
-<a class="sourceLine" id="cb234-5" title="5"><span class="co"># Show</span></a>
-<a class="sourceLine" id="cb234-6" title="6"><span class="kw">kable</span>(tb_nN_by_nQ_A_alpha) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb234-7" title="7"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb239-1" title="1"><span class="co"># Convert Matrix to Tibble</span></a>
+<a class="sourceLine" id="cb239-2" title="2">ar_st_col_names =<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;fl_A&#39;</span>, <span class="st">&#39;fl_alpha&#39;</span>)</a>
+<a class="sourceLine" id="cb239-3" title="3">tb_nN_by_nQ_A_alpha &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mt_nN_by_nQ_A_alpha) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb239-4" title="4"><span class="st">  </span><span class="kw">rename_all</span>(<span class="op">~</span><span class="kw">c</span>(ar_st_col_names))</a>
+<a class="sourceLine" id="cb239-5" title="5"><span class="co"># Show</span></a>
+<a class="sourceLine" id="cb239-6" title="6"><span class="kw">kable</span>(tb_nN_by_nQ_A_alpha) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb239-7" title="7"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -2378,31 +2378,31 @@ fl_alpha
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb235-1" title="1"><span class="co"># Define Implicit Function</span></a>
-<a class="sourceLine" id="cb235-2" title="2">ffi_linear_dplyrdo &lt;-<span class="st"> </span><span class="cf">function</span>(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha){</a>
-<a class="sourceLine" id="cb235-3" title="3">  <span class="co"># ar_A_alpha[1] is A</span></a>
-<a class="sourceLine" id="cb235-4" title="4">  <span class="co"># ar_A_alpha[2] is alpha</span></a>
-<a class="sourceLine" id="cb235-5" title="5"></a>
-<a class="sourceLine" id="cb235-6" title="6">  <span class="kw">print</span>(<span class="kw">paste0</span>(<span class="st">&#39;cur row, fl_A=&#39;</span>, fl_A, <span class="st">&#39;, fl_alpha=&#39;</span>, fl_alpha))</a>
-<a class="sourceLine" id="cb235-7" title="7">  fl_out =<span class="st"> </span><span class="kw">sum</span>(fl_A<span class="op">*</span>ar_nN_A <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>(fl_alpha <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>ar_nN_alpha))</a>
-<a class="sourceLine" id="cb235-8" title="8"></a>
-<a class="sourceLine" id="cb235-9" title="9">  <span class="kw">return</span>(fl_out)</a>
-<a class="sourceLine" id="cb235-10" title="10">}</a>
-<a class="sourceLine" id="cb235-11" title="11"></a>
-<a class="sourceLine" id="cb235-12" title="12"><span class="co"># Evaluate function row by row of tibble</span></a>
-<a class="sourceLine" id="cb235-13" title="13"><span class="co"># fl_A, fl_alpha are from columns of tb_nN_by_nQ_A_alpha</span></a>
-<a class="sourceLine" id="cb235-14" title="14">tb_nN_by_nQ_A_alpha_show &lt;-<span class="st"> </span>tb_nN_by_nQ_A_alpha <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb235-15" title="15"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb235-16" title="16"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">dplyr_eval =</span></a>
-<a class="sourceLine" id="cb235-17" title="17">           <span class="kw">ffi_linear_dplyrdo</span>(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha))</a></code></pre></div>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb240-1" title="1"><span class="co"># Define Implicit Function</span></a>
+<a class="sourceLine" id="cb240-2" title="2">ffi_linear_dplyrdo &lt;-<span class="st"> </span><span class="cf">function</span>(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha){</a>
+<a class="sourceLine" id="cb240-3" title="3">  <span class="co"># ar_A_alpha[1] is A</span></a>
+<a class="sourceLine" id="cb240-4" title="4">  <span class="co"># ar_A_alpha[2] is alpha</span></a>
+<a class="sourceLine" id="cb240-5" title="5"></a>
+<a class="sourceLine" id="cb240-6" title="6">  <span class="kw">print</span>(<span class="kw">paste0</span>(<span class="st">&#39;cur row, fl_A=&#39;</span>, fl_A, <span class="st">&#39;, fl_alpha=&#39;</span>, fl_alpha))</a>
+<a class="sourceLine" id="cb240-7" title="7">  fl_out =<span class="st"> </span><span class="kw">sum</span>(fl_A<span class="op">*</span>ar_nN_A <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>(fl_alpha <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>ar_nN_alpha))</a>
+<a class="sourceLine" id="cb240-8" title="8"></a>
+<a class="sourceLine" id="cb240-9" title="9">  <span class="kw">return</span>(fl_out)</a>
+<a class="sourceLine" id="cb240-10" title="10">}</a>
+<a class="sourceLine" id="cb240-11" title="11"></a>
+<a class="sourceLine" id="cb240-12" title="12"><span class="co"># Evaluate function row by row of tibble</span></a>
+<a class="sourceLine" id="cb240-13" title="13"><span class="co"># fl_A, fl_alpha are from columns of tb_nN_by_nQ_A_alpha</span></a>
+<a class="sourceLine" id="cb240-14" title="14">tb_nN_by_nQ_A_alpha_show &lt;-<span class="st"> </span>tb_nN_by_nQ_A_alpha <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb240-15" title="15"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb240-16" title="16"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">dplyr_eval =</span></a>
+<a class="sourceLine" id="cb240-17" title="17">           <span class="kw">ffi_linear_dplyrdo</span>(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha))</a></code></pre></div>
 <pre><code>## [1] &quot;cur row, fl_A=-2, fl_alpha=0.1&quot;
 ## [1] &quot;cur row, fl_A=-1, fl_alpha=0.3&quot;
 ## [1] &quot;cur row, fl_A=0, fl_alpha=0.5&quot;
 ## [1] &quot;cur row, fl_A=1, fl_alpha=0.7&quot;
 ## [1] &quot;cur row, fl_A=2, fl_alpha=0.9&quot;</code></pre>
-<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb237-1" title="1"><span class="co"># Show</span></a>
-<a class="sourceLine" id="cb237-2" title="2"><span class="kw">kable</span>(tb_nN_by_nQ_A_alpha_show) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb237-3" title="3"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb242-1" title="1"><span class="co"># Show</span></a>
+<a class="sourceLine" id="cb242-2" title="2"><span class="kw">kable</span>(tb_nN_by_nQ_A_alpha_show) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb242-3" title="3"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -2476,20 +2476,20 @@ dplyr_eval
 </tbody>
 </table>
 <p>same as before, still rowwise, but hard code some inputs:</p>
-<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb238-1" title="1"><span class="co"># Define function, fixed inputs are not parameters, but</span></a>
-<a class="sourceLine" id="cb238-2" title="2"><span class="co"># defined earlier as a part of the function</span></a>
-<a class="sourceLine" id="cb238-3" title="3"><span class="co"># ar_nN_A, ar_nN_alpha are fixed, not parameters</span></a>
-<a class="sourceLine" id="cb238-4" title="4">ffi_linear_dplyrdo_func &lt;-<span class="st"> </span><span class="cf">function</span>(fl_A, fl_alpha){</a>
-<a class="sourceLine" id="cb238-5" title="5">  fl_out &lt;-<span class="st"> </span><span class="kw">sum</span>(fl_A<span class="op">*</span>ar_nN_A <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>(fl_alpha <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>ar_nN_alpha))</a>
-<a class="sourceLine" id="cb238-6" title="6">  <span class="kw">return</span>(fl_out)</a>
-<a class="sourceLine" id="cb238-7" title="7">}</a>
-<a class="sourceLine" id="cb238-8" title="8"></a>
-<a class="sourceLine" id="cb238-9" title="9"><span class="co"># Evaluate function row by row of tibble</span></a>
-<a class="sourceLine" id="cb238-10" title="10">tbfunc_A_nN_by_nQ_A_alpha_rowwise =<span class="st"> </span>tb_nN_by_nQ_A_alpha <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb238-11" title="11"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">dplyr_eval =</span> <span class="kw">ffi_linear_dplyrdo_func</span>(fl_A, fl_alpha))</a>
-<a class="sourceLine" id="cb238-12" title="12"><span class="co"># Show</span></a>
-<a class="sourceLine" id="cb238-13" title="13"><span class="kw">kable</span>(tbfunc_A_nN_by_nQ_A_alpha_rowwise) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb238-14" title="14"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb243-1" title="1"><span class="co"># Define function, fixed inputs are not parameters, but</span></a>
+<a class="sourceLine" id="cb243-2" title="2"><span class="co"># defined earlier as a part of the function</span></a>
+<a class="sourceLine" id="cb243-3" title="3"><span class="co"># ar_nN_A, ar_nN_alpha are fixed, not parameters</span></a>
+<a class="sourceLine" id="cb243-4" title="4">ffi_linear_dplyrdo_func &lt;-<span class="st"> </span><span class="cf">function</span>(fl_A, fl_alpha){</a>
+<a class="sourceLine" id="cb243-5" title="5">  fl_out &lt;-<span class="st"> </span><span class="kw">sum</span>(fl_A<span class="op">*</span>ar_nN_A <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>(fl_alpha <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>ar_nN_alpha))</a>
+<a class="sourceLine" id="cb243-6" title="6">  <span class="kw">return</span>(fl_out)</a>
+<a class="sourceLine" id="cb243-7" title="7">}</a>
+<a class="sourceLine" id="cb243-8" title="8"></a>
+<a class="sourceLine" id="cb243-9" title="9"><span class="co"># Evaluate function row by row of tibble</span></a>
+<a class="sourceLine" id="cb243-10" title="10">tbfunc_A_nN_by_nQ_A_alpha_rowwise =<span class="st"> </span>tb_nN_by_nQ_A_alpha <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb243-11" title="11"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">dplyr_eval =</span> <span class="kw">ffi_linear_dplyrdo_func</span>(fl_A, fl_alpha))</a>
+<a class="sourceLine" id="cb243-12" title="12"><span class="co"># Show</span></a>
+<a class="sourceLine" id="cb243-13" title="13"><span class="kw">kable</span>(tbfunc_A_nN_by_nQ_A_alpha_rowwise) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb243-14" title="14"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -2575,33 +2575,33 @@ dplyr_eval
 <li>pmap tibble rows</li>
 <li>dplyr pwalk</li>
 </ul>
-<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb239-1" title="1"><span class="co"># Define function, fixed inputs are not parameters, but defined</span></a>
-<a class="sourceLine" id="cb239-2" title="2"><span class="co"># earlier as a part of the function Rorate fl_alpha and fl_A name</span></a>
-<a class="sourceLine" id="cb239-3" title="3"><span class="co"># compared to before to make sure pmap tracks by names</span></a>
-<a class="sourceLine" id="cb239-4" title="4">ffi_linear_dplyrdo_func &lt;-<span class="st"> </span><span class="cf">function</span>(fl_alpha, fl_A){</a>
-<a class="sourceLine" id="cb239-5" title="5">  fl_out &lt;-<span class="st"> </span><span class="kw">sum</span>(fl_A<span class="op">*</span>ar_nN_A <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>(fl_alpha <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>ar_nN_alpha))</a>
-<a class="sourceLine" id="cb239-6" title="6">  <span class="kw">return</span>(fl_out)</a>
-<a class="sourceLine" id="cb239-7" title="7">}</a>
-<a class="sourceLine" id="cb239-8" title="8"></a>
-<a class="sourceLine" id="cb239-9" title="9"><span class="co"># Evaluate a function row by row of dataframe, generate list,</span></a>
-<a class="sourceLine" id="cb239-10" title="10"><span class="co"># then to vector</span></a>
-<a class="sourceLine" id="cb239-11" title="11">tb_nN_by_nQ_A_alpha <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pmap</span>(ffi_linear_dplyrdo_func) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unlist</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb244-1" title="1"><span class="co"># Define function, fixed inputs are not parameters, but defined</span></a>
+<a class="sourceLine" id="cb244-2" title="2"><span class="co"># earlier as a part of the function Rorate fl_alpha and fl_A name</span></a>
+<a class="sourceLine" id="cb244-3" title="3"><span class="co"># compared to before to make sure pmap tracks by names</span></a>
+<a class="sourceLine" id="cb244-4" title="4">ffi_linear_dplyrdo_func &lt;-<span class="st"> </span><span class="cf">function</span>(fl_alpha, fl_A){</a>
+<a class="sourceLine" id="cb244-5" title="5">  fl_out &lt;-<span class="st"> </span><span class="kw">sum</span>(fl_A<span class="op">*</span>ar_nN_A <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>(fl_alpha <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>ar_nN_alpha))</a>
+<a class="sourceLine" id="cb244-6" title="6">  <span class="kw">return</span>(fl_out)</a>
+<a class="sourceLine" id="cb244-7" title="7">}</a>
+<a class="sourceLine" id="cb244-8" title="8"></a>
+<a class="sourceLine" id="cb244-9" title="9"><span class="co"># Evaluate a function row by row of dataframe, generate list,</span></a>
+<a class="sourceLine" id="cb244-10" title="10"><span class="co"># then to vector</span></a>
+<a class="sourceLine" id="cb244-11" title="11">tb_nN_by_nQ_A_alpha <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pmap</span>(ffi_linear_dplyrdo_func) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unlist</span>()</a></code></pre></div>
 <pre><code>## [1] 2.346356 2.094273 1.895316 1.733708 1.599477</code></pre>
-<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb241-1" title="1"><span class="co"># Same as above, but in line line and save output as new column</span></a>
-<a class="sourceLine" id="cb241-2" title="2"><span class="co"># in dataframe note this ONLY works if the tibble only has variables</span></a>
-<a class="sourceLine" id="cb241-3" title="3"><span class="co"># that are inputs for the function if tibble contains additional</span></a>
-<a class="sourceLine" id="cb241-4" title="4"><span class="co">#  variables, those should be droppd, or only the ones needed selected,</span></a>
-<a class="sourceLine" id="cb241-5" title="5"><span class="co"># inside the pmap call below.</span></a>
-<a class="sourceLine" id="cb241-6" title="6">tbfunc_A_nN_by_nQ_A_alpha_pmap &lt;-<span class="st"> </span>tb_nN_by_nQ_A_alpha <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb241-7" title="7"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">dplyr_eval_pmap =</span></a>
-<a class="sourceLine" id="cb241-8" title="8">           <span class="kw">unlist</span>(</a>
-<a class="sourceLine" id="cb241-9" title="9">             <span class="kw">pmap</span>(tb_nN_by_nQ_A_alpha, ffi_linear_dplyrdo_func)</a>
-<a class="sourceLine" id="cb241-10" title="10">           )</a>
-<a class="sourceLine" id="cb241-11" title="11">  )</a>
-<a class="sourceLine" id="cb241-12" title="12"></a>
-<a class="sourceLine" id="cb241-13" title="13"><span class="co"># Show</span></a>
-<a class="sourceLine" id="cb241-14" title="14"><span class="kw">kable</span>(tbfunc_A_nN_by_nQ_A_alpha_pmap) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb241-15" title="15"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb246-1" title="1"><span class="co"># Same as above, but in line line and save output as new column</span></a>
+<a class="sourceLine" id="cb246-2" title="2"><span class="co"># in dataframe note this ONLY works if the tibble only has variables</span></a>
+<a class="sourceLine" id="cb246-3" title="3"><span class="co"># that are inputs for the function if tibble contains additional</span></a>
+<a class="sourceLine" id="cb246-4" title="4"><span class="co">#  variables, those should be droppd, or only the ones needed selected,</span></a>
+<a class="sourceLine" id="cb246-5" title="5"><span class="co"># inside the pmap call below.</span></a>
+<a class="sourceLine" id="cb246-6" title="6">tbfunc_A_nN_by_nQ_A_alpha_pmap &lt;-<span class="st"> </span>tb_nN_by_nQ_A_alpha <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb246-7" title="7"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">dplyr_eval_pmap =</span></a>
+<a class="sourceLine" id="cb246-8" title="8">           <span class="kw">unlist</span>(</a>
+<a class="sourceLine" id="cb246-9" title="9">             <span class="kw">pmap</span>(tb_nN_by_nQ_A_alpha, ffi_linear_dplyrdo_func)</a>
+<a class="sourceLine" id="cb246-10" title="10">           )</a>
+<a class="sourceLine" id="cb246-11" title="11">  )</a>
+<a class="sourceLine" id="cb246-12" title="12"></a>
+<a class="sourceLine" id="cb246-13" title="13"><span class="co"># Show</span></a>
+<a class="sourceLine" id="cb246-14" title="14"><span class="kw">kable</span>(tbfunc_A_nN_by_nQ_A_alpha_pmap) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb246-15" title="15"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -2698,25 +2698,25 @@ dplyr_eval_pmap
 <li><p>dplyr mutate function applow to each row dot notation</p></li>
 <li><p>note <a href="https://community.rstudio.com/t/dplyr-alternatives-to-rowwise/8071">rowwise might be bad</a> according to Hadley, should use pmap?</p></li>
 </ul>
-<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb242-1" title="1">ffi_linear_dplyrdo_fdot &lt;-<span class="st"> </span><span class="cf">function</span>(ls_row, fl_param){</a>
-<a class="sourceLine" id="cb242-2" title="2">  <span class="co"># Type 1 Param = ar_nN_A, ar_nN_alpha</span></a>
-<a class="sourceLine" id="cb242-3" title="3">  <span class="co"># Type 2 Param = ls_row$fl_A, ls_row$fl_alpha</span></a>
-<a class="sourceLine" id="cb242-4" title="4">  <span class="co"># Type 3 Param = fl_param</span></a>
-<a class="sourceLine" id="cb242-5" title="5"></a>
-<a class="sourceLine" id="cb242-6" title="6">  fl_out &lt;-<span class="st"> </span>(<span class="kw">sum</span>(ls_row<span class="op">$</span>fl_A<span class="op">*</span>ar_nN_A <span class="op">+</span></a>
-<a class="sourceLine" id="cb242-7" title="7"><span class="st">                   </span><span class="dv">1</span><span class="op">/</span>(ls_row<span class="op">$</span>fl_alpha <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>ar_nN_alpha))) <span class="op">+</span><span class="st"> </span>fl_param</a>
-<a class="sourceLine" id="cb242-8" title="8">  <span class="kw">return</span>(fl_out)</a>
-<a class="sourceLine" id="cb242-9" title="9">}</a>
-<a class="sourceLine" id="cb242-10" title="10"></a>
-<a class="sourceLine" id="cb242-11" title="11">cur_func &lt;-<span class="st"> </span>ffi_linear_dplyrdo_fdot</a>
-<a class="sourceLine" id="cb242-12" title="12">fl_param &lt;-<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb242-13" title="13">dplyr_eval_flex &lt;-<span class="st"> </span>tb_nN_by_nQ_A_alpha <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb242-14" title="14"><span class="st">  </span><span class="kw">do</span>(<span class="dt">dplyr_eval_flex =</span> <span class="kw">cur_func</span>(., fl_param)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb242-15" title="15"><span class="st">  </span><span class="kw">unnest</span>(dplyr_eval_flex)</a>
-<a class="sourceLine" id="cb242-16" title="16">tbfunc_B_nN_by_nQ_A_alpha &lt;-<span class="st"> </span>tb_nN_by_nQ_A_alpha <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">add_column</span>(dplyr_eval_flex)</a>
-<a class="sourceLine" id="cb242-17" title="17"><span class="co"># Show</span></a>
-<a class="sourceLine" id="cb242-18" title="18"><span class="kw">kable</span>(tbfunc_B_nN_by_nQ_A_alpha) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb242-19" title="19"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb247-1" title="1">ffi_linear_dplyrdo_fdot &lt;-<span class="st"> </span><span class="cf">function</span>(ls_row, fl_param){</a>
+<a class="sourceLine" id="cb247-2" title="2">  <span class="co"># Type 1 Param = ar_nN_A, ar_nN_alpha</span></a>
+<a class="sourceLine" id="cb247-3" title="3">  <span class="co"># Type 2 Param = ls_row$fl_A, ls_row$fl_alpha</span></a>
+<a class="sourceLine" id="cb247-4" title="4">  <span class="co"># Type 3 Param = fl_param</span></a>
+<a class="sourceLine" id="cb247-5" title="5"></a>
+<a class="sourceLine" id="cb247-6" title="6">  fl_out &lt;-<span class="st"> </span>(<span class="kw">sum</span>(ls_row<span class="op">$</span>fl_A<span class="op">*</span>ar_nN_A <span class="op">+</span></a>
+<a class="sourceLine" id="cb247-7" title="7"><span class="st">                   </span><span class="dv">1</span><span class="op">/</span>(ls_row<span class="op">$</span>fl_alpha <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>ar_nN_alpha))) <span class="op">+</span><span class="st"> </span>fl_param</a>
+<a class="sourceLine" id="cb247-8" title="8">  <span class="kw">return</span>(fl_out)</a>
+<a class="sourceLine" id="cb247-9" title="9">}</a>
+<a class="sourceLine" id="cb247-10" title="10"></a>
+<a class="sourceLine" id="cb247-11" title="11">cur_func &lt;-<span class="st"> </span>ffi_linear_dplyrdo_fdot</a>
+<a class="sourceLine" id="cb247-12" title="12">fl_param &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb247-13" title="13">dplyr_eval_flex &lt;-<span class="st"> </span>tb_nN_by_nQ_A_alpha <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb247-14" title="14"><span class="st">  </span><span class="kw">do</span>(<span class="dt">dplyr_eval_flex =</span> <span class="kw">cur_func</span>(., fl_param)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb247-15" title="15"><span class="st">  </span><span class="kw">unnest</span>(dplyr_eval_flex)</a>
+<a class="sourceLine" id="cb247-16" title="16">tbfunc_B_nN_by_nQ_A_alpha &lt;-<span class="st"> </span>tb_nN_by_nQ_A_alpha <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">add_column</span>(dplyr_eval_flex)</a>
+<a class="sourceLine" id="cb247-17" title="17"><span class="co"># Show</span></a>
+<a class="sourceLine" id="cb247-18" title="18"><span class="kw">kable</span>(tbfunc_B_nN_by_nQ_A_alpha) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb247-19" title="19"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -2792,21 +2792,21 @@ dplyr_eval_flex
 </div>
 <div id="compare-apply-and-mutate-results" class="section level4">
 <h4><span class="header-section-number">3.3.1.7</span> Compare Apply and Mutate Results</h4>
-<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb243-1" title="1"><span class="co"># Show overall Results</span></a>
-<a class="sourceLine" id="cb243-2" title="2">mt_results &lt;-<span class="st"> </span><span class="kw">cbind</span>(ar_func_apply, ar_func_sapply,</a>
-<a class="sourceLine" id="cb243-3" title="3">                    tb_nN_by_nQ_A_alpha_show[<span class="st">&#39;dplyr_eval&#39;</span>],</a>
-<a class="sourceLine" id="cb243-4" title="4">                    tbfunc_A_nN_by_nQ_A_alpha_rowwise[<span class="st">&#39;dplyr_eval&#39;</span>],</a>
-<a class="sourceLine" id="cb243-5" title="5">                    tbfunc_A_nN_by_nQ_A_alpha_pmap[<span class="st">&#39;dplyr_eval_pmap&#39;</span>],</a>
-<a class="sourceLine" id="cb243-6" title="6">                    tbfunc_B_nN_by_nQ_A_alpha[<span class="st">&#39;dplyr_eval_flex&#39;</span>],</a>
-<a class="sourceLine" id="cb243-7" title="7">                    mt_nN_by_nQ_A_alpha)</a>
-<a class="sourceLine" id="cb243-8" title="8"><span class="kw">colnames</span>(mt_results) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;eval_lin_apply&#39;</span>, <span class="st">&#39;eval_lin_sapply&#39;</span>,</a>
-<a class="sourceLine" id="cb243-9" title="9">                          <span class="st">&#39;eval_dplyr_mutate&#39;</span>,</a>
-<a class="sourceLine" id="cb243-10" title="10">                          <span class="st">&#39;eval_dplyr_mutate_hcode&#39;</span>,</a>
-<a class="sourceLine" id="cb243-11" title="11">                          <span class="st">&#39;eval_dplyr_mutate_pmap&#39;</span>,</a>
-<a class="sourceLine" id="cb243-12" title="12">                          <span class="st">&#39;eval_dplyr_mutate_flex&#39;</span>,</a>
-<a class="sourceLine" id="cb243-13" title="13">                          <span class="st">&#39;A_child&#39;</span>, <span class="st">&#39;alpha_child&#39;</span>)</a>
-<a class="sourceLine" id="cb243-14" title="14"><span class="kw">kable</span>(mt_results) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb243-15" title="15"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb248-1" title="1"><span class="co"># Show overall Results</span></a>
+<a class="sourceLine" id="cb248-2" title="2">mt_results &lt;-<span class="st"> </span><span class="kw">cbind</span>(ar_func_apply, ar_func_sapply,</a>
+<a class="sourceLine" id="cb248-3" title="3">                    tb_nN_by_nQ_A_alpha_show[<span class="st">&#39;dplyr_eval&#39;</span>],</a>
+<a class="sourceLine" id="cb248-4" title="4">                    tbfunc_A_nN_by_nQ_A_alpha_rowwise[<span class="st">&#39;dplyr_eval&#39;</span>],</a>
+<a class="sourceLine" id="cb248-5" title="5">                    tbfunc_A_nN_by_nQ_A_alpha_pmap[<span class="st">&#39;dplyr_eval_pmap&#39;</span>],</a>
+<a class="sourceLine" id="cb248-6" title="6">                    tbfunc_B_nN_by_nQ_A_alpha[<span class="st">&#39;dplyr_eval_flex&#39;</span>],</a>
+<a class="sourceLine" id="cb248-7" title="7">                    mt_nN_by_nQ_A_alpha)</a>
+<a class="sourceLine" id="cb248-8" title="8"><span class="kw">colnames</span>(mt_results) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;eval_lin_apply&#39;</span>, <span class="st">&#39;eval_lin_sapply&#39;</span>,</a>
+<a class="sourceLine" id="cb248-9" title="9">                          <span class="st">&#39;eval_dplyr_mutate&#39;</span>,</a>
+<a class="sourceLine" id="cb248-10" title="10">                          <span class="st">&#39;eval_dplyr_mutate_hcode&#39;</span>,</a>
+<a class="sourceLine" id="cb248-11" title="11">                          <span class="st">&#39;eval_dplyr_mutate_pmap&#39;</span>,</a>
+<a class="sourceLine" id="cb248-12" title="12">                          <span class="st">&#39;eval_dplyr_mutate_flex&#39;</span>,</a>
+<a class="sourceLine" id="cb248-13" title="13">                          <span class="st">&#39;A_child&#39;</span>, <span class="st">&#39;alpha_child&#39;</span>)</a>
+<a class="sourceLine" id="cb248-14" title="14"><span class="kw">kable</span>(mt_results) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb248-15" title="15"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>

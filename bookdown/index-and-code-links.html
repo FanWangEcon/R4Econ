@@ -24,7 +24,7 @@
 <meta name="author" content="Fan Wang" />
 
 
-<meta name="date" content="2020-04-20" />
+<meta name="date" content="2020-04-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -160,7 +160,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.4.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-dataframe"><i class="fa fa-check"></i><b>1.4.1</b> Generate Dataframe</a></li>
 <li class="chapter" data-level="1.4.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#factor-label-and-combine"><i class="fa fa-check"></i><b>1.4.2</b> Factor Label and Combine</a></li>
 <li class="chapter" data-level="1.4.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#drawly-random-rows"><i class="fa fa-check"></i><b>1.4.3</b> Drawly Random Rows</a></li>
-<li class="chapter" data-level="1.4.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#variable-na-values"><i class="fa fa-check"></i><b>1.4.4</b> Variable NA Values</a></li>
+<li class="chapter" data-level="1.4.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-variables-conditional-on-others"><i class="fa fa-check"></i><b>1.4.4</b> Generate Variables Conditional On Others</a></li>
 <li class="chapter" data-level="1.4.5" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-values"><i class="fa fa-check"></i><b>1.4.5</b> String Values</a></li>
 </ul></li>
 </ul></li>
@@ -368,7 +368,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><strong>r</strong>: <em>rnorm() + sample() + df[sample(dim(df)[1], it_M, replace=FALSE),]</em></li>
 <li><strong>dplyr</strong>: <em>case_when() + mutate(var = case_when(rnorm(n(),mean=0,sd=1) &lt; 0 ~ 1, TRUE ~ 0)) %&gt;% filter(var == 1)</em></li>
 </ul></li>
-<li><a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html">R Tibble Dataframe NA Values</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_na.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_na.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_na.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html"><strong>html</strong></a></li>
+<li><a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html">Generate Variables Conditional on Other Variables</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_na.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_na.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_na.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html"><strong>html</strong></a>
+<ul>
+<li>Use case_when to generate elseif conditional variables: NA, approximate difference, etc.</li>
+<li><strong>dplyr</strong>: <em>case_when() + na_if() + mutate(var = na_if(case_when(rnorm(n())&lt; 0 ~ -99, TRUE ~ mpg), -99))</em></li>
+<li><strong>r</strong>: <em>e-notation + all.equal() + isTRUE(all.equal(a,b,tol)) + is.na() + NA_real_ + NA_character_ + NA_integer_</em></li>
+</ul></li>
 <li><a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_string.html">R Tibble Dataframe String Manipulations</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_string.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_string.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_string.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_string.html"><strong>html</strong></a></li>
 </ol>
 </div>

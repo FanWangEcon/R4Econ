@@ -144,7 +144,7 @@
 
 \title{Panel Data and Optimization with R}
 \author{Fan Wang}
-\date{2020-04-20}
+\date{2020-04-22}
 
 \begin{document}
 \maketitle
@@ -2184,35 +2184,314 @@ student\_id & date\_in\_class\\
 \end{tabular}
 \end{table}
 
-\hypertarget{variable-na-values}{%
-\subsection{Variable NA Values}\label{variable-na-values}}
+\hypertarget{generate-variables-conditional-on-others}{%
+\subsection{Generate Variables Conditional On Others}\label{generate-variables-conditional-on-others}}
 
 \begin{quote}
 Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R4Econ} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository.
 \end{quote}
 
-\hypertarget{find-and-replace}{%
-\subsubsection{Find and Replace}\label{find-and-replace}}
+\hypertarget{case_when-basic-example}{%
+\subsubsection{case\_when Basic Example}\label{case_when-basic-example}}
 
-Find and Replace in Dataframe.
+Given several other variables, and generate a new variable when these varaibles satisfy conditions. Note that case\_when are ifelse type statements. So below
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  group one is below 16 MPG
+\item
+  when do \emph{qsec \textgreater= 20} second line that is elseif, only those that are \emph{\textgreater=16} are considered here
+\item
+  then think about two dimensional mpg and qsec grid, the lower-right area, give another category to manual cars in that group
+\end{enumerate}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# For dataframe}
-\NormalTok{df.reg <-df.reg }\OperatorTok{%>%}\StringTok{ }\KeywordTok{na_if}\NormalTok{(}\OperatorTok{-}\OtherTok{Inf}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{na_if}\NormalTok{(}\OtherTok{Inf}\NormalTok{)}
-\CommentTok{# For a specific variable in dataframe}
-\NormalTok{df.reg.use }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\OperatorTok{!!}\NormalTok{(var.input) }\OperatorTok{:}\ErrorTok{=}\StringTok{ }\KeywordTok{na_if}\NormalTok{(}\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(var.input), }\DecValTok{0}\NormalTok{))}
+\CommentTok{# Get mtcars}
+\NormalTok{df_mtcars <-}\StringTok{ }\NormalTok{mtcars}
 
-\CommentTok{# Setting to NA}
-\NormalTok{df.reg.use <-}\StringTok{ }\NormalTok{df.reg.guat }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(}\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(var.mth) }\OperatorTok{!=}\StringTok{ }\DecValTok{0}\NormalTok{)}
-\NormalTok{df.reg.use.log <-}\StringTok{ }\NormalTok{df.reg.use}
-\NormalTok{df.reg.use.log[}\KeywordTok{which}\NormalTok{(}\KeywordTok{is.nan}\NormalTok{(df.reg.use}\OperatorTok{$}\NormalTok{prot.imputed.log)),] =}\StringTok{ }\OtherTok{NA}
-\NormalTok{df.reg.use.log[}\KeywordTok{which}\NormalTok{(df.reg.use}\OperatorTok{$}\NormalTok{prot.imputed.log}\OperatorTok{==}\OtherTok{Inf}\NormalTok{),] =}\StringTok{ }\OtherTok{NA}
-\NormalTok{df.reg.use.log[}\KeywordTok{which}\NormalTok{(df.reg.use}\OperatorTok{$}\NormalTok{prot.imputed.log}\OperatorTok{==-}\OtherTok{Inf}\NormalTok{),] =}\StringTok{ }\OtherTok{NA}
-\NormalTok{df.reg.use.log <-}\StringTok{ }\NormalTok{df.reg.use.log }\OperatorTok{%>%}\StringTok{ }\KeywordTok{drop_na}\NormalTok{(prot.imputed.log)}
-\CommentTok{# df.reg.use.log$prot.imputed.log}
+\CommentTok{# case_when with mtcars}
+\NormalTok{df_mtcars <-}\StringTok{ }\NormalTok{df_mtcars }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{mpg_qsec_am_grp =} 
+           \KeywordTok{case_when}\NormalTok{(mpg }\OperatorTok{<}\StringTok{ }\DecValTok{16} \OperatorTok{~}\StringTok{ "< 16 MPG"}\NormalTok{,}
+\NormalTok{                     qsec }\OperatorTok{>=}\StringTok{ }\DecValTok{20} \OperatorTok{~}\StringTok{ "> 16 MPG & qsec >= 20"}\NormalTok{,}
+\NormalTok{                     am }\OperatorTok{==}\StringTok{ }\DecValTok{1} \OperatorTok{~}\StringTok{ "> 16 MPG & asec < 20 & manual"}\NormalTok{,}
+                     \OtherTok{TRUE} \OperatorTok{~}\StringTok{ "Others"}\NormalTok{))}
+
+\CommentTok{# # For dataframe}
+\CommentTok{# df.reg <-df.reg %>% na_if(-Inf) %>% na_if(Inf)}
+\CommentTok{# # For a specific variable in dataframe}
+\CommentTok{# df.reg.use %>% mutate(!!(var.input) := na_if(!!sym(var.input), 0))}
+\CommentTok{# }
+\CommentTok{# # Setting to NA}
+\CommentTok{# df.reg.use <- df.reg.guat %>% filter(!!sym(var.mth) != 0)}
+\CommentTok{# df.reg.use.log <- df.reg.use}
+\CommentTok{# df.reg.use.log[which(is.nan(df.reg.use$prot.imputed.log)),] = NA}
+\CommentTok{# df.reg.use.log[which(df.reg.use$prot.imputed.log==Inf),] = NA}
+\CommentTok{# df.reg.use.log[which(df.reg.use$prot.imputed.log==-Inf),] = NA}
+\CommentTok{# df.reg.use.log <- df.reg.use.log %>% drop_na(prot.imputed.log)}
+\CommentTok{# # df.reg.use.log$prot.imputed.log}
 \end{Highlighting}
 \end{Shaded}
+
+Now we generate scatter plot based on the combined factors
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Labeling}
+\NormalTok{st_title <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'Use case_when To Generate ifelse Groupings'}\NormalTok{)}
+\NormalTok{st_subtitle <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'https://fanwangecon.github.io/'}\NormalTok{,}
+                      \StringTok{'R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html'}\NormalTok{)}
+\NormalTok{st_caption <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'mtcars dataset, '}\NormalTok{,}
+                     \StringTok{'https://fanwangecon.github.io/R4Econ/'}\NormalTok{)}
+\NormalTok{st_x_label <-}\StringTok{ 'MPG = Miles per Gallon'}
+\NormalTok{st_y_label <-}\StringTok{ 'QSEC = time for 1/4 Miles'}
+
+\CommentTok{# Graphing}
+\NormalTok{plt_mtcars_casewhen_scatter <-}\StringTok{ }
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(df_mtcars, }
+         \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{mpg, }\DataTypeTok{y=}\NormalTok{qsec, }
+             \DataTypeTok{colour=}\NormalTok{mpg_qsec_am_grp, }
+             \DataTypeTok{shape=}\NormalTok{mpg_qsec_am_grp)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_jitter}\NormalTok{(}\DataTypeTok{size=}\DecValTok{3}\NormalTok{, }\DataTypeTok{width =} \FloatTok{0.15}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =}\NormalTok{ st_title, }\DataTypeTok{subtitle =}\NormalTok{ st_subtitle,}
+       \DataTypeTok{x =}\NormalTok{ st_x_label, }\DataTypeTok{y =}\NormalTok{ st_y_label, }\DataTypeTok{caption =}\NormalTok{ st_caption) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}
+
+\CommentTok{# show}
+\KeywordTok{print}\NormalTok{(plt_mtcars_casewhen_scatter)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-35-1} \end{center}
+
+\hypertarget{generate-na-values-if-variables-have-certain-value}{%
+\subsubsection{Generate NA values if Variables have Certain Value}\label{generate-na-values-if-variables-have-certain-value}}
+
+In the example below, in one line:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  generate a random standard normal vector
+\item
+  two set na methods:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    if the value of the standard normal is negative, set value to -999, otherwise MPG, replace the value \emph{-999} with \emph{NA}
+  \item
+    case\_when only with type specific NA values
+  \item
+    \href{https://github.com/tidyverse/dplyr/issues/3202\#issuecomment-343601409}{Assigning NA yields error in case\_when}
+  \item
+    note we need to conform NA to type
+  \end{itemize}
+\item
+  generate new categorical variable based on NA condition using is.na with both string and numeric NAs jointly considered.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    fake NA string to be printed on chart
+  \end{itemize}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Get mtcars}
+\NormalTok{df_mtcars <-}\StringTok{ }\NormalTok{mtcars}
+
+\CommentTok{# Make some values of mpg randomly NA}
+\CommentTok{# the NA has to conform to the type of the remaining values for the new variable}
+\CommentTok{# NA_real_, NA_character_, NA_integer_, NA_complex_}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{2341}\NormalTok{)}
+\NormalTok{df_mtcars <-}\StringTok{ }\NormalTok{df_mtcars }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{mpg_wth_NA1 =} \KeywordTok{na_if}\NormalTok{(}
+    \KeywordTok{case_when}\NormalTok{(}
+      \KeywordTok{rnorm}\NormalTok{(}\KeywordTok{n}\NormalTok{(),}\DataTypeTok{mean=}\DecValTok{0}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{1}\NormalTok{) }\OperatorTok{<}\StringTok{ }\DecValTok{0} \OperatorTok{~}\StringTok{ }\DecValTok{-999}\NormalTok{, }
+      \OtherTok{TRUE} \OperatorTok{~}\StringTok{ }\NormalTok{mpg), }
+    \DecValTok{-999}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{mpg_wth_NA2 =} \KeywordTok{case_when}\NormalTok{(}
+    \KeywordTok{rnorm}\NormalTok{(}\KeywordTok{n}\NormalTok{(),}\DataTypeTok{mean=}\DecValTok{0}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{1}\NormalTok{) }\OperatorTok{<}\StringTok{ }\DecValTok{0} \OperatorTok{~}\StringTok{ }\OtherTok{NA_real_}\NormalTok{, }
+    \OtherTok{TRUE} \OperatorTok{~}\StringTok{ }\NormalTok{mpg)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{mpg_wth_NA3 =} \KeywordTok{case_when}\NormalTok{(}
+    \KeywordTok{rnorm}\NormalTok{(}\KeywordTok{n}\NormalTok{(),}\DataTypeTok{mean=}\DecValTok{0}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{1}\NormalTok{) }\OperatorTok{<}\StringTok{ }\DecValTok{0} \OperatorTok{~}\StringTok{ }\OtherTok{NA_character_}\NormalTok{, }
+    \OtherTok{TRUE} \OperatorTok{~}\StringTok{ "shock > 0 string"}\NormalTok{))}
+  
+\CommentTok{# Generate New Variables based on if mpg_wth_NA is NA or not}
+\CommentTok{# same variable as above, but now first a category based on if NA}
+\CommentTok{# And we generate a fake string "NA" variable, this is not NA}
+\CommentTok{# the String NA allows for it to be printed on figure}
+\NormalTok{df_mtcars <-}\StringTok{ }\NormalTok{df_mtcars }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{group_with_na =} 
+           \KeywordTok{case_when}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(mpg_wth_NA2) }\OperatorTok{&}\StringTok{ }\KeywordTok{is.na}\NormalTok{(mpg_wth_NA3) }\OperatorTok{~}\StringTok{ }
+\StringTok{                       "Rand String and Rand Numeric both NA"}\NormalTok{, }
+\NormalTok{                     mpg }\OperatorTok{<}\StringTok{ }\DecValTok{16} \OperatorTok{~}\StringTok{ "< 16 MPG"}\NormalTok{,}
+\NormalTok{                     qsec }\OperatorTok{>=}\StringTok{ }\DecValTok{20} \OperatorTok{~}\StringTok{ "> 16 MPG & qsec >= 20"}\NormalTok{,}
+\NormalTok{                     am }\OperatorTok{==}\StringTok{ }\DecValTok{1} \OperatorTok{~}\StringTok{ "> 16 MPG & asec < 20 & manual"}\NormalTok{,}
+                     \OtherTok{TRUE} \OperatorTok{~}\StringTok{ "Fake String NA"}\NormalTok{))}
+
+\CommentTok{# show}
+\KeywordTok{kable}\NormalTok{(}\KeywordTok{head}\NormalTok{(df_mtcars }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\KeywordTok{starts_with}\NormalTok{(}\StringTok{'mpg'}\NormalTok{)),}\DecValTok{13}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{kable_styling_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{r|r|r|l}
+\hline
+mpg & mpg\_wth\_NA1 & mpg\_wth\_NA2 & mpg\_wth\_NA3\\
+\hline
+\rowcolor{gray!6}  21.0 & NA & NA & shock > 0 string\\
+\hline
+21.0 & 21.0 & 21.0 & NA\\
+\hline
+\rowcolor{gray!6}  22.8 & NA & NA & NA\\
+\hline
+21.4 & NA & 21.4 & NA\\
+\hline
+\rowcolor{gray!6}  18.7 & NA & 18.7 & NA\\
+\hline
+18.1 & 18.1 & NA & shock > 0 string\\
+\hline
+\rowcolor{gray!6}  14.3 & 14.3 & NA & shock > 0 string\\
+\hline
+24.4 & NA & 24.4 & NA\\
+\hline
+\rowcolor{gray!6}  22.8 & 22.8 & 22.8 & NA\\
+\hline
+19.2 & 19.2 & NA & NA\\
+\hline
+\rowcolor{gray!6}  17.8 & NA & NA & NA\\
+\hline
+16.4 & 16.4 & 16.4 & NA\\
+\hline
+\rowcolor{gray!6}  17.3 & NA & NA & shock > 0 string\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# # Setting to NA}
+\CommentTok{# df.reg.use <- df.reg.guat %>% filter(!!sym(var.mth) != 0)}
+\CommentTok{# df.reg.use.log <- df.reg.use}
+\CommentTok{# df.reg.use.log[which(is.nan(df.reg.use$prot.imputed.log)),] = NA}
+\CommentTok{# df.reg.use.log[which(df.reg.use$prot.imputed.log==Inf),] = NA}
+\CommentTok{# df.reg.use.log[which(df.reg.use$prot.imputed.log==-Inf),] = NA}
+\CommentTok{# df.reg.use.log <- df.reg.use.log %>% drop_na(prot.imputed.log)}
+\CommentTok{# # df.reg.use.log$prot.imputed.log}
+\end{Highlighting}
+\end{Shaded}
+
+Now we generate scatter plot based on the combined factors, but now with the NA category
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Labeling}
+\NormalTok{st_title <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'Use na_if and is.na to Generate and Distinguish NA Values}\CharTok{\textbackslash{}n}\StringTok{'}\NormalTok{,}
+                   \StringTok{'NA_real_, NA_character_, NA_integer_, NA_complex_'}\NormalTok{)}
+\NormalTok{st_subtitle <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'https://fanwangecon.github.io/'}\NormalTok{,}
+                      \StringTok{'R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html'}\NormalTok{)}
+\NormalTok{st_caption <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'mtcars dataset, '}\NormalTok{,}
+                     \StringTok{'https://fanwangecon.github.io/R4Econ/'}\NormalTok{)}
+\NormalTok{st_x_label <-}\StringTok{ 'MPG = Miles per Gallon'}
+\NormalTok{st_y_label <-}\StringTok{ 'QSEC = time for 1/4 Miles'}
+
+\CommentTok{# Graphing}
+\NormalTok{plt_mtcars_ifisna_scatter <-}\StringTok{ }
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(df_mtcars, }
+         \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{mpg, }\DataTypeTok{y=}\NormalTok{qsec, }
+             \DataTypeTok{colour=}\NormalTok{group_with_na, }
+             \DataTypeTok{shape=}\NormalTok{group_with_na)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_jitter}\NormalTok{(}\DataTypeTok{size=}\DecValTok{3}\NormalTok{, }\DataTypeTok{width =} \FloatTok{0.15}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =}\NormalTok{ st_title, }\DataTypeTok{subtitle =}\NormalTok{ st_subtitle,}
+       \DataTypeTok{x =}\NormalTok{ st_x_label, }\DataTypeTok{y =}\NormalTok{ st_y_label, }\DataTypeTok{caption =}\NormalTok{ st_caption) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}
+
+\CommentTok{# show}
+\KeywordTok{print}\NormalTok{(plt_mtcars_ifisna_scatter)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-37-1} \end{center}
+
+\hypertarget{approximate-values-comparison}{%
+\subsubsection{Approximate Values Comparison}\label{approximate-values-comparison}}
+
+\begin{itemize}
+\tightlist
+\item
+  r values almost the same
+\item
+  \href{https://stat.ethz.ch/R-manual/R-patched/library/base/html/all.equal.html}{all.equal}
+\end{itemize}
+
+From numeric approximation, often values are very close, and should be set to equal. Use \emph{isTRUE(all.equal)}. In the example below, we randomly generates four arrays. Two of the arrays have slightly higher variance, two arrays have slightly lower variance. They sd are to be 10 times below or 10 times above the tolerance comparison level. The values are not the same in any of the columns, but by allowing for almost true given some tolerance level, in the low standard deviation case, the values differences are within tolerance, so they are equal.
+
+This is an essential issue when dealing with optimization results.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Set tolerance }
+\NormalTok{tol_lvl =}\StringTok{ }\FloatTok{1.5e-3}
+\NormalTok{sd_lower_than_tol =}\StringTok{ }\NormalTok{tol_lvl}\OperatorTok{/}\DecValTok{10}
+\NormalTok{sd_higher_than_tol =}\StringTok{ }\NormalTok{tol_lvl}\OperatorTok{*}\DecValTok{10}
+
+\CommentTok{# larger SD}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{mt_runif_standard <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{10}\NormalTok{,}\DataTypeTok{mean=}\DecValTok{0}\NormalTok{,}\DataTypeTok{sd=}\NormalTok{sd_higher_than_tol), }\DataTypeTok{nrow=}\DecValTok{5}\NormalTok{, }\DataTypeTok{ncol=}\DecValTok{2}\NormalTok{)}
+
+\CommentTok{# small SD}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{mt_rnorm_small_sd <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{10}\NormalTok{,}\DataTypeTok{mean=}\DecValTok{0}\NormalTok{,}\DataTypeTok{sd=}\NormalTok{sd_lower_than_tol), }\DataTypeTok{nrow=}\DecValTok{5}\NormalTok{, }\DataTypeTok{ncol=}\DecValTok{2}\NormalTok{)}
+
+\CommentTok{# Generates Random Matirx}
+\NormalTok{tb_rnorm_runif <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(mt_rnorm_small_sd, mt_runif_standard))}
+
+\CommentTok{# Are Variables the same, not for strict comparison}
+\NormalTok{tb_rnorm_runif_approxi_same <-}\StringTok{ }\NormalTok{tb_rnorm_runif }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{V1_V2_ALMOST_SAME =} 
+           \KeywordTok{case_when}\NormalTok{(}\KeywordTok{isTRUE}\NormalTok{(}\KeywordTok{all.equal}\NormalTok{(V1, V2, }\DataTypeTok{tolerance=}\NormalTok{tol_lvl)) }\OperatorTok{~}\StringTok{ }
+\StringTok{                       }\KeywordTok{paste0}\NormalTok{(}\StringTok{'TOL='}\NormalTok{,sd_lower_than_tol,}\StringTok{', SAME ALMOST'}\NormalTok{),}
+                     \OtherTok{TRUE} \OperatorTok{~}\StringTok{ }
+\StringTok{                       }\KeywordTok{paste0}\NormalTok{(}\StringTok{'TOL='}\NormalTok{,sd_lower_than_tol,}\StringTok{', NOT SAME ALMOST'}\NormalTok{))) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{V3_V4_ALMOST_SAME =}
+           \KeywordTok{case_when}\NormalTok{(}\KeywordTok{isTRUE}\NormalTok{(}\KeywordTok{all.equal}\NormalTok{(V3, V4, }\DataTypeTok{tolerance=}\NormalTok{tol_lvl)) }\OperatorTok{~}\StringTok{ }
+\StringTok{                       }\KeywordTok{paste0}\NormalTok{(}\StringTok{'TOL='}\NormalTok{,sd_higher_than_tol,}\StringTok{', SAME ALMOST'}\NormalTok{),}
+                     \OtherTok{TRUE} \OperatorTok{~}\StringTok{ }
+\StringTok{                       }\KeywordTok{paste0}\NormalTok{(}\StringTok{'TOL='}\NormalTok{,sd_higher_than_tol,}\StringTok{', NOT SAME ALMOST'}\NormalTok{)))}
+
+\CommentTok{# Pring}
+\KeywordTok{kable}\NormalTok{(tb_rnorm_runif_approxi_same) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable_styling_fc_wide}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{r|r|r|r|l|l}
+\hline
+V1 & V2 & V3 & V4 & V1\_V2\_ALMOST\_SAME & V3\_V4\_ALMOST\_SAME\\
+\hline
+\rowcolor{gray!6}  -0.0000841 & 0.0002573 & -0.0084071 & 0.0257260 & TOL=0.00015, SAME ALMOST & TOL=0.015, NOT SAME ALMOST\\
+\hline
+-0.0000345 & 0.0000691 & -0.0034527 & 0.0069137 & TOL=0.00015, SAME ALMOST & TOL=0.015, NOT SAME ALMOST\\
+\hline
+\rowcolor{gray!6}  0.0002338 & -0.0001898 & 0.0233806 & -0.0189759 & TOL=0.00015, SAME ALMOST & TOL=0.015, NOT SAME ALMOST\\
+\hline
+0.0000106 & -0.0001030 & 0.0010576 & -0.0103028 & TOL=0.00015, SAME ALMOST & TOL=0.015, NOT SAME ALMOST\\
+\hline
+\rowcolor{gray!6}  0.0000194 & -0.0000668 & 0.0019393 & -0.0066849 & TOL=0.00015, SAME ALMOST & TOL=0.015, NOT SAME ALMOST\\
+\hline
+\end{tabular}}
+\end{table}
 
 \hypertarget{string-values}{%
 \subsection{String Values}\label{string-values}}
@@ -2221,8 +2500,8 @@ Find and Replace in Dataframe.
 Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R4Econ} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository.
 \end{quote}
 
-\hypertarget{find-and-replace-1}{%
-\subsubsection{Find and Replace}\label{find-and-replace-1}}
+\hypertarget{find-and-replace}{%
+\subsubsection{Find and Replace}\label{find-and-replace}}
 
 Find and Replace in Dataframe.
 
@@ -3642,7 +3921,7 @@ First, we will generate a test score dataset, directly from string. Below we typ
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-71-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-75-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -3654,7 +3933,7 @@ First, we will generate a test score dataset, directly from string. Below we typ
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-72-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-76-1} \end{center}
 
 \hypertarget{summarize-multiple-variables}{%
 \section{Summarize Multiple Variables}\label{summarize-multiple-variables}}
@@ -7759,7 +8038,7 @@ hgt & 77.8 & 73.13353 & 70.97578 & 71.45823\\
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-141-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-145-1} \end{center}
 
 \hypertarget{additional-decomposition-testings}{%
 \subsubsection{Additional Decomposition Testings}\label{additional-decomposition-testings}}
@@ -8135,21 +8414,21 @@ Given the x-variables included in the logit regression, how do they relate to A\
 ## [[1]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-145-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-149-1} \end{center}
 
 \begin{verbatim}
 ## 
 ## [[2]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-145-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-149-2} \end{center}
 
 \begin{verbatim}
 ## 
 ## [[3]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-145-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-149-3} \end{center}
 
 \hypertarget{optimization}{%
 \chapter{Optimization}\label{optimization}}
@@ -8761,7 +9040,7 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-153-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-157-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8780,7 +9059,7 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-153-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-157-2} \end{center}
 
 \hypertarget{integration-by-symmetric-uneven-rectangle}{%
 \subsubsection{Integration By Symmetric Uneven Rectangle}\label{integration-by-symmetric-uneven-rectangle}}
@@ -8835,7 +9114,7 @@ Resulting integration is rectangle based, but rectangle width differ. Th rectang
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-154-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-158-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8854,7 +9133,7 @@ Resulting integration is rectangle based, but rectangle width differ. Th rectang
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-154-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-158-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8873,7 +9152,7 @@ Resulting integration is rectangle based, but rectangle width differ. Th rectang
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-154-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-158-3} \end{center}
 
 \hypertarget{integration-by-constant-width-rectangle-trapezoidal-rule}{%
 \subsubsection{Integration By Constant Width Rectangle (Trapezoidal rule)}\label{integration-by-constant-width-rectangle-trapezoidal-rule}}
@@ -8924,7 +9203,7 @@ This is implementing even width recentagle, even along x-axis take points, and m
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-155-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-159-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8943,7 +9222,7 @@ This is implementing even width recentagle, even along x-axis take points, and m
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-155-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-159-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8962,7 +9241,7 @@ This is implementing even width recentagle, even along x-axis take points, and m
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-155-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-159-3} \end{center}
 
 \hypertarget{analytical-solutions}{%
 \section{Analytical Solutions}\label{analytical-solutions}}
@@ -9441,7 +9720,7 @@ Note that many more A grid points are needed to fully plot out the leontief line
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-163-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-167-1} \end{center}
 
 \hypertarget{appendix-appendix}{%
 \appendix}
@@ -9584,7 +9863,17 @@ Note that many more A grid points are needed to fully plot out the leontief line
     \textbf{dplyr}: \emph{case\_when() + mutate(var = case\_when(rnorm(n(),mean=0,sd=1) \textless{} 0 \textasciitilde{} 1, TRUE \textasciitilde{} 0)) \%\textgreater\% filter(var == 1)}
   \end{itemize}
 \item
-  \href{https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html}{R Tibble Dataframe NA Values}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_na.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_na.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_na.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html}{\textbf{html}}
+  \href{https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html}{Generate Variables Conditional on Other Variables}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_na.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_na.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_na.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use case\_when to generate elseif conditional variables: NA, approximate difference, etc.
+  \item
+    \textbf{dplyr}: \emph{case\_when() + na\_if() + mutate(var = na\_if(case\_when(rnorm(n())\textless{} 0 \textasciitilde{} -99, TRUE \textasciitilde{} mpg), -99))}
+  \item
+    \textbf{r}: \emph{e-notation + all.equal() + isTRUE(all.equal(a,b,tol)) + is.na() + NA\_real\_ + NA\_character\_ + NA\_integer\_}
+  \end{itemize}
 \item
   \href{https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_string.html}{R Tibble Dataframe String Manipulations}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_string.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_string.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_string.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_string.html}{\textbf{html}}
 \end{enumerate}

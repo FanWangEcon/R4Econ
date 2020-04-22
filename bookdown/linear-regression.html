@@ -24,7 +24,7 @@
 <meta name="author" content="Fan Wang" />
 
 
-<meta name="date" content="2020-04-20" />
+<meta name="date" content="2020-04-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -160,7 +160,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.4.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-dataframe"><i class="fa fa-check"></i><b>1.4.1</b> Generate Dataframe</a></li>
 <li class="chapter" data-level="1.4.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#factor-label-and-combine"><i class="fa fa-check"></i><b>1.4.2</b> Factor Label and Combine</a></li>
 <li class="chapter" data-level="1.4.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#drawly-random-rows"><i class="fa fa-check"></i><b>1.4.3</b> Drawly Random Rows</a></li>
-<li class="chapter" data-level="1.4.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#variable-na-values"><i class="fa fa-check"></i><b>1.4.4</b> Variable NA Values</a></li>
+<li class="chapter" data-level="1.4.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-variables-conditional-on-others"><i class="fa fa-check"></i><b>1.4.4</b> Generate Variables Conditional On Others</a></li>
 <li class="chapter" data-level="1.4.5" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-values"><i class="fa fa-check"></i><b>1.4.5</b> String Values</a></li>
 </ul></li>
 </ul></li>
@@ -311,116 +311,116 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>IV regression using AER package. Option to store all results in dataframe row for combining results from other estimations together. Produce Row Statistics.</p>
 <div id="construct-program" class="section level4">
 <h4><span class="header-section-number">5.1.1.1</span> Construct Program</h4>
-<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb258-1" title="1"><span class="co"># IV regression function</span></a>
-<a class="sourceLine" id="cb258-2" title="2"><span class="co"># The code below uses the AER library&#39;s regresison function</span></a>
-<a class="sourceLine" id="cb258-3" title="3"><span class="co"># All results are stored in a single row as data_frame</span></a>
-<a class="sourceLine" id="cb258-4" title="4"><span class="co"># This functoin could work with dplyr do</span></a>
-<a class="sourceLine" id="cb258-5" title="5"><span class="co"># var.y is single outcome, vars.x, vars.c and vars.z are vectors of endogenous variables, controls and instruments.</span></a>
-<a class="sourceLine" id="cb258-6" title="6">regf.iv &lt;-<span class="st"> </span><span class="cf">function</span>(var.y, vars.x, </a>
-<a class="sourceLine" id="cb258-7" title="7">                    vars.c, vars.z, df, <span class="dt">transpose=</span><span class="ot">TRUE</span>) {</a>
-<a class="sourceLine" id="cb258-8" title="8">  </a>
-<a class="sourceLine" id="cb258-9" title="9">  <span class="co"># A. Set-Up Equation</span></a>
-<a class="sourceLine" id="cb258-10" title="10">  str.vars.x &lt;-<span class="st"> </span><span class="kw">paste</span>(vars.x, <span class="dt">collapse=</span><span class="st">&#39;+&#39;</span>)</a>
-<a class="sourceLine" id="cb258-11" title="11">  str.vars.c &lt;-<span class="st"> </span><span class="kw">paste</span>(vars.c, <span class="dt">collapse=</span><span class="st">&#39;+&#39;</span>)</a>
-<a class="sourceLine" id="cb258-12" title="12">  </a>
-<a class="sourceLine" id="cb258-13" title="13">  df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb258-14" title="14"><span class="st">    </span><span class="kw">select</span>(<span class="kw">one_of</span>(var.y, vars.x, vars.c, vars.z)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb258-15" title="15"><span class="st">    </span><span class="kw">drop_na</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter_all</span>(<span class="kw">all_vars</span>(<span class="op">!</span><span class="kw">is.infinite</span>(.)))</a>
-<a class="sourceLine" id="cb258-16" title="16">  </a>
-<a class="sourceLine" id="cb258-17" title="17">  <span class="cf">if</span> (<span class="kw">length</span>(vars.z) <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span>) {</a>
-<a class="sourceLine" id="cb258-18" title="18">    <span class="co">#     library(AER)</span></a>
-<a class="sourceLine" id="cb258-19" title="19">    str.vars.z &lt;-<span class="st"> </span><span class="kw">paste</span>(vars.z, <span class="dt">collapse=</span><span class="st">&#39;+&#39;</span>)</a>
-<a class="sourceLine" id="cb258-20" title="20">    equa.iv &lt;-<span class="st"> </span><span class="kw">paste</span>(var.y,</a>
-<a class="sourceLine" id="cb258-21" title="21">                     <span class="kw">paste</span>(<span class="kw">paste</span>(str.vars.x, str.vars.c, <span class="dt">sep=</span><span class="st">&#39;+&#39;</span>),</a>
-<a class="sourceLine" id="cb258-22" title="22">                           <span class="kw">paste</span>(str.vars.z, str.vars.c, <span class="dt">sep=</span><span class="st">&#39;+&#39;</span>),</a>
-<a class="sourceLine" id="cb258-23" title="23">                           <span class="dt">sep=</span><span class="st">&#39;|&#39;</span>),</a>
-<a class="sourceLine" id="cb258-24" title="24">                     <span class="dt">sep=</span><span class="st">&#39;~&#39;</span>)</a>
-<a class="sourceLine" id="cb258-25" title="25">    <span class="co">#     print(equa.iv)</span></a>
-<a class="sourceLine" id="cb258-26" title="26">    </a>
-<a class="sourceLine" id="cb258-27" title="27">    <span class="co"># B. IV Regression</span></a>
-<a class="sourceLine" id="cb258-28" title="28">    ivreg.summ &lt;-<span class="st"> </span><span class="kw">summary</span>(<span class="kw">ivreg</span>(<span class="kw">as.formula</span>(equa.iv), <span class="dt">data=</span>df),</a>
-<a class="sourceLine" id="cb258-29" title="29">                          <span class="dt">vcov =</span> sandwich, <span class="dt">df =</span> <span class="ot">Inf</span>, <span class="dt">diagnostics =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb258-30" title="30">    </a>
-<a class="sourceLine" id="cb258-31" title="31">    <span class="co"># C. Statistics from IV Regression</span></a>
-<a class="sourceLine" id="cb258-32" title="32">    <span class="co">#     ivreg.summ$coef</span></a>
-<a class="sourceLine" id="cb258-33" title="33">    <span class="co">#     ivreg.summ$diagnostics</span></a>
-<a class="sourceLine" id="cb258-34" title="34">    </a>
-<a class="sourceLine" id="cb258-35" title="35">    <span class="co"># D. Combine Regression Results into a Matrix</span></a>
-<a class="sourceLine" id="cb258-36" title="36">    df.results &lt;-<span class="st"> </span><span class="kw">suppressWarnings</span>(<span class="kw">suppressMessages</span>(</a>
-<a class="sourceLine" id="cb258-37" title="37">      <span class="kw">as_tibble</span>(ivreg.summ<span class="op">$</span>coef, <span class="dt">rownames=</span><span class="st">&#39;rownames&#39;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb258-38" title="38"><span class="st">        </span><span class="kw">full_join</span>(<span class="kw">as_tibble</span>(ivreg.summ<span class="op">$</span>diagnostics, <span class="dt">rownames=</span><span class="st">&#39;rownames&#39;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb258-39" title="39"><span class="st">        </span><span class="kw">full_join</span>(<span class="kw">tibble</span>(<span class="dt">rownames=</span><span class="kw">c</span>(<span class="st">&#39;vars&#39;</span>),</a>
-<a class="sourceLine" id="cb258-40" title="40">                         <span class="dt">var.y=</span>var.y,</a>
-<a class="sourceLine" id="cb258-41" title="41">                         <span class="dt">vars.x=</span>str.vars.x,</a>
-<a class="sourceLine" id="cb258-42" title="42">                         <span class="dt">vars.z=</span>str.vars.z,</a>
-<a class="sourceLine" id="cb258-43" title="43">                         <span class="dt">vars.c=</span>str.vars.c))))</a>
-<a class="sourceLine" id="cb258-44" title="44">  } <span class="cf">else</span> {</a>
-<a class="sourceLine" id="cb258-45" title="45">    </a>
-<a class="sourceLine" id="cb258-46" title="46">    <span class="co"># OLS regression</span></a>
-<a class="sourceLine" id="cb258-47" title="47">    equa.ols &lt;-<span class="st"> </span><span class="kw">paste</span>(var.y,</a>
-<a class="sourceLine" id="cb258-48" title="48">                      <span class="kw">paste</span>(<span class="kw">paste</span>(vars.x, <span class="dt">collapse=</span><span class="st">&#39;+&#39;</span>),</a>
-<a class="sourceLine" id="cb258-49" title="49">                            <span class="kw">paste</span>(vars.c, <span class="dt">collapse=</span><span class="st">&#39;+&#39;</span>), <span class="dt">sep=</span><span class="st">&#39;+&#39;</span>),</a>
-<a class="sourceLine" id="cb258-50" title="50">                      <span class="dt">sep=</span><span class="st">&#39;~&#39;</span>)</a>
-<a class="sourceLine" id="cb258-51" title="51">    </a>
-<a class="sourceLine" id="cb258-52" title="52">    lmreg.summ &lt;-<span class="st"> </span><span class="kw">summary</span>(<span class="kw">lm</span>(<span class="kw">as.formula</span>(equa.ols), <span class="dt">data=</span>df))</a>
-<a class="sourceLine" id="cb258-53" title="53">    </a>
-<a class="sourceLine" id="cb258-54" title="54">    lm.diagnostics &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(</a>
-<a class="sourceLine" id="cb258-55" title="55">      <span class="kw">list</span>(<span class="dt">df1=</span>lmreg.summ<span class="op">$</span>df[[<span class="dv">1</span>]],</a>
-<a class="sourceLine" id="cb258-56" title="56">           <span class="dt">df2=</span>lmreg.summ<span class="op">$</span>df[[<span class="dv">2</span>]],</a>
-<a class="sourceLine" id="cb258-57" title="57">           <span class="dt">df3=</span>lmreg.summ<span class="op">$</span>df[[<span class="dv">3</span>]],</a>
-<a class="sourceLine" id="cb258-58" title="58">           <span class="dt">sigma=</span>lmreg.summ<span class="op">$</span>sigma,</a>
-<a class="sourceLine" id="cb258-59" title="59">           <span class="dt">r.squared=</span>lmreg.summ<span class="op">$</span>r.squared,</a>
-<a class="sourceLine" id="cb258-60" title="60">           <span class="dt">adj.r.squared=</span>lmreg.summ<span class="op">$</span>adj.r.squared)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb258-61" title="61"><span class="st">      </span><span class="kw">gather</span>(variable, value) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb258-62" title="62"><span class="st">      </span><span class="kw">rename</span>(<span class="dt">rownames =</span> variable) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb258-63" title="63"><span class="st">      </span><span class="kw">rename</span>(<span class="dt">v =</span> value)</a>
-<a class="sourceLine" id="cb258-64" title="64">    </a>
-<a class="sourceLine" id="cb258-65" title="65">    df.results &lt;-<span class="st"> </span><span class="kw">suppressWarnings</span>(<span class="kw">suppressMessages</span>(</a>
-<a class="sourceLine" id="cb258-66" title="66">      <span class="kw">as_tibble</span>(lmreg.summ<span class="op">$</span>coef, <span class="dt">rownames=</span><span class="st">&#39;rownames&#39;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb258-67" title="67"><span class="st">        </span><span class="kw">full_join</span>(lm.diagnostics) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb258-68" title="68"><span class="st">        </span><span class="kw">full_join</span>(<span class="kw">tibble</span>(<span class="dt">rownames=</span><span class="kw">c</span>(<span class="st">&#39;vars&#39;</span>),</a>
-<a class="sourceLine" id="cb258-69" title="69">                         <span class="dt">var.y=</span>var.y,</a>
-<a class="sourceLine" id="cb258-70" title="70">                         <span class="dt">vars.x=</span>str.vars.x,</a>
-<a class="sourceLine" id="cb258-71" title="71">                         <span class="dt">vars.c=</span>str.vars.c))))</a>
-<a class="sourceLine" id="cb258-72" title="72">  }</a>
-<a class="sourceLine" id="cb258-73" title="73">  </a>
-<a class="sourceLine" id="cb258-74" title="74">  <span class="co"># E. Flatten Matrix, All IV results as a single tibble </span></a>
-<a class="sourceLine" id="cb258-75" title="75">  <span class="co"># row to be combined with other IV results</span></a>
-<a class="sourceLine" id="cb258-76" title="76">  df.row.results &lt;-<span class="st"> </span>df.results <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb258-77" title="77"><span class="st">    </span><span class="kw">gather</span>(variable, value, <span class="op">-</span>rownames) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb258-78" title="78"><span class="st">    </span><span class="kw">drop_na</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb258-79" title="79"><span class="st">    </span><span class="kw">unite</span>(esti.val, rownames, variable) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb258-80" title="80"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">esti.val =</span> <span class="kw">gsub</span>(<span class="st">&#39; &#39;</span>, <span class="st">&#39;&#39;</span>, esti.val))</a>
-<a class="sourceLine" id="cb258-81" title="81">  </a>
-<a class="sourceLine" id="cb258-82" title="82">  <span class="cf">if</span> (transpose) {</a>
-<a class="sourceLine" id="cb258-83" title="83">    df.row.results &lt;-<span class="st"> </span>df.row.results <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">spread</span>(esti.val, value)</a>
-<a class="sourceLine" id="cb258-84" title="84">  }</a>
-<a class="sourceLine" id="cb258-85" title="85">  </a>
-<a class="sourceLine" id="cb258-86" title="86">  <span class="co"># F. Return</span></a>
-<a class="sourceLine" id="cb258-87" title="87">  <span class="kw">return</span>(<span class="kw">data.frame</span>(df.row.results))</a>
-<a class="sourceLine" id="cb258-88" title="88">}</a></code></pre></div>
+<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb263-1" title="1"><span class="co"># IV regression function</span></a>
+<a class="sourceLine" id="cb263-2" title="2"><span class="co"># The code below uses the AER library&#39;s regresison function</span></a>
+<a class="sourceLine" id="cb263-3" title="3"><span class="co"># All results are stored in a single row as data_frame</span></a>
+<a class="sourceLine" id="cb263-4" title="4"><span class="co"># This functoin could work with dplyr do</span></a>
+<a class="sourceLine" id="cb263-5" title="5"><span class="co"># var.y is single outcome, vars.x, vars.c and vars.z are vectors of endogenous variables, controls and instruments.</span></a>
+<a class="sourceLine" id="cb263-6" title="6">regf.iv &lt;-<span class="st"> </span><span class="cf">function</span>(var.y, vars.x, </a>
+<a class="sourceLine" id="cb263-7" title="7">                    vars.c, vars.z, df, <span class="dt">transpose=</span><span class="ot">TRUE</span>) {</a>
+<a class="sourceLine" id="cb263-8" title="8">  </a>
+<a class="sourceLine" id="cb263-9" title="9">  <span class="co"># A. Set-Up Equation</span></a>
+<a class="sourceLine" id="cb263-10" title="10">  str.vars.x &lt;-<span class="st"> </span><span class="kw">paste</span>(vars.x, <span class="dt">collapse=</span><span class="st">&#39;+&#39;</span>)</a>
+<a class="sourceLine" id="cb263-11" title="11">  str.vars.c &lt;-<span class="st"> </span><span class="kw">paste</span>(vars.c, <span class="dt">collapse=</span><span class="st">&#39;+&#39;</span>)</a>
+<a class="sourceLine" id="cb263-12" title="12">  </a>
+<a class="sourceLine" id="cb263-13" title="13">  df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb263-14" title="14"><span class="st">    </span><span class="kw">select</span>(<span class="kw">one_of</span>(var.y, vars.x, vars.c, vars.z)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb263-15" title="15"><span class="st">    </span><span class="kw">drop_na</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter_all</span>(<span class="kw">all_vars</span>(<span class="op">!</span><span class="kw">is.infinite</span>(.)))</a>
+<a class="sourceLine" id="cb263-16" title="16">  </a>
+<a class="sourceLine" id="cb263-17" title="17">  <span class="cf">if</span> (<span class="kw">length</span>(vars.z) <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span>) {</a>
+<a class="sourceLine" id="cb263-18" title="18">    <span class="co">#     library(AER)</span></a>
+<a class="sourceLine" id="cb263-19" title="19">    str.vars.z &lt;-<span class="st"> </span><span class="kw">paste</span>(vars.z, <span class="dt">collapse=</span><span class="st">&#39;+&#39;</span>)</a>
+<a class="sourceLine" id="cb263-20" title="20">    equa.iv &lt;-<span class="st"> </span><span class="kw">paste</span>(var.y,</a>
+<a class="sourceLine" id="cb263-21" title="21">                     <span class="kw">paste</span>(<span class="kw">paste</span>(str.vars.x, str.vars.c, <span class="dt">sep=</span><span class="st">&#39;+&#39;</span>),</a>
+<a class="sourceLine" id="cb263-22" title="22">                           <span class="kw">paste</span>(str.vars.z, str.vars.c, <span class="dt">sep=</span><span class="st">&#39;+&#39;</span>),</a>
+<a class="sourceLine" id="cb263-23" title="23">                           <span class="dt">sep=</span><span class="st">&#39;|&#39;</span>),</a>
+<a class="sourceLine" id="cb263-24" title="24">                     <span class="dt">sep=</span><span class="st">&#39;~&#39;</span>)</a>
+<a class="sourceLine" id="cb263-25" title="25">    <span class="co">#     print(equa.iv)</span></a>
+<a class="sourceLine" id="cb263-26" title="26">    </a>
+<a class="sourceLine" id="cb263-27" title="27">    <span class="co"># B. IV Regression</span></a>
+<a class="sourceLine" id="cb263-28" title="28">    ivreg.summ &lt;-<span class="st"> </span><span class="kw">summary</span>(<span class="kw">ivreg</span>(<span class="kw">as.formula</span>(equa.iv), <span class="dt">data=</span>df),</a>
+<a class="sourceLine" id="cb263-29" title="29">                          <span class="dt">vcov =</span> sandwich, <span class="dt">df =</span> <span class="ot">Inf</span>, <span class="dt">diagnostics =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb263-30" title="30">    </a>
+<a class="sourceLine" id="cb263-31" title="31">    <span class="co"># C. Statistics from IV Regression</span></a>
+<a class="sourceLine" id="cb263-32" title="32">    <span class="co">#     ivreg.summ$coef</span></a>
+<a class="sourceLine" id="cb263-33" title="33">    <span class="co">#     ivreg.summ$diagnostics</span></a>
+<a class="sourceLine" id="cb263-34" title="34">    </a>
+<a class="sourceLine" id="cb263-35" title="35">    <span class="co"># D. Combine Regression Results into a Matrix</span></a>
+<a class="sourceLine" id="cb263-36" title="36">    df.results &lt;-<span class="st"> </span><span class="kw">suppressWarnings</span>(<span class="kw">suppressMessages</span>(</a>
+<a class="sourceLine" id="cb263-37" title="37">      <span class="kw">as_tibble</span>(ivreg.summ<span class="op">$</span>coef, <span class="dt">rownames=</span><span class="st">&#39;rownames&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb263-38" title="38"><span class="st">        </span><span class="kw">full_join</span>(<span class="kw">as_tibble</span>(ivreg.summ<span class="op">$</span>diagnostics, <span class="dt">rownames=</span><span class="st">&#39;rownames&#39;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb263-39" title="39"><span class="st">        </span><span class="kw">full_join</span>(<span class="kw">tibble</span>(<span class="dt">rownames=</span><span class="kw">c</span>(<span class="st">&#39;vars&#39;</span>),</a>
+<a class="sourceLine" id="cb263-40" title="40">                         <span class="dt">var.y=</span>var.y,</a>
+<a class="sourceLine" id="cb263-41" title="41">                         <span class="dt">vars.x=</span>str.vars.x,</a>
+<a class="sourceLine" id="cb263-42" title="42">                         <span class="dt">vars.z=</span>str.vars.z,</a>
+<a class="sourceLine" id="cb263-43" title="43">                         <span class="dt">vars.c=</span>str.vars.c))))</a>
+<a class="sourceLine" id="cb263-44" title="44">  } <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb263-45" title="45">    </a>
+<a class="sourceLine" id="cb263-46" title="46">    <span class="co"># OLS regression</span></a>
+<a class="sourceLine" id="cb263-47" title="47">    equa.ols &lt;-<span class="st"> </span><span class="kw">paste</span>(var.y,</a>
+<a class="sourceLine" id="cb263-48" title="48">                      <span class="kw">paste</span>(<span class="kw">paste</span>(vars.x, <span class="dt">collapse=</span><span class="st">&#39;+&#39;</span>),</a>
+<a class="sourceLine" id="cb263-49" title="49">                            <span class="kw">paste</span>(vars.c, <span class="dt">collapse=</span><span class="st">&#39;+&#39;</span>), <span class="dt">sep=</span><span class="st">&#39;+&#39;</span>),</a>
+<a class="sourceLine" id="cb263-50" title="50">                      <span class="dt">sep=</span><span class="st">&#39;~&#39;</span>)</a>
+<a class="sourceLine" id="cb263-51" title="51">    </a>
+<a class="sourceLine" id="cb263-52" title="52">    lmreg.summ &lt;-<span class="st"> </span><span class="kw">summary</span>(<span class="kw">lm</span>(<span class="kw">as.formula</span>(equa.ols), <span class="dt">data=</span>df))</a>
+<a class="sourceLine" id="cb263-53" title="53">    </a>
+<a class="sourceLine" id="cb263-54" title="54">    lm.diagnostics &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(</a>
+<a class="sourceLine" id="cb263-55" title="55">      <span class="kw">list</span>(<span class="dt">df1=</span>lmreg.summ<span class="op">$</span>df[[<span class="dv">1</span>]],</a>
+<a class="sourceLine" id="cb263-56" title="56">           <span class="dt">df2=</span>lmreg.summ<span class="op">$</span>df[[<span class="dv">2</span>]],</a>
+<a class="sourceLine" id="cb263-57" title="57">           <span class="dt">df3=</span>lmreg.summ<span class="op">$</span>df[[<span class="dv">3</span>]],</a>
+<a class="sourceLine" id="cb263-58" title="58">           <span class="dt">sigma=</span>lmreg.summ<span class="op">$</span>sigma,</a>
+<a class="sourceLine" id="cb263-59" title="59">           <span class="dt">r.squared=</span>lmreg.summ<span class="op">$</span>r.squared,</a>
+<a class="sourceLine" id="cb263-60" title="60">           <span class="dt">adj.r.squared=</span>lmreg.summ<span class="op">$</span>adj.r.squared)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb263-61" title="61"><span class="st">      </span><span class="kw">gather</span>(variable, value) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb263-62" title="62"><span class="st">      </span><span class="kw">rename</span>(<span class="dt">rownames =</span> variable) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb263-63" title="63"><span class="st">      </span><span class="kw">rename</span>(<span class="dt">v =</span> value)</a>
+<a class="sourceLine" id="cb263-64" title="64">    </a>
+<a class="sourceLine" id="cb263-65" title="65">    df.results &lt;-<span class="st"> </span><span class="kw">suppressWarnings</span>(<span class="kw">suppressMessages</span>(</a>
+<a class="sourceLine" id="cb263-66" title="66">      <span class="kw">as_tibble</span>(lmreg.summ<span class="op">$</span>coef, <span class="dt">rownames=</span><span class="st">&#39;rownames&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb263-67" title="67"><span class="st">        </span><span class="kw">full_join</span>(lm.diagnostics) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb263-68" title="68"><span class="st">        </span><span class="kw">full_join</span>(<span class="kw">tibble</span>(<span class="dt">rownames=</span><span class="kw">c</span>(<span class="st">&#39;vars&#39;</span>),</a>
+<a class="sourceLine" id="cb263-69" title="69">                         <span class="dt">var.y=</span>var.y,</a>
+<a class="sourceLine" id="cb263-70" title="70">                         <span class="dt">vars.x=</span>str.vars.x,</a>
+<a class="sourceLine" id="cb263-71" title="71">                         <span class="dt">vars.c=</span>str.vars.c))))</a>
+<a class="sourceLine" id="cb263-72" title="72">  }</a>
+<a class="sourceLine" id="cb263-73" title="73">  </a>
+<a class="sourceLine" id="cb263-74" title="74">  <span class="co"># E. Flatten Matrix, All IV results as a single tibble </span></a>
+<a class="sourceLine" id="cb263-75" title="75">  <span class="co"># row to be combined with other IV results</span></a>
+<a class="sourceLine" id="cb263-76" title="76">  df.row.results &lt;-<span class="st"> </span>df.results <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb263-77" title="77"><span class="st">    </span><span class="kw">gather</span>(variable, value, <span class="op">-</span>rownames) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb263-78" title="78"><span class="st">    </span><span class="kw">drop_na</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb263-79" title="79"><span class="st">    </span><span class="kw">unite</span>(esti.val, rownames, variable) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb263-80" title="80"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">esti.val =</span> <span class="kw">gsub</span>(<span class="st">&#39; &#39;</span>, <span class="st">&#39;&#39;</span>, esti.val))</a>
+<a class="sourceLine" id="cb263-81" title="81">  </a>
+<a class="sourceLine" id="cb263-82" title="82">  <span class="cf">if</span> (transpose) {</a>
+<a class="sourceLine" id="cb263-83" title="83">    df.row.results &lt;-<span class="st"> </span>df.row.results <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">spread</span>(esti.val, value)</a>
+<a class="sourceLine" id="cb263-84" title="84">  }</a>
+<a class="sourceLine" id="cb263-85" title="85">  </a>
+<a class="sourceLine" id="cb263-86" title="86">  <span class="co"># F. Return</span></a>
+<a class="sourceLine" id="cb263-87" title="87">  <span class="kw">return</span>(<span class="kw">data.frame</span>(df.row.results))</a>
+<a class="sourceLine" id="cb263-88" title="88">}</a></code></pre></div>
 </div>
 <div id="program-testing" class="section level4">
 <h4><span class="header-section-number">5.1.1.2</span> Program Testing</h4>
 <p>Load Data</p>
-<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb259-1" title="1"><span class="co"># Library</span></a>
-<a class="sourceLine" id="cb259-2" title="2"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb259-3" title="3"><span class="kw">library</span>(AER)</a>
-<a class="sourceLine" id="cb259-4" title="4"></a>
-<a class="sourceLine" id="cb259-5" title="5"><span class="co"># Load Sample Data</span></a>
-<a class="sourceLine" id="cb259-6" title="6"><span class="kw">setwd</span>(<span class="st">&#39;C:/Users/fan/R4Econ/_data/&#39;</span>)</a>
-<a class="sourceLine" id="cb259-7" title="7">df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&#39;height_weight.csv&#39;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb264-1" title="1"><span class="co"># Library</span></a>
+<a class="sourceLine" id="cb264-2" title="2"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb264-3" title="3"><span class="kw">library</span>(AER)</a>
+<a class="sourceLine" id="cb264-4" title="4"></a>
+<a class="sourceLine" id="cb264-5" title="5"><span class="co"># Load Sample Data</span></a>
+<a class="sourceLine" id="cb264-6" title="6"><span class="kw">setwd</span>(<span class="st">&#39;C:/Users/fan/R4Econ/_data/&#39;</span>)</a>
+<a class="sourceLine" id="cb264-7" title="7">df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&#39;height_weight.csv&#39;</span>)</a></code></pre></div>
 <div id="example-no-instrument-ols" class="section level5">
 <h5><span class="header-section-number">5.1.1.2.1</span> Example No Instrument, OLS</h5>
-<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb260-1" title="1"><span class="co"># One Instrucments</span></a>
-<a class="sourceLine" id="cb260-2" title="2">var.y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;hgt&#39;</span>)</a>
-<a class="sourceLine" id="cb260-3" title="3">vars.x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;prot&#39;</span>)</a>
-<a class="sourceLine" id="cb260-4" title="4">vars.z &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb260-5" title="5">vars.c &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;hgt0&#39;</span>, <span class="st">&#39;wgt0&#39;</span>)</a>
-<a class="sourceLine" id="cb260-6" title="6"><span class="co"># Regression</span></a>
-<a class="sourceLine" id="cb260-7" title="7"><span class="kw">regf.iv</span>(var.y, vars.x, vars.c, vars.z, df, <span class="dt">transpose=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb260-8" title="8"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb260-9" title="9"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb265-1" title="1"><span class="co"># One Instrucments</span></a>
+<a class="sourceLine" id="cb265-2" title="2">var.y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;hgt&#39;</span>)</a>
+<a class="sourceLine" id="cb265-3" title="3">vars.x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;prot&#39;</span>)</a>
+<a class="sourceLine" id="cb265-4" title="4">vars.z &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb265-5" title="5">vars.c &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;hgt0&#39;</span>, <span class="st">&#39;wgt0&#39;</span>)</a>
+<a class="sourceLine" id="cb265-6" title="6"><span class="co"># Regression</span></a>
+<a class="sourceLine" id="cb265-7" title="7"><span class="kw">regf.iv</span>(var.y, vars.x, vars.c, vars.z, df, <span class="dt">transpose=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb265-8" title="8"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb265-9" title="9"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -670,15 +670,15 @@ sex+hgt0+wgt0
 </div>
 <div id="example-1-insturment" class="section level5">
 <h5><span class="header-section-number">5.1.1.2.2</span> Example 1 Insturment</h5>
-<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb261-1" title="1"><span class="co"># One Instrucments</span></a>
-<a class="sourceLine" id="cb261-2" title="2">var.y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;hgt&#39;</span>)</a>
-<a class="sourceLine" id="cb261-3" title="3">vars.x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;prot&#39;</span>)</a>
-<a class="sourceLine" id="cb261-4" title="4">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;momEdu&#39;</span>)</a>
-<a class="sourceLine" id="cb261-5" title="5">vars.c &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;hgt0&#39;</span>, <span class="st">&#39;wgt0&#39;</span>)</a>
-<a class="sourceLine" id="cb261-6" title="6"><span class="co"># Regression</span></a>
-<a class="sourceLine" id="cb261-7" title="7"><span class="kw">regf.iv</span>(var.y, vars.x, vars.c, vars.z, df, <span class="dt">transpose=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb261-8" title="8"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb261-9" title="9"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb266-1" title="1"><span class="co"># One Instrucments</span></a>
+<a class="sourceLine" id="cb266-2" title="2">var.y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;hgt&#39;</span>)</a>
+<a class="sourceLine" id="cb266-3" title="3">vars.x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;prot&#39;</span>)</a>
+<a class="sourceLine" id="cb266-4" title="4">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;momEdu&#39;</span>)</a>
+<a class="sourceLine" id="cb266-5" title="5">vars.c &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;hgt0&#39;</span>, <span class="st">&#39;wgt0&#39;</span>)</a>
+<a class="sourceLine" id="cb266-6" title="6"><span class="co"># Regression</span></a>
+<a class="sourceLine" id="cb266-7" title="7"><span class="kw">regf.iv</span>(var.y, vars.x, vars.c, vars.z, df, <span class="dt">transpose=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb266-8" title="8"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb266-9" title="9"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -960,15 +960,15 @@ sex+hgt0+wgt0
 </div>
 <div id="example-multiple-instrucments" class="section level5">
 <h5><span class="header-section-number">5.1.1.2.3</span> Example Multiple Instrucments</h5>
-<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb262-1" title="1"><span class="co"># Multiple Instrucments</span></a>
-<a class="sourceLine" id="cb262-2" title="2">var.y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;hgt&#39;</span>)</a>
-<a class="sourceLine" id="cb262-3" title="3">vars.x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;prot&#39;</span>)</a>
-<a class="sourceLine" id="cb262-4" title="4">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;momEdu&#39;</span>, <span class="st">&#39;wealthIdx&#39;</span>, <span class="st">&#39;p.A.prot&#39;</span>, <span class="st">&#39;p.A.nProt&#39;</span>)</a>
-<a class="sourceLine" id="cb262-5" title="5">vars.c &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;hgt0&#39;</span>, <span class="st">&#39;wgt0&#39;</span>)</a>
-<a class="sourceLine" id="cb262-6" title="6"><span class="co"># Regression</span></a>
-<a class="sourceLine" id="cb262-7" title="7"><span class="kw">regf.iv</span>(var.y, vars.x, vars.c, vars.z, df, <span class="dt">transpose=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb262-8" title="8"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb262-9" title="9"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb267-1" title="1"><span class="co"># Multiple Instrucments</span></a>
+<a class="sourceLine" id="cb267-2" title="2">var.y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;hgt&#39;</span>)</a>
+<a class="sourceLine" id="cb267-3" title="3">vars.x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;prot&#39;</span>)</a>
+<a class="sourceLine" id="cb267-4" title="4">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;momEdu&#39;</span>, <span class="st">&#39;wealthIdx&#39;</span>, <span class="st">&#39;p.A.prot&#39;</span>, <span class="st">&#39;p.A.nProt&#39;</span>)</a>
+<a class="sourceLine" id="cb267-5" title="5">vars.c &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;hgt0&#39;</span>, <span class="st">&#39;wgt0&#39;</span>)</a>
+<a class="sourceLine" id="cb267-6" title="6"><span class="co"># Regression</span></a>
+<a class="sourceLine" id="cb267-7" title="7"><span class="kw">regf.iv</span>(var.y, vars.x, vars.c, vars.z, df, <span class="dt">transpose=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb267-8" title="8"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb267-9" title="9"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1266,15 +1266,15 @@ sex+hgt0+wgt0
 </div>
 <div id="example-multiple-endogenous-variables" class="section level5">
 <h5><span class="header-section-number">5.1.1.2.4</span> Example Multiple Endogenous Variables</h5>
-<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb263-1" title="1"><span class="co"># Multiple Instrucments</span></a>
-<a class="sourceLine" id="cb263-2" title="2">var.y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;hgt&#39;</span>)</a>
-<a class="sourceLine" id="cb263-3" title="3">vars.x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;prot&#39;</span>, <span class="st">&#39;cal&#39;</span>)</a>
-<a class="sourceLine" id="cb263-4" title="4">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;momEdu&#39;</span>, <span class="st">&#39;wealthIdx&#39;</span>, <span class="st">&#39;p.A.prot&#39;</span>, <span class="st">&#39;p.A.nProt&#39;</span>)</a>
-<a class="sourceLine" id="cb263-5" title="5">vars.c &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;hgt0&#39;</span>, <span class="st">&#39;wgt0&#39;</span>)</a>
-<a class="sourceLine" id="cb263-6" title="6"><span class="co"># Regression</span></a>
-<a class="sourceLine" id="cb263-7" title="7"><span class="kw">regf.iv</span>(var.y, vars.x, vars.c, vars.z, df, <span class="dt">transpose=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb263-8" title="8"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb263-9" title="9"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb268-1" title="1"><span class="co"># Multiple Instrucments</span></a>
+<a class="sourceLine" id="cb268-2" title="2">var.y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;hgt&#39;</span>)</a>
+<a class="sourceLine" id="cb268-3" title="3">vars.x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;prot&#39;</span>, <span class="st">&#39;cal&#39;</span>)</a>
+<a class="sourceLine" id="cb268-4" title="4">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;momEdu&#39;</span>, <span class="st">&#39;wealthIdx&#39;</span>, <span class="st">&#39;p.A.prot&#39;</span>, <span class="st">&#39;p.A.nProt&#39;</span>)</a>
+<a class="sourceLine" id="cb268-5" title="5">vars.c &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;hgt0&#39;</span>, <span class="st">&#39;wgt0&#39;</span>)</a>
+<a class="sourceLine" id="cb268-6" title="6"><span class="co"># Regression</span></a>
+<a class="sourceLine" id="cb268-7" title="7"><span class="kw">regf.iv</span>(var.y, vars.x, vars.c, vars.z, df, <span class="dt">transpose=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb268-8" title="8"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb268-9" title="9"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1637,37 +1637,37 @@ sex+hgt0+wgt0
 <div id="examples-line-by-line" class="section level5">
 <h5><span class="header-section-number">5.1.1.2.5</span> Examples Line by Line</h5>
 <p>The examples are just to test the code with different types of variables.</p>
-<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb264-1" title="1"><span class="co"># Selecting Variables</span></a>
-<a class="sourceLine" id="cb264-2" title="2">var.y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;hgt&#39;</span>)</a>
-<a class="sourceLine" id="cb264-3" title="3">vars.x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;prot&#39;</span>, <span class="st">&#39;cal&#39;</span>)</a>
-<a class="sourceLine" id="cb264-4" title="4">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;momEdu&#39;</span>, <span class="st">&#39;wealthIdx&#39;</span>, <span class="st">&#39;p.A.prot&#39;</span>, <span class="st">&#39;p.A.nProt&#39;</span>)</a>
-<a class="sourceLine" id="cb264-5" title="5">vars.c &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;hgt0&#39;</span>, <span class="st">&#39;wgt0&#39;</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb265-1" title="1"><span class="co"># A. create Equation</span></a>
-<a class="sourceLine" id="cb265-2" title="2">str.vars.x &lt;-<span class="st"> </span><span class="kw">paste</span>(vars.x, <span class="dt">collapse=</span><span class="st">&#39;+&#39;</span>)</a>
-<a class="sourceLine" id="cb265-3" title="3">str.vars.c &lt;-<span class="st"> </span><span class="kw">paste</span>(vars.c, <span class="dt">collapse=</span><span class="st">&#39;+&#39;</span>)</a>
-<a class="sourceLine" id="cb265-4" title="4">str.vars.z &lt;-<span class="st"> </span><span class="kw">paste</span>(vars.z, <span class="dt">collapse=</span><span class="st">&#39;+&#39;</span>)</a>
-<a class="sourceLine" id="cb265-5" title="5"><span class="kw">print</span>(str.vars.x)</a></code></pre></div>
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb269-1" title="1"><span class="co"># Selecting Variables</span></a>
+<a class="sourceLine" id="cb269-2" title="2">var.y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;hgt&#39;</span>)</a>
+<a class="sourceLine" id="cb269-3" title="3">vars.x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;prot&#39;</span>, <span class="st">&#39;cal&#39;</span>)</a>
+<a class="sourceLine" id="cb269-4" title="4">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;momEdu&#39;</span>, <span class="st">&#39;wealthIdx&#39;</span>, <span class="st">&#39;p.A.prot&#39;</span>, <span class="st">&#39;p.A.nProt&#39;</span>)</a>
+<a class="sourceLine" id="cb269-5" title="5">vars.c &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;hgt0&#39;</span>, <span class="st">&#39;wgt0&#39;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb270-1" title="1"><span class="co"># A. create Equation</span></a>
+<a class="sourceLine" id="cb270-2" title="2">str.vars.x &lt;-<span class="st"> </span><span class="kw">paste</span>(vars.x, <span class="dt">collapse=</span><span class="st">&#39;+&#39;</span>)</a>
+<a class="sourceLine" id="cb270-3" title="3">str.vars.c &lt;-<span class="st"> </span><span class="kw">paste</span>(vars.c, <span class="dt">collapse=</span><span class="st">&#39;+&#39;</span>)</a>
+<a class="sourceLine" id="cb270-4" title="4">str.vars.z &lt;-<span class="st"> </span><span class="kw">paste</span>(vars.z, <span class="dt">collapse=</span><span class="st">&#39;+&#39;</span>)</a>
+<a class="sourceLine" id="cb270-5" title="5"><span class="kw">print</span>(str.vars.x)</a></code></pre></div>
 <pre><code>## [1] &quot;prot+cal&quot;</code></pre>
-<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb267-1" title="1"><span class="kw">print</span>(str.vars.c)</a></code></pre></div>
+<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb272-1" title="1"><span class="kw">print</span>(str.vars.c)</a></code></pre></div>
 <pre><code>## [1] &quot;sex+hgt0+wgt0&quot;</code></pre>
-<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb269-1" title="1"><span class="kw">print</span>(str.vars.z)</a></code></pre></div>
+<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb274-1" title="1"><span class="kw">print</span>(str.vars.z)</a></code></pre></div>
 <pre><code>## [1] &quot;momEdu+wealthIdx+p.A.prot+p.A.nProt&quot;</code></pre>
-<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb271-1" title="1">equa.iv &lt;-<span class="st"> </span><span class="kw">paste</span>(var.y,</a>
-<a class="sourceLine" id="cb271-2" title="2">                 <span class="kw">paste</span>(<span class="kw">paste</span>(str.vars.x, str.vars.c, <span class="dt">sep=</span><span class="st">&#39;+&#39;</span>),</a>
-<a class="sourceLine" id="cb271-3" title="3">                       <span class="kw">paste</span>(str.vars.z, str.vars.c, <span class="dt">sep=</span><span class="st">&#39;+&#39;</span>),</a>
-<a class="sourceLine" id="cb271-4" title="4">                       <span class="dt">sep=</span><span class="st">&#39;|&#39;</span>),</a>
-<a class="sourceLine" id="cb271-5" title="5">                 <span class="dt">sep=</span><span class="st">&#39;~&#39;</span>)</a>
-<a class="sourceLine" id="cb271-6" title="6"><span class="kw">print</span>(equa.iv)</a></code></pre></div>
+<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb276-1" title="1">equa.iv &lt;-<span class="st"> </span><span class="kw">paste</span>(var.y,</a>
+<a class="sourceLine" id="cb276-2" title="2">                 <span class="kw">paste</span>(<span class="kw">paste</span>(str.vars.x, str.vars.c, <span class="dt">sep=</span><span class="st">&#39;+&#39;</span>),</a>
+<a class="sourceLine" id="cb276-3" title="3">                       <span class="kw">paste</span>(str.vars.z, str.vars.c, <span class="dt">sep=</span><span class="st">&#39;+&#39;</span>),</a>
+<a class="sourceLine" id="cb276-4" title="4">                       <span class="dt">sep=</span><span class="st">&#39;|&#39;</span>),</a>
+<a class="sourceLine" id="cb276-5" title="5">                 <span class="dt">sep=</span><span class="st">&#39;~&#39;</span>)</a>
+<a class="sourceLine" id="cb276-6" title="6"><span class="kw">print</span>(equa.iv)</a></code></pre></div>
 <pre><code>## [1] &quot;hgt~prot+cal+sex+hgt0+wgt0|momEdu+wealthIdx+p.A.prot+p.A.nProt+sex+hgt0+wgt0&quot;</code></pre>
-<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb273-1" title="1"><span class="co"># B. regression</span></a>
-<a class="sourceLine" id="cb273-2" title="2">res.ivreg &lt;-<span class="st"> </span><span class="kw">ivreg</span>(<span class="kw">as.formula</span>(equa.iv), <span class="dt">data=</span>df)</a>
-<a class="sourceLine" id="cb273-3" title="3"><span class="kw">coef</span>(res.ivreg)</a></code></pre></div>
+<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb278-1" title="1"><span class="co"># B. regression</span></a>
+<a class="sourceLine" id="cb278-2" title="2">res.ivreg &lt;-<span class="st"> </span><span class="kw">ivreg</span>(<span class="kw">as.formula</span>(equa.iv), <span class="dt">data=</span>df)</a>
+<a class="sourceLine" id="cb278-3" title="3"><span class="kw">coef</span>(res.ivreg)</a></code></pre></div>
 <pre><code>##   (Intercept)          prot           cal       sexMale          hgt0          wgt0 
 ## 44.0243196254 -1.4025623247  0.0651048958  0.1208327876  0.2865254380  0.0008504814</code></pre>
-<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb275-1" title="1"><span class="co"># C. Regression Summary</span></a>
-<a class="sourceLine" id="cb275-2" title="2">ivreg.summ &lt;-<span class="st"> </span><span class="kw">summary</span>(res.ivreg, <span class="dt">vcov =</span> sandwich, <span class="dt">df =</span> <span class="ot">Inf</span>, <span class="dt">diagnostics =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb275-3" title="3"></a>
-<a class="sourceLine" id="cb275-4" title="4">ivreg.summ<span class="op">$</span>coef</a></code></pre></div>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb280-1" title="1"><span class="co"># C. Regression Summary</span></a>
+<a class="sourceLine" id="cb280-2" title="2">ivreg.summ &lt;-<span class="st"> </span><span class="kw">summary</span>(res.ivreg, <span class="dt">vcov =</span> sandwich, <span class="dt">df =</span> <span class="ot">Inf</span>, <span class="dt">diagnostics =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb280-3" title="3"></a>
+<a class="sourceLine" id="cb280-4" title="4">ivreg.summ<span class="op">$</span>coef</a></code></pre></div>
 <pre><code>##                  Estimate   Std. Error    z value     Pr(&gt;|z|)
 ## (Intercept) 44.0243196254 2.7535484724 15.9882131 1.543966e-57
 ## prot        -1.4025623247 0.1986400603 -7.0608231 1.655192e-12
@@ -1677,33 +1677,33 @@ sex+hgt0+wgt0
 ## wgt0         0.0008504814 0.0003371121  2.5228444 1.164099e-02
 ## attr(,&quot;df&quot;)
 ## [1] 0</code></pre>
-<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb277-1" title="1">ivreg.summ<span class="op">$</span>diagnostics</a></code></pre></div>
+<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb282-1" title="1">ivreg.summ<span class="op">$</span>diagnostics</a></code></pre></div>
 <pre><code>##                         df1   df2 statistic       p-value
 ## Weak instruments (prot)   4 14914 274.14708 8.617320e-228
 ## Weak instruments (cal)    4 14914 315.03685 1.189186e-260
 ## Wu-Hausman                2 14914  94.70201  1.350241e-41
 ## Sargan                    2    NA 122.08198  3.091968e-27</code></pre>
-<div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb279-1" title="1"><span class="co"># D. Combine Regression Results into a Matrix</span></a>
-<a class="sourceLine" id="cb279-2" title="2">df.results &lt;-<span class="st"> </span><span class="kw">suppressMessages</span>(<span class="kw">as_tibble</span>(ivreg.summ<span class="op">$</span>coef, <span class="dt">rownames=</span><span class="st">&#39;rownames&#39;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb279-3" title="3"><span class="st">    </span><span class="kw">full_join</span>(<span class="kw">as_tibble</span>(ivreg.summ<span class="op">$</span>diagnostics, <span class="dt">rownames=</span><span class="st">&#39;rownames&#39;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb279-4" title="4"><span class="st">    </span><span class="kw">full_join</span>(<span class="kw">tibble</span>(<span class="dt">rownames=</span><span class="kw">c</span>(<span class="st">&#39;vars&#39;</span>),</a>
-<a class="sourceLine" id="cb279-5" title="5">                     <span class="dt">var.y=</span>var.y,</a>
-<a class="sourceLine" id="cb279-6" title="6">                     <span class="dt">vars.x=</span>str.vars.x,</a>
-<a class="sourceLine" id="cb279-7" title="7">                     <span class="dt">vars.z=</span>str.vars.z,</a>
-<a class="sourceLine" id="cb279-8" title="8">                     <span class="dt">vars.c=</span>str.vars.c)))</a>
-<a class="sourceLine" id="cb279-9" title="9"><span class="co"># E. Flatten Matrix, All IV results as a single tibble row to be combined with other IV results</span></a>
-<a class="sourceLine" id="cb279-10" title="10">df.row.results &lt;-<span class="st"> </span>df.results <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb279-11" title="11"><span class="st">    </span><span class="kw">gather</span>(variable, value, <span class="op">-</span>rownames) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb279-12" title="12"><span class="st">    </span><span class="kw">drop_na</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb279-13" title="13"><span class="st">    </span><span class="kw">unite</span>(esti.val, rownames, variable) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb279-14" title="14"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">esti.val =</span> <span class="kw">gsub</span>(<span class="st">&#39; &#39;</span>, <span class="st">&#39;&#39;</span>, esti.val))</a></code></pre></div>
-<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb280-1" title="1"><span class="co"># F. Results as Single Colum</span></a>
-<a class="sourceLine" id="cb280-2" title="2"><span class="co"># df.row.results</span></a></code></pre></div>
-<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb281-1" title="1"><span class="co"># G. Results as Single Row</span></a>
-<a class="sourceLine" id="cb281-2" title="2"><span class="co"># df.row.results</span></a></code></pre></div>
-<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb282-1" title="1"><span class="co"># t(df.row.results %&gt;% spread(esti.val, value)) %&gt;%</span></a>
-<a class="sourceLine" id="cb282-2" title="2"><span class="co">#   kable() %&gt;%</span></a>
-<a class="sourceLine" id="cb282-3" title="3"><span class="co">#   kable_styling_fc_wide()</span></a></code></pre></div>
+<div class="sourceCode" id="cb284"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb284-1" title="1"><span class="co"># D. Combine Regression Results into a Matrix</span></a>
+<a class="sourceLine" id="cb284-2" title="2">df.results &lt;-<span class="st"> </span><span class="kw">suppressMessages</span>(<span class="kw">as_tibble</span>(ivreg.summ<span class="op">$</span>coef, <span class="dt">rownames=</span><span class="st">&#39;rownames&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb284-3" title="3"><span class="st">    </span><span class="kw">full_join</span>(<span class="kw">as_tibble</span>(ivreg.summ<span class="op">$</span>diagnostics, <span class="dt">rownames=</span><span class="st">&#39;rownames&#39;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb284-4" title="4"><span class="st">    </span><span class="kw">full_join</span>(<span class="kw">tibble</span>(<span class="dt">rownames=</span><span class="kw">c</span>(<span class="st">&#39;vars&#39;</span>),</a>
+<a class="sourceLine" id="cb284-5" title="5">                     <span class="dt">var.y=</span>var.y,</a>
+<a class="sourceLine" id="cb284-6" title="6">                     <span class="dt">vars.x=</span>str.vars.x,</a>
+<a class="sourceLine" id="cb284-7" title="7">                     <span class="dt">vars.z=</span>str.vars.z,</a>
+<a class="sourceLine" id="cb284-8" title="8">                     <span class="dt">vars.c=</span>str.vars.c)))</a>
+<a class="sourceLine" id="cb284-9" title="9"><span class="co"># E. Flatten Matrix, All IV results as a single tibble row to be combined with other IV results</span></a>
+<a class="sourceLine" id="cb284-10" title="10">df.row.results &lt;-<span class="st"> </span>df.results <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb284-11" title="11"><span class="st">    </span><span class="kw">gather</span>(variable, value, <span class="op">-</span>rownames) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb284-12" title="12"><span class="st">    </span><span class="kw">drop_na</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb284-13" title="13"><span class="st">    </span><span class="kw">unite</span>(esti.val, rownames, variable) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb284-14" title="14"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">esti.val =</span> <span class="kw">gsub</span>(<span class="st">&#39; &#39;</span>, <span class="st">&#39;&#39;</span>, esti.val))</a></code></pre></div>
+<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb285-1" title="1"><span class="co"># F. Results as Single Colum</span></a>
+<a class="sourceLine" id="cb285-2" title="2"><span class="co"># df.row.results</span></a></code></pre></div>
+<div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb286-1" title="1"><span class="co"># G. Results as Single Row</span></a>
+<a class="sourceLine" id="cb286-2" title="2"><span class="co"># df.row.results</span></a></code></pre></div>
+<div class="sourceCode" id="cb287"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb287-1" title="1"><span class="co"># t(df.row.results %&gt;% spread(esti.val, value)) %&gt;%</span></a>
+<a class="sourceLine" id="cb287-2" title="2"><span class="co">#   kable() %&gt;%</span></a>
+<a class="sourceLine" id="cb287-3" title="3"><span class="co">#   kable_styling_fc_wide()</span></a></code></pre></div>
 
 </div>
 </div>
@@ -1720,89 +1720,89 @@ sex+hgt0+wgt0
 <div id="construct-program-1" class="section level4">
 <h4><span class="header-section-number">5.1.2.1</span> Construct Program</h4>
 <p>The program relies on double lapply. lapply is used for convenience, not speed.</p>
-<div class="sourceCode" id="cb283"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb283-1" title="1">ff_reg_mbyn &lt;-<span class="st"> </span><span class="cf">function</span>(list.vars.y, list.vars.x,</a>
-<a class="sourceLine" id="cb283-2" title="2">                        vars.c, vars.z, df,</a>
-<a class="sourceLine" id="cb283-3" title="3">                        <span class="dt">return_all =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb283-4" title="4">                        <span class="dt">stats_ends =</span> <span class="st">&#39;value&#39;</span>, <span class="dt">time =</span> <span class="ot">FALSE</span>) {</a>
-<a class="sourceLine" id="cb283-5" title="5"></a>
-<a class="sourceLine" id="cb283-6" title="6">  <span class="co"># regf.iv() function is from C:\Users\fan\R4Econ\linreg\ivreg\ivregdfrow.R</span></a>
-<a class="sourceLine" id="cb283-7" title="7">  <span class="cf">if</span> (time) {</a>
-<a class="sourceLine" id="cb283-8" title="8">    start_time &lt;-<span class="st"> </span><span class="kw">Sys.time</span>()</a>
-<a class="sourceLine" id="cb283-9" title="9">  }</a>
-<a class="sourceLine" id="cb283-10" title="10"></a>
-<a class="sourceLine" id="cb283-11" title="11">  <span class="cf">if</span> (return_all) {</a>
-<a class="sourceLine" id="cb283-12" title="12">    df.reg.out.all &lt;-</a>
-<a class="sourceLine" id="cb283-13" title="13"><span class="st">      </span><span class="kw">bind_rows</span>(<span class="kw">lapply</span>(list.vars.x,</a>
-<a class="sourceLine" id="cb283-14" title="14">                       <span class="cf">function</span>(x) (</a>
-<a class="sourceLine" id="cb283-15" title="15">                         <span class="kw">bind_rows</span>(</a>
-<a class="sourceLine" id="cb283-16" title="16">                           <span class="kw">lapply</span>(list.vars.y, regf.iv,</a>
-<a class="sourceLine" id="cb283-17" title="17">                                  <span class="dt">vars.x=</span>x, <span class="dt">vars.c=</span>vars.c, <span class="dt">vars.z=</span>vars.z, <span class="dt">df=</span>df))</a>
-<a class="sourceLine" id="cb283-18" title="18">                       )))</a>
-<a class="sourceLine" id="cb283-19" title="19"></a>
-<a class="sourceLine" id="cb283-20" title="20">  } <span class="cf">else</span> {</a>
-<a class="sourceLine" id="cb283-21" title="21">    df.reg.out.all &lt;-</a>
-<a class="sourceLine" id="cb283-22" title="22"><span class="st">      </span>(<span class="kw">lapply</span>(list.vars.x,</a>
-<a class="sourceLine" id="cb283-23" title="23">              <span class="cf">function</span>(x) (</a>
-<a class="sourceLine" id="cb283-24" title="24">                <span class="kw">bind_rows</span>(</a>
-<a class="sourceLine" id="cb283-25" title="25">                  <span class="kw">lapply</span>(list.vars.y, regf.iv,</a>
-<a class="sourceLine" id="cb283-26" title="26">                         <span class="dt">vars.x=</span>x, <span class="dt">vars.c=</span>vars.c, <span class="dt">vars.z=</span>vars.z, <span class="dt">df=</span>df)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb283-27" title="27"><span class="st">                  </span><span class="kw">select</span>(vars_var.y, <span class="kw">starts_with</span>(x)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb283-28" title="28"><span class="st">                  </span><span class="kw">select</span>(vars_var.y, <span class="kw">ends_with</span>(stats_ends))</a>
-<a class="sourceLine" id="cb283-29" title="29">              ))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">reduce</span>(full_join)</a>
-<a class="sourceLine" id="cb283-30" title="30">  }</a>
-<a class="sourceLine" id="cb283-31" title="31"></a>
-<a class="sourceLine" id="cb283-32" title="32">  <span class="cf">if</span> (time) {</a>
-<a class="sourceLine" id="cb283-33" title="33">    end_time &lt;-<span class="st"> </span><span class="kw">Sys.time</span>()</a>
-<a class="sourceLine" id="cb283-34" title="34">    <span class="kw">print</span>(<span class="kw">paste0</span>(<span class="st">&#39;Estimation for all ys and xs took (seconds):&#39;</span>,</a>
-<a class="sourceLine" id="cb283-35" title="35">                 end_time <span class="op">-</span><span class="st"> </span>start_time))</a>
-<a class="sourceLine" id="cb283-36" title="36">  }</a>
-<a class="sourceLine" id="cb283-37" title="37"></a>
-<a class="sourceLine" id="cb283-38" title="38">  <span class="kw">return</span>(df.reg.out.all)</a>
-<a class="sourceLine" id="cb283-39" title="39">}</a></code></pre></div>
+<div class="sourceCode" id="cb288"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb288-1" title="1">ff_reg_mbyn &lt;-<span class="st"> </span><span class="cf">function</span>(list.vars.y, list.vars.x,</a>
+<a class="sourceLine" id="cb288-2" title="2">                        vars.c, vars.z, df,</a>
+<a class="sourceLine" id="cb288-3" title="3">                        <span class="dt">return_all =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb288-4" title="4">                        <span class="dt">stats_ends =</span> <span class="st">&#39;value&#39;</span>, <span class="dt">time =</span> <span class="ot">FALSE</span>) {</a>
+<a class="sourceLine" id="cb288-5" title="5"></a>
+<a class="sourceLine" id="cb288-6" title="6">  <span class="co"># regf.iv() function is from C:\Users\fan\R4Econ\linreg\ivreg\ivregdfrow.R</span></a>
+<a class="sourceLine" id="cb288-7" title="7">  <span class="cf">if</span> (time) {</a>
+<a class="sourceLine" id="cb288-8" title="8">    start_time &lt;-<span class="st"> </span><span class="kw">Sys.time</span>()</a>
+<a class="sourceLine" id="cb288-9" title="9">  }</a>
+<a class="sourceLine" id="cb288-10" title="10"></a>
+<a class="sourceLine" id="cb288-11" title="11">  <span class="cf">if</span> (return_all) {</a>
+<a class="sourceLine" id="cb288-12" title="12">    df.reg.out.all &lt;-</a>
+<a class="sourceLine" id="cb288-13" title="13"><span class="st">      </span><span class="kw">bind_rows</span>(<span class="kw">lapply</span>(list.vars.x,</a>
+<a class="sourceLine" id="cb288-14" title="14">                       <span class="cf">function</span>(x) (</a>
+<a class="sourceLine" id="cb288-15" title="15">                         <span class="kw">bind_rows</span>(</a>
+<a class="sourceLine" id="cb288-16" title="16">                           <span class="kw">lapply</span>(list.vars.y, regf.iv,</a>
+<a class="sourceLine" id="cb288-17" title="17">                                  <span class="dt">vars.x=</span>x, <span class="dt">vars.c=</span>vars.c, <span class="dt">vars.z=</span>vars.z, <span class="dt">df=</span>df))</a>
+<a class="sourceLine" id="cb288-18" title="18">                       )))</a>
+<a class="sourceLine" id="cb288-19" title="19"></a>
+<a class="sourceLine" id="cb288-20" title="20">  } <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb288-21" title="21">    df.reg.out.all &lt;-</a>
+<a class="sourceLine" id="cb288-22" title="22"><span class="st">      </span>(<span class="kw">lapply</span>(list.vars.x,</a>
+<a class="sourceLine" id="cb288-23" title="23">              <span class="cf">function</span>(x) (</a>
+<a class="sourceLine" id="cb288-24" title="24">                <span class="kw">bind_rows</span>(</a>
+<a class="sourceLine" id="cb288-25" title="25">                  <span class="kw">lapply</span>(list.vars.y, regf.iv,</a>
+<a class="sourceLine" id="cb288-26" title="26">                         <span class="dt">vars.x=</span>x, <span class="dt">vars.c=</span>vars.c, <span class="dt">vars.z=</span>vars.z, <span class="dt">df=</span>df)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb288-27" title="27"><span class="st">                  </span><span class="kw">select</span>(vars_var.y, <span class="kw">starts_with</span>(x)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb288-28" title="28"><span class="st">                  </span><span class="kw">select</span>(vars_var.y, <span class="kw">ends_with</span>(stats_ends))</a>
+<a class="sourceLine" id="cb288-29" title="29">              ))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">reduce</span>(full_join)</a>
+<a class="sourceLine" id="cb288-30" title="30">  }</a>
+<a class="sourceLine" id="cb288-31" title="31"></a>
+<a class="sourceLine" id="cb288-32" title="32">  <span class="cf">if</span> (time) {</a>
+<a class="sourceLine" id="cb288-33" title="33">    end_time &lt;-<span class="st"> </span><span class="kw">Sys.time</span>()</a>
+<a class="sourceLine" id="cb288-34" title="34">    <span class="kw">print</span>(<span class="kw">paste0</span>(<span class="st">&#39;Estimation for all ys and xs took (seconds):&#39;</span>,</a>
+<a class="sourceLine" id="cb288-35" title="35">                 end_time <span class="op">-</span><span class="st"> </span>start_time))</a>
+<a class="sourceLine" id="cb288-36" title="36">  }</a>
+<a class="sourceLine" id="cb288-37" title="37"></a>
+<a class="sourceLine" id="cb288-38" title="38">  <span class="kw">return</span>(df.reg.out.all)</a>
+<a class="sourceLine" id="cb288-39" title="39">}</a></code></pre></div>
 </div>
 <div id="prepare-data" class="section level4">
 <h4><span class="header-section-number">5.1.2.2</span> Prepare Data</h4>
-<div class="sourceCode" id="cb284"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb284-1" title="1"><span class="co"># Library</span></a>
-<a class="sourceLine" id="cb284-2" title="2"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb284-3" title="3"><span class="kw">library</span>(AER)</a>
-<a class="sourceLine" id="cb284-4" title="4"></a>
-<a class="sourceLine" id="cb284-5" title="5"><span class="co"># Load Sample Data</span></a>
-<a class="sourceLine" id="cb284-6" title="6"><span class="kw">setwd</span>(<span class="st">&#39;C:/Users/fan/R4Econ/_data/&#39;</span>)</a>
-<a class="sourceLine" id="cb284-7" title="7">df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&#39;height_weight.csv&#39;</span>)</a>
-<a class="sourceLine" id="cb284-8" title="8"></a>
-<a class="sourceLine" id="cb284-9" title="9"><span class="co"># Source Dependency</span></a>
-<a class="sourceLine" id="cb284-10" title="10"><span class="kw">source</span>(<span class="st">&#39;C:/Users/fan/R4Econ/linreg/ivreg/ivregdfrow.R&#39;</span>)</a>
-<a class="sourceLine" id="cb284-11" title="11"></a>
-<a class="sourceLine" id="cb284-12" title="12"><span class="co"># Setting</span></a>
-<a class="sourceLine" id="cb284-13" title="13"><span class="kw">options</span>(<span class="dt">repr.matrix.max.rows=</span><span class="dv">50</span>, <span class="dt">repr.matrix.max.cols=</span><span class="dv">50</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb289"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb289-1" title="1"><span class="co"># Library</span></a>
+<a class="sourceLine" id="cb289-2" title="2"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb289-3" title="3"><span class="kw">library</span>(AER)</a>
+<a class="sourceLine" id="cb289-4" title="4"></a>
+<a class="sourceLine" id="cb289-5" title="5"><span class="co"># Load Sample Data</span></a>
+<a class="sourceLine" id="cb289-6" title="6"><span class="kw">setwd</span>(<span class="st">&#39;C:/Users/fan/R4Econ/_data/&#39;</span>)</a>
+<a class="sourceLine" id="cb289-7" title="7">df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&#39;height_weight.csv&#39;</span>)</a>
+<a class="sourceLine" id="cb289-8" title="8"></a>
+<a class="sourceLine" id="cb289-9" title="9"><span class="co"># Source Dependency</span></a>
+<a class="sourceLine" id="cb289-10" title="10"><span class="kw">source</span>(<span class="st">&#39;C:/Users/fan/R4Econ/linreg/ivreg/ivregdfrow.R&#39;</span>)</a>
+<a class="sourceLine" id="cb289-11" title="11"></a>
+<a class="sourceLine" id="cb289-12" title="12"><span class="co"># Setting</span></a>
+<a class="sourceLine" id="cb289-13" title="13"><span class="kw">options</span>(<span class="dt">repr.matrix.max.rows=</span><span class="dv">50</span>, <span class="dt">repr.matrix.max.cols=</span><span class="dv">50</span>)</a></code></pre></div>
 <p>Parameters.</p>
-<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb285-1" title="1">var.y1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;hgt&#39;</span>)</a>
-<a class="sourceLine" id="cb285-2" title="2">var.y2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;wgt&#39;</span>)</a>
-<a class="sourceLine" id="cb285-3" title="3">var.y3 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;vil.id&#39;</span>)</a>
-<a class="sourceLine" id="cb285-4" title="4">list.vars.y &lt;-<span class="st"> </span><span class="kw">c</span>(var.y1, var.y2, var.y3)</a>
-<a class="sourceLine" id="cb285-5" title="5"></a>
-<a class="sourceLine" id="cb285-6" title="6">var.x1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;prot&#39;</span>)</a>
-<a class="sourceLine" id="cb285-7" title="7">var.x2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;cal&#39;</span>)</a>
-<a class="sourceLine" id="cb285-8" title="8">var.x3 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;wealthIdx&#39;</span>)</a>
-<a class="sourceLine" id="cb285-9" title="9">var.x4 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;p.A.prot&#39;</span>)</a>
-<a class="sourceLine" id="cb285-10" title="10">var.x5 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;p.A.nProt&#39;</span>)</a>
-<a class="sourceLine" id="cb285-11" title="11">list.vars.x &lt;-<span class="st"> </span><span class="kw">c</span>(var.x1, var.x2, var.x3, var.x4, var.x5)</a>
-<a class="sourceLine" id="cb285-12" title="12"></a>
-<a class="sourceLine" id="cb285-13" title="13">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;indi.id&#39;</span>)</a>
-<a class="sourceLine" id="cb285-14" title="14">vars.c &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;wgt0&#39;</span>, <span class="st">&#39;hgt0&#39;</span>, <span class="st">&#39;svymthRound&#39;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb290"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb290-1" title="1">var.y1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;hgt&#39;</span>)</a>
+<a class="sourceLine" id="cb290-2" title="2">var.y2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;wgt&#39;</span>)</a>
+<a class="sourceLine" id="cb290-3" title="3">var.y3 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;vil.id&#39;</span>)</a>
+<a class="sourceLine" id="cb290-4" title="4">list.vars.y &lt;-<span class="st"> </span><span class="kw">c</span>(var.y1, var.y2, var.y3)</a>
+<a class="sourceLine" id="cb290-5" title="5"></a>
+<a class="sourceLine" id="cb290-6" title="6">var.x1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;prot&#39;</span>)</a>
+<a class="sourceLine" id="cb290-7" title="7">var.x2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;cal&#39;</span>)</a>
+<a class="sourceLine" id="cb290-8" title="8">var.x3 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;wealthIdx&#39;</span>)</a>
+<a class="sourceLine" id="cb290-9" title="9">var.x4 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;p.A.prot&#39;</span>)</a>
+<a class="sourceLine" id="cb290-10" title="10">var.x5 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;p.A.nProt&#39;</span>)</a>
+<a class="sourceLine" id="cb290-11" title="11">list.vars.x &lt;-<span class="st"> </span><span class="kw">c</span>(var.x1, var.x2, var.x3, var.x4, var.x5)</a>
+<a class="sourceLine" id="cb290-12" title="12"></a>
+<a class="sourceLine" id="cb290-13" title="13">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;indi.id&#39;</span>)</a>
+<a class="sourceLine" id="cb290-14" title="14">vars.c &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;wgt0&#39;</span>, <span class="st">&#39;hgt0&#39;</span>, <span class="st">&#39;svymthRound&#39;</span>)</a></code></pre></div>
 </div>
 <div id="program-testing-1" class="section level4">
 <h4><span class="header-section-number">5.1.2.3</span> Program Testing</h4>
 <div id="test-program-ols-z-stat" class="section level5">
 <h5><span class="header-section-number">5.1.2.3.1</span> Test Program OLS Z-Stat</h5>
-<div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb286-1" title="1">vars.z &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb286-2" title="2"><span class="kw">suppressWarnings</span>(<span class="kw">suppressMessages</span>(</a>
-<a class="sourceLine" id="cb286-3" title="3">  <span class="kw">ff_reg_mbyn</span>(list.vars.y, list.vars.x,</a>
-<a class="sourceLine" id="cb286-4" title="4">              vars.c, vars.z, df,</a>
-<a class="sourceLine" id="cb286-5" title="5">              <span class="dt">return_all =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb286-6" title="6">              <span class="dt">stats_ends =</span> <span class="st">&#39;value&#39;</span>))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb286-7" title="7"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb286-8" title="8"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb291"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb291-1" title="1">vars.z &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb291-2" title="2"><span class="kw">suppressWarnings</span>(<span class="kw">suppressMessages</span>(</a>
+<a class="sourceLine" id="cb291-3" title="3">  <span class="kw">ff_reg_mbyn</span>(list.vars.y, list.vars.x,</a>
+<a class="sourceLine" id="cb291-4" title="4">              vars.c, vars.z, df,</a>
+<a class="sourceLine" id="cb291-5" title="5">              <span class="dt">return_all =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb291-6" title="6">              <span class="dt">stats_ends =</span> <span class="st">&#39;value&#39;</span>))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb291-7" title="7"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb291-8" title="8"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -1894,14 +1894,14 @@ vil.id
 </div>
 <div id="test-program-iv-t-stat" class="section level5">
 <h5><span class="header-section-number">5.1.2.3.2</span> Test Program IV T-stat</h5>
-<div class="sourceCode" id="cb287"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb287-1" title="1">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;indi.id&#39;</span>)</a>
-<a class="sourceLine" id="cb287-2" title="2"><span class="kw">suppressWarnings</span>(<span class="kw">suppressMessages</span>(</a>
-<a class="sourceLine" id="cb287-3" title="3">  <span class="kw">ff_reg_mbyn</span>(list.vars.y, list.vars.x,</a>
-<a class="sourceLine" id="cb287-4" title="4">              vars.c, vars.z, df,</a>
-<a class="sourceLine" id="cb287-5" title="5">              <span class="dt">return_all =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb287-6" title="6">              <span class="dt">stats_ends =</span> <span class="st">&#39;value&#39;</span>))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb287-7" title="7"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb287-8" title="8"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb292"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb292-1" title="1">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;indi.id&#39;</span>)</a>
+<a class="sourceLine" id="cb292-2" title="2"><span class="kw">suppressWarnings</span>(<span class="kw">suppressMessages</span>(</a>
+<a class="sourceLine" id="cb292-3" title="3">  <span class="kw">ff_reg_mbyn</span>(list.vars.y, list.vars.x,</a>
+<a class="sourceLine" id="cb292-4" title="4">              vars.c, vars.z, df,</a>
+<a class="sourceLine" id="cb292-5" title="5">              <span class="dt">return_all =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb292-6" title="6">              <span class="dt">stats_ends =</span> <span class="st">&#39;value&#39;</span>))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb292-7" title="7"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb292-8" title="8"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -1993,14 +1993,14 @@ vil.id
 </div>
 <div id="test-program-ols-coefficient" class="section level5">
 <h5><span class="header-section-number">5.1.2.3.3</span> Test Program OLS Coefficient</h5>
-<div class="sourceCode" id="cb288"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb288-1" title="1">vars.z &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb288-2" title="2"><span class="kw">suppressWarnings</span>(<span class="kw">suppressMessages</span>(</a>
-<a class="sourceLine" id="cb288-3" title="3">  <span class="kw">ff_reg_mbyn</span>(list.vars.y, list.vars.x,</a>
-<a class="sourceLine" id="cb288-4" title="4">              vars.c, vars.z, df,</a>
-<a class="sourceLine" id="cb288-5" title="5">              <span class="dt">return_all =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb288-6" title="6">              <span class="dt">stats_ends =</span> <span class="st">&#39;Estimate&#39;</span>))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb288-7" title="7"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb288-8" title="8"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb293"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb293-1" title="1">vars.z &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb293-2" title="2"><span class="kw">suppressWarnings</span>(<span class="kw">suppressMessages</span>(</a>
+<a class="sourceLine" id="cb293-3" title="3">  <span class="kw">ff_reg_mbyn</span>(list.vars.y, list.vars.x,</a>
+<a class="sourceLine" id="cb293-4" title="4">              vars.c, vars.z, df,</a>
+<a class="sourceLine" id="cb293-5" title="5">              <span class="dt">return_all =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb293-6" title="6">              <span class="dt">stats_ends =</span> <span class="st">&#39;Estimate&#39;</span>))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb293-7" title="7"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb293-8" title="8"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -2092,14 +2092,14 @@ vil.id
 </div>
 <div id="test-program-iv-coefficient" class="section level5">
 <h5><span class="header-section-number">5.1.2.3.4</span> Test Program IV coefficient</h5>
-<div class="sourceCode" id="cb289"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb289-1" title="1">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;indi.id&#39;</span>)</a>
-<a class="sourceLine" id="cb289-2" title="2"><span class="kw">suppressWarnings</span>(<span class="kw">suppressMessages</span>(</a>
-<a class="sourceLine" id="cb289-3" title="3">  <span class="kw">ff_reg_mbyn</span>(list.vars.y, list.vars.x,</a>
-<a class="sourceLine" id="cb289-4" title="4">              vars.c, vars.z, df,</a>
-<a class="sourceLine" id="cb289-5" title="5">              <span class="dt">return_all =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb289-6" title="6">              <span class="dt">stats_ends =</span> <span class="st">&#39;Estimate&#39;</span>))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb289-7" title="7"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb289-8" title="8"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb294"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb294-1" title="1">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;indi.id&#39;</span>)</a>
+<a class="sourceLine" id="cb294-2" title="2"><span class="kw">suppressWarnings</span>(<span class="kw">suppressMessages</span>(</a>
+<a class="sourceLine" id="cb294-3" title="3">  <span class="kw">ff_reg_mbyn</span>(list.vars.y, list.vars.x,</a>
+<a class="sourceLine" id="cb294-4" title="4">              vars.c, vars.z, df,</a>
+<a class="sourceLine" id="cb294-5" title="5">              <span class="dt">return_all =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb294-6" title="6">              <span class="dt">stats_ends =</span> <span class="st">&#39;Estimate&#39;</span>))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb294-7" title="7"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb294-8" title="8"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -2191,14 +2191,14 @@ vil.id
 </div>
 <div id="test-program-ols-return-all" class="section level5">
 <h5><span class="header-section-number">5.1.2.3.5</span> Test Program OLS Return All</h5>
-<div class="sourceCode" id="cb290"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb290-1" title="1">vars.z &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb290-2" title="2"><span class="kw">t</span>(<span class="kw">suppressWarnings</span>(<span class="kw">suppressMessages</span>(</a>
-<a class="sourceLine" id="cb290-3" title="3">  <span class="kw">ff_reg_mbyn</span>(list.vars.y, list.vars.x,</a>
-<a class="sourceLine" id="cb290-4" title="4">            vars.c, vars.z, df,</a>
-<a class="sourceLine" id="cb290-5" title="5">            <span class="dt">return_all =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb290-6" title="6">            <span class="dt">stats_ends =</span> <span class="st">&#39;Estimate&#39;</span>)))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb290-7" title="7"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb290-8" title="8"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb295-1" title="1">vars.z &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb295-2" title="2"><span class="kw">t</span>(<span class="kw">suppressWarnings</span>(<span class="kw">suppressMessages</span>(</a>
+<a class="sourceLine" id="cb295-3" title="3">  <span class="kw">ff_reg_mbyn</span>(list.vars.y, list.vars.x,</a>
+<a class="sourceLine" id="cb295-4" title="4">            vars.c, vars.z, df,</a>
+<a class="sourceLine" id="cb295-5" title="5">            <span class="dt">return_all =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb295-6" title="6">            <span class="dt">stats_ends =</span> <span class="st">&#39;Estimate&#39;</span>)))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb295-7" title="7"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb295-8" title="8"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <tbody>
@@ -4658,14 +4658,14 @@ NA
 </div>
 <div id="test-program-iv-return-all" class="section level5">
 <h5><span class="header-section-number">5.1.2.3.6</span> Test Program IV Return All</h5>
-<div class="sourceCode" id="cb291"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb291-1" title="1">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;indi.id&#39;</span>)</a>
-<a class="sourceLine" id="cb291-2" title="2"><span class="kw">t</span>(<span class="kw">suppressWarnings</span>(<span class="kw">suppressMessages</span>(</a>
-<a class="sourceLine" id="cb291-3" title="3">  <span class="kw">ff_reg_mbyn</span>(list.vars.y, list.vars.x,</a>
-<a class="sourceLine" id="cb291-4" title="4">            vars.c, vars.z, df,</a>
-<a class="sourceLine" id="cb291-5" title="5">            <span class="dt">return_all =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb291-6" title="6">            <span class="dt">stats_ends =</span> <span class="st">&#39;Estimate&#39;</span>)))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb291-7" title="7"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb291-8" title="8"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb296"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb296-1" title="1">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;indi.id&#39;</span>)</a>
+<a class="sourceLine" id="cb296-2" title="2"><span class="kw">t</span>(<span class="kw">suppressWarnings</span>(<span class="kw">suppressMessages</span>(</a>
+<a class="sourceLine" id="cb296-3" title="3">  <span class="kw">ff_reg_mbyn</span>(list.vars.y, list.vars.x,</a>
+<a class="sourceLine" id="cb296-4" title="4">            vars.c, vars.z, df,</a>
+<a class="sourceLine" id="cb296-5" title="5">            <span class="dt">return_all =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb296-6" title="6">            <span class="dt">stats_ends =</span> <span class="st">&#39;Estimate&#39;</span>)))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb296-7" title="7"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb296-8" title="8"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <tbody>
@@ -7327,19 +7327,19 @@ NA
 <div id="program-line-by-line" class="section level4">
 <h4><span class="header-section-number">5.1.2.4</span> Program Line by Line</h4>
 <p>Set Up Parameters</p>
-<div class="sourceCode" id="cb292"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb292-1" title="1">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;indi.id&#39;</span>)</a>
-<a class="sourceLine" id="cb292-2" title="2">vars.z &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb292-3" title="3">vars.c &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;wgt0&#39;</span>, <span class="st">&#39;hgt0&#39;</span>, <span class="st">&#39;svymthRound&#39;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb297"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb297-1" title="1">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;indi.id&#39;</span>)</a>
+<a class="sourceLine" id="cb297-2" title="2">vars.z &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb297-3" title="3">vars.c &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;wgt0&#39;</span>, <span class="st">&#39;hgt0&#39;</span>, <span class="st">&#39;svymthRound&#39;</span>)</a></code></pre></div>
 <div id="lapply" class="section level5">
 <h5><span class="header-section-number">5.1.2.4.1</span> Lapply</h5>
-<div class="sourceCode" id="cb293"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb293-1" title="1">df.reg.out &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(</a>
-<a class="sourceLine" id="cb293-2" title="2">  <span class="kw">bind_rows</span>(<span class="kw">lapply</span>(list.vars.y, regf.iv,</a>
-<a class="sourceLine" id="cb293-3" title="3">                   <span class="dt">vars.x=</span>var.x1, <span class="dt">vars.c=</span>vars.c, <span class="dt">vars.z=</span>vars.z, <span class="dt">df=</span>df)))</a></code></pre></div>
+<div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb298-1" title="1">df.reg.out &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(</a>
+<a class="sourceLine" id="cb298-2" title="2">  <span class="kw">bind_rows</span>(<span class="kw">lapply</span>(list.vars.y, regf.iv,</a>
+<a class="sourceLine" id="cb298-3" title="3">                   <span class="dt">vars.x=</span>var.x1, <span class="dt">vars.c=</span>vars.c, <span class="dt">vars.z=</span>vars.z, <span class="dt">df=</span>df)))</a></code></pre></div>
 </div>
 <div id="nested-lapply-test" class="section level5">
 <h5><span class="header-section-number">5.1.2.4.2</span> Nested Lapply Test</h5>
-<div class="sourceCode" id="cb294"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb294-1" title="1"><span class="kw">lapply</span>(list.vars.y, <span class="cf">function</span>(y) (<span class="kw">mean</span>(df[[var.x1]], <span class="dt">na.rm=</span><span class="ot">TRUE</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb294-2" title="2"><span class="st">                                   </span><span class="kw">mean</span>(df[[y]], <span class="dt">na.rm=</span><span class="ot">TRUE</span>)))</a></code></pre></div>
+<div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb299-1" title="1"><span class="kw">lapply</span>(list.vars.y, <span class="cf">function</span>(y) (<span class="kw">mean</span>(df[[var.x1]], <span class="dt">na.rm=</span><span class="ot">TRUE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb299-2" title="2"><span class="st">                                   </span><span class="kw">mean</span>(df[[y]], <span class="dt">na.rm=</span><span class="ot">TRUE</span>)))</a></code></pre></div>
 <pre><code>## [[1]]
 ## [1] 98.3272
 ## 
@@ -7348,38 +7348,38 @@ NA
 ## 
 ## [[3]]
 ## [1] 26.11226</code></pre>
-<div class="sourceCode" id="cb296"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb296-1" title="1">lapplytwice &lt;-<span class="st"> </span><span class="kw">lapply</span>(</a>
-<a class="sourceLine" id="cb296-2" title="2">  list.vars.x, <span class="cf">function</span>(x) (</a>
-<a class="sourceLine" id="cb296-3" title="3">    <span class="kw">lapply</span>(list.vars.y, <span class="cf">function</span>(y) (<span class="kw">mean</span>(df[[x]], <span class="dt">na.rm=</span><span class="ot">TRUE</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb296-4" title="4"><span class="st">                                       </span><span class="kw">mean</span>(df[[y]], <span class="dt">na.rm=</span><span class="ot">TRUE</span>)))))</a>
-<a class="sourceLine" id="cb296-5" title="5"><span class="co"># lapplytwice</span></a></code></pre></div>
+<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb301-1" title="1">lapplytwice &lt;-<span class="st"> </span><span class="kw">lapply</span>(</a>
+<a class="sourceLine" id="cb301-2" title="2">  list.vars.x, <span class="cf">function</span>(x) (</a>
+<a class="sourceLine" id="cb301-3" title="3">    <span class="kw">lapply</span>(list.vars.y, <span class="cf">function</span>(y) (<span class="kw">mean</span>(df[[x]], <span class="dt">na.rm=</span><span class="ot">TRUE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb301-4" title="4"><span class="st">                                       </span><span class="kw">mean</span>(df[[y]], <span class="dt">na.rm=</span><span class="ot">TRUE</span>)))))</a>
+<a class="sourceLine" id="cb301-5" title="5"><span class="co"># lapplytwice</span></a></code></pre></div>
 </div>
 <div id="nested-lapply-all" class="section level5">
 <h5><span class="header-section-number">5.1.2.4.3</span> Nested Lapply All</h5>
-<div class="sourceCode" id="cb297"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb297-1" title="1">df.reg.out.all &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(</a>
-<a class="sourceLine" id="cb297-2" title="2">  <span class="kw">lapply</span>(list.vars.x,</a>
-<a class="sourceLine" id="cb297-3" title="3">         <span class="cf">function</span>(x) (</a>
-<a class="sourceLine" id="cb297-4" title="4">           <span class="kw">bind_rows</span>(</a>
-<a class="sourceLine" id="cb297-5" title="5">             <span class="kw">lapply</span>(list.vars.y, regf.iv,</a>
-<a class="sourceLine" id="cb297-6" title="6">                    <span class="dt">vars.x=</span>x, <span class="dt">vars.c=</span>vars.c, <span class="dt">vars.z=</span>vars.z, <span class="dt">df=</span>df))</a>
-<a class="sourceLine" id="cb297-7" title="7">         )))</a></code></pre></div>
-<div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb298-1" title="1"><span class="co"># df.reg.out.all %&gt;%</span></a>
-<a class="sourceLine" id="cb298-2" title="2"><span class="co">#   kable() %&gt;%</span></a>
-<a class="sourceLine" id="cb298-3" title="3"><span class="co">#   kable_styling_fc_wide()</span></a></code></pre></div>
+<div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb302-1" title="1">df.reg.out.all &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(</a>
+<a class="sourceLine" id="cb302-2" title="2">  <span class="kw">lapply</span>(list.vars.x,</a>
+<a class="sourceLine" id="cb302-3" title="3">         <span class="cf">function</span>(x) (</a>
+<a class="sourceLine" id="cb302-4" title="4">           <span class="kw">bind_rows</span>(</a>
+<a class="sourceLine" id="cb302-5" title="5">             <span class="kw">lapply</span>(list.vars.y, regf.iv,</a>
+<a class="sourceLine" id="cb302-6" title="6">                    <span class="dt">vars.x=</span>x, <span class="dt">vars.c=</span>vars.c, <span class="dt">vars.z=</span>vars.z, <span class="dt">df=</span>df))</a>
+<a class="sourceLine" id="cb302-7" title="7">         )))</a></code></pre></div>
+<div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb303-1" title="1"><span class="co"># df.reg.out.all %&gt;%</span></a>
+<a class="sourceLine" id="cb303-2" title="2"><span class="co">#   kable() %&gt;%</span></a>
+<a class="sourceLine" id="cb303-3" title="3"><span class="co">#   kable_styling_fc_wide()</span></a></code></pre></div>
 </div>
 <div id="nested-lapply-select" class="section level5">
 <h5><span class="header-section-number">5.1.2.4.4</span> Nested Lapply Select</h5>
-<div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb299-1" title="1">df.reg.out.all &lt;-</a>
-<a class="sourceLine" id="cb299-2" title="2"><span class="st">  </span>(<span class="kw">lapply</span>(list.vars.x,</a>
-<a class="sourceLine" id="cb299-3" title="3">          <span class="cf">function</span>(x) (</a>
-<a class="sourceLine" id="cb299-4" title="4">            <span class="kw">bind_rows</span>(<span class="kw">lapply</span>(list.vars.y, regf.iv,</a>
-<a class="sourceLine" id="cb299-5" title="5">                             <span class="dt">vars.x=</span>x, <span class="dt">vars.c=</span>vars.c, <span class="dt">vars.z=</span>vars.z, <span class="dt">df=</span>df)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb299-6" title="6"><span class="st">              </span><span class="kw">select</span>(vars_var.y, <span class="kw">starts_with</span>(x)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb299-7" title="7"><span class="st">              </span><span class="kw">select</span>(vars_var.y, <span class="kw">ends_with</span>(<span class="st">&#39;value&#39;</span>))</a>
-<a class="sourceLine" id="cb299-8" title="8">          ))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">reduce</span>(full_join)</a></code></pre></div>
-<div class="sourceCode" id="cb300"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb300-1" title="1">df.reg.out.all <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb300-2" title="2"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb300-3" title="3"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb304"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb304-1" title="1">df.reg.out.all &lt;-</a>
+<a class="sourceLine" id="cb304-2" title="2"><span class="st">  </span>(<span class="kw">lapply</span>(list.vars.x,</a>
+<a class="sourceLine" id="cb304-3" title="3">          <span class="cf">function</span>(x) (</a>
+<a class="sourceLine" id="cb304-4" title="4">            <span class="kw">bind_rows</span>(<span class="kw">lapply</span>(list.vars.y, regf.iv,</a>
+<a class="sourceLine" id="cb304-5" title="5">                             <span class="dt">vars.x=</span>x, <span class="dt">vars.c=</span>vars.c, <span class="dt">vars.z=</span>vars.z, <span class="dt">df=</span>df)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb304-6" title="6"><span class="st">              </span><span class="kw">select</span>(vars_var.y, <span class="kw">starts_with</span>(x)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb304-7" title="7"><span class="st">              </span><span class="kw">select</span>(vars_var.y, <span class="kw">ends_with</span>(<span class="st">&#39;value&#39;</span>))</a>
+<a class="sourceLine" id="cb304-8" title="8">          ))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">reduce</span>(full_join)</a></code></pre></div>
+<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb305-1" title="1">df.reg.out.all <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb305-2" title="2"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb305-3" title="3"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -7487,92 +7487,92 @@ vil.id
 <li>Dependency: <em>R4Econ/linreg/ivreg/ivregdfrow.R</em></li>
 </ul>
 <p>The code below does not work with categorical variables (except for dummies). Dummy variable inputs need to be converted to zero/one first. The examples are just to test the code with different types of variables.</p>
-<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb301-1" title="1"><span class="co"># Library</span></a>
-<a class="sourceLine" id="cb301-2" title="2"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb301-3" title="3"><span class="kw">library</span>(AER)</a>
-<a class="sourceLine" id="cb301-4" title="4"></a>
-<a class="sourceLine" id="cb301-5" title="5"><span class="co"># Load Sample Data</span></a>
-<a class="sourceLine" id="cb301-6" title="6"><span class="kw">setwd</span>(<span class="st">&#39;C:/Users/fan/R4Econ/_data/&#39;</span>)</a>
-<a class="sourceLine" id="cb301-7" title="7">df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&#39;height_weight.csv&#39;</span>)</a>
-<a class="sourceLine" id="cb301-8" title="8"></a>
-<a class="sourceLine" id="cb301-9" title="9"><span class="co"># Source Dependency</span></a>
-<a class="sourceLine" id="cb301-10" title="10"><span class="kw">source</span>(<span class="st">&#39;C:/Users/fan/R4Econ/linreg/ivreg/ivregdfrow.R&#39;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb306"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb306-1" title="1"><span class="co"># Library</span></a>
+<a class="sourceLine" id="cb306-2" title="2"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb306-3" title="3"><span class="kw">library</span>(AER)</a>
+<a class="sourceLine" id="cb306-4" title="4"></a>
+<a class="sourceLine" id="cb306-5" title="5"><span class="co"># Load Sample Data</span></a>
+<a class="sourceLine" id="cb306-6" title="6"><span class="kw">setwd</span>(<span class="st">&#39;C:/Users/fan/R4Econ/_data/&#39;</span>)</a>
+<a class="sourceLine" id="cb306-7" title="7">df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&#39;height_weight.csv&#39;</span>)</a>
+<a class="sourceLine" id="cb306-8" title="8"></a>
+<a class="sourceLine" id="cb306-9" title="9"><span class="co"># Source Dependency</span></a>
+<a class="sourceLine" id="cb306-10" title="10"><span class="kw">source</span>(<span class="st">&#39;C:/Users/fan/R4Econ/linreg/ivreg/ivregdfrow.R&#39;</span>)</a></code></pre></div>
 <p>Data Cleaning.</p>
-<div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb302-1" title="1"><span class="co"># Convert Variable for Sex which is categorical to Numeric</span></a>
-<a class="sourceLine" id="cb302-2" title="2">df &lt;-<span class="st"> </span>df</a>
-<a class="sourceLine" id="cb302-3" title="3">df<span class="op">$</span>male &lt;-<span class="st"> </span>(<span class="kw">as.numeric</span>(<span class="kw">factor</span>(df<span class="op">$</span>sex)) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb302-4" title="4"><span class="kw">summary</span>(<span class="kw">factor</span>(df<span class="op">$</span>sex))</a></code></pre></div>
+<div class="sourceCode" id="cb307"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb307-1" title="1"><span class="co"># Convert Variable for Sex which is categorical to Numeric</span></a>
+<a class="sourceLine" id="cb307-2" title="2">df &lt;-<span class="st"> </span>df</a>
+<a class="sourceLine" id="cb307-3" title="3">df<span class="op">$</span>male &lt;-<span class="st"> </span>(<span class="kw">as.numeric</span>(<span class="kw">factor</span>(df<span class="op">$</span>sex)) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb307-4" title="4"><span class="kw">summary</span>(<span class="kw">factor</span>(df<span class="op">$</span>sex))</a></code></pre></div>
 <pre><code>## Female   Male 
 ##  16446  18619</code></pre>
-<div class="sourceCode" id="cb304"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb304-1" title="1"><span class="kw">summary</span>(df<span class="op">$</span>male)</a></code></pre></div>
+<div class="sourceCode" id="cb309"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb309-1" title="1"><span class="kw">summary</span>(df<span class="op">$</span>male)</a></code></pre></div>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##   0.000   0.000   1.000   0.531   1.000   1.000</code></pre>
-<div class="sourceCode" id="cb306"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb306-1" title="1">df.use &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(S.country <span class="op">==</span><span class="st"> &#39;Guatemala&#39;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb306-2" title="2"><span class="st">  </span><span class="kw">filter</span>(svymthRound <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">12</span>, <span class="dv">18</span>, <span class="dv">24</span>))</a>
-<a class="sourceLine" id="cb306-3" title="3"><span class="kw">dim</span>(df.use)</a></code></pre></div>
+<div class="sourceCode" id="cb311"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb311-1" title="1">df.use &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(S.country <span class="op">==</span><span class="st"> &#39;Guatemala&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb311-2" title="2"><span class="st">  </span><span class="kw">filter</span>(svymthRound <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">12</span>, <span class="dv">18</span>, <span class="dv">24</span>))</a>
+<a class="sourceLine" id="cb311-3" title="3"><span class="kw">dim</span>(df.use)</a></code></pre></div>
 <pre><code>## [1] 2022   16</code></pre>
 <p>Setting Up Parameters.</p>
-<div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb308-1" title="1"><span class="co"># Define Left Hand Side Variab les</span></a>
-<a class="sourceLine" id="cb308-2" title="2">var.y1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;hgt&#39;</span>)</a>
-<a class="sourceLine" id="cb308-3" title="3">var.y2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;wgt&#39;</span>)</a>
-<a class="sourceLine" id="cb308-4" title="4">vars.y &lt;-<span class="st"> </span><span class="kw">c</span>(var.y1, var.y2)</a>
-<a class="sourceLine" id="cb308-5" title="5"><span class="co"># Define Right Hand Side Variables</span></a>
-<a class="sourceLine" id="cb308-6" title="6">vars.x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;prot&#39;</span>)</a>
-<a class="sourceLine" id="cb308-7" title="7">vars.c &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;male&#39;</span>, <span class="st">&#39;wgt0&#39;</span>, <span class="st">&#39;hgt0&#39;</span>, <span class="st">&#39;svymthRound&#39;</span>)</a>
-<a class="sourceLine" id="cb308-8" title="8"><span class="co"># vars.z &lt;- c(&#39;p.A.prot&#39;)</span></a>
-<a class="sourceLine" id="cb308-9" title="9">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;vil.id&#39;</span>)</a>
-<a class="sourceLine" id="cb308-10" title="10"><span class="co"># vars.z &lt;- NULL</span></a>
-<a class="sourceLine" id="cb308-11" title="11">vars.xc &lt;-<span class="st"> </span><span class="kw">c</span>(vars.x, vars.c)</a>
-<a class="sourceLine" id="cb308-12" title="12"></a>
-<a class="sourceLine" id="cb308-13" title="13"><span class="co"># Other variables to keep</span></a>
-<a class="sourceLine" id="cb308-14" title="14">vars.other.keep &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;S.country&#39;</span>, <span class="st">&#39;vil.id&#39;</span>, <span class="st">&#39;indi.id&#39;</span>, <span class="st">&#39;svymthRound&#39;</span>)</a>
-<a class="sourceLine" id="cb308-15" title="15"></a>
-<a class="sourceLine" id="cb308-16" title="16"><span class="co"># Decompose sequence</span></a>
-<a class="sourceLine" id="cb308-17" title="17">vars.tomean.first &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;male&#39;</span>, <span class="st">&#39;hgt0&#39;</span>)</a>
-<a class="sourceLine" id="cb308-18" title="18">var.tomean.first.name.suffix &lt;-<span class="st"> &#39;_mh02m&#39;</span></a>
-<a class="sourceLine" id="cb308-19" title="19">vars.tomean.second &lt;-<span class="st"> </span><span class="kw">c</span>(vars.tomean.first, <span class="st">&#39;hgt0&#39;</span>, <span class="st">&#39;wgt0&#39;</span>)</a>
-<a class="sourceLine" id="cb308-20" title="20">var.tomean.second.name.suffix &lt;-<span class="st"> &#39;_mh0me2m&#39;</span></a>
-<a class="sourceLine" id="cb308-21" title="21">vars.tomean.third &lt;-<span class="st"> </span><span class="kw">c</span>(vars.tomean.second, <span class="st">&#39;prot&#39;</span>)</a>
-<a class="sourceLine" id="cb308-22" title="22">var.tomean.third.name.suffix &lt;-<span class="st"> &#39;_mh0mep2m&#39;</span></a>
-<a class="sourceLine" id="cb308-23" title="23">vars.tomean.fourth &lt;-<span class="st"> </span><span class="kw">c</span>(vars.tomean.third, <span class="st">&#39;svymthRound&#39;</span>)</a>
-<a class="sourceLine" id="cb308-24" title="24">var.tomean.fourth.name.suffix &lt;-<span class="st"> &#39;_mh0mepm2m&#39;</span></a>
-<a class="sourceLine" id="cb308-25" title="25">list.vars.tomean =<span class="st"> </span><span class="kw">list</span>(</a>
-<a class="sourceLine" id="cb308-26" title="26"><span class="co">#                         vars.tomean.first,</span></a>
-<a class="sourceLine" id="cb308-27" title="27">                        vars.tomean.second,</a>
-<a class="sourceLine" id="cb308-28" title="28">                        vars.tomean.third,</a>
-<a class="sourceLine" id="cb308-29" title="29">                        vars.tomean.fourth</a>
-<a class="sourceLine" id="cb308-30" title="30">                        )</a>
-<a class="sourceLine" id="cb308-31" title="31">list.vars.tomean.name.suffix &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
-<a class="sourceLine" id="cb308-32" title="32"><span class="co">#                                     var.tomean.first.name.suffix,</span></a>
-<a class="sourceLine" id="cb308-33" title="33">                                     var.tomean.second.name.suffix,</a>
-<a class="sourceLine" id="cb308-34" title="34">                                     var.tomean.third.name.suffix,</a>
-<a class="sourceLine" id="cb308-35" title="35">                                     var.tomean.fourth.name.suffix</a>
-<a class="sourceLine" id="cb308-36" title="36">                                    )</a></code></pre></div>
+<div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb313-1" title="1"><span class="co"># Define Left Hand Side Variab les</span></a>
+<a class="sourceLine" id="cb313-2" title="2">var.y1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;hgt&#39;</span>)</a>
+<a class="sourceLine" id="cb313-3" title="3">var.y2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;wgt&#39;</span>)</a>
+<a class="sourceLine" id="cb313-4" title="4">vars.y &lt;-<span class="st"> </span><span class="kw">c</span>(var.y1, var.y2)</a>
+<a class="sourceLine" id="cb313-5" title="5"><span class="co"># Define Right Hand Side Variables</span></a>
+<a class="sourceLine" id="cb313-6" title="6">vars.x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;prot&#39;</span>)</a>
+<a class="sourceLine" id="cb313-7" title="7">vars.c &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;male&#39;</span>, <span class="st">&#39;wgt0&#39;</span>, <span class="st">&#39;hgt0&#39;</span>, <span class="st">&#39;svymthRound&#39;</span>)</a>
+<a class="sourceLine" id="cb313-8" title="8"><span class="co"># vars.z &lt;- c(&#39;p.A.prot&#39;)</span></a>
+<a class="sourceLine" id="cb313-9" title="9">vars.z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;vil.id&#39;</span>)</a>
+<a class="sourceLine" id="cb313-10" title="10"><span class="co"># vars.z &lt;- NULL</span></a>
+<a class="sourceLine" id="cb313-11" title="11">vars.xc &lt;-<span class="st"> </span><span class="kw">c</span>(vars.x, vars.c)</a>
+<a class="sourceLine" id="cb313-12" title="12"></a>
+<a class="sourceLine" id="cb313-13" title="13"><span class="co"># Other variables to keep</span></a>
+<a class="sourceLine" id="cb313-14" title="14">vars.other.keep &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;S.country&#39;</span>, <span class="st">&#39;vil.id&#39;</span>, <span class="st">&#39;indi.id&#39;</span>, <span class="st">&#39;svymthRound&#39;</span>)</a>
+<a class="sourceLine" id="cb313-15" title="15"></a>
+<a class="sourceLine" id="cb313-16" title="16"><span class="co"># Decompose sequence</span></a>
+<a class="sourceLine" id="cb313-17" title="17">vars.tomean.first &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;male&#39;</span>, <span class="st">&#39;hgt0&#39;</span>)</a>
+<a class="sourceLine" id="cb313-18" title="18">var.tomean.first.name.suffix &lt;-<span class="st"> &#39;_mh02m&#39;</span></a>
+<a class="sourceLine" id="cb313-19" title="19">vars.tomean.second &lt;-<span class="st"> </span><span class="kw">c</span>(vars.tomean.first, <span class="st">&#39;hgt0&#39;</span>, <span class="st">&#39;wgt0&#39;</span>)</a>
+<a class="sourceLine" id="cb313-20" title="20">var.tomean.second.name.suffix &lt;-<span class="st"> &#39;_mh0me2m&#39;</span></a>
+<a class="sourceLine" id="cb313-21" title="21">vars.tomean.third &lt;-<span class="st"> </span><span class="kw">c</span>(vars.tomean.second, <span class="st">&#39;prot&#39;</span>)</a>
+<a class="sourceLine" id="cb313-22" title="22">var.tomean.third.name.suffix &lt;-<span class="st"> &#39;_mh0mep2m&#39;</span></a>
+<a class="sourceLine" id="cb313-23" title="23">vars.tomean.fourth &lt;-<span class="st"> </span><span class="kw">c</span>(vars.tomean.third, <span class="st">&#39;svymthRound&#39;</span>)</a>
+<a class="sourceLine" id="cb313-24" title="24">var.tomean.fourth.name.suffix &lt;-<span class="st"> &#39;_mh0mepm2m&#39;</span></a>
+<a class="sourceLine" id="cb313-25" title="25">list.vars.tomean =<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb313-26" title="26"><span class="co">#                         vars.tomean.first,</span></a>
+<a class="sourceLine" id="cb313-27" title="27">                        vars.tomean.second,</a>
+<a class="sourceLine" id="cb313-28" title="28">                        vars.tomean.third,</a>
+<a class="sourceLine" id="cb313-29" title="29">                        vars.tomean.fourth</a>
+<a class="sourceLine" id="cb313-30" title="30">                        )</a>
+<a class="sourceLine" id="cb313-31" title="31">list.vars.tomean.name.suffix &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb313-32" title="32"><span class="co">#                                     var.tomean.first.name.suffix,</span></a>
+<a class="sourceLine" id="cb313-33" title="33">                                     var.tomean.second.name.suffix,</a>
+<a class="sourceLine" id="cb313-34" title="34">                                     var.tomean.third.name.suffix,</a>
+<a class="sourceLine" id="cb313-35" title="35">                                     var.tomean.fourth.name.suffix</a>
+<a class="sourceLine" id="cb313-36" title="36">                                    )</a></code></pre></div>
 <div id="obtain-regression-coefficients-from-somewhere" class="section level4">
 <h4><span class="header-section-number">5.2.1.1</span> Obtain Regression Coefficients from somewhere</h4>
-<div class="sourceCode" id="cb309"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb309-1" title="1"><span class="co"># Regressions</span></a>
-<a class="sourceLine" id="cb309-2" title="2"><span class="co"># regf.iv from C:\Users\fan\R4Econ\linreg\ivreg\ivregdfrow.R</span></a>
-<a class="sourceLine" id="cb309-3" title="3">df.reg.out &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(</a>
-<a class="sourceLine" id="cb309-4" title="4">  <span class="kw">bind_rows</span>(<span class="kw">lapply</span>(vars.y, regf.iv,</a>
-<a class="sourceLine" id="cb309-5" title="5">                   <span class="dt">vars.x=</span>vars.x, <span class="dt">vars.c=</span>vars.c, <span class="dt">vars.z=</span>vars.z, <span class="dt">df=</span>df)))</a>
-<a class="sourceLine" id="cb309-6" title="6"><span class="co"># Regressions</span></a>
-<a class="sourceLine" id="cb309-7" title="7"><span class="co"># reg1 &lt;- regf.iv(var.y = var.y1, vars.x, vars.c, vars.z, df.use)</span></a>
-<a class="sourceLine" id="cb309-8" title="8"><span class="co"># reg2 &lt;- regf.iv(var.y = var.y2, vars.x, vars.c, vars.z, df.use)</span></a>
-<a class="sourceLine" id="cb309-9" title="9"><span class="co"># df.reg.out &lt;- as_tibble(bind_rows(reg1, reg2))</span></a></code></pre></div>
-<div class="sourceCode" id="cb310"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb310-1" title="1"><span class="co"># df.reg.out</span></a></code></pre></div>
-<div class="sourceCode" id="cb311"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb311-1" title="1"><span class="co"># Select Variables</span></a>
-<a class="sourceLine" id="cb311-2" title="2">str.esti.suffix &lt;-<span class="st"> &#39;_Estimate&#39;</span></a>
-<a class="sourceLine" id="cb311-3" title="3">arr.esti.name &lt;-<span class="st"> </span><span class="kw">paste0</span>(vars.xc, str.esti.suffix)</a>
-<a class="sourceLine" id="cb311-4" title="4">str.outcome.name &lt;-<span class="st"> &#39;vars_var.y&#39;</span></a>
-<a class="sourceLine" id="cb311-5" title="5">arr.columns2select &lt;-<span class="st"> </span><span class="kw">c</span>(arr.esti.name, str.outcome.name)</a>
-<a class="sourceLine" id="cb311-6" title="6">arr.columns2select</a></code></pre></div>
+<div class="sourceCode" id="cb314"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb314-1" title="1"><span class="co"># Regressions</span></a>
+<a class="sourceLine" id="cb314-2" title="2"><span class="co"># regf.iv from C:\Users\fan\R4Econ\linreg\ivreg\ivregdfrow.R</span></a>
+<a class="sourceLine" id="cb314-3" title="3">df.reg.out &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(</a>
+<a class="sourceLine" id="cb314-4" title="4">  <span class="kw">bind_rows</span>(<span class="kw">lapply</span>(vars.y, regf.iv,</a>
+<a class="sourceLine" id="cb314-5" title="5">                   <span class="dt">vars.x=</span>vars.x, <span class="dt">vars.c=</span>vars.c, <span class="dt">vars.z=</span>vars.z, <span class="dt">df=</span>df)))</a>
+<a class="sourceLine" id="cb314-6" title="6"><span class="co"># Regressions</span></a>
+<a class="sourceLine" id="cb314-7" title="7"><span class="co"># reg1 &lt;- regf.iv(var.y = var.y1, vars.x, vars.c, vars.z, df.use)</span></a>
+<a class="sourceLine" id="cb314-8" title="8"><span class="co"># reg2 &lt;- regf.iv(var.y = var.y2, vars.x, vars.c, vars.z, df.use)</span></a>
+<a class="sourceLine" id="cb314-9" title="9"><span class="co"># df.reg.out &lt;- as_tibble(bind_rows(reg1, reg2))</span></a></code></pre></div>
+<div class="sourceCode" id="cb315"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb315-1" title="1"><span class="co"># df.reg.out</span></a></code></pre></div>
+<div class="sourceCode" id="cb316"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb316-1" title="1"><span class="co"># Select Variables</span></a>
+<a class="sourceLine" id="cb316-2" title="2">str.esti.suffix &lt;-<span class="st"> &#39;_Estimate&#39;</span></a>
+<a class="sourceLine" id="cb316-3" title="3">arr.esti.name &lt;-<span class="st"> </span><span class="kw">paste0</span>(vars.xc, str.esti.suffix)</a>
+<a class="sourceLine" id="cb316-4" title="4">str.outcome.name &lt;-<span class="st"> &#39;vars_var.y&#39;</span></a>
+<a class="sourceLine" id="cb316-5" title="5">arr.columns2select &lt;-<span class="st"> </span><span class="kw">c</span>(arr.esti.name, str.outcome.name)</a>
+<a class="sourceLine" id="cb316-6" title="6">arr.columns2select</a></code></pre></div>
 <pre><code>## [1] &quot;prot_Estimate&quot;        &quot;male_Estimate&quot;        &quot;wgt0_Estimate&quot;        &quot;hgt0_Estimate&quot;        &quot;svymthRound_Estimate&quot; &quot;vars_var.y&quot;</code></pre>
-<div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb313-1" title="1"><span class="co"># Generate dataframe for coefficients</span></a>
-<a class="sourceLine" id="cb313-2" title="2">df.coef &lt;-<span class="st"> </span>df.reg.out[,<span class="kw">c</span>(arr.columns2select)] <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb313-3" title="3"><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(arr.esti.name), as.numeric) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">column_to_rownames</span>(str.outcome.name)</a>
-<a class="sourceLine" id="cb313-4" title="4">df.coef <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb313-5" title="5"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb313-6" title="6"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb318"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb318-1" title="1"><span class="co"># Generate dataframe for coefficients</span></a>
+<a class="sourceLine" id="cb318-2" title="2">df.coef &lt;-<span class="st"> </span>df.reg.out[,<span class="kw">c</span>(arr.columns2select)] <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb318-3" title="3"><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(arr.esti.name), as.numeric) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">column_to_rownames</span>(str.outcome.name)</a>
+<a class="sourceLine" id="cb318-4" title="4">df.coef <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb318-5" title="5"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb318-6" title="6"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -7638,7 +7638,7 @@ wgt
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb314"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb314-1" title="1"><span class="kw">str</span>(df.coef)</a></code></pre></div>
+<div class="sourceCode" id="cb319"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb319-1" title="1"><span class="kw">str</span>(df.coef)</a></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    2 obs. of  5 variables:
 ##  $ prot_Estimate       : num  -0.271 -59.073
 ##  $ male_Estimate       : num  1.24 489.85
@@ -7648,18 +7648,18 @@ wgt
 </div>
 <div id="decomposition-step-1" class="section level4">
 <h4><span class="header-section-number">5.2.1.2</span> Decomposition Step 1</h4>
-<div class="sourceCode" id="cb316"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb316-1" title="1"><span class="co"># Decomposition Step 1: gather</span></a>
-<a class="sourceLine" id="cb316-2" title="2">df.decompose_step1 &lt;-<span class="st"> </span>df.use <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb316-3" title="3"><span class="st">                        </span><span class="kw">filter</span>(svymthRound <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">12</span>, <span class="dv">18</span>, <span class="dv">24</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb316-4" title="4"><span class="st">                        </span><span class="kw">select</span>(<span class="kw">one_of</span>(<span class="kw">c</span>(vars.other.keep, vars.xc, vars.y))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb316-5" title="5"><span class="st">                        </span><span class="kw">drop_na</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb316-6" title="6"><span class="st">                        </span><span class="kw">gather</span>(variable, value, <span class="op">-</span><span class="kw">one_of</span>(<span class="kw">c</span>(vars.other.keep, vars.xc)))</a>
-<a class="sourceLine" id="cb316-7" title="7"><span class="kw">options</span>(<span class="dt">repr.matrix.max.rows=</span><span class="dv">20</span>, <span class="dt">repr.matrix.max.cols=</span><span class="dv">20</span>)</a>
-<a class="sourceLine" id="cb316-8" title="8"><span class="kw">dim</span>(df.decompose_step1)</a></code></pre></div>
+<div class="sourceCode" id="cb321"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb321-1" title="1"><span class="co"># Decomposition Step 1: gather</span></a>
+<a class="sourceLine" id="cb321-2" title="2">df.decompose_step1 &lt;-<span class="st"> </span>df.use <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb321-3" title="3"><span class="st">                        </span><span class="kw">filter</span>(svymthRound <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">12</span>, <span class="dv">18</span>, <span class="dv">24</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb321-4" title="4"><span class="st">                        </span><span class="kw">select</span>(<span class="kw">one_of</span>(<span class="kw">c</span>(vars.other.keep, vars.xc, vars.y))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb321-5" title="5"><span class="st">                        </span><span class="kw">drop_na</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb321-6" title="6"><span class="st">                        </span><span class="kw">gather</span>(variable, value, <span class="op">-</span><span class="kw">one_of</span>(<span class="kw">c</span>(vars.other.keep, vars.xc)))</a>
+<a class="sourceLine" id="cb321-7" title="7"><span class="kw">options</span>(<span class="dt">repr.matrix.max.rows=</span><span class="dv">20</span>, <span class="dt">repr.matrix.max.cols=</span><span class="dv">20</span>)</a>
+<a class="sourceLine" id="cb321-8" title="8"><span class="kw">dim</span>(df.decompose_step1)</a></code></pre></div>
 <pre><code>## [1] 1382   10</code></pre>
-<div class="sourceCode" id="cb318"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb318-1" title="1"><span class="kw">head</span>(df.decompose_step1, <span class="dv">10</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb318-2" title="2"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb318-3" title="3"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb323"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb323-1" title="1"><span class="kw">head</span>(df.decompose_step1, <span class="dv">10</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb323-2" title="2"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb323-3" title="3"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -8021,19 +8021,19 @@ hgt
 </div>
 <div id="decomposition-step-2" class="section level4">
 <h4><span class="header-section-number">5.2.1.3</span> Decomposition Step 2</h4>
-<div class="sourceCode" id="cb319"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb319-1" title="1"><span class="co"># Decomposition Step 2: mutate_at(vars, funs(mean = mean(.)))</span></a>
-<a class="sourceLine" id="cb319-2" title="2"><span class="co"># the xc averaging could have taken place earlier, no difference in mean across variables</span></a>
-<a class="sourceLine" id="cb319-3" title="3">df.decompose_step2 &lt;-<span class="st"> </span>df.decompose_step1 <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb319-4" title="4"><span class="st">                        </span><span class="kw">group_by</span>(variable) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb319-5" title="5"><span class="st">                        </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(<span class="kw">c</span>(vars.xc, <span class="st">&#39;value&#39;</span>)), <span class="kw">funs</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(.))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb319-6" title="6"><span class="st">                        </span><span class="kw">ungroup</span>()</a>
-<a class="sourceLine" id="cb319-7" title="7"></a>
-<a class="sourceLine" id="cb319-8" title="8"><span class="kw">options</span>(<span class="dt">repr.matrix.max.rows=</span><span class="dv">20</span>, <span class="dt">repr.matrix.max.cols=</span><span class="dv">20</span>)</a>
-<a class="sourceLine" id="cb319-9" title="9"><span class="kw">dim</span>(df.decompose_step2)</a></code></pre></div>
+<div class="sourceCode" id="cb324"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb324-1" title="1"><span class="co"># Decomposition Step 2: mutate_at(vars, funs(mean = mean(.)))</span></a>
+<a class="sourceLine" id="cb324-2" title="2"><span class="co"># the xc averaging could have taken place earlier, no difference in mean across variables</span></a>
+<a class="sourceLine" id="cb324-3" title="3">df.decompose_step2 &lt;-<span class="st"> </span>df.decompose_step1 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb324-4" title="4"><span class="st">                        </span><span class="kw">group_by</span>(variable) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb324-5" title="5"><span class="st">                        </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(<span class="kw">c</span>(vars.xc, <span class="st">&#39;value&#39;</span>)), <span class="kw">funs</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(.))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb324-6" title="6"><span class="st">                        </span><span class="kw">ungroup</span>()</a>
+<a class="sourceLine" id="cb324-7" title="7"></a>
+<a class="sourceLine" id="cb324-8" title="8"><span class="kw">options</span>(<span class="dt">repr.matrix.max.rows=</span><span class="dv">20</span>, <span class="dt">repr.matrix.max.cols=</span><span class="dv">20</span>)</a>
+<a class="sourceLine" id="cb324-9" title="9"><span class="kw">dim</span>(df.decompose_step2)</a></code></pre></div>
 <pre><code>## [1] 1382   16</code></pre>
-<div class="sourceCode" id="cb321"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb321-1" title="1"><span class="kw">head</span>(df.decompose_step2,<span class="dv">10</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb321-2" title="2"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb321-3" title="3"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb326"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb326-1" title="1"><span class="kw">head</span>(df.decompose_step2,<span class="dv">10</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb326-2" title="2"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb326-3" title="3"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -8595,31 +8595,31 @@ hgt
 </div>
 <div id="decomposition-step-3-non-loop" class="section level4">
 <h4><span class="header-section-number">5.2.1.4</span> Decomposition Step 3 Non-Loop</h4>
-<div class="sourceCode" id="cb322"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb322-1" title="1">ff_lr_decompose_valadj &lt;-<span class="st"> </span><span class="cf">function</span>(df, df.coef, vars.tomean, str.esti.suffix) {</a>
-<a class="sourceLine" id="cb322-2" title="2">  new_value &lt;-<span class="st"> </span>(df<span class="op">$</span>value <span class="op">+</span></a>
-<a class="sourceLine" id="cb322-3" title="3"><span class="st">                  </span><span class="kw">rowSums</span>((df[<span class="kw">paste0</span>(vars.tomean, <span class="st">&#39;_mean&#39;</span>)] <span class="op">-</span><span class="st"> </span>df[vars.tomean])</a>
-<a class="sourceLine" id="cb322-4" title="4">                          <span class="op">*</span>df.coef[df<span class="op">$</span>variable, <span class="kw">paste0</span>(vars.tomean, str.esti.suffix)]))</a>
-<a class="sourceLine" id="cb322-5" title="5">  <span class="kw">return</span>(new_value)</a>
-<a class="sourceLine" id="cb322-6" title="6">}</a></code></pre></div>
+<div class="sourceCode" id="cb327"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb327-1" title="1">ff_lr_decompose_valadj &lt;-<span class="st"> </span><span class="cf">function</span>(df, df.coef, vars.tomean, str.esti.suffix) {</a>
+<a class="sourceLine" id="cb327-2" title="2">  new_value &lt;-<span class="st"> </span>(df<span class="op">$</span>value <span class="op">+</span></a>
+<a class="sourceLine" id="cb327-3" title="3"><span class="st">                  </span><span class="kw">rowSums</span>((df[<span class="kw">paste0</span>(vars.tomean, <span class="st">&#39;_mean&#39;</span>)] <span class="op">-</span><span class="st"> </span>df[vars.tomean])</a>
+<a class="sourceLine" id="cb327-4" title="4">                          <span class="op">*</span>df.coef[df<span class="op">$</span>variable, <span class="kw">paste0</span>(vars.tomean, str.esti.suffix)]))</a>
+<a class="sourceLine" id="cb327-5" title="5">  <span class="kw">return</span>(new_value)</a>
+<a class="sourceLine" id="cb327-6" title="6">}</a></code></pre></div>
 </div>
 <div id="decomposition-step-3-with-loop" class="section level4">
 <h4><span class="header-section-number">5.2.1.5</span> Decomposition Step 3 With Loop</h4>
-<div class="sourceCode" id="cb323"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb323-1" title="1">df.decompose_step3 &lt;-<span class="st"> </span>df.decompose_step2</a>
-<a class="sourceLine" id="cb323-2" title="2"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(list.vars.tomean)) {</a>
-<a class="sourceLine" id="cb323-3" title="3">    var.decomp.cur &lt;-<span class="st"> </span>(<span class="kw">paste0</span>(<span class="st">&#39;value&#39;</span>, list.vars.tomean.name.suffix[[i]]))</a>
-<a class="sourceLine" id="cb323-4" title="4">    vars.tomean &lt;-<span class="st"> </span>list.vars.tomean[[i]]</a>
-<a class="sourceLine" id="cb323-5" title="5">    var.decomp.cur</a>
-<a class="sourceLine" id="cb323-6" title="6">    df.decompose_step3 &lt;-<span class="st"> </span>df.decompose_step3 <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb323-7" title="7"><span class="st">      </span><span class="kw">mutate</span>((<span class="op">!!</span>var.decomp.cur) <span class="op">:</span><span class="er">=</span></a>
-<a class="sourceLine" id="cb323-8" title="8"><span class="st">               </span><span class="kw">ff_lr_decompose_valadj</span>(., df.coef, vars.tomean, str.esti.suffix))</a>
-<a class="sourceLine" id="cb323-9" title="9"></a>
-<a class="sourceLine" id="cb323-10" title="10">}</a>
-<a class="sourceLine" id="cb323-11" title="11"></a>
-<a class="sourceLine" id="cb323-12" title="12"><span class="kw">dim</span>(df.decompose_step3)</a></code></pre></div>
+<div class="sourceCode" id="cb328"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb328-1" title="1">df.decompose_step3 &lt;-<span class="st"> </span>df.decompose_step2</a>
+<a class="sourceLine" id="cb328-2" title="2"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(list.vars.tomean)) {</a>
+<a class="sourceLine" id="cb328-3" title="3">    var.decomp.cur &lt;-<span class="st"> </span>(<span class="kw">paste0</span>(<span class="st">&#39;value&#39;</span>, list.vars.tomean.name.suffix[[i]]))</a>
+<a class="sourceLine" id="cb328-4" title="4">    vars.tomean &lt;-<span class="st"> </span>list.vars.tomean[[i]]</a>
+<a class="sourceLine" id="cb328-5" title="5">    var.decomp.cur</a>
+<a class="sourceLine" id="cb328-6" title="6">    df.decompose_step3 &lt;-<span class="st"> </span>df.decompose_step3 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb328-7" title="7"><span class="st">      </span><span class="kw">mutate</span>((<span class="op">!!</span>var.decomp.cur) <span class="op">:</span><span class="er">=</span></a>
+<a class="sourceLine" id="cb328-8" title="8"><span class="st">               </span><span class="kw">ff_lr_decompose_valadj</span>(., df.coef, vars.tomean, str.esti.suffix))</a>
+<a class="sourceLine" id="cb328-9" title="9"></a>
+<a class="sourceLine" id="cb328-10" title="10">}</a>
+<a class="sourceLine" id="cb328-11" title="11"></a>
+<a class="sourceLine" id="cb328-12" title="12"><span class="kw">dim</span>(df.decompose_step3)</a></code></pre></div>
 <pre><code>## [1] 1382   19</code></pre>
-<div class="sourceCode" id="cb325"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb325-1" title="1"><span class="kw">head</span>(df.decompose_step3, <span class="dv">10</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb325-2" title="2"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb325-3" title="3"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb330"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb330-1" title="1"><span class="kw">head</span>(df.decompose_step3, <span class="dv">10</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb330-2" title="2"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb330-3" title="3"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -9280,15 +9280,15 @@ hgt
 </div>
 <div id="decomposition-step-4-variance" class="section level4">
 <h4><span class="header-section-number">5.2.1.6</span> Decomposition Step 4 Variance</h4>
-<div class="sourceCode" id="cb326"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb326-1" title="1">df.decompose_step3 <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb326-2" title="2"><span class="st">        </span><span class="kw">select</span>(variable, <span class="kw">contains</span>(<span class="st">&#39;value&#39;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb326-3" title="3"><span class="st">        </span><span class="kw">group_by</span>(variable) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb326-4" title="4"><span class="st">        </span><span class="kw">summarize_all</span>(<span class="kw">funs</span>(<span class="dt">mean =</span> mean, <span class="dt">var =</span> var)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb326-5" title="5"><span class="st">        </span><span class="kw">select</span>(<span class="kw">matches</span>(<span class="st">&#39;value&#39;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">ends_with</span>(<span class="st">&quot;_var&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb326-6" title="6"><span class="st">        </span><span class="kw">mutate_if</span>(is.numeric, <span class="kw">funs</span>( <span class="dt">frac =</span> (.<span class="op">/</span>value_var))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb326-7" title="7"><span class="st">        </span><span class="kw">mutate_if</span>(is.numeric, round, <span class="dv">3</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb326-8" title="8"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb326-9" title="9"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb331"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb331-1" title="1">df.decompose_step3 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb331-2" title="2"><span class="st">        </span><span class="kw">select</span>(variable, <span class="kw">contains</span>(<span class="st">&#39;value&#39;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb331-3" title="3"><span class="st">        </span><span class="kw">group_by</span>(variable) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb331-4" title="4"><span class="st">        </span><span class="kw">summarize_all</span>(<span class="kw">funs</span>(<span class="dt">mean =</span> mean, <span class="dt">var =</span> var)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb331-5" title="5"><span class="st">        </span><span class="kw">select</span>(<span class="kw">matches</span>(<span class="st">&#39;value&#39;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">ends_with</span>(<span class="st">&quot;_var&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb331-6" title="6"><span class="st">        </span><span class="kw">mutate_if</span>(is.numeric, <span class="kw">funs</span>( <span class="dt">frac =</span> (.<span class="op">/</span>value_var))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb331-7" title="7"><span class="st">        </span><span class="kw">mutate_if</span>(is.numeric, round, <span class="dv">3</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb331-8" title="8"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb331-9" title="9"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -9397,10 +9397,10 @@ NA
 <div id="graphical-results" class="section level4">
 <h4><span class="header-section-number">5.2.1.7</span> Graphical Results</h4>
 <p>Graphically, difficult to pick up exact differences in variance, a 50 percent reduction in variance visually does not look like 50 percent. Intuitively, we are kind of seeing standard deviation, not variance on the graph if we think abou the x-scale.</p>
-<div class="sourceCode" id="cb327"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb327-1" title="1"><span class="kw">head</span>(df.decompose_step3 <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb327-2" title="2"><span class="st">    </span><span class="kw">select</span>(variable, <span class="kw">contains</span>(<span class="st">&#39;value&#39;</span>), <span class="op">-</span>value_mean), <span class="dv">10</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb327-3" title="3"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb327-4" title="4"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb332"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb332-1" title="1"><span class="kw">head</span>(df.decompose_step3 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb332-2" title="2"><span class="st">    </span><span class="kw">select</span>(variable, <span class="kw">contains</span>(<span class="st">&#39;value&#39;</span>), <span class="op">-</span>value_mean), <span class="dv">10</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb332-3" title="3"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb332-4" title="4"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -9594,34 +9594,34 @@ hgt
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb328"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb328-1" title="1">df.decompose_step3 <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb328-2" title="2"><span class="st">    </span><span class="kw">select</span>(variable, <span class="kw">contains</span>(<span class="st">&#39;value&#39;</span>), <span class="op">-</span>value_mean) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb328-3" title="3"><span class="st">    </span><span class="kw">rename</span>(<span class="dt">outcome =</span> variable) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb328-4" title="4"><span class="st">    </span><span class="kw">gather</span>(variable, value, <span class="op">-</span>outcome) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb328-5" title="5"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>value, <span class="dt">color =</span> variable, <span class="dt">fill =</span> variable)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb328-6" title="6"><span class="st">        </span><span class="kw">geom_line</span>(<span class="dt">stat =</span> <span class="st">&quot;density&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb328-7" title="7"><span class="st">        </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>outcome, <span class="dt">scales=</span><span class="st">&#39;free&#39;</span>, <span class="dt">nrow=</span><span class="dv">2</span>)</a></code></pre></div>
-<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-143-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb333"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb333-1" title="1">df.decompose_step3 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb333-2" title="2"><span class="st">    </span><span class="kw">select</span>(variable, <span class="kw">contains</span>(<span class="st">&#39;value&#39;</span>), <span class="op">-</span>value_mean) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb333-3" title="3"><span class="st">    </span><span class="kw">rename</span>(<span class="dt">outcome =</span> variable) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb333-4" title="4"><span class="st">    </span><span class="kw">gather</span>(variable, value, <span class="op">-</span>outcome) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb333-5" title="5"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>value, <span class="dt">color =</span> variable, <span class="dt">fill =</span> variable)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb333-6" title="6"><span class="st">        </span><span class="kw">geom_line</span>(<span class="dt">stat =</span> <span class="st">&quot;density&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb333-7" title="7"><span class="st">        </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>outcome, <span class="dt">scales=</span><span class="st">&#39;free&#39;</span>, <span class="dt">nrow=</span><span class="dv">2</span>)</a></code></pre></div>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-147-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="additional-decomposition-testings" class="section level4">
 <h4><span class="header-section-number">5.2.1.8</span> Additional Decomposition Testings</h4>
-<div class="sourceCode" id="cb329"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb329-1" title="1"><span class="kw">head</span>(df.decompose_step2[vars.tomean.first],<span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb329-2" title="2"><span class="kw">head</span>(df.decompose_step2[<span class="kw">paste0</span>(vars.tomean.first, <span class="st">&#39;_mean&#39;</span>)], <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb329-3" title="3"><span class="kw">head</span>(df.coef[df.decompose_step2<span class="op">$</span>variable,</a>
-<a class="sourceLine" id="cb329-4" title="4">             <span class="kw">paste0</span>(vars.tomean.first, str.esti.suffix)], <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb329-5" title="5">df.decompose.tomean.first &lt;-<span class="st"> </span>df.decompose_step2 <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb329-6" title="6"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">pred_new =</span> df.decompose_step2<span class="op">$</span>value <span class="op">+</span></a>
-<a class="sourceLine" id="cb329-7" title="7"><span class="st">        </span><span class="kw">rowSums</span>((df.decompose_step2[<span class="kw">paste0</span>(vars.tomean.first, <span class="st">&#39;_mean&#39;</span>)]</a>
-<a class="sourceLine" id="cb329-8" title="8">                 <span class="op">-</span><span class="st"> </span>df.decompose_step2[vars.tomean.first])</a>
-<a class="sourceLine" id="cb329-9" title="9">            <span class="op">*</span>df.coef[df.decompose_step2<span class="op">$</span>variable,</a>
-<a class="sourceLine" id="cb329-10" title="10">                     <span class="kw">paste0</span>(vars.tomean.first, str.esti.suffix)])) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb329-11" title="11"><span class="st">        </span><span class="kw">select</span>(variable, value, pred_new)</a>
-<a class="sourceLine" id="cb329-12" title="12"><span class="kw">head</span>(df.decompose.tomean.first, <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb329-13" title="13">df.decompose.tomean.first <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb329-14" title="14"><span class="st">        </span><span class="kw">group_by</span>(variable) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb329-15" title="15"><span class="st">        </span><span class="kw">summarize_all</span>(<span class="kw">funs</span>(<span class="dt">mean =</span> mean, <span class="dt">sd =</span> sd))  <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb329-16" title="16"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb329-17" title="17"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb334"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb334-1" title="1"><span class="kw">head</span>(df.decompose_step2[vars.tomean.first],<span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb334-2" title="2"><span class="kw">head</span>(df.decompose_step2[<span class="kw">paste0</span>(vars.tomean.first, <span class="st">&#39;_mean&#39;</span>)], <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb334-3" title="3"><span class="kw">head</span>(df.coef[df.decompose_step2<span class="op">$</span>variable,</a>
+<a class="sourceLine" id="cb334-4" title="4">             <span class="kw">paste0</span>(vars.tomean.first, str.esti.suffix)], <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb334-5" title="5">df.decompose.tomean.first &lt;-<span class="st"> </span>df.decompose_step2 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb334-6" title="6"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">pred_new =</span> df.decompose_step2<span class="op">$</span>value <span class="op">+</span></a>
+<a class="sourceLine" id="cb334-7" title="7"><span class="st">        </span><span class="kw">rowSums</span>((df.decompose_step2[<span class="kw">paste0</span>(vars.tomean.first, <span class="st">&#39;_mean&#39;</span>)]</a>
+<a class="sourceLine" id="cb334-8" title="8">                 <span class="op">-</span><span class="st"> </span>df.decompose_step2[vars.tomean.first])</a>
+<a class="sourceLine" id="cb334-9" title="9">            <span class="op">*</span>df.coef[df.decompose_step2<span class="op">$</span>variable,</a>
+<a class="sourceLine" id="cb334-10" title="10">                     <span class="kw">paste0</span>(vars.tomean.first, str.esti.suffix)])) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb334-11" title="11"><span class="st">        </span><span class="kw">select</span>(variable, value, pred_new)</a>
+<a class="sourceLine" id="cb334-12" title="12"><span class="kw">head</span>(df.decompose.tomean.first, <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb334-13" title="13">df.decompose.tomean.first <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb334-14" title="14"><span class="st">        </span><span class="kw">group_by</span>(variable) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb334-15" title="15"><span class="st">        </span><span class="kw">summarize_all</span>(<span class="kw">funs</span>(<span class="dt">mean =</span> mean, <span class="dt">sd =</span> sd))  <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb334-16" title="16"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb334-17" title="17"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -9680,18 +9680,18 @@ wgt
 </tbody>
 </table>
 <p>Note the r-square from regression above matches up with the 1 - ratio below. This is the proper decomposition method that is equivalent to r2.</p>
-<div class="sourceCode" id="cb330"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb330-1" title="1">df.decompose_step2 <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb330-2" title="2"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">pred_new =</span> df.decompose_step2<span class="op">$</span>value <span class="op">+</span></a>
-<a class="sourceLine" id="cb330-3" title="3"><span class="st">        </span><span class="kw">rowSums</span>((df.decompose_step2[<span class="kw">paste0</span>(vars.tomean.second, <span class="st">&#39;_mean&#39;</span>)]</a>
-<a class="sourceLine" id="cb330-4" title="4">                 <span class="op">-</span><span class="st"> </span>df.decompose_step2[vars.tomean.second])</a>
-<a class="sourceLine" id="cb330-5" title="5">            <span class="op">*</span>df.coef[df.decompose_step2<span class="op">$</span>variable,</a>
-<a class="sourceLine" id="cb330-6" title="6">                     <span class="kw">paste0</span>(vars.tomean.second, str.esti.suffix)])) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb330-7" title="7"><span class="st">        </span><span class="kw">select</span>(variable, value, pred_new) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb330-8" title="8"><span class="st">        </span><span class="kw">group_by</span>(variable) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb330-9" title="9"><span class="st">        </span><span class="kw">summarize_all</span>(<span class="kw">funs</span>(<span class="dt">mean =</span> mean, <span class="dt">var =</span> var)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb330-10" title="10"><span class="st">        </span><span class="kw">mutate</span>(<span class="dt">ratio =</span> (pred_new_var<span class="op">/</span>value_var))  <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb330-11" title="11"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb330-12" title="12"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb335"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb335-1" title="1">df.decompose_step2 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb335-2" title="2"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">pred_new =</span> df.decompose_step2<span class="op">$</span>value <span class="op">+</span></a>
+<a class="sourceLine" id="cb335-3" title="3"><span class="st">        </span><span class="kw">rowSums</span>((df.decompose_step2[<span class="kw">paste0</span>(vars.tomean.second, <span class="st">&#39;_mean&#39;</span>)]</a>
+<a class="sourceLine" id="cb335-4" title="4">                 <span class="op">-</span><span class="st"> </span>df.decompose_step2[vars.tomean.second])</a>
+<a class="sourceLine" id="cb335-5" title="5">            <span class="op">*</span>df.coef[df.decompose_step2<span class="op">$</span>variable,</a>
+<a class="sourceLine" id="cb335-6" title="6">                     <span class="kw">paste0</span>(vars.tomean.second, str.esti.suffix)])) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb335-7" title="7"><span class="st">        </span><span class="kw">select</span>(variable, value, pred_new) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb335-8" title="8"><span class="st">        </span><span class="kw">group_by</span>(variable) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb335-9" title="9"><span class="st">        </span><span class="kw">summarize_all</span>(<span class="kw">funs</span>(<span class="dt">mean =</span> mean, <span class="dt">var =</span> var)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb335-10" title="10"><span class="st">        </span><span class="kw">mutate</span>(<span class="dt">ratio =</span> (pred_new_var<span class="op">/</span>value_var))  <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb335-11" title="11"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb335-12" title="12"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>

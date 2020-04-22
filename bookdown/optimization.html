@@ -24,7 +24,7 @@
 <meta name="author" content="Fan Wang" />
 
 
-<meta name="date" content="2020-04-20" />
+<meta name="date" content="2020-04-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -160,7 +160,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.4.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-dataframe"><i class="fa fa-check"></i><b>1.4.1</b> Generate Dataframe</a></li>
 <li class="chapter" data-level="1.4.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#factor-label-and-combine"><i class="fa fa-check"></i><b>1.4.2</b> Factor Label and Combine</a></li>
 <li class="chapter" data-level="1.4.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#drawly-random-rows"><i class="fa fa-check"></i><b>1.4.3</b> Drawly Random Rows</a></li>
-<li class="chapter" data-level="1.4.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#variable-na-values"><i class="fa fa-check"></i><b>1.4.4</b> Variable NA Values</a></li>
+<li class="chapter" data-level="1.4.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-variables-conditional-on-others"><i class="fa fa-check"></i><b>1.4.4</b> Generate Variables Conditional On Others</a></li>
 <li class="chapter" data-level="1.4.5" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-values"><i class="fa fa-check"></i><b>1.4.5</b> String Values</a></li>
 </ul></li>
 </ul></li>
@@ -326,127 +326,127 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="initialize-matrix" class="section level4">
 <h4><span class="header-section-number">7.1.1.1</span> Initialize Matrix</h4>
 <p>Prepare Input Data:</p>
-<div class="sourceCode" id="cb346"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb346-1" title="1"><span class="co"># Parameters</span></a>
-<a class="sourceLine" id="cb346-2" title="2">fl_rho =<span class="st"> </span><span class="fl">0.20</span></a>
-<a class="sourceLine" id="cb346-3" title="3">svr_id_var =<span class="st"> &#39;INDI_ID&#39;</span></a>
-<a class="sourceLine" id="cb346-4" title="4"></a>
-<a class="sourceLine" id="cb346-5" title="5"><span class="co"># P fixed parameters, nN is N dimensional, nP is P dimensional</span></a>
-<a class="sourceLine" id="cb346-6" title="6">ar_nN_A =<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dt">length.out =</span> <span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb346-7" title="7">ar_nN_alpha =<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="dt">length.out =</span> <span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb346-8" title="8"></a>
-<a class="sourceLine" id="cb346-9" title="9"><span class="co"># Choice Grid for nutritional feasible choices for each</span></a>
-<a class="sourceLine" id="cb346-10" title="10">fl_N_agg =<span class="st"> </span><span class="dv">100</span></a>
-<a class="sourceLine" id="cb346-11" title="11">fl_N_min =<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb346-12" title="12"></a>
-<a class="sourceLine" id="cb346-13" title="13"><span class="co"># Mesh Expand</span></a>
-<a class="sourceLine" id="cb346-14" title="14">tb_states_choices &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">cbind</span>(ar_nN_A, ar_nN_alpha)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb346-15" title="15"><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var=</span>svr_id_var)</a>
-<a class="sourceLine" id="cb346-16" title="16"></a>
-<a class="sourceLine" id="cb346-17" title="17"><span class="co"># Convert Matrix to Tibble</span></a>
-<a class="sourceLine" id="cb346-18" title="18">ar_st_col_names =<span class="st"> </span><span class="kw">c</span>(svr_id_var,<span class="st">&#39;fl_A&#39;</span>, <span class="st">&#39;fl_alpha&#39;</span>)</a>
-<a class="sourceLine" id="cb346-19" title="19">tb_states_choices &lt;-<span class="st"> </span>tb_states_choices <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename_all</span>(<span class="op">~</span><span class="kw">c</span>(ar_st_col_names))</a></code></pre></div>
+<div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb351-1" title="1"><span class="co"># Parameters</span></a>
+<a class="sourceLine" id="cb351-2" title="2">fl_rho =<span class="st"> </span><span class="fl">0.20</span></a>
+<a class="sourceLine" id="cb351-3" title="3">svr_id_var =<span class="st"> &#39;INDI_ID&#39;</span></a>
+<a class="sourceLine" id="cb351-4" title="4"></a>
+<a class="sourceLine" id="cb351-5" title="5"><span class="co"># P fixed parameters, nN is N dimensional, nP is P dimensional</span></a>
+<a class="sourceLine" id="cb351-6" title="6">ar_nN_A =<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dt">length.out =</span> <span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb351-7" title="7">ar_nN_alpha =<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="dt">length.out =</span> <span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb351-8" title="8"></a>
+<a class="sourceLine" id="cb351-9" title="9"><span class="co"># Choice Grid for nutritional feasible choices for each</span></a>
+<a class="sourceLine" id="cb351-10" title="10">fl_N_agg =<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb351-11" title="11">fl_N_min =<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb351-12" title="12"></a>
+<a class="sourceLine" id="cb351-13" title="13"><span class="co"># Mesh Expand</span></a>
+<a class="sourceLine" id="cb351-14" title="14">tb_states_choices &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">cbind</span>(ar_nN_A, ar_nN_alpha)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb351-15" title="15"><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var=</span>svr_id_var)</a>
+<a class="sourceLine" id="cb351-16" title="16"></a>
+<a class="sourceLine" id="cb351-17" title="17"><span class="co"># Convert Matrix to Tibble</span></a>
+<a class="sourceLine" id="cb351-18" title="18">ar_st_col_names =<span class="st"> </span><span class="kw">c</span>(svr_id_var,<span class="st">&#39;fl_A&#39;</span>, <span class="st">&#39;fl_alpha&#39;</span>)</a>
+<a class="sourceLine" id="cb351-19" title="19">tb_states_choices &lt;-<span class="st"> </span>tb_states_choices <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename_all</span>(<span class="op">~</span><span class="kw">c</span>(ar_st_col_names))</a></code></pre></div>
 <p>Prepare Function:</p>
-<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb347-1" title="1"><span class="co"># Define Implicit Function</span></a>
-<a class="sourceLine" id="cb347-2" title="2">ffi_nonlin_dplyrdo &lt;-<span class="st"> </span><span class="cf">function</span>(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, fl_rho){</a>
-<a class="sourceLine" id="cb347-3" title="3"></a>
-<a class="sourceLine" id="cb347-4" title="4">  ar_p1_s1 =<span class="st"> </span><span class="kw">exp</span>((fl_A <span class="op">-</span><span class="st"> </span>ar_A)<span class="op">*</span>fl_rho)</a>
-<a class="sourceLine" id="cb347-5" title="5">  ar_p1_s2 =<span class="st"> </span>(fl_alpha<span class="op">/</span>ar_alpha)</a>
-<a class="sourceLine" id="cb347-6" title="6">  ar_p1_s3 =<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>(ar_alpha<span class="op">*</span>fl_rho <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb347-7" title="7">  ar_p1 =<span class="st"> </span>(ar_p1_s1<span class="op">*</span>ar_p1_s2)<span class="op">^</span>ar_p1_s3</a>
-<a class="sourceLine" id="cb347-8" title="8">  ar_p2 =<span class="st"> </span>fl_N<span class="op">^</span>((fl_alpha<span class="op">*</span>fl_rho<span class="dv">-1</span>)<span class="op">/</span>(ar_alpha<span class="op">*</span>fl_rho<span class="dv">-1</span>))</a>
-<a class="sourceLine" id="cb347-9" title="9">  ar_overall =<span class="st"> </span>ar_p1<span class="op">*</span>ar_p2</a>
-<a class="sourceLine" id="cb347-10" title="10">  fl_overall =<span class="st"> </span>fl_N_agg <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(ar_overall)</a>
-<a class="sourceLine" id="cb347-11" title="11"></a>
-<a class="sourceLine" id="cb347-12" title="12">  <span class="kw">return</span>(fl_overall)</a>
-<a class="sourceLine" id="cb347-13" title="13">}</a></code></pre></div>
+<div class="sourceCode" id="cb352"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb352-1" title="1"><span class="co"># Define Implicit Function</span></a>
+<a class="sourceLine" id="cb352-2" title="2">ffi_nonlin_dplyrdo &lt;-<span class="st"> </span><span class="cf">function</span>(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, fl_rho){</a>
+<a class="sourceLine" id="cb352-3" title="3"></a>
+<a class="sourceLine" id="cb352-4" title="4">  ar_p1_s1 =<span class="st"> </span><span class="kw">exp</span>((fl_A <span class="op">-</span><span class="st"> </span>ar_A)<span class="op">*</span>fl_rho)</a>
+<a class="sourceLine" id="cb352-5" title="5">  ar_p1_s2 =<span class="st"> </span>(fl_alpha<span class="op">/</span>ar_alpha)</a>
+<a class="sourceLine" id="cb352-6" title="6">  ar_p1_s3 =<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>(ar_alpha<span class="op">*</span>fl_rho <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb352-7" title="7">  ar_p1 =<span class="st"> </span>(ar_p1_s1<span class="op">*</span>ar_p1_s2)<span class="op">^</span>ar_p1_s3</a>
+<a class="sourceLine" id="cb352-8" title="8">  ar_p2 =<span class="st"> </span>fl_N<span class="op">^</span>((fl_alpha<span class="op">*</span>fl_rho<span class="dv">-1</span>)<span class="op">/</span>(ar_alpha<span class="op">*</span>fl_rho<span class="dv">-1</span>))</a>
+<a class="sourceLine" id="cb352-9" title="9">  ar_overall =<span class="st"> </span>ar_p1<span class="op">*</span>ar_p2</a>
+<a class="sourceLine" id="cb352-10" title="10">  fl_overall =<span class="st"> </span>fl_N_agg <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(ar_overall)</a>
+<a class="sourceLine" id="cb352-11" title="11"></a>
+<a class="sourceLine" id="cb352-12" title="12">  <span class="kw">return</span>(fl_overall)</a>
+<a class="sourceLine" id="cb352-13" title="13">}</a></code></pre></div>
 <p>Initialize the matrix with <span class="math inline">\(a_0\)</span> and <span class="math inline">\(b_0\)</span>, the initial min and max points:</p>
-<div class="sourceCode" id="cb348"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb348-1" title="1"><span class="co"># common prefix to make reshaping easier</span></a>
-<a class="sourceLine" id="cb348-2" title="2">st_bisec_prefix &lt;-<span class="st"> &#39;bisec_&#39;</span></a>
-<a class="sourceLine" id="cb348-3" title="3">svr_a_lst &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;a_0&#39;</span>)</a>
-<a class="sourceLine" id="cb348-4" title="4">svr_b_lst &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;b_0&#39;</span>)</a>
-<a class="sourceLine" id="cb348-5" title="5">svr_fa_lst &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;fa_0&#39;</span>)</a>
-<a class="sourceLine" id="cb348-6" title="6">svr_fb_lst &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;fb_0&#39;</span>)</a>
-<a class="sourceLine" id="cb348-7" title="7"></a>
-<a class="sourceLine" id="cb348-8" title="8"><span class="co"># Add initial a and b</span></a>
-<a class="sourceLine" id="cb348-9" title="9">tb_states_choices_bisec &lt;-<span class="st"> </span>tb_states_choices <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb348-10" title="10"><span class="st">  </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_a_lst) <span class="op">:</span><span class="er">=</span><span class="st"> </span>fl_N_min, <span class="op">!!</span><span class="kw">sym</span>(svr_b_lst) <span class="op">:</span><span class="er">=</span><span class="st"> </span>fl_N_agg)</a>
-<a class="sourceLine" id="cb348-11" title="11"></a>
-<a class="sourceLine" id="cb348-12" title="12"><span class="co"># Evaluate function f(a_0) and f(b_0)</span></a>
-<a class="sourceLine" id="cb348-13" title="13">tb_states_choices_bisec &lt;-<span class="st"> </span>tb_states_choices_bisec <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb348-14" title="14"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb348-15" title="15"><span class="st">  </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_fa_lst) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, <span class="op">!!</span><span class="kw">sym</span>(svr_a_lst),</a>
-<a class="sourceLine" id="cb348-16" title="16">                                                ar_nN_A, ar_nN_alpha,</a>
-<a class="sourceLine" id="cb348-17" title="17">                                                fl_N_agg, fl_rho),</a>
-<a class="sourceLine" id="cb348-18" title="18">         <span class="op">!!</span><span class="kw">sym</span>(svr_fb_lst) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, <span class="op">!!</span><span class="kw">sym</span>(svr_b_lst),</a>
-<a class="sourceLine" id="cb348-19" title="19">                                                ar_nN_A, ar_nN_alpha,</a>
-<a class="sourceLine" id="cb348-20" title="20">                                                fl_N_agg, fl_rho))</a>
-<a class="sourceLine" id="cb348-21" title="21"><span class="co"># Summarize</span></a>
-<a class="sourceLine" id="cb348-22" title="22"><span class="kw">dim</span>(tb_states_choices_bisec)</a></code></pre></div>
+<div class="sourceCode" id="cb353"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb353-1" title="1"><span class="co"># common prefix to make reshaping easier</span></a>
+<a class="sourceLine" id="cb353-2" title="2">st_bisec_prefix &lt;-<span class="st"> &#39;bisec_&#39;</span></a>
+<a class="sourceLine" id="cb353-3" title="3">svr_a_lst &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;a_0&#39;</span>)</a>
+<a class="sourceLine" id="cb353-4" title="4">svr_b_lst &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;b_0&#39;</span>)</a>
+<a class="sourceLine" id="cb353-5" title="5">svr_fa_lst &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;fa_0&#39;</span>)</a>
+<a class="sourceLine" id="cb353-6" title="6">svr_fb_lst &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;fb_0&#39;</span>)</a>
+<a class="sourceLine" id="cb353-7" title="7"></a>
+<a class="sourceLine" id="cb353-8" title="8"><span class="co"># Add initial a and b</span></a>
+<a class="sourceLine" id="cb353-9" title="9">tb_states_choices_bisec &lt;-<span class="st"> </span>tb_states_choices <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb353-10" title="10"><span class="st">  </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_a_lst) <span class="op">:</span><span class="er">=</span><span class="st"> </span>fl_N_min, <span class="op">!!</span><span class="kw">sym</span>(svr_b_lst) <span class="op">:</span><span class="er">=</span><span class="st"> </span>fl_N_agg)</a>
+<a class="sourceLine" id="cb353-11" title="11"></a>
+<a class="sourceLine" id="cb353-12" title="12"><span class="co"># Evaluate function f(a_0) and f(b_0)</span></a>
+<a class="sourceLine" id="cb353-13" title="13">tb_states_choices_bisec &lt;-<span class="st"> </span>tb_states_choices_bisec <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb353-14" title="14"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb353-15" title="15"><span class="st">  </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_fa_lst) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, <span class="op">!!</span><span class="kw">sym</span>(svr_a_lst),</a>
+<a class="sourceLine" id="cb353-16" title="16">                                                ar_nN_A, ar_nN_alpha,</a>
+<a class="sourceLine" id="cb353-17" title="17">                                                fl_N_agg, fl_rho),</a>
+<a class="sourceLine" id="cb353-18" title="18">         <span class="op">!!</span><span class="kw">sym</span>(svr_fb_lst) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, <span class="op">!!</span><span class="kw">sym</span>(svr_b_lst),</a>
+<a class="sourceLine" id="cb353-19" title="19">                                                ar_nN_A, ar_nN_alpha,</a>
+<a class="sourceLine" id="cb353-20" title="20">                                                fl_N_agg, fl_rho))</a>
+<a class="sourceLine" id="cb353-21" title="21"><span class="co"># Summarize</span></a>
+<a class="sourceLine" id="cb353-22" title="22"><span class="kw">dim</span>(tb_states_choices_bisec)</a></code></pre></div>
 <pre><code>## [1] 4 7</code></pre>
-<div class="sourceCode" id="cb350"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb350-1" title="1"><span class="co"># summary(tb_states_choices_bisec)</span></a></code></pre></div>
+<div class="sourceCode" id="cb355"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb355-1" title="1"><span class="co"># summary(tb_states_choices_bisec)</span></a></code></pre></div>
 </div>
 <div id="iterate-and-solve-for-fp-update-fa-and-fb" class="section level4">
 <h4><span class="header-section-number">7.1.1.2</span> Iterate and Solve for f(p), update f(a) and f(b)</h4>
 <p>Implement the DPLYR based Concurrent bisection algorithm.</p>
-<div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb351-1" title="1"><span class="co"># fl_tol = float tolerance criteria</span></a>
-<a class="sourceLine" id="cb351-2" title="2"><span class="co"># it_tol = number of interations to allow at most</span></a>
-<a class="sourceLine" id="cb351-3" title="3">fl_tol &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^-</span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb351-4" title="4">it_tol &lt;-<span class="st"> </span><span class="dv">100</span></a>
-<a class="sourceLine" id="cb351-5" title="5"></a>
-<a class="sourceLine" id="cb351-6" title="6"><span class="co"># fl_p_dist2zr = distance to zero to initalize</span></a>
-<a class="sourceLine" id="cb351-7" title="7">fl_p_dist2zr &lt;-<span class="st"> </span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb351-8" title="8">it_cur &lt;-<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb351-9" title="9"><span class="cf">while</span> (it_cur <span class="op">&lt;=</span><span class="st"> </span>it_tol <span class="op">&amp;&amp;</span><span class="st"> </span>fl_p_dist2zr <span class="op">&gt;=</span><span class="st"> </span>fl_tol ) {</a>
-<a class="sourceLine" id="cb351-10" title="10"></a>
-<a class="sourceLine" id="cb351-11" title="11">  it_cur &lt;-<span class="st"> </span>it_cur <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb351-12" title="12"></a>
-<a class="sourceLine" id="cb351-13" title="13">  <span class="co"># New Variables</span></a>
-<a class="sourceLine" id="cb351-14" title="14">  svr_a_cur &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;a_&#39;</span>, it_cur)</a>
-<a class="sourceLine" id="cb351-15" title="15">  svr_b_cur &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;b_&#39;</span>, it_cur)</a>
-<a class="sourceLine" id="cb351-16" title="16">  svr_fa_cur &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;fa_&#39;</span>, it_cur)</a>
-<a class="sourceLine" id="cb351-17" title="17">  svr_fb_cur &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;fb_&#39;</span>, it_cur)</a>
-<a class="sourceLine" id="cb351-18" title="18"></a>
-<a class="sourceLine" id="cb351-19" title="19">  <span class="co"># Evaluate function f(a_0) and f(b_0)</span></a>
-<a class="sourceLine" id="cb351-20" title="20">  <span class="co"># 1. generate p</span></a>
-<a class="sourceLine" id="cb351-21" title="21">  <span class="co"># 2. generate f_p</span></a>
-<a class="sourceLine" id="cb351-22" title="22">  <span class="co"># 3. generate f_p*f_a</span></a>
-<a class="sourceLine" id="cb351-23" title="23">  tb_states_choices_bisec &lt;-<span class="st"> </span>tb_states_choices_bisec <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb351-24" title="24"><span class="st">    </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb351-25" title="25"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">p =</span> ((<span class="op">!!</span><span class="kw">sym</span>(svr_a_lst) <span class="op">+</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_b_lst))<span class="op">/</span><span class="dv">2</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb351-26" title="26"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">f_p =</span> <span class="kw">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, p,</a>
-<a class="sourceLine" id="cb351-27" title="27">                                    ar_nN_A, ar_nN_alpha,</a>
-<a class="sourceLine" id="cb351-28" title="28">                                    fl_N_agg, fl_rho)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb351-29" title="29"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">f_p_t_f_a =</span> f_p<span class="op">*!!</span><span class="kw">sym</span>(svr_fa_lst))</a>
-<a class="sourceLine" id="cb351-30" title="30">  <span class="co"># fl_p_dist2zr = sum(abs(p))</span></a>
-<a class="sourceLine" id="cb351-31" title="31">  fl_p_dist2zr &lt;-<span class="st"> </span><span class="kw">mean</span>(<span class="kw">abs</span>(tb_states_choices_bisec <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(f_p)))</a>
-<a class="sourceLine" id="cb351-32" title="32"></a>
-<a class="sourceLine" id="cb351-33" title="33">  <span class="co"># Update a and b</span></a>
-<a class="sourceLine" id="cb351-34" title="34">  tb_states_choices_bisec &lt;-<span class="st"> </span>tb_states_choices_bisec <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb351-35" title="35"><span class="st">    </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_a_cur) <span class="op">:</span><span class="er">=</span></a>
-<a class="sourceLine" id="cb351-36" title="36"><span class="st">             </span><span class="kw">case_when</span>(f_p_t_f_a <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_a_lst),</a>
-<a class="sourceLine" id="cb351-37" title="37">                       <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>p)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb351-38" title="38"><span class="st">    </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_b_cur) <span class="op">:</span><span class="er">=</span></a>
-<a class="sourceLine" id="cb351-39" title="39"><span class="st">             </span><span class="kw">case_when</span>(f_p_t_f_a <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span>p,</a>
-<a class="sourceLine" id="cb351-40" title="40">                       <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_b_lst)))</a>
-<a class="sourceLine" id="cb351-41" title="41">  <span class="co"># Update f(a) and f(b)</span></a>
-<a class="sourceLine" id="cb351-42" title="42">  tb_states_choices_bisec &lt;-<span class="st"> </span>tb_states_choices_bisec <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb351-43" title="43"><span class="st">    </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_fa_cur) <span class="op">:</span><span class="er">=</span></a>
-<a class="sourceLine" id="cb351-44" title="44"><span class="st">             </span><span class="kw">case_when</span>(f_p_t_f_a <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_fa_lst),</a>
-<a class="sourceLine" id="cb351-45" title="45">                       <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>f_p)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb351-46" title="46"><span class="st">    </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_fb_cur) <span class="op">:</span><span class="er">=</span></a>
-<a class="sourceLine" id="cb351-47" title="47"><span class="st">             </span><span class="kw">case_when</span>(f_p_t_f_a <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span>f_p,</a>
-<a class="sourceLine" id="cb351-48" title="48">                       <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_fb_lst)))</a>
-<a class="sourceLine" id="cb351-49" title="49">  <span class="co"># Save from last</span></a>
-<a class="sourceLine" id="cb351-50" title="50">  svr_a_lst &lt;-<span class="st"> </span>svr_a_cur</a>
-<a class="sourceLine" id="cb351-51" title="51">  svr_b_lst &lt;-<span class="st"> </span>svr_b_cur</a>
-<a class="sourceLine" id="cb351-52" title="52">  svr_fa_lst &lt;-<span class="st"> </span>svr_fa_cur</a>
-<a class="sourceLine" id="cb351-53" title="53">  svr_fb_lst &lt;-<span class="st"> </span>svr_fb_cur</a>
-<a class="sourceLine" id="cb351-54" title="54"></a>
-<a class="sourceLine" id="cb351-55" title="55">  <span class="co"># Summar current round</span></a>
-<a class="sourceLine" id="cb351-56" title="56">  <span class="kw">print</span>(<span class="kw">paste0</span>(<span class="st">&#39;it_cur:&#39;</span>, it_cur, <span class="st">&#39;, fl_p_dist2zr:&#39;</span>, fl_p_dist2zr))</a>
-<a class="sourceLine" id="cb351-57" title="57">  <span class="kw">summary</span>(tb_states_choices_bisec <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb351-58" title="58"><span class="st">            </span><span class="kw">select</span>(<span class="kw">one_of</span>(svr_a_cur, svr_b_cur, svr_fa_cur, svr_fb_cur)))</a>
-<a class="sourceLine" id="cb351-59" title="59">}</a></code></pre></div>
+<div class="sourceCode" id="cb356"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb356-1" title="1"><span class="co"># fl_tol = float tolerance criteria</span></a>
+<a class="sourceLine" id="cb356-2" title="2"><span class="co"># it_tol = number of interations to allow at most</span></a>
+<a class="sourceLine" id="cb356-3" title="3">fl_tol &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^-</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb356-4" title="4">it_tol &lt;-<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb356-5" title="5"></a>
+<a class="sourceLine" id="cb356-6" title="6"><span class="co"># fl_p_dist2zr = distance to zero to initalize</span></a>
+<a class="sourceLine" id="cb356-7" title="7">fl_p_dist2zr &lt;-<span class="st"> </span><span class="dv">1000</span></a>
+<a class="sourceLine" id="cb356-8" title="8">it_cur &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb356-9" title="9"><span class="cf">while</span> (it_cur <span class="op">&lt;=</span><span class="st"> </span>it_tol <span class="op">&amp;&amp;</span><span class="st"> </span>fl_p_dist2zr <span class="op">&gt;=</span><span class="st"> </span>fl_tol ) {</a>
+<a class="sourceLine" id="cb356-10" title="10"></a>
+<a class="sourceLine" id="cb356-11" title="11">  it_cur &lt;-<span class="st"> </span>it_cur <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb356-12" title="12"></a>
+<a class="sourceLine" id="cb356-13" title="13">  <span class="co"># New Variables</span></a>
+<a class="sourceLine" id="cb356-14" title="14">  svr_a_cur &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;a_&#39;</span>, it_cur)</a>
+<a class="sourceLine" id="cb356-15" title="15">  svr_b_cur &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;b_&#39;</span>, it_cur)</a>
+<a class="sourceLine" id="cb356-16" title="16">  svr_fa_cur &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;fa_&#39;</span>, it_cur)</a>
+<a class="sourceLine" id="cb356-17" title="17">  svr_fb_cur &lt;-<span class="st"> </span><span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&#39;fb_&#39;</span>, it_cur)</a>
+<a class="sourceLine" id="cb356-18" title="18"></a>
+<a class="sourceLine" id="cb356-19" title="19">  <span class="co"># Evaluate function f(a_0) and f(b_0)</span></a>
+<a class="sourceLine" id="cb356-20" title="20">  <span class="co"># 1. generate p</span></a>
+<a class="sourceLine" id="cb356-21" title="21">  <span class="co"># 2. generate f_p</span></a>
+<a class="sourceLine" id="cb356-22" title="22">  <span class="co"># 3. generate f_p*f_a</span></a>
+<a class="sourceLine" id="cb356-23" title="23">  tb_states_choices_bisec &lt;-<span class="st"> </span>tb_states_choices_bisec <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb356-24" title="24"><span class="st">    </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb356-25" title="25"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">p =</span> ((<span class="op">!!</span><span class="kw">sym</span>(svr_a_lst) <span class="op">+</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_b_lst))<span class="op">/</span><span class="dv">2</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb356-26" title="26"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">f_p =</span> <span class="kw">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, p,</a>
+<a class="sourceLine" id="cb356-27" title="27">                                    ar_nN_A, ar_nN_alpha,</a>
+<a class="sourceLine" id="cb356-28" title="28">                                    fl_N_agg, fl_rho)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb356-29" title="29"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">f_p_t_f_a =</span> f_p<span class="op">*!!</span><span class="kw">sym</span>(svr_fa_lst))</a>
+<a class="sourceLine" id="cb356-30" title="30">  <span class="co"># fl_p_dist2zr = sum(abs(p))</span></a>
+<a class="sourceLine" id="cb356-31" title="31">  fl_p_dist2zr &lt;-<span class="st"> </span><span class="kw">mean</span>(<span class="kw">abs</span>(tb_states_choices_bisec <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(f_p)))</a>
+<a class="sourceLine" id="cb356-32" title="32"></a>
+<a class="sourceLine" id="cb356-33" title="33">  <span class="co"># Update a and b</span></a>
+<a class="sourceLine" id="cb356-34" title="34">  tb_states_choices_bisec &lt;-<span class="st"> </span>tb_states_choices_bisec <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb356-35" title="35"><span class="st">    </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_a_cur) <span class="op">:</span><span class="er">=</span></a>
+<a class="sourceLine" id="cb356-36" title="36"><span class="st">             </span><span class="kw">case_when</span>(f_p_t_f_a <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_a_lst),</a>
+<a class="sourceLine" id="cb356-37" title="37">                       <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>p)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb356-38" title="38"><span class="st">    </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_b_cur) <span class="op">:</span><span class="er">=</span></a>
+<a class="sourceLine" id="cb356-39" title="39"><span class="st">             </span><span class="kw">case_when</span>(f_p_t_f_a <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span>p,</a>
+<a class="sourceLine" id="cb356-40" title="40">                       <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_b_lst)))</a>
+<a class="sourceLine" id="cb356-41" title="41">  <span class="co"># Update f(a) and f(b)</span></a>
+<a class="sourceLine" id="cb356-42" title="42">  tb_states_choices_bisec &lt;-<span class="st"> </span>tb_states_choices_bisec <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb356-43" title="43"><span class="st">    </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_fa_cur) <span class="op">:</span><span class="er">=</span></a>
+<a class="sourceLine" id="cb356-44" title="44"><span class="st">             </span><span class="kw">case_when</span>(f_p_t_f_a <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_fa_lst),</a>
+<a class="sourceLine" id="cb356-45" title="45">                       <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>f_p)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb356-46" title="46"><span class="st">    </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_fb_cur) <span class="op">:</span><span class="er">=</span></a>
+<a class="sourceLine" id="cb356-47" title="47"><span class="st">             </span><span class="kw">case_when</span>(f_p_t_f_a <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span>f_p,</a>
+<a class="sourceLine" id="cb356-48" title="48">                       <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_fb_lst)))</a>
+<a class="sourceLine" id="cb356-49" title="49">  <span class="co"># Save from last</span></a>
+<a class="sourceLine" id="cb356-50" title="50">  svr_a_lst &lt;-<span class="st"> </span>svr_a_cur</a>
+<a class="sourceLine" id="cb356-51" title="51">  svr_b_lst &lt;-<span class="st"> </span>svr_b_cur</a>
+<a class="sourceLine" id="cb356-52" title="52">  svr_fa_lst &lt;-<span class="st"> </span>svr_fa_cur</a>
+<a class="sourceLine" id="cb356-53" title="53">  svr_fb_lst &lt;-<span class="st"> </span>svr_fb_cur</a>
+<a class="sourceLine" id="cb356-54" title="54"></a>
+<a class="sourceLine" id="cb356-55" title="55">  <span class="co"># Summar current round</span></a>
+<a class="sourceLine" id="cb356-56" title="56">  <span class="kw">print</span>(<span class="kw">paste0</span>(<span class="st">&#39;it_cur:&#39;</span>, it_cur, <span class="st">&#39;, fl_p_dist2zr:&#39;</span>, fl_p_dist2zr))</a>
+<a class="sourceLine" id="cb356-57" title="57">  <span class="kw">summary</span>(tb_states_choices_bisec <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb356-58" title="58"><span class="st">            </span><span class="kw">select</span>(<span class="kw">one_of</span>(svr_a_cur, svr_b_cur, svr_fa_cur, svr_fb_cur)))</a>
+<a class="sourceLine" id="cb356-59" title="59">}</a></code></pre></div>
 <pre><code>## [1] &quot;it_cur:1, fl_p_dist2zr:1597.93916362849&quot;
 ## [1] &quot;it_cur:2, fl_p_dist2zr:676.06602535902&quot;
 ## [1] &quot;it_cur:3, fl_p_dist2zr:286.850590132782&quot;
@@ -473,8 +473,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h5><span class="header-section-number">7.1.1.3.1</span> Table One–Very Wide</h5>
 <p>Show what the <em>tb_states_choices_bisec</em> looks like.</p>
 <p>Variables are formatted like: <em>bisec_xx_yy</em>, where yy is the iteration indicator, and xx is either a, b, fa, or fb.</p>
-<div class="sourceCode" id="cb353"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb353-1" title="1"><span class="kw">kable</span>(<span class="kw">head</span>(<span class="kw">t</span>(tb_states_choices_bisec), <span class="dv">25</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb353-2" title="2"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb358"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb358-1" title="1"><span class="kw">kable</span>(<span class="kw">head</span>(<span class="kw">t</span>(tb_states_choices_bisec), <span class="dv">25</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb358-2" title="2"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <tbody>
 <tr>
@@ -904,32 +904,32 @@ bisec_fa_4
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb354"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb354-1" title="1"><span class="co"># str(tb_states_choices_bisec)</span></a></code></pre></div>
+<div class="sourceCode" id="cb359"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb359-1" title="1"><span class="co"># str(tb_states_choices_bisec)</span></a></code></pre></div>
 </div>
 <div id="table-twovery-wide-to-very-long" class="section level5">
 <h5><span class="header-section-number">7.1.1.3.2</span> Table Two–Very Wide to Very Long</h5>
 <p>We want to treat the iteration count information that is the suffix of variable names as a variable by itself. Additionally, we want to treat the a,b,fa,fb as a variable. Structuring the data very long like this allows for easy graphing and other types of analysis. Rather than dealing with many many variables, we have only 3 core variables that store bisection iteration information.</p>
 <p>Here we use the very nice <em>pivot_longer</em> function. Note that to achieve this, we put a common prefix in front of the variables we wanted to convert to long. THis is helpful, because we can easily identify which variables need to be reshaped.</p>
-<div class="sourceCode" id="cb355"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb355-1" title="1"><span class="co"># New variables</span></a>
-<a class="sourceLine" id="cb355-2" title="2">svr_bisect_iter &lt;-<span class="st"> &#39;biseciter&#39;</span></a>
-<a class="sourceLine" id="cb355-3" title="3">svr_abfafb_long_name &lt;-<span class="st"> &#39;varname&#39;</span></a>
-<a class="sourceLine" id="cb355-4" title="4">svr_number_col &lt;-<span class="st"> &#39;value&#39;</span></a>
-<a class="sourceLine" id="cb355-5" title="5">svr_id_bisect_iter &lt;-<span class="st"> </span><span class="kw">paste0</span>(svr_id_var, <span class="st">&#39;_bisect_ier&#39;</span>)</a>
-<a class="sourceLine" id="cb355-6" title="6"></a>
-<a class="sourceLine" id="cb355-7" title="7"><span class="co"># Pivot wide to very long</span></a>
-<a class="sourceLine" id="cb355-8" title="8">tb_states_choices_bisec_long &lt;-<span class="st"> </span>tb_states_choices_bisec <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb355-9" title="9"><span class="st">  </span><span class="kw">pivot_longer</span>(</a>
-<a class="sourceLine" id="cb355-10" title="10">    <span class="dt">cols =</span> <span class="kw">starts_with</span>(st_bisec_prefix),</a>
-<a class="sourceLine" id="cb355-11" title="11">    <span class="dt">names_to =</span> <span class="kw">c</span>(svr_abfafb_long_name, svr_bisect_iter),</a>
-<a class="sourceLine" id="cb355-12" title="12">    <span class="dt">names_pattern =</span> <span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&quot;(.*)_(.*)&quot;</span>),</a>
-<a class="sourceLine" id="cb355-13" title="13">    <span class="dt">values_to =</span> svr_number_col</a>
-<a class="sourceLine" id="cb355-14" title="14">  )</a>
-<a class="sourceLine" id="cb355-15" title="15"></a>
-<a class="sourceLine" id="cb355-16" title="16"><span class="co"># Print</span></a>
-<a class="sourceLine" id="cb355-17" title="17"><span class="co"># summary(tb_states_choices_bisec_long)</span></a>
-<a class="sourceLine" id="cb355-18" title="18"><span class="kw">kable</span>(<span class="kw">head</span>(tb_states_choices_bisec_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb355-19" title="19"><span class="st">             </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">15</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb355-20" title="20"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb360"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb360-1" title="1"><span class="co"># New variables</span></a>
+<a class="sourceLine" id="cb360-2" title="2">svr_bisect_iter &lt;-<span class="st"> &#39;biseciter&#39;</span></a>
+<a class="sourceLine" id="cb360-3" title="3">svr_abfafb_long_name &lt;-<span class="st"> &#39;varname&#39;</span></a>
+<a class="sourceLine" id="cb360-4" title="4">svr_number_col &lt;-<span class="st"> &#39;value&#39;</span></a>
+<a class="sourceLine" id="cb360-5" title="5">svr_id_bisect_iter &lt;-<span class="st"> </span><span class="kw">paste0</span>(svr_id_var, <span class="st">&#39;_bisect_ier&#39;</span>)</a>
+<a class="sourceLine" id="cb360-6" title="6"></a>
+<a class="sourceLine" id="cb360-7" title="7"><span class="co"># Pivot wide to very long</span></a>
+<a class="sourceLine" id="cb360-8" title="8">tb_states_choices_bisec_long &lt;-<span class="st"> </span>tb_states_choices_bisec <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb360-9" title="9"><span class="st">  </span><span class="kw">pivot_longer</span>(</a>
+<a class="sourceLine" id="cb360-10" title="10">    <span class="dt">cols =</span> <span class="kw">starts_with</span>(st_bisec_prefix),</a>
+<a class="sourceLine" id="cb360-11" title="11">    <span class="dt">names_to =</span> <span class="kw">c</span>(svr_abfafb_long_name, svr_bisect_iter),</a>
+<a class="sourceLine" id="cb360-12" title="12">    <span class="dt">names_pattern =</span> <span class="kw">paste0</span>(st_bisec_prefix, <span class="st">&quot;(.*)_(.*)&quot;</span>),</a>
+<a class="sourceLine" id="cb360-13" title="13">    <span class="dt">values_to =</span> svr_number_col</a>
+<a class="sourceLine" id="cb360-14" title="14">  )</a>
+<a class="sourceLine" id="cb360-15" title="15"></a>
+<a class="sourceLine" id="cb360-16" title="16"><span class="co"># Print</span></a>
+<a class="sourceLine" id="cb360-17" title="17"><span class="co"># summary(tb_states_choices_bisec_long)</span></a>
+<a class="sourceLine" id="cb360-18" title="18"><span class="kw">kable</span>(<span class="kw">head</span>(tb_states_choices_bisec_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb360-19" title="19"><span class="st">             </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">15</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb360-20" title="20"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1256,9 +1256,9 @@ fa
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb356"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb356-1" title="1"><span class="kw">kable</span>(<span class="kw">tail</span>(tb_states_choices_bisec_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb356-2" title="2"><span class="st">             </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">15</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb356-3" title="3"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb361-1" title="1"><span class="kw">kable</span>(<span class="kw">tail</span>(tb_states_choices_bisec_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb361-2" title="2"><span class="st">             </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">15</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb361-3" title="3"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1589,18 +1589,18 @@ fb
 <div id="table-twovery-very-long-to-wider-again" class="section level5">
 <h5><span class="header-section-number">7.1.1.3.3</span> Table Two–Very Very Long to Wider Again</h5>
 <p>But the previous results are too long, with the a, b, fa, and fb all in one column as different categories, they are really not different categories, they are in fact different types of variables. So we want to spread those four categories of this variable into four columns, each one representing the a, b, fa, and fb values. The rows would then be uniquly identified by the iteration counter and individual ID.</p>
-<div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb357-1" title="1"><span class="co"># Pivot wide to very long to a little wide</span></a>
-<a class="sourceLine" id="cb357-2" title="2">tb_states_choices_bisec_wider &lt;-<span class="st"> </span>tb_states_choices_bisec_long <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb357-3" title="3"><span class="st">  </span><span class="kw">pivot_wider</span>(</a>
-<a class="sourceLine" id="cb357-4" title="4">    <span class="dt">names_from =</span> <span class="op">!!</span><span class="kw">sym</span>(svr_abfafb_long_name),</a>
-<a class="sourceLine" id="cb357-5" title="5">    <span class="dt">values_from =</span> svr_number_col</a>
-<a class="sourceLine" id="cb357-6" title="6">  )</a>
-<a class="sourceLine" id="cb357-7" title="7"></a>
-<a class="sourceLine" id="cb357-8" title="8"><span class="co"># Print</span></a>
-<a class="sourceLine" id="cb357-9" title="9"><span class="co"># summary(tb_states_choices_bisec_wider)</span></a>
-<a class="sourceLine" id="cb357-10" title="10"><span class="kw">kable</span>(<span class="kw">head</span>(tb_states_choices_bisec_wider <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb357-11" title="11"><span class="st">              </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">10</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb357-12" title="12"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb362"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb362-1" title="1"><span class="co"># Pivot wide to very long to a little wide</span></a>
+<a class="sourceLine" id="cb362-2" title="2">tb_states_choices_bisec_wider &lt;-<span class="st"> </span>tb_states_choices_bisec_long <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb362-3" title="3"><span class="st">  </span><span class="kw">pivot_wider</span>(</a>
+<a class="sourceLine" id="cb362-4" title="4">    <span class="dt">names_from =</span> <span class="op">!!</span><span class="kw">sym</span>(svr_abfafb_long_name),</a>
+<a class="sourceLine" id="cb362-5" title="5">    <span class="dt">values_from =</span> svr_number_col</a>
+<a class="sourceLine" id="cb362-6" title="6">  )</a>
+<a class="sourceLine" id="cb362-7" title="7"></a>
+<a class="sourceLine" id="cb362-8" title="8"><span class="co"># Print</span></a>
+<a class="sourceLine" id="cb362-9" title="9"><span class="co"># summary(tb_states_choices_bisec_wider)</span></a>
+<a class="sourceLine" id="cb362-10" title="10"><span class="kw">kable</span>(<span class="kw">head</span>(tb_states_choices_bisec_wider <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb362-11" title="11"><span class="st">              </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">10</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb362-12" title="12"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -1895,9 +1895,9 @@ fb
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb358"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb358-1" title="1"><span class="kw">kable</span>(<span class="kw">head</span>(tb_states_choices_bisec_wider <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb358-2" title="2"><span class="st">              </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">10</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb358-3" title="3"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb363"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb363-1" title="1"><span class="kw">kable</span>(<span class="kw">head</span>(tb_states_choices_bisec_wider <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb363-2" title="2"><span class="st">              </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">10</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb363-3" title="3"><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</a></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -2197,23 +2197,23 @@ fb
 <div id="graph-bisection-iteration-results" class="section level4">
 <h4><span class="header-section-number">7.1.1.4</span> Graph Bisection Iteration Results</h4>
 <p>Actually we want to graph based on the long results, not the wider. Wider easier to view in table.</p>
-<div class="sourceCode" id="cb359"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb359-1" title="1"><span class="co"># Graph results</span></a>
-<a class="sourceLine" id="cb359-2" title="2">lineplot &lt;-<span class="st"> </span>tb_states_choices_bisec_long <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb359-3" title="3"><span class="st">    </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_bisect_iter) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">as.numeric</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_bisect_iter))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb359-4" title="4"><span class="st">    </span><span class="kw">filter</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_abfafb_long_name) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb359-5" title="5"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="op">!!</span><span class="kw">sym</span>(svr_bisect_iter), <span class="dt">y=</span><span class="op">!!</span><span class="kw">sym</span>(svr_number_col),</a>
-<a class="sourceLine" id="cb359-6" title="6">               <span class="dt">colour=</span><span class="op">!!</span><span class="kw">sym</span>(svr_abfafb_long_name),</a>
-<a class="sourceLine" id="cb359-7" title="7">               <span class="dt">linetype=</span><span class="op">!!</span><span class="kw">sym</span>(svr_abfafb_long_name),</a>
-<a class="sourceLine" id="cb359-8" title="8">               <span class="dt">shape=</span><span class="op">!!</span><span class="kw">sym</span>(svr_abfafb_long_name))) <span class="op">+</span></a>
-<a class="sourceLine" id="cb359-9" title="9"><span class="st">        </span><span class="kw">facet_wrap</span>( <span class="op">~</span><span class="st"> </span>INDI_ID) <span class="op">+</span></a>
-<a class="sourceLine" id="cb359-10" title="10"><span class="st">        </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb359-11" title="11"><span class="st">        </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb359-12" title="12"><span class="st">        </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&#39;Bisection Iteration over individuals Until Convergence&#39;</span>,</a>
-<a class="sourceLine" id="cb359-13" title="13">             <span class="dt">x =</span> <span class="st">&#39;Bisection Iteration&#39;</span>,</a>
-<a class="sourceLine" id="cb359-14" title="14">             <span class="dt">y =</span> <span class="st">&#39;a (left side point) and b (right side point) values&#39;</span>,</a>
-<a class="sourceLine" id="cb359-15" title="15">             <span class="dt">caption =</span> <span class="st">&#39;DPLYR concurrent bisection nonlinear multple individuals&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb359-16" title="16"><span class="st">      </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb359-17" title="17"><span class="kw">print</span>(lineplot)</a></code></pre></div>
+<div class="sourceCode" id="cb364"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb364-1" title="1"><span class="co"># Graph results</span></a>
+<a class="sourceLine" id="cb364-2" title="2">lineplot &lt;-<span class="st"> </span>tb_states_choices_bisec_long <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb364-3" title="3"><span class="st">    </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_bisect_iter) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">as.numeric</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_bisect_iter))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb364-4" title="4"><span class="st">    </span><span class="kw">filter</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_abfafb_long_name) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb364-5" title="5"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="op">!!</span><span class="kw">sym</span>(svr_bisect_iter), <span class="dt">y=</span><span class="op">!!</span><span class="kw">sym</span>(svr_number_col),</a>
+<a class="sourceLine" id="cb364-6" title="6">               <span class="dt">colour=</span><span class="op">!!</span><span class="kw">sym</span>(svr_abfafb_long_name),</a>
+<a class="sourceLine" id="cb364-7" title="7">               <span class="dt">linetype=</span><span class="op">!!</span><span class="kw">sym</span>(svr_abfafb_long_name),</a>
+<a class="sourceLine" id="cb364-8" title="8">               <span class="dt">shape=</span><span class="op">!!</span><span class="kw">sym</span>(svr_abfafb_long_name))) <span class="op">+</span></a>
+<a class="sourceLine" id="cb364-9" title="9"><span class="st">        </span><span class="kw">facet_wrap</span>( <span class="op">~</span><span class="st"> </span>INDI_ID) <span class="op">+</span></a>
+<a class="sourceLine" id="cb364-10" title="10"><span class="st">        </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb364-11" title="11"><span class="st">        </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb364-12" title="12"><span class="st">        </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&#39;Bisection Iteration over individuals Until Convergence&#39;</span>,</a>
+<a class="sourceLine" id="cb364-13" title="13">             <span class="dt">x =</span> <span class="st">&#39;Bisection Iteration&#39;</span>,</a>
+<a class="sourceLine" id="cb364-14" title="14">             <span class="dt">y =</span> <span class="st">&#39;a (left side point) and b (right side point) values&#39;</span>,</a>
+<a class="sourceLine" id="cb364-15" title="15">             <span class="dt">caption =</span> <span class="st">&#39;DPLYR concurrent bisection nonlinear multple individuals&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb364-16" title="16"><span class="st">      </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb364-17" title="17"><span class="kw">print</span>(lineplot)</a></code></pre></div>
 <p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/reshape%20solution%20for%20graphing-1.png" width="672" style="display: block; margin: auto;" /></p>
 
 </div>
