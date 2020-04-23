@@ -24,7 +24,7 @@
 <meta name="author" content="Fan Wang" />
 
 
-<meta name="date" content="2020-04-22" />
+<meta name="date" content="2020-04-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="optimization.html"/>
-<link rel="next" href="index-and-code-links.html"/>
+<link rel="next" href="tables-and-graphs.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -236,6 +236,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.3.2" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#atkinson-family-utility"><i class="fa fa-check"></i><b>8.3.2</b> Atkinson Family Utility</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="9" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html"><i class="fa fa-check"></i><b>9</b> Tables and Graphs</a><ul>
+<li class="chapter" data-level="9.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#r-base-plots"><i class="fa fa-check"></i><b>9.1</b> R Base Plots</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#plot-curve-line-and-points"><i class="fa fa-check"></i><b>9.1.1</b> Plot Curve, Line and Points</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#write-and-read-plots"><i class="fa fa-check"></i><b>9.2</b> Write and Read Plots</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#import-and-export-images"><i class="fa fa-check"></i><b>9.2.1</b> Import and Export Images</a></li>
+</ul></li>
+</ul></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
 <li class="chapter" data-level="A" data-path="index-and-code-links.html"><a href="index-and-code-links.html"><i class="fa fa-check"></i><b>A</b> Index and Code Links</a><ul>
 <li class="chapter" data-level="A.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#array-matrix-dataframe-links"><i class="fa fa-check"></i><b>A.1</b> Array, Matrix, Dataframe links</a><ul>
@@ -274,6 +282,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="A.8.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.1-distributionsdistributions-links"><i class="fa fa-check"></i><b>A.8.1</b> <span>Section 8.1 Distributions</span> links</a></li>
 <li class="chapter" data-level="A.8.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.2-analytical-solutionsanalytical-solutions-links"><i class="fa fa-check"></i><b>A.8.2</b> <span>Section 8.2 Analytical Solutions</span> links</a></li>
 <li class="chapter" data-level="A.8.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.3-inequality-modelsinequality-models-links"><i class="fa fa-check"></i><b>A.8.3</b> <span>Section 8.3 Inequality Models</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.9" data-path="index-and-code-links.html"><a href="index-and-code-links.html#tables-and-graphs-links"><i class="fa fa-check"></i><b>A.9</b> Tables and Graphs links</a><ul>
+<li class="chapter" data-level="A.9.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.1-r-base-plotsr-base-plots-links"><i class="fa fa-check"></i><b>A.9.1</b> <span>Section 9.1 R Base Plots</span> links</a></li>
+<li class="chapter" data-level="A.9.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.2-write-and-read-plotswrite-and-read-plots-links"><i class="fa fa-check"></i><b>A.9.2</b> <span>Section 9.2 Write and Read Plots</span> links</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -314,7 +326,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb365-4" title="4">fl_cdf_max =<span class="st"> </span><span class="fl">0.999999</span></a>
 <a class="sourceLine" id="cb365-5" title="5">ar_it_draws &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">1000</span>)</a></code></pre></div>
 <div id="randomly-sample-and-integrate-monte-carlo-integration" class="section level4">
-<h4><span class="header-section-number">8.1.1.1</span> Randomly Sample and Integrate (Monte Carlo integration)</h4>
+<h4><span class="header-section-number">8.1.1.1</span> Randomly Sample and Integrate (Monte Carlo Integration)</h4>
 <p>Compare randomly drawn normal shock mean and known mean. How does simulated mean change with draws. Actual integral equals to <span class="math inline">\(10\)</span>, as sample size increases, the sample mean approaches the integration results, but this is expensive, even with ten thousand draws, not very exact.</p>
 <div class="sourceCode" id="cb366"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb366-1" title="1"><span class="co"># Simulate Draws</span></a>
 <a class="sourceLine" id="cb366-2" title="2"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
@@ -334,38 +346,45 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb366-16" title="16">x.labels &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;n=1&#39;</span>, <span class="st">&#39;n=10&#39;</span>, <span class="st">&#39;n=100&#39;</span>, <span class="st">&#39;n=1000&#39;</span>)</a>
 <a class="sourceLine" id="cb366-17" title="17">x.breaks &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>)</a>
 <a class="sourceLine" id="cb366-18" title="18"></a>
-<a class="sourceLine" id="cb366-19" title="19"><span class="co"># Graph Results--Draw</span></a>
-<a class="sourceLine" id="cb366-20" title="20">plt_mean &lt;-<span class="st"> </span>tb_sample_means <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb366-21" title="21"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>draw_count, <span class="dt">y=</span>mean)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb366-22" title="22"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size=</span><span class="fl">0.75</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb366-23" title="23"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Sample Average</span></a>
-<a class="sourceLine" id="cb366-24" title="24"><span class="st">                      as Sample Size Increases</span><span class="ch">\n</span><span class="st"> True Mean=&#39;</span>,</a>
-<a class="sourceLine" id="cb366-25" title="25">                      fl_eps_mean,<span class="st">&#39;, sd=&#39;</span>,fl_eps_sd),</a>
-<a class="sourceLine" id="cb366-26" title="26">       <span class="dt">x =</span> <span class="st">&#39;Sample Size&#39;</span>,</a>
-<a class="sourceLine" id="cb366-27" title="27">       <span class="dt">y =</span> <span class="st">&#39;Sample Mean&#39;</span>,</a>
-<a class="sourceLine" id="cb366-28" title="28">       <span class="dt">caption =</span> <span class="st">&#39;Mean of Sample Integrates to Mean&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb366-29" title="29"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="dt">labels =</span> x.labels, <span class="dt">breaks =</span> x.breaks) <span class="op">+</span></a>
-<a class="sourceLine" id="cb366-30" title="30"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
-<a class="sourceLine" id="cb366-31" title="31"><span class="kw">print</span>(plt_mean)</a></code></pre></div>
+<a class="sourceLine" id="cb366-19" title="19"><span class="co"># Shared Subtitle</span></a>
+<a class="sourceLine" id="cb366-20" title="20">st_subtitle &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;https://fanwangecon.github.io/&#39;</span>,</a>
+<a class="sourceLine" id="cb366-21" title="21">                      <span class="st">&#39;R4Econ/math/integration/htmlpdfr/fs_integrate_normal.html&#39;</span>)</a>
+<a class="sourceLine" id="cb366-22" title="22"></a>
+<a class="sourceLine" id="cb366-23" title="23"><span class="co"># Shared Labels</span></a>
+<a class="sourceLine" id="cb366-24" title="24">slb_title_shr =<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;as Sample Size Increases</span><span class="ch">\n</span><span class="st">&#39;</span>,</a>
+<a class="sourceLine" id="cb366-25" title="25">                       <span class="st">&#39;True Mean=&#39;</span>, fl_eps_mean,<span class="st">&#39;, sd=&#39;</span>,fl_eps_sd)</a>
+<a class="sourceLine" id="cb366-26" title="26">slb_xtitle =<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;Sample Size&#39;</span>)</a>
+<a class="sourceLine" id="cb366-27" title="27"></a>
+<a class="sourceLine" id="cb366-28" title="28"><span class="co"># Graph Results--Draw</span></a>
+<a class="sourceLine" id="cb366-29" title="29">plt_mean &lt;-<span class="st"> </span>tb_sample_means <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb366-30" title="30"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>draw_count, <span class="dt">y=</span>mean)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb366-31" title="31"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size=</span><span class="fl">0.75</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb366-32" title="32"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Sample Mean &#39;</span>, slb_title_shr),</a>
+<a class="sourceLine" id="cb366-33" title="33">       <span class="dt">subtitle =</span> st_subtitle,</a>
+<a class="sourceLine" id="cb366-34" title="34">       <span class="dt">x =</span> slb_xtitle,</a>
+<a class="sourceLine" id="cb366-35" title="35">       <span class="dt">y =</span> <span class="st">&#39;Sample Mean&#39;</span>,</a>
+<a class="sourceLine" id="cb366-36" title="36">       <span class="dt">caption =</span> <span class="st">&#39;Mean of Sample Integrates to True Mean&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb366-37" title="37"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="dt">labels =</span> x.labels, <span class="dt">breaks =</span> x.breaks) <span class="op">+</span></a>
+<a class="sourceLine" id="cb366-38" title="38"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb366-39" title="39"><span class="kw">print</span>(plt_mean)</a></code></pre></div>
 <p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-159-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb367"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb367-1" title="1">plt_sd &lt;-<span class="st"> </span>tb_sample_means <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb367-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>draw_count, <span class="dt">y=</span>sd)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb367-3" title="3"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size=</span><span class="fl">0.75</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb367-4" title="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Sample Standard Deviation</span></a>
-<a class="sourceLine" id="cb367-5" title="5"><span class="st">                      as Sample Size Increases</span><span class="ch">\n</span><span class="st"> True Mean=&#39;</span>,</a>
-<a class="sourceLine" id="cb367-6" title="6">                      fl_eps_mean,<span class="st">&#39;, sd=&#39;</span>,fl_eps_sd),</a>
-<a class="sourceLine" id="cb367-7" title="7">       <span class="dt">x =</span> <span class="st">&#39;Sample Size&#39;</span>,</a>
-<a class="sourceLine" id="cb367-8" title="8">       <span class="dt">y =</span> <span class="st">&#39;Sample Standard Deviation&#39;</span>,</a>
-<a class="sourceLine" id="cb367-9" title="9">       <span class="dt">caption =</span> <span class="st">&#39;Standard Deviation of Sample Integrates to True Standard Deviation&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb367-10" title="10"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="dt">labels =</span> x.labels, <span class="dt">breaks =</span> x.breaks) <span class="op">+</span></a>
-<a class="sourceLine" id="cb367-11" title="11"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
-<a class="sourceLine" id="cb367-12" title="12"><span class="kw">print</span>(plt_sd)</a></code></pre></div>
+<a class="sourceLine" id="cb367-4" title="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Sample Standard Deviation &#39;</span>, slb_title_shr),</a>
+<a class="sourceLine" id="cb367-5" title="5">       <span class="dt">subtitle =</span> st_subtitle,</a>
+<a class="sourceLine" id="cb367-6" title="6">       <span class="dt">x =</span> slb_xtitle,</a>
+<a class="sourceLine" id="cb367-7" title="7">       <span class="dt">y =</span> <span class="st">&#39;Sample Standard Deviation&#39;</span>,</a>
+<a class="sourceLine" id="cb367-8" title="8">       <span class="dt">caption =</span> <span class="st">&#39;Standard Deviation of Sample Integrates to True SD&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb367-9" title="9"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="dt">labels =</span> x.labels, <span class="dt">breaks =</span> x.breaks) <span class="op">+</span></a>
+<a class="sourceLine" id="cb367-10" title="10"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb367-11" title="11"><span class="kw">print</span>(plt_sd)</a></code></pre></div>
 <p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-159-2.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="integration-by-symmetric-uneven-rectangle" class="section level4">
 <h4><span class="header-section-number">8.1.1.2</span> Integration By Symmetric Uneven Rectangle</h4>
-<p>Draw on grid from probability space, and then find use norm inverse to find corresponding x point. Under this approach, each rectangle is suppose to approximate the same same. So even area, but uneven width.</p>
-<p>Resulting integration is rectangle based, but rectangle width differ. Th rectangle have wider width as they move away from the mean, and thin width close to the mean. This is much more stable than the random draw method, and approximates the true answer more accurately.</p>
+<p>Draw on even grid from close to 0 to close to 1. Get the corresponding x points to these quantile levels. Distance between x points are not equi-distance but increasing and symmetric away from the mean. Under this approach, each rectangle aims to approximate the same area.</p>
+<p>Resulting integration is rectangle based, but rectangle width differ. The rectangles have wider width as they move away from the mean, and thinner width close to the mean. This is much more stable than the random draw method, but note that it converges somewhat slowly to true values as well.</p>
 <div class="sourceCode" id="cb368"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb368-1" title="1">mt_fl_means &lt;-</a>
 <a class="sourceLine" id="cb368-2" title="2"><span class="st">  </span><span class="kw">sapply</span>(ar_it_draws, <span class="cf">function</span>(x) {</a>
 <a class="sourceLine" id="cb368-3" title="3"></a>
@@ -394,50 +413,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb368-26" title="26">x.labels &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;n=1&#39;</span>, <span class="st">&#39;n=10&#39;</span>, <span class="st">&#39;n=100&#39;</span>, <span class="st">&#39;n=1000&#39;</span>)</a>
 <a class="sourceLine" id="cb368-27" title="27">x.breaks &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>)</a>
 <a class="sourceLine" id="cb368-28" title="28"></a>
-<a class="sourceLine" id="cb368-29" title="29"><span class="co"># Graph Results--Draw</span></a>
-<a class="sourceLine" id="cb368-30" title="30">plt_mean &lt;-<span class="st"> </span>tb_sample_means <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb368-31" title="31"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>draw_count, <span class="dt">y=</span>mean)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb368-32" title="32"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size=</span><span class="fl">0.75</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb368-33" title="33"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Average as Uneven Rectangle</span></a>
-<a class="sourceLine" id="cb368-34" title="34"><span class="st">                      Count Increases</span><span class="ch">\n</span><span class="st"> True Mean=&#39;</span>,</a>
-<a class="sourceLine" id="cb368-35" title="35">                      fl_eps_mean,<span class="st">&#39;, sd=&#39;</span>,fl_eps_sd),</a>
-<a class="sourceLine" id="cb368-36" title="36">       <span class="dt">x =</span> <span class="st">&#39;Number of Uneven Rectangles for Approximation&#39;</span>,</a>
-<a class="sourceLine" id="cb368-37" title="37">       <span class="dt">y =</span> <span class="st">&#39;Integrated Mean&#39;</span>,</a>
-<a class="sourceLine" id="cb368-38" title="38">       <span class="dt">caption =</span> <span class="st">&#39;Integral Approximation as Uneven Rectangle Count Increases&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb368-39" title="39"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="dt">labels =</span> x.labels, <span class="dt">breaks =</span> x.breaks) <span class="op">+</span></a>
-<a class="sourceLine" id="cb368-40" title="40"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
-<a class="sourceLine" id="cb368-41" title="41"><span class="kw">print</span>(plt_mean)</a></code></pre></div>
+<a class="sourceLine" id="cb368-29" title="29"><span class="co"># Shared Labels</span></a>
+<a class="sourceLine" id="cb368-30" title="30">slb_title_shr =<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;as Uneven Rectangle Count Increases</span><span class="ch">\n</span><span class="st">&#39;</span>,</a>
+<a class="sourceLine" id="cb368-31" title="31">                       <span class="st">&#39;True Mean=&#39;</span>, fl_eps_mean,<span class="st">&#39;, sd=&#39;</span>,fl_eps_sd)</a>
+<a class="sourceLine" id="cb368-32" title="32">slb_xtitle =<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;Number of Quantile Bins for Uneven Rectangles Approximation&#39;</span>)</a>
+<a class="sourceLine" id="cb368-33" title="33"></a>
+<a class="sourceLine" id="cb368-34" title="34"><span class="co"># Graph Results--Draw</span></a>
+<a class="sourceLine" id="cb368-35" title="35">plt_mean &lt;-<span class="st"> </span>tb_sample_means <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb368-36" title="36"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>draw_count, <span class="dt">y=</span>mean)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb368-37" title="37"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size=</span><span class="fl">0.75</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb368-38" title="38"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Average &#39;</span>, slb_title_shr),</a>
+<a class="sourceLine" id="cb368-39" title="39">       <span class="dt">subtitle =</span> st_subtitle,</a>
+<a class="sourceLine" id="cb368-40" title="40">       <span class="dt">x =</span> slb_xtitle,</a>
+<a class="sourceLine" id="cb368-41" title="41">       <span class="dt">y =</span> <span class="st">&#39;Approximated Mean&#39;</span>,</a>
+<a class="sourceLine" id="cb368-42" title="42">       <span class="dt">caption =</span> <span class="st">&#39;Integral Approximation as Uneven Rectangle Count Increases&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb368-43" title="43"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="dt">labels =</span> x.labels, <span class="dt">breaks =</span> x.breaks) <span class="op">+</span></a>
+<a class="sourceLine" id="cb368-44" title="44"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb368-45" title="45"><span class="kw">print</span>(plt_mean)</a></code></pre></div>
 <p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-160-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb369"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb369-1" title="1">plt_sd &lt;-<span class="st"> </span>tb_sample_means <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb369-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>draw_count, <span class="dt">y=</span>sd)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb369-3" title="3"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size=</span><span class="fl">0.75</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb369-4" title="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Standard Deviation as Uneven Rectangle</span></a>
-<a class="sourceLine" id="cb369-5" title="5"><span class="st">                      Count Increases</span><span class="ch">\n</span><span class="st"> True Mean=&#39;</span>,</a>
-<a class="sourceLine" id="cb369-6" title="6">                      fl_eps_mean,<span class="st">&#39;, sd=&#39;</span>,fl_eps_sd),</a>
-<a class="sourceLine" id="cb369-7" title="7">       <span class="dt">x =</span> <span class="st">&#39;Number of Uneven Rectangles for Approximation&#39;</span>,</a>
-<a class="sourceLine" id="cb369-8" title="8">       <span class="dt">y =</span> <span class="st">&#39;Standard Deviation&#39;</span>,</a>
-<a class="sourceLine" id="cb369-9" title="9">       <span class="dt">caption =</span> <span class="st">&#39;Integral Approximation as Uneven Rectangle Count Increases&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb369-10" title="10"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="dt">labels =</span> x.labels, <span class="dt">breaks =</span> x.breaks) <span class="op">+</span></a>
-<a class="sourceLine" id="cb369-11" title="11"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
-<a class="sourceLine" id="cb369-12" title="12"><span class="kw">print</span>(plt_sd)</a></code></pre></div>
+<a class="sourceLine" id="cb369-4" title="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Standard Deviation &#39;</span>, slb_title_shr),</a>
+<a class="sourceLine" id="cb369-5" title="5">       <span class="dt">subtitle =</span> st_subtitle,</a>
+<a class="sourceLine" id="cb369-6" title="6">       <span class="dt">x =</span> slb_xtitle,</a>
+<a class="sourceLine" id="cb369-7" title="7">       <span class="dt">y =</span> <span class="st">&#39;Approximated Standard Deviation&#39;</span>,</a>
+<a class="sourceLine" id="cb369-8" title="8">       <span class="dt">caption =</span> <span class="st">&#39;Integral Approximation as Uneven Rectangle Count Increases&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb369-9" title="9"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="dt">labels =</span> x.labels, <span class="dt">breaks =</span> x.breaks) <span class="op">+</span></a>
+<a class="sourceLine" id="cb369-10" title="10"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb369-11" title="11"><span class="kw">print</span>(plt_sd)</a></code></pre></div>
 <p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-160-2.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb370"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb370-1" title="1">plt_cdf &lt;-<span class="st"> </span>tb_sample_means <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb370-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>draw_count, <span class="dt">y=</span>cdf)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb370-3" title="3"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size=</span><span class="fl">0.75</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb370-4" title="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Aggregate Probability as Uneven Rectangle</span></a>
-<a class="sourceLine" id="cb370-5" title="5"><span class="st">                      Count Increases</span><span class="ch">\n</span><span class="st"> True Mean=&#39;</span>,</a>
-<a class="sourceLine" id="cb370-6" title="6">                      fl_eps_mean,<span class="st">&#39;, sd=&#39;</span>,fl_eps_sd),</a>
-<a class="sourceLine" id="cb370-7" title="7">       <span class="dt">x =</span> <span class="st">&#39;Number of Uneven Rectangles for Approximation&#39;</span>,</a>
-<a class="sourceLine" id="cb370-8" title="8">       <span class="dt">y =</span> <span class="st">&#39;Aggregate Probability&#39;</span>,</a>
-<a class="sourceLine" id="cb370-9" title="9">       <span class="dt">caption =</span> <span class="st">&#39;Aggregate Probability Approximation as Uneven Rectangle Count Increases&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb370-10" title="10"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="dt">labels =</span> x.labels, <span class="dt">breaks =</span> x.breaks) <span class="op">+</span></a>
-<a class="sourceLine" id="cb370-11" title="11"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
-<a class="sourceLine" id="cb370-12" title="12"><span class="kw">print</span>(plt_cdf)</a></code></pre></div>
+<a class="sourceLine" id="cb370-4" title="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Aggregate Probability &#39;</span>, slb_title_shr),</a>
+<a class="sourceLine" id="cb370-5" title="5">       <span class="dt">subtitle =</span> st_subtitle,</a>
+<a class="sourceLine" id="cb370-6" title="6">       <span class="dt">x =</span> slb_xtitle,</a>
+<a class="sourceLine" id="cb370-7" title="7">       <span class="dt">y =</span> <span class="st">&#39;Sum of Uneven Rectangles&#39;</span>,</a>
+<a class="sourceLine" id="cb370-8" title="8">       <span class="dt">caption =</span> <span class="st">&#39;Sum of Approx. Probability as Uneven Rectangle Count Increases&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb370-9" title="9"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="dt">labels =</span> x.labels, <span class="dt">breaks =</span> x.breaks) <span class="op">+</span></a>
+<a class="sourceLine" id="cb370-10" title="10"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb370-11" title="11"><span class="kw">print</span>(plt_cdf)</a></code></pre></div>
 <p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-160-3.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="integration-by-constant-width-rectangle-trapezoidal-rule" class="section level4">
 <h4><span class="header-section-number">8.1.1.3</span> Integration By Constant Width Rectangle (Trapezoidal rule)</h4>
-<p>This is implementing even width recentagle, even along x-axis take points, and measure <span class="math inline">\(f(x)\)</span>. Rectangle width are the same. This is even width, but uneven area. Note that this method approximates the true answer much better and more quickly.</p>
+<p>This is implementing even width recentagle, even along x-axix. Rectangle width are the same, height is <span class="math inline">\(f(x)\)</span>. This is even width, but uneven area. Note that this method approximates the true answer much better and more quickly than the prior methods.</p>
 <div class="sourceCode" id="cb371"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb371-1" title="1">mt_fl_means &lt;-</a>
 <a class="sourceLine" id="cb371-2" title="2"><span class="st">  </span><span class="kw">sapply</span>(ar_it_draws, <span class="cf">function</span>(x) {</a>
 <a class="sourceLine" id="cb371-3" title="3"></a>
@@ -464,45 +485,47 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb371-24" title="24">x.labels &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;n=1&#39;</span>, <span class="st">&#39;n=10&#39;</span>, <span class="st">&#39;n=100&#39;</span>, <span class="st">&#39;n=1000&#39;</span>)</a>
 <a class="sourceLine" id="cb371-25" title="25">x.breaks &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>)</a>
 <a class="sourceLine" id="cb371-26" title="26"></a>
-<a class="sourceLine" id="cb371-27" title="27"><span class="co"># Graph Results--Draw</span></a>
-<a class="sourceLine" id="cb371-28" title="28">plt_mean &lt;-<span class="st"> </span>tb_sample_means <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb371-29" title="29"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>draw_count, <span class="dt">y=</span>mean)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb371-30" title="30"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size=</span><span class="fl">0.75</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb371-31" title="31"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Average as Even Rectangle</span></a>
-<a class="sourceLine" id="cb371-32" title="32"><span class="st">                      Count Increases</span><span class="ch">\n</span><span class="st"> True Mean=&#39;</span>,</a>
-<a class="sourceLine" id="cb371-33" title="33">                      fl_eps_mean,<span class="st">&#39;, sd=&#39;</span>,fl_eps_sd),</a>
-<a class="sourceLine" id="cb371-34" title="34">       <span class="dt">x =</span> <span class="st">&#39;Number of Even Rectangles for Approximation&#39;</span>,</a>
-<a class="sourceLine" id="cb371-35" title="35">       <span class="dt">y =</span> <span class="st">&#39;Integrated Mean&#39;</span>,</a>
-<a class="sourceLine" id="cb371-36" title="36">       <span class="dt">caption =</span> <span class="st">&#39;Integral Approximation as Even Rectangle Count Increases&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb371-37" title="37"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="dt">labels =</span> x.labels, <span class="dt">breaks =</span> x.breaks) <span class="op">+</span></a>
-<a class="sourceLine" id="cb371-38" title="38"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
-<a class="sourceLine" id="cb371-39" title="39"><span class="kw">print</span>(plt_mean)</a></code></pre></div>
+<a class="sourceLine" id="cb371-27" title="27"><span class="co"># Shared Labels</span></a>
+<a class="sourceLine" id="cb371-28" title="28">slb_title_shr =<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;as Even Rectangle Count Increases</span><span class="ch">\n</span><span class="st">&#39;</span>,</a>
+<a class="sourceLine" id="cb371-29" title="29">                       <span class="st">&#39;True Mean=&#39;</span>, fl_eps_mean,<span class="st">&#39;, sd=&#39;</span>,fl_eps_sd)</a>
+<a class="sourceLine" id="cb371-30" title="30">slb_xtitle =<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;Number Equi-distance Rectangles Bins&#39;</span>)</a>
+<a class="sourceLine" id="cb371-31" title="31"></a>
+<a class="sourceLine" id="cb371-32" title="32"><span class="co"># Graph Results--Draw</span></a>
+<a class="sourceLine" id="cb371-33" title="33">plt_mean &lt;-<span class="st"> </span>tb_sample_means <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb371-34" title="34"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>draw_count, <span class="dt">y=</span>mean)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb371-35" title="35"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size=</span><span class="fl">0.75</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb371-36" title="36"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Average &#39;</span>, slb_title_shr),</a>
+<a class="sourceLine" id="cb371-37" title="37">       <span class="dt">subtitle =</span> st_subtitle,</a>
+<a class="sourceLine" id="cb371-38" title="38">       <span class="dt">x =</span> slb_xtitle,</a>
+<a class="sourceLine" id="cb371-39" title="39">       <span class="dt">y =</span> <span class="st">&#39;Integrated Mean&#39;</span>,</a>
+<a class="sourceLine" id="cb371-40" title="40">       <span class="dt">caption =</span> <span class="st">&#39;Integral Approximation as Even Rectangle width decreases&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb371-41" title="41"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="dt">labels =</span> x.labels, <span class="dt">breaks =</span> x.breaks) <span class="op">+</span></a>
+<a class="sourceLine" id="cb371-42" title="42"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb371-43" title="43"><span class="kw">print</span>(plt_mean)</a></code></pre></div>
 <p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-161-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb372"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb372-1" title="1">plt_sd &lt;-<span class="st"> </span>tb_sample_means <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb372-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>draw_count, <span class="dt">y=</span>sd)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb372-3" title="3"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size=</span><span class="fl">0.75</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb372-4" title="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Standard Deviation as Even Rectangle</span></a>
-<a class="sourceLine" id="cb372-5" title="5"><span class="st">                      Count Increases</span><span class="ch">\n</span><span class="st"> True Mean=&#39;</span>,</a>
-<a class="sourceLine" id="cb372-6" title="6">                      fl_eps_mean,<span class="st">&#39;, sd=&#39;</span>,fl_eps_sd),</a>
-<a class="sourceLine" id="cb372-7" title="7">       <span class="dt">x =</span> <span class="st">&#39;Number of Even Rectangles for Approximation&#39;</span>,</a>
-<a class="sourceLine" id="cb372-8" title="8">       <span class="dt">y =</span> <span class="st">&#39;Standard Deviation&#39;</span>,</a>
-<a class="sourceLine" id="cb372-9" title="9">       <span class="dt">caption =</span> <span class="st">&#39;Integral Approximation as Even Rectangle Count Increases&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb372-10" title="10"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="dt">labels =</span> x.labels, <span class="dt">breaks =</span> x.breaks) <span class="op">+</span></a>
-<a class="sourceLine" id="cb372-11" title="11"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
-<a class="sourceLine" id="cb372-12" title="12"><span class="kw">print</span>(plt_sd)</a></code></pre></div>
+<a class="sourceLine" id="cb372-4" title="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Standard Deviation &#39;</span>, slb_title_shr),</a>
+<a class="sourceLine" id="cb372-5" title="5">       <span class="dt">subtitle =</span> st_subtitle,</a>
+<a class="sourceLine" id="cb372-6" title="6">       <span class="dt">x =</span> slb_xtitle,</a>
+<a class="sourceLine" id="cb372-7" title="7">       <span class="dt">y =</span> <span class="st">&#39;Standard Deviation&#39;</span>,</a>
+<a class="sourceLine" id="cb372-8" title="8">       <span class="dt">caption =</span> <span class="st">&#39;Integral Approximation as Even Rectangle width decreases&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb372-9" title="9"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="dt">labels =</span> x.labels, <span class="dt">breaks =</span> x.breaks) <span class="op">+</span></a>
+<a class="sourceLine" id="cb372-10" title="10"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb372-11" title="11"><span class="kw">print</span>(plt_sd)</a></code></pre></div>
 <p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-161-2.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb373"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb373-1" title="1">plt_cdf &lt;-<span class="st"> </span>tb_sample_means <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb373-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>draw_count, <span class="dt">y=</span>cdf)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb373-3" title="3"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size=</span><span class="fl">0.75</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb373-4" title="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Aggregate Probability as Even Rectangle</span></a>
-<a class="sourceLine" id="cb373-5" title="5"><span class="st">                      Count Increases</span><span class="ch">\n</span><span class="st"> True Mean=&#39;</span>,</a>
-<a class="sourceLine" id="cb373-6" title="6">                      fl_eps_mean,<span class="st">&#39;, sd=&#39;</span>,fl_eps_sd),</a>
-<a class="sourceLine" id="cb373-7" title="7">       <span class="dt">x =</span> <span class="st">&#39;Number of Even Rectangles for Approximation&#39;</span>,</a>
-<a class="sourceLine" id="cb373-8" title="8">       <span class="dt">y =</span> <span class="st">&#39;Aggregate Probability&#39;</span>,</a>
-<a class="sourceLine" id="cb373-9" title="9">       <span class="dt">caption =</span> <span class="st">&#39;Aggregate Probability Approximation as Even Rectangle Count Increases&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb373-10" title="10"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="dt">labels =</span> x.labels, <span class="dt">breaks =</span> x.breaks) <span class="op">+</span></a>
-<a class="sourceLine" id="cb373-11" title="11"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
-<a class="sourceLine" id="cb373-12" title="12"><span class="kw">print</span>(plt_cdf)</a></code></pre></div>
+<a class="sourceLine" id="cb373-4" title="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Aggregate Probability &#39;</span>, slb_title_shr),</a>
+<a class="sourceLine" id="cb373-5" title="5">       <span class="dt">subtitle =</span> st_subtitle,</a>
+<a class="sourceLine" id="cb373-6" title="6">       <span class="dt">x =</span> slb_xtitle,</a>
+<a class="sourceLine" id="cb373-7" title="7">       <span class="dt">y =</span> <span class="st">&#39;Sum of Equi-Dist Rectangles&#39;</span>,</a>
+<a class="sourceLine" id="cb373-8" title="8">       <span class="dt">caption =</span> <span class="st">&#39;Sum of Approx. Probability as Equi-Dist Rectangle width decreases&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb373-9" title="9"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="dt">labels =</span> x.labels, <span class="dt">breaks =</span> x.breaks) <span class="op">+</span></a>
+<a class="sourceLine" id="cb373-10" title="10"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb373-11" title="11"><span class="kw">print</span>(plt_cdf)</a></code></pre></div>
 <p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-161-3.png" width="672" style="display: block; margin: auto;" /></p>
 
 </div>
@@ -863,16 +886,13 @@ so when <span class="math inline">\(G\)</span> is increasing and <span class="ma
 </div>
 </div>
 </div>
-
-
-
             </section>
 
           </div>
         </div>
       </div>
 <a href="optimization.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="index-and-code-links.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="tables-and-graphs.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

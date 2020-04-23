@@ -40,7 +40,7 @@ fl_cdf_max = 0.999999
 ar_it_draws <- seq(1, 1000)
 ```
 
-#### Randomly Sample and Integrate (Monte Carlo integration)
+#### Randomly Sample and Integrate (Monte Carlo Integration)
 
 Compare randomly drawn normal shock mean and known mean. How does simulated mean change with draws. Actual integral equals to $10$, as sample size increases, the sample mean approaches the integration results, but this is expensive, even with ten thousand draws, not very exact.
 
@@ -63,16 +63,24 @@ tb_sample_means <- as_tibble(mt_sample_means)
 x.labels <- c('n=1', 'n=10', 'n=100', 'n=1000')
 x.breaks <- c(1, 10, 100, 1000)
 
+# Shared Subtitle
+st_subtitle <- paste0('https://fanwangecon.github.io/',
+                      'R4Econ/math/integration/htmlpdfr/fs_integrate_normal.html')
+
+# Shared Labels
+slb_title_shr = paste0('as Sample Size Increases\n',
+                       'True Mean=', fl_eps_mean,', sd=',fl_eps_sd)
+slb_xtitle = paste0('Sample Size')
+
 # Graph Results--Draw
 plt_mean <- tb_sample_means %>%
   ggplot(aes(x=draw_count, y=mean)) +
   geom_line(size=0.75) +
-  labs(title = paste0('Sample Average
-                      as Sample Size Increases\n True Mean=',
-                      fl_eps_mean,', sd=',fl_eps_sd),
-       x = 'Sample Size',
+  labs(title = paste0('Sample Mean ', slb_title_shr),
+       subtitle = st_subtitle,
+       x = slb_xtitle,
        y = 'Sample Mean',
-       caption = 'Mean of Sample Integrates to Mean') +
+       caption = 'Mean of Sample Integrates to True Mean') +
   scale_x_continuous(trans='log10', labels = x.labels, breaks = x.breaks) +
   theme_bw()
 print(plt_mean)
@@ -80,12 +88,11 @@ print(plt_mean)
 plt_sd <- tb_sample_means %>%
   ggplot(aes(x=draw_count, y=sd)) +
   geom_line(size=0.75) +
-  labs(title = paste0('Sample Standard Deviation
-                      as Sample Size Increases\n True Mean=',
-                      fl_eps_mean,', sd=',fl_eps_sd),
-       x = 'Sample Size',
+  labs(title = paste0('Sample Standard Deviation ', slb_title_shr),
+       subtitle = st_subtitle,
+       x = slb_xtitle,
        y = 'Sample Standard Deviation',
-       caption = 'Standard Deviation of Sample Integrates to True Standard Deviation') +
+       caption = 'Standard Deviation of Sample Integrates to True SD') +
   scale_x_continuous(trans='log10', labels = x.labels, breaks = x.breaks) +
   theme_bw()
 print(plt_sd)
@@ -93,9 +100,9 @@ print(plt_sd)
 
 #### Integration By Symmetric Uneven Rectangle
 
-Draw on grid from probability space, and then find use norm inverse to find corresponding x point. Under this approach, each rectangle is suppose to approximate the same same. So even area, but uneven width.
+Draw on even grid from close to 0 to close to 1. Get the corresponding x points to these quantile levels. Distance between x points are not equi-distance but increasing and symmetric away from the mean. Under this approach, each rectangle aims to approximate the same area.
 
-Resulting integration is rectangle based, but rectangle width differ. Th rectangle have wider width as they move away from the mean, and thin width close to the mean. This is much more stable than the random draw method, and approximates the true answer more accurately.
+Resulting integration is rectangle based, but rectangle width differ. The rectangles have wider width as they move away from the mean, and thinner width close to the mean. This is much more stable than the random draw method, but note that it converges somewhat slowly to true values as well.
 
 ```{r}
 mt_fl_means <-
@@ -126,15 +133,19 @@ tb_sample_means <- as_tibble(mt_sample_means)
 x.labels <- c('n=1', 'n=10', 'n=100', 'n=1000')
 x.breaks <- c(1, 10, 100, 1000)
 
+# Shared Labels
+slb_title_shr = paste0('as Uneven Rectangle Count Increases\n',
+                       'True Mean=', fl_eps_mean,', sd=',fl_eps_sd)
+slb_xtitle = paste0('Number of Quantile Bins for Uneven Rectangles Approximation')
+
 # Graph Results--Draw
 plt_mean <- tb_sample_means %>%
   ggplot(aes(x=draw_count, y=mean)) +
   geom_line(size=0.75) +
-  labs(title = paste0('Average as Uneven Rectangle
-                      Count Increases\n True Mean=',
-                      fl_eps_mean,', sd=',fl_eps_sd),
-       x = 'Number of Uneven Rectangles for Approximation',
-       y = 'Integrated Mean',
+  labs(title = paste0('Average ', slb_title_shr),
+       subtitle = st_subtitle,
+       x = slb_xtitle,
+       y = 'Approximated Mean',
        caption = 'Integral Approximation as Uneven Rectangle Count Increases') +
   scale_x_continuous(trans='log10', labels = x.labels, breaks = x.breaks) +
   theme_bw()
@@ -143,11 +154,10 @@ print(plt_mean)
 plt_sd <- tb_sample_means %>%
   ggplot(aes(x=draw_count, y=sd)) +
   geom_line(size=0.75) +
-  labs(title = paste0('Standard Deviation as Uneven Rectangle
-                      Count Increases\n True Mean=',
-                      fl_eps_mean,', sd=',fl_eps_sd),
-       x = 'Number of Uneven Rectangles for Approximation',
-       y = 'Standard Deviation',
+  labs(title = paste0('Standard Deviation ', slb_title_shr),
+       subtitle = st_subtitle,
+       x = slb_xtitle,
+       y = 'Approximated Standard Deviation',
        caption = 'Integral Approximation as Uneven Rectangle Count Increases') +
   scale_x_continuous(trans='log10', labels = x.labels, breaks = x.breaks) +
   theme_bw()
@@ -156,12 +166,11 @@ print(plt_sd)
 plt_cdf <- tb_sample_means %>%
   ggplot(aes(x=draw_count, y=cdf)) +
   geom_line(size=0.75) +
-  labs(title = paste0('Aggregate Probability as Uneven Rectangle
-                      Count Increases\n True Mean=',
-                      fl_eps_mean,', sd=',fl_eps_sd),
-       x = 'Number of Uneven Rectangles for Approximation',
-       y = 'Aggregate Probability',
-       caption = 'Aggregate Probability Approximation as Uneven Rectangle Count Increases') +
+  labs(title = paste0('Aggregate Probability ', slb_title_shr),
+       subtitle = st_subtitle,
+       x = slb_xtitle,
+       y = 'Sum of Uneven Rectangles',
+       caption = 'Sum of Approx. Probability as Uneven Rectangle Count Increases') +
   scale_x_continuous(trans='log10', labels = x.labels, breaks = x.breaks) +
   theme_bw()
 print(plt_cdf)
@@ -169,7 +178,7 @@ print(plt_cdf)
 
 #### Integration By Constant Width Rectangle (Trapezoidal rule)
 
-This is implementing even width recentagle, even along x-axis take points, and measure $f(x)$. Rectangle width are the same. This is even width, but uneven area. Note that this method approximates the true answer much better and more quickly.
+This is implementing even width recentagle, even along x-axix. Rectangle width are the same, height is $f(x)$. This is even width, but uneven area. Note that this method approximates the true answer much better and more quickly than the prior methods.
 
 ```{r}
 mt_fl_means <-
@@ -198,16 +207,20 @@ tb_sample_means <- as_tibble(mt_sample_means)
 x.labels <- c('n=1', 'n=10', 'n=100', 'n=1000')
 x.breaks <- c(1, 10, 100, 1000)
 
+# Shared Labels
+slb_title_shr = paste0('as Even Rectangle Count Increases\n',
+                       'True Mean=', fl_eps_mean,', sd=',fl_eps_sd)
+slb_xtitle = paste0('Number Equi-distance Rectangles Bins')
+
 # Graph Results--Draw
 plt_mean <- tb_sample_means %>%
   ggplot(aes(x=draw_count, y=mean)) +
   geom_line(size=0.75) +
-  labs(title = paste0('Average as Even Rectangle
-                      Count Increases\n True Mean=',
-                      fl_eps_mean,', sd=',fl_eps_sd),
-       x = 'Number of Even Rectangles for Approximation',
+  labs(title = paste0('Average ', slb_title_shr),
+       subtitle = st_subtitle,
+       x = slb_xtitle,
        y = 'Integrated Mean',
-       caption = 'Integral Approximation as Even Rectangle Count Increases') +
+       caption = 'Integral Approximation as Even Rectangle width decreases') +
   scale_x_continuous(trans='log10', labels = x.labels, breaks = x.breaks) +
   theme_bw()
 print(plt_mean)
@@ -215,12 +228,11 @@ print(plt_mean)
 plt_sd <- tb_sample_means %>%
   ggplot(aes(x=draw_count, y=sd)) +
   geom_line(size=0.75) +
-  labs(title = paste0('Standard Deviation as Even Rectangle
-                      Count Increases\n True Mean=',
-                      fl_eps_mean,', sd=',fl_eps_sd),
-       x = 'Number of Even Rectangles for Approximation',
+  labs(title = paste0('Standard Deviation ', slb_title_shr),
+       subtitle = st_subtitle,
+       x = slb_xtitle,
        y = 'Standard Deviation',
-       caption = 'Integral Approximation as Even Rectangle Count Increases') +
+       caption = 'Integral Approximation as Even Rectangle width decreases') +
   scale_x_continuous(trans='log10', labels = x.labels, breaks = x.breaks) +
   theme_bw()
 print(plt_sd)
@@ -228,12 +240,11 @@ print(plt_sd)
 plt_cdf <- tb_sample_means %>%
   ggplot(aes(x=draw_count, y=cdf)) +
   geom_line(size=0.75) +
-  labs(title = paste0('Aggregate Probability as Even Rectangle
-                      Count Increases\n True Mean=',
-                      fl_eps_mean,', sd=',fl_eps_sd),
-       x = 'Number of Even Rectangles for Approximation',
-       y = 'Aggregate Probability',
-       caption = 'Aggregate Probability Approximation as Even Rectangle Count Increases') +
+  labs(title = paste0('Aggregate Probability ', slb_title_shr),
+       subtitle = st_subtitle,
+       x = slb_xtitle,
+       y = 'Sum of Equi-Dist Rectangles',
+       caption = 'Sum of Approx. Probability as Equi-Dist Rectangle width decreases') +
   scale_x_continuous(trans='log10', labels = x.labels, breaks = x.breaks) +
   theme_bw()
 print(plt_cdf)

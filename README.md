@@ -215,7 +215,23 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ **r**: *apply(mt, 1, funct(x){}) + do.call(rbind, ls_mt)*
 	+ **tidyr**: *expand_grid()*
 	+ **ggplot2**: *geom_line() + facet_wrap()*
-3. [README_appendix](https://fanwangecon.github.io/R4Econ//htmlpdfr/README_appendix.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master///README_appendix.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master//htmlpdfr/README_appendix.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master//htmlpdfr/README_appendix.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ//htmlpdfr/README_appendix.html)
+
+# 9  Tables and Graphs
+
+## 9.1  R Base Plots
+
+1. [R Base Plot Line with Curves and Scatter](https://fanwangecon.github.io/R4Econ/tabgraph/baseplot/htmlpdfr/fs_base_curve.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/baseplot//fs_base_curve.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/baseplot/htmlpdfr/fs_base_curve.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/baseplot/htmlpdfr/fs_base_curve.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/tabgraph/baseplot/htmlpdfr/fs_base_curve.html)
+	+ Plot scatter points, line plot and functional curve graphs together.
+	+ Set margins for legend to be outside of graph area, change line, point, label and legend sizes.
+	+ Generate additional lines for plots successively, record successively, and plot all steps, or initial steps results.
+	+ **r**: *plot() + curve() + legend() + title() + axis() + par() + recordPlot()*
+
+## 9.2  Write and Read Plots
+
+1. [Base R Save Images At Different Sizes](https://fanwangecon.github.io/R4Econ/tabgraph/inout/htmlpdfr/fs_img_io.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/inout//fs_img_io.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/inout/htmlpdfr/fs_img_io.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/inout/htmlpdfr/fs_img_io.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/tabgraph/inout/htmlpdfr/fs_img_io.html)
+	+ Base R store image core, add legends/titles/labels/axis of different sizes to save figures of different sizes.
+	+ **r**: *png() + setEPS() + postscript() + dev.off()*
+2. [README_appendix](https://fanwangecon.github.io/R4Econ//htmlpdfr/README_appendix.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master///README_appendix.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master//htmlpdfr/README_appendix.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master//htmlpdfr/README_appendix.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ//htmlpdfr/README_appendix.html)
 
 ----
 Please contact [![](https://img.shields.io/github/followers/fanwangecon?label=FanWangEcon&style=social)](https://github.com/FanWangEcon) [![](https://img.shields.io/twitter/follow/fanwangecon?label=%20&style=social)](https://twitter.com/fanwangecon) for issues or problems.

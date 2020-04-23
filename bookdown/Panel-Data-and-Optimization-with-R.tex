@@ -144,7 +144,7 @@
 
 \title{Panel Data and Optimization with R}
 \author{Fan Wang}
-\date{2020-04-22}
+\date{2020-04-23}
 
 \begin{document}
 \maketitle
@@ -9000,7 +9000,7 @@ Some Common parameters
 \end{Shaded}
 
 \hypertarget{randomly-sample-and-integrate-monte-carlo-integration}{%
-\subsubsection{Randomly Sample and Integrate (Monte Carlo integration)}\label{randomly-sample-and-integrate-monte-carlo-integration}}
+\subsubsection{Randomly Sample and Integrate (Monte Carlo Integration)}\label{randomly-sample-and-integrate-monte-carlo-integration}}
 
 Compare randomly drawn normal shock mean and known mean. How does simulated mean change with draws. Actual integral equals to \(10\), as sample size increases, the sample mean approaches the integration results, but this is expensive, even with ten thousand draws, not very exact.
 
@@ -9024,16 +9024,24 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \NormalTok{x.labels <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'n=1'}\NormalTok{, }\StringTok{'n=10'}\NormalTok{, }\StringTok{'n=100'}\NormalTok{, }\StringTok{'n=1000'}\NormalTok{)}
 \NormalTok{x.breaks <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DecValTok{1000}\NormalTok{)}
 
+\CommentTok{# Shared Subtitle}
+\NormalTok{st_subtitle <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'https://fanwangecon.github.io/'}\NormalTok{,}
+                      \StringTok{'R4Econ/math/integration/htmlpdfr/fs_integrate_normal.html'}\NormalTok{)}
+
+\CommentTok{# Shared Labels}
+\NormalTok{slb_title_shr =}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'as Sample Size Increases}\CharTok{\textbackslash{}n}\StringTok{'}\NormalTok{,}
+                       \StringTok{'True Mean='}\NormalTok{, fl_eps_mean,}\StringTok{', sd='}\NormalTok{,fl_eps_sd)}
+\NormalTok{slb_xtitle =}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'Sample Size'}\NormalTok{)}
+
 \CommentTok{# Graph Results--Draw}
 \NormalTok{plt_mean <-}\StringTok{ }\NormalTok{tb_sample_means }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{draw_count, }\DataTypeTok{y=}\NormalTok{mean)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{size=}\FloatTok{0.75}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{'Sample Average}
-\StringTok{                      as Sample Size Increases}\CharTok{\textbackslash{}n}\StringTok{ True Mean='}\NormalTok{,}
-\NormalTok{                      fl_eps_mean,}\StringTok{', sd='}\NormalTok{,fl_eps_sd),}
-       \DataTypeTok{x =} \StringTok{'Sample Size'}\NormalTok{,}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{'Sample Mean '}\NormalTok{, slb_title_shr),}
+       \DataTypeTok{subtitle =}\NormalTok{ st_subtitle,}
+       \DataTypeTok{x =}\NormalTok{ slb_xtitle,}
        \DataTypeTok{y =} \StringTok{'Sample Mean'}\NormalTok{,}
-       \DataTypeTok{caption =} \StringTok{'Mean of Sample Integrates to Mean'}\NormalTok{) }\OperatorTok{+}
+       \DataTypeTok{caption =} \StringTok{'Mean of Sample Integrates to True Mean'}\NormalTok{) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{trans=}\StringTok{'log10'}\NormalTok{, }\DataTypeTok{labels =}\NormalTok{ x.labels, }\DataTypeTok{breaks =}\NormalTok{ x.breaks) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}
 \KeywordTok{print}\NormalTok{(plt_mean)}
@@ -9047,12 +9055,11 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \NormalTok{plt_sd <-}\StringTok{ }\NormalTok{tb_sample_means }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{draw_count, }\DataTypeTok{y=}\NormalTok{sd)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{size=}\FloatTok{0.75}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{'Sample Standard Deviation}
-\StringTok{                      as Sample Size Increases}\CharTok{\textbackslash{}n}\StringTok{ True Mean='}\NormalTok{,}
-\NormalTok{                      fl_eps_mean,}\StringTok{', sd='}\NormalTok{,fl_eps_sd),}
-       \DataTypeTok{x =} \StringTok{'Sample Size'}\NormalTok{,}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{'Sample Standard Deviation '}\NormalTok{, slb_title_shr),}
+       \DataTypeTok{subtitle =}\NormalTok{ st_subtitle,}
+       \DataTypeTok{x =}\NormalTok{ slb_xtitle,}
        \DataTypeTok{y =} \StringTok{'Sample Standard Deviation'}\NormalTok{,}
-       \DataTypeTok{caption =} \StringTok{'Standard Deviation of Sample Integrates to True Standard Deviation'}\NormalTok{) }\OperatorTok{+}
+       \DataTypeTok{caption =} \StringTok{'Standard Deviation of Sample Integrates to True SD'}\NormalTok{) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{trans=}\StringTok{'log10'}\NormalTok{, }\DataTypeTok{labels =}\NormalTok{ x.labels, }\DataTypeTok{breaks =}\NormalTok{ x.breaks) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}
 \KeywordTok{print}\NormalTok{(plt_sd)}
@@ -9064,9 +9071,9 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \hypertarget{integration-by-symmetric-uneven-rectangle}{%
 \subsubsection{Integration By Symmetric Uneven Rectangle}\label{integration-by-symmetric-uneven-rectangle}}
 
-Draw on grid from probability space, and then find use norm inverse to find corresponding x point. Under this approach, each rectangle is suppose to approximate the same same. So even area, but uneven width.
+Draw on even grid from close to 0 to close to 1. Get the corresponding x points to these quantile levels. Distance between x points are not equi-distance but increasing and symmetric away from the mean. Under this approach, each rectangle aims to approximate the same area.
 
-Resulting integration is rectangle based, but rectangle width differ. Th rectangle have wider width as they move away from the mean, and thin width close to the mean. This is much more stable than the random draw method, and approximates the true answer more accurately.
+Resulting integration is rectangle based, but rectangle width differ. The rectangles have wider width as they move away from the mean, and thinner width close to the mean. This is much more stable than the random draw method, but note that it converges somewhat slowly to true values as well.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9098,15 +9105,19 @@ Resulting integration is rectangle based, but rectangle width differ. Th rectang
 \NormalTok{x.labels <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'n=1'}\NormalTok{, }\StringTok{'n=10'}\NormalTok{, }\StringTok{'n=100'}\NormalTok{, }\StringTok{'n=1000'}\NormalTok{)}
 \NormalTok{x.breaks <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DecValTok{1000}\NormalTok{)}
 
+\CommentTok{# Shared Labels}
+\NormalTok{slb_title_shr =}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'as Uneven Rectangle Count Increases}\CharTok{\textbackslash{}n}\StringTok{'}\NormalTok{,}
+                       \StringTok{'True Mean='}\NormalTok{, fl_eps_mean,}\StringTok{', sd='}\NormalTok{,fl_eps_sd)}
+\NormalTok{slb_xtitle =}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'Number of Quantile Bins for Uneven Rectangles Approximation'}\NormalTok{)}
+
 \CommentTok{# Graph Results--Draw}
 \NormalTok{plt_mean <-}\StringTok{ }\NormalTok{tb_sample_means }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{draw_count, }\DataTypeTok{y=}\NormalTok{mean)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{size=}\FloatTok{0.75}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{'Average as Uneven Rectangle}
-\StringTok{                      Count Increases}\CharTok{\textbackslash{}n}\StringTok{ True Mean='}\NormalTok{,}
-\NormalTok{                      fl_eps_mean,}\StringTok{', sd='}\NormalTok{,fl_eps_sd),}
-       \DataTypeTok{x =} \StringTok{'Number of Uneven Rectangles for Approximation'}\NormalTok{,}
-       \DataTypeTok{y =} \StringTok{'Integrated Mean'}\NormalTok{,}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{'Average '}\NormalTok{, slb_title_shr),}
+       \DataTypeTok{subtitle =}\NormalTok{ st_subtitle,}
+       \DataTypeTok{x =}\NormalTok{ slb_xtitle,}
+       \DataTypeTok{y =} \StringTok{'Approximated Mean'}\NormalTok{,}
        \DataTypeTok{caption =} \StringTok{'Integral Approximation as Uneven Rectangle Count Increases'}\NormalTok{) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{trans=}\StringTok{'log10'}\NormalTok{, }\DataTypeTok{labels =}\NormalTok{ x.labels, }\DataTypeTok{breaks =}\NormalTok{ x.breaks) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}
@@ -9121,11 +9132,10 @@ Resulting integration is rectangle based, but rectangle width differ. Th rectang
 \NormalTok{plt_sd <-}\StringTok{ }\NormalTok{tb_sample_means }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{draw_count, }\DataTypeTok{y=}\NormalTok{sd)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{size=}\FloatTok{0.75}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{'Standard Deviation as Uneven Rectangle}
-\StringTok{                      Count Increases}\CharTok{\textbackslash{}n}\StringTok{ True Mean='}\NormalTok{,}
-\NormalTok{                      fl_eps_mean,}\StringTok{', sd='}\NormalTok{,fl_eps_sd),}
-       \DataTypeTok{x =} \StringTok{'Number of Uneven Rectangles for Approximation'}\NormalTok{,}
-       \DataTypeTok{y =} \StringTok{'Standard Deviation'}\NormalTok{,}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{'Standard Deviation '}\NormalTok{, slb_title_shr),}
+       \DataTypeTok{subtitle =}\NormalTok{ st_subtitle,}
+       \DataTypeTok{x =}\NormalTok{ slb_xtitle,}
+       \DataTypeTok{y =} \StringTok{'Approximated Standard Deviation'}\NormalTok{,}
        \DataTypeTok{caption =} \StringTok{'Integral Approximation as Uneven Rectangle Count Increases'}\NormalTok{) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{trans=}\StringTok{'log10'}\NormalTok{, }\DataTypeTok{labels =}\NormalTok{ x.labels, }\DataTypeTok{breaks =}\NormalTok{ x.breaks) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}
@@ -9140,12 +9150,11 @@ Resulting integration is rectangle based, but rectangle width differ. Th rectang
 \NormalTok{plt_cdf <-}\StringTok{ }\NormalTok{tb_sample_means }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{draw_count, }\DataTypeTok{y=}\NormalTok{cdf)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{size=}\FloatTok{0.75}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{'Aggregate Probability as Uneven Rectangle}
-\StringTok{                      Count Increases}\CharTok{\textbackslash{}n}\StringTok{ True Mean='}\NormalTok{,}
-\NormalTok{                      fl_eps_mean,}\StringTok{', sd='}\NormalTok{,fl_eps_sd),}
-       \DataTypeTok{x =} \StringTok{'Number of Uneven Rectangles for Approximation'}\NormalTok{,}
-       \DataTypeTok{y =} \StringTok{'Aggregate Probability'}\NormalTok{,}
-       \DataTypeTok{caption =} \StringTok{'Aggregate Probability Approximation as Uneven Rectangle Count Increases'}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{'Aggregate Probability '}\NormalTok{, slb_title_shr),}
+       \DataTypeTok{subtitle =}\NormalTok{ st_subtitle,}
+       \DataTypeTok{x =}\NormalTok{ slb_xtitle,}
+       \DataTypeTok{y =} \StringTok{'Sum of Uneven Rectangles'}\NormalTok{,}
+       \DataTypeTok{caption =} \StringTok{'Sum of Approx. Probability as Uneven Rectangle Count Increases'}\NormalTok{) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{trans=}\StringTok{'log10'}\NormalTok{, }\DataTypeTok{labels =}\NormalTok{ x.labels, }\DataTypeTok{breaks =}\NormalTok{ x.breaks) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}
 \KeywordTok{print}\NormalTok{(plt_cdf)}
@@ -9157,7 +9166,7 @@ Resulting integration is rectangle based, but rectangle width differ. Th rectang
 \hypertarget{integration-by-constant-width-rectangle-trapezoidal-rule}{%
 \subsubsection{Integration By Constant Width Rectangle (Trapezoidal rule)}\label{integration-by-constant-width-rectangle-trapezoidal-rule}}
 
-This is implementing even width recentagle, even along x-axis take points, and measure \(f(x)\). Rectangle width are the same. This is even width, but uneven area. Note that this method approximates the true answer much better and more quickly.
+This is implementing even width recentagle, even along x-axix. Rectangle width are the same, height is \(f(x)\). This is even width, but uneven area. Note that this method approximates the true answer much better and more quickly than the prior methods.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9187,16 +9196,20 @@ This is implementing even width recentagle, even along x-axis take points, and m
 \NormalTok{x.labels <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'n=1'}\NormalTok{, }\StringTok{'n=10'}\NormalTok{, }\StringTok{'n=100'}\NormalTok{, }\StringTok{'n=1000'}\NormalTok{)}
 \NormalTok{x.breaks <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DecValTok{1000}\NormalTok{)}
 
+\CommentTok{# Shared Labels}
+\NormalTok{slb_title_shr =}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'as Even Rectangle Count Increases}\CharTok{\textbackslash{}n}\StringTok{'}\NormalTok{,}
+                       \StringTok{'True Mean='}\NormalTok{, fl_eps_mean,}\StringTok{', sd='}\NormalTok{,fl_eps_sd)}
+\NormalTok{slb_xtitle =}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'Number Equi-distance Rectangles Bins'}\NormalTok{)}
+
 \CommentTok{# Graph Results--Draw}
 \NormalTok{plt_mean <-}\StringTok{ }\NormalTok{tb_sample_means }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{draw_count, }\DataTypeTok{y=}\NormalTok{mean)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{size=}\FloatTok{0.75}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{'Average as Even Rectangle}
-\StringTok{                      Count Increases}\CharTok{\textbackslash{}n}\StringTok{ True Mean='}\NormalTok{,}
-\NormalTok{                      fl_eps_mean,}\StringTok{', sd='}\NormalTok{,fl_eps_sd),}
-       \DataTypeTok{x =} \StringTok{'Number of Even Rectangles for Approximation'}\NormalTok{,}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{'Average '}\NormalTok{, slb_title_shr),}
+       \DataTypeTok{subtitle =}\NormalTok{ st_subtitle,}
+       \DataTypeTok{x =}\NormalTok{ slb_xtitle,}
        \DataTypeTok{y =} \StringTok{'Integrated Mean'}\NormalTok{,}
-       \DataTypeTok{caption =} \StringTok{'Integral Approximation as Even Rectangle Count Increases'}\NormalTok{) }\OperatorTok{+}
+       \DataTypeTok{caption =} \StringTok{'Integral Approximation as Even Rectangle width decreases'}\NormalTok{) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{trans=}\StringTok{'log10'}\NormalTok{, }\DataTypeTok{labels =}\NormalTok{ x.labels, }\DataTypeTok{breaks =}\NormalTok{ x.breaks) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}
 \KeywordTok{print}\NormalTok{(plt_mean)}
@@ -9210,12 +9223,11 @@ This is implementing even width recentagle, even along x-axis take points, and m
 \NormalTok{plt_sd <-}\StringTok{ }\NormalTok{tb_sample_means }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{draw_count, }\DataTypeTok{y=}\NormalTok{sd)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{size=}\FloatTok{0.75}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{'Standard Deviation as Even Rectangle}
-\StringTok{                      Count Increases}\CharTok{\textbackslash{}n}\StringTok{ True Mean='}\NormalTok{,}
-\NormalTok{                      fl_eps_mean,}\StringTok{', sd='}\NormalTok{,fl_eps_sd),}
-       \DataTypeTok{x =} \StringTok{'Number of Even Rectangles for Approximation'}\NormalTok{,}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{'Standard Deviation '}\NormalTok{, slb_title_shr),}
+       \DataTypeTok{subtitle =}\NormalTok{ st_subtitle,}
+       \DataTypeTok{x =}\NormalTok{ slb_xtitle,}
        \DataTypeTok{y =} \StringTok{'Standard Deviation'}\NormalTok{,}
-       \DataTypeTok{caption =} \StringTok{'Integral Approximation as Even Rectangle Count Increases'}\NormalTok{) }\OperatorTok{+}
+       \DataTypeTok{caption =} \StringTok{'Integral Approximation as Even Rectangle width decreases'}\NormalTok{) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{trans=}\StringTok{'log10'}\NormalTok{, }\DataTypeTok{labels =}\NormalTok{ x.labels, }\DataTypeTok{breaks =}\NormalTok{ x.breaks) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}
 \KeywordTok{print}\NormalTok{(plt_sd)}
@@ -9229,12 +9241,11 @@ This is implementing even width recentagle, even along x-axis take points, and m
 \NormalTok{plt_cdf <-}\StringTok{ }\NormalTok{tb_sample_means }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{draw_count, }\DataTypeTok{y=}\NormalTok{cdf)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{size=}\FloatTok{0.75}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{'Aggregate Probability as Even Rectangle}
-\StringTok{                      Count Increases}\CharTok{\textbackslash{}n}\StringTok{ True Mean='}\NormalTok{,}
-\NormalTok{                      fl_eps_mean,}\StringTok{', sd='}\NormalTok{,fl_eps_sd),}
-       \DataTypeTok{x =} \StringTok{'Number of Even Rectangles for Approximation'}\NormalTok{,}
-       \DataTypeTok{y =} \StringTok{'Aggregate Probability'}\NormalTok{,}
-       \DataTypeTok{caption =} \StringTok{'Aggregate Probability Approximation as Even Rectangle Count Increases'}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \KeywordTok{paste0}\NormalTok{(}\StringTok{'Aggregate Probability '}\NormalTok{, slb_title_shr),}
+       \DataTypeTok{subtitle =}\NormalTok{ st_subtitle,}
+       \DataTypeTok{x =}\NormalTok{ slb_xtitle,}
+       \DataTypeTok{y =} \StringTok{'Sum of Equi-Dist Rectangles'}\NormalTok{,}
+       \DataTypeTok{caption =} \StringTok{'Sum of Approx. Probability as Equi-Dist Rectangle width decreases'}\NormalTok{) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{trans=}\StringTok{'log10'}\NormalTok{, }\DataTypeTok{labels =}\NormalTok{ x.labels, }\DataTypeTok{breaks =}\NormalTok{ x.breaks) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}
 \KeywordTok{print}\NormalTok{(plt_cdf)}
@@ -9721,6 +9732,506 @@ Note that many more A grid points are needed to fully plot out the leontief line
 \end{Shaded}
 
 \begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-167-1} \end{center}
+
+\hypertarget{tables-and-graphs}{%
+\chapter{Tables and Graphs}\label{tables-and-graphs}}
+
+\hypertarget{r-base-plots}{%
+\section{R Base Plots}\label{r-base-plots}}
+
+\hypertarget{plot-curve-line-and-points}{%
+\subsection{Plot Curve, Line and Points}\label{plot-curve-line-and-points}}
+
+\begin{quote}
+Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R4Econ} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository.
+\end{quote}
+
+Work with the R plot function.
+
+\hypertarget{one-point-one-line-and-two-curves}{%
+\subsubsection{One Point, One Line and Two Curves}\label{one-point-one-line-and-two-curves}}
+
+\begin{itemize}
+\tightlist
+\item
+  r curve on top of plot
+\item
+  r plot specify pch lty both scatter and line
+\item
+  r legend outside
+\end{itemize}
+
+Jointly plot:
+
+\begin{itemize}
+\tightlist
+\item
+  1 scatter plot
+\item
+  1 line plot
+\item
+  2 function curve plots
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#######################################################}
+\CommentTok{# First, Some common Labels:}
+\CommentTok{#######################################################}
+\CommentTok{# Labeling}
+\NormalTok{st_title <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'Scatter, Line and Curve Joint Ploting Example Using Base R}\CharTok{\textbackslash{}n}\StringTok{'}\NormalTok{,}
+                   \StringTok{'plot() + curve(): x*sin(x), cos(x), sin(x)*cos(x), sin(x)+tan(x)+cos(x)'}\NormalTok{)}
+\NormalTok{st_subtitle <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'https://fanwangecon.github.io/'}\NormalTok{,}
+                      \StringTok{'R4Econ/tabgraph/inout/htmlpdfr/fs_base_curve.html'}\NormalTok{)}
+\NormalTok{st_x_label <-}\StringTok{ 'x'}
+\NormalTok{st_y_label <-}\StringTok{ 'f(x)'}
+
+\CommentTok{#######################################################}
+\CommentTok{# Second, Generate the Graphs Functions and data points:}
+\CommentTok{#######################################################}
+\CommentTok{# x only used for Point 1 and Line 1}
+\NormalTok{x <-}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\OperatorTok{-}\DecValTok{1}\OperatorTok{*}\NormalTok{pi, }\DecValTok{1}\OperatorTok{*}\NormalTok{pi, }\DataTypeTok{length.out=}\DecValTok{25}\NormalTok{)}
+\CommentTok{# Line (Point) 1: Generate X and Y}
+\NormalTok{y1 <-}\StringTok{ }\NormalTok{x}\OperatorTok{*}\KeywordTok{sin}\NormalTok{(x)}
+\NormalTok{st_point_}\DecValTok{1}\NormalTok{_y_legend <-}\StringTok{ 'x*sin(x)'}
+\CommentTok{# Line 2: Line Plot}
+\NormalTok{y2 <-}\StringTok{ }\KeywordTok{cos}\NormalTok{(x)}
+\NormalTok{st_line_}\DecValTok{2}\NormalTok{_y_legend <-}\StringTok{ 'cos(x)'}
+\CommentTok{# Line 3: Function}
+\NormalTok{fc_sin_cos_diff <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{sin}\NormalTok{(x)}\OperatorTok{*}\KeywordTok{cos}\NormalTok{(x)}
+\NormalTok{st_line_}\DecValTok{3}\NormalTok{_y_legend <-}\StringTok{ 'sin(x)*cos(x)'}
+\CommentTok{# Line 4: Function}
+\NormalTok{fc_sin_cos_tan <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{sin}\NormalTok{(x) }\OperatorTok{+}\StringTok{ }\KeywordTok{cos}\NormalTok{(x) }\OperatorTok{+}\StringTok{ }\KeywordTok{tan}\NormalTok{(x)}
+\NormalTok{st_line_}\DecValTok{4}\NormalTok{_y_legend <-}\StringTok{ 'sin(x) + tan(x) + cos(x)'}
+
+\CommentTok{#######################################################}
+\CommentTok{# Third, set:}
+\CommentTok{# - point shape and size: *pch* and *cex*}
+\CommentTok{# - line type and width: *lty* and *lwd*}
+\CommentTok{#######################################################}
+\CommentTok{# http://www.sthda.com/english/wiki/r-plot-pch-symbols-the-different-point-shapes-available-in-r}
+\CommentTok{# http://www.sthda.com/english/wiki/line-types-in-r-lty}
+\CommentTok{# for colors, see: https://fanwangecon.github.io/M4Econ/graph/tools/fs_color.html}
+\NormalTok{st_point_}\DecValTok{1}\NormalTok{_blue <-}\StringTok{ }\KeywordTok{rgb}\NormalTok{(}\DecValTok{57}\OperatorTok{/}\DecValTok{255}\NormalTok{,}\DecValTok{106}\OperatorTok{/}\DecValTok{255}\NormalTok{,}\DecValTok{177}\OperatorTok{/}\DecValTok{255}\NormalTok{)}
+\NormalTok{st_line_}\DecValTok{2}\NormalTok{_red <-}\StringTok{ }\KeywordTok{rgb}\NormalTok{(}\DecValTok{204}\OperatorTok{/}\DecValTok{255}\NormalTok{, }\DecValTok{37}\OperatorTok{/}\DecValTok{255}\NormalTok{, }\DecValTok{41}\OperatorTok{/}\DecValTok{255}\NormalTok{,)}
+\NormalTok{st_line_}\DecValTok{3}\NormalTok{_black <-}\StringTok{ 'black'}
+\NormalTok{st_line_}\DecValTok{4}\NormalTok{_purple <-}\StringTok{ 'orange'}
+
+\CommentTok{# point type}
+\NormalTok{st_point_}\DecValTok{1}\NormalTok{_pch <-}\StringTok{ }\DecValTok{10}
+\CommentTok{# point size}
+\NormalTok{st_point_}\DecValTok{1}\NormalTok{_cex <-}\StringTok{ }\DecValTok{2}
+
+\CommentTok{# line type}
+\NormalTok{st_line_}\DecValTok{2}\NormalTok{_lty <-}\StringTok{ 'dashed'}
+\NormalTok{st_line_}\DecValTok{3}\NormalTok{_lty <-}\StringTok{ 'dotted'}
+\NormalTok{st_line_}\DecValTok{4}\NormalTok{_lty <-}\StringTok{ 'dotdash'}
+\CommentTok{# line width}
+\NormalTok{st_line_}\DecValTok{2}\NormalTok{_lwd <-}\StringTok{ }\DecValTok{3}
+\NormalTok{st_line_}\DecValTok{3}\NormalTok{_lwd <-}\StringTok{ }\FloatTok{2.5}
+\NormalTok{st_line_}\DecValTok{4}\NormalTok{_lwd <-}\StringTok{ }\FloatTok{3.5}
+
+\CommentTok{#######################################################}
+\CommentTok{# Fourth: Share xlim and ylim}
+\CommentTok{#######################################################}
+\NormalTok{ar_xlim =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{min}\NormalTok{(x), }\KeywordTok{max}\NormalTok{(x))}
+\NormalTok{ar_ylim =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\FloatTok{3.5}\NormalTok{, }\FloatTok{3.5}\NormalTok{)}
+
+\CommentTok{#######################################################}
+\CommentTok{# Fifth: the legend will be long, will place it to the right of figure,}
+\CommentTok{#######################################################}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\OtherTok{FALSE}\NormalTok{, }\DataTypeTok{mar=}\KeywordTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{10}\NormalTok{))}
+
+\CommentTok{#######################################################}
+\CommentTok{# Sixth, the four objects and do not print yet:}
+\CommentTok{#######################################################}
+\CommentTok{# pdf(NULL)}
+\CommentTok{# Graph Scatter 1}
+\KeywordTok{plot}\NormalTok{(x, y1, }\DataTypeTok{type=}\StringTok{"p"}\NormalTok{,}
+     \DataTypeTok{col =}\NormalTok{ st_point_}\DecValTok{1}\NormalTok{_blue,}
+     \DataTypeTok{pch =}\NormalTok{ st_point_}\DecValTok{1}\NormalTok{_pch, }\DataTypeTok{cex =}\NormalTok{ st_point_}\DecValTok{1}\NormalTok{_cex,}
+     \DataTypeTok{xlim =}\NormalTok{ ar_xlim, }\DataTypeTok{ylim =}\NormalTok{ ar_ylim,}
+     \DataTypeTok{panel.first =} \KeywordTok{grid}\NormalTok{(),}
+     \DataTypeTok{ylab =} \StringTok{''}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{''}\NormalTok{, }\DataTypeTok{yaxt=}\StringTok{'n'}\NormalTok{, }\DataTypeTok{xaxt=}\StringTok{'n'}\NormalTok{, }\DataTypeTok{ann=}\OtherTok{FALSE}\NormalTok{)}
+\NormalTok{pl_scatter_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\KeywordTok{recordPlot}\NormalTok{()}
+
+\CommentTok{# Graph Line 2}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T)}
+\KeywordTok{plot}\NormalTok{(x, y2, }\DataTypeTok{type=}\StringTok{"l"}\NormalTok{,}
+     \DataTypeTok{col =}\NormalTok{ st_line_}\DecValTok{2}\NormalTok{_red,}
+     \DataTypeTok{lwd =}\NormalTok{ st_line_}\DecValTok{2}\NormalTok{_lwd, }\DataTypeTok{lty =}\NormalTok{ st_line_}\DecValTok{2}\NormalTok{_lty,}
+     \DataTypeTok{xlim =}\NormalTok{ ar_xlim, }\DataTypeTok{ylim =}\NormalTok{ ar_ylim,}
+     \DataTypeTok{ylab =} \StringTok{''}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{''}\NormalTok{, }\DataTypeTok{yaxt=}\StringTok{'n'}\NormalTok{, }\DataTypeTok{xaxt=}\StringTok{'n'}\NormalTok{, }\DataTypeTok{ann=}\OtherTok{FALSE}\NormalTok{)}
+\NormalTok{pl_}\DecValTok{12}\NormalTok{ <-}\StringTok{ }\KeywordTok{recordPlot}\NormalTok{()}
+
+\CommentTok{# Graph Curve 3}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T)}
+\KeywordTok{curve}\NormalTok{(fc_sin_cos_diff,}
+      \DataTypeTok{col =}\NormalTok{ st_line_}\DecValTok{3}\NormalTok{_black,}
+      \DataTypeTok{lwd =}\NormalTok{ st_line_}\DecValTok{3}\NormalTok{_lwd, }\DataTypeTok{lty =}\NormalTok{ st_line_}\DecValTok{3}\NormalTok{_lty,}
+      \DataTypeTok{from =}\NormalTok{ ar_xlim[}\DecValTok{1}\NormalTok{], }\DataTypeTok{to =}\NormalTok{ ar_xlim[}\DecValTok{2}\NormalTok{], }\DataTypeTok{ylim =}\NormalTok{ ar_ylim,}
+      \DataTypeTok{ylab =} \StringTok{''}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{''}\NormalTok{, }\DataTypeTok{yaxt=}\StringTok{'n'}\NormalTok{, }\DataTypeTok{xaxt=}\StringTok{'n'}\NormalTok{, }\DataTypeTok{ann=}\OtherTok{FALSE}\NormalTok{)}
+\NormalTok{pl_}\DecValTok{123}\NormalTok{ <-}\StringTok{ }\KeywordTok{recordPlot}\NormalTok{()}
+
+\CommentTok{# Graph Curve 4}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T)}
+\KeywordTok{curve}\NormalTok{(fc_sin_cos_tan,}
+      \DataTypeTok{col =}\NormalTok{ st_line_}\DecValTok{4}\NormalTok{_purple,}
+      \DataTypeTok{lwd =}\NormalTok{ st_line_}\DecValTok{4}\NormalTok{_lwd, }\DataTypeTok{lty =}\NormalTok{ st_line_}\DecValTok{4}\NormalTok{_lty,}
+      \DataTypeTok{from =}\NormalTok{ ar_xlim[}\DecValTok{1}\NormalTok{], }\DataTypeTok{to =}\NormalTok{ ar_xlim[}\DecValTok{2}\NormalTok{], }\DataTypeTok{ylim =}\NormalTok{ ar_ylim,}
+      \DataTypeTok{ylab =} \StringTok{''}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{''}\NormalTok{, }\DataTypeTok{yaxt=}\StringTok{'n'}\NormalTok{, }\DataTypeTok{xaxt=}\StringTok{'n'}\NormalTok{, }\DataTypeTok{ann=}\OtherTok{FALSE}\NormalTok{)}
+\NormalTok{pl_}\DecValTok{1234}\NormalTok{ <-}\StringTok{ }\KeywordTok{recordPlot}\NormalTok{()}
+\CommentTok{# invisible(dev.off())}
+
+\CommentTok{#######################################################}
+\CommentTok{# Seventh, Set Title and Legend and Plot Jointly}
+\CommentTok{#######################################################}
+\CommentTok{# CEX sizing Contorl Titling and Legend Sizes}
+\NormalTok{fl_ces_fig_reg =}\StringTok{ }\DecValTok{1}
+\NormalTok{fl_ces_fig_small =}\StringTok{ }\FloatTok{0.75}
+
+\CommentTok{# R Legend}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{main =}\NormalTok{ st_title, }\DataTypeTok{sub =}\NormalTok{ st_subtitle, }\DataTypeTok{xlab =}\NormalTok{ st_x_label, }\DataTypeTok{ylab =}\NormalTok{ st_y_label,}
+      \DataTypeTok{cex.lab=}\NormalTok{fl_ces_fig_reg,}
+      \DataTypeTok{cex.main=}\NormalTok{fl_ces_fig_reg,}
+      \DataTypeTok{cex.sub=}\NormalTok{fl_ces_fig_small)}
+\KeywordTok{axis}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DataTypeTok{cex.axis=}\NormalTok{fl_ces_fig_reg)}
+\KeywordTok{axis}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DataTypeTok{cex.axis=}\NormalTok{fl_ces_fig_reg)}
+\KeywordTok{grid}\NormalTok{()}
+
+\CommentTok{# Legend sizing CEX}
+\KeywordTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{,}
+       \DataTypeTok{inset=}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\FloatTok{0.4}\NormalTok{,}\DecValTok{0}\NormalTok{),}
+       \DataTypeTok{xpd=}\OtherTok{TRUE}\NormalTok{,}
+       \KeywordTok{c}\NormalTok{(st_point_}\DecValTok{1}\NormalTok{_y_legend, st_line_}\DecValTok{2}\NormalTok{_y_legend, st_line_}\DecValTok{3}\NormalTok{_y_legend, st_line_}\DecValTok{4}\NormalTok{_y_legend),}
+       \DataTypeTok{col =} \KeywordTok{c}\NormalTok{(st_point_}\DecValTok{1}\NormalTok{_blue, st_line_}\DecValTok{2}\NormalTok{_red, st_line_}\DecValTok{3}\NormalTok{_black, st_line_}\DecValTok{4}\NormalTok{_purple),}
+       \DataTypeTok{pch =} \KeywordTok{c}\NormalTok{(st_point_}\DecValTok{1}\NormalTok{_pch, }\OtherTok{NA}\NormalTok{, }\OtherTok{NA}\NormalTok{, }\OtherTok{NA}\NormalTok{),}
+       \DataTypeTok{cex =}\NormalTok{ fl_ces_fig_small,}
+       \DataTypeTok{lty =} \KeywordTok{c}\NormalTok{(}\OtherTok{NA}\NormalTok{, st_line_}\DecValTok{2}\NormalTok{_lty, st_line_}\DecValTok{3}\NormalTok{_lty, st_line_}\DecValTok{4}\NormalTok{_lty),}
+       \DataTypeTok{lwd =} \KeywordTok{c}\NormalTok{(}\OtherTok{NA}\NormalTok{, st_line_}\DecValTok{2}\NormalTok{_lwd, st_line_}\DecValTok{3}\NormalTok{_lwd,st_line_}\DecValTok{4}\NormalTok{_lwd),}
+       \DataTypeTok{title =} \StringTok{'Legends'}\NormalTok{,}
+       \DataTypeTok{y.intersp=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-169-1} \end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# record final plot}
+\NormalTok{pl_}\DecValTok{1234}\NormalTok{_final <-}\StringTok{ }\KeywordTok{recordPlot}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+We used recordplot() earlier. So now we can print just the first two constructed plots.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#######################################################}
+\CommentTok{# Eighth, Plot just the first two saved lines}
+\CommentTok{#######################################################}
+\CommentTok{# mar: margin, bottom, left, top, right}
+\NormalTok{pl_}\DecValTok{12}
+\CommentTok{# R Legend}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T)}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{main =}\NormalTok{ st_title, }\DataTypeTok{sub =}\NormalTok{ st_subtitle, }\DataTypeTok{xlab =}\NormalTok{ st_x_label, }\DataTypeTok{ylab =}\NormalTok{ st_y_label,}
+      \DataTypeTok{cex.lab =}\NormalTok{ fl_ces_fig_reg,}
+      \DataTypeTok{cex.main =}\NormalTok{ fl_ces_fig_reg,}
+      \DataTypeTok{cex.sub =}\NormalTok{ fl_ces_fig_small)}
+
+\CommentTok{# Legend sizing CEX}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T)}
+\KeywordTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{,}
+       \DataTypeTok{inset=}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\FloatTok{0.4}\NormalTok{,}\DecValTok{0}\NormalTok{),}
+       \DataTypeTok{xpd=}\OtherTok{TRUE}\NormalTok{,}
+       \KeywordTok{c}\NormalTok{(st_point_}\DecValTok{1}\NormalTok{_y_legend, st_line_}\DecValTok{2}\NormalTok{_y_legend),}
+       \DataTypeTok{col =} \KeywordTok{c}\NormalTok{(st_point_}\DecValTok{1}\NormalTok{_blue, st_line_}\DecValTok{2}\NormalTok{_red),}
+       \DataTypeTok{pch =} \KeywordTok{c}\NormalTok{(st_point_}\DecValTok{1}\NormalTok{_pch, }\OtherTok{NA}\NormalTok{),}
+       \DataTypeTok{cex =}\NormalTok{ fl_ces_fig_small,}
+       \DataTypeTok{lty =} \KeywordTok{c}\NormalTok{(}\OtherTok{NA}\NormalTok{, st_line_}\DecValTok{2}\NormalTok{_lty),}
+       \DataTypeTok{lwd =} \KeywordTok{c}\NormalTok{(}\OtherTok{NA}\NormalTok{, st_line_}\DecValTok{2}\NormalTok{_lwd),}
+       \DataTypeTok{title =} \StringTok{'Legends'}\NormalTok{,}
+       \DataTypeTok{y.intersp=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-170-1} \end{center}
+
+\hypertarget{write-and-read-plots}{%
+\section{Write and Read Plots}\label{write-and-read-plots}}
+
+\hypertarget{import-and-export-images}{%
+\subsection{Import and Export Images}\label{import-and-export-images}}
+
+\begin{quote}
+Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R4Econ} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository.
+\end{quote}
+
+Work with the R plot function.
+
+\hypertarget{export-images-different-formats-with-plot}{%
+\subsubsection{Export Images Different Formats with Plot()}\label{export-images-different-formats-with-plot}}
+
+\hypertarget{generate-and-record-a-plot}{%
+\paragraph{Generate and Record A Plot}\label{generate-and-record-a-plot}}
+
+Generate a graph and recordPlot() it. The generated graph does not have legends Yet. Crucially, there are no titles, legends, axis, labels in the figures. As we stack the figures together, do not add those. Only add at the end jointly for all figure elements together to control at one spot things.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#######################################################}
+\CommentTok{# First, Strings}
+\CommentTok{#######################################################}
+\CommentTok{# Labeling}
+\NormalTok{st_title <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'Scatter, Line and Curve Joint Ploting Example Using Base R}\CharTok{\textbackslash{}n}\StringTok{'}\NormalTok{,}
+                   \StringTok{'plot() + curve():sin(x)*cos(x), sin(x)+tan(x)+cos(x)'}\NormalTok{)}
+\NormalTok{st_subtitle <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'https://fanwangecon.github.io/'}\NormalTok{,}
+                      \StringTok{'R4Econ/tabgraph/inout/htmlpdfr/fs_base_curve.html'}\NormalTok{)}
+\NormalTok{st_x_label <-}\StringTok{ 'x'}
+\NormalTok{st_y_label <-}\StringTok{ 'f(x)'}
+
+\CommentTok{#######################################################}
+\CommentTok{# Second, functions}
+\CommentTok{#######################################################}
+\NormalTok{fc_sin_cos_diff <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{sin}\NormalTok{(x)}\OperatorTok{*}\KeywordTok{cos}\NormalTok{(x)}
+\NormalTok{st_line_}\DecValTok{3}\NormalTok{_y_legend <-}\StringTok{ 'sin(x)*cos(x)'}
+\NormalTok{fc_sin_cos_tan <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{sin}\NormalTok{(x) }\OperatorTok{+}\StringTok{ }\KeywordTok{cos}\NormalTok{(x) }\OperatorTok{+}\StringTok{ }\KeywordTok{tan}\NormalTok{(x)}
+\NormalTok{st_line_}\DecValTok{4}\NormalTok{_y_legend <-}\StringTok{ 'sin(x) + tan(x) + cos(x)'}
+
+\CommentTok{#######################################################}
+\CommentTok{# Third, patterns}
+\CommentTok{#######################################################}
+\NormalTok{st_line_}\DecValTok{3}\NormalTok{_black <-}\StringTok{ 'black'}
+\NormalTok{st_line_}\DecValTok{4}\NormalTok{_purple <-}\StringTok{ 'orange'}
+\CommentTok{# line type}
+\NormalTok{st_line_}\DecValTok{3}\NormalTok{_lty <-}\StringTok{ 'dotted'}
+\NormalTok{st_line_}\DecValTok{4}\NormalTok{_lty <-}\StringTok{ 'dotdash'}
+\CommentTok{# line width}
+\NormalTok{st_line_}\DecValTok{3}\NormalTok{_lwd <-}\StringTok{ }\FloatTok{2.5}
+\NormalTok{st_line_}\DecValTok{4}\NormalTok{_lwd <-}\StringTok{ }\FloatTok{3.5}
+
+\CommentTok{#######################################################}
+\CommentTok{# Fourth: Share xlim and ylim}
+\CommentTok{#######################################################}
+\NormalTok{ar_xlim =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{3}\NormalTok{, }\DecValTok{3}\NormalTok{)}
+\NormalTok{ar_ylim =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\FloatTok{3.5}\NormalTok{, }\FloatTok{3.5}\NormalTok{)}
+
+\CommentTok{#######################################################}
+\CommentTok{# Fifth: Even margins}
+\CommentTok{#######################################################}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\OtherTok{FALSE}\NormalTok{)}
+
+\CommentTok{#######################################################}
+\CommentTok{# Sixth, the four objects and do not print yet:}
+\CommentTok{#######################################################}
+\CommentTok{# Graph Curve 3}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T)}
+\KeywordTok{curve}\NormalTok{(fc_sin_cos_diff,}
+      \DataTypeTok{col =}\NormalTok{ st_line_}\DecValTok{3}\NormalTok{_black,}
+      \DataTypeTok{lwd =}\NormalTok{ st_line_}\DecValTok{3}\NormalTok{_lwd, }\DataTypeTok{lty =}\NormalTok{ st_line_}\DecValTok{3}\NormalTok{_lty,}
+      \DataTypeTok{from =}\NormalTok{ ar_xlim[}\DecValTok{1}\NormalTok{], }\DataTypeTok{to =}\NormalTok{ ar_xlim[}\DecValTok{2}\NormalTok{], }\DataTypeTok{ylim =}\NormalTok{ ar_ylim,}
+      \DataTypeTok{ylab =} \StringTok{''}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{''}\NormalTok{, }\DataTypeTok{yaxt=}\StringTok{'n'}\NormalTok{, }\DataTypeTok{xaxt=}\StringTok{'n'}\NormalTok{, }\DataTypeTok{ann=}\OtherTok{FALSE}\NormalTok{)}
+\CommentTok{# Graph Curve 4}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T)}
+\KeywordTok{curve}\NormalTok{(fc_sin_cos_tan,}
+      \DataTypeTok{col =}\NormalTok{ st_line_}\DecValTok{4}\NormalTok{_purple,}
+      \DataTypeTok{lwd =}\NormalTok{ st_line_}\DecValTok{4}\NormalTok{_lwd, }\DataTypeTok{lty =}\NormalTok{ st_line_}\DecValTok{4}\NormalTok{_lty,}
+      \DataTypeTok{from =}\NormalTok{ ar_xlim[}\DecValTok{1}\NormalTok{], }\DataTypeTok{to =}\NormalTok{ ar_xlim[}\DecValTok{2}\NormalTok{], }\DataTypeTok{ylim =}\NormalTok{ ar_ylim,}
+      \DataTypeTok{ylab =} \StringTok{''}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{''}\NormalTok{, }\DataTypeTok{yaxt=}\StringTok{'n'}\NormalTok{, }\DataTypeTok{xaxt=}\StringTok{'n'}\NormalTok{, }\DataTypeTok{ann=}\OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pl_curves_save <-}\StringTok{ }\KeywordTok{recordPlot}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{generate-large-font-and-small-font-versions-of-plot}{%
+\paragraph{Generate Large Font and Small Font Versions of PLot}\label{generate-large-font-and-small-font-versions-of-plot}}
+
+Generate larger font version:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Replay}
+\NormalTok{pl_curves_save}
+
+\CommentTok{#######################################################}
+\CommentTok{# Seventh, Set Title and Legend and Plot Jointly}
+\CommentTok{#######################################################}
+\CommentTok{# CEX sizing Contorl Titling and Legend Sizes}
+\NormalTok{fl_ces_fig_reg =}\StringTok{ }\FloatTok{0.75}
+\NormalTok{fl_ces_fig_leg =}\StringTok{ }\FloatTok{0.75}
+\NormalTok{fl_ces_fig_small =}\StringTok{ }\FloatTok{0.65}
+
+\CommentTok{# R Legend}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{main =}\NormalTok{ st_title, }\DataTypeTok{sub =}\NormalTok{ st_subtitle, }\DataTypeTok{xlab =}\NormalTok{ st_x_label, }\DataTypeTok{ylab =}\NormalTok{ st_y_label,}
+      \DataTypeTok{cex.lab=}\NormalTok{fl_ces_fig_reg,}
+      \DataTypeTok{cex.main=}\NormalTok{fl_ces_fig_reg,}
+      \DataTypeTok{cex.sub=}\NormalTok{fl_ces_fig_small)}
+\KeywordTok{axis}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DataTypeTok{cex.axis=}\NormalTok{fl_ces_fig_reg)}
+\KeywordTok{axis}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DataTypeTok{cex.axis=}\NormalTok{fl_ces_fig_reg)}
+\KeywordTok{grid}\NormalTok{()}
+
+\CommentTok{# Legend sizing CEX}
+\KeywordTok{legend}\NormalTok{(}\StringTok{"topleft"}\NormalTok{,}
+       \DataTypeTok{bg=}\StringTok{"transparent"}\NormalTok{,}
+       \DataTypeTok{bty =} \StringTok{"n"}\NormalTok{,}
+       \KeywordTok{c}\NormalTok{(st_line_}\DecValTok{3}\NormalTok{_y_legend, st_line_}\DecValTok{4}\NormalTok{_y_legend),}
+       \DataTypeTok{col =} \KeywordTok{c}\NormalTok{(st_line_}\DecValTok{3}\NormalTok{_black, st_line_}\DecValTok{4}\NormalTok{_purple),}
+       \DataTypeTok{pch =} \KeywordTok{c}\NormalTok{(}\OtherTok{NA}\NormalTok{, }\OtherTok{NA}\NormalTok{),}
+       \DataTypeTok{cex =}\NormalTok{ fl_ces_fig_leg,}
+       \DataTypeTok{lty =} \KeywordTok{c}\NormalTok{(st_line_}\DecValTok{3}\NormalTok{_lty, st_line_}\DecValTok{4}\NormalTok{_lty),}
+       \DataTypeTok{lwd =} \KeywordTok{c}\NormalTok{(st_line_}\DecValTok{3}\NormalTok{_lwd,st_line_}\DecValTok{4}\NormalTok{_lwd),}
+       \DataTypeTok{y.intersp=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# record final plot}
+\NormalTok{pl_curves_large <-}\StringTok{ }\KeywordTok{recordPlot}\NormalTok{()}
+\KeywordTok{dev.off}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+Generate smaller font version:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Replay}
+\NormalTok{pl_curves_save}
+
+\CommentTok{#######################################################}
+\CommentTok{# Seventh, Set Title and Legend and Plot Jointly}
+\CommentTok{#######################################################}
+\CommentTok{# CEX sizing Contorl Titling and Legend Sizes}
+\NormalTok{fl_ces_fig_reg =}\StringTok{ }\FloatTok{0.45}
+\NormalTok{fl_ces_fig_leg =}\StringTok{ }\FloatTok{0.45}
+\NormalTok{fl_ces_fig_small =}\StringTok{ }\FloatTok{0.25}
+
+\CommentTok{# R Legend}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{main =}\NormalTok{ st_title, }\DataTypeTok{sub =}\NormalTok{ st_subtitle, }\DataTypeTok{xlab =}\NormalTok{ st_x_label, }\DataTypeTok{ylab =}\NormalTok{ st_y_label,}
+      \DataTypeTok{cex.lab=}\NormalTok{fl_ces_fig_reg,}
+      \DataTypeTok{cex.main=}\NormalTok{fl_ces_fig_reg,}
+      \DataTypeTok{cex.sub=}\NormalTok{fl_ces_fig_small)}
+\KeywordTok{axis}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DataTypeTok{cex.axis=}\NormalTok{fl_ces_fig_reg)}
+\KeywordTok{axis}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DataTypeTok{cex.axis=}\NormalTok{fl_ces_fig_reg)}
+\KeywordTok{grid}\NormalTok{()}
+
+\CommentTok{# Legend sizing CEX}
+\KeywordTok{legend}\NormalTok{(}\StringTok{"topleft"}\NormalTok{,}
+       \DataTypeTok{bg=}\StringTok{"transparent"}\NormalTok{,}
+       \DataTypeTok{bty =} \StringTok{"n"}\NormalTok{,}
+       \KeywordTok{c}\NormalTok{(st_line_}\DecValTok{3}\NormalTok{_y_legend, st_line_}\DecValTok{4}\NormalTok{_y_legend),}
+       \DataTypeTok{col =} \KeywordTok{c}\NormalTok{(st_line_}\DecValTok{3}\NormalTok{_black, st_line_}\DecValTok{4}\NormalTok{_purple),}
+       \DataTypeTok{pch =} \KeywordTok{c}\NormalTok{(}\OtherTok{NA}\NormalTok{, }\OtherTok{NA}\NormalTok{),}
+       \DataTypeTok{cex =}\NormalTok{ fl_ces_fig_leg,}
+       \DataTypeTok{lty =} \KeywordTok{c}\NormalTok{(st_line_}\DecValTok{3}\NormalTok{_lty, st_line_}\DecValTok{4}\NormalTok{_lty),}
+       \DataTypeTok{lwd =} \KeywordTok{c}\NormalTok{(st_line_}\DecValTok{3}\NormalTok{_lwd,st_line_}\DecValTok{4}\NormalTok{_lwd),}
+       \DataTypeTok{y.intersp=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# record final plot}
+\NormalTok{pl_curves_small <-}\StringTok{ }\KeywordTok{recordPlot}\NormalTok{()}
+\KeywordTok{dev.off}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{save-plot-with-varying-resolutions-and-heights}{%
+\paragraph{Save Plot with Varying Resolutions and Heights}\label{save-plot-with-varying-resolutions-and-heights}}
+
+Export recorded plot.
+
+A4 paper is 8.3 x 11.7, with 1 inch margins, the remaining area is 6.3 x 9.7. For figures that should take half of the page, the height should be 4.8 inch. One third of a page should be 3.2 inch. 6.3 inch is 160mm and 3 inch is 76 mm. In the example below, use
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Store both in within folder directory and root image directory:}
+\CommentTok{# C:\textbackslash{}Users\textbackslash{}fan\textbackslash{}R4Econ\textbackslash{}tabgraph\textbackslash{}inout\textbackslash{}_img}
+\CommentTok{# C:\textbackslash{}Users\textbackslash{}fan\textbackslash{}R4Econ\textbackslash{}_img}
+\CommentTok{# need to store in both because bookdown and indi pdf path differ.}
+\CommentTok{# Wrap in try because will not work underbookdown, but images already created}
+
+\NormalTok{ls_spt_root <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'..//..//'}\NormalTok{, }\StringTok{''}\NormalTok{)}
+\NormalTok{spt_prefix <-}\StringTok{ '_img/fs_img_io_2curve'}
+
+\ControlFlowTok{for}\NormalTok{ (spt_root }\ControlFlowTok{in}\NormalTok{ ls_spt_root) \{}
+  \CommentTok{# Changing pointsize will not change font sizes inside, just rescale}
+  \CommentTok{# PNG 72}
+  \KeywordTok{try}\NormalTok{(}\KeywordTok{png}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(spt_root, spt_prefix, }\StringTok{"_w135h76_res72.png"}\NormalTok{),}
+      \DataTypeTok{width =} \DecValTok{135}\NormalTok{ , }\DataTypeTok{height =} \DecValTok{76}\NormalTok{, }\DataTypeTok{units=}\StringTok{'mm'}\NormalTok{, }\DataTypeTok{res =} \DecValTok{72}\NormalTok{, }\DataTypeTok{pointsize=}\DecValTok{7}\NormalTok{))}
+  \KeywordTok{print}\NormalTok{(pl_curves_large)}
+  \KeywordTok{dev.off}\NormalTok{()}
+  \CommentTok{# PNG 300}
+  \KeywordTok{try}\NormalTok{(}\KeywordTok{png}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(spt_root, spt_prefix, }\StringTok{"_w135h76_res300.png"}\NormalTok{),}
+      \DataTypeTok{width =} \DecValTok{135}\NormalTok{, }\DataTypeTok{height =} \DecValTok{76}\NormalTok{, }\DataTypeTok{units=}\StringTok{'mm'}\NormalTok{, }\DataTypeTok{res =} \DecValTok{300}\NormalTok{, }\DataTypeTok{pointsize=}\DecValTok{7}\NormalTok{))}
+  \KeywordTok{print}\NormalTok{(pl_curves_large)}
+  \KeywordTok{dev.off}\NormalTok{()}
+  \CommentTok{# PNG 300, SMALL, POINT SIZE LOWER}
+  \KeywordTok{try}\NormalTok{(}\KeywordTok{png}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(spt_root, spt_prefix, }\StringTok{"_w80h48_res300.png"}\NormalTok{),}
+      \DataTypeTok{width =} \DecValTok{80}\NormalTok{, }\DataTypeTok{height =} \DecValTok{48}\NormalTok{, }\DataTypeTok{units=}\StringTok{'mm'}\NormalTok{, }\DataTypeTok{res =} \DecValTok{300}\NormalTok{, }\DataTypeTok{pointsize=}\DecValTok{7}\NormalTok{))}
+  \KeywordTok{print}\NormalTok{(pl_curves_small)}
+  \KeywordTok{dev.off}\NormalTok{()}
+  \CommentTok{# PNG 300}
+  \KeywordTok{try}\NormalTok{(}\KeywordTok{png}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(spt_root, spt_prefix, }\StringTok{"_w160h100_res300.png"}\NormalTok{),}
+      \DataTypeTok{width =} \DecValTok{160}\NormalTok{, }\DataTypeTok{height =} \DecValTok{100}\NormalTok{, }\DataTypeTok{units=}\StringTok{'mm'}\NormalTok{, }\DataTypeTok{res =} \DecValTok{300}\NormalTok{))}
+  \KeywordTok{print}\NormalTok{(pl_curves_large)}
+  \KeywordTok{dev.off}\NormalTok{()}
+
+  \CommentTok{# EPS}
+  \KeywordTok{setEPS}\NormalTok{()}
+  \KeywordTok{try}\NormalTok{(}\KeywordTok{postscript}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(spt_root, spt_prefix, }\StringTok{"_fs_2curve.eps"}\NormalTok{)))}
+  \KeywordTok{print}\NormalTok{(pl_curves_large)}
+  \KeywordTok{dev.off}\NormalTok{()}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Error in png(paste0(spt_root, spt_prefix, "_w135h76_res72.png"), width = 135,  : 
+##   unable to start png() device
+## Error in png(paste0(spt_root, spt_prefix, "_w135h76_res300.png"), width = 135,  : 
+##   unable to start png() device
+## Error in png(paste0(spt_root, spt_prefix, "_w80h48_res300.png"), width = 80,  : 
+##   unable to start png() device
+## Error in png(paste0(spt_root, spt_prefix, "_w160h100_res300.png"), width = 160,  : 
+##   unable to start png() device
+## Error in postscript(paste0(spt_root, spt_prefix, "_fs_2curve.eps")) : 
+##   cannot open file '..//..//_img/fs_img_io_2curve_fs_2curve.eps'
+\end{verbatim}
+
+\hypertarget{low-and-high-resolution-figure}{%
+\paragraph{Low and High Resolution Figure}\label{low-and-high-resolution-figure}}
+
+The standard resolution often produces very low quality images. Resolution should be increased. See figure comparison.
+
+\begin{figure}
+\centering
+\caption{RES=72 (DEFAULT R) TOP, RES=300 Bottom, (Width=160, Height=81, PNG)}
+\includegraphics[width=\linewidth]{_img/fs_img_io_2curve_w135h76_res72.png}
+\hfill
+\centering
+\includegraphics[width=\linewidth]{_img/fs_img_io_2curve_w135h76_res300.png}
+\end{figure}
+
+\hypertarget{smaller-and-larger-figures}{%
+\paragraph{Smaller and Larger Figures}\label{smaller-and-larger-figures}}
+
+Smaller and larger figures with different font size comparison. Note that earlier, we generated the figure without legends, labels, etc first, recorded the figure. Then we associated the same underlying figure with differently sized titles, legends, axis, labels.
+
+\begin{figure}
+\centering
+\caption{Top Small (small font saved), Bottom Large, PNG}
+\includegraphics[width=\linewidth]{_img/fs_img_io_2curve_w80h48_res300.png}
+\hfill
+\centering
+\includegraphics[width=\linewidth]{_img/fs_img_io_2curve_w160h100_res300.png}
+\end{figure}
 
 \hypertarget{appendix-appendix}{%
 \appendix}
@@ -10308,6 +10819,49 @@ Note that many more A grid points are needed to fully plot out the leontief line
     \textbf{tidyr}: \emph{expand\_grid()}
   \item
     \textbf{ggplot2}: \emph{geom\_line() + facet\_wrap()}
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{tables-and-graphs-links}{%
+\section{Tables and Graphs links}\label{tables-and-graphs-links}}
+
+\hypertarget{section-9.1-r-base-plotsr-base-plots-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{r-base-plots}{Section 9.1 R Base Plots} links}{Section 9.1 R Base Plots links}}\label{section-9.1-r-base-plotsr-base-plots-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/tabgraph/baseplot/htmlpdfr/fs_base_curve.html}{R Base Plot Line with Curves and Scatter}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/baseplot//fs_base_curve.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/baseplot/htmlpdfr/fs_base_curve.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/baseplot/htmlpdfr/fs_base_curve.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/tabgraph/baseplot/htmlpdfr/fs_base_curve.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Plot scatter points, line plot and functional curve graphs together.
+  \item
+    Set margins for legend to be outside of graph area, change line, point, label and legend sizes.
+  \item
+    Generate additional lines for plots successively, record successively, and plot all steps, or initial steps results.
+  \item
+    \textbf{r}: \emph{plot() + curve() + legend() + title() + axis() + par() + recordPlot()}
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{section-9.2-write-and-read-plotswrite-and-read-plots-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{write-and-read-plots}{Section 9.2 Write and Read Plots} links}{Section 9.2 Write and Read Plots links}}\label{section-9.2-write-and-read-plotswrite-and-read-plots-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/tabgraph/inout/htmlpdfr/fs_img_io.html}{Base R Save Images At Different Sizes}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/inout//fs_img_io.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/inout/htmlpdfr/fs_img_io.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/inout/htmlpdfr/fs_img_io.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/tabgraph/inout/htmlpdfr/fs_img_io.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Base R store image core, add legends/titles/labels/axis of different sizes to save figures of different sizes.
+  \item
+    \textbf{r}: \emph{png() + setEPS() + postscript() + dev.off()}
   \end{itemize}
 \item
   \href{https://fanwangecon.github.io/R4Econ//htmlpdfr/README_appendix.html}{README\_appendix}: \href{https://github.com/FanWangEcon/R4Econ/blob/master///README_appendix.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master//htmlpdfr/README_appendix.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master//htmlpdfr/README_appendix.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ//htmlpdfr/README_appendix.html}{\textbf{html}}
