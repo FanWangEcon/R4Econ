@@ -12,6 +12,22 @@ try(source("../../.Rprofile"))
 ## gsub(x = var.input,  pattern = "\\.", replacement = "_")
 
 
+## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+st_tex_text <- "\n% Lat2ex Comments\n\\newcommand{\\exa}{\\text{from external file: } \\alpha + \\beta}\n% More LaLatex Comments\n"
+st_clean_a1 <- gsub("\\%.*?\\\n", "", st_tex_text)
+st_clean_a2 <- gsub("L.*?x", "[LATEX]", st_tex_text)
+print(paste0('st_tex_text:', st_tex_text))
+print(paste0('st_clean_a1:', st_clean_a1))
+print(paste0('st_clean_a2:', st_clean_a2))
+
+
+## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+st_tex_text <- "\\end{equation}\n}\n% Even more comments from Latex preamble"
+st_clean_a1 <- gsub("\\\n%.*","", st_tex_text)
+print(paste0('st_tex_text:', st_tex_text))
+print(paste0('st_clean_a1:', st_clean_a1))
+
+
 ## ----support dtype string if contains----------------------------------------------------------------------------------------------------------------------------------
 st_example_a <- 'C:/Users/fan/R4Econ/amto/tibble/fs_tib_basics.Rmd'
 st_example_b <- 'C:/Users/fan/R4Econ/amto/tibble/_main.html'

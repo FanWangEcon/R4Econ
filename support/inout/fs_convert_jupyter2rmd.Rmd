@@ -11,7 +11,7 @@ urlcolor: blue
 always_allow_html: yes
 ---
 
-Back to [Fan](https://fanwangecon.github.io)'s [Reusable R Code](https://fanwangecon.github.io/R4Econ/) table of content.
+Back to [Fan](https://fanwangecon.github.io)'s [Reusable R =Code](https://fanwangecon.github.io/R4Econ/) table of content.
 
 ```{r GlobalOptions, echo = T, results = 'hide', message=F, warning=F}
 options(knitr.duplicate.label = 'allow')
@@ -65,22 +65,69 @@ close(fileConn)
 Search in folder for ipynb files, and then convert collectively to Rmd.
 
 ```{r}
-# Generate Paths
-spt_file_root = 'C:/Users/fan/Stat4Econ/descriptive/'
-spt_file_name = 'DataBasketball'
-spt_file_full_ipynb = paste0(spt_file_root, spt_file_name, '.ipynb')
-spt_file_full_rmd = paste0(spt_file_root, spt_file_name, '.rmd')
 
-# Convert from IPYNB to RMD
-file_nb_rmd = rmarkdown:::convert_ipynb(spt_file_full_ipynb)
-st_nb_rmd = xfun::file_string(file_nb_rmd)
+spt_root <- 'C:/Users/fan/Stat4Econ/'
+# if the path contains these skip
 
-# Save RMD
-fileConn <- file(spt_file_full_rmd)
-writeLines(st_nb_rmd, fileConn)
-close(fileConn)
+spn_skip <- c('summarize', 'panel', 'support')
+spn_skip <- c('')
 
-# Convert to PDF and HTML
-rmarkdown::render(spt_file_full_rmd, "pdf_document")
-rmarkdown::render(spt_file_full_rmd, "html_document")
+# Group A
+spt_desc <- paste0(spt_root, 'descriptive')
+spt_srvy <- paste0(spt_root, 'survey')
+spt_summ <- paste0(spt_root, 'summarystats')
+ls_path_group_a <- c(spt_desc, spt_srvy, spt_summ)
+
+# Group B
+spt_prob <- paste0(spt_root, 'probability')
+spt_pbct <- paste0(spt_root, 'probcts')
+ls_path_group_b <- c(spt_prob, spt_pbct)
+
+# All ls_path_group_use
+ls_path_group <- c(ls_path_group_a, ls_path_group_b)
+
+# Group To Use
+ls_path_group_use <- ls_path_group
+# ls_path_group_use <- ls_path_group_temp
+
+# Get Path
+ls_sfls <- list.files(path=ls_path_group_use, recursive=T, pattern=".ipynb", full.names=T)
+
+# Excludes elements of path that have exclusion strings
+if (spn_skip != '') {
+  ls_sfls <- ls_sfls[!grepl(paste(spn_skip, collapse = "|"), ls_sfls)]
+}
+
+# print
+for (spt_file in ls_sfls) {
+  # 1. Check if the RMD file has been modified or is new, if neither, do not generate pdf html
+  # 2. store pdf and html files in a subfolder
+  # 3. main folder keeps only Rmd file
+  # 4. delete tex and other files
+
+  # print(paste0('spt_file:', spt_file))
+  
+  st_fullpath_noname <- dirname(spt_file)
+  st_fullpath_nosufx <- sub('\\.ipynb$', '', spt_file)
+  st_file_wno_suffix <- sub('\\.ipynb$', '', basename(spt_file))
+
+  setwd(st_fullpath_noname)
+  spt_file_full_rmd = paste0(st_fullpath_nosufx, '.Rmd')
+
+  print(paste0('st_fullpath_noname:', st_fullpath_noname))
+  print(paste0('spt_file:', spt_file))
+  print(paste0('spt_file_full_rmd:', spt_file_full_rmd))
+  
+  # Convert from IPYNB to RMD
+  file_nb_rmd = rmarkdown:::convert_ipynb(spt_file)
+  st_nb_rmd = xfun::file_string(file_nb_rmd)
+
+  # Save RMD
+  fileConn <- file(spt_file_full_rmd)
+  writeLines(st_nb_rmd, fileConn)
+  close(fileConn)
+
+}
+
+
 ```

@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE-----------------------------------------------------------------
+## ----global_options, include = FALSE-----------------------------------------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ----amto.array.fs_array_basics.multi.2d-------------------------------------------------------------
+## ----amto.array.fs_array_basics.multi.2d-------------------------------------------------------------------------------------------------------------------------------
 # Multidimensional Array
 # 1 is r1c1t1, 1.5 in r2c1t1, 0 in r1c2t1, etc.
 # Three dimensions, row first, column second, and tensor third
@@ -11,7 +11,7 @@ dim(x)
 print(x)
 
 
-## ----amto.array.fs_array_basics.slice.lastelement----------------------------------------------------
+## ----amto.array.fs_array_basics.slice.lastelement----------------------------------------------------------------------------------------------------------------------
 # Remove last element of array
 vars.group.bydf <- c('23','dfa', 'wer')
 vars.group.bydf[-length(vars.group.bydf)]
@@ -20,7 +20,7 @@ head(vars.group.bydf, -1)
 head(vars.group.bydf, 2)
 
 
-## ----------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Remove first element of array
 vars.group.bydf <- c('23','dfa', 'wer')
 vars.group.bydf[2:length(vars.group.bydf)]
@@ -29,7 +29,7 @@ tail(vars.group.bydf, -1)
 tail(vars.group.bydf, 2)
 
 
-## ----amto.array.fs_array_basics.NA.check-------------------------------------------------------------
+## ----amto.array.fs_array_basics.NA.check-------------------------------------------------------------------------------------------------------------------------------
 # Convert Inf and -Inf to NA
 x <- c(1, -1, Inf, 10, -Inf)
 na_if(na_if(x, -Inf), Inf)

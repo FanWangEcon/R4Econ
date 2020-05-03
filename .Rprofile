@@ -111,9 +111,9 @@ if(!is.null(spt_file_current)) {
   # Common Shared Text and Strings
   total_area <- (800 * 7) / 2
   if (st_file_wno_suffix == 'Panel-Data-and-Optimization-with-R') {
-    text_shared_preamble_one <- paste0("> Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository ([bookdown site](https://fanwangecon.github.io/R4Econ/bookdown)), or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.")
+    text_shared_preamble_one <- paste0("> Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R Code Examples](https://fanwangecon.github.io/R4Econ/) Repository ([bookdown site](https://fanwangecon.github.io/R4Econ/bookdown)), or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository ([bookdown site](https://fanwangecon.github.io/Stat4Econ/bookdown)).")
   } else {
-    text_shared_preamble_one <- paste0(st_head_link, " Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R4Econ](https://fanwangecon.github.io/R4Econ/) Repository ([bookdown site](https://fanwangecon.github.io/R4Econ/bookdown)), or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository.")
+    text_shared_preamble_one <- paste0(st_head_link, " Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R Code Examples](https://fanwangecon.github.io/R4Econ/) Repository ([bookdown site](https://fanwangecon.github.io/R4Econ/bookdown)), or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository ([bookdown site](https://fanwangecon.github.io/Stat4Econ/bookdown)).")
   }
 }
 

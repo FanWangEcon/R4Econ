@@ -41,6 +41,9 @@ try(source("../../.Rprofile"))
 
 #### String Replace
 
+- r string wildcard replace between regex
+- [R - replace part of a string using wildcards](https://stackoverflow.com/a/27246520/8280804)
+
 ```{r, amto.array.fs_ary_string.replace, eval=FALSE}
 # String replacement
 gsub(x = paste0(unique(df.slds.stats.perc$it.inner.counter), ':',
@@ -50,6 +53,27 @@ gsub(x = paste0(unique(df.slds.stats.perc$it.inner.counter), ':',
 gsub(x = var,  pattern = "\n", replacement = "")
 gsub(x = var.input,  pattern = "\\.", replacement = "_")
 ```
+
+String replaces a segment, search by wildcard. Given the string below, delete all text between carriage return and pound sign:
+
+```{r}
+st_tex_text <- "\n% Lat2ex Comments\n\\newcommand{\\exa}{\\text{from external file: } \\alpha + \\beta}\n% More LaLatex Comments\n"
+st_clean_a1 <- gsub("\\%.*?\\\n", "", st_tex_text)
+st_clean_a2 <- gsub("L.*?x", "[LATEX]", st_tex_text)
+print(paste0('st_tex_text:', st_tex_text))
+print(paste0('st_clean_a1:', st_clean_a1))
+print(paste0('st_clean_a2:', st_clean_a2))
+```
+
+String delete after a particular string:
+
+```{r}
+st_tex_text <- "\\end{equation}\n}\n% Even more comments from Latex preamble"
+st_clean_a1 <- gsub("\\\n%.*","", st_tex_text)
+print(paste0('st_tex_text:', st_tex_text))
+print(paste0('st_clean_a1:', st_clean_a1))
+```
+
 
 ##### Search If and Which String Contains
 

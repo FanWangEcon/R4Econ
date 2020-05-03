@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE-----------------------------------------------------------------
+## ----global_options, include = FALSE-----------------------------------------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ---- amto.tibble.fs_tib_na.find_replace, eval=TRUE--------------------------------------------------
+## ---- amto.tibble.fs_tib_na.find_replace, eval=TRUE--------------------------------------------------------------------------------------------------------------------
 # First make sure these are factors
 tb_mtcars <- as_tibble(mtcars) %>% 
   mutate(vs = as_factor(vs), am = as_factor(am))
@@ -21,7 +21,7 @@ tb_mtcars_selected <- tb_mtcars %>%
 print(tb_mtcars_selected)
 
 
-## ----------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Labeling
 st_title <- paste0('Distribution of MPG and QSEC from mtcars')
 st_subtitle <- paste0('https://fanwangecon.github.io/',
