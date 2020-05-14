@@ -8,6 +8,13 @@ To help clarify data types for inputs, add prefix to variable names:
 
 Various string prefixes:
 
+### Strings
+
+Main String
+
+- *st*: main string prefix, for lines
+- *stf*: prefix for entire string files, all lines, including read in and to be reading in.
+
 **Time**
 
 - *tm*: time variables values etc that can used for calculations
@@ -16,11 +23,22 @@ Various string prefixes:
 
 - *svr*: variable string, as in data variable name
 - *slb*: string variables labels etc
--
-**Function Names and Path**
 
-- *spt*: string path, path only, does not include name
-- *spn*: string path, including name
+**File Names and Path**
+
+- *spt*: absolute string path, path only, does not include name.
+- *spn*: absolute string path, including name.
+
+- *srt*: relative file path, no name
+- *srn*: relative file path, with name
+
+- *snm*: function name with suffix or not by itself, no path.
+- *sna*: no suffix function name
+
+- *suf*: suffix only
+
+**Function name strings**
+
 - *sfc*: function string name
 
 **String Code**
@@ -30,6 +48,13 @@ Various string prefixes:
 **Graph String**
 
 - *stg*
+
+### Various non-numeric data objects
+
+**files**
+
+- *fl* = file object
+
 
 - oj = some kind of generic anything object
 - fl = float

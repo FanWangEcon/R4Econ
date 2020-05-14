@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE-----------------------------------------------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE-------------------------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------------
 # Define Lists
 ls_num <- list(1,2,3)
 ls_str <- list('1','2','3')
@@ -16,18 +16,39 @@ names(ls_num_str_named) <- ar_st_names
 # Add Element to Named List
 ls_num_str_named$e4 <- 'this is added'
 
-# display
-print(paste0('ls_num:', str(ls_num)))
-print(paste0('ls_num[2:3]:', str(ls_num[2:3])))
-print(paste0('ls_str:', str(ls_str)))
-print(paste0('ls_str[2:3]:', str(ls_str[2:3])))
-print(paste0('ls_num_str:', str(ls_num_str)))
-print(paste0('ls_num_str[2:4]:', str(ls_num_str[2:4])))
-print(paste0('ls_num_str_named:', str(ls_num_str_named)))
-print(paste0('ls_num_str_named[c(\'e2\',\'e3\',\'e4\')]', str(ls_num_str_named[c('e2','e3','e4')])))
+
+## ------------------------------------------------------------------------------------------------------------------------------------------------------
+# list to String printing function
+ffi_lst2str <- function(ls_list, st_desc, bl_print=TRUE) {
+  
+  # string desc
+  if(missing(st_desc)){
+    st_desc <- deparse(substitute(ls_list))
+  }
+    
+  # create string
+  st_string_from_list = paste0(paste0(st_desc, ':'), 
+                               paste(names(ls_list), ls_list, sep="=", collapse=";" ))
+  
+  if (bl_print){
+    print(st_string_from_list)
+  }
+}
+
+# print full
+ffi_lst2str(ls_num)
+ffi_lst2str(ls_str)
+ffi_lst2str(ls_num_str)
+ffi_lst2str(ls_num_str_named)
+
+# print subset
+ffi_lst2str(ls_num[2:3])
+ffi_lst2str(ls_str[2:3])
+ffi_lst2str(ls_num_str[2:4])
+ffi_lst2str(ls_num_str_named[c('e2','e3','e4')])
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------------
 # Dimensions
 it_M <- 2
 it_Q <- 3
@@ -48,28 +69,21 @@ dim(ls_2d) <- c(it_M, it_Q)
 dim(ls_2d_named) <- c(it_M, it_Q)
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------------
 # display
-print('ls_2d_flat')
-print(ls_2d_flat)
-
-print('ls_2d_flat_named')
-print(ls_2d_flat_named)
-
-print('ls_2d')
-print(ls_2d)
-
-print('ls_2d_named')
+ffi_lst2str(ls_2d_flat_named)
+# print(ls_2d_flat_named)
+ffi_lst2str(ls_2d_named)
 print(ls_2d_named)
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------------
 # Select Values, double bracket to select from 2dim list
 print('ls_2d[[1,2]]')
 print(ls_2d[[1,2]])
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------------
 # Dimensions
 it_M <- 3
 it_Q <- 4
@@ -99,29 +113,22 @@ tb_2d_flat_named <- as_tibble(ls_2d_flat_named) %>% unnest()
 mt_2d_flat_named <- as.matrix(tb_2d_flat_named)
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------------
 # These are not element names, can still name each element
 # display
 print('ls_2d_flat_named')
 print(ls_2d_flat_named)
-print('str(ls_2d_flat_named)')
-print(str(ls_2d_flat_named))
 print('tb_2d_flat_named')
 print(tb_2d_flat_named)
 print('mt_2d_flat_named')
 print(mt_2d_flat_named)
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------------
 # Select elements with with dimnames
-print('ls_2d_flat_named[[\'row2\',\'col2\']]')
-print(ls_2d_flat_named[['row2','col2']])
-
+ffi_lst2str(ls_2d_flat_named[['row2','col2']])
 # Select elements with element names
-print('ls_2d_flat_named[[\'e5\']]')
-print(ls_2d_flat_named[['e5']])
-
+ffi_lst2str(ls_2d_flat_named[['e5']])
 # Select elements with index
-print('ls_2d_flat_named[[5]]')
-print(ls_2d_flat_named[[5]])
+ffi_lst2str(ls_2d_flat_named[[5]])
 

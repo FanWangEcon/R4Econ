@@ -2,13 +2,18 @@
 title: "R Generate and Combine Fixed and Random Matrix"
 titleshort: "Matrix Basics"
 description: |
-  Generate and combine fixed and random matrixes
+  Generate and combine NA, fixed and random matrixes. Name columns and rows.
 core:
   - package: R
     code: |
       rbind()
-      matrix
-date: 2020-04-01
+      matrix(NA)
+      matrix(NA_real_)
+      matrix(NA_integer_)
+      colnames()
+      rownames()
+date: 2020-05-13
+date_start: 2020-04-01
 output:
   pdf_document:
     pandoc_args: '../../_output_kniti_pdf.yaml'
@@ -44,6 +49,35 @@ ar_row_three <- c(0.35,0.75)
 mt_n_by_2 <- rbind(ar_row_one, ar_row_two, ar_row_three)
 kable(mt_n_by_2) %>%
   kable_styling_fc()
+```
+
+#### Name Matrix Columns and Rows
+
+```{r}
+# An empty matrix with Logical NA
+mt_named <- matrix(data=NA, nrow=2, ncol=2)
+colnames(mt_named) <- paste0('c', seq(1,2))
+rownames(mt_named) <- paste0('r', seq(1,2))
+mt_named
+```
+
+#### Generate NA Matrix
+
+- [Best way to allocate matrix in R, NULL vs NA?](https://stackoverflow.com/a/26724451/8280804)
+
+Allocate with NA or NA_real_ or NA_int_. Clarity in type definition is preferred. 
+
+```{r}
+# An empty matrix with Logical NA
+mt_na <- matrix(data=NA, nrow=2, ncol=2)
+str(mt_na)
+
+# An empty matrix with numerica NA
+mt_fl_na <- matrix(data=NA_real_, nrow=2, ncol=2)
+mt_it_na <- matrix(data=NA_integer_, nrow=2, ncol=2)
+
+str(mt_fl_na)
+str(mt_fl_na)
 ```
 
 #### Generate Random Matrixes
