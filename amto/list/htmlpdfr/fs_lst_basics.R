@@ -20,16 +20,16 @@ ls_num_str_named$e4 <- 'this is added'
 ## ------------------------------------------------------------------------------------------------------------------------------------------------------
 # list to String printing function
 ffi_lst2str <- function(ls_list, st_desc, bl_print=TRUE) {
-  
+
   # string desc
   if(missing(st_desc)){
     st_desc <- deparse(substitute(ls_list))
   }
-    
+
   # create string
-  st_string_from_list = paste0(paste0(st_desc, ':'), 
+  st_string_from_list = paste0(paste0(st_desc, ':'),
                                paste(names(ls_list), ls_list, sep="=", collapse=";" ))
-  
+
   if (bl_print){
     print(st_string_from_list)
   }

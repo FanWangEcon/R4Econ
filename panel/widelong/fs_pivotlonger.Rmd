@@ -1,0 +1,84 @@
+---
+title: "R Wide Data to Long Data Example (TIDYR Pivot Longer)"
+description: |
+  A matrix of ev given states, rows are states and cols are shocks. Convert to Long table with shock and state values and ev.
+core:
+  - package: dplyr
+    code: |
+      left_join()
+      pivot_longer(cols = starts_with('zi'), names_to = c('zi'), names_pattern = paste0("zi(.)"), values_to = "ev")
+date: 2020-05-14
+date_start: 2020-05-14
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+### Wide to Long
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+Using the [pivot_wider](https://tidyr.tidyverse.org/reference/pivot_wider.html) function in tidyr to reshape panel or other data structures
+
+#### Generated Matrix by States to Long Table
+
+A matrix of ev given states, rows are states and cols are shocks. Convert to Long table with shock and state values and ev.
+
+Generated Matrix by States to Long Table where state values are stored as variables, with correct value labels for states:
+
+1. Generate a matrix
+2. Convert matrix to tibble
+3. Tibble make longer, and store column and row id var names
+
+```{r}
+# Generate A Matrix
+set.seed(123)
+ar_a <- c(1.2, 22.2, 33.33)
+ar_z <- c(-2.5,  -1, 0, 1, 2.53)
+mt_ev = matrix(rnorm(ar_a*ar_z), nrow=length(ar_a), ncol=length(ar_z))
+
+# Name Matrix
+rownames(mt_ev) <- paste0('ai', seq(1:length(ar_a)))
+colnames(mt_ev) <- paste0('zi', seq(1:length(ar_z)))
+
+# to tibble
+tb_ev <- as_tibble(mt_ev) %>% rowid_to_column(var = "ai")
+
+# longer 
+tb_ev_long <- tb_ev %>% 
+  pivot_longer(cols = starts_with('zi'), 
+               names_to = c('zi'),
+               names_pattern = paste0("zi(.)"),
+               values_to = "ev") %>%
+  mutate(zi = as.numeric(zi))
+
+# Merge with a and z values
+tb_ev_long <- tb_ev_long %>% 
+  left_join(as_tibble(ar_a) %>% 
+              rowid_to_column(var = "ai") %>%
+              rename(a = value)
+              , by = 'ai') %>% 
+  left_join(as_tibble(ar_z) %>% 
+              rowid_to_column(var = "zi") %>%
+              rename(z = value), 
+            by = 'zi') %>%
+  select(a,ai,z,zi,ev)
+
+# Display
+kable(tb_ev) %>% kable_styling_fc()  
+kable(tb_ev_long) %>% kable_styling_fc()  
+```

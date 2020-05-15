@@ -76,19 +76,21 @@ ls_num_str_named$e4 <- 'this is added'
 - r print parameter code as string
 - [How to convert variable (object) name into String](https://stackoverflow.com/a/14577878/8280804)
 
+The function below ffi_lst2str is also a function in [REconTools](https://fanwangecon.github.io/REconTools/index.html): [ff_sup_lst2str](https://fanwangecon.github.io/REconTools/reference/ff_sup_lst2str.html).
+
 ```{r}
 # list to String printing function
 ffi_lst2str <- function(ls_list, st_desc, bl_print=TRUE) {
-  
+
   # string desc
   if(missing(st_desc)){
     st_desc <- deparse(substitute(ls_list))
   }
-    
+
   # create string
-  st_string_from_list = paste0(paste0(st_desc, ':'), 
+  st_string_from_list = paste0(paste0(st_desc, ':'),
                                paste(names(ls_list), ls_list, sep="=", collapse=";" ))
-  
+
   if (bl_print){
     print(st_string_from_list)
   }
@@ -215,7 +217,7 @@ print('mt_2d_flat_named')
 print(mt_2d_flat_named)
 ```
 
-Select elements from list: 
+Select elements from list:
 
 ```{r}
 # Select elements with with dimnames
