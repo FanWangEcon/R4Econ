@@ -235,7 +235,19 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 1. [Base R Save Images At Different Sizes](https://fanwangecon.github.io/R4Econ/tabgraph/inout/htmlpdfr/fs_img_io.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/inout//fs_img_io.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/inout/htmlpdfr/fs_img_io.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/inout/htmlpdfr/fs_img_io.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/tabgraph/inout/htmlpdfr/fs_img_io.html)
 	+ Base R store image core, add legends/titles/labels/axis of different sizes to save figures of different sizes.
 	+ **r**: *png() + setEPS() + postscript() + dev.off()*
-2. [Panel Data and Optimization with R](https://fanwangecon.github.io/R4Econ//htmlpdfr/title.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master///title.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master//htmlpdfr/title.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master//htmlpdfr/title.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ//htmlpdfr/title.html)
+
+# 10  Programming
+
+## 10.1  File in and Out
+
+1. [Save Text to File, Read Text from File, Replace Text in File](https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_text_save.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout//fs_text_save.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_text_save.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_text_save.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_text_save.html)
+	+ Save data to file, read text from file, replace text in file.
+	+ **r**: *kable() + file() + writeLines() + readLines() + close() + gsub()*
+2. [Convert R Markdown File to R, PDF and HTML](https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_rmd_pdf_html.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout//fs_rmd_pdf_html.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_rmd_pdf_html.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_rmd_pdf_html.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_rmd_pdf_html.html)
+	+ Find all files in a folder with a particula suffix, with exclusion.
+	+ Convert R Markdow File to R, PDF and HTML.
+	+ Modify markdown pounds hierarchy.
+	+ **r**: *file() + writeLines() + readLines() + close() + gsub()*
 
 ----
 Please contact [![](https://img.shields.io/github/followers/fanwangecon?label=FanWangEcon&style=social)](https://github.com/FanWangEcon) [![](https://img.shields.io/twitter/follow/fanwangecon?label=%20&style=social)](https://twitter.com/fanwangecon) for issues or problems.

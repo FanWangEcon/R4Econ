@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE-----------------------------------------------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE-------------------------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ----setup-------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----setup---------------------------------------------------------------------------------------------------------------------------------------------
 # Parameters
 fl_rho = 0.20
 svr_id_var = 'INDI_ID'
@@ -39,7 +39,7 @@ kable(tb_states_choices_ttest) %>%
   kable_styling_fc()
 
 
-## ----define function---------------------------------------------------------------------------------------------------------------------------------------------------
+## ----define function-----------------------------------------------------------------------------------------------------------------------------------
 # Convert Matrix to Tibble
 ar_st_col_names = c(svr_id_var,'fl_A', 'fl_alpha')
 tb_states_choices <- tb_states_choices %>% rename_all(~c(ar_st_col_names))
@@ -72,7 +72,7 @@ ffi_nonlin_dplyrdo <- function(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, f
 }
 
 
-## ----linear_apply------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----linear_apply--------------------------------------------------------------------------------------------------------------------------------------
 # fl_A, fl_alpha are from columns of tb_nN_by_nQ_A_alpha
 tb_states_choices_ttest_eval = tb_states_choices_ttest %>% rowwise() %>%
                         mutate(dplyr_eval = ffi_nonlin_dplyrdo(fl_A, fl_alpha, fl_N,
@@ -83,7 +83,7 @@ kable(tb_states_choices_ttest_eval) %>%
   kable_styling_fc()
 
 
-## ----linear apply many points------------------------------------------------------------------------------------------------------------------------------------------
+## ----linear apply many points--------------------------------------------------------------------------------------------------------------------------
 # fl_A, fl_alpha are from columns of tb_nN_by_nQ_A_alpha
 tb_states_choices_dense_eval = tb_states_choices_dense %>% rowwise() %>%
                         mutate(dplyr_eval = ffi_nonlin_dplyrdo(fl_A, fl_alpha, fl_N,
@@ -91,7 +91,7 @@ tb_states_choices_dense_eval = tb_states_choices_dense %>% rowwise() %>%
                                                                fl_N_agg, fl_rho))
 
 
-## ----graph many evaluations--------------------------------------------------------------------------------------------------------------------------------------------
+## ----graph many evaluations----------------------------------------------------------------------------------------------------------------------------
 # Labeling
 st_title <- paste0('Evaluate Non-Linear Functions to Search for Roots')
 st_subtitle <- paste0('https://fanwangecon.github.io/',

@@ -68,7 +68,8 @@ setwd(spt_root)
 bl_test = TRUE
 bl_gen_if_git_old = FALSE
 ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/R4Econ'),
-                 ar_spn_skip = c('support', 'index.Rmd', '_main.Rmd'),
+                 ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd', 
+                                 '_mod.Rmd', 'title.Rmd'),
                  st_folder_pdf = '/htmlpdfr/',
                  st_folder_html = '/htmlpdfr/',
                  st_folder_R = '/htmlpdfr/',
@@ -96,14 +97,28 @@ setwd(spt_root)
 
 bl_test = FALSE
 bl_gen_if_git_old = TRUE
-ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/R4Econ'),
-                 ar_spn_skip = c('support', 'index.Rmd', 'README', '_main.Rmd'),
+
+# ar_spt_root = c('C:/Users/fan/R4Econ/amto',
+#                 'C:/Users/fan/R4Econ/development',
+#                 'C:/Users/fan/R4Econ/function',
+#                 'C:/Users/fan/R4Econ/linreg',
+#                 'C:/Users/fan/R4Econ/math',
+#                 'C:/Users/fan/R4Econ/optimization',
+#                 'C:/Users/fan/R4Econ/panel',
+#                 'C:/Users/fan/R4Econ/regnonlin',
+#                 'C:/Users/fan/R4Econ/tabgraph',
+#                 'C:/Users/fan/R4Econ/summarize')
+
+ff_sup_clean_rmd(ar_spt_root = 'C:/Users/fan/R4Econ/',
+                 ar_spn_skip = c('support', 'index.Rmd', 'README', 
+                                 'main.Rmd', '_mod.Rmd', 'title.Rmd',
+                                 'Panel Data and Optimization with R'),
                  st_folder_pdf = '/htmlpdfr/',
                  st_folder_html = '/htmlpdfr/',
                  st_folder_R = '/htmlpdfr/',
                  bl_gen_if_git_old = bl_gen_if_git_old,
                  bl_recursive = TRUE,
-                 bl_verbose = FALSE,
+                 bl_verbose = TRUE,
                  bl_test = bl_test)
 
 end_time <- Sys.time()
@@ -133,7 +148,7 @@ spn_prj_readme_toc = 'README_toc.md'
 spn_prj_readme_ful = 'README.md'
 
 # FIles to Ignore
-ls_st_ignore=['index.Rmd', 'README_appendix.md']
+ls_st_ignore=['index.Rmd', 'README_appendix.md', 'title.Rmd', 'main.Rmd']
 
 # Generate README TOC
 ft_bookdownparse.fs_yml2readme(sfc_prj=sfc_prj, sph_prj=sph_prj,

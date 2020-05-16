@@ -21,7 +21,7 @@ setwd(spt_root)
 bl_test = TRUE
 bl_gen_if_git_old = FALSE
 ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/R4Econ'),
-                 ar_spn_skip = c('support', 'index.Rmd', '_main.Rmd'),
+                 ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd'),
                  st_folder_pdf = '/htmlpdfr/',
                  st_folder_html = '/htmlpdfr/',
                  st_folder_R = '/htmlpdfr/',
@@ -45,7 +45,7 @@ setwd(spt_root)
 bl_test = FALSE
 bl_gen_if_git_old = TRUE
 ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/R4Econ'),
-                 ar_spn_skip = c('support', 'index.Rmd', '_main.Rmd'),
+                 ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd'),
                  st_folder_pdf = '/htmlpdfr/',
                  st_folder_html = '/htmlpdfr/',
                  st_folder_R = '/htmlpdfr/',

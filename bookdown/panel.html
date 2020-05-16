@@ -5,26 +5,32 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 4 Panel | Panel Data and Optimization with R</title>
-  <meta name="description" content="R Examples Panel and Optimization." />
-  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+  <meta name="description" content="<p>Find all files in a folder with a particula suffix, with exclusion.
+Convert R Markdow File to R, PDF and HTML.
+Modify markdown pounds hierarchy.</p>" />
+  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 4 Panel | Panel Data and Optimization with R" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="R Examples Panel and Optimization." />
+  <meta property="og:description" content="<p>Find all files in a folder with a particula suffix, with exclusion.
+Convert R Markdow File to R, PDF and HTML.
+Modify markdown pounds hierarchy.</p>" />
   <meta name="github-repo" content="fanwangecon/R4Econ" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Chapter 4 Panel | Panel Data and Optimization with R" />
   
-  <meta name="twitter:description" content="R Examples Panel and Optimization." />
+  <meta name="twitter:description" content="<p>Find all files in a folder with a particula suffix, with exclusion.
+Convert R Markdow File to R, PDF and HTML.
+Modify markdown pounds hierarchy.</p>" />
   
 
 <meta name="author" content="Fan Wang" />
 
 
-<meta name="date" content="2020-05-14" />
+<meta name="date" content="2020-05-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,6 +39,7 @@
   
 <link rel="prev" href="functions.html"/>
 <link rel="next" href="linear-regression.html"/>
+<script src="libs/header-attrs-2.1/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -62,25 +69,26 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -89,9 +97,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -141,21 +149,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html"><i class="fa fa-check"></i><b>1</b> Array, Matrix, Dataframe</a><ul>
-<li class="chapter" data-level="1.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#list"><i class="fa fa-check"></i><b>1.1</b> List</a><ul>
+<li class="chapter" data-level="1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html"><i class="fa fa-check"></i><b>1</b> Array, Matrix, Dataframe</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#list"><i class="fa fa-check"></i><b>1.1</b> List</a>
+<ul>
 <li class="chapter" data-level="1.1.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#multiple-dimensional-list"><i class="fa fa-check"></i><b>1.1.1</b> Multiple Dimensional List</a></li>
 </ul></li>
-<li class="chapter" data-level="1.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#array"><i class="fa fa-check"></i><b>1.2</b> Array</a><ul>
+<li class="chapter" data-level="1.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#array"><i class="fa fa-check"></i><b>1.2</b> Array</a>
+<ul>
 <li class="chapter" data-level="1.2.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#array-basics"><i class="fa fa-check"></i><b>1.2.1</b> Array Basics</a></li>
 <li class="chapter" data-level="1.2.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-arrays"><i class="fa fa-check"></i><b>1.2.2</b> Generate Arrays</a></li>
 <li class="chapter" data-level="1.2.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-arrays"><i class="fa fa-check"></i><b>1.2.3</b> String Arrays</a></li>
 <li class="chapter" data-level="1.2.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#mesh-matrices-arrays-and-scalars"><i class="fa fa-check"></i><b>1.2.4</b> Mesh Matrices, Arrays and Scalars</a></li>
 </ul></li>
-<li class="chapter" data-level="1.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#matrix"><i class="fa fa-check"></i><b>1.3</b> Matrix</a><ul>
+<li class="chapter" data-level="1.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#matrix"><i class="fa fa-check"></i><b>1.3</b> Matrix</a>
+<ul>
 <li class="chapter" data-level="1.3.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-matrixes"><i class="fa fa-check"></i><b>1.3.1</b> Generate Matrixes</a></li>
 <li class="chapter" data-level="1.3.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#linear-algebra"><i class="fa fa-check"></i><b>1.3.2</b> Linear Algebra</a></li>
 </ul></li>
-<li class="chapter" data-level="1.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#variables-in-dataframes"><i class="fa fa-check"></i><b>1.4</b> Variables in Dataframes</a><ul>
+<li class="chapter" data-level="1.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#variables-in-dataframes"><i class="fa fa-check"></i><b>1.4</b> Variables in Dataframes</a>
+<ul>
 <li class="chapter" data-level="1.4.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-dataframe"><i class="fa fa-check"></i><b>1.4.1</b> Generate Dataframe</a></li>
 <li class="chapter" data-level="1.4.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#factor-label-and-combine"><i class="fa fa-check"></i><b>1.4.2</b> Factor Label and Combine</a></li>
 <li class="chapter" data-level="1.4.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#drawly-random-rows"><i class="fa fa-check"></i><b>1.4.3</b> Drawly Random Rows</a></li>
@@ -163,128 +176,178 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.4.5" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-values"><i class="fa fa-check"></i><b>1.4.5</b> String Values</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="summarize-data.html"><a href="summarize-data.html"><i class="fa fa-check"></i><b>2</b> Summarize Data</a><ul>
-<li class="chapter" data-level="2.1" data-path="summarize-data.html"><a href="summarize-data.html#counting-observation"><i class="fa fa-check"></i><b>2.1</b> Counting Observation</a><ul>
+<li class="chapter" data-level="2" data-path="summarize-data.html"><a href="summarize-data.html"><i class="fa fa-check"></i><b>2</b> Summarize Data</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="summarize-data.html"><a href="summarize-data.html#counting-observation"><i class="fa fa-check"></i><b>2.1</b> Counting Observation</a>
+<ul>
 <li class="chapter" data-level="2.1.1" data-path="summarize-data.html"><a href="summarize-data.html#uncount"><i class="fa fa-check"></i><b>2.1.1</b> Uncount</a></li>
 </ul></li>
-<li class="chapter" data-level="2.2" data-path="summarize-data.html"><a href="summarize-data.html#sorting-indexing-slicing"><i class="fa fa-check"></i><b>2.2</b> Sorting, Indexing, Slicing</a><ul>
+<li class="chapter" data-level="2.2" data-path="summarize-data.html"><a href="summarize-data.html#sorting-indexing-slicing"><i class="fa fa-check"></i><b>2.2</b> Sorting, Indexing, Slicing</a>
+<ul>
 <li class="chapter" data-level="2.2.1" data-path="summarize-data.html"><a href="summarize-data.html#sorting"><i class="fa fa-check"></i><b>2.2.1</b> Sorting</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="summarize-data.html"><a href="summarize-data.html#group-statistics"><i class="fa fa-check"></i><b>2.3</b> Group Statistics</a><ul>
+<li class="chapter" data-level="2.3" data-path="summarize-data.html"><a href="summarize-data.html#group-statistics"><i class="fa fa-check"></i><b>2.3</b> Group Statistics</a>
+<ul>
 <li class="chapter" data-level="2.3.1" data-path="summarize-data.html"><a href="summarize-data.html#groups-statistics"><i class="fa fa-check"></i><b>2.3.1</b> Groups Statistics</a></li>
 <li class="chapter" data-level="2.3.2" data-path="summarize-data.html"><a href="summarize-data.html#one-variable-group-summary"><i class="fa fa-check"></i><b>2.3.2</b> One Variable Group Summary</a></li>
 <li class="chapter" data-level="2.3.3" data-path="summarize-data.html"><a href="summarize-data.html#nested-within-group-stats"><i class="fa fa-check"></i><b>2.3.3</b> Nested within Group Stats</a></li>
 </ul></li>
-<li class="chapter" data-level="2.4" data-path="summarize-data.html"><a href="summarize-data.html#distributional-statistics"><i class="fa fa-check"></i><b>2.4</b> Distributional Statistics</a><ul>
+<li class="chapter" data-level="2.4" data-path="summarize-data.html"><a href="summarize-data.html#distributional-statistics"><i class="fa fa-check"></i><b>2.4</b> Distributional Statistics</a>
+<ul>
 <li class="chapter" data-level="2.4.1" data-path="summarize-data.html"><a href="summarize-data.html#histogram"><i class="fa fa-check"></i><b>2.4.1</b> Histogram</a></li>
 </ul></li>
-<li class="chapter" data-level="2.5" data-path="summarize-data.html"><a href="summarize-data.html#summarize-multiple-variables"><i class="fa fa-check"></i><b>2.5</b> Summarize Multiple Variables</a><ul>
+<li class="chapter" data-level="2.5" data-path="summarize-data.html"><a href="summarize-data.html#summarize-multiple-variables"><i class="fa fa-check"></i><b>2.5</b> Summarize Multiple Variables</a>
+<ul>
 <li class="chapter" data-level="2.5.1" data-path="summarize-data.html"><a href="summarize-data.html#generate-replace-variables"><i class="fa fa-check"></i><b>2.5.1</b> Generate Replace Variables</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>3</b> Functions</a><ul>
-<li class="chapter" data-level="3.1" data-path="functions.html"><a href="functions.html#dataframe-mutate"><i class="fa fa-check"></i><b>3.1</b> Dataframe Mutate</a><ul>
+<li class="chapter" data-level="3" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>3</b> Functions</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="functions.html"><a href="functions.html#dataframe-mutate"><i class="fa fa-check"></i><b>3.1</b> Dataframe Mutate</a>
+<ul>
 <li class="chapter" data-level="3.1.1" data-path="functions.html"><a href="functions.html#row-input-functions"><i class="fa fa-check"></i><b>3.1.1</b> Row Input Functions</a></li>
 <li class="chapter" data-level="3.1.2" data-path="functions.html"><a href="functions.html#evaluate-choices-across-states"><i class="fa fa-check"></i><b>3.1.2</b> Evaluate Choices Across States</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="functions.html"><a href="functions.html#dataframe-do-anything"><i class="fa fa-check"></i><b>3.2</b> Dataframe Do Anything</a><ul>
+<li class="chapter" data-level="3.2" data-path="functions.html"><a href="functions.html#dataframe-do-anything"><i class="fa fa-check"></i><b>3.2</b> Dataframe Do Anything</a>
+<ul>
 <li class="chapter" data-level="3.2.1" data-path="functions.html"><a href="functions.html#mxq-to-mxp-rows"><i class="fa fa-check"></i><b>3.2.1</b> MxQ to MxP Rows</a></li>
 <li class="chapter" data-level="3.2.2" data-path="functions.html"><a href="functions.html#mx1-to-mxq-rows"><i class="fa fa-check"></i><b>3.2.2</b> Mx1 to MxQ Rows</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="functions.html"><a href="functions.html#apply-and-pmap"><i class="fa fa-check"></i><b>3.3</b> Apply and pmap</a><ul>
+<li class="chapter" data-level="3.3" data-path="functions.html"><a href="functions.html#apply-and-pmap"><i class="fa fa-check"></i><b>3.3</b> Apply and pmap</a>
+<ul>
 <li class="chapter" data-level="3.3.1" data-path="functions.html"><a href="functions.html#apply-sapply-mutate"><i class="fa fa-check"></i><b>3.3.1</b> Apply, Sapply, Mutate</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="panel.html"><a href="panel.html"><i class="fa fa-check"></i><b>4</b> Panel</a><ul>
-<li class="chapter" data-level="4.1" data-path="panel.html"><a href="panel.html#generate-and-join"><i class="fa fa-check"></i><b>4.1</b> Generate and Join</a><ul>
+<li class="chapter" data-level="4" data-path="panel.html"><a href="panel.html"><i class="fa fa-check"></i><b>4</b> Panel</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="panel.html"><a href="panel.html#generate-and-join"><i class="fa fa-check"></i><b>4.1</b> Generate and Join</a>
+<ul>
 <li class="chapter" data-level="4.1.1" data-path="panel.html"><a href="panel.html#generate-panel-structure"><i class="fa fa-check"></i><b>4.1.1</b> Generate Panel Structure</a></li>
 <li class="chapter" data-level="4.1.2" data-path="panel.html"><a href="panel.html#join-datasets"><i class="fa fa-check"></i><b>4.1.2</b> Join Datasets</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="panel.html"><a href="panel.html#wide-and-long"><i class="fa fa-check"></i><b>4.2</b> Wide and Long</a><ul>
+<li class="chapter" data-level="4.2" data-path="panel.html"><a href="panel.html#wide-and-long"><i class="fa fa-check"></i><b>4.2</b> Wide and Long</a>
+<ul>
 <li class="chapter" data-level="4.2.1" data-path="panel.html"><a href="panel.html#long-to-wide"><i class="fa fa-check"></i><b>4.2.1</b> Long to Wide</a></li>
+<li class="chapter" data-level="4.2.2" data-path="panel.html"><a href="panel.html#wide-to-long"><i class="fa fa-check"></i><b>4.2.2</b> Wide to Long</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>5</b> Linear Regression</a><ul>
-<li class="chapter" data-level="5.1" data-path="linear-regression.html"><a href="linear-regression.html#ols-and-iv"><i class="fa fa-check"></i><b>5.1</b> OLS and IV</a><ul>
+<li class="chapter" data-level="5" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>5</b> Linear Regression</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="linear-regression.html"><a href="linear-regression.html#ols-and-iv"><i class="fa fa-check"></i><b>5.1</b> OLS and IV</a>
+<ul>
 <li class="chapter" data-level="5.1.1" data-path="linear-regression.html"><a href="linear-regression.html#ols-and-iv-regression"><i class="fa fa-check"></i><b>5.1.1</b> OLS and IV Regression</a></li>
 <li class="chapter" data-level="5.1.2" data-path="linear-regression.html"><a href="linear-regression.html#iv-loop-over-rhs"><i class="fa fa-check"></i><b>5.1.2</b> IV Loop over RHS</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="linear-regression.html"><a href="linear-regression.html#decomposition"><i class="fa fa-check"></i><b>5.2</b> Decomposition</a><ul>
+<li class="chapter" data-level="5.2" data-path="linear-regression.html"><a href="linear-regression.html#decomposition"><i class="fa fa-check"></i><b>5.2</b> Decomposition</a>
+<ul>
 <li class="chapter" data-level="5.2.1" data-path="linear-regression.html"><a href="linear-regression.html#decompose-rhs"><i class="fa fa-check"></i><b>5.2.1</b> Decompose RHS</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="nonlinear-regression.html"><a href="nonlinear-regression.html"><i class="fa fa-check"></i><b>6</b> Nonlinear Regression</a><ul>
-<li class="chapter" data-level="6.1" data-path="nonlinear-regression.html"><a href="nonlinear-regression.html#logit-regression"><i class="fa fa-check"></i><b>6.1</b> Logit Regression</a><ul>
+<li class="chapter" data-level="6" data-path="nonlinear-regression.html"><a href="nonlinear-regression.html"><i class="fa fa-check"></i><b>6</b> Nonlinear Regression</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="nonlinear-regression.html"><a href="nonlinear-regression.html#logit-regression"><i class="fa fa-check"></i><b>6.1</b> Logit Regression</a>
+<ul>
 <li class="chapter" data-level="6.1.1" data-path="nonlinear-regression.html"><a href="nonlinear-regression.html#binary-logit"><i class="fa fa-check"></i><b>6.1.1</b> Binary Logit</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="optimization.html"><a href="optimization.html"><i class="fa fa-check"></i><b>7</b> Optimization</a><ul>
-<li class="chapter" data-level="7.1" data-path="optimization.html"><a href="optimization.html#bisection"><i class="fa fa-check"></i><b>7.1</b> Bisection</a><ul>
+<li class="chapter" data-level="7" data-path="optimization.html"><a href="optimization.html"><i class="fa fa-check"></i><b>7</b> Optimization</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="optimization.html"><a href="optimization.html#bisection"><i class="fa fa-check"></i><b>7.1</b> Bisection</a>
+<ul>
 <li class="chapter" data-level="7.1.1" data-path="optimization.html"><a href="optimization.html#bisection-1"><i class="fa fa-check"></i><b>7.1.1</b> Bisection</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html"><i class="fa fa-check"></i><b>8</b> Mathmatics and Statistics</a><ul>
-<li class="chapter" data-level="8.1" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#distributions"><i class="fa fa-check"></i><b>8.1</b> Distributions</a><ul>
+<li class="chapter" data-level="8" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html"><i class="fa fa-check"></i><b>8</b> Mathmatics and Statistics</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#distributions"><i class="fa fa-check"></i><b>8.1</b> Distributions</a>
+<ul>
 <li class="chapter" data-level="8.1.1" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#integrate-over-normal-guassian-process-shock"><i class="fa fa-check"></i><b>8.1.1</b> Integrate Over Normal Guassian Process Shock</a></li>
 </ul></li>
-<li class="chapter" data-level="8.2" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#analytical-solutions"><i class="fa fa-check"></i><b>8.2</b> Analytical Solutions</a><ul>
+<li class="chapter" data-level="8.2" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#analytical-solutions"><i class="fa fa-check"></i><b>8.2</b> Analytical Solutions</a>
+<ul>
 <li class="chapter" data-level="8.2.1" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#linear-scalar-fx0-solutions"><i class="fa fa-check"></i><b>8.2.1</b> Linear Scalar f(x)=0 Solutions</a></li>
 </ul></li>
-<li class="chapter" data-level="8.3" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#inequality-models"><i class="fa fa-check"></i><b>8.3</b> Inequality Models</a><ul>
+<li class="chapter" data-level="8.3" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#inequality-models"><i class="fa fa-check"></i><b>8.3</b> Inequality Models</a>
+<ul>
 <li class="chapter" data-level="8.3.1" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#gini-discrete-sample"><i class="fa fa-check"></i><b>8.3.1</b> Gini Discrete Sample</a></li>
 <li class="chapter" data-level="8.3.2" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#atkinson-family-utility"><i class="fa fa-check"></i><b>8.3.2</b> Atkinson Family Utility</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html"><i class="fa fa-check"></i><b>9</b> Tables and Graphs</a><ul>
-<li class="chapter" data-level="9.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#r-base-plots"><i class="fa fa-check"></i><b>9.1</b> R Base Plots</a><ul>
+<li class="chapter" data-level="9" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html"><i class="fa fa-check"></i><b>9</b> Tables and Graphs</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#r-base-plots"><i class="fa fa-check"></i><b>9.1</b> R Base Plots</a>
+<ul>
 <li class="chapter" data-level="9.1.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#plot-curve-line-and-points"><i class="fa fa-check"></i><b>9.1.1</b> Plot Curve, Line and Points</a></li>
 </ul></li>
-<li class="chapter" data-level="9.2" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#write-and-read-plots"><i class="fa fa-check"></i><b>9.2</b> Write and Read Plots</a><ul>
+<li class="chapter" data-level="9.2" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#write-and-read-plots"><i class="fa fa-check"></i><b>9.2</b> Write and Read Plots</a>
+<ul>
 <li class="chapter" data-level="9.2.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#import-and-export-images"><i class="fa fa-check"></i><b>9.2.1</b> Import and Export Images</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="10" data-path="programming.html"><a href="programming.html"><i class="fa fa-check"></i><b>10</b> Programming</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="programming.html"><a href="programming.html#file-in-and-out"><i class="fa fa-check"></i><b>10.1</b> File in and Out</a>
+<ul>
+<li class="chapter" data-level="10.1.1" data-path="programming.html"><a href="programming.html#text-to-file"><i class="fa fa-check"></i><b>10.1.1</b> Text to File</a></li>
+<li class="chapter" data-level="10.1.2" data-path="programming.html"><a href="programming.html#rmd-to-html"><i class="fa fa-check"></i><b>10.1.2</b> Rmd to HTML</a></li>
+</ul></li>
+</ul></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
-<li class="chapter" data-level="A" data-path="index-and-code-links.html"><a href="index-and-code-links.html"><i class="fa fa-check"></i><b>A</b> Index and Code Links</a><ul>
-<li class="chapter" data-level="A.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#array-matrix-dataframe-links"><i class="fa fa-check"></i><b>A.1</b> Array, Matrix, Dataframe links</a><ul>
+<li class="chapter" data-level="A" data-path="index-and-code-links.html"><a href="index-and-code-links.html"><i class="fa fa-check"></i><b>A</b> Index and Code Links</a>
+<ul>
+<li class="chapter" data-level="A.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#array-matrix-dataframe-links"><i class="fa fa-check"></i><b>A.1</b> Array, Matrix, Dataframe links</a>
+<ul>
 <li class="chapter" data-level="A.1.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.1-listlist-links"><i class="fa fa-check"></i><b>A.1.1</b> <span>Section 1.1 List</span> links</a></li>
 <li class="chapter" data-level="A.1.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.2-arrayarray-links"><i class="fa fa-check"></i><b>A.1.2</b> <span>Section 1.2 Array</span> links</a></li>
 <li class="chapter" data-level="A.1.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.3-matrixmatrix-links"><i class="fa fa-check"></i><b>A.1.3</b> <span>Section 1.3 Matrix</span> links</a></li>
 <li class="chapter" data-level="A.1.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.4-variables-in-dataframesvariables-in-dataframes-links"><i class="fa fa-check"></i><b>A.1.4</b> <span>Section 1.4 Variables in Dataframes</span> links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#summarize-data-links"><i class="fa fa-check"></i><b>A.2</b> Summarize Data links</a><ul>
+<li class="chapter" data-level="A.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#summarize-data-links"><i class="fa fa-check"></i><b>A.2</b> Summarize Data links</a>
+<ul>
 <li class="chapter" data-level="A.2.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.1-counting-observationcounting-observation-links"><i class="fa fa-check"></i><b>A.2.1</b> <span>Section 2.1 Counting Observation</span> links</a></li>
 <li class="chapter" data-level="A.2.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.2-sorting-indexing-slicingsorting-indexing-slicing-links"><i class="fa fa-check"></i><b>A.2.2</b> <span>Section 2.2 Sorting, Indexing, Slicing</span> links</a></li>
 <li class="chapter" data-level="A.2.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.3-group-statisticsgroup-statistics-links"><i class="fa fa-check"></i><b>A.2.3</b> <span>Section 2.3 Group Statistics</span> links</a></li>
 <li class="chapter" data-level="A.2.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.4-distributional-statisticsdistributional-statistics-links"><i class="fa fa-check"></i><b>A.2.4</b> <span>Section 2.4 Distributional Statistics</span> links</a></li>
 <li class="chapter" data-level="A.2.5" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.5-summarize-multiple-variablessummarize-multiple-variables-links"><i class="fa fa-check"></i><b>A.2.5</b> <span>Section 2.5 Summarize Multiple Variables</span> links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#functions-links"><i class="fa fa-check"></i><b>A.3</b> Functions links</a><ul>
+<li class="chapter" data-level="A.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#functions-links"><i class="fa fa-check"></i><b>A.3</b> Functions links</a>
+<ul>
 <li class="chapter" data-level="A.3.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.1-dataframe-mutatedataframe-mutate-links"><i class="fa fa-check"></i><b>A.3.1</b> <span>Section 3.1 Dataframe Mutate</span> links</a></li>
 <li class="chapter" data-level="A.3.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.2-dataframe-do-anythingdataframe-do-anything-links"><i class="fa fa-check"></i><b>A.3.2</b> <span>Section 3.2 Dataframe Do Anything</span> links</a></li>
 <li class="chapter" data-level="A.3.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.3-apply-and-pmapapply-and-pmap-links"><i class="fa fa-check"></i><b>A.3.3</b> <span>Section 3.3 Apply and pmap</span> links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#panel-links"><i class="fa fa-check"></i><b>A.4</b> Panel links</a><ul>
+<li class="chapter" data-level="A.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#panel-links"><i class="fa fa-check"></i><b>A.4</b> Panel links</a>
+<ul>
 <li class="chapter" data-level="A.4.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.1-generate-and-joingenerate-and-join-links"><i class="fa fa-check"></i><b>A.4.1</b> <span>Section 4.1 Generate and Join</span> links</a></li>
 <li class="chapter" data-level="A.4.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.2-wide-and-longwide-and-long-links"><i class="fa fa-check"></i><b>A.4.2</b> <span>Section 4.2 Wide and Long</span> links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.5" data-path="index-and-code-links.html"><a href="index-and-code-links.html#linear-regression-links"><i class="fa fa-check"></i><b>A.5</b> Linear Regression links</a><ul>
+<li class="chapter" data-level="A.5" data-path="index-and-code-links.html"><a href="index-and-code-links.html#linear-regression-links"><i class="fa fa-check"></i><b>A.5</b> Linear Regression links</a>
+<ul>
 <li class="chapter" data-level="A.5.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.1-ols-and-ivols-and-iv-links"><i class="fa fa-check"></i><b>A.5.1</b> <span>Section 5.1 OLS and IV</span> links</a></li>
 <li class="chapter" data-level="A.5.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.2-decompositiondecomposition-links"><i class="fa fa-check"></i><b>A.5.2</b> <span>Section 5.2 Decomposition</span> links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.6" data-path="index-and-code-links.html"><a href="index-and-code-links.html#nonlinear-regression-links"><i class="fa fa-check"></i><b>A.6</b> Nonlinear Regression links</a><ul>
+<li class="chapter" data-level="A.6" data-path="index-and-code-links.html"><a href="index-and-code-links.html#nonlinear-regression-links"><i class="fa fa-check"></i><b>A.6</b> Nonlinear Regression links</a>
+<ul>
 <li class="chapter" data-level="A.6.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-6.1-logit-regressionlogit-regression-links"><i class="fa fa-check"></i><b>A.6.1</b> <span>Section 6.1 Logit Regression</span> links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.7" data-path="index-and-code-links.html"><a href="index-and-code-links.html#optimization-links"><i class="fa fa-check"></i><b>A.7</b> Optimization links</a><ul>
+<li class="chapter" data-level="A.7" data-path="index-and-code-links.html"><a href="index-and-code-links.html#optimization-links"><i class="fa fa-check"></i><b>A.7</b> Optimization links</a>
+<ul>
 <li class="chapter" data-level="A.7.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-7.1-bisectionbisection-links"><i class="fa fa-check"></i><b>A.7.1</b> <span>Section 7.1 Bisection</span> links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.8" data-path="index-and-code-links.html"><a href="index-and-code-links.html#mathmatics-and-statistics-links"><i class="fa fa-check"></i><b>A.8</b> Mathmatics and Statistics links</a><ul>
+<li class="chapter" data-level="A.8" data-path="index-and-code-links.html"><a href="index-and-code-links.html#mathmatics-and-statistics-links"><i class="fa fa-check"></i><b>A.8</b> Mathmatics and Statistics links</a>
+<ul>
 <li class="chapter" data-level="A.8.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.1-distributionsdistributions-links"><i class="fa fa-check"></i><b>A.8.1</b> <span>Section 8.1 Distributions</span> links</a></li>
 <li class="chapter" data-level="A.8.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.2-analytical-solutionsanalytical-solutions-links"><i class="fa fa-check"></i><b>A.8.2</b> <span>Section 8.2 Analytical Solutions</span> links</a></li>
 <li class="chapter" data-level="A.8.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.3-inequality-modelsinequality-models-links"><i class="fa fa-check"></i><b>A.8.3</b> <span>Section 8.3 Inequality Models</span> links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.9" data-path="index-and-code-links.html"><a href="index-and-code-links.html#tables-and-graphs-links"><i class="fa fa-check"></i><b>A.9</b> Tables and Graphs links</a><ul>
+<li class="chapter" data-level="A.9" data-path="index-and-code-links.html"><a href="index-and-code-links.html#tables-and-graphs-links"><i class="fa fa-check"></i><b>A.9</b> Tables and Graphs links</a>
+<ul>
 <li class="chapter" data-level="A.9.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.1-r-base-plotsr-base-plots-links"><i class="fa fa-check"></i><b>A.9.1</b> <span>Section 9.1 R Base Plots</span> links</a></li>
 <li class="chapter" data-level="A.9.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.2-write-and-read-plotswrite-and-read-plots-links"><i class="fa fa-check"></i><b>A.9.2</b> <span>Section 9.2 Write and Read Plots</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.10" data-path="index-and-code-links.html"><a href="index-and-code-links.html#programming-links"><i class="fa fa-check"></i><b>A.10</b> Programming links</a>
+<ul>
+<li class="chapter" data-level="A.10.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.1-file-in-and-outfile-in-and-out-links"><i class="fa fa-check"></i><b>A.10.1</b> <span>Section 10.1 File in and Out</span> links</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -307,36 +370,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="panel" class="section level1">
+<div id="panel" class="section level1" number="4">
 <h1><span class="header-section-number">Chapter 4</span> Panel</h1>
 
-<div id="generate-and-join" class="section level2">
+<div id="generate-and-join" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Generate and Join</h2>
 
-<div id="generate-panel-structure" class="section level3">
+<div id="generate-panel-structure" class="section level3" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> Generate Panel Structure</h3>
 <blockquote>
 <p>Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R Code Examples</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository (<a href="https://fanwangecon.github.io/Stat4Econ/bookdown">bookdown site</a>).</p>
 </blockquote>
-<div id="balanced-panel-skeleton" class="section level4">
+<div id="balanced-panel-skeleton" class="section level4" number="4.1.1.1">
 <h4><span class="header-section-number">4.1.1.1</span> Balanced Panel Skeleton</h4>
 <p>There are <span class="math inline">\(N\)</span> individuals, each could be observed <span class="math inline">\(M\)</span> times. In the example below, there are 3 students, each observed over 4 dates. This just uses the <a href="https://tidyr.tidyverse.org/reference/uncount.html">uncount</a> function from <em>tidyr</em>.</p>
-<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb248-1" title="1"><span class="co"># Define</span></a>
-<a class="sourceLine" id="cb248-2" title="2">it_N &lt;-<span class="st"> </span><span class="dv">3</span></a>
-<a class="sourceLine" id="cb248-3" title="3">it_M &lt;-<span class="st"> </span><span class="dv">5</span></a>
-<a class="sourceLine" id="cb248-4" title="4">svr_id &lt;-<span class="st"> &#39;student_id&#39;</span></a>
-<a class="sourceLine" id="cb248-5" title="5">svr_date &lt;-<span class="st"> &#39;class_day&#39;</span></a>
-<a class="sourceLine" id="cb248-6" title="6"></a>
-<a class="sourceLine" id="cb248-7" title="7"><span class="co"># dataframe</span></a>
-<a class="sourceLine" id="cb248-8" title="8">df_panel_skeleton &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">matrix</span>(it_M, <span class="dt">nrow=</span>it_N, <span class="dt">ncol=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb248-9" title="9"><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> svr_id) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb248-10" title="10"><span class="st">  </span><span class="kw">uncount</span>(V1) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb248-11" title="11"><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_date) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">row_number</span>()) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb248-12" title="12"><span class="st">  </span><span class="kw">ungroup</span>()</a>
-<a class="sourceLine" id="cb248-13" title="13"></a>
-<a class="sourceLine" id="cb248-14" title="14"><span class="co"># Print</span></a>
-<a class="sourceLine" id="cb248-15" title="15"><span class="kw">kable</span>(df_panel_skeleton) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb248-16" title="16"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="panel.html#cb250-1"></a><span class="co"># Define</span></span>
+<span id="cb250-2"><a href="panel.html#cb250-2"></a>it_N &lt;-<span class="st"> </span><span class="dv">3</span></span>
+<span id="cb250-3"><a href="panel.html#cb250-3"></a>it_M &lt;-<span class="st"> </span><span class="dv">5</span></span>
+<span id="cb250-4"><a href="panel.html#cb250-4"></a>svr_id &lt;-<span class="st"> &#39;student_id&#39;</span></span>
+<span id="cb250-5"><a href="panel.html#cb250-5"></a>svr_date &lt;-<span class="st"> &#39;class_day&#39;</span></span>
+<span id="cb250-6"><a href="panel.html#cb250-6"></a></span>
+<span id="cb250-7"><a href="panel.html#cb250-7"></a><span class="co"># dataframe</span></span>
+<span id="cb250-8"><a href="panel.html#cb250-8"></a>df_panel_skeleton &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">matrix</span>(it_M, <span class="dt">nrow=</span>it_N, <span class="dt">ncol=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb250-9"><a href="panel.html#cb250-9"></a><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> svr_id) <span class="op">%&gt;%</span></span>
+<span id="cb250-10"><a href="panel.html#cb250-10"></a><span class="st">  </span><span class="kw">uncount</span>(V1) <span class="op">%&gt;%</span></span>
+<span id="cb250-11"><a href="panel.html#cb250-11"></a><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_date) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">row_number</span>()) <span class="op">%&gt;%</span></span>
+<span id="cb250-12"><a href="panel.html#cb250-12"></a><span class="st">  </span><span class="kw">ungroup</span>()</span>
+<span id="cb250-13"><a href="panel.html#cb250-13"></a></span>
+<span id="cb250-14"><a href="panel.html#cb250-14"></a><span class="co"># Print</span></span>
+<span id="cb250-15"><a href="panel.html#cb250-15"></a><span class="kw">kable</span>(df_panel_skeleton) <span class="op">%&gt;%</span></span>
+<span id="cb250-16"><a href="panel.html#cb250-16"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -474,31 +537,31 @@ class_day
 
 </div>
 </div>
-<div id="join-datasets" class="section level3">
+<div id="join-datasets" class="section level3" number="4.1.2">
 <h3><span class="header-section-number">4.1.2</span> Join Datasets</h3>
 <blockquote>
 <p>Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R Code Examples</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository (<a href="https://fanwangecon.github.io/Stat4Econ/bookdown">bookdown site</a>).</p>
 </blockquote>
-<div id="join-panel-with-multiple-keys" class="section level4">
+<div id="join-panel-with-multiple-keys" class="section level4" number="4.1.2.1">
 <h4><span class="header-section-number">4.1.2.1</span> Join Panel with Multiple Keys</h4>
 <p>We have two datasets, one for student enrollment, panel over time, but some students do not show up on some dates. The other is a skeleton panel with all student ID and all dates. Often we need to join dataframes together, and we need to join by the student ID and the panel time Key at the same time. When students show up, there is a quiz score for that day, so the joined panel should have as data column quiz score</p>
 <p>Student count is <span class="math inline">\(N\)</span>, total dates are <span class="math inline">\(M\)</span>. First we generate two panels below, then we join by both keys using <em>left_join</em>. First, define dataframes:</p>
-<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb249-1" title="1"><span class="co"># Define</span></a>
-<a class="sourceLine" id="cb249-2" title="2">it_N &lt;-<span class="st"> </span><span class="dv">4</span></a>
-<a class="sourceLine" id="cb249-3" title="3">it_M &lt;-<span class="st"> </span><span class="dv">3</span></a>
-<a class="sourceLine" id="cb249-4" title="4">svr_id &lt;-<span class="st"> &#39;sid&#39;</span></a>
-<a class="sourceLine" id="cb249-5" title="5">svr_date &lt;-<span class="st"> &#39;classday&#39;</span></a>
-<a class="sourceLine" id="cb249-6" title="6">svr_attend &lt;-<span class="st"> &#39;date_in_class&#39;</span></a>
-<a class="sourceLine" id="cb249-7" title="7"></a>
-<a class="sourceLine" id="cb249-8" title="8"><span class="co"># Panel Skeleton</span></a>
-<a class="sourceLine" id="cb249-9" title="9">df_panel_balanced_skeleton &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">matrix</span>(it_M, <span class="dt">nrow=</span>it_N, <span class="dt">ncol=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb249-10" title="10"><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> svr_id) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb249-11" title="11"><span class="st">  </span><span class="kw">uncount</span>(V1) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb249-12" title="12"><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_date) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">row_number</span>()) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb249-13" title="13"><span class="st">  </span><span class="kw">ungroup</span>()</a>
-<a class="sourceLine" id="cb249-14" title="14"><span class="co"># Print</span></a>
-<a class="sourceLine" id="cb249-15" title="15"><span class="kw">kable</span>(df_panel_balanced_skeleton) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb249-16" title="16"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="panel.html#cb251-1"></a><span class="co"># Define</span></span>
+<span id="cb251-2"><a href="panel.html#cb251-2"></a>it_N &lt;-<span class="st"> </span><span class="dv">4</span></span>
+<span id="cb251-3"><a href="panel.html#cb251-3"></a>it_M &lt;-<span class="st"> </span><span class="dv">3</span></span>
+<span id="cb251-4"><a href="panel.html#cb251-4"></a>svr_id &lt;-<span class="st"> &#39;sid&#39;</span></span>
+<span id="cb251-5"><a href="panel.html#cb251-5"></a>svr_date &lt;-<span class="st"> &#39;classday&#39;</span></span>
+<span id="cb251-6"><a href="panel.html#cb251-6"></a>svr_attend &lt;-<span class="st"> &#39;date_in_class&#39;</span></span>
+<span id="cb251-7"><a href="panel.html#cb251-7"></a></span>
+<span id="cb251-8"><a href="panel.html#cb251-8"></a><span class="co"># Panel Skeleton</span></span>
+<span id="cb251-9"><a href="panel.html#cb251-9"></a>df_panel_balanced_skeleton &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">matrix</span>(it_M, <span class="dt">nrow=</span>it_N, <span class="dt">ncol=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb251-10"><a href="panel.html#cb251-10"></a><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> svr_id) <span class="op">%&gt;%</span></span>
+<span id="cb251-11"><a href="panel.html#cb251-11"></a><span class="st">  </span><span class="kw">uncount</span>(V1) <span class="op">%&gt;%</span></span>
+<span id="cb251-12"><a href="panel.html#cb251-12"></a><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_date) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">row_number</span>()) <span class="op">%&gt;%</span></span>
+<span id="cb251-13"><a href="panel.html#cb251-13"></a><span class="st">  </span><span class="kw">ungroup</span>()</span>
+<span id="cb251-14"><a href="panel.html#cb251-14"></a><span class="co"># Print</span></span>
+<span id="cb251-15"><a href="panel.html#cb251-15"></a><span class="kw">kable</span>(df_panel_balanced_skeleton) <span class="op">%&gt;%</span></span>
+<span id="cb251-16"><a href="panel.html#cb251-16"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -609,19 +672,19 @@ classday
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb250-1" title="1"><span class="co"># Smaller Panel of Random Days in School</span></a>
-<a class="sourceLine" id="cb250-2" title="2"><span class="kw">set.seed</span>(<span class="dv">456</span>)</a>
-<a class="sourceLine" id="cb250-3" title="3">df_panel_attend &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">matrix</span>(it_M, <span class="dt">nrow=</span>it_N, <span class="dt">ncol=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb250-4" title="4"><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> svr_id) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb250-5" title="5"><span class="st">  </span><span class="kw">uncount</span>(V1) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb250-6" title="6"><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_date) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">row_number</span>()) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb250-7" title="7"><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">in_class =</span> <span class="kw">case_when</span>(<span class="kw">rnorm</span>(<span class="kw">n</span>(),<span class="dt">mean=</span><span class="dv">0</span>,<span class="dt">sd=</span><span class="dv">1</span>) <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb250-8" title="8"><span class="st">  </span><span class="kw">filter</span>(in_class <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id), <span class="op">!!</span><span class="kw">sym</span>(svr_date)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb250-9" title="9"><span class="st">  </span><span class="kw">rename</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_attend) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_date)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb250-10" title="10"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">dayquizscore =</span> <span class="kw">rnorm</span>(<span class="kw">n</span>(),<span class="dt">mean=</span><span class="dv">80</span>,<span class="dt">sd=</span><span class="dv">10</span>))</a>
-<a class="sourceLine" id="cb250-11" title="11"><span class="co"># Print</span></a>
-<a class="sourceLine" id="cb250-12" title="12"><span class="kw">kable</span>(df_panel_attend) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb250-13" title="13"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb252-1"><a href="panel.html#cb252-1"></a><span class="co"># Smaller Panel of Random Days in School</span></span>
+<span id="cb252-2"><a href="panel.html#cb252-2"></a><span class="kw">set.seed</span>(<span class="dv">456</span>)</span>
+<span id="cb252-3"><a href="panel.html#cb252-3"></a>df_panel_attend &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">matrix</span>(it_M, <span class="dt">nrow=</span>it_N, <span class="dt">ncol=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb252-4"><a href="panel.html#cb252-4"></a><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> svr_id) <span class="op">%&gt;%</span></span>
+<span id="cb252-5"><a href="panel.html#cb252-5"></a><span class="st">  </span><span class="kw">uncount</span>(V1) <span class="op">%&gt;%</span></span>
+<span id="cb252-6"><a href="panel.html#cb252-6"></a><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_date) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">row_number</span>()) <span class="op">%&gt;%</span></span>
+<span id="cb252-7"><a href="panel.html#cb252-7"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">in_class =</span> <span class="kw">case_when</span>(<span class="kw">rnorm</span>(<span class="kw">n</span>(),<span class="dt">mean=</span><span class="dv">0</span>,<span class="dt">sd=</span><span class="dv">1</span>) <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb252-8"><a href="panel.html#cb252-8"></a><span class="st">  </span><span class="kw">filter</span>(in_class <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id), <span class="op">!!</span><span class="kw">sym</span>(svr_date)) <span class="op">%&gt;%</span></span>
+<span id="cb252-9"><a href="panel.html#cb252-9"></a><span class="st">  </span><span class="kw">rename</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_attend) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_date)) <span class="op">%&gt;%</span></span>
+<span id="cb252-10"><a href="panel.html#cb252-10"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">dayquizscore =</span> <span class="kw">rnorm</span>(<span class="kw">n</span>(),<span class="dt">mean=</span><span class="dv">80</span>,<span class="dt">sd=</span><span class="dv">10</span>))</span>
+<span id="cb252-11"><a href="panel.html#cb252-11"></a><span class="co"># Print</span></span>
+<span id="cb252-12"><a href="panel.html#cb252-12"></a><span class="kw">kable</span>(df_panel_attend) <span class="op">%&gt;%</span></span>
+<span id="cb252-13"><a href="panel.html#cb252-13"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -695,18 +758,18 @@ dayquizscore
 </tbody>
 </table>
 <p>Second, now join dataframes:</p>
-<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb251-1" title="1"><span class="co"># Join with explicit names</span></a>
-<a class="sourceLine" id="cb251-2" title="2">df_quiz_joined_multikey &lt;-<span class="st"> </span>df_panel_balanced_skeleton <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb251-3" title="3"><span class="st">  </span><span class="kw">left_join</span>(df_panel_attend,</a>
-<a class="sourceLine" id="cb251-4" title="4">            <span class="dt">by=</span>(<span class="kw">c</span>(<span class="st">&#39;sid&#39;</span>=<span class="st">&#39;sid&#39;</span>, <span class="st">&#39;classday&#39;</span>=<span class="st">&#39;date_in_class&#39;</span>)))</a>
-<a class="sourceLine" id="cb251-5" title="5"></a>
-<a class="sourceLine" id="cb251-6" title="6"><span class="co"># Join with setname strings</span></a>
-<a class="sourceLine" id="cb251-7" title="7">df_quiz_joined_multikey_setnames &lt;-<span class="st"> </span>df_panel_balanced_skeleton <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb251-8" title="8"><span class="st">  </span><span class="kw">left_join</span>(df_panel_attend, <span class="dt">by=</span><span class="kw">setNames</span>(<span class="kw">c</span>(<span class="st">&#39;sid&#39;</span>, <span class="st">&#39;date_in_class&#39;</span>), <span class="kw">c</span>(<span class="st">&#39;sid&#39;</span>, <span class="st">&#39;classday&#39;</span>)))</a>
-<a class="sourceLine" id="cb251-9" title="9"></a>
-<a class="sourceLine" id="cb251-10" title="10"><span class="co"># Print</span></a>
-<a class="sourceLine" id="cb251-11" title="11"><span class="kw">kable</span>(df_quiz_joined_multikey) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb251-12" title="12"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="panel.html#cb253-1"></a><span class="co"># Join with explicit names</span></span>
+<span id="cb253-2"><a href="panel.html#cb253-2"></a>df_quiz_joined_multikey &lt;-<span class="st"> </span>df_panel_balanced_skeleton <span class="op">%&gt;%</span></span>
+<span id="cb253-3"><a href="panel.html#cb253-3"></a><span class="st">  </span><span class="kw">left_join</span>(df_panel_attend,</span>
+<span id="cb253-4"><a href="panel.html#cb253-4"></a>            <span class="dt">by=</span>(<span class="kw">c</span>(<span class="st">&#39;sid&#39;</span>=<span class="st">&#39;sid&#39;</span>, <span class="st">&#39;classday&#39;</span>=<span class="st">&#39;date_in_class&#39;</span>)))</span>
+<span id="cb253-5"><a href="panel.html#cb253-5"></a></span>
+<span id="cb253-6"><a href="panel.html#cb253-6"></a><span class="co"># Join with setname strings</span></span>
+<span id="cb253-7"><a href="panel.html#cb253-7"></a>df_quiz_joined_multikey_setnames &lt;-<span class="st"> </span>df_panel_balanced_skeleton <span class="op">%&gt;%</span></span>
+<span id="cb253-8"><a href="panel.html#cb253-8"></a><span class="st">  </span><span class="kw">left_join</span>(df_panel_attend, <span class="dt">by=</span><span class="kw">setNames</span>(<span class="kw">c</span>(<span class="st">&#39;sid&#39;</span>, <span class="st">&#39;date_in_class&#39;</span>), <span class="kw">c</span>(<span class="st">&#39;sid&#39;</span>, <span class="st">&#39;classday&#39;</span>)))</span>
+<span id="cb253-9"><a href="panel.html#cb253-9"></a></span>
+<span id="cb253-10"><a href="panel.html#cb253-10"></a><span class="co"># Print</span></span>
+<span id="cb253-11"><a href="panel.html#cb253-11"></a><span class="kw">kable</span>(df_quiz_joined_multikey) <span class="op">%&gt;%</span></span>
+<span id="cb253-12"><a href="panel.html#cb253-12"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -856,8 +919,8 @@ NA
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb252-1" title="1"><span class="kw">kable</span>(df_quiz_joined_multikey_setnames) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb252-2" title="2"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb254-1"><a href="panel.html#cb254-1"></a><span class="kw">kable</span>(df_quiz_joined_multikey_setnames) <span class="op">%&gt;%</span></span>
+<span id="cb254-2"><a href="panel.html#cb254-2"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1008,35 +1071,35 @@ NA
 </tbody>
 </table>
 </div>
-<div id="stack-panel-frames-together" class="section level4">
+<div id="stack-panel-frames-together" class="section level4" number="4.1.2.2">
 <h4><span class="header-section-number">4.1.2.2</span> Stack Panel Frames Together</h4>
 <p>There are multiple panel dataframe, each for different subsets of dates. All variable names and units of observations are identical. Use DPLYR <a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a>.</p>
-<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb253-1" title="1"><span class="co"># Define</span></a>
-<a class="sourceLine" id="cb253-2" title="2">it_N &lt;-<span class="st"> </span><span class="dv">2</span> <span class="co"># Number of individuals</span></a>
-<a class="sourceLine" id="cb253-3" title="3">it_M &lt;-<span class="st"> </span><span class="dv">3</span> <span class="co"># Number of Months</span></a>
-<a class="sourceLine" id="cb253-4" title="4">svr_id &lt;-<span class="st"> &#39;sid&#39;</span></a>
-<a class="sourceLine" id="cb253-5" title="5">svr_date &lt;-<span class="st"> &#39;date&#39;</span></a>
-<a class="sourceLine" id="cb253-6" title="6"></a>
-<a class="sourceLine" id="cb253-7" title="7"><span class="co"># Panel First Half of Year</span></a>
-<a class="sourceLine" id="cb253-8" title="8">df_panel_m1tom3 &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">matrix</span>(it_M, <span class="dt">nrow=</span>it_N, <span class="dt">ncol=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb253-9" title="9"><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> svr_id) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb253-10" title="10"><span class="st">  </span><span class="kw">uncount</span>(V1) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb253-11" title="11"><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_date) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">row_number</span>()) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb253-12" title="12"><span class="st">  </span><span class="kw">ungroup</span>()</a>
-<a class="sourceLine" id="cb253-13" title="13"></a>
-<a class="sourceLine" id="cb253-14" title="14"><span class="co"># Panel Second Half of Year</span></a>
-<a class="sourceLine" id="cb253-15" title="15">df_panel_m4tom6 &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">matrix</span>(it_M, <span class="dt">nrow=</span>it_N, <span class="dt">ncol=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb253-16" title="16"><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> svr_id) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb253-17" title="17"><span class="st">  </span><span class="kw">uncount</span>(V1) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb253-18" title="18"><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_date) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">row_number</span>() <span class="op">+</span><span class="st"> </span><span class="dv">3</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb253-19" title="19"><span class="st">  </span><span class="kw">ungroup</span>()</a>
-<a class="sourceLine" id="cb253-20" title="20"></a>
-<a class="sourceLine" id="cb253-21" title="21"><span class="co"># Bind Rows</span></a>
-<a class="sourceLine" id="cb253-22" title="22">df_panel_m1tm6 &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(df_panel_m1tom3, df_panel_m4tom6) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="op">!!!</span><span class="kw">syms</span>(<span class="kw">c</span>(svr_id, svr_date)))</a>
-<a class="sourceLine" id="cb253-23" title="23"></a>
-<a class="sourceLine" id="cb253-24" title="24"><span class="co"># Print</span></a>
-<a class="sourceLine" id="cb253-25" title="25"><span class="kw">kable</span>(df_panel_m1tom3) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb253-26" title="26"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="panel.html#cb255-1"></a><span class="co"># Define</span></span>
+<span id="cb255-2"><a href="panel.html#cb255-2"></a>it_N &lt;-<span class="st"> </span><span class="dv">2</span> <span class="co"># Number of individuals</span></span>
+<span id="cb255-3"><a href="panel.html#cb255-3"></a>it_M &lt;-<span class="st"> </span><span class="dv">3</span> <span class="co"># Number of Months</span></span>
+<span id="cb255-4"><a href="panel.html#cb255-4"></a>svr_id &lt;-<span class="st"> &#39;sid&#39;</span></span>
+<span id="cb255-5"><a href="panel.html#cb255-5"></a>svr_date &lt;-<span class="st"> &#39;date&#39;</span></span>
+<span id="cb255-6"><a href="panel.html#cb255-6"></a></span>
+<span id="cb255-7"><a href="panel.html#cb255-7"></a><span class="co"># Panel First Half of Year</span></span>
+<span id="cb255-8"><a href="panel.html#cb255-8"></a>df_panel_m1tom3 &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">matrix</span>(it_M, <span class="dt">nrow=</span>it_N, <span class="dt">ncol=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb255-9"><a href="panel.html#cb255-9"></a><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> svr_id) <span class="op">%&gt;%</span></span>
+<span id="cb255-10"><a href="panel.html#cb255-10"></a><span class="st">  </span><span class="kw">uncount</span>(V1) <span class="op">%&gt;%</span></span>
+<span id="cb255-11"><a href="panel.html#cb255-11"></a><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_date) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">row_number</span>()) <span class="op">%&gt;%</span></span>
+<span id="cb255-12"><a href="panel.html#cb255-12"></a><span class="st">  </span><span class="kw">ungroup</span>()</span>
+<span id="cb255-13"><a href="panel.html#cb255-13"></a></span>
+<span id="cb255-14"><a href="panel.html#cb255-14"></a><span class="co"># Panel Second Half of Year</span></span>
+<span id="cb255-15"><a href="panel.html#cb255-15"></a>df_panel_m4tom6 &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">matrix</span>(it_M, <span class="dt">nrow=</span>it_N, <span class="dt">ncol=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb255-16"><a href="panel.html#cb255-16"></a><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> svr_id) <span class="op">%&gt;%</span></span>
+<span id="cb255-17"><a href="panel.html#cb255-17"></a><span class="st">  </span><span class="kw">uncount</span>(V1) <span class="op">%&gt;%</span></span>
+<span id="cb255-18"><a href="panel.html#cb255-18"></a><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_date) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">row_number</span>() <span class="op">+</span><span class="st"> </span><span class="dv">3</span>) <span class="op">%&gt;%</span></span>
+<span id="cb255-19"><a href="panel.html#cb255-19"></a><span class="st">  </span><span class="kw">ungroup</span>()</span>
+<span id="cb255-20"><a href="panel.html#cb255-20"></a></span>
+<span id="cb255-21"><a href="panel.html#cb255-21"></a><span class="co"># Bind Rows</span></span>
+<span id="cb255-22"><a href="panel.html#cb255-22"></a>df_panel_m1tm6 &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(df_panel_m1tom3, df_panel_m4tom6) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="op">!!!</span><span class="kw">syms</span>(<span class="kw">c</span>(svr_id, svr_date)))</span>
+<span id="cb255-23"><a href="panel.html#cb255-23"></a></span>
+<span id="cb255-24"><a href="panel.html#cb255-24"></a><span class="co"># Print</span></span>
+<span id="cb255-25"><a href="panel.html#cb255-25"></a><span class="kw">kable</span>(df_panel_m1tom3) <span class="op">%&gt;%</span></span>
+<span id="cb255-26"><a href="panel.html#cb255-26"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1099,8 +1162,8 @@ date
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb254-1" title="1"><span class="kw">kable</span>(df_panel_m4tom6) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb254-2" title="2"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb256-1"><a href="panel.html#cb256-1"></a><span class="kw">kable</span>(df_panel_m4tom6) <span class="op">%&gt;%</span></span>
+<span id="cb256-2"><a href="panel.html#cb256-2"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1163,8 +1226,8 @@ date
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb255-1" title="1"><span class="kw">kable</span>(df_panel_m1tm6) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb255-2" title="2"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb257-1"><a href="panel.html#cb257-1"></a><span class="kw">kable</span>(df_panel_m1tm6) <span class="op">%&gt;%</span></span>
+<span id="cb257-2"><a href="panel.html#cb257-2"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1279,38 +1342,38 @@ date
 </div>
 </div>
 </div>
-<div id="wide-and-long" class="section level2">
+<div id="wide-and-long" class="section level2" number="4.2">
 <h2><span class="header-section-number">4.2</span> Wide and Long</h2>
 
-<div id="long-to-wide" class="section level3">
+<div id="long-to-wide" class="section level3" number="4.2.1">
 <h3><span class="header-section-number">4.2.1</span> Long to Wide</h3>
 <blockquote>
 <p>Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R Code Examples</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository (<a href="https://fanwangecon.github.io/Stat4Econ/bookdown">bookdown site</a>).</p>
 </blockquote>
 <p>Using the <a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a> function in tidyr to reshape panel or other data structures</p>
-<div id="panel-long-attendance-roster-to-wide" class="section level4">
+<div id="panel-long-attendance-roster-to-wide" class="section level4" number="4.2.1.1">
 <h4><span class="header-section-number">4.2.1.1</span> Panel Long Attendance Roster to Wide</h4>
 <p>There are <span class="math inline">\(N\)</span> students in class, but only a subset of them attend class each day. If student <span class="math inline">\(id_i\)</span> is in class on day <span class="math inline">\(Q\)</span>, the teacher records on a sheet the date and the student ID. So if the student has been in class 10 times, the teacher has ten rows of recorded data for the student with two columns: column one is the student ID, and column two is the date on which the student was in class. Suppose there were 50 students, who on average attended exactly 10 classes each during the semester, this means we have <span class="math inline">\(10 \cdot 50\)</span> rows of data, with differing numbers of rows for each student. This is shown as <em>df_panel_attend_date</em> generated below.</p>
 <p>Now we want to generate a new dataframe, where each row is a date, and each column is a student. The values in the new dataframe shows, at the <span class="math inline">\(Q^{th}\)</span> day, how many classes student <span class="math inline">\(i\)</span> has attended so far. The following results is also in a REconTools Function. This is shown as <em>df_attend_cumu_by_day</em> generated below.</p>
 <p><strong>First</strong>, generate the raw data structure, <em>df_panel_attend_date</em>:</p>
-<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb256-1" title="1"><span class="co"># Define</span></a>
-<a class="sourceLine" id="cb256-2" title="2">it_N &lt;-<span class="st"> </span><span class="dv">3</span></a>
-<a class="sourceLine" id="cb256-3" title="3">it_M &lt;-<span class="st"> </span><span class="dv">5</span></a>
-<a class="sourceLine" id="cb256-4" title="4">svr_id &lt;-<span class="st"> &#39;student_id&#39;</span></a>
-<a class="sourceLine" id="cb256-5" title="5"></a>
-<a class="sourceLine" id="cb256-6" title="6"><span class="co"># from : support/rand/fs_rand_draws.Rmd</span></a>
-<a class="sourceLine" id="cb256-7" title="7"><span class="kw">set.seed</span>(<span class="dv">222</span>)</a>
-<a class="sourceLine" id="cb256-8" title="8">df_panel_attend_date &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">matrix</span>(it_M, <span class="dt">nrow=</span>it_N, <span class="dt">ncol=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb256-9" title="9"><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> svr_id) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb256-10" title="10"><span class="st">  </span><span class="kw">uncount</span>(V1) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb256-11" title="11"><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">date =</span> <span class="kw">row_number</span>()) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb256-12" title="12"><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">in_class =</span> <span class="kw">case_when</span>(<span class="kw">rnorm</span>(<span class="kw">n</span>(),<span class="dt">mean=</span><span class="dv">0</span>,<span class="dt">sd=</span><span class="dv">1</span>) <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb256-13" title="13"><span class="st">  </span><span class="kw">filter</span>(in_class <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id), date) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb256-14" title="14"><span class="st">  </span><span class="kw">rename</span>(<span class="dt">date_in_class =</span> date)</a>
-<a class="sourceLine" id="cb256-15" title="15"></a>
-<a class="sourceLine" id="cb256-16" title="16"><span class="co"># Print</span></a>
-<a class="sourceLine" id="cb256-17" title="17"><span class="kw">kable</span>(df_panel_attend_date) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb256-18" title="18"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="panel.html#cb258-1"></a><span class="co"># Define</span></span>
+<span id="cb258-2"><a href="panel.html#cb258-2"></a>it_N &lt;-<span class="st"> </span><span class="dv">3</span></span>
+<span id="cb258-3"><a href="panel.html#cb258-3"></a>it_M &lt;-<span class="st"> </span><span class="dv">5</span></span>
+<span id="cb258-4"><a href="panel.html#cb258-4"></a>svr_id &lt;-<span class="st"> &#39;student_id&#39;</span></span>
+<span id="cb258-5"><a href="panel.html#cb258-5"></a></span>
+<span id="cb258-6"><a href="panel.html#cb258-6"></a><span class="co"># from : support/rand/fs_rand_draws.Rmd</span></span>
+<span id="cb258-7"><a href="panel.html#cb258-7"></a><span class="kw">set.seed</span>(<span class="dv">222</span>)</span>
+<span id="cb258-8"><a href="panel.html#cb258-8"></a>df_panel_attend_date &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">matrix</span>(it_M, <span class="dt">nrow=</span>it_N, <span class="dt">ncol=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb258-9"><a href="panel.html#cb258-9"></a><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> svr_id) <span class="op">%&gt;%</span></span>
+<span id="cb258-10"><a href="panel.html#cb258-10"></a><span class="st">  </span><span class="kw">uncount</span>(V1) <span class="op">%&gt;%</span></span>
+<span id="cb258-11"><a href="panel.html#cb258-11"></a><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">date =</span> <span class="kw">row_number</span>()) <span class="op">%&gt;%</span></span>
+<span id="cb258-12"><a href="panel.html#cb258-12"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">in_class =</span> <span class="kw">case_when</span>(<span class="kw">rnorm</span>(<span class="kw">n</span>(),<span class="dt">mean=</span><span class="dv">0</span>,<span class="dt">sd=</span><span class="dv">1</span>) <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb258-13"><a href="panel.html#cb258-13"></a><span class="st">  </span><span class="kw">filter</span>(in_class <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id), date) <span class="op">%&gt;%</span></span>
+<span id="cb258-14"><a href="panel.html#cb258-14"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">date_in_class =</span> date)</span>
+<span id="cb258-15"><a href="panel.html#cb258-15"></a></span>
+<span id="cb258-16"><a href="panel.html#cb258-16"></a><span class="co"># Print</span></span>
+<span id="cb258-17"><a href="panel.html#cb258-17"></a><span class="kw">kable</span>(df_panel_attend_date) <span class="op">%&gt;%</span></span>
+<span id="cb258-18"><a href="panel.html#cb258-18"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1390,15 +1453,15 @@ date_in_class
 </tbody>
 </table>
 <p><strong>Second</strong>, generate wider data structure, <em>df_attend_cumu_by_day</em>:</p>
-<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb257-1" title="1"><span class="co"># Define</span></a>
-<a class="sourceLine" id="cb257-2" title="2">svr_id &lt;-<span class="st"> &#39;student_id&#39;</span></a>
-<a class="sourceLine" id="cb257-3" title="3">svr_date &lt;-<span class="st"> &#39;date_in_class&#39;</span></a>
-<a class="sourceLine" id="cb257-4" title="4">st_idcol_prefix &lt;-<span class="st"> &#39;sid_&#39;</span></a>
-<a class="sourceLine" id="cb257-5" title="5"></a>
-<a class="sourceLine" id="cb257-6" title="6"><span class="co"># Generate cumulative enrollment counts by date</span></a>
-<a class="sourceLine" id="cb257-7" title="7">df_panel_attend_date_addone &lt;-<span class="st"> </span>df_panel_attend_date <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">attended =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb257-8" title="8"><span class="kw">kable</span>(df_panel_attend_date_addone) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb257-9" title="9"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb259-1"><a href="panel.html#cb259-1"></a><span class="co"># Define</span></span>
+<span id="cb259-2"><a href="panel.html#cb259-2"></a>svr_id &lt;-<span class="st"> &#39;student_id&#39;</span></span>
+<span id="cb259-3"><a href="panel.html#cb259-3"></a>svr_date &lt;-<span class="st"> &#39;date_in_class&#39;</span></span>
+<span id="cb259-4"><a href="panel.html#cb259-4"></a>st_idcol_prefix &lt;-<span class="st"> &#39;sid_&#39;</span></span>
+<span id="cb259-5"><a href="panel.html#cb259-5"></a></span>
+<span id="cb259-6"><a href="panel.html#cb259-6"></a><span class="co"># Generate cumulative enrollment counts by date</span></span>
+<span id="cb259-7"><a href="panel.html#cb259-7"></a>df_panel_attend_date_addone &lt;-<span class="st"> </span>df_panel_attend_date <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">attended =</span> <span class="dv">1</span>)</span>
+<span id="cb259-8"><a href="panel.html#cb259-8"></a><span class="kw">kable</span>(df_panel_attend_date_addone) <span class="op">%&gt;%</span></span>
+<span id="cb259-9"><a href="panel.html#cb259-9"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1504,12 +1567,12 @@ attended
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb258-1" title="1"><span class="co"># Pivot Wide</span></a>
-<a class="sourceLine" id="cb258-2" title="2">df_panel_attend_date_wider &lt;-<span class="st"> </span>df_panel_attend_date_addone <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb258-3" title="3"><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from =</span> svr_id,</a>
-<a class="sourceLine" id="cb258-4" title="4">              <span class="dt">values_from =</span> attended)</a>
-<a class="sourceLine" id="cb258-5" title="5"><span class="kw">kable</span>(df_panel_attend_date_wider) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb258-6" title="6"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="panel.html#cb260-1"></a><span class="co"># Pivot Wide</span></span>
+<span id="cb260-2"><a href="panel.html#cb260-2"></a>df_panel_attend_date_wider &lt;-<span class="st"> </span>df_panel_attend_date_addone <span class="op">%&gt;%</span></span>
+<span id="cb260-3"><a href="panel.html#cb260-3"></a><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from =</span> svr_id,</span>
+<span id="cb260-4"><a href="panel.html#cb260-4"></a>              <span class="dt">values_from =</span> attended)</span>
+<span id="cb260-5"><a href="panel.html#cb260-5"></a><span class="kw">kable</span>(df_panel_attend_date_wider) <span class="op">%&gt;%</span></span>
+<span id="cb260-6"><a href="panel.html#cb260-6"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1600,16 +1663,16 @@ NA
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb259-1" title="1"><span class="co"># Sort and rename</span></a>
-<a class="sourceLine" id="cb259-2" title="2"><span class="co"># rename see: https://fanwangecon.github.io/R4Econ/amto/tibble/fs_tib_basics.html</span></a>
-<a class="sourceLine" id="cb259-3" title="3">ar_unique_ids &lt;-<span class="st"> </span><span class="kw">sort</span>(<span class="kw">unique</span>(df_panel_attend_date <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id))))</a>
-<a class="sourceLine" id="cb259-4" title="4">df_panel_attend_date_wider_sort &lt;-<span class="st"> </span>df_panel_attend_date_wider <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb259-5" title="5"><span class="st">    </span><span class="kw">arrange</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_date)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb259-6" title="6"><span class="st">    </span><span class="kw">rename_at</span>(<span class="kw">vars</span>(<span class="kw">num_range</span>(<span class="st">&#39;&#39;</span>,ar_unique_ids))</a>
-<a class="sourceLine" id="cb259-7" title="7">              , <span class="kw">list</span>(<span class="op">~</span><span class="kw">paste0</span>(st_idcol_prefix, . , <span class="st">&#39;&#39;</span>))</a>
-<a class="sourceLine" id="cb259-8" title="8">              )</a>
-<a class="sourceLine" id="cb259-9" title="9"><span class="kw">kable</span>(df_panel_attend_date_wider_sort) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb259-10" title="10"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="panel.html#cb261-1"></a><span class="co"># Sort and rename</span></span>
+<span id="cb261-2"><a href="panel.html#cb261-2"></a><span class="co"># rename see: https://fanwangecon.github.io/R4Econ/amto/tibble/fs_tib_basics.html</span></span>
+<span id="cb261-3"><a href="panel.html#cb261-3"></a>ar_unique_ids &lt;-<span class="st"> </span><span class="kw">sort</span>(<span class="kw">unique</span>(df_panel_attend_date <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id))))</span>
+<span id="cb261-4"><a href="panel.html#cb261-4"></a>df_panel_attend_date_wider_sort &lt;-<span class="st"> </span>df_panel_attend_date_wider <span class="op">%&gt;%</span></span>
+<span id="cb261-5"><a href="panel.html#cb261-5"></a><span class="st">    </span><span class="kw">arrange</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_date)) <span class="op">%&gt;%</span></span>
+<span id="cb261-6"><a href="panel.html#cb261-6"></a><span class="st">    </span><span class="kw">rename_at</span>(<span class="kw">vars</span>(<span class="kw">num_range</span>(<span class="st">&#39;&#39;</span>,ar_unique_ids))</span>
+<span id="cb261-7"><a href="panel.html#cb261-7"></a>              , <span class="kw">list</span>(<span class="op">~</span><span class="kw">paste0</span>(st_idcol_prefix, . , <span class="st">&#39;&#39;</span>))</span>
+<span id="cb261-8"><a href="panel.html#cb261-8"></a>              )</span>
+<span id="cb261-9"><a href="panel.html#cb261-9"></a><span class="kw">kable</span>(df_panel_attend_date_wider_sort) <span class="op">%&gt;%</span></span>
+<span id="cb261-10"><a href="panel.html#cb261-10"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1700,14 +1763,14 @@ NA
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb260-1" title="1"><span class="co"># replace NA and cumusum again</span></a>
-<a class="sourceLine" id="cb260-2" title="2"><span class="co"># see: R4Econ/support/function/fs_func_multivar for renaming and replacing</span></a>
-<a class="sourceLine" id="cb260-3" title="3">df_attend_cumu_by_day &lt;-<span class="st"> </span>df_panel_attend_date_wider_sort <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb260-4" title="4"><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(<span class="kw">contains</span>(st_idcol_prefix)), <span class="kw">list</span>(<span class="op">~</span><span class="kw">replace_na</span>(., <span class="dv">0</span>))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb260-5" title="5"><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(<span class="kw">contains</span>(st_idcol_prefix)), <span class="kw">list</span>(<span class="op">~</span><span class="kw">cumsum</span>(.)))</a>
-<a class="sourceLine" id="cb260-6" title="6"></a>
-<a class="sourceLine" id="cb260-7" title="7"><span class="kw">kable</span>(df_attend_cumu_by_day) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb260-8" title="8"><span class="st">  </span><span class="kw">kable_styling_fc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="panel.html#cb262-1"></a><span class="co"># replace NA and cumusum again</span></span>
+<span id="cb262-2"><a href="panel.html#cb262-2"></a><span class="co"># see: R4Econ/support/function/fs_func_multivar for renaming and replacing</span></span>
+<span id="cb262-3"><a href="panel.html#cb262-3"></a>df_attend_cumu_by_day &lt;-<span class="st"> </span>df_panel_attend_date_wider_sort <span class="op">%&gt;%</span></span>
+<span id="cb262-4"><a href="panel.html#cb262-4"></a><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(<span class="kw">contains</span>(st_idcol_prefix)), <span class="kw">list</span>(<span class="op">~</span><span class="kw">replace_na</span>(., <span class="dv">0</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb262-5"><a href="panel.html#cb262-5"></a><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(<span class="kw">contains</span>(st_idcol_prefix)), <span class="kw">list</span>(<span class="op">~</span><span class="kw">cumsum</span>(.)))</span>
+<span id="cb262-6"><a href="panel.html#cb262-6"></a></span>
+<span id="cb262-7"><a href="panel.html#cb262-7"></a><span class="kw">kable</span>(df_attend_cumu_by_day) <span class="op">%&gt;%</span></span>
+<span id="cb262-8"><a href="panel.html#cb262-8"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1799,20 +1862,438 @@ sid_3
 </tbody>
 </table>
 <p>The structure above is also a function in Fan’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, here the function is tested:</p>
-<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb261-1" title="1"><span class="co"># Parameters</span></a>
-<a class="sourceLine" id="cb261-2" title="2">df &lt;-<span class="st"> </span>df_panel_attend_date</a>
-<a class="sourceLine" id="cb261-3" title="3">svr_id_i &lt;-<span class="st"> &#39;student_id&#39;</span></a>
-<a class="sourceLine" id="cb261-4" title="4">svr_id_t &lt;-<span class="st"> &#39;date_in_class&#39;</span></a>
-<a class="sourceLine" id="cb261-5" title="5">st_idcol_prefix &lt;-<span class="st"> &#39;sid_&#39;</span></a>
-<a class="sourceLine" id="cb261-6" title="6"></a>
-<a class="sourceLine" id="cb261-7" title="7"><span class="co"># Invoke Function</span></a>
-<a class="sourceLine" id="cb261-8" title="8">ls_df_rosterwide &lt;-<span class="st"> </span><span class="kw">ff_panel_expand_longrosterwide</span>(df, svr_id_t, svr_id_i, st_idcol_prefix)</a>
-<a class="sourceLine" id="cb261-9" title="9">df_roster_wide_func &lt;-<span class="st"> </span>ls_df_rosterwide<span class="op">$</span>df_roster_wide</a>
-<a class="sourceLine" id="cb261-10" title="10">df_roster_wide_cumu_func &lt;-<span class="st"> </span>ls_df_rosterwide<span class="op">$</span>df_roster_wide_cumu</a>
-<a class="sourceLine" id="cb261-11" title="11"></a>
-<a class="sourceLine" id="cb261-12" title="12"><span class="co"># Print</span></a>
-<a class="sourceLine" id="cb261-13" title="13"><span class="kw">print</span>(df_roster_wide_func)</a>
-<a class="sourceLine" id="cb261-14" title="14"><span class="kw">print</span>(df_roster_wide_cumu_func)</a></code></pre></div>
+<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="panel.html#cb263-1"></a><span class="co"># Parameters</span></span>
+<span id="cb263-2"><a href="panel.html#cb263-2"></a>df &lt;-<span class="st"> </span>df_panel_attend_date</span>
+<span id="cb263-3"><a href="panel.html#cb263-3"></a>svr_id_i &lt;-<span class="st"> &#39;student_id&#39;</span></span>
+<span id="cb263-4"><a href="panel.html#cb263-4"></a>svr_id_t &lt;-<span class="st"> &#39;date_in_class&#39;</span></span>
+<span id="cb263-5"><a href="panel.html#cb263-5"></a>st_idcol_prefix &lt;-<span class="st"> &#39;sid_&#39;</span></span>
+<span id="cb263-6"><a href="panel.html#cb263-6"></a></span>
+<span id="cb263-7"><a href="panel.html#cb263-7"></a><span class="co"># Invoke Function</span></span>
+<span id="cb263-8"><a href="panel.html#cb263-8"></a>ls_df_rosterwide &lt;-<span class="st"> </span><span class="kw">ff_panel_expand_longrosterwide</span>(df, svr_id_t, svr_id_i, st_idcol_prefix)</span>
+<span id="cb263-9"><a href="panel.html#cb263-9"></a>df_roster_wide_func &lt;-<span class="st"> </span>ls_df_rosterwide<span class="op">$</span>df_roster_wide</span>
+<span id="cb263-10"><a href="panel.html#cb263-10"></a>df_roster_wide_cumu_func &lt;-<span class="st"> </span>ls_df_rosterwide<span class="op">$</span>df_roster_wide_cumu</span>
+<span id="cb263-11"><a href="panel.html#cb263-11"></a></span>
+<span id="cb263-12"><a href="panel.html#cb263-12"></a><span class="co"># Print</span></span>
+<span id="cb263-13"><a href="panel.html#cb263-13"></a><span class="kw">print</span>(df_roster_wide_func)</span>
+<span id="cb263-14"><a href="panel.html#cb263-14"></a><span class="kw">print</span>(df_roster_wide_cumu_func)</span></code></pre></div>
+
+</div>
+</div>
+<div id="wide-to-long" class="section level3" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> Wide to Long</h3>
+<blockquote>
+<p>Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R Code Examples</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository (<a href="https://fanwangecon.github.io/Stat4Econ/bookdown">bookdown site</a>).</p>
+</blockquote>
+<p>Using the <a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a> function in tidyr to reshape panel or other data structures</p>
+<div id="generated-matrix-by-states-to-long-table" class="section level4" number="4.2.2.1">
+<h4><span class="header-section-number">4.2.2.1</span> Generated Matrix by States to Long Table</h4>
+<p>A matrix of ev given states, rows are states and cols are shocks. Convert to Long table with shock and state values and ev.</p>
+<p>Generated Matrix by States to Long Table where state values are stored as variables, with correct value labels for states:</p>
+<ol style="list-style-type: decimal">
+<li>Generate a matrix</li>
+<li>Convert matrix to tibble</li>
+<li>Tibble make longer, and store column and row id var names</li>
+</ol>
+<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="panel.html#cb264-1"></a><span class="co"># Generate A Matrix</span></span>
+<span id="cb264-2"><a href="panel.html#cb264-2"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb264-3"><a href="panel.html#cb264-3"></a>ar_a &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">1.2</span>, <span class="fl">22.2</span>, <span class="fl">33.33</span>)</span>
+<span id="cb264-4"><a href="panel.html#cb264-4"></a>ar_z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="fl">2.5</span>,  <span class="dv">-1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">2.53</span>)</span>
+<span id="cb264-5"><a href="panel.html#cb264-5"></a>mt_ev =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(ar_a<span class="op">*</span>ar_z), <span class="dt">nrow=</span><span class="kw">length</span>(ar_a), <span class="dt">ncol=</span><span class="kw">length</span>(ar_z))</span>
+<span id="cb264-6"><a href="panel.html#cb264-6"></a></span>
+<span id="cb264-7"><a href="panel.html#cb264-7"></a><span class="co"># Name Matrix</span></span>
+<span id="cb264-8"><a href="panel.html#cb264-8"></a><span class="kw">rownames</span>(mt_ev) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;ai&#39;</span>, <span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(ar_a)))</span>
+<span id="cb264-9"><a href="panel.html#cb264-9"></a><span class="kw">colnames</span>(mt_ev) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;zi&#39;</span>, <span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(ar_z)))</span>
+<span id="cb264-10"><a href="panel.html#cb264-10"></a></span>
+<span id="cb264-11"><a href="panel.html#cb264-11"></a><span class="co"># to tibble</span></span>
+<span id="cb264-12"><a href="panel.html#cb264-12"></a>tb_ev &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mt_ev) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> <span class="st">&quot;ai&quot;</span>)</span>
+<span id="cb264-13"><a href="panel.html#cb264-13"></a></span>
+<span id="cb264-14"><a href="panel.html#cb264-14"></a><span class="co"># longer </span></span>
+<span id="cb264-15"><a href="panel.html#cb264-15"></a>tb_ev_long &lt;-<span class="st"> </span>tb_ev <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb264-16"><a href="panel.html#cb264-16"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> <span class="kw">starts_with</span>(<span class="st">&#39;zi&#39;</span>), </span>
+<span id="cb264-17"><a href="panel.html#cb264-17"></a>               <span class="dt">names_to =</span> <span class="kw">c</span>(<span class="st">&#39;zi&#39;</span>),</span>
+<span id="cb264-18"><a href="panel.html#cb264-18"></a>               <span class="dt">names_pattern =</span> <span class="kw">paste0</span>(<span class="st">&quot;zi(.)&quot;</span>),</span>
+<span id="cb264-19"><a href="panel.html#cb264-19"></a>               <span class="dt">values_to =</span> <span class="st">&quot;ev&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb264-20"><a href="panel.html#cb264-20"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">zi =</span> <span class="kw">as.numeric</span>(zi))</span>
+<span id="cb264-21"><a href="panel.html#cb264-21"></a></span>
+<span id="cb264-22"><a href="panel.html#cb264-22"></a><span class="co"># Merge with a and z values</span></span>
+<span id="cb264-23"><a href="panel.html#cb264-23"></a>tb_ev_long &lt;-<span class="st"> </span>tb_ev_long <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb264-24"><a href="panel.html#cb264-24"></a><span class="st">  </span><span class="kw">left_join</span>(<span class="kw">as_tibble</span>(ar_a) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb264-25"><a href="panel.html#cb264-25"></a><span class="st">              </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> <span class="st">&quot;ai&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb264-26"><a href="panel.html#cb264-26"></a><span class="st">              </span><span class="kw">rename</span>(<span class="dt">a =</span> value)</span>
+<span id="cb264-27"><a href="panel.html#cb264-27"></a>              , <span class="dt">by =</span> <span class="st">&#39;ai&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb264-28"><a href="panel.html#cb264-28"></a><span class="st">  </span><span class="kw">left_join</span>(<span class="kw">as_tibble</span>(ar_z) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb264-29"><a href="panel.html#cb264-29"></a><span class="st">              </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> <span class="st">&quot;zi&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb264-30"><a href="panel.html#cb264-30"></a><span class="st">              </span><span class="kw">rename</span>(<span class="dt">z =</span> value), </span>
+<span id="cb264-31"><a href="panel.html#cb264-31"></a>            <span class="dt">by =</span> <span class="st">&#39;zi&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb264-32"><a href="panel.html#cb264-32"></a><span class="st">  </span><span class="kw">select</span>(a,ai,z,zi,ev)</span>
+<span id="cb264-33"><a href="panel.html#cb264-33"></a></span>
+<span id="cb264-34"><a href="panel.html#cb264-34"></a><span class="co"># Display</span></span>
+<span id="cb264-35"><a href="panel.html#cb264-35"></a><span class="kw">kable</span>(tb_ev) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling_fc</span>()  </span></code></pre></div>
+<table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+ai
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+zi1
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+zi2
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+zi3
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+zi4
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+zi5
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-0.5604756
+</td>
+<td style="text-align:right;">
+0.0705084
+</td>
+<td style="text-align:right;">
+-0.2301775
+</td>
+<td style="text-align:right;">
+0.1292877
+</td>
+<td style="text-align:right;">
+1.5587083
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+-0.2301775
+</td>
+<td style="text-align:right;">
+0.1292877
+</td>
+<td style="text-align:right;">
+1.5587083
+</td>
+<td style="text-align:right;">
+-0.5604756
+</td>
+<td style="text-align:right;">
+0.0705084
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1.5587083
+</td>
+<td style="text-align:right;">
+-0.5604756
+</td>
+<td style="text-align:right;">
+0.0705084
+</td>
+<td style="text-align:right;">
+-0.2301775
+</td>
+<td style="text-align:right;">
+0.1292877
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="panel.html#cb265-1"></a><span class="kw">kable</span>(tb_ev_long) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling_fc</span>()  </span></code></pre></div>
+<table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+a
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+ai
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+z
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+zi
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+ev
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1.20
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-2.50
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-0.5604756
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1.20
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-1.00
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.0705084
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1.20
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-0.2301775
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1.20
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+0.1292877
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1.20
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.53
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+1.5587083
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+22.20
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+-2.50
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-0.2301775
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+22.20
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+-1.00
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.1292877
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+22.20
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1.5587083
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+22.20
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+-0.5604756
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+22.20
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2.53
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+0.0705084
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+33.33
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-2.50
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1.5587083
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+33.33
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-1.00
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+-0.5604756
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+33.33
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.0705084
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+33.33
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+-0.2301775
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+33.33
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2.53
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+0.1292877
+</td>
+</tr>
+</tbody>
+</table>
 
 </div>
 </div>

@@ -1,0 +1,20 @@
+\documentclass[12pt,english]{article}
+\usepackage[bottom]{footmisc}
+\usepackage[urlcolor=blue]{hyperref}
+\begin{document}
+\title{A Latex Testing File}
+\author{\href{http://fanwangecon.github.io/}{Fan Wang} \thanks{See information \href{https://fanwangecon.github.io/Tex4Econ/}{Tex4Econ} for more.}}
+\maketitle
+Ipsum information dolor sit amet, consectetur adipiscing elit. Integer Latex placerat nunc orci.
+\paragraph{\href{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3140132}{Data}}
+Village closure information is taken from a village head survey.\footnote{Generally students went to schools.}
+output:
+  pdf_document:
+    pandoc_args: '..//..//_output_kniti_pdf.yaml'
+    includes:
+      in_header: '..//..//preamble.tex'
+  html_document:
+    pandoc_args: '..//..//_output_kniti_html.yaml'
+    includes:
+      in_header: '..//..//hdga.html'
+\end{document}

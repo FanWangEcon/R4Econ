@@ -5,26 +5,32 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 6 Nonlinear Regression | Panel Data and Optimization with R</title>
-  <meta name="description" content="R Examples Panel and Optimization." />
-  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+  <meta name="description" content="<p>Find all files in a folder with a particula suffix, with exclusion.
+Convert R Markdow File to R, PDF and HTML.
+Modify markdown pounds hierarchy.</p>" />
+  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 6 Nonlinear Regression | Panel Data and Optimization with R" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="R Examples Panel and Optimization." />
+  <meta property="og:description" content="<p>Find all files in a folder with a particula suffix, with exclusion.
+Convert R Markdow File to R, PDF and HTML.
+Modify markdown pounds hierarchy.</p>" />
   <meta name="github-repo" content="fanwangecon/R4Econ" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Chapter 6 Nonlinear Regression | Panel Data and Optimization with R" />
   
-  <meta name="twitter:description" content="R Examples Panel and Optimization." />
+  <meta name="twitter:description" content="<p>Find all files in a folder with a particula suffix, with exclusion.
+Convert R Markdow File to R, PDF and HTML.
+Modify markdown pounds hierarchy.</p>" />
   
 
 <meta name="author" content="Fan Wang" />
 
 
-<meta name="date" content="2020-05-14" />
+<meta name="date" content="2020-05-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,6 +39,7 @@
   
 <link rel="prev" href="linear-regression.html"/>
 <link rel="next" href="optimization.html"/>
+<script src="libs/header-attrs-2.1/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -62,25 +69,26 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -89,9 +97,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -141,21 +149,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html"><i class="fa fa-check"></i><b>1</b> Array, Matrix, Dataframe</a><ul>
-<li class="chapter" data-level="1.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#list"><i class="fa fa-check"></i><b>1.1</b> List</a><ul>
+<li class="chapter" data-level="1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html"><i class="fa fa-check"></i><b>1</b> Array, Matrix, Dataframe</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#list"><i class="fa fa-check"></i><b>1.1</b> List</a>
+<ul>
 <li class="chapter" data-level="1.1.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#multiple-dimensional-list"><i class="fa fa-check"></i><b>1.1.1</b> Multiple Dimensional List</a></li>
 </ul></li>
-<li class="chapter" data-level="1.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#array"><i class="fa fa-check"></i><b>1.2</b> Array</a><ul>
+<li class="chapter" data-level="1.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#array"><i class="fa fa-check"></i><b>1.2</b> Array</a>
+<ul>
 <li class="chapter" data-level="1.2.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#array-basics"><i class="fa fa-check"></i><b>1.2.1</b> Array Basics</a></li>
 <li class="chapter" data-level="1.2.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-arrays"><i class="fa fa-check"></i><b>1.2.2</b> Generate Arrays</a></li>
 <li class="chapter" data-level="1.2.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-arrays"><i class="fa fa-check"></i><b>1.2.3</b> String Arrays</a></li>
 <li class="chapter" data-level="1.2.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#mesh-matrices-arrays-and-scalars"><i class="fa fa-check"></i><b>1.2.4</b> Mesh Matrices, Arrays and Scalars</a></li>
 </ul></li>
-<li class="chapter" data-level="1.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#matrix"><i class="fa fa-check"></i><b>1.3</b> Matrix</a><ul>
+<li class="chapter" data-level="1.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#matrix"><i class="fa fa-check"></i><b>1.3</b> Matrix</a>
+<ul>
 <li class="chapter" data-level="1.3.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-matrixes"><i class="fa fa-check"></i><b>1.3.1</b> Generate Matrixes</a></li>
 <li class="chapter" data-level="1.3.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#linear-algebra"><i class="fa fa-check"></i><b>1.3.2</b> Linear Algebra</a></li>
 </ul></li>
-<li class="chapter" data-level="1.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#variables-in-dataframes"><i class="fa fa-check"></i><b>1.4</b> Variables in Dataframes</a><ul>
+<li class="chapter" data-level="1.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#variables-in-dataframes"><i class="fa fa-check"></i><b>1.4</b> Variables in Dataframes</a>
+<ul>
 <li class="chapter" data-level="1.4.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-dataframe"><i class="fa fa-check"></i><b>1.4.1</b> Generate Dataframe</a></li>
 <li class="chapter" data-level="1.4.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#factor-label-and-combine"><i class="fa fa-check"></i><b>1.4.2</b> Factor Label and Combine</a></li>
 <li class="chapter" data-level="1.4.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#drawly-random-rows"><i class="fa fa-check"></i><b>1.4.3</b> Drawly Random Rows</a></li>
@@ -163,128 +176,178 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.4.5" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-values"><i class="fa fa-check"></i><b>1.4.5</b> String Values</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="summarize-data.html"><a href="summarize-data.html"><i class="fa fa-check"></i><b>2</b> Summarize Data</a><ul>
-<li class="chapter" data-level="2.1" data-path="summarize-data.html"><a href="summarize-data.html#counting-observation"><i class="fa fa-check"></i><b>2.1</b> Counting Observation</a><ul>
+<li class="chapter" data-level="2" data-path="summarize-data.html"><a href="summarize-data.html"><i class="fa fa-check"></i><b>2</b> Summarize Data</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="summarize-data.html"><a href="summarize-data.html#counting-observation"><i class="fa fa-check"></i><b>2.1</b> Counting Observation</a>
+<ul>
 <li class="chapter" data-level="2.1.1" data-path="summarize-data.html"><a href="summarize-data.html#uncount"><i class="fa fa-check"></i><b>2.1.1</b> Uncount</a></li>
 </ul></li>
-<li class="chapter" data-level="2.2" data-path="summarize-data.html"><a href="summarize-data.html#sorting-indexing-slicing"><i class="fa fa-check"></i><b>2.2</b> Sorting, Indexing, Slicing</a><ul>
+<li class="chapter" data-level="2.2" data-path="summarize-data.html"><a href="summarize-data.html#sorting-indexing-slicing"><i class="fa fa-check"></i><b>2.2</b> Sorting, Indexing, Slicing</a>
+<ul>
 <li class="chapter" data-level="2.2.1" data-path="summarize-data.html"><a href="summarize-data.html#sorting"><i class="fa fa-check"></i><b>2.2.1</b> Sorting</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="summarize-data.html"><a href="summarize-data.html#group-statistics"><i class="fa fa-check"></i><b>2.3</b> Group Statistics</a><ul>
+<li class="chapter" data-level="2.3" data-path="summarize-data.html"><a href="summarize-data.html#group-statistics"><i class="fa fa-check"></i><b>2.3</b> Group Statistics</a>
+<ul>
 <li class="chapter" data-level="2.3.1" data-path="summarize-data.html"><a href="summarize-data.html#groups-statistics"><i class="fa fa-check"></i><b>2.3.1</b> Groups Statistics</a></li>
 <li class="chapter" data-level="2.3.2" data-path="summarize-data.html"><a href="summarize-data.html#one-variable-group-summary"><i class="fa fa-check"></i><b>2.3.2</b> One Variable Group Summary</a></li>
 <li class="chapter" data-level="2.3.3" data-path="summarize-data.html"><a href="summarize-data.html#nested-within-group-stats"><i class="fa fa-check"></i><b>2.3.3</b> Nested within Group Stats</a></li>
 </ul></li>
-<li class="chapter" data-level="2.4" data-path="summarize-data.html"><a href="summarize-data.html#distributional-statistics"><i class="fa fa-check"></i><b>2.4</b> Distributional Statistics</a><ul>
+<li class="chapter" data-level="2.4" data-path="summarize-data.html"><a href="summarize-data.html#distributional-statistics"><i class="fa fa-check"></i><b>2.4</b> Distributional Statistics</a>
+<ul>
 <li class="chapter" data-level="2.4.1" data-path="summarize-data.html"><a href="summarize-data.html#histogram"><i class="fa fa-check"></i><b>2.4.1</b> Histogram</a></li>
 </ul></li>
-<li class="chapter" data-level="2.5" data-path="summarize-data.html"><a href="summarize-data.html#summarize-multiple-variables"><i class="fa fa-check"></i><b>2.5</b> Summarize Multiple Variables</a><ul>
+<li class="chapter" data-level="2.5" data-path="summarize-data.html"><a href="summarize-data.html#summarize-multiple-variables"><i class="fa fa-check"></i><b>2.5</b> Summarize Multiple Variables</a>
+<ul>
 <li class="chapter" data-level="2.5.1" data-path="summarize-data.html"><a href="summarize-data.html#generate-replace-variables"><i class="fa fa-check"></i><b>2.5.1</b> Generate Replace Variables</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>3</b> Functions</a><ul>
-<li class="chapter" data-level="3.1" data-path="functions.html"><a href="functions.html#dataframe-mutate"><i class="fa fa-check"></i><b>3.1</b> Dataframe Mutate</a><ul>
+<li class="chapter" data-level="3" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>3</b> Functions</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="functions.html"><a href="functions.html#dataframe-mutate"><i class="fa fa-check"></i><b>3.1</b> Dataframe Mutate</a>
+<ul>
 <li class="chapter" data-level="3.1.1" data-path="functions.html"><a href="functions.html#row-input-functions"><i class="fa fa-check"></i><b>3.1.1</b> Row Input Functions</a></li>
 <li class="chapter" data-level="3.1.2" data-path="functions.html"><a href="functions.html#evaluate-choices-across-states"><i class="fa fa-check"></i><b>3.1.2</b> Evaluate Choices Across States</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="functions.html"><a href="functions.html#dataframe-do-anything"><i class="fa fa-check"></i><b>3.2</b> Dataframe Do Anything</a><ul>
+<li class="chapter" data-level="3.2" data-path="functions.html"><a href="functions.html#dataframe-do-anything"><i class="fa fa-check"></i><b>3.2</b> Dataframe Do Anything</a>
+<ul>
 <li class="chapter" data-level="3.2.1" data-path="functions.html"><a href="functions.html#mxq-to-mxp-rows"><i class="fa fa-check"></i><b>3.2.1</b> MxQ to MxP Rows</a></li>
 <li class="chapter" data-level="3.2.2" data-path="functions.html"><a href="functions.html#mx1-to-mxq-rows"><i class="fa fa-check"></i><b>3.2.2</b> Mx1 to MxQ Rows</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="functions.html"><a href="functions.html#apply-and-pmap"><i class="fa fa-check"></i><b>3.3</b> Apply and pmap</a><ul>
+<li class="chapter" data-level="3.3" data-path="functions.html"><a href="functions.html#apply-and-pmap"><i class="fa fa-check"></i><b>3.3</b> Apply and pmap</a>
+<ul>
 <li class="chapter" data-level="3.3.1" data-path="functions.html"><a href="functions.html#apply-sapply-mutate"><i class="fa fa-check"></i><b>3.3.1</b> Apply, Sapply, Mutate</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="panel.html"><a href="panel.html"><i class="fa fa-check"></i><b>4</b> Panel</a><ul>
-<li class="chapter" data-level="4.1" data-path="panel.html"><a href="panel.html#generate-and-join"><i class="fa fa-check"></i><b>4.1</b> Generate and Join</a><ul>
+<li class="chapter" data-level="4" data-path="panel.html"><a href="panel.html"><i class="fa fa-check"></i><b>4</b> Panel</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="panel.html"><a href="panel.html#generate-and-join"><i class="fa fa-check"></i><b>4.1</b> Generate and Join</a>
+<ul>
 <li class="chapter" data-level="4.1.1" data-path="panel.html"><a href="panel.html#generate-panel-structure"><i class="fa fa-check"></i><b>4.1.1</b> Generate Panel Structure</a></li>
 <li class="chapter" data-level="4.1.2" data-path="panel.html"><a href="panel.html#join-datasets"><i class="fa fa-check"></i><b>4.1.2</b> Join Datasets</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="panel.html"><a href="panel.html#wide-and-long"><i class="fa fa-check"></i><b>4.2</b> Wide and Long</a><ul>
+<li class="chapter" data-level="4.2" data-path="panel.html"><a href="panel.html#wide-and-long"><i class="fa fa-check"></i><b>4.2</b> Wide and Long</a>
+<ul>
 <li class="chapter" data-level="4.2.1" data-path="panel.html"><a href="panel.html#long-to-wide"><i class="fa fa-check"></i><b>4.2.1</b> Long to Wide</a></li>
+<li class="chapter" data-level="4.2.2" data-path="panel.html"><a href="panel.html#wide-to-long"><i class="fa fa-check"></i><b>4.2.2</b> Wide to Long</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>5</b> Linear Regression</a><ul>
-<li class="chapter" data-level="5.1" data-path="linear-regression.html"><a href="linear-regression.html#ols-and-iv"><i class="fa fa-check"></i><b>5.1</b> OLS and IV</a><ul>
+<li class="chapter" data-level="5" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>5</b> Linear Regression</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="linear-regression.html"><a href="linear-regression.html#ols-and-iv"><i class="fa fa-check"></i><b>5.1</b> OLS and IV</a>
+<ul>
 <li class="chapter" data-level="5.1.1" data-path="linear-regression.html"><a href="linear-regression.html#ols-and-iv-regression"><i class="fa fa-check"></i><b>5.1.1</b> OLS and IV Regression</a></li>
 <li class="chapter" data-level="5.1.2" data-path="linear-regression.html"><a href="linear-regression.html#iv-loop-over-rhs"><i class="fa fa-check"></i><b>5.1.2</b> IV Loop over RHS</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="linear-regression.html"><a href="linear-regression.html#decomposition"><i class="fa fa-check"></i><b>5.2</b> Decomposition</a><ul>
+<li class="chapter" data-level="5.2" data-path="linear-regression.html"><a href="linear-regression.html#decomposition"><i class="fa fa-check"></i><b>5.2</b> Decomposition</a>
+<ul>
 <li class="chapter" data-level="5.2.1" data-path="linear-regression.html"><a href="linear-regression.html#decompose-rhs"><i class="fa fa-check"></i><b>5.2.1</b> Decompose RHS</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="nonlinear-regression.html"><a href="nonlinear-regression.html"><i class="fa fa-check"></i><b>6</b> Nonlinear Regression</a><ul>
-<li class="chapter" data-level="6.1" data-path="nonlinear-regression.html"><a href="nonlinear-regression.html#logit-regression"><i class="fa fa-check"></i><b>6.1</b> Logit Regression</a><ul>
+<li class="chapter" data-level="6" data-path="nonlinear-regression.html"><a href="nonlinear-regression.html"><i class="fa fa-check"></i><b>6</b> Nonlinear Regression</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="nonlinear-regression.html"><a href="nonlinear-regression.html#logit-regression"><i class="fa fa-check"></i><b>6.1</b> Logit Regression</a>
+<ul>
 <li class="chapter" data-level="6.1.1" data-path="nonlinear-regression.html"><a href="nonlinear-regression.html#binary-logit"><i class="fa fa-check"></i><b>6.1.1</b> Binary Logit</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="optimization.html"><a href="optimization.html"><i class="fa fa-check"></i><b>7</b> Optimization</a><ul>
-<li class="chapter" data-level="7.1" data-path="optimization.html"><a href="optimization.html#bisection"><i class="fa fa-check"></i><b>7.1</b> Bisection</a><ul>
+<li class="chapter" data-level="7" data-path="optimization.html"><a href="optimization.html"><i class="fa fa-check"></i><b>7</b> Optimization</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="optimization.html"><a href="optimization.html#bisection"><i class="fa fa-check"></i><b>7.1</b> Bisection</a>
+<ul>
 <li class="chapter" data-level="7.1.1" data-path="optimization.html"><a href="optimization.html#bisection-1"><i class="fa fa-check"></i><b>7.1.1</b> Bisection</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html"><i class="fa fa-check"></i><b>8</b> Mathmatics and Statistics</a><ul>
-<li class="chapter" data-level="8.1" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#distributions"><i class="fa fa-check"></i><b>8.1</b> Distributions</a><ul>
+<li class="chapter" data-level="8" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html"><i class="fa fa-check"></i><b>8</b> Mathmatics and Statistics</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#distributions"><i class="fa fa-check"></i><b>8.1</b> Distributions</a>
+<ul>
 <li class="chapter" data-level="8.1.1" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#integrate-over-normal-guassian-process-shock"><i class="fa fa-check"></i><b>8.1.1</b> Integrate Over Normal Guassian Process Shock</a></li>
 </ul></li>
-<li class="chapter" data-level="8.2" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#analytical-solutions"><i class="fa fa-check"></i><b>8.2</b> Analytical Solutions</a><ul>
+<li class="chapter" data-level="8.2" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#analytical-solutions"><i class="fa fa-check"></i><b>8.2</b> Analytical Solutions</a>
+<ul>
 <li class="chapter" data-level="8.2.1" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#linear-scalar-fx0-solutions"><i class="fa fa-check"></i><b>8.2.1</b> Linear Scalar f(x)=0 Solutions</a></li>
 </ul></li>
-<li class="chapter" data-level="8.3" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#inequality-models"><i class="fa fa-check"></i><b>8.3</b> Inequality Models</a><ul>
+<li class="chapter" data-level="8.3" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#inequality-models"><i class="fa fa-check"></i><b>8.3</b> Inequality Models</a>
+<ul>
 <li class="chapter" data-level="8.3.1" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#gini-discrete-sample"><i class="fa fa-check"></i><b>8.3.1</b> Gini Discrete Sample</a></li>
 <li class="chapter" data-level="8.3.2" data-path="mathmatics-and-statistics.html"><a href="mathmatics-and-statistics.html#atkinson-family-utility"><i class="fa fa-check"></i><b>8.3.2</b> Atkinson Family Utility</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html"><i class="fa fa-check"></i><b>9</b> Tables and Graphs</a><ul>
-<li class="chapter" data-level="9.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#r-base-plots"><i class="fa fa-check"></i><b>9.1</b> R Base Plots</a><ul>
+<li class="chapter" data-level="9" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html"><i class="fa fa-check"></i><b>9</b> Tables and Graphs</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#r-base-plots"><i class="fa fa-check"></i><b>9.1</b> R Base Plots</a>
+<ul>
 <li class="chapter" data-level="9.1.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#plot-curve-line-and-points"><i class="fa fa-check"></i><b>9.1.1</b> Plot Curve, Line and Points</a></li>
 </ul></li>
-<li class="chapter" data-level="9.2" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#write-and-read-plots"><i class="fa fa-check"></i><b>9.2</b> Write and Read Plots</a><ul>
+<li class="chapter" data-level="9.2" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#write-and-read-plots"><i class="fa fa-check"></i><b>9.2</b> Write and Read Plots</a>
+<ul>
 <li class="chapter" data-level="9.2.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#import-and-export-images"><i class="fa fa-check"></i><b>9.2.1</b> Import and Export Images</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="10" data-path="programming.html"><a href="programming.html"><i class="fa fa-check"></i><b>10</b> Programming</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="programming.html"><a href="programming.html#file-in-and-out"><i class="fa fa-check"></i><b>10.1</b> File in and Out</a>
+<ul>
+<li class="chapter" data-level="10.1.1" data-path="programming.html"><a href="programming.html#text-to-file"><i class="fa fa-check"></i><b>10.1.1</b> Text to File</a></li>
+<li class="chapter" data-level="10.1.2" data-path="programming.html"><a href="programming.html#rmd-to-html"><i class="fa fa-check"></i><b>10.1.2</b> Rmd to HTML</a></li>
+</ul></li>
+</ul></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
-<li class="chapter" data-level="A" data-path="index-and-code-links.html"><a href="index-and-code-links.html"><i class="fa fa-check"></i><b>A</b> Index and Code Links</a><ul>
-<li class="chapter" data-level="A.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#array-matrix-dataframe-links"><i class="fa fa-check"></i><b>A.1</b> Array, Matrix, Dataframe links</a><ul>
+<li class="chapter" data-level="A" data-path="index-and-code-links.html"><a href="index-and-code-links.html"><i class="fa fa-check"></i><b>A</b> Index and Code Links</a>
+<ul>
+<li class="chapter" data-level="A.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#array-matrix-dataframe-links"><i class="fa fa-check"></i><b>A.1</b> Array, Matrix, Dataframe links</a>
+<ul>
 <li class="chapter" data-level="A.1.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.1-listlist-links"><i class="fa fa-check"></i><b>A.1.1</b> <span>Section 1.1 List</span> links</a></li>
 <li class="chapter" data-level="A.1.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.2-arrayarray-links"><i class="fa fa-check"></i><b>A.1.2</b> <span>Section 1.2 Array</span> links</a></li>
 <li class="chapter" data-level="A.1.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.3-matrixmatrix-links"><i class="fa fa-check"></i><b>A.1.3</b> <span>Section 1.3 Matrix</span> links</a></li>
 <li class="chapter" data-level="A.1.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.4-variables-in-dataframesvariables-in-dataframes-links"><i class="fa fa-check"></i><b>A.1.4</b> <span>Section 1.4 Variables in Dataframes</span> links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#summarize-data-links"><i class="fa fa-check"></i><b>A.2</b> Summarize Data links</a><ul>
+<li class="chapter" data-level="A.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#summarize-data-links"><i class="fa fa-check"></i><b>A.2</b> Summarize Data links</a>
+<ul>
 <li class="chapter" data-level="A.2.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.1-counting-observationcounting-observation-links"><i class="fa fa-check"></i><b>A.2.1</b> <span>Section 2.1 Counting Observation</span> links</a></li>
 <li class="chapter" data-level="A.2.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.2-sorting-indexing-slicingsorting-indexing-slicing-links"><i class="fa fa-check"></i><b>A.2.2</b> <span>Section 2.2 Sorting, Indexing, Slicing</span> links</a></li>
 <li class="chapter" data-level="A.2.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.3-group-statisticsgroup-statistics-links"><i class="fa fa-check"></i><b>A.2.3</b> <span>Section 2.3 Group Statistics</span> links</a></li>
 <li class="chapter" data-level="A.2.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.4-distributional-statisticsdistributional-statistics-links"><i class="fa fa-check"></i><b>A.2.4</b> <span>Section 2.4 Distributional Statistics</span> links</a></li>
 <li class="chapter" data-level="A.2.5" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.5-summarize-multiple-variablessummarize-multiple-variables-links"><i class="fa fa-check"></i><b>A.2.5</b> <span>Section 2.5 Summarize Multiple Variables</span> links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#functions-links"><i class="fa fa-check"></i><b>A.3</b> Functions links</a><ul>
+<li class="chapter" data-level="A.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#functions-links"><i class="fa fa-check"></i><b>A.3</b> Functions links</a>
+<ul>
 <li class="chapter" data-level="A.3.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.1-dataframe-mutatedataframe-mutate-links"><i class="fa fa-check"></i><b>A.3.1</b> <span>Section 3.1 Dataframe Mutate</span> links</a></li>
 <li class="chapter" data-level="A.3.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.2-dataframe-do-anythingdataframe-do-anything-links"><i class="fa fa-check"></i><b>A.3.2</b> <span>Section 3.2 Dataframe Do Anything</span> links</a></li>
 <li class="chapter" data-level="A.3.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.3-apply-and-pmapapply-and-pmap-links"><i class="fa fa-check"></i><b>A.3.3</b> <span>Section 3.3 Apply and pmap</span> links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#panel-links"><i class="fa fa-check"></i><b>A.4</b> Panel links</a><ul>
+<li class="chapter" data-level="A.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#panel-links"><i class="fa fa-check"></i><b>A.4</b> Panel links</a>
+<ul>
 <li class="chapter" data-level="A.4.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.1-generate-and-joingenerate-and-join-links"><i class="fa fa-check"></i><b>A.4.1</b> <span>Section 4.1 Generate and Join</span> links</a></li>
 <li class="chapter" data-level="A.4.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.2-wide-and-longwide-and-long-links"><i class="fa fa-check"></i><b>A.4.2</b> <span>Section 4.2 Wide and Long</span> links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.5" data-path="index-and-code-links.html"><a href="index-and-code-links.html#linear-regression-links"><i class="fa fa-check"></i><b>A.5</b> Linear Regression links</a><ul>
+<li class="chapter" data-level="A.5" data-path="index-and-code-links.html"><a href="index-and-code-links.html#linear-regression-links"><i class="fa fa-check"></i><b>A.5</b> Linear Regression links</a>
+<ul>
 <li class="chapter" data-level="A.5.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.1-ols-and-ivols-and-iv-links"><i class="fa fa-check"></i><b>A.5.1</b> <span>Section 5.1 OLS and IV</span> links</a></li>
 <li class="chapter" data-level="A.5.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.2-decompositiondecomposition-links"><i class="fa fa-check"></i><b>A.5.2</b> <span>Section 5.2 Decomposition</span> links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.6" data-path="index-and-code-links.html"><a href="index-and-code-links.html#nonlinear-regression-links"><i class="fa fa-check"></i><b>A.6</b> Nonlinear Regression links</a><ul>
+<li class="chapter" data-level="A.6" data-path="index-and-code-links.html"><a href="index-and-code-links.html#nonlinear-regression-links"><i class="fa fa-check"></i><b>A.6</b> Nonlinear Regression links</a>
+<ul>
 <li class="chapter" data-level="A.6.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-6.1-logit-regressionlogit-regression-links"><i class="fa fa-check"></i><b>A.6.1</b> <span>Section 6.1 Logit Regression</span> links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.7" data-path="index-and-code-links.html"><a href="index-and-code-links.html#optimization-links"><i class="fa fa-check"></i><b>A.7</b> Optimization links</a><ul>
+<li class="chapter" data-level="A.7" data-path="index-and-code-links.html"><a href="index-and-code-links.html#optimization-links"><i class="fa fa-check"></i><b>A.7</b> Optimization links</a>
+<ul>
 <li class="chapter" data-level="A.7.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-7.1-bisectionbisection-links"><i class="fa fa-check"></i><b>A.7.1</b> <span>Section 7.1 Bisection</span> links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.8" data-path="index-and-code-links.html"><a href="index-and-code-links.html#mathmatics-and-statistics-links"><i class="fa fa-check"></i><b>A.8</b> Mathmatics and Statistics links</a><ul>
+<li class="chapter" data-level="A.8" data-path="index-and-code-links.html"><a href="index-and-code-links.html#mathmatics-and-statistics-links"><i class="fa fa-check"></i><b>A.8</b> Mathmatics and Statistics links</a>
+<ul>
 <li class="chapter" data-level="A.8.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.1-distributionsdistributions-links"><i class="fa fa-check"></i><b>A.8.1</b> <span>Section 8.1 Distributions</span> links</a></li>
 <li class="chapter" data-level="A.8.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.2-analytical-solutionsanalytical-solutions-links"><i class="fa fa-check"></i><b>A.8.2</b> <span>Section 8.2 Analytical Solutions</span> links</a></li>
 <li class="chapter" data-level="A.8.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.3-inequality-modelsinequality-models-links"><i class="fa fa-check"></i><b>A.8.3</b> <span>Section 8.3 Inequality Models</span> links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.9" data-path="index-and-code-links.html"><a href="index-and-code-links.html#tables-and-graphs-links"><i class="fa fa-check"></i><b>A.9</b> Tables and Graphs links</a><ul>
+<li class="chapter" data-level="A.9" data-path="index-and-code-links.html"><a href="index-and-code-links.html#tables-and-graphs-links"><i class="fa fa-check"></i><b>A.9</b> Tables and Graphs links</a>
+<ul>
 <li class="chapter" data-level="A.9.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.1-r-base-plotsr-base-plots-links"><i class="fa fa-check"></i><b>A.9.1</b> <span>Section 9.1 R Base Plots</span> links</a></li>
 <li class="chapter" data-level="A.9.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.2-write-and-read-plotswrite-and-read-plots-links"><i class="fa fa-check"></i><b>A.9.2</b> <span>Section 9.2 Write and Read Plots</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.10" data-path="index-and-code-links.html"><a href="index-and-code-links.html#programming-links"><i class="fa fa-check"></i><b>A.10</b> Programming links</a>
+<ul>
+<li class="chapter" data-level="A.10.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.1-file-in-and-outfile-in-and-out-links"><i class="fa fa-check"></i><b>A.10.1</b> <span>Section 10.1 File in and Out</span> links</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -307,241 +370,241 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="nonlinear-regression" class="section level1">
+<div id="nonlinear-regression" class="section level1" number="6">
 <h1><span class="header-section-number">Chapter 6</span> Nonlinear Regression</h1>
 
-<div id="logit-regression" class="section level2">
+<div id="logit-regression" class="section level2" number="6.1">
 <h2><span class="header-section-number">6.1</span> Logit Regression</h2>
 
-<div id="binary-logit" class="section level3">
+<div id="binary-logit" class="section level3" number="6.1.1">
 <h3><span class="header-section-number">6.1.1</span> Binary Logit</h3>
 <blockquote>
 <p>Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R Code Examples</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository (<a href="https://fanwangecon.github.io/Stat4Econ/bookdown">bookdown site</a>).</p>
 </blockquote>
 <p><em>Data Preparation</em></p>
-<div class="sourceCode" id="cb335"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb335-1" title="1">df_mtcars &lt;-<span class="st"> </span>mtcars</a>
-<a class="sourceLine" id="cb335-2" title="2"></a>
-<a class="sourceLine" id="cb335-3" title="3"><span class="co"># X-variables to use on RHS</span></a>
-<a class="sourceLine" id="cb335-4" title="4">ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;mpg&#39;</span>, <span class="st">&#39;qsec&#39;</span>)</a>
-<a class="sourceLine" id="cb335-5" title="5">ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;mpg&#39;</span>)</a>
-<a class="sourceLine" id="cb335-6" title="6">ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;qsec&#39;</span>)</a>
-<a class="sourceLine" id="cb335-7" title="7">ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;wt&#39;</span>)</a>
-<a class="sourceLine" id="cb335-8" title="8">ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;mpg&#39;</span>, <span class="st">&#39;wt&#39;</span>, <span class="st">&#39;vs&#39;</span>)</a>
-<a class="sourceLine" id="cb335-9" title="9"></a>
-<a class="sourceLine" id="cb335-10" title="10">svr_binary &lt;-<span class="st"> &#39;hpLowHigh&#39;</span></a>
-<a class="sourceLine" id="cb335-11" title="11">svr_binary_lb0 &lt;-<span class="st"> &#39;LowHP&#39;</span></a>
-<a class="sourceLine" id="cb335-12" title="12">svr_binary_lb1 &lt;-<span class="st"> &#39;HighHP&#39;</span></a>
-<a class="sourceLine" id="cb335-13" title="13">svr_outcome &lt;-<span class="st"> &#39;am&#39;</span></a>
-<a class="sourceLine" id="cb335-14" title="14">sdt_name &lt;-<span class="st"> &#39;mtcars&#39;</span></a>
-<a class="sourceLine" id="cb335-15" title="15"></a>
-<a class="sourceLine" id="cb335-16" title="16"><span class="co"># Discretize hp</span></a>
-<a class="sourceLine" id="cb335-17" title="17">df_mtcars &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb335-18" title="18"><span class="st">    </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_binary) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">cut</span>(hp,</a>
-<a class="sourceLine" id="cb335-19" title="19">                           <span class="dt">breaks=</span><span class="kw">c</span>(<span class="op">-</span><span class="ot">Inf</span>, <span class="dv">210</span>, <span class="ot">Inf</span>),</a>
-<a class="sourceLine" id="cb335-20" title="20">                           <span class="dt">labels=</span><span class="kw">c</span>(svr_binary_lb0, svr_binary_lb1)))</a></code></pre></div>
-<div id="logit-regresion-and-prediction" class="section level4">
+<div class="sourceCode" id="cb339"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb339-1"><a href="nonlinear-regression.html#cb339-1"></a>df_mtcars &lt;-<span class="st"> </span>mtcars</span>
+<span id="cb339-2"><a href="nonlinear-regression.html#cb339-2"></a></span>
+<span id="cb339-3"><a href="nonlinear-regression.html#cb339-3"></a><span class="co"># X-variables to use on RHS</span></span>
+<span id="cb339-4"><a href="nonlinear-regression.html#cb339-4"></a>ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;mpg&#39;</span>, <span class="st">&#39;qsec&#39;</span>)</span>
+<span id="cb339-5"><a href="nonlinear-regression.html#cb339-5"></a>ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;mpg&#39;</span>)</span>
+<span id="cb339-6"><a href="nonlinear-regression.html#cb339-6"></a>ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;qsec&#39;</span>)</span>
+<span id="cb339-7"><a href="nonlinear-regression.html#cb339-7"></a>ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;wt&#39;</span>)</span>
+<span id="cb339-8"><a href="nonlinear-regression.html#cb339-8"></a>ls_st_xs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;mpg&#39;</span>, <span class="st">&#39;wt&#39;</span>, <span class="st">&#39;vs&#39;</span>)</span>
+<span id="cb339-9"><a href="nonlinear-regression.html#cb339-9"></a></span>
+<span id="cb339-10"><a href="nonlinear-regression.html#cb339-10"></a>svr_binary &lt;-<span class="st"> &#39;hpLowHigh&#39;</span></span>
+<span id="cb339-11"><a href="nonlinear-regression.html#cb339-11"></a>svr_binary_lb0 &lt;-<span class="st"> &#39;LowHP&#39;</span></span>
+<span id="cb339-12"><a href="nonlinear-regression.html#cb339-12"></a>svr_binary_lb1 &lt;-<span class="st"> &#39;HighHP&#39;</span></span>
+<span id="cb339-13"><a href="nonlinear-regression.html#cb339-13"></a>svr_outcome &lt;-<span class="st"> &#39;am&#39;</span></span>
+<span id="cb339-14"><a href="nonlinear-regression.html#cb339-14"></a>sdt_name &lt;-<span class="st"> &#39;mtcars&#39;</span></span>
+<span id="cb339-15"><a href="nonlinear-regression.html#cb339-15"></a></span>
+<span id="cb339-16"><a href="nonlinear-regression.html#cb339-16"></a><span class="co"># Discretize hp</span></span>
+<span id="cb339-17"><a href="nonlinear-regression.html#cb339-17"></a>df_mtcars &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span></span>
+<span id="cb339-18"><a href="nonlinear-regression.html#cb339-18"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_binary) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">cut</span>(hp,</span>
+<span id="cb339-19"><a href="nonlinear-regression.html#cb339-19"></a>                           <span class="dt">breaks=</span><span class="kw">c</span>(<span class="op">-</span><span class="ot">Inf</span>, <span class="dv">210</span>, <span class="ot">Inf</span>),</span>
+<span id="cb339-20"><a href="nonlinear-regression.html#cb339-20"></a>                           <span class="dt">labels=</span><span class="kw">c</span>(svr_binary_lb0, svr_binary_lb1)))</span></code></pre></div>
+<div id="logit-regresion-and-prediction" class="section level4" number="6.1.1.1">
 <h4><span class="header-section-number">6.1.1.1</span> Logit Regresion and Prediction</h4>
 <p>logit regression with glm, and predict using estimation data. Prediction and estimation with one variable.</p>
 <ul>
 <li><a href="https://stats.idre.ucla.edu/r/dae/logit-regression/">LOGIT REGRESSION R DATA ANALYSIS EXAMPLES</a></li>
 <li><a href="https://www.statmethods.net/advstats/glm.html">Generalized Linear Models</a></li>
 </ul>
-<div class="sourceCode" id="cb336"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb336-1" title="1"><span class="co"># Regress</span></a>
-<a class="sourceLine" id="cb336-2" title="2">rs_logit &lt;-<span class="st"> </span><span class="kw">glm</span>(<span class="kw">as.formula</span>(<span class="kw">paste</span>(svr_outcome, <span class="st">&quot;~&quot;</span>, <span class="kw">paste</span>(ls_st_xs, <span class="dt">collapse=</span><span class="st">&quot;+&quot;</span>)))</a>
-<a class="sourceLine" id="cb336-3" title="3">                ,<span class="dt">data =</span> df_mtcars, <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)</a>
-<a class="sourceLine" id="cb336-4" title="4"><span class="kw">summary</span>(rs_logit)</a></code></pre></div>
-<pre><code>
-Call:
-glm(formula = as.formula(paste(svr_outcome, &quot;~&quot;, paste(ls_st_xs, 
-    collapse = &quot;+&quot;))), family = &quot;binomial&quot;, data = df_mtcars)
-
-Deviance Residuals: 
-     Min        1Q    Median        3Q       Max  
--1.73603  -0.25477  -0.04891   0.13402   1.90321  
-
-Coefficients:
-            Estimate Std. Error z value Pr(&gt;|z|)  
-(Intercept) 22.69008   13.95112   1.626   0.1039  
-mpg         -0.01786    0.33957  -0.053   0.9581  
-wt          -6.73804    3.01400  -2.236   0.0254 *
-vs          -4.44046    2.84247  -1.562   0.1182  
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 43.230  on 31  degrees of freedom
-Residual deviance: 13.092  on 28  degrees of freedom
-AIC: 21.092
-
-Number of Fisher Scoring iterations: 7</code></pre>
-<div class="sourceCode" id="cb338"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb338-1" title="1"><span class="co"># Predcit Using Regression Data</span></a>
-<a class="sourceLine" id="cb338-2" title="2">df_mtcars<span class="op">$</span>p_mpg &lt;-<span class="st"> </span><span class="kw">predict</span>(rs_logit, <span class="dt">newdata =</span> df_mtcars, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a></code></pre></div>
-<div id="prediction-with-observed-binary-input" class="section level5">
+<div class="sourceCode" id="cb340"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb340-1"><a href="nonlinear-regression.html#cb340-1"></a><span class="co"># Regress</span></span>
+<span id="cb340-2"><a href="nonlinear-regression.html#cb340-2"></a>rs_logit &lt;-<span class="st"> </span><span class="kw">glm</span>(<span class="kw">as.formula</span>(<span class="kw">paste</span>(svr_outcome, <span class="st">&quot;~&quot;</span>, <span class="kw">paste</span>(ls_st_xs, <span class="dt">collapse=</span><span class="st">&quot;+&quot;</span>)))</span>
+<span id="cb340-3"><a href="nonlinear-regression.html#cb340-3"></a>                ,<span class="dt">data =</span> df_mtcars, <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
+<span id="cb340-4"><a href="nonlinear-regression.html#cb340-4"></a><span class="kw">summary</span>(rs_logit)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = as.formula(paste(svr_outcome, &quot;~&quot;, paste(ls_st_xs, 
+##     collapse = &quot;+&quot;))), family = &quot;binomial&quot;, data = df_mtcars)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -1.73603  -0.25477  -0.04891   0.13402   1.90321  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept) 22.69008   13.95112   1.626   0.1039  
+## mpg         -0.01786    0.33957  -0.053   0.9581  
+## wt          -6.73804    3.01400  -2.236   0.0254 *
+## vs          -4.44046    2.84247  -1.562   0.1182  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 43.230  on 31  degrees of freedom
+## Residual deviance: 13.092  on 28  degrees of freedom
+## AIC: 21.092
+## 
+## Number of Fisher Scoring iterations: 7</code></pre>
+<div class="sourceCode" id="cb342"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb342-1"><a href="nonlinear-regression.html#cb342-1"></a><span class="co"># Predcit Using Regression Data</span></span>
+<span id="cb342-2"><a href="nonlinear-regression.html#cb342-2"></a>df_mtcars<span class="op">$</span>p_mpg &lt;-<span class="st"> </span><span class="kw">predict</span>(rs_logit, <span class="dt">newdata =</span> df_mtcars, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</span></code></pre></div>
+<div id="prediction-with-observed-binary-input" class="section level5" number="6.1.1.1.1">
 <h5><span class="header-section-number">6.1.1.1.1</span> Prediction with Observed Binary Input</h5>
 <p>Logit regression with a continuous variable and a binary variable. Predict outcome with observed continuous variable as well as observed binary input variable.</p>
-<div class="sourceCode" id="cb339"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb339-1" title="1"><span class="co"># Regress</span></a>
-<a class="sourceLine" id="cb339-2" title="2">rs_logit_bi &lt;-<span class="st"> </span><span class="kw">glm</span>(<span class="kw">as.formula</span>(<span class="kw">paste</span>(svr_outcome,</a>
-<a class="sourceLine" id="cb339-3" title="3">                                    <span class="st">&quot;~ factor(&quot;</span>, svr_binary,<span class="st">&quot;) + &quot;</span>,</a>
-<a class="sourceLine" id="cb339-4" title="4">                                    <span class="kw">paste</span>(ls_st_xs, <span class="dt">collapse=</span><span class="st">&quot;+&quot;</span>)))</a>
-<a class="sourceLine" id="cb339-5" title="5">                   , <span class="dt">data =</span> df_mtcars, <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)</a>
-<a class="sourceLine" id="cb339-6" title="6"><span class="kw">summary</span>(rs_logit_bi)</a></code></pre></div>
-<pre><code>
-Call:
-glm(formula = as.formula(paste(svr_outcome, &quot;~ factor(&quot;, svr_binary, 
-    &quot;) + &quot;, paste(ls_st_xs, collapse = &quot;+&quot;))), family = &quot;binomial&quot;, 
-    data = df_mtcars)
-
-Deviance Residuals: 
-     Min        1Q    Median        3Q       Max  
--1.45771  -0.09563  -0.00875   0.00555   1.87612  
-
-Coefficients:
-                        Estimate Std. Error z value Pr(&gt;|z|)  
-(Intercept)               3.8285    18.0390   0.212   0.8319  
-factor(hpLowHigh)HighHP   6.9907     5.5176   1.267   0.2052  
-mpg                       0.8985     0.8906   1.009   0.3131  
-wt                       -6.7291     3.3166  -2.029   0.0425 *
-vs                       -5.9206     4.1908  -1.413   0.1577  
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 43.2297  on 31  degrees of freedom
-Residual deviance:  8.9777  on 27  degrees of freedom
-AIC: 18.978
-
-Number of Fisher Scoring iterations: 9</code></pre>
-<div class="sourceCode" id="cb341"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb341-1" title="1"><span class="co"># Predcit Using Regresion Data</span></a>
-<a class="sourceLine" id="cb341-2" title="2">df_mtcars<span class="op">$</span>p_mpg_hp &lt;-<span class="st"> </span><span class="kw">predict</span>(rs_logit_bi, <span class="dt">newdata =</span> df_mtcars, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb341-3" title="3"></a>
-<a class="sourceLine" id="cb341-4" title="4"><span class="co"># Predicted Probabilities am on mgp with or without hp binary</span></a>
-<a class="sourceLine" id="cb341-5" title="5">scatter &lt;-<span class="st"> </span><span class="kw">ggplot</span>(df_mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>p_mpg_hp, <span class="dt">y=</span>p_mpg)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb341-6" title="6"><span class="st">      </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb341-7" title="7"><span class="st">      </span><span class="co"># geom_smooth(method=lm) + # Trend line</span></a>
-<a class="sourceLine" id="cb341-8" title="8"><span class="st">      </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">slope =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="co"># 45 degree line</span></a>
-<a class="sourceLine" id="cb341-9" title="9"><span class="st">      </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Predicted Probabilities &#39;</span>, svr_outcome, <span class="st">&#39; on &#39;</span>, ls_st_xs, <span class="st">&#39; with or without hp binary&#39;</span>),</a>
-<a class="sourceLine" id="cb341-10" title="10">           <span class="dt">x =</span> <span class="kw">paste0</span>(<span class="st">&#39;prediction with &#39;</span>, ls_st_xs, <span class="st">&#39; and binary &#39;</span>, svr_binary, <span class="st">&#39; indicator, 1 is high&#39;</span>),</a>
-<a class="sourceLine" id="cb341-11" title="11">           <span class="dt">y =</span> <span class="kw">paste0</span>(<span class="st">&#39;prediction with only &#39;</span>, ls_st_xs),</a>
-<a class="sourceLine" id="cb341-12" title="12">           <span class="dt">caption =</span> <span class="st">&#39;mtcars; prediction based on observed data&#39;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb341-13" title="13"><span class="st">      </span><span class="kw">theme_bw</span>()</a>
-<a class="sourceLine" id="cb341-14" title="14"><span class="kw">print</span>(scatter)</a></code></pre></div>
+<div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb343-1"><a href="nonlinear-regression.html#cb343-1"></a><span class="co"># Regress</span></span>
+<span id="cb343-2"><a href="nonlinear-regression.html#cb343-2"></a>rs_logit_bi &lt;-<span class="st"> </span><span class="kw">glm</span>(<span class="kw">as.formula</span>(<span class="kw">paste</span>(svr_outcome,</span>
+<span id="cb343-3"><a href="nonlinear-regression.html#cb343-3"></a>                                    <span class="st">&quot;~ factor(&quot;</span>, svr_binary,<span class="st">&quot;) + &quot;</span>,</span>
+<span id="cb343-4"><a href="nonlinear-regression.html#cb343-4"></a>                                    <span class="kw">paste</span>(ls_st_xs, <span class="dt">collapse=</span><span class="st">&quot;+&quot;</span>)))</span>
+<span id="cb343-5"><a href="nonlinear-regression.html#cb343-5"></a>                   , <span class="dt">data =</span> df_mtcars, <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
+<span id="cb343-6"><a href="nonlinear-regression.html#cb343-6"></a><span class="kw">summary</span>(rs_logit_bi)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = as.formula(paste(svr_outcome, &quot;~ factor(&quot;, svr_binary, 
+##     &quot;) + &quot;, paste(ls_st_xs, collapse = &quot;+&quot;))), family = &quot;binomial&quot;, 
+##     data = df_mtcars)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -1.45771  -0.09563  -0.00875   0.00555   1.87612  
+## 
+## Coefficients:
+##                         Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept)               3.8285    18.0390   0.212   0.8319  
+## factor(hpLowHigh)HighHP   6.9907     5.5176   1.267   0.2052  
+## mpg                       0.8985     0.8906   1.009   0.3131  
+## wt                       -6.7291     3.3166  -2.029   0.0425 *
+## vs                       -5.9206     4.1908  -1.413   0.1577  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 43.2297  on 31  degrees of freedom
+## Residual deviance:  8.9777  on 27  degrees of freedom
+## AIC: 18.978
+## 
+## Number of Fisher Scoring iterations: 9</code></pre>
+<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb345-1"><a href="nonlinear-regression.html#cb345-1"></a><span class="co"># Predcit Using Regresion Data</span></span>
+<span id="cb345-2"><a href="nonlinear-regression.html#cb345-2"></a>df_mtcars<span class="op">$</span>p_mpg_hp &lt;-<span class="st"> </span><span class="kw">predict</span>(rs_logit_bi, <span class="dt">newdata =</span> df_mtcars, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</span>
+<span id="cb345-3"><a href="nonlinear-regression.html#cb345-3"></a></span>
+<span id="cb345-4"><a href="nonlinear-regression.html#cb345-4"></a><span class="co"># Predicted Probabilities am on mgp with or without hp binary</span></span>
+<span id="cb345-5"><a href="nonlinear-regression.html#cb345-5"></a>scatter &lt;-<span class="st"> </span><span class="kw">ggplot</span>(df_mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>p_mpg_hp, <span class="dt">y=</span>p_mpg)) <span class="op">+</span></span>
+<span id="cb345-6"><a href="nonlinear-regression.html#cb345-6"></a><span class="st">      </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">1</span>) <span class="op">+</span></span>
+<span id="cb345-7"><a href="nonlinear-regression.html#cb345-7"></a><span class="st">      </span><span class="co"># geom_smooth(method=lm) + # Trend line</span></span>
+<span id="cb345-8"><a href="nonlinear-regression.html#cb345-8"></a><span class="st">      </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">slope =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="co"># 45 degree line</span></span>
+<span id="cb345-9"><a href="nonlinear-regression.html#cb345-9"></a><span class="st">      </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Predicted Probabilities &#39;</span>, svr_outcome, <span class="st">&#39; on &#39;</span>, ls_st_xs, <span class="st">&#39; with or without hp binary&#39;</span>),</span>
+<span id="cb345-10"><a href="nonlinear-regression.html#cb345-10"></a>           <span class="dt">x =</span> <span class="kw">paste0</span>(<span class="st">&#39;prediction with &#39;</span>, ls_st_xs, <span class="st">&#39; and binary &#39;</span>, svr_binary, <span class="st">&#39; indicator, 1 is high&#39;</span>),</span>
+<span id="cb345-11"><a href="nonlinear-regression.html#cb345-11"></a>           <span class="dt">y =</span> <span class="kw">paste0</span>(<span class="st">&#39;prediction with only &#39;</span>, ls_st_xs),</span>
+<span id="cb345-12"><a href="nonlinear-regression.html#cb345-12"></a>           <span class="dt">caption =</span> <span class="st">&#39;mtcars; prediction based on observed data&#39;</span>) <span class="op">+</span></span>
+<span id="cb345-13"><a href="nonlinear-regression.html#cb345-13"></a><span class="st">      </span><span class="kw">theme_bw</span>()</span>
+<span id="cb345-14"><a href="nonlinear-regression.html#cb345-14"></a><span class="kw">print</span>(scatter)</span></code></pre></div>
 <p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/logit%20with%20binary%20and%20continuous%20RHS-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-<div id="prediction-with-binary-set-to-0-and-1" class="section level5">
+<div id="prediction-with-binary-set-to-0-and-1" class="section level5" number="6.1.1.1.2">
 <h5><span class="header-section-number">6.1.1.1.2</span> Prediction with Binary set to 0 and 1</h5>
 <p>Now generate two predictions. One set where binary input is equal to 0, and another where the binary inputs are equal to 1. Ignore whether in data binary input is equal to 0 or 1. Use the same regression results as what was just derived.</p>
 <p>Note that given the example here, the probability changes a lot when we</p>
-<div class="sourceCode" id="cb342"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb342-1" title="1"><span class="co"># Previous regression results</span></a>
-<a class="sourceLine" id="cb342-2" title="2"><span class="kw">summary</span>(rs_logit_bi)</a></code></pre></div>
-<pre><code>
-Call:
-glm(formula = as.formula(paste(svr_outcome, &quot;~ factor(&quot;, svr_binary, 
-    &quot;) + &quot;, paste(ls_st_xs, collapse = &quot;+&quot;))), family = &quot;binomial&quot;, 
-    data = df_mtcars)
-
-Deviance Residuals: 
-     Min        1Q    Median        3Q       Max  
--1.45771  -0.09563  -0.00875   0.00555   1.87612  
-
-Coefficients:
-                        Estimate Std. Error z value Pr(&gt;|z|)  
-(Intercept)               3.8285    18.0390   0.212   0.8319  
-factor(hpLowHigh)HighHP   6.9907     5.5176   1.267   0.2052  
-mpg                       0.8985     0.8906   1.009   0.3131  
-wt                       -6.7291     3.3166  -2.029   0.0425 *
-vs                       -5.9206     4.1908  -1.413   0.1577  
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 43.2297  on 31  degrees of freedom
-Residual deviance:  8.9777  on 27  degrees of freedom
-AIC: 18.978
-
-Number of Fisher Scoring iterations: 9</code></pre>
-<div class="sourceCode" id="cb344"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb344-1" title="1"><span class="co"># Two different dataframes, mutate the binary regressor</span></a>
-<a class="sourceLine" id="cb344-2" title="2">df_mtcars_bi0 &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_binary) <span class="op">:</span><span class="er">=</span><span class="st"> </span>svr_binary_lb0)</a>
-<a class="sourceLine" id="cb344-3" title="3">df_mtcars_bi1 &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_binary) <span class="op">:</span><span class="er">=</span><span class="st"> </span>svr_binary_lb1)</a>
-<a class="sourceLine" id="cb344-4" title="4"></a>
-<a class="sourceLine" id="cb344-5" title="5"><span class="co"># Predcit Using Regresion Data</span></a>
-<a class="sourceLine" id="cb344-6" title="6">df_mtcars<span class="op">$</span>p_mpg_hp_bi0 &lt;-<span class="st"> </span><span class="kw">predict</span>(rs_logit_bi, <span class="dt">newdata =</span> df_mtcars_bi0, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb344-7" title="7">df_mtcars<span class="op">$</span>p_mpg_hp_bi1 &lt;-<span class="st"> </span><span class="kw">predict</span>(rs_logit_bi, <span class="dt">newdata =</span> df_mtcars_bi1, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb344-8" title="8"></a>
-<a class="sourceLine" id="cb344-9" title="9"><span class="co"># Predicted Probabilities and Binary Input</span></a>
-<a class="sourceLine" id="cb344-10" title="10">scatter &lt;-<span class="st"> </span><span class="kw">ggplot</span>(df_mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>p_mpg_hp_bi0)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb344-11" title="11"><span class="st">      </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>p_mpg_hp), <span class="dt">size=</span><span class="dv">4</span>, <span class="dt">shape=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb344-12" title="12"><span class="st">      </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>p_mpg_hp_bi1), <span class="dt">size=</span><span class="dv">2</span>, <span class="dt">shape=</span><span class="dv">8</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb344-13" title="13"><span class="st">      </span><span class="co"># geom_smooth(method=lm) + # Trend line</span></a>
-<a class="sourceLine" id="cb344-14" title="14"><span class="st">      </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">slope =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="co"># 45 degree line</span></a>
-<a class="sourceLine" id="cb344-15" title="15"><span class="st">      </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Predicted Probabilities and Binary Input&#39;</span>,</a>
-<a class="sourceLine" id="cb344-16" title="16">                          <span class="st">&#39;</span><span class="ch">\n</span><span class="st">cross(shape=4)/red is predict actual binary data&#39;</span>,</a>
-<a class="sourceLine" id="cb344-17" title="17">                          <span class="st">&#39;</span><span class="ch">\n</span><span class="st">star(shape=8)/black is predict set binary = 1 for all&#39;</span>),</a>
-<a class="sourceLine" id="cb344-18" title="18">            <span class="dt">x =</span> <span class="kw">paste0</span>(<span class="st">&#39;prediction with &#39;</span>, ls_st_xs, <span class="st">&#39; and binary &#39;</span>, svr_binary, <span class="st">&#39; = 0 for all&#39;</span>),</a>
-<a class="sourceLine" id="cb344-19" title="19">            <span class="dt">y =</span> <span class="kw">paste0</span>(<span class="st">&#39;prediction with &#39;</span>, ls_st_xs, <span class="st">&#39; and binary &#39;</span>, svr_binary, <span class="st">&#39; = 1&#39;</span>),</a>
-<a class="sourceLine" id="cb344-20" title="20">           <span class="dt">caption =</span> <span class="kw">paste0</span>(sdt_name)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb344-21" title="21"><span class="st">      </span><span class="kw">theme_bw</span>()</a>
-<a class="sourceLine" id="cb344-22" title="22"><span class="kw">print</span>(scatter)</a></code></pre></div>
+<div class="sourceCode" id="cb346"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb346-1"><a href="nonlinear-regression.html#cb346-1"></a><span class="co"># Previous regression results</span></span>
+<span id="cb346-2"><a href="nonlinear-regression.html#cb346-2"></a><span class="kw">summary</span>(rs_logit_bi)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = as.formula(paste(svr_outcome, &quot;~ factor(&quot;, svr_binary, 
+##     &quot;) + &quot;, paste(ls_st_xs, collapse = &quot;+&quot;))), family = &quot;binomial&quot;, 
+##     data = df_mtcars)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -1.45771  -0.09563  -0.00875   0.00555   1.87612  
+## 
+## Coefficients:
+##                         Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept)               3.8285    18.0390   0.212   0.8319  
+## factor(hpLowHigh)HighHP   6.9907     5.5176   1.267   0.2052  
+## mpg                       0.8985     0.8906   1.009   0.3131  
+## wt                       -6.7291     3.3166  -2.029   0.0425 *
+## vs                       -5.9206     4.1908  -1.413   0.1577  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 43.2297  on 31  degrees of freedom
+## Residual deviance:  8.9777  on 27  degrees of freedom
+## AIC: 18.978
+## 
+## Number of Fisher Scoring iterations: 9</code></pre>
+<div class="sourceCode" id="cb348"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb348-1"><a href="nonlinear-regression.html#cb348-1"></a><span class="co"># Two different dataframes, mutate the binary regressor</span></span>
+<span id="cb348-2"><a href="nonlinear-regression.html#cb348-2"></a>df_mtcars_bi0 &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_binary) <span class="op">:</span><span class="er">=</span><span class="st"> </span>svr_binary_lb0)</span>
+<span id="cb348-3"><a href="nonlinear-regression.html#cb348-3"></a>df_mtcars_bi1 &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_binary) <span class="op">:</span><span class="er">=</span><span class="st"> </span>svr_binary_lb1)</span>
+<span id="cb348-4"><a href="nonlinear-regression.html#cb348-4"></a></span>
+<span id="cb348-5"><a href="nonlinear-regression.html#cb348-5"></a><span class="co"># Predcit Using Regresion Data</span></span>
+<span id="cb348-6"><a href="nonlinear-regression.html#cb348-6"></a>df_mtcars<span class="op">$</span>p_mpg_hp_bi0 &lt;-<span class="st"> </span><span class="kw">predict</span>(rs_logit_bi, <span class="dt">newdata =</span> df_mtcars_bi0, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</span>
+<span id="cb348-7"><a href="nonlinear-regression.html#cb348-7"></a>df_mtcars<span class="op">$</span>p_mpg_hp_bi1 &lt;-<span class="st"> </span><span class="kw">predict</span>(rs_logit_bi, <span class="dt">newdata =</span> df_mtcars_bi1, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</span>
+<span id="cb348-8"><a href="nonlinear-regression.html#cb348-8"></a></span>
+<span id="cb348-9"><a href="nonlinear-regression.html#cb348-9"></a><span class="co"># Predicted Probabilities and Binary Input</span></span>
+<span id="cb348-10"><a href="nonlinear-regression.html#cb348-10"></a>scatter &lt;-<span class="st"> </span><span class="kw">ggplot</span>(df_mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>p_mpg_hp_bi0)) <span class="op">+</span></span>
+<span id="cb348-11"><a href="nonlinear-regression.html#cb348-11"></a><span class="st">      </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>p_mpg_hp), <span class="dt">size=</span><span class="dv">4</span>, <span class="dt">shape=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
+<span id="cb348-12"><a href="nonlinear-regression.html#cb348-12"></a><span class="st">      </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>p_mpg_hp_bi1), <span class="dt">size=</span><span class="dv">2</span>, <span class="dt">shape=</span><span class="dv">8</span>) <span class="op">+</span></span>
+<span id="cb348-13"><a href="nonlinear-regression.html#cb348-13"></a><span class="st">      </span><span class="co"># geom_smooth(method=lm) + # Trend line</span></span>
+<span id="cb348-14"><a href="nonlinear-regression.html#cb348-14"></a><span class="st">      </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">slope =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="co"># 45 degree line</span></span>
+<span id="cb348-15"><a href="nonlinear-regression.html#cb348-15"></a><span class="st">      </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Predicted Probabilities and Binary Input&#39;</span>,</span>
+<span id="cb348-16"><a href="nonlinear-regression.html#cb348-16"></a>                          <span class="st">&#39;</span><span class="ch">\n</span><span class="st">cross(shape=4)/red is predict actual binary data&#39;</span>,</span>
+<span id="cb348-17"><a href="nonlinear-regression.html#cb348-17"></a>                          <span class="st">&#39;</span><span class="ch">\n</span><span class="st">star(shape=8)/black is predict set binary = 1 for all&#39;</span>),</span>
+<span id="cb348-18"><a href="nonlinear-regression.html#cb348-18"></a>            <span class="dt">x =</span> <span class="kw">paste0</span>(<span class="st">&#39;prediction with &#39;</span>, ls_st_xs, <span class="st">&#39; and binary &#39;</span>, svr_binary, <span class="st">&#39; = 0 for all&#39;</span>),</span>
+<span id="cb348-19"><a href="nonlinear-regression.html#cb348-19"></a>            <span class="dt">y =</span> <span class="kw">paste0</span>(<span class="st">&#39;prediction with &#39;</span>, ls_st_xs, <span class="st">&#39; and binary &#39;</span>, svr_binary, <span class="st">&#39; = 1&#39;</span>),</span>
+<span id="cb348-20"><a href="nonlinear-regression.html#cb348-20"></a>           <span class="dt">caption =</span> <span class="kw">paste0</span>(sdt_name)) <span class="op">+</span></span>
+<span id="cb348-21"><a href="nonlinear-regression.html#cb348-21"></a><span class="st">      </span><span class="kw">theme_bw</span>()</span>
+<span id="cb348-22"><a href="nonlinear-regression.html#cb348-22"></a><span class="kw">print</span>(scatter)</span></code></pre></div>
 <p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/logit%20prediction%200%20vs%201-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-<div id="prediction-with-binary-set-to-0-and-1-difference" class="section level5">
+<div id="prediction-with-binary-set-to-0-and-1-difference" class="section level5" number="6.1.1.1.3">
 <h5><span class="header-section-number">6.1.1.1.3</span> Prediction with Binary set to 0 and 1 Difference</h5>
 <p>What is the difference in probability between binary = 0 vs binary = 1. How does that relate to the probability of outcome of interest when binary = 0 for all.</p>
 <p>In the binary logit case, the relationship will be hump–shaped by construction between <span class="math inline">\(A_i\)</span> and <span class="math inline">\(\alpha_i\)</span>. In the exponential wage cases, the relationship is convex upwards.</p>
-<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb345-1" title="1"><span class="co"># Generate Gap Variable</span></a>
-<a class="sourceLine" id="cb345-2" title="2">df_mtcars &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">alpha_i =</span> p_mpg_hp_bi1 <span class="op">-</span><span class="st"> </span>p_mpg_hp_bi0) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb345-3" title="3"><span class="st">                </span><span class="kw">mutate</span>(<span class="dt">A_i =</span> p_mpg_hp_bi0)</a>
-<a class="sourceLine" id="cb345-4" title="4"></a>
-<a class="sourceLine" id="cb345-5" title="5"><span class="co"># Binary Marginal Effects and Prediction without Binary</span></a>
-<a class="sourceLine" id="cb345-6" title="6">scatter &lt;-<span class="st"> </span><span class="kw">ggplot</span>(df_mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>A_i)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb345-7" title="7"><span class="st">      </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>alpha_i), <span class="dt">size=</span><span class="dv">4</span>, <span class="dt">shape=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb345-8" title="8"><span class="st">      </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">slope =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="co"># 45 degree line</span></a>
-<a class="sourceLine" id="cb345-9" title="9"><span class="st">      </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Binary Marginal Effects and Prediction without Binary&#39;</span>),</a>
-<a class="sourceLine" id="cb345-10" title="10">           <span class="dt">x =</span> <span class="st">&#39;P(binary=0) for all&#39;</span>,</a>
-<a class="sourceLine" id="cb345-11" title="11">           <span class="dt">y =</span> <span class="st">&#39;P(binary=1) - P(binary=0) gap&#39;</span>,</a>
-<a class="sourceLine" id="cb345-12" title="12">           <span class="dt">caption =</span> <span class="kw">paste0</span>(sdt_name)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb345-13" title="13"><span class="st">      </span><span class="kw">theme_bw</span>()</a>
-<a class="sourceLine" id="cb345-14" title="14"><span class="kw">print</span>(scatter)</a></code></pre></div>
+<div class="sourceCode" id="cb349"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb349-1"><a href="nonlinear-regression.html#cb349-1"></a><span class="co"># Generate Gap Variable</span></span>
+<span id="cb349-2"><a href="nonlinear-regression.html#cb349-2"></a>df_mtcars &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">alpha_i =</span> p_mpg_hp_bi1 <span class="op">-</span><span class="st"> </span>p_mpg_hp_bi0) <span class="op">%&gt;%</span></span>
+<span id="cb349-3"><a href="nonlinear-regression.html#cb349-3"></a><span class="st">                </span><span class="kw">mutate</span>(<span class="dt">A_i =</span> p_mpg_hp_bi0)</span>
+<span id="cb349-4"><a href="nonlinear-regression.html#cb349-4"></a></span>
+<span id="cb349-5"><a href="nonlinear-regression.html#cb349-5"></a><span class="co"># Binary Marginal Effects and Prediction without Binary</span></span>
+<span id="cb349-6"><a href="nonlinear-regression.html#cb349-6"></a>scatter &lt;-<span class="st"> </span><span class="kw">ggplot</span>(df_mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>A_i)) <span class="op">+</span></span>
+<span id="cb349-7"><a href="nonlinear-regression.html#cb349-7"></a><span class="st">      </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>alpha_i), <span class="dt">size=</span><span class="dv">4</span>, <span class="dt">shape=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
+<span id="cb349-8"><a href="nonlinear-regression.html#cb349-8"></a><span class="st">      </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">slope =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="co"># 45 degree line</span></span>
+<span id="cb349-9"><a href="nonlinear-regression.html#cb349-9"></a><span class="st">      </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;Binary Marginal Effects and Prediction without Binary&#39;</span>),</span>
+<span id="cb349-10"><a href="nonlinear-regression.html#cb349-10"></a>           <span class="dt">x =</span> <span class="st">&#39;P(binary=0) for all&#39;</span>,</span>
+<span id="cb349-11"><a href="nonlinear-regression.html#cb349-11"></a>           <span class="dt">y =</span> <span class="st">&#39;P(binary=1) - P(binary=0) gap&#39;</span>,</span>
+<span id="cb349-12"><a href="nonlinear-regression.html#cb349-12"></a>           <span class="dt">caption =</span> <span class="kw">paste0</span>(sdt_name)) <span class="op">+</span></span>
+<span id="cb349-13"><a href="nonlinear-regression.html#cb349-13"></a><span class="st">      </span><span class="kw">theme_bw</span>()</span>
+<span id="cb349-14"><a href="nonlinear-regression.html#cb349-14"></a><span class="kw">print</span>(scatter)</span></code></pre></div>
 <p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/logit%20prediction%20marginal%20vs%20base-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-<div id="x-variables-and-a-and-alpha" class="section level5">
+<div id="x-variables-and-a-and-alpha" class="section level5" number="6.1.1.1.4">
 <h5><span class="header-section-number">6.1.1.1.4</span> X variables and A and alpha</h5>
 <p>Given the x-variables included in the logit regression, how do they relate to A_i and alpha_i</p>
-<div class="sourceCode" id="cb346"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb346-1" title="1"><span class="co"># Generate Gap Variable</span></a>
-<a class="sourceLine" id="cb346-2" title="2">df_mtcars &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">alpha_i =</span> p_mpg_hp_bi1 <span class="op">-</span><span class="st"> </span>p_mpg_hp_bi0) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb346-3" title="3"><span class="st">                </span><span class="kw">mutate</span>(<span class="dt">A_i =</span> p_mpg_hp_bi0)</a>
-<a class="sourceLine" id="cb346-4" title="4"></a>
-<a class="sourceLine" id="cb346-5" title="5"><span class="co"># Binary Marginal Effects and Prediction without Binary</span></a>
-<a class="sourceLine" id="cb346-6" title="6">ggplot.A.alpha.x &lt;-<span class="st"> </span><span class="cf">function</span>(svr_x, df,</a>
-<a class="sourceLine" id="cb346-7" title="7">                             <span class="dt">svr_alpha =</span> <span class="st">&#39;alpha_i&#39;</span>, <span class="dt">svr_A =</span> <span class="st">&quot;A_i&quot;</span>){</a>
-<a class="sourceLine" id="cb346-8" title="8"></a>
-<a class="sourceLine" id="cb346-9" title="9">  scatter &lt;-<span class="st"> </span><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(<span class="dt">x=</span><span class="op">!!</span><span class="kw">sym</span>(svr_x))) <span class="op">+</span></a>
-<a class="sourceLine" id="cb346-10" title="10"><span class="st">        </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>alpha_i), <span class="dt">size=</span><span class="dv">4</span>, <span class="dt">shape=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb346-11" title="11"><span class="st">        </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>A_i), <span class="dt">size=</span><span class="dv">2</span>, <span class="dt">shape=</span><span class="dv">8</span>, <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb346-12" title="12"><span class="st">        </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">slope =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="co"># 45 degree line</span></a>
-<a class="sourceLine" id="cb346-13" title="13"><span class="st">        </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;A (blue) and alpha (red) vs x variables=&#39;</span>, svr_x),</a>
-<a class="sourceLine" id="cb346-14" title="14">             <span class="dt">x =</span> svr_x,</a>
-<a class="sourceLine" id="cb346-15" title="15">             <span class="dt">y =</span> <span class="st">&#39;Probabilities&#39;</span>,</a>
-<a class="sourceLine" id="cb346-16" title="16">             <span class="dt">caption =</span> <span class="kw">paste0</span>(sdt_name)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb346-17" title="17"><span class="st">        </span><span class="kw">theme_bw</span>()</a>
-<a class="sourceLine" id="cb346-18" title="18"></a>
-<a class="sourceLine" id="cb346-19" title="19"><span class="kw">return</span>(scatter)</a>
-<a class="sourceLine" id="cb346-20" title="20">}</a>
-<a class="sourceLine" id="cb346-21" title="21"></a>
-<a class="sourceLine" id="cb346-22" title="22"><span class="co"># Plot over multiple</span></a>
-<a class="sourceLine" id="cb346-23" title="23"><span class="kw">lapply</span>(ls_st_xs,</a>
-<a class="sourceLine" id="cb346-24" title="24">       ggplot.A.alpha.x,</a>
-<a class="sourceLine" id="cb346-25" title="25">       <span class="dt">df =</span> df_mtcars)</a></code></pre></div>
-<pre><code>[[1]]</code></pre>
-<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-156-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[2]]</code></pre>
-<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-156-2.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[3]]</code></pre>
-<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-156-3.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb350"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb350-1"><a href="nonlinear-regression.html#cb350-1"></a><span class="co"># Generate Gap Variable</span></span>
+<span id="cb350-2"><a href="nonlinear-regression.html#cb350-2"></a>df_mtcars &lt;-<span class="st"> </span>df_mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">alpha_i =</span> p_mpg_hp_bi1 <span class="op">-</span><span class="st"> </span>p_mpg_hp_bi0) <span class="op">%&gt;%</span></span>
+<span id="cb350-3"><a href="nonlinear-regression.html#cb350-3"></a><span class="st">                </span><span class="kw">mutate</span>(<span class="dt">A_i =</span> p_mpg_hp_bi0)</span>
+<span id="cb350-4"><a href="nonlinear-regression.html#cb350-4"></a></span>
+<span id="cb350-5"><a href="nonlinear-regression.html#cb350-5"></a><span class="co"># Binary Marginal Effects and Prediction without Binary</span></span>
+<span id="cb350-6"><a href="nonlinear-regression.html#cb350-6"></a>ggplot.A.alpha.x &lt;-<span class="st"> </span><span class="cf">function</span>(svr_x, df,</span>
+<span id="cb350-7"><a href="nonlinear-regression.html#cb350-7"></a>                             <span class="dt">svr_alpha =</span> <span class="st">&#39;alpha_i&#39;</span>, <span class="dt">svr_A =</span> <span class="st">&quot;A_i&quot;</span>){</span>
+<span id="cb350-8"><a href="nonlinear-regression.html#cb350-8"></a></span>
+<span id="cb350-9"><a href="nonlinear-regression.html#cb350-9"></a>  scatter &lt;-<span class="st"> </span><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(<span class="dt">x=</span><span class="op">!!</span><span class="kw">sym</span>(svr_x))) <span class="op">+</span></span>
+<span id="cb350-10"><a href="nonlinear-regression.html#cb350-10"></a><span class="st">        </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>alpha_i), <span class="dt">size=</span><span class="dv">4</span>, <span class="dt">shape=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
+<span id="cb350-11"><a href="nonlinear-regression.html#cb350-11"></a><span class="st">        </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>A_i), <span class="dt">size=</span><span class="dv">2</span>, <span class="dt">shape=</span><span class="dv">8</span>, <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span></span>
+<span id="cb350-12"><a href="nonlinear-regression.html#cb350-12"></a><span class="st">        </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">slope =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="co"># 45 degree line</span></span>
+<span id="cb350-13"><a href="nonlinear-regression.html#cb350-13"></a><span class="st">        </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste0</span>(<span class="st">&#39;A (blue) and alpha (red) vs x variables=&#39;</span>, svr_x),</span>
+<span id="cb350-14"><a href="nonlinear-regression.html#cb350-14"></a>             <span class="dt">x =</span> svr_x,</span>
+<span id="cb350-15"><a href="nonlinear-regression.html#cb350-15"></a>             <span class="dt">y =</span> <span class="st">&#39;Probabilities&#39;</span>,</span>
+<span id="cb350-16"><a href="nonlinear-regression.html#cb350-16"></a>             <span class="dt">caption =</span> <span class="kw">paste0</span>(sdt_name)) <span class="op">+</span></span>
+<span id="cb350-17"><a href="nonlinear-regression.html#cb350-17"></a><span class="st">        </span><span class="kw">theme_bw</span>()</span>
+<span id="cb350-18"><a href="nonlinear-regression.html#cb350-18"></a></span>
+<span id="cb350-19"><a href="nonlinear-regression.html#cb350-19"></a><span class="kw">return</span>(scatter)</span>
+<span id="cb350-20"><a href="nonlinear-regression.html#cb350-20"></a>}</span>
+<span id="cb350-21"><a href="nonlinear-regression.html#cb350-21"></a></span>
+<span id="cb350-22"><a href="nonlinear-regression.html#cb350-22"></a><span class="co"># Plot over multiple</span></span>
+<span id="cb350-23"><a href="nonlinear-regression.html#cb350-23"></a><span class="kw">lapply</span>(ls_st_xs,</span>
+<span id="cb350-24"><a href="nonlinear-regression.html#cb350-24"></a>       ggplot.A.alpha.x,</span>
+<span id="cb350-25"><a href="nonlinear-regression.html#cb350-25"></a>       <span class="dt">df =</span> df_mtcars)</span></code></pre></div>
+<pre><code>## [[1]]</code></pre>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-159-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## 
+## [[2]]</code></pre>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-159-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## 
+## [[3]]</code></pre>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-159-3.png" width="672" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>

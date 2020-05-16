@@ -1,0 +1,177 @@
+---
+title: "Convert R Markdown File to R, PDF and HTML"
+description: |
+  Find all files in a folder with a particula suffix, with exclusion.
+  Convert R Markdow File to R, PDF and HTML.
+  Modify markdown pounds hierarchy.
+core:
+  - package: r
+    code: |
+      file()
+      writeLines()
+      readLines()
+      close()
+      gsub()
+date: 2020-05-16
+date_start: 2020-05-16
+output:
+  pdf_document:
+    pandoc_args: '../../../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../../../preamble.tex'
+  html_document:
+    pandoc_args: '../../../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+# Rmd to HTML
+
+```{r global_options, include = FALSE}
+try(source("../../../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+## Search and Find all Files in Repository
+
+Search inside directories, for all files in a repository that have a particular suffix and that don't contain skip pattern list string items.
+
+```{r}
+# Serch Folder and skip list
+spt_roots <- c('C:/Users/fan/R4Econ/amto', 'C:/Users/fan/R4Econ/summarize')
+spn_skip <- c('summarize', 'panel', 'support')
+
+# Search and get all Path
+ls_sfls <- list.files(path=spt_roots, recursive=T, pattern=".Rmd", full.names=T)
+
+# Skip path if contains words in skip list
+if(!missing(spn_skip)) {
+  ls_sfls <- ls_sfls[!grepl(paste(spn_skip, collapse = "|"), ls_sfls)]
+}
+
+# Loop and print
+for (spt_file in ls_sfls) {
+    st_fullpath_nosufx <- tail(strsplit(spt_file, "/")[[1]],n=1)
+    print(paste0(spt_file, '---', st_fullpath_nosufx))
+}
+```
+
+## Search and Find all Git Modified or New Rmd
+
+Search inside directories, for all files in a git repo folder that are new or have been modified. Ignore possible subset of file based on string search.
+
+```{r}
+# Serch Folder and skip list
+spt_roots <- c('C:/Users/fan/R4Econ/amto', 'C:/Users/fan/R4Econ/development')
+spn_skip <- c('summarize', 'panel', 'support')
+ls_sfls <- list.files(path=spt_roots, recursive=T, pattern=".Rmd", full.names=T)
+if(!missing(spn_skip)) {
+  ls_sfls <- ls_sfls[!grepl(paste(spn_skip, collapse = "|"), ls_sfls)]
+}
+
+# Loop and print
+for (spt_file in ls_sfls) {
+  spg_check_git_status <- paste0('git status -s ', spt_file)
+  st_git_status <- toString(system(spg_check_git_status, intern=TRUE))
+  bl_modified <- grepl(' M ', st_git_status, fixed=TRUE)
+  bl_anewfile <- grepl('?? ', st_git_status, fixed=TRUE)
+  bl_nochange <- (st_git_status == "")
+
+  if (bl_modified == 1) {
+    print(paste0('MODIFIED: ', spt_file))
+  } else if (bl_anewfile == 1) {
+    print(paste0('A NEW FL: ', spt_file))
+  } else {
+    print(paste0('NO CHNGE: ', spt_file))
+  }
+}
+```
+
+## Resave an Existing File with Different Name Different Folder
+
+Given an existing Rmd File, Resave it with a different name (add to name suffix), and then save in a different folder:
+
+- old file: */R4Econ/development/fs_rmd_pdf_html.Rmd*
+- new file: *R4Econ/development/inout/_file/rmd/fs_rmd_pdf_html_mod.Rmd*
+
+```{r}
+# Serch Folder and skip list
+spt_roots <- c('C:/Users/fan/R4Econ/development/inout/')
+spn_skip <- c('_main', '_file')
+ls_sfls <- list.files(path=spt_roots, recursive=T, pattern=".Rmd", full.names=T)
+if(!missing(spn_skip)) {
+  ls_sfls <- ls_sfls[!grepl(paste(spn_skip, collapse = "|"), ls_sfls)]
+}
+
+# Loop and print
+for (spt_file in ls_sfls) {
+  spt_new <- paste0('_file/rmd/')
+  spn_new <- paste0(spt_new, sub('\\.Rmd$', '', basename(spt_file)), '_mod.Rmd')
+  print(spt_new)
+  print(spn_new)
+
+  fileConn_rd <- file(spt_file, "r")
+  st_file_read <- readLines(fileConn_rd)
+
+  fileConn_sr <- file(spn_new)
+  writeLines(st_file_read, fileConn_sr)
+
+  close(fileConn_rd)
+  close(fileConn_sr)
+}
+```
+
+### Replacment Function Change Markdown Hierarchy and Add to YAML
+
+Given an existing Rmd File, Resave it with a different name, and replace (add in) additional yaml contents.
+
+```{r}
+spn_file = '_file/rmd/fs_rmd_pdf_html_mod.Rmd'
+fileConn_sr <- file(spn_file)
+st_file <- readLines(fileConn_sr)
+# print(st_file)
+
+st_search <- "html_document:
+    toc: true
+    number_sections: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+      toc_depth: 3"
+st_replace <- paste0("html_document:
+    toc: true
+    number_sections: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+      toc_depth: 3\n",
+                     "    toc: true\n",
+                     "    number_sections: true\n",
+                     "    toc_float:\n",
+                     "      collapsed: false\n",
+                     "      smooth_scroll: false\n",
+                     "      toc_depth: 3")
+st_file_updated <- gsub(x = st_file,
+                        pattern = st_search,
+                        replacement = st_replace)
+
+st_search <- "../../../../"
+st_replace <- paste0("../../../../../../../../")
+st_file_updated <- gsub(x = st_file_updated,
+                        pattern = st_search,
+                        replacement = st_replace)
+
+st_file_updated <- gsub(x = st_file_updated, pattern = '# ', replacement = '# ')
+st_file_updated <- gsub(x = st_file_updated, pattern = '## ', replacement = '## ')
+st_file_updated <- gsub(x = st_file_updated, pattern = '# ', replacement = '# ')
+
+spn_file = '_file/rmd/fs_rmd_pdf_html_mod.Rmd'
+fileConn_sr <- file(spn_file)
+st_file <- writeLines(st_file_updated, fileConn_sr)
+
+```
