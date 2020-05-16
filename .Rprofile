@@ -68,6 +68,7 @@ if (knitr::is_latex_output()) {
 # Get Current File Path
 spt_file_current <- knitr::current_input(dir = TRUE)
 print(paste0('spt_file_current:',spt_file_current))
+spt_file_current <- gsub(x = spt_file_current,  pattern = "_mod.Rmd", replacement = ".Rmd")
 
 if(!is.null(spt_file_current)) {
   sfc_prj='/R4Econ'
