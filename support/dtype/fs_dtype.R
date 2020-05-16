@@ -11,3 +11,11 @@ if(!is.atomic(lambda)){
 } else {
   print('is atomic')
 }
+
+
+ar_spn_skip_1 = c('matrix', 'tibble')
+
+if (!missing(ar_spn_skip_2)){
+
+}
+  length(ar_spn_skip_2) > 1

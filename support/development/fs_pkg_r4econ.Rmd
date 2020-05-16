@@ -42,6 +42,14 @@ R4Econ Rmd to PDF and HTML.
 # knitr::purl(file_path_rmd, output=file_path_r, documentation = 1)
 ```
 
+#### TOC
+
+Toc and Numbered list possible through external specification pandoc yaml for pdf, but not possible for HTML. HTML needs to be specified via rmd yaml directly. Use the follow replacement strategy:
+
+- Use *notepad++*
+- Search: *html_document:\r\n*
+- Replace: *html_document:\r\n    toc: true\r\n    number_sections: true\r\n    toc_float:\r\n      collapsed: false\r\n      smooth_scroll: false\r\n      toc_depth: 3\r\n*
+
 
 #### Testing Which Files Have Changed
 
@@ -87,7 +95,7 @@ start_time <- Sys.time()
 setwd(spt_root)
 
 bl_test = FALSE
-bl_gen_if_git_old = FALSE
+bl_gen_if_git_old = TRUE
 ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/R4Econ'),
                  ar_spn_skip = c('support', 'index.Rmd', 'README', '_main.Rmd'),
                  st_folder_pdf = '/htmlpdfr/',

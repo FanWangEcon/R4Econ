@@ -178,7 +178,7 @@ As functions are developed, some vignettes can be invoked differently, taking ad
 ```{r}
 # Step 3
 rm(list = ls(all.names = TRUE))
-# setwd('C:/Users/fan/PrjOptiAlloc')
+setwd('C:/Users/fan/PrjOptiAlloc')
 setwd('C:/Users/fan/REconTools')
 devtools::document()
 # Step 4
@@ -200,7 +200,7 @@ During development, after new R functions have been written, testing latested fu
 setwd('C:/Users/fan/REconTools')
 devtools::load_all()
 library(REconTools)
-# library(PrjOptiAlloc)
+library(PrjOptiAlloc)
 # devtools::install(build_vignette = FALSE)
 ```
 
@@ -211,6 +211,20 @@ setwd('C:/Users/fan/R4Econ')
 bookdown::render_book('index.Rmd', 'bookdown::gitbook')
 bookdown::render_book('index.Rmd', 'bookdown::pdf_book')
 ```
+
+```
+usethis::use_package("kableExtra")
+usethis::use_package("broom")
+usethis::use_package("ggplot2")
+```
+
+### Debuging and Errors
+
+While Checking Package, often face errors. Here is a list of lessons:
+
+1. read messages clearly, usually they are very informative, what line of code, which function has error
+2. do not load tidyverse, tidymodels etc in vignette or functions, use specific packages. Add the packages, whether used in vignette or functions with *usethis::use_package("package_name")*.
+3. do not add another personal package as a dependency, because that package will likely depend on REconTools, if dealing with REconTools
 
 ## Attach vs Import
 
