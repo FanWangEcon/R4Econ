@@ -67,7 +67,11 @@ setwd(spt_root)
 
 bl_test = TRUE
 bl_gen_if_git_old = FALSE
-ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/R4Econ'),
+
+ar_spt_root = 'C:/Users/fan/R4Econ/'
+ar_spt_root = 'C:/Users/fan/R4Econ/development/inout/'
+
+ff_sup_clean_rmd(ar_spt_root = ar_spt_root,
                  ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd', 
                                  '_mod.Rmd', 'title.Rmd'),
                  st_folder_pdf = '/htmlpdfr/',
@@ -76,7 +80,8 @@ ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/R4Econ'),
                  bl_gen_if_git_old = bl_gen_if_git_old,
                  bl_recursive = TRUE,
                  bl_verbose = FALSE,
-                 bl_test = bl_test)
+                 bl_test = bl_test, 
+                 it_hierachy_shift=2, it_toc_depth=3)
 
 end_time <- Sys.time()
 print(paste0('ff_sup_clean_rmd(), bl_test = TRUE, took:', end_time - start_time))
@@ -96,7 +101,7 @@ start_time <- Sys.time()
 setwd(spt_root)
 
 bl_test = FALSE
-bl_gen_if_git_old = TRUE
+bl_gen_if_git_old = FALSE
 
 # ar_spt_root = c('C:/Users/fan/R4Econ/amto',
 #                 'C:/Users/fan/R4Econ/development',
@@ -109,7 +114,10 @@ bl_gen_if_git_old = TRUE
 #                 'C:/Users/fan/R4Econ/tabgraph',
 #                 'C:/Users/fan/R4Econ/summarize')
 
-ff_sup_clean_rmd(ar_spt_root = 'C:/Users/fan/R4Econ/',
+ar_spt_root = 'C:/Users/fan/R4Econ/'
+ar_spt_root = 'C:/Users/fan/R4Econ/development/inout/'
+
+ff_sup_clean_rmd(ar_spt_root = ar_spt_root,
                  ar_spn_skip = c('support', 'index.Rmd', 'README', 
                                  'main.Rmd', '_mod.Rmd', 'title.Rmd',
                                  'Panel Data and Optimization with R'),
@@ -119,7 +127,8 @@ ff_sup_clean_rmd(ar_spt_root = 'C:/Users/fan/R4Econ/',
                  bl_gen_if_git_old = bl_gen_if_git_old,
                  bl_recursive = TRUE,
                  bl_verbose = TRUE,
-                 bl_test = bl_test)
+                 bl_test = bl_test,
+                 it_hierachy_shift=2, it_toc_depth=3)
 
 end_time <- Sys.time()
 print(paste0('ff_sup_clean_rmd(), bl_test = FALSE, took:', end_time - start_time))

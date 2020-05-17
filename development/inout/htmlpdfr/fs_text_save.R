@@ -4,7 +4,7 @@ try(source("../../.Rprofile"))
 
 ## ------------------------------------------------------------------------------------------------------------------------------------------------------
 # Load Data
-dt <- mtcars[1:5, 1:6]
+dt <- mtcars[1:4, 1:6]
 # Generate latex string variable
 st_out_tex <- kable(dt, "latex")
 print(st_out_tex)
@@ -33,6 +33,12 @@ output:
     includes:
       in_header: '..//..//preamble.tex'
   html_document:
+    toc: true
+    number_sections: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+      toc_depth: 3
     pandoc_args: '..//..//_output_kniti_html.yaml'
     includes:
       in_header: '..//..//hdga.html'
@@ -60,8 +66,20 @@ st_file_read <- readLines(fileConn)
 close(fileConn)
 
 # Search and Replace String
-st_search <- "html_document:"
-st_replace <- paste0("html_document:\r\n",
+st_search <- "html_document:
+    toc: true
+    number_sections: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+      toc_depth: 3"
+st_replace <- paste0("html_document:
+    toc: true
+    number_sections: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+      toc_depth: 3\r\n",
                      "    toc: true\r\n",
                      "    number_sections: true\r\n",
                      "    toc_float:\r\n",

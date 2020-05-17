@@ -57,10 +57,12 @@ sink(paste0(spt_log, 'rmd_clean_test.log'))
 start_time <- Sys.time()
 setwd(spt_root)
 
+
 bl_test = TRUE
 bl_gen_if_git_old = FALSE
 ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/Stat4Econ/'),
-                 ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd', 
+                 ar_spn_skip = c('support', 'index.Rmd', 'README',
+                                 'main.Rmd', '_mod.Rmd', 'title.Rmd',
                                  'hypothesis', 'tidyverse.Rmd'),
                  st_folder_pdf = '/htmlpdfr/',
                  st_folder_html = '/htmlpdfr/',
@@ -68,7 +70,8 @@ ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/Stat4Econ/'),
                  bl_gen_if_git_old = bl_gen_if_git_old,
                  bl_recursive = TRUE,
                  bl_verbose = FALSE,
-                 bl_test = bl_test)
+                 bl_test = bl_test,
+                 it_hierachy_shift=1, it_toc_depth=3)
 
 end_time <- Sys.time()
 print(paste0('ff_sup_clean_rmd(), bl_test = TRUE, took:', end_time - start_time))
@@ -90,15 +93,17 @@ setwd(spt_root)
 bl_test = FALSE
 bl_gen_if_git_old = TRUE
 ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/Stat4Econ/'),
-                 ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd', 
-                                 'hypothesis', 'title.Rmd'),
+                 ar_spn_skip = c('support', 'index.Rmd', 'README',
+                                 'main.Rmd', '_mod.Rmd', 'title.Rmd',
+                                 'hypothesis', 'tidyverse.Rmd'),
                  st_folder_pdf = '/htmlpdfr/',
                  st_folder_html = '/htmlpdfr/',
                  st_folder_R = '/htmlpdfr/',
                  bl_gen_if_git_old = bl_gen_if_git_old,
                  bl_recursive = TRUE,
-                 bl_verbose = FALSE,
-                 bl_test = bl_test)
+                 bl_verbose = TRUE,
+                 bl_test = bl_test,
+                 it_hierachy_shift=1, it_toc_depth=3)
 
 end_time <- Sys.time()
 print(paste0('ff_sup_clean_rmd(), bl_test = FALSE, took:', end_time - start_time))
