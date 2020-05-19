@@ -1,18 +1,18 @@
 ---
 title: "R use Mutate to Evaluate one Defined or Anonymous Function  \nAcross Rows of a Matrix or Elements of an Array"
-titleshort: "Mutate to Evaluate Function over Rows."
+titleshort: "Mutate rowwise, mutate pmap, and rowwise do unnest"
 description: |
   Evaluate function f(x_i,y_i,c), where c is a constant and x and y vary over each row of a matrix, with index i indicating rows.
-  Get same results using various types of mutate.
+  Get same results using various types of mutate rowwise, mutate pmap and rowwise do unnest.
 core:
   - package: dplyr
     code: |
       rowwise()
-      unnest(out)
+      do()
+      unnest()
   - package: purrr
     code: |
       pmap(func)
-      unlist()
   - package: tidyr
     code: |
       unlist()
@@ -77,39 +77,7 @@ kable(tb_nN_by_nQ_A_alpha) %>%
   kable_styling_fc()
 ```
 
-#### Mutate over Function
-
-For this example, use a very simple function with only one type of input, all inputs are scalars.
-
-```{r}
-# Define Implicit Function
-ffi_nonlinear <- function(fl_A, fl_alpha){
-
-  fl_out <- (fl_A + fl_alpha*fl_A)/(fl_A)^2
-
-  return(fl_out)
-}
-```
-
-Apply the function over the dataframe, note three different ways below, the third way allows for parameters to be strings.
-
-```{r}
-# variable names
-svr_fl_A <- 'fl_A'
-svr_fl_alpha <- 'fl_alpha'
-
-# Evaluate
-tb_nN_by_nQ_A_alpha_mutate_rows <- tb_nN_by_nQ_A_alpha %>%
-  mutate(fl_out_m1 = ffi_nonlinear(fl_A=.$fl_A, fl_alpha=.$fl_alpha),
-         fl_out_m2 = ffi_nonlinear(fl_A=`$`(., 'fl_A'), fl_alpha=`$`(., 'fl_alpha')),
-         fl_out_m3 = ffi_nonlinear(fl_A=.[[svr_fl_A]], fl_alpha=.[[svr_fl_alpha]]))
-
-# print
-kable(tb_nN_by_nQ_A_alpha_mutate_rows) %>% kable_styling_fc()
-```
-
-
-#### Mutate rowwise
+#### mutate rowwise
 
 - dplyr mutate own function
 - dplyr all row function
@@ -161,7 +129,7 @@ kable(tbfunc_A_nN_by_nQ_A_alpha_rowwise) %>%
   kable_styling_fc()
 ```
 
-#### Mutate with pmap
+#### mutate with pmap
 
 Apparantly *rowwise()* is not a good idea, and *pmap* should be used, below is the *pmap* solution to the problem. Which does seem nicer. Crucially, don't have to define input parameter names, automatically I think they are matching up to the names in the function
 
@@ -203,7 +171,7 @@ kable(tbfunc_A_nN_by_nQ_A_alpha_pmap) %>%
   kable_styling_fc()
 ```
 
-#### Rowwise Three Input Types
+#### rowwise and do
 
 Now, we have three types of parameters, for something like a bisection type calculation. We will supply the program with a function with some hard-coded value inside, and as parameters, we will have one parameter which is a row in the current matrix, and another parameter which is a sclar values. The three types of parameters are dealt with sparately:
 

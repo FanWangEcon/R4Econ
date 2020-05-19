@@ -30,31 +30,6 @@ kable(tb_nN_by_nQ_A_alpha) %>%
   kable_styling_fc()
 
 
-## ------------------------------------------------------------------------------------------------------------------------------------------------------
-# Define Implicit Function
-ffi_nonlinear <- function(fl_A, fl_alpha){
-
-  fl_out <- (fl_A + fl_alpha*fl_A)/(fl_A)^2
-
-  return(fl_out)
-}
-
-
-## ------------------------------------------------------------------------------------------------------------------------------------------------------
-# variable names
-svr_fl_A <- 'fl_A'
-svr_fl_alpha <- 'fl_alpha'
-
-# Evaluate
-tb_nN_by_nQ_A_alpha_mutate_rows <- tb_nN_by_nQ_A_alpha %>%
-  mutate(fl_out_m1 = ffi_nonlinear(fl_A=.$fl_A, fl_alpha=.$fl_alpha),
-         fl_out_m2 = ffi_nonlinear(fl_A=`$`(., 'fl_A'), fl_alpha=`$`(., 'fl_alpha')),
-         fl_out_m3 = ffi_nonlinear(fl_A=.[[svr_fl_A]], fl_alpha=.[[svr_fl_alpha]]))
-
-# print
-kable(tb_nN_by_nQ_A_alpha_mutate_rows) %>% kable_styling_fc()
-
-
 ## ----linear_dplyr--------------------------------------------------------------------------------------------------------------------------------------
 
 # Define Implicit Function

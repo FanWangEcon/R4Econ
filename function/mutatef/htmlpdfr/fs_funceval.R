@@ -16,9 +16,41 @@ ar_nN_N_choice = seq(1,it_N_child_cnt)/sum(seq(1,it_N_child_cnt))
 
 # N by Q varying parameters
 mt_nN_by_nQ_A_alpha = cbind(ar_nN_A, ar_nN_alpha, ar_nN_N_choice)
+
+# Convert Matrix to Tibble
+ar_st_col_names = c('fl_A', 'fl_alpha', 'fl_N')
+tb_nN_by_nQ_A_alpha <- as_tibble(mt_nN_by_nQ_A_alpha) %>% rename_all(~c(ar_st_col_names))
+
 # Show
-kable(mt_nN_by_nQ_A_alpha) %>%
+kable(tb_nN_by_nQ_A_alpha) %>%
   kable_styling_fc()
+
+
+## ------------------------------------------------------------------------------------------------------------------------------------------------------
+# Define Implicit Function
+ffi_nonlinear <- function(fl_A, fl_alpha){
+
+  fl_out <- (fl_A + fl_alpha*fl_A)/(fl_A)^2
+
+  return(fl_out)
+}
+
+
+## ------------------------------------------------------------------------------------------------------------------------------------------------------
+# variable names
+svr_fl_A <- 'fl_A'
+svr_fl_alpha <- 'fl_alpha'
+
+# Evaluate
+tb_nN_by_nQ_A_alpha_mutate_rows <- tb_nN_by_nQ_A_alpha %>%
+  mutate(fl_out_m1 = ffi_nonlinear(fl_A=.$fl_A, fl_alpha=.$fl_alpha),
+         fl_out_m2 = ffi_nonlinear(fl_A=`$`(., 'fl_A'), fl_alpha=`$`(., 'fl_alpha')),
+         fl_out_m3 = ffi_nonlinear(fl_A=.[[svr_fl_A]], fl_alpha=.[[svr_fl_alpha]]),
+         fl_out_m4 = ffi_nonlinear(fl_A=fl_A, fl_alpha=fl_alpha),
+         fl_out_m5 = ffi_nonlinear(fl_A, fl_alpha))
+
+# print
+kable(tb_nN_by_nQ_A_alpha_mutate_rows) %>% kable_styling_fc()
 
 
 ## ----nonlinear_test------------------------------------------------------------------------------------------------------------------------------------
@@ -79,9 +111,6 @@ for (i in seq(1,dim(mt_nN_by_nQ_A_alpha)[1])){
 
 
 ## ----nonlinear_dplyr_mutate----------------------------------------------------------------------------------------------------------------------------
-# Convert Matrix to Tibble
-ar_st_col_names = c('fl_A', 'fl_alpha', 'fl_N')
-tb_nN_by_nQ_A_alpha <- as_tibble(mt_nN_by_nQ_A_alpha) %>% rename_all(~c(ar_st_col_names))
 
 # Define Implicit Function
 ffi_nonlin_dplyrdo <- function(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, fl_rho){
