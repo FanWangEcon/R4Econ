@@ -60,7 +60,8 @@ setwd(spt_root)
 bl_test = TRUE
 bl_gen_if_git_old = FALSE
 ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/pyfan'),
-                 ar_spn_skip = c('pkgtest','index.Rmd', 'main.Rmd', 'README', 'title.Rmd'),
+                 ar_spn_skip = c('pkgtest','index.Rmd', 'main.Rmd',
+                                  '_mod.Rmd', 'README', 'title.Rmd'),
                  st_folder_pdf = '/htmlpdfr/',
                  st_folder_html = '/htmlpdfr/',
                  st_folder_R = '/htmlpdfr/',
@@ -89,13 +90,14 @@ setwd(spt_root)
 bl_test = FALSE
 bl_gen_if_git_old = TRUE
 ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/pyfan'),
-                 ar_spn_skip = c('pkgtest','index.Rmd', 'main.Rmd', 'README', 'title.Rmd'),
+                 ar_spn_skip = c('pkgtest','index.Rmd', 'main.Rmd',
+                                 '_mod.Rmd', 'README', 'title.Rmd'),
                  st_folder_pdf = '/htmlpdfr/',
                  st_folder_html = '/htmlpdfr/',
                  st_folder_R = '/htmlpdfr/',
                  bl_gen_if_git_old = bl_gen_if_git_old,
                  bl_recursive = TRUE,
-                 bl_verbose = FALSE,
+                 bl_verbose = TRUE,
                  bl_test = bl_test)
 
 end_time <- Sys.time()

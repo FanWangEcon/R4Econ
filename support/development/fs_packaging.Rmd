@@ -178,7 +178,7 @@ As functions are developed, some vignettes can be invoked differently, taking ad
 ```{r}
 # Step 3
 rm(list = ls(all.names = TRUE))
-setwd('C:/Users/fan/PrjOptiAlloc')
+# setwd('C:/Users/fan/PrjOptiAlloc')
 setwd('C:/Users/fan/REconTools')
 devtools::document()
 # Step 4
@@ -216,6 +216,16 @@ bookdown::render_book('index.Rmd', 'bookdown::pdf_book')
 usethis::use_package("kableExtra")
 usethis::use_package("broom")
 usethis::use_package("ggplot2")
+```
+
+```
+usethis::use_package("forcats")
+usethis::use_package("haven")
+usethis::use_package("purrr")
+usethis::use_package("kableExtra")
+
+<!-- Ignore these directories -->
+usethis::use_build_ignore(c("_img", "code_r", "docs", "vignettes_working"))
 ```
 
 ### Debuging and Errors

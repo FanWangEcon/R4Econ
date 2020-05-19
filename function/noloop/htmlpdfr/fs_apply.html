@@ -13,7 +13,7 @@
 
 <meta name="date" content="2020-05-18" />
 
-<title>R use Mutate to Evaluate one Defined or Anonymous Function Across Rows of a Matrix or Elements of an Array</title>
+<title>R use Apply and Sapply to Evaluate one Defined or Anonymous Function Across Rows of a Matrix or Elements of an Array</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1495,8 +1495,7 @@ Td(r,u,"4");}}}};
 Ui.prototype.register=function(a,b,c){if(3!==bj(this,a).status){bj(this,a).o=b;bj(this,a).status=3;c&&(bj(this,a).i=c);var d=bg(a),e=Yi[d.containerId];if(void 0!==e){var f=ld[d.containerId].bootstrap,h=d.prefix.toUpperCase();ld[d.containerId]._spx&&(h=h.toLowerCase());var k=Zd("gtm.uniqueEventId"),l=h,m=Ea()-f;if(Pd&&!Gd[k]){k!==Cd&&(Ad(),Cd=k);var q=l+"."+Math.floor(f-e)+"."+Math.floor(m);Ld=Ld?Ld+","+q:"&cl="+q}delete Yi[d.containerId]}this.flush()}};
 Ui.prototype.push=function(a,b,c,d){var e=Math.floor(Ea()/1E3);cj(this,c,b[0][D.sa]||this.i[D.sa]);this.h.push(new aj(a,e,c,b,d));d||this.flush()};
 Ui.prototype.flush=function(a){for(var b=this;this.h.length;){var c=this.h[0];if(c.i)c.i=!1,this.h.push(c);else switch(c.type){case "require":if(3!==bj(this,c.aa).status&&!a)return;Pd&&F.clearTimeout(c.h[0].timeoutId);break;case "set":xa(c.h[0],function(l,m){C(La(l,m),b.i)});break;case "config":var d=c.h[0],e=!!d[D.hc];delete d[D.hc];var f=bj(this,c.aa),h=bg(c.aa),k=h.containerId===h.id;e||(k?f.containerConfig={}:f.targetConfig[c.aa]={});f.h&&e||dj(this,D.D,d,c);f.h=!0;delete d[D.va];k?C(d,f.containerConfig):
-C(d,f.targetConfig[c.aa]);break;case "event":dj(this,c.h[1],c.h[0],c)}this.h.shift()}};var ej=["GP","G"],fj="G".split(/,/);fj.push("GF");fj.push("HA");
-fj.push("UA");fj.push("AW");var gj=!1;gj=!0;var hj=null,ij={},jj={},kj;function lj(a,b){var c={event:a};b&&(c.eventModel=C(b),b[D.Ac]&&(c.eventCallback=b[D.Ac]),b[D.Jb]&&(c.eventTimeout=b[D.Jb]));return c}
+C(d,f.targetConfig[c.aa]);break;case "event":dj(this,c.h[1],c.h[0],c)}this.h.shift()}};var ej=["GP","G"],fj="G".split(/,/);fj.push("GF");fj.push("HA");fj.push("AW");var gj=!1;gj=!0;var hj=null,ij={},jj={},kj;function lj(a,b){var c={event:a};b&&(c.eventModel=C(b),b[D.Ac]&&(c.eventCallback=b[D.Ac]),b[D.Jb]&&(c.eventTimeout=b[D.Jb]));return c}
 var mj=function(){hj=hj||!ld.gtagRegistered;ld.gtagRegistered=!0;return hj},nj=function(a){if(void 0===jj[a.id]){var b;switch(a.prefix){case "UA":b=th("gtagua",{trackingId:a.id});break;case "AW":b=th("gtagaw",{conversionId:a});break;case "DC":b=th("gtagfl",{targetId:a.id});break;case "GF":b=th("gtaggf",{conversionId:a});break;case "HA":b=th("gtagha",{conversionId:a});break;case "GP":b=th("gtaggp",{conversionId:a.id});break;default:return}if(!kj){var c=zb("v",{name:"send_to",dataLayerVersion:2});pb.push(c);
 kj=["macro",pb.length-1]}var d={arg0:kj,arg1:a.id,ignore_case:!1};d[Fb.xa]="_lc";rb.push(d);var e={"if":[rb.length-1],add:[b]};e["if"]&&(e.add||e.block)&&qb.push(e);jj[a.id]=b}},oj=function(a){xa(ij,function(b,c){var d=n(c,a);0<=d&&c.splice(d,1)})},pj=function(a){if(a.containerId!==kd.s&&"G"!==a.prefix){var b;switch(a.prefix){case "UA":b=14;break;case "AW":b=15;break;case "DC":b=16;break;default:b=17}J("GTM",b)}};
 var qj={config:function(a){var b=a[2]||{};if(2>a.length||!g(a[1])||!Qa(b))return;var c=bg(a[1]);if(!c)return;oj(c.id);var d=c.id,e=b[D.yc]||"default";e=e.toString().split(",");for(var f=0;f<e.length;f++)ij[e[f]]=ij[e[f]]||[],ij[e[f]].push(d);delete b[D.yc];xd();if(mj()){C(b);if(gj&&-1!==n(fj,c.prefix)||-1!==n(ej,c.prefix)){"G"===c.prefix&&(b[D.va]=!0);Xi(b,c.id);return}nj(c);pj(c)}ce("gtag.targets."+c.id,void 0);ce("gtag.targets."+c.id,C(b));var h={};h[D.ya]=c.id;return lj(D.D,
@@ -1821,7 +1820,8 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">R use Mutate to Evaluate one Defined or Anonymous Function<br />
+<h1 class="title toc-ignore">R use Apply and Sapply to<br />
+Evaluate one Defined or Anonymous Function<br />
 Across Rows of a Matrix or Elements of an Array</h1>
 <h4 class="author"><a href="https://fanwangecon.github.io/">Fan Wang</a></h4>
 <h4 class="date">2020-05-18</h4>
@@ -1829,12 +1829,25 @@ Across Rows of a Matrix or Elements of an Array</h1>
 </div>
 
 
-<div id="mutate-evaluate-functions" class="section level1" number="1">
-<h1 number="1"><span class="header-section-number">1</span> Mutate Evaluate Functions</h1>
+<div id="apply-and-sapply" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> Apply and Sapply</h1>
 <blockquote>
-<p>Go to the <a href="https://github.com/FanWangEcon//R4Econ/blob/master/function/noloop//fs_applysapplymutate.Rmd"><strong>RMD</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/function/noloop//htmlpdfr/fs_applysapplymutate.R"><strong>R</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/function/noloop//htmlpdfr/fs_applysapplymutate.pdf"><strong>PDF</strong></a>, or <a href="https://fanwangecon.github.io//R4Econ/function/noloop//htmlpdfr/fs_applysapplymutate.html"><strong>HTML</strong></a> version of this file. Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R Code Examples</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository (<a href="https://fanwangecon.github.io/Stat4Econ/bookdown">bookdown site</a>).</p>
+<p>Go to the <a href="https://github.com/FanWangEcon//R4Econ/blob/master/function/noloop//fs_apply.Rmd"><strong>RMD</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/function/noloop//htmlpdfr/fs_apply.R"><strong>R</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/function/noloop//htmlpdfr/fs_apply.pdf"><strong>PDF</strong></a>, or <a href="https://fanwangecon.github.io//R4Econ/function/noloop//htmlpdfr/fs_apply.html"><strong>HTML</strong></a> version of this file. Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R Code Examples</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository (<a href="https://fanwangecon.github.io/Stat4Econ/bookdown">bookdown site</a>).</p>
 </blockquote>
-<p>Apply a function over rows of a matrix using mutate, rowwise, etc.</p>
+<ul>
+<li>r apply matrix to function row by row</li>
+<li>r evaluate function on grid</li>
+<li><a href="https://stackoverflow.com/questions/4236368/apply-a-function-to-every-row-of-a-matrix-or-a-data-frame">Apply a function to every row of a matrix or a data frame</a></li>
+<li>r apply</li>
+<li>r sapply</li>
+<li>sapply over matrix row by row</li>
+<li>function as parameters using formulas</li>
+<li>do</li>
+</ul>
+<p>We want evaluate linear function f(x_i, y_i, ar_x, ar_y, c, d), where c and d are constants, and ar_x and ar_y are arrays, both fixed. x_i and y_i vary over each row of matrix. More specifically, we have a functions, this function takes inputs that are individual specific. We would like to evaluate this function concurrently across <span class="math inline">\(N\)</span> individuals.</p>
+<p>The function is such that across the <span class="math inline">\(N\)</span> individuals, some of the function parameter inputs are the same, but others are different. If we are looking at demand for a particular product, the prices of all products enter the demand equation for each product, but the product’s own price enters also in a different way.</p>
+<p>The objective is either to just evaluate this function across <span class="math inline">\(N\)</span> individuals, or this is a part of a nonlinear solution system.</p>
+<p>What is the relationship between apply, lapply and vectorization? see <a href="https://stackoverflow.com/a/29006276/8280804">Is the “*apply” family really not vectorized?</a>.</p>
 <div id="set-up-input-arrays" class="section level2" number="1.1">
 <h2 number="1.1"><span class="header-section-number">1.1</span> Set up Input Arrays</h2>
 <p>There is a function that takes <span class="math inline">\(M=Q+P\)</span> inputs, we want to evaluate this function <span class="math inline">\(N\)</span> times. Each time, there are <span class="math inline">\(M\)</span> inputs, where all but <span class="math inline">\(Q\)</span> of the <span class="math inline">\(M\)</span> inputs, meaning <span class="math inline">\(P\)</span> of the <span class="math inline">\(M\)</span> inputs, are the same. In particular, <span class="math inline">\(P=Q*N\)</span>.</p>
@@ -1910,281 +1923,165 @@ ar_nN_alpha
 </tr>
 </tbody>
 </table>
-<pre class="r"><code># Convert Matrix to Tibble
-ar_st_col_names = c(&#39;fl_A&#39;, &#39;fl_alpha&#39;)
-tb_nN_by_nQ_A_alpha &lt;- as_tibble(mt_nN_by_nQ_A_alpha) %&gt;%
-  rename_all(~c(ar_st_col_names))
-# Show
-kable(tb_nN_by_nQ_A_alpha) %&gt;%
-  kable_styling_fc()</code></pre>
-<table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-fl_A
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-fl_alpha
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
--2
-</td>
-<td style="text-align:right;">
-0.1
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
--1
-</td>
-<td style="text-align:right;">
-0.3
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.7
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.9
-</td>
-</tr>
-</tbody>
-</table>
 </div>
-<div id="mutate-over-function" class="section level2" number="1.2">
-<h2 number="1.2"><span class="header-section-number">1.2</span> Mutate over Function</h2>
-<p>For this example, use a very simple function with only one type of input, all inputs are scalars.</p>
+<div id="using-apply" class="section level2" number="1.2">
+<h2 number="1.2"><span class="header-section-number">1.2</span> Using apply</h2>
+<div id="named-function" class="section level3" number="1.2.1">
+<h3 number="1.2.1"><span class="header-section-number">1.2.1</span> Named Function</h3>
+<p>First we use the apply function, we have to hard-code the arrays that are fixed for each of the <span class="math inline">\(N\)</span> individuals. Then apply allows us to loop over the matrix that is <span class="math inline">\(N\)</span> by <span class="math inline">\(Q\)</span>, each row one at a time, from <span class="math inline">\(1\)</span> to <span class="math inline">\(N\)</span>.</p>
 <pre class="r"><code># Define Implicit Function
-ffi_nonlinear &lt;- function(fl_A, fl_alpha){
-
-  fl_out &lt;- (fl_A + fl_alpha*fl_A)/(fl_A)^2
-
-  return(fl_out)
-}</code></pre>
-<p>Apply the function over the dataframe, note three different ways below, the third way allows for parameters to be strings.</p>
-<pre class="r"><code># variable names
-svr_fl_A &lt;- &#39;fl_A&#39;
-svr_fl_alpha &lt;- &#39;fl_alpha&#39;
-
-# Evaluate
-tb_nN_by_nQ_A_alpha_mutate_rows &lt;- tb_nN_by_nQ_A_alpha %&gt;%
-  mutate(fl_out_m1 = ffi_nonlinear(fl_A=.$fl_A, fl_alpha=.$fl_alpha),
-         fl_out_m2 = ffi_nonlinear(fl_A=`$`(., &#39;fl_A&#39;), fl_alpha=`$`(., &#39;fl_alpha&#39;)),
-         fl_out_m3 = ffi_nonlinear(fl_A=.[[svr_fl_A]], fl_alpha=.[[svr_fl_alpha]]))
-
-# print
-kable(tb_nN_by_nQ_A_alpha_mutate_rows) %&gt;% kable_styling_fc()</code></pre>
-<table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-fl_A
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-fl_alpha
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-fl_out_m1
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-fl_out_m2
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-fl_out_m3
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
--2
-</td>
-<td style="text-align:right;">
-0.1
-</td>
-<td style="text-align:right;">
--0.55
-</td>
-<td style="text-align:right;">
--0.55
-</td>
-<td style="text-align:right;">
--0.55
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
--1
-</td>
-<td style="text-align:right;">
-0.3
-</td>
-<td style="text-align:right;">
--1.30
-</td>
-<td style="text-align:right;">
--1.30
-</td>
-<td style="text-align:right;">
--1.30
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-NaN
-</td>
-<td style="text-align:right;">
-NaN
-</td>
-<td style="text-align:right;">
-NaN
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.7
-</td>
-<td style="text-align:right;">
-1.70
-</td>
-<td style="text-align:right;">
-1.70
-</td>
-<td style="text-align:right;">
-1.70
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.9
-</td>
-<td style="text-align:right;">
-0.95
-</td>
-<td style="text-align:right;">
-0.95
-</td>
-<td style="text-align:right;">
-0.95
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="mutate-rowwise" class="section level2" number="1.3">
-<h2 number="1.3"><span class="header-section-number">1.3</span> Mutate rowwise</h2>
-<ul>
-<li>dplyr mutate own function</li>
-<li>dplyr all row function</li>
-<li>dplyr do function</li>
-<li>apply function each row dplyr</li>
-<li>applying a function to every row of a table using dplyr</li>
-<li>dplyr rowwise</li>
-</ul>
-<pre class="r"><code># Define Implicit Function
-ffi_linear_dplyrdo &lt;- function(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha){
+ffi_linear_hardcode &lt;- function(ar_A_alpha){
   # ar_A_alpha[1] is A
   # ar_A_alpha[2] is alpha
 
-  print(paste0(&#39;cur row, fl_A=&#39;, fl_A, &#39;, fl_alpha=&#39;, fl_alpha))
-  fl_out = sum(fl_A*ar_nN_A + 1/(fl_alpha + 1/ar_nN_alpha))
+  fl_out = sum(ar_A_alpha[1]*ar_nN_A +
+                 1/(ar_A_alpha[2] + 1/ar_nN_alpha))
 
   return(fl_out)
 }
 
-# Evaluate function row by row of tibble
-# fl_A, fl_alpha are from columns of tb_nN_by_nQ_A_alpha
-tb_nN_by_nQ_A_alpha_show &lt;- tb_nN_by_nQ_A_alpha %&gt;%
-  rowwise() %&gt;%
-  mutate(dplyr_eval =
-           ffi_linear_dplyrdo(fl_A, fl_alpha, ar_nN_A, ar_nN_alpha))</code></pre>
-<pre><code>## [1] &quot;cur row, fl_A=-2, fl_alpha=0.1&quot;
-## [1] &quot;cur row, fl_A=-1, fl_alpha=0.3&quot;
-## [1] &quot;cur row, fl_A=0, fl_alpha=0.5&quot;
-## [1] &quot;cur row, fl_A=1, fl_alpha=0.7&quot;
-## [1] &quot;cur row, fl_A=2, fl_alpha=0.9&quot;</code></pre>
-<pre class="r"><code># Show
-kable(tb_nN_by_nQ_A_alpha_show) %&gt;%
-  kable_styling_fc()</code></pre>
+# Evaluate function row by row
+ar_func_apply = apply(mt_nN_by_nQ_A_alpha, 1, ffi_linear_hardcode)</code></pre>
+</div>
+<div id="anonymous-function" class="section level3" number="1.2.2">
+<h3 number="1.2.2"><span class="header-section-number">1.2.2</span> Anonymous Function</h3>
+<ul>
+<li>apply over matrix</li>
+</ul>
+<p>Apply with anonymous function generating a list of arrays of different lengths. In the example below, we want to drawn <span class="math inline">\(N\)</span> sets of random uniform numbers, but for each set the number of draws we want to have is <span class="math inline">\(Q_i\)</span>. Furthermore, we want to rescale the random uniform draws so that they all become proportions that sum u pto one for each <span class="math inline">\(i\)</span>, but then we multply each row’s values by the row specific aggregates.</p>
+<p>The anonymous function has hard coded parameters. Using an anonymous function here allows for parameters to be provided inside the function that are shared across each looped evaluation. This is perhaps more convenient than sapply with additional parameters.</p>
+<pre class="r"><code>set.seed(1039)
+
+# Define the number of draws each row and total amount
+it_N &lt;- 4
+fl_unif_min &lt;- 1
+fl_unif_max &lt;- 2
+mt_draw_define &lt;- cbind(sample(it_N, it_N, replace=TRUE),
+                        runif(it_N, min=1, max=10))
+tb_draw_define &lt;- as_tibble(mt_draw_define) %&gt;%
+  rowid_to_column(var = &quot;draw_group&quot;)
+print(tb_draw_define)
+
+# apply row by row, anonymous function has hard
+# coded min and max
+ls_ar_draws_shares_lvls =
+  apply(tb_draw_define,
+        1,
+        function(row) {
+          it_draw &lt;- row[2]
+          fl_sum &lt;- row[3]
+          ar_unif &lt;- runif(it_draw,
+                           min=fl_unif_min,
+                           max=fl_unif_max)
+          ar_share &lt;- ar_unif/sum(ar_unif)
+          ar_levels &lt;- ar_share*fl_sum
+          return(list(ar_share=ar_share,
+                      ar_levels=ar_levels))
+        })
+
+# Show Results
+print(ls_ar_draws_shares_lvls)</code></pre>
+<pre><code>## [[1]]
+## [[1]]$ar_share
+## [1] 0.2783638 0.2224140 0.2797840 0.2194381
+## 
+## [[1]]$ar_levels
+## [1] 1.492414 1.192446 1.500028 1.176491
+## 
+## 
+## [[2]]
+## [[2]]$ar_share
+## [1] 0.5052919 0.4947081
+## 
+## [[2]]$ar_levels
+## [1] 3.866528 3.785541
+## 
+## 
+## [[3]]
+## [[3]]$ar_share
+## [1] 1
+## 
+## [[3]]$ar_levels
+##       V2 
+## 9.572211 
+## 
+## 
+## [[4]]
+## [[4]]$ar_share
+## [1] 0.4211426 0.2909812 0.2878762
+## 
+## [[4]]$ar_levels
+## [1] 4.051971 2.799640 2.769765</code></pre>
+<p>We will try to do the same thing as above, but now the output will be a stacked dataframe. Note that within each element of the apply row by row loop, we are generating two variables <em>ar_share</em> and <em>ar_levels</em>. We will not generate a dataframe with multiple columns, storing <em>ar_share</em>, <em>ar_levels</em> as well as information on <em>min</em>, <em>max</em>, number of draws and rescale total sum.</p>
+<pre class="r"><code>set.seed(1039)
+# apply row by row, anonymous function has hard coded min and max
+ls_mt_draws_shares_lvls =
+  apply(tb_draw_define, 1, function(row) {
+
+    it_draw_group &lt;- row[1]
+    it_draw &lt;- row[2]
+    fl_sum &lt;- row[3]
+
+    ar_unif &lt;- runif(it_draw,
+                     min=fl_unif_min,
+                     max=fl_unif_max)
+    ar_share &lt;- ar_unif/sum(ar_unif)
+    ar_levels &lt;- ar_share*fl_sum
+
+    mt_all_res &lt;- cbind(it_draw_group, it_draw, fl_sum,
+                        ar_unif, ar_share, ar_levels)
+    colnames(mt_all_res) &lt;-
+      c(&#39;draw_group&#39;, &#39;draw_count&#39;, &#39;sum&#39;,
+        &#39;unif_draw&#39;, &#39;share&#39;, &#39;rescale&#39;)
+    rownames(mt_all_res) &lt;- NULL
+
+    return(mt_all_res)
+  })
+mt_draws_shares_lvls_all &lt;- do.call(rbind, ls_mt_draws_shares_lvls)
+# Show Results
+kable(mt_draws_shares_lvls_all) %&gt;% kable_styling_fc()</code></pre>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-fl_A
+draw_group
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-fl_alpha
+draw_count
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-dplyr_eval
+sum
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+unif_draw
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+share
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+rescale
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:right;">
--2
+1
 </td>
 <td style="text-align:right;">
-0.1
+4
 </td>
 <td style="text-align:right;">
-2.346356
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
--1
+5.361378
 </td>
 <td style="text-align:right;">
-0.3
+1.125668
 </td>
 <td style="text-align:right;">
-2.094273
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0
+0.1988606
 </td>
 <td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-1.895316
+1.066167
 </td>
 </tr>
 <tr>
@@ -2192,86 +2089,19 @@ dplyr_eval
 1
 </td>
 <td style="text-align:right;">
-0.7
+4
 </td>
 <td style="text-align:right;">
-1.733708
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
+5.361378
 </td>
 <td style="text-align:right;">
-0.9
+1.668536
 </td>
 <td style="text-align:right;">
-1.599477
-</td>
-</tr>
-</tbody>
-</table>
-<p>same as before, still rowwise, but hard code some inputs:</p>
-<pre class="r"><code># Define function, fixed inputs are not parameters, but
-# defined earlier as a part of the function
-# ar_nN_A, ar_nN_alpha are fixed, not parameters
-ffi_linear_dplyrdo_func &lt;- function(fl_A, fl_alpha){
-  fl_out &lt;- sum(fl_A*ar_nN_A + 1/(fl_alpha + 1/ar_nN_alpha))
-  return(fl_out)
-}
-
-# Evaluate function row by row of tibble
-tbfunc_A_nN_by_nQ_A_alpha_rowwise = tb_nN_by_nQ_A_alpha %&gt;% rowwise() %&gt;%
-  mutate(dplyr_eval = ffi_linear_dplyrdo_func(fl_A, fl_alpha))
-# Show
-kable(tbfunc_A_nN_by_nQ_A_alpha_rowwise) %&gt;%
-  kable_styling_fc()</code></pre>
-<table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-fl_A
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-fl_alpha
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-dplyr_eval
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
--2
+0.2947638
 </td>
 <td style="text-align:right;">
-0.1
-</td>
-<td style="text-align:right;">
-2.346356
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
--1
-</td>
-<td style="text-align:right;">
-0.3
-</td>
-<td style="text-align:right;">
-2.094273
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-1.895316
+1.580340
 </td>
 </tr>
 <tr>
@@ -2279,10 +2109,39 @@ dplyr_eval
 1
 </td>
 <td style="text-align:right;">
-0.7
+4
 </td>
 <td style="text-align:right;">
-1.733708
+5.361378
+</td>
+<td style="text-align:right;">
+1.419382
+</td>
+<td style="text-align:right;">
+0.2507483
+</td>
+<td style="text-align:right;">
+1.344356
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+5.361378
+</td>
+<td style="text-align:right;">
+1.447001
+</td>
+<td style="text-align:right;">
+0.2556274
+</td>
+<td style="text-align:right;">
+1.370515
 </td>
 </tr>
 <tr>
@@ -2290,285 +2149,233 @@ dplyr_eval
 2
 </td>
 <td style="text-align:right;">
-0.9
+2
 </td>
 <td style="text-align:right;">
-1.599477
+7.652069
+</td>
+<td style="text-align:right;">
+1.484598
+</td>
+<td style="text-align:right;">
+0.4605236
+</td>
+<td style="text-align:right;">
+3.523959
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+7.652069
+</td>
+<td style="text-align:right;">
+1.739119
+</td>
+<td style="text-align:right;">
+0.5394764
+</td>
+<td style="text-align:right;">
+4.128110
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+9.572211
+</td>
+<td style="text-align:right;">
+1.952468
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+9.572211
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+9.621375
+</td>
+<td style="text-align:right;">
+1.957931
+</td>
+<td style="text-align:right;">
+0.3609352
+</td>
+<td style="text-align:right;">
+3.472693
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+9.621375
+</td>
+<td style="text-align:right;">
+1.926995
+</td>
+<td style="text-align:right;">
+0.3552324
+</td>
+<td style="text-align:right;">
+3.417824
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+9.621375
+</td>
+<td style="text-align:right;">
+1.539678
+</td>
+<td style="text-align:right;">
+0.2838324
+</td>
+<td style="text-align:right;">
+2.730858
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<div id="mutate-with-pmap" class="section level2" number="1.4">
-<h2 number="1.4"><span class="header-section-number">1.4</span> Mutate with pmap</h2>
-<p>Apparantly <em>rowwise()</em> is not a good idea, and <em>pmap</em> should be used, below is the <em>pmap</em> solution to the problem. Which does seem nicer. Crucially, don’t have to define input parameter names, automatically I think they are matching up to the names in the function</p>
+</div>
+<div id="using-sapply" class="section level2" number="1.3">
+<h2 number="1.3"><span class="header-section-number">1.3</span> Using sapply</h2>
+<div id="named-function-1" class="section level3" number="1.3.1">
+<h3 number="1.3.1"><span class="header-section-number">1.3.1</span> Named Function</h3>
 <ul>
-<li>dplyr mutate pass function</li>
-<li>r function quosure string multiple</li>
-<li>r function multiple parameters as one string</li>
-<li>dplyr mutate anonymous function</li>
-<li>quosure style lambda</li>
-<li>pmap tibble rows</li>
-<li>dplyr pwalk</li>
+<li>r convert matrix to list</li>
+<li>Convert a matrix to a list of vectors in R</li>
 </ul>
-<pre class="r"><code># Define function, fixed inputs are not parameters, but defined
-# earlier as a part of the function Rorate fl_alpha and fl_A name
-# compared to before to make sure pmap tracks by names
-ffi_linear_dplyrdo_func &lt;- function(fl_alpha, fl_A){
-  fl_out &lt;- sum(fl_A*ar_nN_A + 1/(fl_alpha + 1/ar_nN_alpha))
+<p>Sapply allows us to not have tohard code in the A and alpha arrays. But Sapply works over List or Vector, not Matrix. So we have to convert the <span class="math inline">\(N\)</span> by <span class="math inline">\(Q\)</span> matrix to a N element list Now update the function with sapply.</p>
+<pre class="r"><code>ls_ar_nN_by_nQ_A_alpha = as.list(data.frame(t(mt_nN_by_nQ_A_alpha)))
+
+# Define Implicit Function
+ffi_linear_sapply &lt;- function(ar_A_alpha, ar_A, ar_alpha){
+  # ar_A_alpha[1] is A
+  # ar_A_alpha[2] is alpha
+
+  fl_out = sum(ar_A_alpha[1]*ar_nN_A +
+                 1/(ar_A_alpha[2] + 1/ar_nN_alpha))
+
   return(fl_out)
 }
 
-# Evaluate a function row by row of dataframe, generate list,
-# then to vector
-tb_nN_by_nQ_A_alpha %&gt;% pmap(ffi_linear_dplyrdo_func) %&gt;% unlist()</code></pre>
-<pre><code>## [1] 2.346356 2.094273 1.895316 1.733708 1.599477</code></pre>
-<pre class="r"><code># Same as above, but in line line and save output as new column
-# in dataframe note this ONLY works if the tibble only has variables
-# that are inputs for the function if tibble contains additional
-#  variables, those should be droppd, or only the ones needed selected,
-# inside the pmap call below.
-tbfunc_A_nN_by_nQ_A_alpha_pmap &lt;- tb_nN_by_nQ_A_alpha %&gt;%
-  mutate(dplyr_eval_pmap =
-           unlist(
-             pmap(tb_nN_by_nQ_A_alpha, ffi_linear_dplyrdo_func)
-           )
-  )
-
-# Show
-kable(tbfunc_A_nN_by_nQ_A_alpha_pmap) %&gt;%
-  kable_styling_fc()</code></pre>
-<table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-fl_A
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-fl_alpha
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-dplyr_eval_pmap
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
--2
-</td>
-<td style="text-align:right;">
-0.1
-</td>
-<td style="text-align:right;">
-2.346356
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
--1
-</td>
-<td style="text-align:right;">
-0.3
-</td>
-<td style="text-align:right;">
-2.094273
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-1.895316
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.7
-</td>
-<td style="text-align:right;">
-1.733708
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.9
-</td>
-<td style="text-align:right;">
-1.599477
-</td>
-</tr>
-</tbody>
-</table>
+# Evaluate function row by row
+ar_func_sapply = sapply(ls_ar_nN_by_nQ_A_alpha, ffi_linear_sapply,
+                        ar_A=ar_nN_A, ar_alpha=ar_nN_alpha)</code></pre>
 </div>
-<div id="rowwise-three-input-types" class="section level2" number="1.5">
-<h2 number="1.5"><span class="header-section-number">1.5</span> Rowwise Three Input Types</h2>
-<p>Now, we have three types of parameters, for something like a bisection type calculation. We will supply the program with a function with some hard-coded value inside, and as parameters, we will have one parameter which is a row in the current matrix, and another parameter which is a sclar values. The three types of parameters are dealt with sparately:</p>
-<ol style="list-style-type: decimal">
-<li>parameters that are fixed for all bisection iterations, but differ for each row</li>
-</ol>
+<div id="anonymous-function-1" class="section level3" number="1.3.2">
+<h3 number="1.3.2"><span class="header-section-number">1.3.2</span> Anonymous Function</h3>
 <ul>
-<li>these are hard-coded into the function</li>
+<li>sapply anonymous function</li>
+<li>r anoymous function multiple lines</li>
 </ul>
-<ol start="2" style="list-style-type: decimal">
-<li>parameters that are fixed for all bisection iterations, but are shared across rows</li>
-</ol>
-<ul>
-<li>these are the first parameter of the function, a list</li>
-</ul>
-<ol start="3" style="list-style-type: decimal">
-<li>parameters that differ for each iteration, but differ acoss iterations</li>
-</ol>
-<ul>
-<li><p>second scalar value parameter for the function</p></li>
-<li><p>dplyr mutate function applow to each row dot notation</p></li>
-<li><p>note <a href="https://community.rstudio.com/t/dplyr-alternatives-to-rowwise/8071">rowwise might be bad</a> according to Hadley, should use pmap?</p></li>
-</ul>
-<pre class="r"><code>ffi_linear_dplyrdo_fdot &lt;- function(ls_row, fl_param){
-  # Type 1 Param = ar_nN_A, ar_nN_alpha
-  # Type 2 Param = ls_row$fl_A, ls_row$fl_alpha
-  # Type 3 Param = fl_param
+<p>Sapply with anonymous function generating a list of arrays of different lengths. In the example below, we want to drawn <span class="math inline">\(N\)</span> sets of random uniform numbers, but for each set the number of draws we want to have is <span class="math inline">\(Q_i\)</span>. Furthermore, we want to rescale the random uniform draws so that they all become proportions that sum u pto one for each <span class="math inline">\(i\)</span>.</p>
+<pre class="r"><code>it_N &lt;- 4
+fl_unif_min &lt;- 1
+fl_unif_max &lt;- 2
 
-  fl_out &lt;- (sum(ls_row$fl_A*ar_nN_A +
-                   1/(ls_row$fl_alpha + 1/ar_nN_alpha))) + fl_param
-  return(fl_out)
-}
-
-cur_func &lt;- ffi_linear_dplyrdo_fdot
-fl_param &lt;- 0
-dplyr_eval_flex &lt;- tb_nN_by_nQ_A_alpha %&gt;% rowwise() %&gt;%
-  do(dplyr_eval_flex = cur_func(., fl_param)) %&gt;%
-  unnest(dplyr_eval_flex)
-tbfunc_B_nN_by_nQ_A_alpha &lt;- tb_nN_by_nQ_A_alpha %&gt;% add_column(dplyr_eval_flex)
-# Show
-kable(tbfunc_B_nN_by_nQ_A_alpha) %&gt;%
-  kable_styling_fc()</code></pre>
-<table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-fl_A
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-fl_alpha
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-dplyr_eval_flex
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
--2
-</td>
-<td style="text-align:right;">
-0.1
-</td>
-<td style="text-align:right;">
-2.346356
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
--1
-</td>
-<td style="text-align:right;">
-0.3
-</td>
-<td style="text-align:right;">
-2.094273
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-1.895316
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.7
-</td>
-<td style="text-align:right;">
-1.733708
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.9
-</td>
-<td style="text-align:right;">
-1.599477
-</td>
-</tr>
-</tbody>
-</table>
+# Generate using runif without anonymous function
+set.seed(1039)
+ls_ar_draws = sapply(seq(it_N),
+                     runif,
+                     min=fl_unif_min, max=fl_unif_max)
+print(ls_ar_draws)</code></pre>
+<pre><code>## [[1]]
+## [1] 1.125668
+## 
+## [[2]]
+## [1] 1.668536 1.419382
+## 
+## [[3]]
+## [1] 1.447001 1.484598 1.739119
+## 
+## [[4]]
+## [1] 1.952468 1.957931 1.926995 1.539678</code></pre>
+<pre class="r"><code># Generate Using Anonymous Function
+set.seed(1039)
+ls_ar_draws_shares = sapply(seq(it_N),
+                            function(n, min, max) {
+                              ar_unif &lt;- runif(n,min,max)
+                              ar_share &lt;- ar_unif/sum(ar_unif)
+                              return(ar_share)
+                            },
+                            min=fl_unif_min, max=fl_unif_max)
+# Print Share
+print(ls_ar_draws_shares)</code></pre>
+<pre><code>## [[1]]
+## [1] 1
+## 
+## [[2]]
+## [1] 0.5403432 0.4596568
+## 
+## [[3]]
+## [1] 0.3098027 0.3178522 0.3723451
+## 
+## [[4]]
+## [1] 0.2646671 0.2654076 0.2612141 0.2087113</code></pre>
+<pre class="r"><code># Sapply with anonymous function to check sums
+sapply(seq(it_N), function(x) {sum(ls_ar_draws[[x]])})</code></pre>
+<pre><code>## [1] 1.125668 3.087918 4.670717 7.377071</code></pre>
+<pre class="r"><code>sapply(seq(it_N), function(x) {sum(ls_ar_draws_shares[[x]])})</code></pre>
+<pre><code>## [1] 1 1 1 1</code></pre>
 </div>
-<div id="compare-apply-and-mutate-results" class="section level2" number="1.6">
-<h2 number="1.6"><span class="header-section-number">1.6</span> Compare Apply and Mutate Results</h2>
+</div>
+<div id="compare-results" class="section level2" number="1.4">
+<h2 number="1.4"><span class="header-section-number">1.4</span> Compare Results</h2>
 <pre class="r"><code># Show overall Results
-mt_results &lt;- cbind(tb_nN_by_nQ_A_alpha_show[&#39;dplyr_eval&#39;],
-                    tbfunc_A_nN_by_nQ_A_alpha_rowwise[&#39;dplyr_eval&#39;],
-                    tbfunc_A_nN_by_nQ_A_alpha_pmap[&#39;dplyr_eval_pmap&#39;],
-                    tbfunc_B_nN_by_nQ_A_alpha[&#39;dplyr_eval_flex&#39;],
-                    mt_nN_by_nQ_A_alpha)
-colnames(mt_results) &lt;- c(&#39;eval_dplyr_mutate&#39;,
-                          &#39;eval_dplyr_mutate_hcode&#39;,
-                          &#39;eval_dplyr_mutate_pmap&#39;,
-                          &#39;eval_dplyr_mutate_flex&#39;,
-                          &#39;A_child&#39;, &#39;alpha_child&#39;)
+mt_results &lt;- cbind(ar_func_apply, ar_func_sapply)
+colnames(mt_results) &lt;- c(&#39;eval_lin_apply&#39;, &#39;eval_lin_sapply&#39;)
 kable(mt_results) %&gt;%
   kable_styling_fc_wide()</code></pre>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-eval_dplyr_mutate
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-eval_dplyr_mutate_hcode
+eval_lin_apply
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-eval_dplyr_mutate_pmap
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-eval_dplyr_mutate_flex
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-A_child
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-alpha_child
+eval_lin_sapply
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:right;">
-2.346356
+<td style="text-align:left;">
+X1
 </td>
 <td style="text-align:right;">
 2.346356
@@ -2576,19 +2383,10 @@ alpha_child
 <td style="text-align:right;">
 2.346356
 </td>
-<td style="text-align:right;">
-2.346356
-</td>
-<td style="text-align:right;">
--2
-</td>
-<td style="text-align:right;">
-0.1
-</td>
 </tr>
 <tr>
-<td style="text-align:right;">
-2.094273
+<td style="text-align:left;">
+X2
 </td>
 <td style="text-align:right;">
 2.094273
@@ -2596,74 +2394,38 @@ alpha_child
 <td style="text-align:right;">
 2.094273
 </td>
-<td style="text-align:right;">
-2.094273
+</tr>
+<tr>
+<td style="text-align:left;">
+X3
 </td>
 <td style="text-align:right;">
--1
+1.895316
 </td>
 <td style="text-align:right;">
-0.3
+1.895316
 </td>
 </tr>
 <tr>
-<td style="text-align:right;">
-1.895316
+<td style="text-align:left;">
+X4
 </td>
 <td style="text-align:right;">
-1.895316
+1.733708
 </td>
 <td style="text-align:right;">
-1.895316
-</td>
-<td style="text-align:right;">
-1.895316
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.5
+1.733708
 </td>
 </tr>
 <tr>
-<td style="text-align:right;">
-1.733708
-</td>
-<td style="text-align:right;">
-1.733708
-</td>
-<td style="text-align:right;">
-1.733708
-</td>
-<td style="text-align:right;">
-1.733708
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.7
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.599477
+<td style="text-align:left;">
+X5
 </td>
 <td style="text-align:right;">
 1.599477
 </td>
 <td style="text-align:right;">
 1.599477
-</td>
-<td style="text-align:right;">
-1.599477
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.9
 </td>
 </tr>
 </tbody>
