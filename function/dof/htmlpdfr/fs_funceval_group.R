@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE-------------------------------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ----large df------------------------------------------------------------------------------------------------------------------------------------------
+## ----large df-----------------------------------------------------------------------------------------------------------------------
 # Parameter Setups
 it_M <- 10
 it_Q_max <- 10000
@@ -17,7 +17,7 @@ tb_M <- as_tibble(mt_data) %>% rowid_to_column(var = "ID") %>%
                 mutate(mean = fl_rnorm_mu)
 
 
-## ------------------------------------------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------------
 # A. Normal Draw Expansion, Explicitly Name
 set.seed('123')
 tb_income_norm_dot_dollar <- tb_M %>% group_by(ID) %>%
@@ -49,19 +49,17 @@ tb_income_norm_dot_bracket_db <- tb_M %>% group_by(ID) %>%
   left_join(tb_M, by="ID")
 
 # display
-sum(sum(tb_income_norm_dollar_dot - tb_income_norm_dot_dollar - tb_income_norm_dot_bracket_db))
-# display
-head(tb_income_norm_dot_dollar, 20)
+print(dim(tb_income_norm_dot_bracket_db))
+kable(head(tb_income_norm_dot_bracket_db, 20)) %>% kable_styling_fc()
 
 
-## ------------------------------------------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------------
 # Gini by Group
-tb_gini_norm <- tb_income_norm_dollar_dot %>% group_by(ID) %>%
+tb_gini_norm <- tb_income_norm_dot_bracket_db %>% group_by(ID) %>%
   do(inc_gini_norm = ff_dist_gini_vector_pos(.$income)) %>%
   unnest(c(inc_gini_norm)) %>%
   left_join(tb_M, by="ID")
 
 # display
-kable(tb_gini_norm) %>%
-  kable_styling_fc()
+kable(tb_gini_norm) %>% kable_styling_fc()
 

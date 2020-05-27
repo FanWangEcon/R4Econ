@@ -30,7 +30,7 @@ Modify markdown pounds hierarchy.</p>" />
 <meta name="author" content="Fan Wang" />
 
 
-<meta name="date" content="2020-05-16" />
+<meta name="date" content="2020-05-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -210,12 +210,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.2" data-path="functions.html"><a href="functions.html#dataframe-do-anything"><i class="fa fa-check"></i><b>3.2</b> Dataframe Do Anything</a>
 <ul>
-<li class="chapter" data-level="3.2.1" data-path="functions.html"><a href="functions.html#mxq-to-mxp-rows"><i class="fa fa-check"></i><b>3.2.1</b> MxQ to MxP Rows</a></li>
-<li class="chapter" data-level="3.2.2" data-path="functions.html"><a href="functions.html#mx1-to-mxq-rows"><i class="fa fa-check"></i><b>3.2.2</b> Mx1 to MxQ Rows</a></li>
+<li class="chapter" data-level="3.2.1" data-path="functions.html"><a href="functions.html#mx1-by-n-to-mxq-by-n1"><i class="fa fa-check"></i><b>3.2.1</b> (Mx1 by N) to (MxQ by N+1)</a></li>
+<li class="chapter" data-level="3.2.2" data-path="functions.html"><a href="functions.html#mxp-by-n-to-mx1-by-1"><i class="fa fa-check"></i><b>3.2.2</b> (MxP by N) to (Mx1 by 1)</a></li>
+<li class="chapter" data-level="3.2.3" data-path="functions.html"><a href="functions.html#mxp-by-n-to-mxq-by-nz"><i class="fa fa-check"></i><b>3.2.3</b> (MxP by N) to (MxQ by N+Z)</a></li>
 </ul></li>
 <li class="chapter" data-level="3.3" data-path="functions.html"><a href="functions.html#apply-and-pmap"><i class="fa fa-check"></i><b>3.3</b> Apply and pmap</a>
 <ul>
-<li class="chapter" data-level="3.3.1" data-path="functions.html"><a href="functions.html#apply-sapply-mutate"><i class="fa fa-check"></i><b>3.3.1</b> Apply, Sapply, Mutate</a></li>
+<li class="chapter" data-level="3.3.1" data-path="functions.html"><a href="functions.html#apply-and-sapply"><i class="fa fa-check"></i><b>3.3.1</b> Apply and Sapply</a></li>
+<li class="chapter" data-level="3.3.2" data-path="functions.html"><a href="functions.html#mutate-evaluate-functions"><i class="fa fa-check"></i><b>3.3.2</b> Mutate Evaluate Functions</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="panel.html"><a href="panel.html"><i class="fa fa-check"></i><b>4</b> Panel</a>
@@ -2925,11 +2927,12 @@ NaN
 <div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb179-1"><a href="summarize-data.html#cb179-1"></a><span class="kw">dim</span>(df.avg.allvars.wide)</span></code></pre></div>
 <pre><code>## [1] 2023   38</code></pre>
 <div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb181-1"><a href="summarize-data.html#cb181-1"></a><span class="kw">names</span>(df.avg.allvars.wide)</span></code></pre></div>
-<pre><code>##  [1] &quot;S.country&quot;      &quot;indi.id&quot;        &quot;cal_m12_c1&quot;     &quot;cal_m12_c2&quot;     &quot;cal_m12t24_c0&quot;  &quot;cal_m12t24_c1&quot;  &quot;cal_m3_c1&quot;      &quot;cal_m3_c2&quot;     
-##  [9] &quot;cal_m3_c3&quot;      &quot;cal_m3_c4&quot;      &quot;cal_m3_c5&quot;      &quot;cal_m3_c6&quot;      &quot;cal_m3_c7&quot;      &quot;cal_m3_c8&quot;      &quot;cal_m6_c1&quot;      &quot;cal_m6_c2&quot;     
-## [17] &quot;cal_m6_c3&quot;      &quot;cal_m6_c4&quot;      &quot;cal_m8t24_c0&quot;   &quot;cal_m8t24_c1&quot;   &quot;prot_m12_c1&quot;    &quot;prot_m12_c2&quot;    &quot;prot_m12t24_c0&quot; &quot;prot_m12t24_c1&quot;
-## [25] &quot;prot_m3_c1&quot;     &quot;prot_m3_c2&quot;     &quot;prot_m3_c3&quot;     &quot;prot_m3_c4&quot;     &quot;prot_m3_c5&quot;     &quot;prot_m3_c6&quot;     &quot;prot_m3_c7&quot;     &quot;prot_m3_c8&quot;    
-## [33] &quot;prot_m6_c1&quot;     &quot;prot_m6_c2&quot;     &quot;prot_m6_c3&quot;     &quot;prot_m6_c4&quot;     &quot;prot_m8t24_c0&quot;  &quot;prot_m8t24_c1&quot;</code></pre>
+<pre><code>##  [1] &quot;S.country&quot;      &quot;indi.id&quot;        &quot;cal_m12_c1&quot;     &quot;cal_m12_c2&quot;     &quot;cal_m12t24_c0&quot;  &quot;cal_m12t24_c1&quot;  &quot;cal_m3_c1&quot;     
+##  [8] &quot;cal_m3_c2&quot;      &quot;cal_m3_c3&quot;      &quot;cal_m3_c4&quot;      &quot;cal_m3_c5&quot;      &quot;cal_m3_c6&quot;      &quot;cal_m3_c7&quot;      &quot;cal_m3_c8&quot;     
+## [15] &quot;cal_m6_c1&quot;      &quot;cal_m6_c2&quot;      &quot;cal_m6_c3&quot;      &quot;cal_m6_c4&quot;      &quot;cal_m8t24_c0&quot;   &quot;cal_m8t24_c1&quot;   &quot;prot_m12_c1&quot;   
+## [22] &quot;prot_m12_c2&quot;    &quot;prot_m12t24_c0&quot; &quot;prot_m12t24_c1&quot; &quot;prot_m3_c1&quot;     &quot;prot_m3_c2&quot;     &quot;prot_m3_c3&quot;     &quot;prot_m3_c4&quot;    
+## [29] &quot;prot_m3_c5&quot;     &quot;prot_m3_c6&quot;     &quot;prot_m3_c7&quot;     &quot;prot_m3_c8&quot;     &quot;prot_m6_c1&quot;     &quot;prot_m6_c2&quot;     &quot;prot_m6_c3&quot;    
+## [36] &quot;prot_m6_c4&quot;     &quot;prot_m8t24_c0&quot;  &quot;prot_m8t24_c1&quot;</code></pre>
 <div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb183-1"><a href="summarize-data.html#cb183-1"></a>df.avg.allvars.wide[<span class="dv">1</span><span class="op">:</span><span class="dv">20</span>,] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling_fc_wide</span>()</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">

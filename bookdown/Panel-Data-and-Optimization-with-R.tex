@@ -144,7 +144,7 @@
 
 \title{Panel Data and Optimization with R}
 \author{Fan Wang}
-\date{2020-05-16}
+\date{2020-05-27}
 
 \begin{document}
 \maketitle
@@ -762,6 +762,41 @@ Get last two elements of array.
 ## [1]  1 -1 NA 10 NA
 \end{verbatim}
 
+\hypertarget{notations}{%
+\subsubsection{Notations}\label{notations}}
+
+\hypertarget{e-notation}{%
+\paragraph{e notation}\label{e-notation}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Case one: \emph{1.149946e+00}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    this is approximately: 1.14995
+  \end{itemize}
+\item
+  Case two: \emph{9.048038e-01}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    this is approximately: 0.90480
+  \end{itemize}
+\item
+  Case three: \emph{9.048038e-01}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    this is approximately: 0.90480
+  \end{itemize}
+\end{enumerate}
+
 \hypertarget{generate-arrays}{%
 \subsection{Generate Arrays}\label{generate-arrays}}
 
@@ -1005,11 +1040,11 @@ From path, get file name without suffix.
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{st\_example \textless{}{-}}\StringTok{ \textquotesingle{}C:/Users/fan/R4Econ/amto/tibble/fs\_tib\_basics.Rmd\textquotesingle{}}
-\NormalTok{st\_file\_wth\_suffix \textless{}{-}}\StringTok{ }\KeywordTok{tail}\NormalTok{(}\KeywordTok{strsplit}\NormalTok{(st\_example, }\StringTok{"/"}\NormalTok{)[[}\DecValTok{1}\NormalTok{]],}\DataTypeTok{n=}\DecValTok{1}\NormalTok{)}
-\NormalTok{st\_file\_wno\_suffix \textless{}{-}}\StringTok{ }\KeywordTok{sub}\NormalTok{(}\StringTok{\textquotesingle{}}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.Rmd$\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{, }\KeywordTok{basename}\NormalTok{(st\_example))}
-\NormalTok{st\_fullpath\_nosufx \textless{}{-}}\StringTok{ }\KeywordTok{sub}\NormalTok{(}\StringTok{\textquotesingle{}}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.Rmd$\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{, st\_example)}
-\NormalTok{st\_lastpath\_noname \textless{}{-}}\StringTok{ }\NormalTok{(}\KeywordTok{dirname}\NormalTok{(st\_example))}
-\NormalTok{st\_fullpath\_noname \textless{}{-}}\StringTok{ }\KeywordTok{dirname}\NormalTok{(st\_example)}
+\NormalTok{st\_file\_wth\_suffix\_s \textless{}{-}}\StringTok{ }\KeywordTok{tail}\NormalTok{(}\KeywordTok{strsplit}\NormalTok{(st\_example, }\StringTok{"/"}\NormalTok{)[[}\DecValTok{1}\NormalTok{]],}\DataTypeTok{n=}\DecValTok{1}\NormalTok{)}
+\NormalTok{st\_file\_wno\_suffix\_s \textless{}{-}}\StringTok{ }\KeywordTok{sub}\NormalTok{(}\StringTok{\textquotesingle{}}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.Rmd$\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{, }\KeywordTok{basename}\NormalTok{(st\_example))}
+\NormalTok{st\_fullpath\_nosufx\_s \textless{}{-}}\StringTok{ }\KeywordTok{sub}\NormalTok{(}\StringTok{\textquotesingle{}}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.Rmd$\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{, st\_example)}
+\NormalTok{st\_lastpath\_noname\_s \textless{}{-}}\StringTok{ }\NormalTok{(}\KeywordTok{dirname}\NormalTok{(st\_example))}
+\NormalTok{st\_fullpath\_noname\_s \textless{}{-}}\StringTok{ }\KeywordTok{dirname}\NormalTok{(st\_example)}
 
 \KeywordTok{print}\NormalTok{(}\KeywordTok{strsplit}\NormalTok{(st\_example, }\StringTok{"/"}\NormalTok{))}
 \end{Highlighting}
@@ -1017,12 +1052,13 @@ From path, get file name without suffix.
 
 \begin{verbatim}
 ## [[1]]
-## [1] "C:"                "Users"             "fan"               "R4Econ"            "amto"              "tibble"            "fs_tib_basics.Rmd"
+## [1] "C:"                "Users"             "fan"               "R4Econ"            "amto"              "tibble"           
+## [7] "fs_tib_basics.Rmd"
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{print}\NormalTok{(st\_file\_wth\_suffix)}
+\KeywordTok{print}\NormalTok{(st\_file\_wth\_suffix\_s)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1032,7 +1068,7 @@ From path, get file name without suffix.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{print}\NormalTok{(st\_file\_wno\_suffix)}
+\KeywordTok{print}\NormalTok{(st\_file\_wno\_suffix\_s)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1042,7 +1078,7 @@ From path, get file name without suffix.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{print}\NormalTok{(st\_fullpath\_nosufx)}
+\KeywordTok{print}\NormalTok{(st\_fullpath\_nosufx\_s)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1052,7 +1088,7 @@ From path, get file name without suffix.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{print}\NormalTok{(st\_lastpath\_noname)}
+\KeywordTok{print}\NormalTok{(st\_lastpath\_noname\_s)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1062,7 +1098,7 @@ From path, get file name without suffix.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{print}\NormalTok{(st\_fullpath\_noname)}
+\KeywordTok{print}\NormalTok{(st\_fullpath\_noname\_s)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1114,9 +1150,9 @@ Note \emph{expand\_grid} is a from tidyr 1.0.0.
 \NormalTok{fl\_lambda =}\StringTok{ }\FloatTok{1.1}
 \NormalTok{mt\_nP\_A\_alpha =}\StringTok{ }\KeywordTok{cbind}\NormalTok{(ar\_nN\_A, ar\_nN\_alpha, fl\_rho, fl\_lambda)}
 \NormalTok{ar\_st\_varnames \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{\textquotesingle{}s\_A\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}s\_alpha\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}p\_rho\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}p\_lambda\textquotesingle{}}\NormalTok{)}
-\NormalTok{tb\_states\_endo \textless{}{-}}\StringTok{ }\KeywordTok{as\_tibble}\NormalTok{(mt\_nP\_A\_alpha) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
-\StringTok{  }\KeywordTok{rename\_all}\NormalTok{(}\OperatorTok{\textasciitilde{}}\KeywordTok{c}\NormalTok{(ar\_st\_varnames)) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
-\StringTok{  }\KeywordTok{rowid\_to\_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"state\_id"}\NormalTok{) }
+\NormalTok{tb\_states\_endo \textless{}{-}}\StringTok{ }\KeywordTok{as\_tibble}\NormalTok{(mt\_nP\_A\_alpha) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{rename\_all}\NormalTok{(}\OperatorTok{\textasciitilde{}}\KeywordTok{c}\NormalTok{(ar\_st\_varnames)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{rowid\_to\_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"state\_id"}\NormalTok{)}
 
 \CommentTok{\# B. Choice Grid}
 \NormalTok{it\_N\_choice\_cnt =}\StringTok{ }\DecValTok{3}
@@ -1124,28 +1160,28 @@ Note \emph{expand\_grid} is a from tidyr 1.0.0.
 \NormalTok{fl\_min =}\StringTok{ }\DecValTok{0}
 \NormalTok{ar\_nN\_d =}\StringTok{ }\KeywordTok{seq}\NormalTok{(fl\_min, fl\_max, }\DataTypeTok{length.out =}\NormalTok{ it\_N\_choice\_cnt)}
 \NormalTok{ar\_st\_varnames \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{\textquotesingle{}c\_food\textquotesingle{}}\NormalTok{)}
-\NormalTok{tb\_choices \textless{}{-}}\StringTok{ }\KeywordTok{as\_tibble}\NormalTok{(ar\_nN\_d) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
-\StringTok{  }\KeywordTok{rename\_all}\NormalTok{(}\OperatorTok{\textasciitilde{}}\KeywordTok{c}\NormalTok{(ar\_st\_varnames)) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
-\StringTok{  }\KeywordTok{rowid\_to\_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"choice\_id"}\NormalTok{) }
+\NormalTok{tb\_choices \textless{}{-}}\StringTok{ }\KeywordTok{as\_tibble}\NormalTok{(ar\_nN\_d) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{rename\_all}\NormalTok{(}\OperatorTok{\textasciitilde{}}\KeywordTok{c}\NormalTok{(ar\_st\_varnames)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{rowid\_to\_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"choice\_id"}\NormalTok{)}
 
 \CommentTok{\# C. Shock Grid}
 \KeywordTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
 \NormalTok{it\_N\_shock\_cnt =}\StringTok{ }\DecValTok{4}
 \NormalTok{ar\_nQ\_shocks =}\StringTok{ }\KeywordTok{exp}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(it\_N\_shock\_cnt, }\DataTypeTok{mean=}\DecValTok{0}\NormalTok{, }\DataTypeTok{sd=}\DecValTok{1}\NormalTok{))}
 \NormalTok{ar\_st\_varnames \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{\textquotesingle{}s\_eps\textquotesingle{}}\NormalTok{)}
-\NormalTok{tb\_states\_exo \textless{}{-}}\StringTok{ }\KeywordTok{as\_tibble}\NormalTok{(ar\_nQ\_shocks) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
-\StringTok{  }\KeywordTok{rename\_all}\NormalTok{(}\OperatorTok{\textasciitilde{}}\KeywordTok{c}\NormalTok{(ar\_st\_varnames)) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
-\StringTok{  }\KeywordTok{rowid\_to\_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"shock\_id"}\NormalTok{) }
+\NormalTok{tb\_states\_exo \textless{}{-}}\StringTok{ }\KeywordTok{as\_tibble}\NormalTok{(ar\_nQ\_shocks) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{rename\_all}\NormalTok{(}\OperatorTok{\textasciitilde{}}\KeywordTok{c}\NormalTok{(ar\_st\_varnames)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{rowid\_to\_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"shock\_id"}\NormalTok{)}
 
 \CommentTok{\# dataframe expand with other non expanded variables}
-\NormalTok{ar\_st\_varnames \textless{}{-}}\StringTok{ }
-\NormalTok{tb\_states\_shk\_choices \textless{}{-}}\StringTok{ }\NormalTok{tb\_states\_endo }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
-\StringTok{  }\KeywordTok{expand\_grid}\NormalTok{(tb\_choices) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
-\StringTok{  }\KeywordTok{expand\_grid}\NormalTok{(tb\_states\_exo) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
-\StringTok{  }\KeywordTok{select}\NormalTok{(state\_id, choice\_id, shock\_id, }
+\NormalTok{ar\_st\_varnames \textless{}{-}}
+\NormalTok{tb\_states\_shk\_choices \textless{}{-}}\StringTok{ }\NormalTok{tb\_states\_endo }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{expand\_grid}\NormalTok{(tb\_choices) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{expand\_grid}\NormalTok{(tb\_states\_exo) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(state\_id, choice\_id, shock\_id,}
 \NormalTok{         s\_A, s\_alpha, s\_eps, c\_food,}
 \NormalTok{         p\_rho, p\_lambda)}
-  
+
 \CommentTok{\# display}
 \KeywordTok{kable}\NormalTok{(tb\_states\_shk\_choices) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{kable\_styling\_fc}\NormalTok{()}
 \end{Highlighting}
@@ -1770,13 +1806,14 @@ Show what is in the table: 1, column and row names; 2, contents inside table.
 \end{Shaded}
 
 \begin{verbatim}
-##   [1] "1"   "2"   "3"   "4"   "5"   "6"   "7"   "8"   "9"   "10"  "11"  "12"  "13"  "14"  "15"  "16"  "17"  "18"  "19"  "20"  "21"  "22"  "23"  "24" 
-##  [25] "25"  "26"  "27"  "28"  "29"  "30"  "31"  "32"  "33"  "34"  "35"  "36"  "37"  "38"  "39"  "40"  "41"  "42"  "43"  "44"  "45"  "46"  "47"  "48" 
-##  [49] "49"  "50"  "51"  "52"  "53"  "54"  "55"  "56"  "57"  "58"  "59"  "60"  "61"  "62"  "63"  "64"  "65"  "66"  "67"  "68"  "69"  "70"  "71"  "72" 
-##  [73] "73"  "74"  "75"  "76"  "77"  "78"  "79"  "80"  "81"  "82"  "83"  "84"  "85"  "86"  "87"  "88"  "89"  "90"  "91"  "92"  "93"  "94"  "95"  "96" 
-##  [97] "97"  "98"  "99"  "100" "101" "102" "103" "104" "105" "106" "107" "108" "109" "110" "111" "112" "113" "114" "115" "116" "117" "118" "119" "120"
-## [121] "121" "122" "123" "124" "125" "126" "127" "128" "129" "130" "131" "132" "133" "134" "135" "136" "137" "138" "139" "140" "141" "142" "143" "144"
-## [145] "145" "146" "147" "148" "149" "150"
+##   [1] "1"   "2"   "3"   "4"   "5"   "6"   "7"   "8"   "9"   "10"  "11"  "12"  "13"  "14"  "15"  "16"  "17"  "18"  "19"  "20"  "21" 
+##  [22] "22"  "23"  "24"  "25"  "26"  "27"  "28"  "29"  "30"  "31"  "32"  "33"  "34"  "35"  "36"  "37"  "38"  "39"  "40"  "41"  "42" 
+##  [43] "43"  "44"  "45"  "46"  "47"  "48"  "49"  "50"  "51"  "52"  "53"  "54"  "55"  "56"  "57"  "58"  "59"  "60"  "61"  "62"  "63" 
+##  [64] "64"  "65"  "66"  "67"  "68"  "69"  "70"  "71"  "72"  "73"  "74"  "75"  "76"  "77"  "78"  "79"  "80"  "81"  "82"  "83"  "84" 
+##  [85] "85"  "86"  "87"  "88"  "89"  "90"  "91"  "92"  "93"  "94"  "95"  "96"  "97"  "98"  "99"  "100" "101" "102" "103" "104" "105"
+## [106] "106" "107" "108" "109" "110" "111" "112" "113" "114" "115" "116" "117" "118" "119" "120" "121" "122" "123" "124" "125" "126"
+## [127] "127" "128" "129" "130" "131" "132" "133" "134" "135" "136" "137" "138" "139" "140" "141" "142" "143" "144" "145" "146" "147"
+## [148] "148" "149" "150"
 \end{verbatim}
 
 \begin{Shaded}
@@ -3584,11 +3621,12 @@ This is the tabular version of results
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] "S.country"      "indi.id"        "cal_m12_c1"     "cal_m12_c2"     "cal_m12t24_c0"  "cal_m12t24_c1"  "cal_m3_c1"      "cal_m3_c2"     
-##  [9] "cal_m3_c3"      "cal_m3_c4"      "cal_m3_c5"      "cal_m3_c6"      "cal_m3_c7"      "cal_m3_c8"      "cal_m6_c1"      "cal_m6_c2"     
-## [17] "cal_m6_c3"      "cal_m6_c4"      "cal_m8t24_c0"   "cal_m8t24_c1"   "prot_m12_c1"    "prot_m12_c2"    "prot_m12t24_c0" "prot_m12t24_c1"
-## [25] "prot_m3_c1"     "prot_m3_c2"     "prot_m3_c3"     "prot_m3_c4"     "prot_m3_c5"     "prot_m3_c6"     "prot_m3_c7"     "prot_m3_c8"    
-## [33] "prot_m6_c1"     "prot_m6_c2"     "prot_m6_c3"     "prot_m6_c4"     "prot_m8t24_c0"  "prot_m8t24_c1"
+##  [1] "S.country"      "indi.id"        "cal_m12_c1"     "cal_m12_c2"     "cal_m12t24_c0"  "cal_m12t24_c1"  "cal_m3_c1"     
+##  [8] "cal_m3_c2"      "cal_m3_c3"      "cal_m3_c4"      "cal_m3_c5"      "cal_m3_c6"      "cal_m3_c7"      "cal_m3_c8"     
+## [15] "cal_m6_c1"      "cal_m6_c2"      "cal_m6_c3"      "cal_m6_c4"      "cal_m8t24_c0"   "cal_m8t24_c1"   "prot_m12_c1"   
+## [22] "prot_m12_c2"    "prot_m12t24_c0" "prot_m12t24_c1" "prot_m3_c1"     "prot_m3_c2"     "prot_m3_c3"     "prot_m3_c4"    
+## [29] "prot_m3_c5"     "prot_m3_c6"     "prot_m3_c7"     "prot_m3_c8"     "prot_m6_c1"     "prot_m6_c2"     "prot_m6_c3"    
+## [36] "prot_m6_c4"     "prot_m8t24_c0"  "prot_m8t24_c1"
 \end{verbatim}
 
 \begin{Shaded}
@@ -4151,8 +4189,13 @@ There is a function that takes \(M=Q+P\) inputs, we want to evaluate this functi
 
 \CommentTok{\# N by Q varying parameters}
 \NormalTok{mt\_nN\_by\_nQ\_A\_alpha =}\StringTok{ }\KeywordTok{cbind}\NormalTok{(ar\_nN\_A, ar\_nN\_alpha, ar\_nN\_N\_choice)}
+
+\CommentTok{\# Convert Matrix to Tibble}
+\NormalTok{ar\_st\_col\_names =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{\textquotesingle{}fl\_A\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}fl\_alpha\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}fl\_N\textquotesingle{}}\NormalTok{)}
+\NormalTok{tb\_nN\_by\_nQ\_A\_alpha \textless{}{-}}\StringTok{ }\KeywordTok{as\_tibble}\NormalTok{(mt\_nN\_by\_nQ\_A\_alpha) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{rename\_all}\NormalTok{(}\OperatorTok{\textasciitilde{}}\KeywordTok{c}\NormalTok{(ar\_st\_col\_names))}
+
 \CommentTok{\# Show}
-\KeywordTok{kable}\NormalTok{(mt\_nN\_by\_nQ\_A\_alpha) }\OperatorTok{\%\textgreater{}\%}
+\KeywordTok{kable}\NormalTok{(tb\_nN\_by\_nQ\_A\_alpha) }\OperatorTok{\%\textgreater{}\%}
 \StringTok{  }\KeywordTok{kable\_styling\_fc}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
@@ -4161,7 +4204,7 @@ There is a function that takes \(M=Q+P\) inputs, we want to evaluate this functi
 \centering
 \begin{tabular}{r|r|r}
 \hline
-ar\_nN\_A & ar\_nN\_alpha & ar\_nN\_N\_choice\\
+fl\_A & fl\_alpha & fl\_N\\
 \hline
 \rowcolor{gray!6}  -2 & 0.1 & 0.0666667\\
 \hline
@@ -4176,8 +4219,65 @@ ar\_nN\_A & ar\_nN\_alpha & ar\_nN\_N\_choice\\
 \end{tabular}
 \end{table}
 
-\hypertarget{testing-function}{%
-\subsubsection{Testing Function}\label{testing-function}}
+\hypertarget{mutate-over-simple-function}{%
+\subsubsection{Mutate over Simple Function}\label{mutate-over-simple-function}}
+
+For this example, use a very simple function with only one type of input, all inputs are scalars.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Define Implicit Function}
+\NormalTok{ffi\_nonlinear \textless{}{-}}\StringTok{ }\ControlFlowTok{function}\NormalTok{(fl\_A, fl\_alpha)\{}
+
+\NormalTok{  fl\_out \textless{}{-}}\StringTok{ }\NormalTok{(fl\_A }\OperatorTok{+}\StringTok{ }\NormalTok{fl\_alpha}\OperatorTok{*}\NormalTok{fl\_A)}\OperatorTok{/}\NormalTok{(fl\_A)}\OperatorTok{\^{}}\DecValTok{2}
+
+  \KeywordTok{return}\NormalTok{(fl\_out)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Apply the function over the dataframe, note five different ways below, the third way allows for parameters to be strings.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# variable names}
+\NormalTok{svr\_fl\_A \textless{}{-}}\StringTok{ \textquotesingle{}fl\_A\textquotesingle{}}
+\NormalTok{svr\_fl\_alpha \textless{}{-}}\StringTok{ \textquotesingle{}fl\_alpha\textquotesingle{}}
+
+\CommentTok{\# Evaluate}
+\NormalTok{tb\_nN\_by\_nQ\_A\_alpha\_mutate\_rows \textless{}{-}}\StringTok{ }\NormalTok{tb\_nN\_by\_nQ\_A\_alpha }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{fl\_out\_m1 =} \KeywordTok{ffi\_nonlinear}\NormalTok{(}\DataTypeTok{fl\_A=}\NormalTok{.}\OperatorTok{$}\NormalTok{fl\_A, }\DataTypeTok{fl\_alpha=}\NormalTok{.}\OperatorTok{$}\NormalTok{fl\_alpha),}
+         \DataTypeTok{fl\_out\_m2 =} \KeywordTok{ffi\_nonlinear}\NormalTok{(}\DataTypeTok{fl\_A=}\StringTok{\textasciigrave{}}\DataTypeTok{$}\StringTok{\textasciigrave{}}\NormalTok{(., }\StringTok{\textquotesingle{}fl\_A\textquotesingle{}}\NormalTok{), }\DataTypeTok{fl\_alpha=}\StringTok{\textasciigrave{}}\DataTypeTok{$}\StringTok{\textasciigrave{}}\NormalTok{(., }\StringTok{\textquotesingle{}fl\_alpha\textquotesingle{}}\NormalTok{)),}
+         \DataTypeTok{fl\_out\_m3 =} \KeywordTok{ffi\_nonlinear}\NormalTok{(}\DataTypeTok{fl\_A=}\NormalTok{.[[svr\_fl\_A]], }\DataTypeTok{fl\_alpha=}\NormalTok{.[[svr\_fl\_alpha]]),}
+         \DataTypeTok{fl\_out\_m4 =} \KeywordTok{ffi\_nonlinear}\NormalTok{(}\DataTypeTok{fl\_A=}\NormalTok{fl\_A, }\DataTypeTok{fl\_alpha=}\NormalTok{fl\_alpha),}
+         \DataTypeTok{fl\_out\_m5 =} \KeywordTok{ffi\_nonlinear}\NormalTok{(fl\_A, fl\_alpha))}
+
+\CommentTok{\# print}
+\KeywordTok{kable}\NormalTok{(tb\_nN\_by\_nQ\_A\_alpha\_mutate\_rows) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{r|r|r|r|r|r|r|r}
+\hline
+fl\_A & fl\_alpha & fl\_N & fl\_out\_m1 & fl\_out\_m2 & fl\_out\_m3 & fl\_out\_m4 & fl\_out\_m5\\
+\hline
+\rowcolor{gray!6}  -2 & 0.1 & 0.0666667 & -0.55 & -0.55 & -0.55 & -0.55 & -0.55\\
+\hline
+-1 & 0.3 & 0.1333333 & -1.30 & -1.30 & -1.30 & -1.30 & -1.30\\
+\hline
+\rowcolor{gray!6}  0 & 0.5 & 0.2000000 & NaN & NaN & NaN & NaN & NaN\\
+\hline
+1 & 0.7 & 0.2666667 & 1.70 & 1.70 & 1.70 & 1.70 & 1.70\\
+\hline
+\rowcolor{gray!6}  2 & 0.9 & 0.3333333 & 0.95 & 0.95 & 0.95 & 0.95 & 0.95\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{testing-function-with-scalar-and-arrays}{%
+\subsubsection{Testing Function with Scalar and Arrays}\label{testing-function-with-scalar-and-arrays}}
 
 Test non-linear Equation.
 
@@ -4270,10 +4370,6 @@ Implement the non-linear problem's evaluation using apply over all \(N\) individ
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# Convert Matrix to Tibble}
-\NormalTok{ar\_st\_col\_names =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{\textquotesingle{}fl\_A\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}fl\_alpha\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}fl\_N\textquotesingle{}}\NormalTok{)}
-\NormalTok{tb\_nN\_by\_nQ\_A\_alpha \textless{}{-}}\StringTok{ }\KeywordTok{as\_tibble}\NormalTok{(mt\_nN\_by\_nQ\_A\_alpha) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{rename\_all}\NormalTok{(}\OperatorTok{\textasciitilde{}}\KeywordTok{c}\NormalTok{(ar\_st\_col\_names))}
-
 \CommentTok{\# Define Implicit Function}
 \NormalTok{ffi\_nonlin\_dplyrdo \textless{}{-}}\StringTok{ }\ControlFlowTok{function}\NormalTok{(fl\_A, fl\_alpha, fl\_N, ar\_A, ar\_alpha, fl\_N\_agg, fl\_rho)\{}
 
@@ -4627,157 +4723,8 @@ Same as above, but now we evaluate the function over the individuals at many cho
 \hypertarget{dataframe-do-anything}{%
 \section{Dataframe Do Anything}\label{dataframe-do-anything}}
 
-\hypertarget{mxq-to-mxp-rows}{%
-\subsection{MxQ to MxP Rows}\label{mxq-to-mxp-rows}}
-
-\begin{quote}
-Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R Code Examples} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository (\href{https://fanwangecon.github.io/Stat4Econ/bookdown}{bookdown site}).
-\end{quote}
-
-\hypertarget{mxq-to-mx1-rows-within-group-gini}{%
-\subsubsection{MxQ to Mx1 Rows: Within Group Gini}\label{mxq-to-mx1-rows-within-group-gini}}
-
-There is a Panel with \(M\) individuals and each individual has \(Q\) records/rows. A function generate an individual specific outcome given the \(Q\) individual specific inputs, along with shared parameters and arrays across the \(M\) individuals.
-
-For example, suppose we have a dataframe of individual wage information from different countries, each row is an individual from one country. We want to generate country specific gini based on the individual data for each country in the dataframe. But additionally, perhaps the gini formula requires not just individual income but some additional parameters or shared dataframes as inputs.
-
-Given the within \(m\) income observations, we can compute gini statistics that are individual specific based on the observed distribution of incomes. For this, we will use the \href{https://fanwangecon.github.io/REconTools/reference/ff_dist_gini_vector_pos.html}{ff\_dist\_gini\_vector\_pos.html} function from \href{https://fanwangecon.github.io/REconTools/}{REconTools}.
-
-To make this more interesting, we will generate large dataframe with more \(M\) and more \(Q\) each \(m\).
-
-\hypertarget{large-dataframe}{%
-\paragraph{Large Dataframe}\label{large-dataframe}}
-
-There are up to ten thousand income observation per person. And there are ten people.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# Parameter Setups}
-\NormalTok{it\_M \textless{}{-}}\StringTok{ }\DecValTok{10}
-\NormalTok{it\_Q\_max \textless{}{-}}\StringTok{ }\DecValTok{10000}
-\NormalTok{fl\_rnorm\_mu \textless{}{-}}\StringTok{ }\DecValTok{1}
-\NormalTok{ar\_rnorm\_sd \textless{}{-}}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\FloatTok{0.01}\NormalTok{, }\FloatTok{0.2}\NormalTok{, }\DataTypeTok{length.out=}\NormalTok{it\_M)}
-\NormalTok{ar\_it\_q \textless{}{-}}\StringTok{ }\KeywordTok{sample.int}\NormalTok{(it\_Q\_max, it\_M, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{)}
-
-\CommentTok{\# N by Q varying parameters}
-\NormalTok{mt\_data =}\StringTok{ }\KeywordTok{cbind}\NormalTok{(ar\_it\_q, ar\_rnorm\_sd)}
-\NormalTok{tb\_M \textless{}{-}}\StringTok{ }\KeywordTok{as\_tibble}\NormalTok{(mt\_data) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{rowid\_to\_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"ID"}\NormalTok{) }\OperatorTok{\%\textgreater{}\%}
-\StringTok{                }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{sd =}\NormalTok{ ar\_rnorm\_sd, }\DataTypeTok{Q =}\NormalTok{ ar\_it\_q) }\OperatorTok{\%\textgreater{}\%}
-\StringTok{                }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{mean =}\NormalTok{ fl\_rnorm\_mu)}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{compute-group-specific-gini-normal}{%
-\paragraph{Compute Group specific gini, NORMAL}\label{compute-group-specific-gini-normal}}
-
-There is only one input for the gini function \emph{ar\_pos}. Note that the gini are not very large even with large SD, because these are normal distributions. By Construction, most peple are in the middle. So with almost zero standard deviation, we have perfect equality, as standard deviation increases, inequality increases, but still pretty equal overall, there is no fat upper tail.
-
-Note that there are three ways of referring to variable names with dot, which are all shown below:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  We can explicitly refer to names
-\item
-  We can use the \href{https://stackoverflow.com/a/18228613/8280804}{dollar dot structure} to use string variable names in do anything.
-\item
-  We can use dot bracket, this is the only option that works with string variable names
-\end{enumerate}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# A. Normal Draw Expansion, Explicitly Name}
-\KeywordTok{set.seed}\NormalTok{(}\StringTok{\textquotesingle{}123\textquotesingle{}}\NormalTok{)}
-\NormalTok{tb\_income\_norm\_dot\_dollar \textless{}{-}}\StringTok{ }\NormalTok{tb\_M }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{group\_by}\NormalTok{(ID) }\OperatorTok{\%\textgreater{}\%}
-\StringTok{  }\KeywordTok{do}\NormalTok{(}\DataTypeTok{income =} \KeywordTok{rnorm}\NormalTok{(.}\OperatorTok{$}\NormalTok{Q,}
-                    \DataTypeTok{mean=}\NormalTok{.}\OperatorTok{$}\NormalTok{mean,}
-                    \DataTypeTok{sd=}\NormalTok{.}\OperatorTok{$}\NormalTok{sd)) }\OperatorTok{\%\textgreater{}\%}
-\StringTok{  }\KeywordTok{unnest}\NormalTok{(}\KeywordTok{c}\NormalTok{(income)) }\OperatorTok{\%\textgreater{}\%}
-\StringTok{  }\KeywordTok{left\_join}\NormalTok{(tb\_M, }\DataTypeTok{by=}\StringTok{"ID"}\NormalTok{)}
-
-\CommentTok{\# Normal Draw Expansion again, dot dollar differently with string variable name}
-\KeywordTok{set.seed}\NormalTok{(}\StringTok{\textquotesingle{}123\textquotesingle{}}\NormalTok{)}
-\NormalTok{tb\_income\_norm\_dollar\_dot \textless{}{-}}\StringTok{ }\NormalTok{tb\_M }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{group\_by}\NormalTok{(ID) }\OperatorTok{\%\textgreater{}\%}
-\StringTok{  }\KeywordTok{do}\NormalTok{(}\DataTypeTok{income =} \KeywordTok{rnorm}\NormalTok{(}\StringTok{\textasciigrave{}}\DataTypeTok{$}\StringTok{\textasciigrave{}}\NormalTok{(., }\StringTok{\textquotesingle{}Q\textquotesingle{}}\NormalTok{),}
-                    \DataTypeTok{mean =} \StringTok{\textasciigrave{}}\DataTypeTok{$}\StringTok{\textasciigrave{}}\NormalTok{(., }\StringTok{\textquotesingle{}mean\textquotesingle{}}\NormalTok{),}
-                    \DataTypeTok{sd =} \StringTok{\textasciigrave{}}\DataTypeTok{$}\StringTok{\textasciigrave{}}\NormalTok{(., }\StringTok{\textquotesingle{}sd\textquotesingle{}}\NormalTok{))) }\OperatorTok{\%\textgreater{}\%}
-\StringTok{  }\KeywordTok{unnest}\NormalTok{(}\KeywordTok{c}\NormalTok{(income)) }\OperatorTok{\%\textgreater{}\%}
-\StringTok{  }\KeywordTok{left\_join}\NormalTok{(tb\_M, }\DataTypeTok{by=}\StringTok{"ID"}\NormalTok{)}
-
-\CommentTok{\# Normal Draw Expansion again, dot double bracket}
-\KeywordTok{set.seed}\NormalTok{(}\StringTok{\textquotesingle{}123\textquotesingle{}}\NormalTok{)}
-\NormalTok{svr\_mean \textless{}{-}}\StringTok{ \textquotesingle{}mean\textquotesingle{}}
-\NormalTok{svr\_sd \textless{}{-}}\StringTok{ \textquotesingle{}sd\textquotesingle{}}
-\NormalTok{svr\_Q \textless{}{-}}\StringTok{ \textquotesingle{}Q\textquotesingle{}}
-\NormalTok{tb\_income\_norm\_dot\_bracket\_db \textless{}{-}}\StringTok{ }\NormalTok{tb\_M }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{group\_by}\NormalTok{(ID) }\OperatorTok{\%\textgreater{}\%}
-\StringTok{  }\KeywordTok{do}\NormalTok{(}\DataTypeTok{income =} \KeywordTok{rnorm}\NormalTok{(.[[svr\_Q]],}
-                    \DataTypeTok{mean =}\NormalTok{ .[[svr\_mean]],}
-                    \DataTypeTok{sd =}\NormalTok{ .[[svr\_sd]])) }\OperatorTok{\%\textgreater{}\%}
-\StringTok{  }\KeywordTok{unnest}\NormalTok{(}\KeywordTok{c}\NormalTok{(income)) }\OperatorTok{\%\textgreater{}\%}
-\StringTok{  }\KeywordTok{left\_join}\NormalTok{(tb\_M, }\DataTypeTok{by=}\StringTok{"ID"}\NormalTok{)}
-
-\CommentTok{\# display}
-\KeywordTok{sum}\NormalTok{(}\KeywordTok{sum}\NormalTok{(tb\_income\_norm\_dollar\_dot }\OperatorTok{{-}}\StringTok{ }\NormalTok{tb\_income\_norm\_dot\_dollar }\OperatorTok{{-}}\StringTok{ }\NormalTok{tb\_income\_norm\_dot\_bracket\_db))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## [1] -463785175
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# display}
-\KeywordTok{head}\NormalTok{(tb\_income\_norm\_dot\_dollar, }\DecValTok{20}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# Gini by Group}
-\NormalTok{tb\_gini\_norm \textless{}{-}}\StringTok{ }\NormalTok{tb\_income\_norm\_dollar\_dot }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{group\_by}\NormalTok{(ID) }\OperatorTok{\%\textgreater{}\%}
-\StringTok{  }\KeywordTok{do}\NormalTok{(}\DataTypeTok{inc\_gini\_norm =} \KeywordTok{ff\_dist\_gini\_vector\_pos}\NormalTok{(.}\OperatorTok{$}\NormalTok{income)) }\OperatorTok{\%\textgreater{}\%}
-\StringTok{  }\KeywordTok{unnest}\NormalTok{(}\KeywordTok{c}\NormalTok{(inc\_gini\_norm)) }\OperatorTok{\%\textgreater{}\%}
-\StringTok{  }\KeywordTok{left\_join}\NormalTok{(tb\_M, }\DataTypeTok{by=}\StringTok{"ID"}\NormalTok{)}
-
-\CommentTok{\# display}
-\KeywordTok{kable}\NormalTok{(tb\_gini\_norm) }\OperatorTok{\%\textgreater{}\%}
-\StringTok{  }\KeywordTok{kable\_styling\_fc}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{table}[!h]
-\centering
-\begin{tabular}{r|r|r|r|r}
-\hline
-ID & inc\_gini\_norm & Q & sd & mean\\
-\hline
-\rowcolor{gray!6}  1 & 0.0056337 & 9982 & 0.0100000 & 1\\
-\hline
-2 & 0.0175280 & 2980 & 0.0311111 & 1\\
-\hline
-\rowcolor{gray!6}  3 & 0.0293986 & 1614 & 0.0522222 & 1\\
-\hline
-4 & 0.0422304 & 555 & 0.0733333 & 1\\
-\hline
-\rowcolor{gray!6}  5 & 0.0535146 & 4469 & 0.0944444 & 1\\
-\hline
-6 & 0.0653938 & 9359 & 0.1155556 & 1\\
-\hline
-\rowcolor{gray!6}  7 & 0.0769135 & 7789 & 0.1366667 & 1\\
-\hline
-8 & 0.0894165 & 9991 & 0.1577778 & 1\\
-\hline
-\rowcolor{gray!6}  9 & 0.1010982 & 9097 & 0.1788889 & 1\\
-\hline
-10 & 0.1124019 & 1047 & 0.2000000 & 1\\
-\hline
-\end{tabular}
-\end{table}
-
-\hypertarget{mx1-to-mxq-rows}{%
-\subsection{Mx1 to MxQ Rows}\label{mx1-to-mxq-rows}}
+\hypertarget{mx1-by-n-to-mxq-by-n1}{%
+\subsection{(Mx1 by N) to (MxQ by N+1)}\label{mx1-by-n-to-mxq-by-n1}}
 
 \begin{quote}
 Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R Code Examples} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository (\href{https://fanwangecon.github.io/Stat4Econ/bookdown}{bookdown site}).
@@ -4819,11 +4766,11 @@ This is the first step, generate \(M\) rows of data, to be expanded. Each row co
 \hline
 ID & Q & sd & mean\\
 \hline
-\rowcolor{gray!6}  1 & 3 & 0.010 & 1000\\
+\rowcolor{gray!6}  1 & 1 & 0.010 & 1000\\
 \hline
 2 & 3 & 100.005 & 1000\\
 \hline
-\rowcolor{gray!6}  3 & 1 & 200.000 & 1000\\
+\rowcolor{gray!6}  3 & 4 & 200.000 & 1000\\
 \hline
 \end{tabular}
 \end{table}
@@ -4873,19 +4820,21 @@ Use dot dollar to get variables
 \hline
 ID & income\\
 \hline
-\rowcolor{gray!6}  1 & 1000.0183\\
+\rowcolor{gray!6}  1 & 999.9803\\
 \hline
-1 & 999.9943\\
+2 & 1070.1391\\
 \hline
-\rowcolor{gray!6}  1 & 999.9822\\
+\rowcolor{gray!6}  2 & 952.7185\\
 \hline
-2 & 1033.7465\\
+2 & 893.2123\\
 \hline
-\rowcolor{gray!6}  2 & 1093.1374\\
+\rowcolor{gray!6}  3 & 956.4050\\
 \hline
-2 & 862.1896\\
+3 & 794.7991\\
 \hline
-\rowcolor{gray!6}  3 & 988.7742\\
+\rowcolor{gray!6}  3 & 854.2218\\
+\hline
+3 & 874.9921\\
 \hline
 \end{tabular}
 \end{table}
@@ -4903,28 +4852,436 @@ ID & income\\
 \hline
 ID & income & Q & sd & mean\\
 \hline
-\rowcolor{gray!6}  1 & 1000.0183 & 3 & 0.010 & 1000\\
+\rowcolor{gray!6}  1 & 999.9803 & 1 & 0.010 & 1000\\
 \hline
-1 & 999.9943 & 3 & 0.010 & 1000\\
+2 & 1070.1391 & 3 & 100.005 & 1000\\
 \hline
-\rowcolor{gray!6}  1 & 999.9822 & 3 & 0.010 & 1000\\
+\rowcolor{gray!6}  2 & 952.7185 & 3 & 100.005 & 1000\\
 \hline
-2 & 1033.7465 & 3 & 100.005 & 1000\\
+2 & 893.2123 & 3 & 100.005 & 1000\\
 \hline
-\rowcolor{gray!6}  2 & 1093.1374 & 3 & 100.005 & 1000\\
+\rowcolor{gray!6}  3 & 956.4050 & 4 & 200.000 & 1000\\
 \hline
-2 & 862.1896 & 3 & 100.005 & 1000\\
+3 & 794.7991 & 4 & 200.000 & 1000\\
 \hline
-\rowcolor{gray!6}  3 & 988.7742 & 1 & 200.000 & 1000\\
+\rowcolor{gray!6}  3 & 854.2218 & 4 & 200.000 & 1000\\
+\hline
+3 & 874.9921 & 4 & 200.000 & 1000\\
 \hline
 \end{tabular}
 \end{table}
 
+\hypertarget{mxp-by-n-to-mx1-by-1}{%
+\subsection{(MxP by N) to (Mx1 by 1)}\label{mxp-by-n-to-mx1-by-1}}
+
+\begin{quote}
+Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R Code Examples} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository (\href{https://fanwangecon.github.io/Stat4Econ/bookdown}{bookdown site}).
+\end{quote}
+
+There is a Panel with \(M\) individuals and each individual has \(Q\) records/rows. A function generate an individual specific outcome given the \(Q\) individual specific inputs, along with shared parameters and arrays across the \(M\) individuals.
+
+For example, suppose we have a dataframe of individual wage information from different countries, each row is an individual from one country. We want to generate country specific gini based on the individual data for each country in the dataframe. But additionally, perhaps the gini formula requires not just individual income but some additional parameters or shared dataframes as inputs.
+
+Given the within \(m\) income observations, we can compute gini statistics that are individual specific based on the observed distribution of incomes. For this, we will use the \href{https://fanwangecon.github.io/REconTools/reference/ff_dist_gini_vector_pos.html}{ff\_dist\_gini\_vector\_pos.html} function from \href{https://fanwangecon.github.io/REconTools/}{REconTools}.
+
+To make this more interesting, we will generate large dataframe with more \(M\) and more \(Q\) each \(m\).
+
+\hypertarget{income-rows-for-individuals-in-many-groups}{%
+\subsubsection{Income Rows for Individuals in Many Groups}\label{income-rows-for-individuals-in-many-groups}}
+
+There are up to ten thousand income observation per person. And there are ten people.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Parameter Setups}
+\NormalTok{it\_M \textless{}{-}}\StringTok{ }\DecValTok{10}
+\NormalTok{it\_Q\_max \textless{}{-}}\StringTok{ }\DecValTok{10000}
+\NormalTok{fl\_rnorm\_mu \textless{}{-}}\StringTok{ }\DecValTok{1}
+\NormalTok{ar\_rnorm\_sd \textless{}{-}}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\FloatTok{0.01}\NormalTok{, }\FloatTok{0.2}\NormalTok{, }\DataTypeTok{length.out=}\NormalTok{it\_M)}
+\NormalTok{ar\_it\_q \textless{}{-}}\StringTok{ }\KeywordTok{sample.int}\NormalTok{(it\_Q\_max, it\_M, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{)}
+
+\CommentTok{\# N by Q varying parameters}
+\NormalTok{mt\_data =}\StringTok{ }\KeywordTok{cbind}\NormalTok{(ar\_it\_q, ar\_rnorm\_sd)}
+\NormalTok{tb\_M \textless{}{-}}\StringTok{ }\KeywordTok{as\_tibble}\NormalTok{(mt\_data) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{rowid\_to\_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"ID"}\NormalTok{) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{                }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{sd =}\NormalTok{ ar\_rnorm\_sd, }\DataTypeTok{Q =}\NormalTok{ ar\_it\_q) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{                }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{mean =}\NormalTok{ fl\_rnorm\_mu)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{compute-group-specific-gini}{%
+\subsubsection{Compute Group Specific Gini}\label{compute-group-specific-gini}}
+
+There is only one input for the gini function \emph{ar\_pos}. Note that the gini are not very large even with large SD, because these are normal distributions. By Construction, most peple are in the middle. So with almost zero standard deviation, we have perfect equality, as standard deviation increases, inequality increases, but still pretty equal overall, there is no fat upper tail.
+
+Note that there are three ways of referring to variable names with dot, which are all shown below:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  We can explicitly refer to names
+\item
+  We can use the \href{https://stackoverflow.com/a/18228613/8280804}{dollar dot structure} to use string variable names in do anything.
+\item
+  We can use dot bracket, this is the only option that works with string variable names
+\end{enumerate}
+
+First: Generate individual group all incomes:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# A. Normal Draw Expansion, Explicitly Name}
+\KeywordTok{set.seed}\NormalTok{(}\StringTok{\textquotesingle{}123\textquotesingle{}}\NormalTok{)}
+\NormalTok{tb\_income\_norm\_dot\_dollar \textless{}{-}}\StringTok{ }\NormalTok{tb\_M }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{group\_by}\NormalTok{(ID) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{do}\NormalTok{(}\DataTypeTok{income =} \KeywordTok{rnorm}\NormalTok{(.}\OperatorTok{$}\NormalTok{Q,}
+                    \DataTypeTok{mean=}\NormalTok{.}\OperatorTok{$}\NormalTok{mean,}
+                    \DataTypeTok{sd=}\NormalTok{.}\OperatorTok{$}\NormalTok{sd)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{unnest}\NormalTok{(}\KeywordTok{c}\NormalTok{(income)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{left\_join}\NormalTok{(tb\_M, }\DataTypeTok{by=}\StringTok{"ID"}\NormalTok{)}
+
+\CommentTok{\# Normal Draw Expansion again, dot dollar differently with string variable name}
+\KeywordTok{set.seed}\NormalTok{(}\StringTok{\textquotesingle{}123\textquotesingle{}}\NormalTok{)}
+\NormalTok{tb\_income\_norm\_dollar\_dot \textless{}{-}}\StringTok{ }\NormalTok{tb\_M }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{group\_by}\NormalTok{(ID) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{do}\NormalTok{(}\DataTypeTok{income =} \KeywordTok{rnorm}\NormalTok{(}\StringTok{\textasciigrave{}}\DataTypeTok{$}\StringTok{\textasciigrave{}}\NormalTok{(., }\StringTok{\textquotesingle{}Q\textquotesingle{}}\NormalTok{),}
+                    \DataTypeTok{mean =} \StringTok{\textasciigrave{}}\DataTypeTok{$}\StringTok{\textasciigrave{}}\NormalTok{(., }\StringTok{\textquotesingle{}mean\textquotesingle{}}\NormalTok{),}
+                    \DataTypeTok{sd =} \StringTok{\textasciigrave{}}\DataTypeTok{$}\StringTok{\textasciigrave{}}\NormalTok{(., }\StringTok{\textquotesingle{}sd\textquotesingle{}}\NormalTok{))) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{unnest}\NormalTok{(}\KeywordTok{c}\NormalTok{(income)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{left\_join}\NormalTok{(tb\_M, }\DataTypeTok{by=}\StringTok{"ID"}\NormalTok{)}
+
+\CommentTok{\# Normal Draw Expansion again, dot double bracket}
+\KeywordTok{set.seed}\NormalTok{(}\StringTok{\textquotesingle{}123\textquotesingle{}}\NormalTok{)}
+\NormalTok{svr\_mean \textless{}{-}}\StringTok{ \textquotesingle{}mean\textquotesingle{}}
+\NormalTok{svr\_sd \textless{}{-}}\StringTok{ \textquotesingle{}sd\textquotesingle{}}
+\NormalTok{svr\_Q \textless{}{-}}\StringTok{ \textquotesingle{}Q\textquotesingle{}}
+\NormalTok{tb\_income\_norm\_dot\_bracket\_db \textless{}{-}}\StringTok{ }\NormalTok{tb\_M }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{group\_by}\NormalTok{(ID) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{do}\NormalTok{(}\DataTypeTok{income =} \KeywordTok{rnorm}\NormalTok{(.[[svr\_Q]],}
+                    \DataTypeTok{mean =}\NormalTok{ .[[svr\_mean]],}
+                    \DataTypeTok{sd =}\NormalTok{ .[[svr\_sd]])) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{unnest}\NormalTok{(}\KeywordTok{c}\NormalTok{(income)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{left\_join}\NormalTok{(tb\_M, }\DataTypeTok{by=}\StringTok{"ID"}\NormalTok{)}
+
+\CommentTok{\# display}
+\KeywordTok{print}\NormalTok{(}\KeywordTok{dim}\NormalTok{(tb\_income\_norm\_dot\_bracket\_db))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 59429     5
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{kable}\NormalTok{(}\KeywordTok{head}\NormalTok{(tb\_income\_norm\_dot\_bracket\_db, }\DecValTok{20}\NormalTok{)) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{r|r|r|r|r}
+\hline
+ID & income & Q & sd & mean\\
+\hline
+\rowcolor{gray!6}  1 & 0.9943952 & 3004 & 0.01 & 1\\
+\hline
+1 & 0.9976982 & 3004 & 0.01 & 1\\
+\hline
+\rowcolor{gray!6}  1 & 1.0155871 & 3004 & 0.01 & 1\\
+\hline
+1 & 1.0007051 & 3004 & 0.01 & 1\\
+\hline
+\rowcolor{gray!6}  1 & 1.0012929 & 3004 & 0.01 & 1\\
+\hline
+1 & 1.0171506 & 3004 & 0.01 & 1\\
+\hline
+\rowcolor{gray!6}  1 & 1.0046092 & 3004 & 0.01 & 1\\
+\hline
+1 & 0.9873494 & 3004 & 0.01 & 1\\
+\hline
+\rowcolor{gray!6}  1 & 0.9931315 & 3004 & 0.01 & 1\\
+\hline
+1 & 0.9955434 & 3004 & 0.01 & 1\\
+\hline
+\rowcolor{gray!6}  1 & 1.0122408 & 3004 & 0.01 & 1\\
+\hline
+1 & 1.0035981 & 3004 & 0.01 & 1\\
+\hline
+\rowcolor{gray!6}  1 & 1.0040077 & 3004 & 0.01 & 1\\
+\hline
+1 & 1.0011068 & 3004 & 0.01 & 1\\
+\hline
+\rowcolor{gray!6}  1 & 0.9944416 & 3004 & 0.01 & 1\\
+\hline
+1 & 1.0178691 & 3004 & 0.01 & 1\\
+\hline
+\rowcolor{gray!6}  1 & 1.0049785 & 3004 & 0.01 & 1\\
+\hline
+1 & 0.9803338 & 3004 & 0.01 & 1\\
+\hline
+\rowcolor{gray!6}  1 & 1.0070136 & 3004 & 0.01 & 1\\
+\hline
+1 & 0.9952721 & 3004 & 0.01 & 1\\
+\hline
+\end{tabular}
+\end{table}
+
+Second, compute gini:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Gini by Group}
+\NormalTok{tb\_gini\_norm \textless{}{-}}\StringTok{ }\NormalTok{tb\_income\_norm\_dot\_bracket\_db }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{group\_by}\NormalTok{(ID) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{do}\NormalTok{(}\DataTypeTok{inc\_gini\_norm =} \KeywordTok{ff\_dist\_gini\_vector\_pos}\NormalTok{(.}\OperatorTok{$}\NormalTok{income)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{unnest}\NormalTok{(}\KeywordTok{c}\NormalTok{(inc\_gini\_norm)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{left\_join}\NormalTok{(tb\_M, }\DataTypeTok{by=}\StringTok{"ID"}\NormalTok{)}
+
+\CommentTok{\# display}
+\KeywordTok{kable}\NormalTok{(tb\_gini\_norm) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{r|r|r|r|r}
+\hline
+ID & inc\_gini\_norm & Q & sd & mean\\
+\hline
+\rowcolor{gray!6}  1 & 0.0056006 & 3004 & 0.0100000 & 1\\
+\hline
+2 & 0.0174893 & 3207 & 0.0311111 & 1\\
+\hline
+\rowcolor{gray!6}  3 & 0.0295527 & 7989 & 0.0522222 & 1\\
+\hline
+4 & 0.0412807 & 3995 & 0.0733333 & 1\\
+\hline
+\rowcolor{gray!6}  5 & 0.0537107 & 8358 & 0.0944444 & 1\\
+\hline
+6 & 0.0650354 & 217 & 0.1155556 & 1\\
+\hline
+\rowcolor{gray!6}  7 & 0.0766718 & 9506 & 0.1366667 & 1\\
+\hline
+8 & 0.0891009 & 8157 & 0.1577778 & 1\\
+\hline
+\rowcolor{gray!6}  9 & 0.1014251 & 6216 & 0.1788889 & 1\\
+\hline
+10 & 0.1135054 & 8780 & 0.2000000 & 1\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{mxp-by-n-to-mxq-by-nz}{%
+\subsection{(MxP by N) to (MxQ by N+Z)}\label{mxp-by-n-to-mxq-by-nz}}
+
+\begin{quote}
+Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R Code Examples} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository (\href{https://fanwangecon.github.io/Stat4Econ/bookdown}{bookdown site}).
+\end{quote}
+
+There is a dataframe composed of \emph{M} mini-dataframes. Group by a variable that identifies each unique sub-dataframe, and use the sub-dataframes with \emph{P} rows as inputs to a function.
+
+The function outputs \emph{Q by Z} rows and columns of results, stack the results. The output file has \emph{MxQ} rows and the \emph{Z} columns of additional results should be appended.
+
+\hypertarget{generate-the-mxp-by-n-dataframe}{%
+\subsubsection{Generate the MxP by N Dataframe}\label{generate-the-mxp-by-n-dataframe}}
+
+\emph{M} Grouping characteristics, \emph{P} rows for each group, and \emph{N} Variables.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \emph{M} are individuals
+\item
+  \emph{P} are dates
+\item
+  A wage variable for individual wage at each date. And a savings varaible as well.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Define}
+\NormalTok{it\_M \textless{}{-}}\StringTok{ }\DecValTok{3}
+\NormalTok{it\_P \textless{}{-}}\StringTok{ }\DecValTok{5}
+\NormalTok{svr\_m \textless{}{-}}\StringTok{ \textquotesingle{}group\_m\textquotesingle{}}
+\NormalTok{svr\_mp \textless{}{-}}\StringTok{ \textquotesingle{}info\_mp\textquotesingle{}}
+
+\CommentTok{\# dataframe}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{df\_panel\_skeleton \textless{}{-}}\StringTok{ }\KeywordTok{as\_tibble}\NormalTok{(}\KeywordTok{matrix}\NormalTok{(it\_P, }\DataTypeTok{nrow=}\NormalTok{it\_M, }\DataTypeTok{ncol=}\DecValTok{1}\NormalTok{)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{rowid\_to\_column}\NormalTok{(}\DataTypeTok{var =}\NormalTok{ svr\_m) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{uncount}\NormalTok{(V1) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{group\_by}\NormalTok{(}\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_m)) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_mp) }\OperatorTok{:}\ErrorTok{=}\StringTok{ }\KeywordTok{row\_number}\NormalTok{()) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{ungroup}\NormalTok{() }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{rowwise}\NormalTok{() }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{wage =} \KeywordTok{rnorm}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DecValTok{10}\NormalTok{), }
+                       \DataTypeTok{savings =} \KeywordTok{rnorm}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{200}\NormalTok{, }\DecValTok{30}\NormalTok{)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{ungroup}\NormalTok{() }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
+\StringTok{  }\KeywordTok{rowid\_to\_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"id\_ji"}\NormalTok{)}
+
+\CommentTok{\# Print}
+\KeywordTok{kable}\NormalTok{(df\_panel\_skeleton) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{r|r|r|r|r}
+\hline
+id\_ji & group\_m & info\_mp & wage & savings\\
+\hline
+\rowcolor{gray!6}  1 & 1 & 1 & 94.39524 & 253.6074\\
+\hline
+2 & 1 & 2 & 97.69823 & 214.9355\\
+\hline
+\rowcolor{gray!6}  3 & 1 & 3 & 115.58708 & 141.0015\\
+\hline
+4 & 1 & 4 & 100.70508 & 221.0407\\
+\hline
+\rowcolor{gray!6}  5 & 1 & 5 & 101.29288 & 185.8163\\
+\hline
+6 & 2 & 1 & 117.15065 & 167.9653\\
+\hline
+\rowcolor{gray!6}  7 & 2 & 2 & 104.60916 & 193.4608\\
+\hline
+8 & 2 & 3 & 87.34939 & 169.2199\\
+\hline
+\rowcolor{gray!6}  9 & 2 & 4 & 93.13147 & 178.1333\\
+\hline
+10 & 2 & 5 & 95.54338 & 181.2488\\
+\hline
+\rowcolor{gray!6}  11 & 3 & 1 & 112.24082 & 149.3992\\
+\hline
+12 & 3 & 2 & 103.59814 & 225.1336\\
+\hline
+\rowcolor{gray!6}  13 & 3 & 3 & 104.00771 & 204.6012\\
+\hline
+14 & 3 & 4 & 101.10683 & 165.8559\\
+\hline
+\rowcolor{gray!6}  15 & 3 & 5 & 94.44159 & 237.6144\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{subgroup-compute-and-expand}{%
+\subsubsection{Subgroup Compute and Expand}\label{subgroup-compute-and-expand}}
+
+Use the \emph{M} sub-dataframes, generate \emph{Q} by \emph{Z} result for each of the \emph{M} groups. Stack all results together.
+
+Base on all the wages for each individual, generate individual specific mean and standard deviations. Do this for three things, the wage variable, the savings variable, and the sum of wage and savings:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \emph{Z=2}: 2 columns, mean and standard deviation
+\item
+  \emph{Q=3}: 3 rows, statistics based on wage, savings, and the sum of both
+\end{enumerate}
+
+First, here is the processing function that takes the dataframe as input, with a parameter for rounding:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# define function}
+\NormalTok{ffi\_subset\_mean\_sd \textless{}{-}}\StringTok{ }\ControlFlowTok{function}\NormalTok{(df\_sub, }\DataTypeTok{it\_round=}\DecValTok{1}\NormalTok{) \{}
+  \CommentTok{\#\textquotesingle{} A function that generates mean and sd for several variables}
+  \CommentTok{\#\textquotesingle{}}
+  \CommentTok{\#\textquotesingle{} @description}
+  \CommentTok{\#\textquotesingle{} Assume there are two variables in df\_sub wage and savings}
+  \CommentTok{\#\textquotesingle{}}
+  \CommentTok{\#\textquotesingle{} @param df\_sub dataframe where each individual row is a different }
+  \CommentTok{\#\textquotesingle{} data point, over which we compute mean and sd, Assum there are two }
+  \CommentTok{\#\textquotesingle{} variables, savings and wage}
+  \CommentTok{\#\textquotesingle{} @param it\_round integer rounding for resulting dataframe}
+  \CommentTok{\#\textquotesingle{} @return a dataframe where each row is aggregate for a different type}
+  \CommentTok{\#\textquotesingle{} of variablea and each column is a different statistics}
+  
+\NormalTok{  fl\_wage\_mn =}\StringTok{ }\KeywordTok{mean}\NormalTok{(df\_sub}\OperatorTok{$}\NormalTok{wage)}
+\NormalTok{  fl\_wage\_sd =}\StringTok{ }\KeywordTok{sd}\NormalTok{(df\_sub}\OperatorTok{$}\NormalTok{wage)}
+  
+\NormalTok{  fl\_save\_mn =}\StringTok{ }\KeywordTok{mean}\NormalTok{(df\_sub}\OperatorTok{$}\NormalTok{savings)}
+\NormalTok{  fl\_save\_sd =}\StringTok{ }\KeywordTok{sd}\NormalTok{(df\_sub}\OperatorTok{$}\NormalTok{savings)}
+  
+\NormalTok{  fl\_wgsv\_mn =}\StringTok{ }\KeywordTok{mean}\NormalTok{(df\_sub}\OperatorTok{$}\NormalTok{wage }\OperatorTok{+}\StringTok{ }\NormalTok{df\_sub}\OperatorTok{$}\NormalTok{savings)}
+\NormalTok{  fl\_wgsv\_sd =}\StringTok{ }\KeywordTok{sd}\NormalTok{(df\_sub}\OperatorTok{$}\NormalTok{wage }\OperatorTok{+}\StringTok{ }\NormalTok{df\_sub}\OperatorTok{$}\NormalTok{savings)  }
+  
+\NormalTok{  ar\_mn \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(fl\_wage\_mn, fl\_save\_mn, fl\_wgsv\_mn)}
+\NormalTok{  ar\_sd \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(fl\_wage\_sd, fl\_save\_sd, fl\_wgsv\_sd)}
+\NormalTok{  ar\_st\_row\_lab \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{\textquotesingle{}wage\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}savings\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}wage\_and\_savings\textquotesingle{}}\NormalTok{)}
+  
+\NormalTok{  mt\_stats \textless{}{-}}\StringTok{ }\KeywordTok{cbind}\NormalTok{(ar\_mn, ar\_sd)}
+\NormalTok{  mt\_stats \textless{}{-}}\StringTok{ }\KeywordTok{round}\NormalTok{(mt\_stats, it\_round)}
+  
+\NormalTok{  ar\_st\_varnames \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{\textquotesingle{}mean\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}sd\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}variables\textquotesingle{}}\NormalTok{)}
+\NormalTok{  df\_combine \textless{}{-}}\StringTok{ }\KeywordTok{as\_tibble}\NormalTok{(mt\_stats) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
+\StringTok{    }\KeywordTok{add\_column}\NormalTok{(ar\_st\_row\_lab) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{    }\KeywordTok{rename\_all}\NormalTok{(}\OperatorTok{\textasciitilde{}}\KeywordTok{c}\NormalTok{(ar\_st\_varnames)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{    }\KeywordTok{select}\NormalTok{(variables, }\StringTok{\textquotesingle{}mean\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}sd\textquotesingle{}}\NormalTok{) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{    }\KeywordTok{rowid\_to\_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"id\_q"}\NormalTok{)}
+    
+  \KeywordTok{return}\NormalTok{(df\_combine)}
+\NormalTok{\}}
+\CommentTok{\# testing function}
+\KeywordTok{ffi\_subset\_mean\_sd}\NormalTok{(df\_panel\_skeleton }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{filter}\NormalTok{(}\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_m)}\OperatorTok{==}\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+Second, call \emph{ffi\_subset\_mean\_sd} function for each of the groups indexed by \emph{j} and stack results together with \emph{j} index:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  group by
+\item
+  call function
+\item
+  unnest
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# run group stats and stack dataframes}
+\NormalTok{df\_outputs \textless{}{-}}\StringTok{ }\NormalTok{df\_panel\_skeleton }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{group\_by}\NormalTok{(}\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_m)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{do}\NormalTok{(}\DataTypeTok{df\_stats =} \KeywordTok{ffi\_subset\_mean\_sd}\NormalTok{(., }\DataTypeTok{it\_round=}\DecValTok{2}\NormalTok{)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{unnest}\NormalTok{() }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{rowid\_to\_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"id\_mq"}\NormalTok{)}
+\CommentTok{\# print}
+\KeywordTok{kable}\NormalTok{(df\_outputs) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{r|r|r|l|r|r}
+\hline
+id\_mq & group\_m & id\_q & variables & mean & sd\\
+\hline
+\rowcolor{gray!6}  1 & 1 & 1 & wage & 101.94 & 8.11\\
+\hline
+2 & 1 & 2 & savings & 203.28 & 42.33\\
+\hline
+\rowcolor{gray!6}  3 & 1 & 3 & wage\_and\_savings & 305.22 & 34.83\\
+\hline
+4 & 2 & 1 & wage & 99.56 & 11.63\\
+\hline
+\rowcolor{gray!6}  5 & 2 & 2 & savings & 178.01 & 10.34\\
+\hline
+6 & 2 & 3 & wage\_and\_savings & 277.56 & 15.48\\
+\hline
+\rowcolor{gray!6}  7 & 3 & 1 & wage & 103.08 & 6.39\\
+\hline
+8 & 3 & 2 & savings & 196.52 & 37.86\\
+\hline
+\rowcolor{gray!6}  9 & 3 & 3 & wage\_and\_savings & 299.60 & 33.50\\
+\hline
+\end{tabular}
+\end{table}
+
+In the resulting file, we went from a matrix with \emph{MxP} rows to a matrix with \emph{MxQ} Rows.
+
 \hypertarget{apply-and-pmap}{%
 \section{Apply and pmap}\label{apply-and-pmap}}
 
-\hypertarget{apply-sapply-mutate}{%
-\subsection{Apply, Sapply, Mutate}\label{apply-sapply-mutate}}
+\hypertarget{apply-and-sapply}{%
+\subsection{Apply and Sapply}\label{apply-and-sapply}}
 
 \begin{quote}
 Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R Code Examples} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository (\href{https://fanwangecon.github.io/Stat4Econ/bookdown}{bookdown site}).
@@ -4944,8 +5301,6 @@ Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon
   r sapply
 \item
   sapply over matrix row by row
-\item
-  apply dplyr vectorize
 \item
   function as parameters using formulas
 \item
@@ -5011,8 +5366,8 @@ ar\_nN\_A & ar\_nN\_alpha\\
 \hypertarget{using-apply}{%
 \subsubsection{Using apply}\label{using-apply}}
 
-\hypertarget{apply-with-named-function}{%
-\paragraph{Apply with Named Function}\label{apply-with-named-function}}
+\hypertarget{named-function}{%
+\paragraph{Named Function}\label{named-function}}
 
 First we use the apply function, we have to hard-code the arrays that are fixed for each of the \(N\) individuals. Then apply allows us to loop over the matrix that is \(N\) by \(Q\), each row one at a time, from \(1\) to \(N\).
 
@@ -5034,8 +5389,8 @@ First we use the apply function, we have to hard-code the arrays that are fixed 
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{apply-using-anonymous-function}{%
-\paragraph{Apply using Anonymous Function}\label{apply-using-anonymous-function}}
+\hypertarget{anonymous-function}{%
+\paragraph{Anonymous Function}\label{anonymous-function}}
 
 \begin{itemize}
 \tightlist
@@ -5183,8 +5538,8 @@ draw\_group & draw\_count & sum & unif\_draw & share & rescale\\
 \hypertarget{using-sapply}{%
 \subsubsection{Using sapply}\label{using-sapply}}
 
-\hypertarget{sapply-with-named-function}{%
-\paragraph{sapply with named function}\label{sapply-with-named-function}}
+\hypertarget{named-function-1}{%
+\paragraph{Named Function}\label{named-function-1}}
 
 \begin{itemize}
 \tightlist
@@ -5218,8 +5573,8 @@ Now update the function with sapply.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{sapply-using-anonymous-function}{%
-\paragraph{sapply using anonymous function}\label{sapply-using-anonymous-function}}
+\hypertarget{anonymous-function-1}{%
+\paragraph{Anonymous Function}\label{anonymous-function-1}}
 
 \begin{itemize}
 \tightlist
@@ -5311,24 +5666,95 @@ Sapply with anonymous function generating a list of arrays of different lengths.
 ## [1] 1 1 1 1
 \end{verbatim}
 
-\hypertarget{using-dplyr-mutate-rowwise}{%
-\subsubsection{Using dplyr mutate rowwise}\label{using-dplyr-mutate-rowwise}}
+\hypertarget{compare-results}{%
+\subsubsection{Compare Results}\label{compare-results}}
 
-\begin{itemize}
-\tightlist
-\item
-  dplyr mutate own function
-\item
-  dplyr all row function
-\item
-  dplyr do function
-\item
-  apply function each row dplyr
-\item
-  applying a function to every row of a table using dplyr
-\item
-  dplyr rowwise
-\end{itemize}
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Show overall Results}
+\NormalTok{mt\_results \textless{}{-}}\StringTok{ }\KeywordTok{cbind}\NormalTok{(ar\_func\_apply, ar\_func\_sapply)}
+\KeywordTok{colnames}\NormalTok{(mt\_results) \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{\textquotesingle{}eval\_lin\_apply\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}eval\_lin\_sapply\textquotesingle{}}\NormalTok{)}
+\KeywordTok{kable}\NormalTok{(mt\_results) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{kable\_styling\_fc\_wide}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{l|r|r}
+\hline
+  & eval\_lin\_apply & eval\_lin\_sapply\\
+\hline
+\rowcolor{gray!6}  X1 & 2.346356 & 2.346356\\
+\hline
+X2 & 2.094273 & 2.094273\\
+\hline
+\rowcolor{gray!6}  X3 & 1.895316 & 1.895316\\
+\hline
+X4 & 1.733708 & 1.733708\\
+\hline
+\rowcolor{gray!6}  X5 & 1.599477 & 1.599477\\
+\hline
+\end{tabular}}
+\end{table}
+
+\hypertarget{mutate-evaluate-functions}{%
+\subsection{Mutate Evaluate Functions}\label{mutate-evaluate-functions}}
+
+\begin{quote}
+Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R Code Examples} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository (\href{https://fanwangecon.github.io/Stat4Econ/bookdown}{bookdown site}).
+\end{quote}
+
+Apply a function over rows of a matrix using mutate, rowwise, etc.
+
+\hypertarget{set-up-input-arrays-3}{%
+\subsubsection{Set up Input Arrays}\label{set-up-input-arrays-3}}
+
+There is a function that takes \(M=Q+P\) inputs, we want to evaluate this function \(N\) times. Each time, there are \(M\) inputs, where all but \(Q\) of the \(M\) inputs, meaning \(P\) of the \(M\) inputs, are the same. In particular, \(P=Q*N\).
+
+\[M = Q+P = Q + Q*N\]
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# it\_child\_count = N, the number of children}
+\NormalTok{it\_N\_child\_cnt =}\StringTok{ }\DecValTok{5}
+\CommentTok{\# it\_heter\_param = Q, number of parameters that are}
+\CommentTok{\# heterogeneous across children}
+\NormalTok{it\_Q\_hetpa\_cnt =}\StringTok{ }\DecValTok{2}
+
+\CommentTok{\# P fixed parameters, nN is N dimensional, nP is P dimensional}
+\NormalTok{ar\_nN\_A =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\OperatorTok{{-}}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DataTypeTok{length.out =}\NormalTok{ it\_N\_child\_cnt)}
+\NormalTok{ar\_nN\_alpha =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\FloatTok{0.9}\NormalTok{, }\DataTypeTok{length.out =}\NormalTok{ it\_N\_child\_cnt)}
+\NormalTok{ar\_nP\_A\_alpha =}\StringTok{ }\KeywordTok{c}\NormalTok{(ar\_nN\_A, ar\_nN\_alpha)}
+
+\CommentTok{\# N by Q varying parameters}
+\NormalTok{mt\_nN\_by\_nQ\_A\_alpha =}\StringTok{ }\KeywordTok{cbind}\NormalTok{(ar\_nN\_A, ar\_nN\_alpha)}
+
+\CommentTok{\# display}
+\KeywordTok{kable}\NormalTok{(mt\_nN\_by\_nQ\_A\_alpha) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{r|r}
+\hline
+ar\_nN\_A & ar\_nN\_alpha\\
+\hline
+\rowcolor{gray!6}  -2 & 0.1\\
+\hline
+-1 & 0.3\\
+\hline
+\rowcolor{gray!6}  0 & 0.5\\
+\hline
+1 & 0.7\\
+\hline
+\rowcolor{gray!6}  2 & 0.9\\
+\hline
+\end{tabular}
+\end{table}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -5360,6 +5786,25 @@ fl\_A & fl\_alpha\\
 \hline
 \end{tabular}
 \end{table}
+
+\hypertarget{mutate-rowwise}{%
+\subsubsection{mutate rowwise}\label{mutate-rowwise}}
+
+\begin{itemize}
+\tightlist
+\item
+  dplyr mutate own function
+\item
+  dplyr all row function
+\item
+  dplyr do function
+\item
+  apply function each row dplyr
+\item
+  applying a function to every row of a table using dplyr
+\item
+  dplyr rowwise
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -5458,8 +5903,8 @@ fl\_A & fl\_alpha & dplyr\_eval\\
 \end{tabular}
 \end{table}
 
-\hypertarget{using-dplyr-mutate-with-pmap}{%
-\subsubsection{Using Dplyr Mutate with Pmap}\label{using-dplyr-mutate-with-pmap}}
+\hypertarget{mutate-with-pmap}{%
+\subsubsection{mutate with pmap}\label{mutate-with-pmap}}
 
 Apparantly \emph{rowwise()} is not a good idea, and \emph{pmap} should be used, below is the \emph{pmap} solution to the problem. Which does seem nicer. Crucially, don't have to define input parameter names, automatically I think they are matching up to the names in the function
 
@@ -5540,8 +5985,8 @@ fl\_A & fl\_alpha & dplyr\_eval\_pmap\\
 \end{tabular}
 \end{table}
 
-\hypertarget{dplyr-three-types-of-inputs-rowwise}{%
-\subsubsection{DPLYR Three Types of Inputs ROWWISE}\label{dplyr-three-types-of-inputs-rowwise}}
+\hypertarget{rowwise-and-do}{%
+\subsubsection{rowwise and do}\label{rowwise-and-do}}
 
 Now, we have three types of parameters, for something like a bisection type calculation. We will supply the program with a function with some hard-coded value inside, and as parameters, we will have one parameter which is a row in the current matrix, and another parameter which is a sclar values. The three types of parameters are dealt with sparately:
 
@@ -5638,14 +6083,12 @@ fl\_A & fl\_alpha & dplyr\_eval\_flex\\
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\# Show overall Results}
-\NormalTok{mt\_results \textless{}{-}}\StringTok{ }\KeywordTok{cbind}\NormalTok{(ar\_func\_apply, ar\_func\_sapply,}
-\NormalTok{                    tb\_nN\_by\_nQ\_A\_alpha\_show[}\StringTok{\textquotesingle{}dplyr\_eval\textquotesingle{}}\NormalTok{],}
+\NormalTok{mt\_results \textless{}{-}}\StringTok{ }\KeywordTok{cbind}\NormalTok{(tb\_nN\_by\_nQ\_A\_alpha\_show[}\StringTok{\textquotesingle{}dplyr\_eval\textquotesingle{}}\NormalTok{],}
 \NormalTok{                    tbfunc\_A\_nN\_by\_nQ\_A\_alpha\_rowwise[}\StringTok{\textquotesingle{}dplyr\_eval\textquotesingle{}}\NormalTok{],}
 \NormalTok{                    tbfunc\_A\_nN\_by\_nQ\_A\_alpha\_pmap[}\StringTok{\textquotesingle{}dplyr\_eval\_pmap\textquotesingle{}}\NormalTok{],}
 \NormalTok{                    tbfunc\_B\_nN\_by\_nQ\_A\_alpha[}\StringTok{\textquotesingle{}dplyr\_eval\_flex\textquotesingle{}}\NormalTok{],}
 \NormalTok{                    mt\_nN\_by\_nQ\_A\_alpha)}
-\KeywordTok{colnames}\NormalTok{(mt\_results) \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{\textquotesingle{}eval\_lin\_apply\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}eval\_lin\_sapply\textquotesingle{}}\NormalTok{,}
-                          \StringTok{\textquotesingle{}eval\_dplyr\_mutate\textquotesingle{}}\NormalTok{,}
+\KeywordTok{colnames}\NormalTok{(mt\_results) \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{\textquotesingle{}eval\_dplyr\_mutate\textquotesingle{}}\NormalTok{,}
                           \StringTok{\textquotesingle{}eval\_dplyr\_mutate\_hcode\textquotesingle{}}\NormalTok{,}
                           \StringTok{\textquotesingle{}eval\_dplyr\_mutate\_pmap\textquotesingle{}}\NormalTok{,}
                           \StringTok{\textquotesingle{}eval\_dplyr\_mutate\_flex\textquotesingle{}}\NormalTok{,}
@@ -5658,19 +6101,19 @@ fl\_A & fl\_alpha & dplyr\_eval\_flex\\
 \begin{table}[!h]
 \centering
 \resizebox{\linewidth}{!}{
-\begin{tabular}{l|r|r|r|r|r|r|r|r}
+\begin{tabular}{r|r|r|r|r|r}
 \hline
-  & eval\_lin\_apply & eval\_lin\_sapply & eval\_dplyr\_mutate & eval\_dplyr\_mutate\_hcode & eval\_dplyr\_mutate\_pmap & eval\_dplyr\_mutate\_flex & A\_child & alpha\_child\\
+eval\_dplyr\_mutate & eval\_dplyr\_mutate\_hcode & eval\_dplyr\_mutate\_pmap & eval\_dplyr\_mutate\_flex & A\_child & alpha\_child\\
 \hline
-\rowcolor{gray!6}  X1 & 2.346356 & 2.346356 & 2.346356 & 2.346356 & 2.346356 & 2.346356 & -2 & 0.1\\
+\rowcolor{gray!6}  2.346356 & 2.346356 & 2.346356 & 2.346356 & -2 & 0.1\\
 \hline
-X2 & 2.094273 & 2.094273 & 2.094273 & 2.094273 & 2.094273 & 2.094273 & -1 & 0.3\\
+2.094273 & 2.094273 & 2.094273 & 2.094273 & -1 & 0.3\\
 \hline
-\rowcolor{gray!6}  X3 & 1.895316 & 1.895316 & 1.895316 & 1.895316 & 1.895316 & 1.895316 & 0 & 0.5\\
+\rowcolor{gray!6}  1.895316 & 1.895316 & 1.895316 & 1.895316 & 0 & 0.5\\
 \hline
-X4 & 1.733708 & 1.733708 & 1.733708 & 1.733708 & 1.733708 & 1.733708 & 1 & 0.7\\
+1.733708 & 1.733708 & 1.733708 & 1.733708 & 1 & 0.7\\
 \hline
-\rowcolor{gray!6}  X5 & 1.599477 & 1.599477 & 1.599477 & 1.599477 & 1.599477 & 1.599477 & 2 & 0.9\\
+\rowcolor{gray!6}  1.599477 & 1.599477 & 1.599477 & 1.599477 & 2 & 0.9\\
 \hline
 \end{tabular}}
 \end{table}
@@ -6333,8 +6776,8 @@ Generated Matrix by States to Long Table where state values are stored as variab
 \begin{Highlighting}[]
 \CommentTok{\# Generate A Matrix}
 \KeywordTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
-\NormalTok{ar\_a \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\FloatTok{1.2}\NormalTok{, }\FloatTok{22.2}\NormalTok{, }\FloatTok{33.33}\NormalTok{)}
-\NormalTok{ar\_z \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\OperatorTok{{-}}\FloatTok{2.5}\NormalTok{,  }\DecValTok{{-}1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\FloatTok{2.53}\NormalTok{)}
+\NormalTok{ar\_a \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\FloatTok{1.1}\NormalTok{,}\FloatTok{5.1}\NormalTok{)}
+\NormalTok{ar\_z \textless{}{-}}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\OperatorTok{{-}}\FloatTok{2.5}\NormalTok{, }\FloatTok{2.53}\NormalTok{, }\DataTypeTok{length.out=}\DecValTok{11}\NormalTok{)}
 \NormalTok{mt\_ev =}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(ar\_a}\OperatorTok{*}\NormalTok{ar\_z), }\DataTypeTok{nrow=}\KeywordTok{length}\NormalTok{(ar\_a), }\DataTypeTok{ncol=}\KeywordTok{length}\NormalTok{(ar\_z))}
 
 \CommentTok{\# Name Matrix}
@@ -6344,49 +6787,47 @@ Generated Matrix by States to Long Table where state values are stored as variab
 \CommentTok{\# to tibble}
 \NormalTok{tb\_ev \textless{}{-}}\StringTok{ }\KeywordTok{as\_tibble}\NormalTok{(mt\_ev) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{rowid\_to\_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"ai"}\NormalTok{)}
 
-\CommentTok{\# longer }
-\NormalTok{tb\_ev\_long \textless{}{-}}\StringTok{ }\NormalTok{tb\_ev }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
-\StringTok{  }\KeywordTok{pivot\_longer}\NormalTok{(}\DataTypeTok{cols =} \KeywordTok{starts\_with}\NormalTok{(}\StringTok{\textquotesingle{}zi\textquotesingle{}}\NormalTok{), }
+\CommentTok{\# longer}
+\NormalTok{tb\_ev\_long \textless{}{-}}\StringTok{ }\NormalTok{tb\_ev }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{pivot\_longer}\NormalTok{(}\DataTypeTok{cols =} \KeywordTok{starts\_with}\NormalTok{(}\StringTok{\textquotesingle{}zi\textquotesingle{}}\NormalTok{),}
                \DataTypeTok{names\_to =} \KeywordTok{c}\NormalTok{(}\StringTok{\textquotesingle{}zi\textquotesingle{}}\NormalTok{),}
-               \DataTypeTok{names\_pattern =} \KeywordTok{paste0}\NormalTok{(}\StringTok{"zi(.)"}\NormalTok{),}
+               \DataTypeTok{names\_pattern =} \KeywordTok{paste0}\NormalTok{(}\StringTok{"zi(.*)"}\NormalTok{),}
                \DataTypeTok{values\_to =} \StringTok{"ev"}\NormalTok{) }\OperatorTok{\%\textgreater{}\%}
 \StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{zi =} \KeywordTok{as.numeric}\NormalTok{(zi))}
 
 \CommentTok{\# Merge with a and z values}
-\NormalTok{tb\_ev\_long \textless{}{-}}\StringTok{ }\NormalTok{tb\_ev\_long }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
-\StringTok{  }\KeywordTok{left\_join}\NormalTok{(}\KeywordTok{as\_tibble}\NormalTok{(ar\_a) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
+\NormalTok{tb\_ev\_long \textless{}{-}}\StringTok{ }\NormalTok{tb\_ev\_long }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{left\_join}\NormalTok{(}\KeywordTok{as\_tibble}\NormalTok{(ar\_a) }\OperatorTok{\%\textgreater{}\%}
 \StringTok{              }\KeywordTok{rowid\_to\_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"ai"}\NormalTok{) }\OperatorTok{\%\textgreater{}\%}
 \StringTok{              }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{a =}\NormalTok{ value)}
-\NormalTok{              , }\DataTypeTok{by =} \StringTok{\textquotesingle{}ai\textquotesingle{}}\NormalTok{) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
-\StringTok{  }\KeywordTok{left\_join}\NormalTok{(}\KeywordTok{as\_tibble}\NormalTok{(ar\_z) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
+\NormalTok{              , }\DataTypeTok{by =} \StringTok{\textquotesingle{}ai\textquotesingle{}}\NormalTok{) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{left\_join}\NormalTok{(}\KeywordTok{as\_tibble}\NormalTok{(ar\_z) }\OperatorTok{\%\textgreater{}\%}
 \StringTok{              }\KeywordTok{rowid\_to\_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"zi"}\NormalTok{) }\OperatorTok{\%\textgreater{}\%}
-\StringTok{              }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{z =}\NormalTok{ value), }
+\StringTok{              }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{z =}\NormalTok{ value),}
             \DataTypeTok{by =} \StringTok{\textquotesingle{}zi\textquotesingle{}}\NormalTok{) }\OperatorTok{\%\textgreater{}\%}
 \StringTok{  }\KeywordTok{select}\NormalTok{(a,ai,z,zi,ev)}
 
 \CommentTok{\# Display}
-\KeywordTok{kable}\NormalTok{(tb\_ev) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{kable\_styling\_fc}\NormalTok{()  }
+\KeywordTok{kable}\NormalTok{(tb\_ev) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{kable\_styling\_fc}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{table}[!h]
 \centering
-\begin{tabular}{r|r|r|r|r|r}
+\begin{tabular}{r|r|r|r|r|r|r|r|r|r|r|r}
 \hline
-ai & zi1 & zi2 & zi3 & zi4 & zi5\\
+ai & zi1 & zi2 & zi3 & zi4 & zi5 & zi6 & zi7 & zi8 & zi9 & zi10 & zi11\\
 \hline
-\rowcolor{gray!6}  1 & -0.5604756 & 0.0705084 & -0.2301775 & 0.1292877 & 1.5587083\\
+\rowcolor{gray!6}  1 & -0.5604756 & 1.5587083 & 0.1292877 & 0.4609162 & -0.6868529 & 1.2240818 & -0.2301775 & 0.0705084 & 1.7150650 & -1.2650612 & -0.445662\\
 \hline
-2 & -0.2301775 & 0.1292877 & 1.5587083 & -0.5604756 & 0.0705084\\
-\hline
-\rowcolor{gray!6}  3 & 1.5587083 & -0.5604756 & 0.0705084 & -0.2301775 & 0.1292877\\
+2 & -0.2301775 & 0.0705084 & 1.7150650 & -1.2650612 & -0.4456620 & -0.5604756 & 1.5587083 & 0.1292877 & 0.4609162 & -0.6868529 & 1.224082\\
 \hline
 \end{tabular}
 \end{table}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{kable}\NormalTok{(tb\_ev\_long) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{kable\_styling\_fc}\NormalTok{()  }
+\KeywordTok{kable}\NormalTok{(tb\_ev\_long) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{kable\_styling\_fc}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -6396,35 +6837,49 @@ ai & zi1 & zi2 & zi3 & zi4 & zi5\\
 \hline
 a & ai & z & zi & ev\\
 \hline
-\rowcolor{gray!6}  1.20 & 1 & -2.50 & 1 & -0.5604756\\
+\rowcolor{gray!6}  1.1 & 1 & -2.500 & 1 & -0.5604756\\
 \hline
-1.20 & 1 & -1.00 & 2 & 0.0705084\\
+1.1 & 1 & -1.997 & 2 & 1.5587083\\
 \hline
-\rowcolor{gray!6}  1.20 & 1 & 0.00 & 3 & -0.2301775\\
+\rowcolor{gray!6}  1.1 & 1 & -1.494 & 3 & 0.1292877\\
 \hline
-1.20 & 1 & 1.00 & 4 & 0.1292877\\
+1.1 & 1 & -0.991 & 4 & 0.4609162\\
 \hline
-\rowcolor{gray!6}  1.20 & 1 & 2.53 & 5 & 1.5587083\\
+\rowcolor{gray!6}  1.1 & 1 & -0.488 & 5 & -0.6868529\\
 \hline
-22.20 & 2 & -2.50 & 1 & -0.2301775\\
+1.1 & 1 & 0.015 & 6 & 1.2240818\\
 \hline
-\rowcolor{gray!6}  22.20 & 2 & -1.00 & 2 & 0.1292877\\
+\rowcolor{gray!6}  1.1 & 1 & 0.518 & 7 & -0.2301775\\
 \hline
-22.20 & 2 & 0.00 & 3 & 1.5587083\\
+1.1 & 1 & 1.021 & 8 & 0.0705084\\
 \hline
-\rowcolor{gray!6}  22.20 & 2 & 1.00 & 4 & -0.5604756\\
+\rowcolor{gray!6}  1.1 & 1 & 1.524 & 9 & 1.7150650\\
 \hline
-22.20 & 2 & 2.53 & 5 & 0.0705084\\
+1.1 & 1 & 2.027 & 10 & -1.2650612\\
 \hline
-\rowcolor{gray!6}  33.33 & 3 & -2.50 & 1 & 1.5587083\\
+\rowcolor{gray!6}  1.1 & 1 & 2.530 & 11 & -0.4456620\\
 \hline
-33.33 & 3 & -1.00 & 2 & -0.5604756\\
+5.1 & 2 & -2.500 & 1 & -0.2301775\\
 \hline
-\rowcolor{gray!6}  33.33 & 3 & 0.00 & 3 & 0.0705084\\
+\rowcolor{gray!6}  5.1 & 2 & -1.997 & 2 & 0.0705084\\
 \hline
-33.33 & 3 & 1.00 & 4 & -0.2301775\\
+5.1 & 2 & -1.494 & 3 & 1.7150650\\
 \hline
-\rowcolor{gray!6}  33.33 & 3 & 2.53 & 5 & 0.1292877\\
+\rowcolor{gray!6}  5.1 & 2 & -0.991 & 4 & -1.2650612\\
+\hline
+5.1 & 2 & -0.488 & 5 & -0.4456620\\
+\hline
+\rowcolor{gray!6}  5.1 & 2 & 0.015 & 6 & -0.5604756\\
+\hline
+5.1 & 2 & 0.518 & 7 & 1.5587083\\
+\hline
+\rowcolor{gray!6}  5.1 & 2 & 1.021 & 8 & 0.1292877\\
+\hline
+5.1 & 2 & 1.524 & 9 & 0.4609162\\
+\hline
+\rowcolor{gray!6}  5.1 & 2 & 2.027 & 10 & -0.6868529\\
+\hline
+5.1 & 2 & 2.530 & 11 & 1.2240818\\
 \hline
 \end{tabular}
 \end{table}
@@ -7857,7 +8312,8 @@ Setting Up Parameters.
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "prot_Estimate"        "male_Estimate"        "wgt0_Estimate"        "hgt0_Estimate"        "svymthRound_Estimate" "vars_var.y"
+## [1] "prot_Estimate"        "male_Estimate"        "wgt0_Estimate"        "hgt0_Estimate"        "svymthRound_Estimate"
+## [6] "vars_var.y"
 \end{verbatim}
 
 \begin{Shaded}
@@ -8177,7 +8633,7 @@ hgt & 77.8 & 73.13353 & 70.97578 & 71.45823\\
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-153-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-162-1} \end{center}
 
 \hypertarget{additional-decomposition-testings}{%
 \subsubsection{Additional Decomposition Testings}\label{additional-decomposition-testings}}
@@ -8553,21 +9009,21 @@ Given the x-variables included in the logit regression, how do they relate to A\
 ## [[1]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-157-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-166-1} \end{center}
 
 \begin{verbatim}
 ## 
 ## [[2]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-157-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-166-2} \end{center}
 
 \begin{verbatim}
 ## 
 ## [[3]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-157-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-166-3} \end{center}
 
 \hypertarget{optimization}{%
 \chapter{Optimization}\label{optimization}}
@@ -9187,7 +9643,7 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-165-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-174-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9205,7 +9661,7 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-165-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-174-2} \end{center}
 
 \hypertarget{integration-by-symmetric-uneven-rectangle}{%
 \subsubsection{Integration By Symmetric Uneven Rectangle}\label{integration-by-symmetric-uneven-rectangle}}
@@ -9264,7 +9720,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-166-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-175-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9282,7 +9738,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-166-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-175-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9300,7 +9756,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-166-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-175-3} \end{center}
 
 \hypertarget{integration-by-constant-width-rectangle-trapezoidal-rule}{%
 \subsubsection{Integration By Constant Width Rectangle (Trapezoidal rule)}\label{integration-by-constant-width-rectangle-trapezoidal-rule}}
@@ -9355,7 +9811,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-167-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-176-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9373,7 +9829,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-167-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-176-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9391,7 +9847,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-167-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-176-3} \end{center}
 
 \hypertarget{analytical-solutions}{%
 \section{Analytical Solutions}\label{analytical-solutions}}
@@ -9870,7 +10326,7 @@ Note that many more A grid points are needed to fully plot out the leontief line
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-175-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-184-1} \end{center}
 
 \hypertarget{tables-and-graphs}{%
 \chapter{Tables and Graphs}\label{tables-and-graphs}}
@@ -10053,7 +10509,7 @@ Jointly plot:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-177-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-186-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10094,7 +10550,7 @@ We used recordplot() earlier. So now we can print just the first two constructed
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-178-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-187-1} \end{center}
 
 \hypertarget{write-and-read-plots}{%
 \section{Write and Read Plots}\label{write-and-read-plots}}
@@ -10393,7 +10849,7 @@ Tabular outputs, text outputs, etc are saved as variables, which could be printe
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\# Load Data}
-\NormalTok{dt \textless{}{-}}\StringTok{ }\NormalTok{mtcars[}\DecValTok{1}\OperatorTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\OperatorTok{:}\DecValTok{6}\NormalTok{]}
+\NormalTok{dt \textless{}{-}}\StringTok{ }\NormalTok{mtcars[}\DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{, }\DecValTok{1}\OperatorTok{:}\DecValTok{6}\NormalTok{]}
 \CommentTok{\# Generate latex string variable}
 \NormalTok{st\_out\_tex \textless{}{-}}\StringTok{ }\KeywordTok{kable}\NormalTok{(dt, }\StringTok{"latex"}\NormalTok{)}
 \KeywordTok{print}\NormalTok{(st\_out\_tex)}
@@ -10644,9 +11100,9 @@ Search inside directories, for all files in a git repo folder that are new or ha
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/array/fs_ary_basics.Rmd"
+## [1] "MODIFIED: C:/Users/fan/R4Econ/amto/array/fs_ary_basics.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/array/fs_ary_generate.Rmd"
-## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/array/fs_ary_mesh.Rmd"
+## [1] "MODIFIED: C:/Users/fan/R4Econ/amto/array/fs_ary_mesh.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/array/fs_ary_string.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/array/main.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/list/fs_lst_basics.Rmd"
@@ -10818,6 +11274,8 @@ Given an existing Rmd File, Resave it with a different name, and replace (add in
   \tightlist
   \item
     Basic array operations in R, rep, head, tail, na, etc.
+  \item
+    E notation.
   \item
     \textbf{r}: \emph{rep() + head() + tail() + na\_if()}
   \end{itemize}
@@ -11072,12 +11530,16 @@ Given an existing Rmd File, Resave it with a different name, and replace (add in
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \href{https://fanwangecon.github.io/R4Econ/function/mutatef/htmlpdfr/fs_funceval.html}{Nonlinear Function over Rows}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/mutatef//fs_funceval.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/mutatef/htmlpdfr/fs_funceval.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/mutatef/htmlpdfr/fs_funceval.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/function/mutatef/htmlpdfr/fs_funceval.html}{\textbf{html}}
+  \href{https://fanwangecon.github.io/R4Econ/function/mutatef/htmlpdfr/fs_funceval.html}{Nonlinear Function of Scalars and Arrays over Rows}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/mutatef//fs_funceval.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/mutatef/htmlpdfr/fs_funceval.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/mutatef/htmlpdfr/fs_funceval.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/function/mutatef/htmlpdfr/fs_funceval.html}{\textbf{html}}
 
   \begin{itemize}
   \tightlist
   \item
-    Evaluate nonlinear function f(x\_i, y\_i, ar\_x, ar\_y, c, d), where c and d are constants, and ar\_x and ar\_y are arrays, both fixed. x\_i and y\_i vary over each row of matrix.
+    Five methods to evaluate scalar nonlinear function over matrix.
+  \item
+    Evaluate non-linear function with scalar from rows and arrays as constants.
+  \item
+    \textbf{r}: \emph{.\(fl_A + fl_A=\)`(., `fl\_A') + .{[}{[}svr\_fl\_A{]}{]}}
   \item
     \textbf{dplyr}: \emph{rowwise() + mutate(out = funct(inputs))}
   \end{itemize}
@@ -11108,24 +11570,36 @@ Given an existing Rmd File, Resave it with a different name, and replace (add in
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \href{https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_group.html}{Evaluate Function Do Anything Group Stack Results}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof//fs_funceval_group.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_group.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_group.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_group.html}{\textbf{html}}
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Group dataframe by categories, compute category specific output scalar or arrays based on within category variable information.
-  \item
-    \textbf{dplyr}: \emph{group\_by(ID) + do(inc = rnorm(.\(N, mean=.\)mn, sd=.\$sd)) + unnest(c(inc)) + left\_join(df, by=``ID'')}
-  \end{itemize}
-\item
-  \href{https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_expand.html}{Expand Each Dataframe Row into More Rows}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof//fs_funceval_expand.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_expand.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_expand.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_expand.html}{\textbf{html}}
+  \href{https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_expand.html}{Dataframe Row to Array (Mx1 by N) to (MxQ by N+1)}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof//fs_funceval_expand.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_expand.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_expand.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_expand.html}{\textbf{html}}
 
   \begin{itemize}
   \tightlist
   \item
     Generate row value specific arrays of varying Length, and stack expanded dataframe.
   \item
+    Given row-specific information, generate row-specific arrays that expand matrix.
+  \item
     \textbf{dplyr}: \emph{do() + unnest() + left\_join() + df \%\textgreater\% group\_by(ID) \%\textgreater\% do(inc = rnorm(.\(Q, mean=.\)mean, sd=.\$sd)) \%\textgreater\% unnest(c(inc))}
+  \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_group.html}{Dataframe Subset to Scalar (MxP by N) to (Mx1 by 1)}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof//fs_funceval_group.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_group.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_group.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_group.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    MxQ rows to Mx1 Rows. Group dataframe by categories, compute category specific output scalar or arrays based on within category variable information.
+  \item
+    \textbf{dplyr}: \emph{group\_by(ID) + do(inc = rnorm(.\(N, mean=.\)mn, sd=.\$sd)) + unnest(c(inc)) + left\_join(df, by=``ID'')}
+  \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_groupwider.html}{Dataframe Subset to Dataframe (MxP by N) to (MxQ by N+Z-1)}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof//fs_funceval_groupwider.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_groupwider.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_groupwider.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_groupwider.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Group by mini dataframes as inputs for function. Stack output dataframes with group id.
+  \item
+    \textbf{dplyr}: \emph{group\_by() + do() + unnest()}
   \end{itemize}
 \end{enumerate}
 
@@ -11136,18 +11610,32 @@ Given an existing Rmd File, Resave it with a different name, and replace (add in
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \href{https://fanwangecon.github.io/R4Econ/function/noloop/htmlpdfr/fs_applysapplymutate.html}{Apply and Mutate over Rows}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop//fs_applysapplymutate.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop/htmlpdfr/fs_applysapplymutate.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop/htmlpdfr/fs_applysapplymutate.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/function/noloop/htmlpdfr/fs_applysapplymutate.html}{\textbf{html}}
+  \href{https://fanwangecon.github.io/R4Econ/function/noloop/htmlpdfr/fs_apply.html}{Apply and Sapply function over arrays and rows}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop//fs_apply.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop/htmlpdfr/fs_apply.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop/htmlpdfr/fs_apply.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/function/noloop/htmlpdfr/fs_apply.html}{\textbf{html}}
 
   \begin{itemize}
   \tightlist
   \item
     Evaluate function f(x\_i,y\_i,c), where c is a constant and x and y vary over each row of a matrix, with index i indicating rows.
   \item
-    Get same results using apply, sapply, and dplyr mutate.
+    Get same results using apply and sapply with defined and anonymous functions.
   \item
     \textbf{r}: \emph{do.call() + apply(mt, 1, func) + sapply(ls\_ar, func, ar1, ar2)}
+  \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/function/noloop/htmlpdfr/fs_applysapplymutate.html}{Mutate rowwise, mutate pmap, and rowwise do unnest}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop//fs_applysapplymutate.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop/htmlpdfr/fs_applysapplymutate.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop/htmlpdfr/fs_applysapplymutate.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/function/noloop/htmlpdfr/fs_applysapplymutate.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
   \item
-    \textbf{purrr}: \emph{rowwise() + unnest(out) + pmap(func) + unlist()}
+    Evaluate function f(x\_i,y\_i,c), where c is a constant and x and y vary over each row of a matrix, with index i indicating rows.
+  \item
+    Get same results using various types of mutate rowwise, mutate pmap and rowwise do unnest.
+  \item
+    \textbf{dplyr}: \emph{rowwise() + do() + unnest()}
+  \item
+    \textbf{purrr}: \emph{pmap(func)}
+  \item
+    \textbf{tidyr}: \emph{unlist()}
   \end{itemize}
 \end{enumerate}
 

@@ -59,9 +59,9 @@ fl_rho = 0.1
 fl_lambda = 1.1
 mt_nP_A_alpha = cbind(ar_nN_A, ar_nN_alpha, fl_rho, fl_lambda)
 ar_st_varnames <- c('s_A', 's_alpha', 'p_rho', 'p_lambda')
-tb_states_endo <- as_tibble(mt_nP_A_alpha) %>% 
-  rename_all(~c(ar_st_varnames)) %>% 
-  rowid_to_column(var = "state_id") 
+tb_states_endo <- as_tibble(mt_nP_A_alpha) %>%
+  rename_all(~c(ar_st_varnames)) %>%
+  rowid_to_column(var = "state_id")
 
 # B. Choice Grid
 it_N_choice_cnt = 3
@@ -69,28 +69,28 @@ fl_max = 10
 fl_min = 0
 ar_nN_d = seq(fl_min, fl_max, length.out = it_N_choice_cnt)
 ar_st_varnames <- c('c_food')
-tb_choices <- as_tibble(ar_nN_d) %>% 
-  rename_all(~c(ar_st_varnames)) %>% 
-  rowid_to_column(var = "choice_id") 
+tb_choices <- as_tibble(ar_nN_d) %>%
+  rename_all(~c(ar_st_varnames)) %>%
+  rowid_to_column(var = "choice_id")
 
 # C. Shock Grid
 set.seed(123)
 it_N_shock_cnt = 4
 ar_nQ_shocks = exp(rnorm(it_N_shock_cnt, mean=0, sd=1))
 ar_st_varnames <- c('s_eps')
-tb_states_exo <- as_tibble(ar_nQ_shocks) %>% 
-  rename_all(~c(ar_st_varnames)) %>% 
-  rowid_to_column(var = "shock_id") 
+tb_states_exo <- as_tibble(ar_nQ_shocks) %>%
+  rename_all(~c(ar_st_varnames)) %>%
+  rowid_to_column(var = "shock_id")
 
 # dataframe expand with other non expanded variables
-ar_st_varnames <- 
-tb_states_shk_choices <- tb_states_endo %>% 
-  expand_grid(tb_choices) %>% 
-  expand_grid(tb_states_exo) %>% 
-  select(state_id, choice_id, shock_id, 
+ar_st_varnames <-
+tb_states_shk_choices <- tb_states_endo %>%
+  expand_grid(tb_choices) %>%
+  expand_grid(tb_states_exo) %>%
+  select(state_id, choice_id, shock_id,
          s_A, s_alpha, s_eps, c_food,
          p_rho, p_lambda)
-  
+
 # display
 kable(tb_states_shk_choices) %>% kable_styling_fc()
 ```

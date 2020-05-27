@@ -1,5 +1,5 @@
 ---
-title: "pyfan Refreshes Package, Generates RMD based PDF, HTML and R Files"
+title: "pyecon Refreshes Package, Generates RMD based PDF, HTML and R Files"
 titleshort: "Knit PDF, HTML and Curl R based on RMD"
 description: |
   Knit PDF, HTML and Curl R based on RMD.
@@ -33,10 +33,10 @@ library(reticulate)
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
 
-pyfan Rmd to PDF and HTML.
+pyecon Rmd to PDF and HTML.
 
 ```{r}
-# file_path_root <- 'C:/Users/fan/pyfan/support/development/fs_pkg_pyfan'
+# file_path_root <- 'C:/Users/fan/pyecon/support/development/fs_pkg_pyecon'
 # file_path_r <- paste0(file_path_root, '.R')
 # file_path_rmd <- paste0(file_path_root, '.Rmd')
 # knitr::purl(file_path_rmd, output=file_path_r, documentation = 1)
@@ -45,21 +45,21 @@ pyfan Rmd to PDF and HTML.
 
 #### Testing Which Files Have Changed
 
-Check through *pyfan* and see which files have been added, and which files have been modified. bl_test set to TRUE. Not generating any new files, just checking.
+Check through *pyecon* and see which files have been added, and which files have been modified. bl_test set to TRUE. Not generating any new files, just checking.
 
 Note: new files that should not get pdf and html should have *.rmd* rather than *.Rmd* as suffix.
 
 ```{r}
 # run examples
-spt_root <- 'C:/Users/fan/pyfan'
-spt_log <- 'C:/Users/fan/pyfan/_log/rmdclean/'
+spt_root <- 'C:/Users/fan/pyecon'
+spt_log <- 'C:/Users/fan/pyecon/_log/rmdclean/'
 sink(paste0(spt_log, 'rmd_clean_test.log'))
 start_time <- Sys.time()
 setwd(spt_root)
 
 bl_test = TRUE
 bl_gen_if_git_old = FALSE
-ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/pyfan'),
+ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/pyecon'),
                  ar_spn_skip = c('pkgtest','index.Rmd', 'main.Rmd',
                                   '_mod.Rmd', 'README', 'title.Rmd'),
                  st_folder_pdf = '/htmlpdfr/',
@@ -81,15 +81,15 @@ Only generate pdf and html for files that have git changes or are new.
 
 
 ```{r}
-spt_root <- 'C:/Users/fan/pyfan'
-spt_log <- 'C:/Users/fan/pyfan/_log/rmdclean/'
+spt_root <- 'C:/Users/fan/pyecon'
+spt_log <- 'C:/Users/fan/pyecon/_log/rmdclean/'
 sink(paste0(spt_log, 'rmd_clean_actual.log'))
 start_time <- Sys.time()
 setwd(spt_root)
 
 bl_test = FALSE
 bl_gen_if_git_old = FALSE
-ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/pyfan'),
+ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/pyecon'),
                  ar_spn_skip = c('pkgtest','index.Rmd', 'main.Rmd',
                                  '_mod.Rmd', 'README', 'title.Rmd'),
                  st_folder_pdf = '/htmlpdfr/',
@@ -112,11 +112,11 @@ There is python file that parses rmd front matters and goes through rmd files in
 - 'C:/Users/fan/Py4Econ/support/inout/bookdownparse.py'
 
 ```{python}
-import pyfan.util.rmd.bookdownparse as ft_bookdownparse
+import pyecon.util.rmd.bookdownparse as ft_bookdownparse
 
 # Path Roots
-sfc_prj = 'pyfan'
-sph_prj = 'C:/Users/fan/pyfan/'
+sfc_prj = 'pyecon'
+sph_prj = 'C:/Users/fan/pyecon/'
 spn_prj_bookdown_yml = '_bookdown.yml'
 
 # Read me preamble, and endnotes
@@ -150,7 +150,7 @@ with open(sph_prj + spn_prj_readme_ful, 'w') as outfile:
 Generate contenxt for bookdown appendix.
 
 ```{python}
-sph_prj = 'C:/Users/fan/pyfan/'
+sph_prj = 'C:/Users/fan/pyecon/'
 spn_prj_readme_toc = 'README_toc.md'
 spn_prj_appendix = 'README_appendix.md'
 spn_in = open(sph_prj + spn_prj_readme_toc, "r")
@@ -215,8 +215,8 @@ spn_out.close()
 Render HTML:
 
 ```{r}
-spt_root <- 'C:/Users/fan/pyfan'
-spt_log <- 'C:/Users/fan/pyfan/_log/rmdclean/'
+spt_root <- 'C:/Users/fan/pyecon'
+spt_log <- 'C:/Users/fan/pyecon/_log/rmdclean/'
 
 sink(paste0(spt_log, 'render_bookdown_html.log'))
 start_time <- Sys.time()
@@ -233,8 +233,8 @@ sink()
 Render PDF:
 
 ```{r}
-spt_root <- 'C:/Users/fan/pyfan'
-spt_log <- 'C:/Users/fan/pyfan/_log/rmdclean/'
+spt_root <- 'C:/Users/fan/pyecon'
+spt_log <- 'C:/Users/fan/pyecon/_log/rmdclean/'
 
 sink(paste0(spt_log, 'render_bookdown_pdf.log'))
 start_time <- Sys.time()

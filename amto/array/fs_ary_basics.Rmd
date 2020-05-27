@@ -2,6 +2,7 @@
 title: "Arrays Operations in R"
 description: |
   Basic array operations in R, rep, head, tail, na, etc.
+  E notation.
 core:
   - package: r
     code: |
@@ -9,7 +10,8 @@ core:
       head()
       tail()
       na_if()
-date: 2020-04-01
+date: 2020-05-27
+date_start: 2020-04-01
 output:
   pdf_document:
     pandoc_args: '../../_output_kniti_pdf.yaml'
@@ -69,7 +71,7 @@ head(vars.group.bydf, -1)
 head(vars.group.bydf, 2)
 ```
 
-Get last two elements of array. 
+Get last two elements of array.
 
 ```{r}
 # Remove first element of array
@@ -89,3 +91,14 @@ tail(vars.group.bydf, 2)
 x <- c(1, -1, Inf, 10, -Inf)
 na_if(na_if(x, -Inf), Inf)
 ```
+
+#### Notations
+
+##### e notation
+
+1. Case one: *1.149946e+00*
+    + this is approximately: 1.14995
+2. Case two: *9.048038e-01*
+    + this is approximately: 0.90480
+3. Case three: *9.048038e-01*
+    + this is approximately: 0.90480

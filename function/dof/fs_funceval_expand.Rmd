@@ -1,8 +1,9 @@
 ---
-title: "R Expand Each Dataframe Row into More Rows"
-titleshort: "Expand Each Dataframe Row into More Rows"
+title: "R Do Anything Function over Dataframe Rows Expansion, (Mx1 by N) to (MxQ by N+1)"
+titleshort: "Dataframe Row to Array (Mx1 by N) to (MxQ by N+1)"
 description: |
   Generate row value specific arrays of varying Length, and stack expanded dataframe.
+  Given row-specific information, generate row-specific arrays that expand matrix.
 core:
   - package: dplyr
     code: |
@@ -10,7 +11,7 @@ core:
       unnest()
       left_join()
       df %>% group_by(ID) %>% do(inc = rnorm(.$Q, mean=.$mean, sd=.$sd)) %>% unnest(c(inc))
-date: 2020-04-19
+date: 2020-05-27
 date_start: 2020-04-01
 output:
   pdf_document:
@@ -25,7 +26,7 @@ always_allow_html: true
 urlcolor: blue
 ---
 
-### Mx1 to MxQ Rows
+### (Mx1 by N) to (MxQ by N+1)
 
 ```{r global_options, include = FALSE}
 try(source("../../.Rprofile"))

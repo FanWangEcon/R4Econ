@@ -30,7 +30,7 @@ Modify markdown pounds hierarchy.</p>" />
 <meta name="author" content="Fan Wang" />
 
 
-<meta name="date" content="2020-05-16" />
+<meta name="date" content="2020-05-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -210,12 +210,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.2" data-path="functions.html"><a href="functions.html#dataframe-do-anything"><i class="fa fa-check"></i><b>3.2</b> Dataframe Do Anything</a>
 <ul>
-<li class="chapter" data-level="3.2.1" data-path="functions.html"><a href="functions.html#mxq-to-mxp-rows"><i class="fa fa-check"></i><b>3.2.1</b> MxQ to MxP Rows</a></li>
-<li class="chapter" data-level="3.2.2" data-path="functions.html"><a href="functions.html#mx1-to-mxq-rows"><i class="fa fa-check"></i><b>3.2.2</b> Mx1 to MxQ Rows</a></li>
+<li class="chapter" data-level="3.2.1" data-path="functions.html"><a href="functions.html#mx1-by-n-to-mxq-by-n1"><i class="fa fa-check"></i><b>3.2.1</b> (Mx1 by N) to (MxQ by N+1)</a></li>
+<li class="chapter" data-level="3.2.2" data-path="functions.html"><a href="functions.html#mxp-by-n-to-mx1-by-1"><i class="fa fa-check"></i><b>3.2.2</b> (MxP by N) to (Mx1 by 1)</a></li>
+<li class="chapter" data-level="3.2.3" data-path="functions.html"><a href="functions.html#mxp-by-n-to-mxq-by-nz"><i class="fa fa-check"></i><b>3.2.3</b> (MxP by N) to (MxQ by N+Z)</a></li>
 </ul></li>
 <li class="chapter" data-level="3.3" data-path="functions.html"><a href="functions.html#apply-and-pmap"><i class="fa fa-check"></i><b>3.3</b> Apply and pmap</a>
 <ul>
-<li class="chapter" data-level="3.3.1" data-path="functions.html"><a href="functions.html#apply-sapply-mutate"><i class="fa fa-check"></i><b>3.3.1</b> Apply, Sapply, Mutate</a></li>
+<li class="chapter" data-level="3.3.1" data-path="functions.html"><a href="functions.html#apply-and-sapply"><i class="fa fa-check"></i><b>3.3.1</b> Apply and Sapply</a></li>
+<li class="chapter" data-level="3.3.2" data-path="functions.html"><a href="functions.html#mutate-evaluate-functions"><i class="fa fa-check"></i><b>3.3.2</b> Mutate Evaluate Functions</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="panel.html"><a href="panel.html"><i class="fa fa-check"></i><b>4</b> Panel</a>
@@ -395,172 +397,172 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>1 line plot</li>
 <li>2 function curve plots</li>
 </ul>
-<div class="sourceCode" id="cb396"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb396-1"><a href="tables-and-graphs.html#cb396-1"></a><span class="co">#######################################################</span></span>
-<span id="cb396-2"><a href="tables-and-graphs.html#cb396-2"></a><span class="co"># First, Some common Labels:</span></span>
-<span id="cb396-3"><a href="tables-and-graphs.html#cb396-3"></a><span class="co">#######################################################</span></span>
-<span id="cb396-4"><a href="tables-and-graphs.html#cb396-4"></a><span class="co"># Labeling</span></span>
-<span id="cb396-5"><a href="tables-and-graphs.html#cb396-5"></a>st_title &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;Scatter, Line and Curve Joint Ploting Example Using Base R</span><span class="ch">\n</span><span class="st">&#39;</span>,</span>
-<span id="cb396-6"><a href="tables-and-graphs.html#cb396-6"></a>                   <span class="st">&#39;plot() + curve(): x*sin(x), cos(x), sin(x)*cos(x), sin(x)+tan(x)+cos(x)&#39;</span>)</span>
-<span id="cb396-7"><a href="tables-and-graphs.html#cb396-7"></a>st_subtitle &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;https://fanwangecon.github.io/&#39;</span>,</span>
-<span id="cb396-8"><a href="tables-and-graphs.html#cb396-8"></a>                      <span class="st">&#39;R4Econ/tabgraph/inout/htmlpdfr/fs_base_curve.html&#39;</span>)</span>
-<span id="cb396-9"><a href="tables-and-graphs.html#cb396-9"></a>st_x_label &lt;-<span class="st"> &#39;x&#39;</span></span>
-<span id="cb396-10"><a href="tables-and-graphs.html#cb396-10"></a>st_y_label &lt;-<span class="st"> &#39;f(x)&#39;</span></span>
-<span id="cb396-11"><a href="tables-and-graphs.html#cb396-11"></a></span>
-<span id="cb396-12"><a href="tables-and-graphs.html#cb396-12"></a><span class="co">#######################################################</span></span>
-<span id="cb396-13"><a href="tables-and-graphs.html#cb396-13"></a><span class="co"># Second, Generate the Graphs Functions and data points:</span></span>
-<span id="cb396-14"><a href="tables-and-graphs.html#cb396-14"></a><span class="co">#######################################################</span></span>
-<span id="cb396-15"><a href="tables-and-graphs.html#cb396-15"></a><span class="co"># x only used for Point 1 and Line 1</span></span>
-<span id="cb396-16"><a href="tables-and-graphs.html#cb396-16"></a>x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">1</span><span class="op">*</span>pi, <span class="dv">1</span><span class="op">*</span>pi, <span class="dt">length.out=</span><span class="dv">25</span>)</span>
-<span id="cb396-17"><a href="tables-and-graphs.html#cb396-17"></a><span class="co"># Line (Point) 1: Generate X and Y</span></span>
-<span id="cb396-18"><a href="tables-and-graphs.html#cb396-18"></a>y1 &lt;-<span class="st"> </span>x<span class="op">*</span><span class="kw">sin</span>(x)</span>
-<span id="cb396-19"><a href="tables-and-graphs.html#cb396-19"></a>st_point_<span class="dv">1</span>_y_legend &lt;-<span class="st"> &#39;x*sin(x)&#39;</span></span>
-<span id="cb396-20"><a href="tables-and-graphs.html#cb396-20"></a><span class="co"># Line 2: Line Plot</span></span>
-<span id="cb396-21"><a href="tables-and-graphs.html#cb396-21"></a>y2 &lt;-<span class="st"> </span><span class="kw">cos</span>(x)</span>
-<span id="cb396-22"><a href="tables-and-graphs.html#cb396-22"></a>st_line_<span class="dv">2</span>_y_legend &lt;-<span class="st"> &#39;cos(x)&#39;</span></span>
-<span id="cb396-23"><a href="tables-and-graphs.html#cb396-23"></a><span class="co"># Line 3: Function</span></span>
-<span id="cb396-24"><a href="tables-and-graphs.html#cb396-24"></a>fc_sin_cos_diff &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">sin</span>(x)<span class="op">*</span><span class="kw">cos</span>(x)</span>
-<span id="cb396-25"><a href="tables-and-graphs.html#cb396-25"></a>st_line_<span class="dv">3</span>_y_legend &lt;-<span class="st"> &#39;sin(x)*cos(x)&#39;</span></span>
-<span id="cb396-26"><a href="tables-and-graphs.html#cb396-26"></a><span class="co"># Line 4: Function</span></span>
-<span id="cb396-27"><a href="tables-and-graphs.html#cb396-27"></a>fc_sin_cos_tan &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">sin</span>(x) <span class="op">+</span><span class="st"> </span><span class="kw">cos</span>(x) <span class="op">+</span><span class="st"> </span><span class="kw">tan</span>(x)</span>
-<span id="cb396-28"><a href="tables-and-graphs.html#cb396-28"></a>st_line_<span class="dv">4</span>_y_legend &lt;-<span class="st"> &#39;sin(x) + tan(x) + cos(x)&#39;</span></span>
-<span id="cb396-29"><a href="tables-and-graphs.html#cb396-29"></a></span>
-<span id="cb396-30"><a href="tables-and-graphs.html#cb396-30"></a><span class="co">#######################################################</span></span>
-<span id="cb396-31"><a href="tables-and-graphs.html#cb396-31"></a><span class="co"># Third, set:</span></span>
-<span id="cb396-32"><a href="tables-and-graphs.html#cb396-32"></a><span class="co"># - point shape and size: *pch* and *cex*</span></span>
-<span id="cb396-33"><a href="tables-and-graphs.html#cb396-33"></a><span class="co"># - line type and width: *lty* and *lwd*</span></span>
-<span id="cb396-34"><a href="tables-and-graphs.html#cb396-34"></a><span class="co">#######################################################</span></span>
-<span id="cb396-35"><a href="tables-and-graphs.html#cb396-35"></a><span class="co"># http://www.sthda.com/english/wiki/r-plot-pch-symbols-the-different-point-shapes-available-in-r</span></span>
-<span id="cb396-36"><a href="tables-and-graphs.html#cb396-36"></a><span class="co"># http://www.sthda.com/english/wiki/line-types-in-r-lty</span></span>
-<span id="cb396-37"><a href="tables-and-graphs.html#cb396-37"></a><span class="co"># for colors, see: https://fanwangecon.github.io/M4Econ/graph/tools/fs_color.html</span></span>
-<span id="cb396-38"><a href="tables-and-graphs.html#cb396-38"></a>st_point_<span class="dv">1</span>_blue &lt;-<span class="st"> </span><span class="kw">rgb</span>(<span class="dv">57</span><span class="op">/</span><span class="dv">255</span>,<span class="dv">106</span><span class="op">/</span><span class="dv">255</span>,<span class="dv">177</span><span class="op">/</span><span class="dv">255</span>)</span>
-<span id="cb396-39"><a href="tables-and-graphs.html#cb396-39"></a>st_line_<span class="dv">2</span>_red &lt;-<span class="st"> </span><span class="kw">rgb</span>(<span class="dv">204</span><span class="op">/</span><span class="dv">255</span>, <span class="dv">37</span><span class="op">/</span><span class="dv">255</span>, <span class="dv">41</span><span class="op">/</span><span class="dv">255</span>,)</span>
-<span id="cb396-40"><a href="tables-and-graphs.html#cb396-40"></a>st_line_<span class="dv">3</span>_black &lt;-<span class="st"> &#39;black&#39;</span></span>
-<span id="cb396-41"><a href="tables-and-graphs.html#cb396-41"></a>st_line_<span class="dv">4</span>_purple &lt;-<span class="st"> &#39;orange&#39;</span></span>
-<span id="cb396-42"><a href="tables-and-graphs.html#cb396-42"></a></span>
-<span id="cb396-43"><a href="tables-and-graphs.html#cb396-43"></a><span class="co"># point type</span></span>
-<span id="cb396-44"><a href="tables-and-graphs.html#cb396-44"></a>st_point_<span class="dv">1</span>_pch &lt;-<span class="st"> </span><span class="dv">10</span></span>
-<span id="cb396-45"><a href="tables-and-graphs.html#cb396-45"></a><span class="co"># point size</span></span>
-<span id="cb396-46"><a href="tables-and-graphs.html#cb396-46"></a>st_point_<span class="dv">1</span>_cex &lt;-<span class="st"> </span><span class="dv">2</span></span>
-<span id="cb396-47"><a href="tables-and-graphs.html#cb396-47"></a></span>
-<span id="cb396-48"><a href="tables-and-graphs.html#cb396-48"></a><span class="co"># line type</span></span>
-<span id="cb396-49"><a href="tables-and-graphs.html#cb396-49"></a>st_line_<span class="dv">2</span>_lty &lt;-<span class="st"> &#39;dashed&#39;</span></span>
-<span id="cb396-50"><a href="tables-and-graphs.html#cb396-50"></a>st_line_<span class="dv">3</span>_lty &lt;-<span class="st"> &#39;dotted&#39;</span></span>
-<span id="cb396-51"><a href="tables-and-graphs.html#cb396-51"></a>st_line_<span class="dv">4</span>_lty &lt;-<span class="st"> &#39;dotdash&#39;</span></span>
-<span id="cb396-52"><a href="tables-and-graphs.html#cb396-52"></a><span class="co"># line width</span></span>
-<span id="cb396-53"><a href="tables-and-graphs.html#cb396-53"></a>st_line_<span class="dv">2</span>_lwd &lt;-<span class="st"> </span><span class="dv">3</span></span>
-<span id="cb396-54"><a href="tables-and-graphs.html#cb396-54"></a>st_line_<span class="dv">3</span>_lwd &lt;-<span class="st"> </span><span class="fl">2.5</span></span>
-<span id="cb396-55"><a href="tables-and-graphs.html#cb396-55"></a>st_line_<span class="dv">4</span>_lwd &lt;-<span class="st"> </span><span class="fl">3.5</span></span>
-<span id="cb396-56"><a href="tables-and-graphs.html#cb396-56"></a></span>
-<span id="cb396-57"><a href="tables-and-graphs.html#cb396-57"></a><span class="co">#######################################################</span></span>
-<span id="cb396-58"><a href="tables-and-graphs.html#cb396-58"></a><span class="co"># Fourth: Share xlim and ylim</span></span>
-<span id="cb396-59"><a href="tables-and-graphs.html#cb396-59"></a><span class="co">#######################################################</span></span>
-<span id="cb396-60"><a href="tables-and-graphs.html#cb396-60"></a>ar_xlim =<span class="st"> </span><span class="kw">c</span>(<span class="kw">min</span>(x), <span class="kw">max</span>(x))</span>
-<span id="cb396-61"><a href="tables-and-graphs.html#cb396-61"></a>ar_ylim =<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="fl">3.5</span>, <span class="fl">3.5</span>)</span>
-<span id="cb396-62"><a href="tables-and-graphs.html#cb396-62"></a></span>
-<span id="cb396-63"><a href="tables-and-graphs.html#cb396-63"></a><span class="co">#######################################################</span></span>
-<span id="cb396-64"><a href="tables-and-graphs.html#cb396-64"></a><span class="co"># Fifth: the legend will be long, will place it to the right of figure,</span></span>
-<span id="cb396-65"><a href="tables-and-graphs.html#cb396-65"></a><span class="co">#######################################################</span></span>
-<span id="cb396-66"><a href="tables-and-graphs.html#cb396-66"></a><span class="kw">par</span>(<span class="dt">new=</span><span class="ot">FALSE</span>, <span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">10</span>))</span>
-<span id="cb396-67"><a href="tables-and-graphs.html#cb396-67"></a></span>
-<span id="cb396-68"><a href="tables-and-graphs.html#cb396-68"></a><span class="co">#######################################################</span></span>
-<span id="cb396-69"><a href="tables-and-graphs.html#cb396-69"></a><span class="co"># Sixth, the four objects and do not print yet:</span></span>
-<span id="cb396-70"><a href="tables-and-graphs.html#cb396-70"></a><span class="co">#######################################################</span></span>
-<span id="cb396-71"><a href="tables-and-graphs.html#cb396-71"></a><span class="co"># pdf(NULL)</span></span>
-<span id="cb396-72"><a href="tables-and-graphs.html#cb396-72"></a><span class="co"># Graph Scatter 1</span></span>
-<span id="cb396-73"><a href="tables-and-graphs.html#cb396-73"></a><span class="kw">plot</span>(x, y1, <span class="dt">type=</span><span class="st">&quot;p&quot;</span>,</span>
-<span id="cb396-74"><a href="tables-and-graphs.html#cb396-74"></a>     <span class="dt">col =</span> st_point_<span class="dv">1</span>_blue,</span>
-<span id="cb396-75"><a href="tables-and-graphs.html#cb396-75"></a>     <span class="dt">pch =</span> st_point_<span class="dv">1</span>_pch, <span class="dt">cex =</span> st_point_<span class="dv">1</span>_cex,</span>
-<span id="cb396-76"><a href="tables-and-graphs.html#cb396-76"></a>     <span class="dt">xlim =</span> ar_xlim, <span class="dt">ylim =</span> ar_ylim,</span>
-<span id="cb396-77"><a href="tables-and-graphs.html#cb396-77"></a>     <span class="dt">panel.first =</span> <span class="kw">grid</span>(),</span>
-<span id="cb396-78"><a href="tables-and-graphs.html#cb396-78"></a>     <span class="dt">ylab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">xlab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">yaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">ann=</span><span class="ot">FALSE</span>)</span>
-<span id="cb396-79"><a href="tables-and-graphs.html#cb396-79"></a>pl_scatter_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">recordPlot</span>()</span>
-<span id="cb396-80"><a href="tables-and-graphs.html#cb396-80"></a></span>
-<span id="cb396-81"><a href="tables-and-graphs.html#cb396-81"></a><span class="co"># Graph Line 2</span></span>
-<span id="cb396-82"><a href="tables-and-graphs.html#cb396-82"></a><span class="kw">par</span>(<span class="dt">new=</span>T)</span>
-<span id="cb396-83"><a href="tables-and-graphs.html#cb396-83"></a><span class="kw">plot</span>(x, y2, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>,</span>
-<span id="cb396-84"><a href="tables-and-graphs.html#cb396-84"></a>     <span class="dt">col =</span> st_line_<span class="dv">2</span>_red,</span>
-<span id="cb396-85"><a href="tables-and-graphs.html#cb396-85"></a>     <span class="dt">lwd =</span> st_line_<span class="dv">2</span>_lwd, <span class="dt">lty =</span> st_line_<span class="dv">2</span>_lty,</span>
-<span id="cb396-86"><a href="tables-and-graphs.html#cb396-86"></a>     <span class="dt">xlim =</span> ar_xlim, <span class="dt">ylim =</span> ar_ylim,</span>
-<span id="cb396-87"><a href="tables-and-graphs.html#cb396-87"></a>     <span class="dt">ylab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">xlab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">yaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">ann=</span><span class="ot">FALSE</span>)</span>
-<span id="cb396-88"><a href="tables-and-graphs.html#cb396-88"></a>pl_<span class="dv">12</span> &lt;-<span class="st"> </span><span class="kw">recordPlot</span>()</span>
-<span id="cb396-89"><a href="tables-and-graphs.html#cb396-89"></a></span>
-<span id="cb396-90"><a href="tables-and-graphs.html#cb396-90"></a><span class="co"># Graph Curve 3</span></span>
-<span id="cb396-91"><a href="tables-and-graphs.html#cb396-91"></a><span class="kw">par</span>(<span class="dt">new=</span>T)</span>
-<span id="cb396-92"><a href="tables-and-graphs.html#cb396-92"></a><span class="kw">curve</span>(fc_sin_cos_diff,</span>
-<span id="cb396-93"><a href="tables-and-graphs.html#cb396-93"></a>      <span class="dt">col =</span> st_line_<span class="dv">3</span>_black,</span>
-<span id="cb396-94"><a href="tables-and-graphs.html#cb396-94"></a>      <span class="dt">lwd =</span> st_line_<span class="dv">3</span>_lwd, <span class="dt">lty =</span> st_line_<span class="dv">3</span>_lty,</span>
-<span id="cb396-95"><a href="tables-and-graphs.html#cb396-95"></a>      <span class="dt">from =</span> ar_xlim[<span class="dv">1</span>], <span class="dt">to =</span> ar_xlim[<span class="dv">2</span>], <span class="dt">ylim =</span> ar_ylim,</span>
-<span id="cb396-96"><a href="tables-and-graphs.html#cb396-96"></a>      <span class="dt">ylab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">xlab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">yaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">ann=</span><span class="ot">FALSE</span>)</span>
-<span id="cb396-97"><a href="tables-and-graphs.html#cb396-97"></a>pl_<span class="dv">123</span> &lt;-<span class="st"> </span><span class="kw">recordPlot</span>()</span>
-<span id="cb396-98"><a href="tables-and-graphs.html#cb396-98"></a></span>
-<span id="cb396-99"><a href="tables-and-graphs.html#cb396-99"></a><span class="co"># Graph Curve 4</span></span>
-<span id="cb396-100"><a href="tables-and-graphs.html#cb396-100"></a><span class="kw">par</span>(<span class="dt">new=</span>T)</span>
-<span id="cb396-101"><a href="tables-and-graphs.html#cb396-101"></a><span class="kw">curve</span>(fc_sin_cos_tan,</span>
-<span id="cb396-102"><a href="tables-and-graphs.html#cb396-102"></a>      <span class="dt">col =</span> st_line_<span class="dv">4</span>_purple,</span>
-<span id="cb396-103"><a href="tables-and-graphs.html#cb396-103"></a>      <span class="dt">lwd =</span> st_line_<span class="dv">4</span>_lwd, <span class="dt">lty =</span> st_line_<span class="dv">4</span>_lty,</span>
-<span id="cb396-104"><a href="tables-and-graphs.html#cb396-104"></a>      <span class="dt">from =</span> ar_xlim[<span class="dv">1</span>], <span class="dt">to =</span> ar_xlim[<span class="dv">2</span>], <span class="dt">ylim =</span> ar_ylim,</span>
-<span id="cb396-105"><a href="tables-and-graphs.html#cb396-105"></a>      <span class="dt">ylab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">xlab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">yaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">ann=</span><span class="ot">FALSE</span>)</span>
-<span id="cb396-106"><a href="tables-and-graphs.html#cb396-106"></a>pl_<span class="dv">1234</span> &lt;-<span class="st"> </span><span class="kw">recordPlot</span>()</span>
-<span id="cb396-107"><a href="tables-and-graphs.html#cb396-107"></a><span class="co"># invisible(dev.off())</span></span>
-<span id="cb396-108"><a href="tables-and-graphs.html#cb396-108"></a></span>
-<span id="cb396-109"><a href="tables-and-graphs.html#cb396-109"></a><span class="co">#######################################################</span></span>
-<span id="cb396-110"><a href="tables-and-graphs.html#cb396-110"></a><span class="co"># Seventh, Set Title and Legend and Plot Jointly</span></span>
-<span id="cb396-111"><a href="tables-and-graphs.html#cb396-111"></a><span class="co">#######################################################</span></span>
-<span id="cb396-112"><a href="tables-and-graphs.html#cb396-112"></a><span class="co"># CEX sizing Contorl Titling and Legend Sizes</span></span>
-<span id="cb396-113"><a href="tables-and-graphs.html#cb396-113"></a>fl_ces_fig_reg =<span class="st"> </span><span class="dv">1</span></span>
-<span id="cb396-114"><a href="tables-and-graphs.html#cb396-114"></a>fl_ces_fig_small =<span class="st"> </span><span class="fl">0.75</span></span>
-<span id="cb396-115"><a href="tables-and-graphs.html#cb396-115"></a></span>
-<span id="cb396-116"><a href="tables-and-graphs.html#cb396-116"></a><span class="co"># R Legend</span></span>
-<span id="cb396-117"><a href="tables-and-graphs.html#cb396-117"></a><span class="kw">title</span>(<span class="dt">main =</span> st_title, <span class="dt">sub =</span> st_subtitle, <span class="dt">xlab =</span> st_x_label, <span class="dt">ylab =</span> st_y_label,</span>
-<span id="cb396-118"><a href="tables-and-graphs.html#cb396-118"></a>      <span class="dt">cex.lab=</span>fl_ces_fig_reg,</span>
-<span id="cb396-119"><a href="tables-and-graphs.html#cb396-119"></a>      <span class="dt">cex.main=</span>fl_ces_fig_reg,</span>
-<span id="cb396-120"><a href="tables-and-graphs.html#cb396-120"></a>      <span class="dt">cex.sub=</span>fl_ces_fig_small)</span>
-<span id="cb396-121"><a href="tables-and-graphs.html#cb396-121"></a><span class="kw">axis</span>(<span class="dv">1</span>, <span class="dt">cex.axis=</span>fl_ces_fig_reg)</span>
-<span id="cb396-122"><a href="tables-and-graphs.html#cb396-122"></a><span class="kw">axis</span>(<span class="dv">2</span>, <span class="dt">cex.axis=</span>fl_ces_fig_reg)</span>
-<span id="cb396-123"><a href="tables-and-graphs.html#cb396-123"></a><span class="kw">grid</span>()</span>
-<span id="cb396-124"><a href="tables-and-graphs.html#cb396-124"></a></span>
-<span id="cb396-125"><a href="tables-and-graphs.html#cb396-125"></a><span class="co"># Legend sizing CEX</span></span>
-<span id="cb396-126"><a href="tables-and-graphs.html#cb396-126"></a><span class="kw">legend</span>(<span class="st">&quot;topright&quot;</span>,</span>
-<span id="cb396-127"><a href="tables-and-graphs.html#cb396-127"></a>       <span class="dt">inset=</span><span class="kw">c</span>(<span class="op">-</span><span class="fl">0.4</span>,<span class="dv">0</span>),</span>
-<span id="cb396-128"><a href="tables-and-graphs.html#cb396-128"></a>       <span class="dt">xpd=</span><span class="ot">TRUE</span>,</span>
-<span id="cb396-129"><a href="tables-and-graphs.html#cb396-129"></a>       <span class="kw">c</span>(st_point_<span class="dv">1</span>_y_legend, st_line_<span class="dv">2</span>_y_legend, st_line_<span class="dv">3</span>_y_legend, st_line_<span class="dv">4</span>_y_legend),</span>
-<span id="cb396-130"><a href="tables-and-graphs.html#cb396-130"></a>       <span class="dt">col =</span> <span class="kw">c</span>(st_point_<span class="dv">1</span>_blue, st_line_<span class="dv">2</span>_red, st_line_<span class="dv">3</span>_black, st_line_<span class="dv">4</span>_purple),</span>
-<span id="cb396-131"><a href="tables-and-graphs.html#cb396-131"></a>       <span class="dt">pch =</span> <span class="kw">c</span>(st_point_<span class="dv">1</span>_pch, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</span>
-<span id="cb396-132"><a href="tables-and-graphs.html#cb396-132"></a>       <span class="dt">cex =</span> fl_ces_fig_small,</span>
-<span id="cb396-133"><a href="tables-and-graphs.html#cb396-133"></a>       <span class="dt">lty =</span> <span class="kw">c</span>(<span class="ot">NA</span>, st_line_<span class="dv">2</span>_lty, st_line_<span class="dv">3</span>_lty, st_line_<span class="dv">4</span>_lty),</span>
-<span id="cb396-134"><a href="tables-and-graphs.html#cb396-134"></a>       <span class="dt">lwd =</span> <span class="kw">c</span>(<span class="ot">NA</span>, st_line_<span class="dv">2</span>_lwd, st_line_<span class="dv">3</span>_lwd,st_line_<span class="dv">4</span>_lwd),</span>
-<span id="cb396-135"><a href="tables-and-graphs.html#cb396-135"></a>       <span class="dt">title =</span> <span class="st">&#39;Legends&#39;</span>,</span>
-<span id="cb396-136"><a href="tables-and-graphs.html#cb396-136"></a>       <span class="dt">y.intersp=</span><span class="dv">2</span>)</span></code></pre></div>
-<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-179-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb397"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb397-1"><a href="tables-and-graphs.html#cb397-1"></a><span class="co"># record final plot</span></span>
-<span id="cb397-2"><a href="tables-and-graphs.html#cb397-2"></a>pl_<span class="dv">1234</span>_final &lt;-<span class="st"> </span><span class="kw">recordPlot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb403-1"><a href="tables-and-graphs.html#cb403-1"></a><span class="co">#######################################################</span></span>
+<span id="cb403-2"><a href="tables-and-graphs.html#cb403-2"></a><span class="co"># First, Some common Labels:</span></span>
+<span id="cb403-3"><a href="tables-and-graphs.html#cb403-3"></a><span class="co">#######################################################</span></span>
+<span id="cb403-4"><a href="tables-and-graphs.html#cb403-4"></a><span class="co"># Labeling</span></span>
+<span id="cb403-5"><a href="tables-and-graphs.html#cb403-5"></a>st_title &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;Scatter, Line and Curve Joint Ploting Example Using Base R</span><span class="ch">\n</span><span class="st">&#39;</span>,</span>
+<span id="cb403-6"><a href="tables-and-graphs.html#cb403-6"></a>                   <span class="st">&#39;plot() + curve(): x*sin(x), cos(x), sin(x)*cos(x), sin(x)+tan(x)+cos(x)&#39;</span>)</span>
+<span id="cb403-7"><a href="tables-and-graphs.html#cb403-7"></a>st_subtitle &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;https://fanwangecon.github.io/&#39;</span>,</span>
+<span id="cb403-8"><a href="tables-and-graphs.html#cb403-8"></a>                      <span class="st">&#39;R4Econ/tabgraph/inout/htmlpdfr/fs_base_curve.html&#39;</span>)</span>
+<span id="cb403-9"><a href="tables-and-graphs.html#cb403-9"></a>st_x_label &lt;-<span class="st"> &#39;x&#39;</span></span>
+<span id="cb403-10"><a href="tables-and-graphs.html#cb403-10"></a>st_y_label &lt;-<span class="st"> &#39;f(x)&#39;</span></span>
+<span id="cb403-11"><a href="tables-and-graphs.html#cb403-11"></a></span>
+<span id="cb403-12"><a href="tables-and-graphs.html#cb403-12"></a><span class="co">#######################################################</span></span>
+<span id="cb403-13"><a href="tables-and-graphs.html#cb403-13"></a><span class="co"># Second, Generate the Graphs Functions and data points:</span></span>
+<span id="cb403-14"><a href="tables-and-graphs.html#cb403-14"></a><span class="co">#######################################################</span></span>
+<span id="cb403-15"><a href="tables-and-graphs.html#cb403-15"></a><span class="co"># x only used for Point 1 and Line 1</span></span>
+<span id="cb403-16"><a href="tables-and-graphs.html#cb403-16"></a>x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">1</span><span class="op">*</span>pi, <span class="dv">1</span><span class="op">*</span>pi, <span class="dt">length.out=</span><span class="dv">25</span>)</span>
+<span id="cb403-17"><a href="tables-and-graphs.html#cb403-17"></a><span class="co"># Line (Point) 1: Generate X and Y</span></span>
+<span id="cb403-18"><a href="tables-and-graphs.html#cb403-18"></a>y1 &lt;-<span class="st"> </span>x<span class="op">*</span><span class="kw">sin</span>(x)</span>
+<span id="cb403-19"><a href="tables-and-graphs.html#cb403-19"></a>st_point_<span class="dv">1</span>_y_legend &lt;-<span class="st"> &#39;x*sin(x)&#39;</span></span>
+<span id="cb403-20"><a href="tables-and-graphs.html#cb403-20"></a><span class="co"># Line 2: Line Plot</span></span>
+<span id="cb403-21"><a href="tables-and-graphs.html#cb403-21"></a>y2 &lt;-<span class="st"> </span><span class="kw">cos</span>(x)</span>
+<span id="cb403-22"><a href="tables-and-graphs.html#cb403-22"></a>st_line_<span class="dv">2</span>_y_legend &lt;-<span class="st"> &#39;cos(x)&#39;</span></span>
+<span id="cb403-23"><a href="tables-and-graphs.html#cb403-23"></a><span class="co"># Line 3: Function</span></span>
+<span id="cb403-24"><a href="tables-and-graphs.html#cb403-24"></a>fc_sin_cos_diff &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">sin</span>(x)<span class="op">*</span><span class="kw">cos</span>(x)</span>
+<span id="cb403-25"><a href="tables-and-graphs.html#cb403-25"></a>st_line_<span class="dv">3</span>_y_legend &lt;-<span class="st"> &#39;sin(x)*cos(x)&#39;</span></span>
+<span id="cb403-26"><a href="tables-and-graphs.html#cb403-26"></a><span class="co"># Line 4: Function</span></span>
+<span id="cb403-27"><a href="tables-and-graphs.html#cb403-27"></a>fc_sin_cos_tan &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">sin</span>(x) <span class="op">+</span><span class="st"> </span><span class="kw">cos</span>(x) <span class="op">+</span><span class="st"> </span><span class="kw">tan</span>(x)</span>
+<span id="cb403-28"><a href="tables-and-graphs.html#cb403-28"></a>st_line_<span class="dv">4</span>_y_legend &lt;-<span class="st"> &#39;sin(x) + tan(x) + cos(x)&#39;</span></span>
+<span id="cb403-29"><a href="tables-and-graphs.html#cb403-29"></a></span>
+<span id="cb403-30"><a href="tables-and-graphs.html#cb403-30"></a><span class="co">#######################################################</span></span>
+<span id="cb403-31"><a href="tables-and-graphs.html#cb403-31"></a><span class="co"># Third, set:</span></span>
+<span id="cb403-32"><a href="tables-and-graphs.html#cb403-32"></a><span class="co"># - point shape and size: *pch* and *cex*</span></span>
+<span id="cb403-33"><a href="tables-and-graphs.html#cb403-33"></a><span class="co"># - line type and width: *lty* and *lwd*</span></span>
+<span id="cb403-34"><a href="tables-and-graphs.html#cb403-34"></a><span class="co">#######################################################</span></span>
+<span id="cb403-35"><a href="tables-and-graphs.html#cb403-35"></a><span class="co"># http://www.sthda.com/english/wiki/r-plot-pch-symbols-the-different-point-shapes-available-in-r</span></span>
+<span id="cb403-36"><a href="tables-and-graphs.html#cb403-36"></a><span class="co"># http://www.sthda.com/english/wiki/line-types-in-r-lty</span></span>
+<span id="cb403-37"><a href="tables-and-graphs.html#cb403-37"></a><span class="co"># for colors, see: https://fanwangecon.github.io/M4Econ/graph/tools/fs_color.html</span></span>
+<span id="cb403-38"><a href="tables-and-graphs.html#cb403-38"></a>st_point_<span class="dv">1</span>_blue &lt;-<span class="st"> </span><span class="kw">rgb</span>(<span class="dv">57</span><span class="op">/</span><span class="dv">255</span>,<span class="dv">106</span><span class="op">/</span><span class="dv">255</span>,<span class="dv">177</span><span class="op">/</span><span class="dv">255</span>)</span>
+<span id="cb403-39"><a href="tables-and-graphs.html#cb403-39"></a>st_line_<span class="dv">2</span>_red &lt;-<span class="st"> </span><span class="kw">rgb</span>(<span class="dv">204</span><span class="op">/</span><span class="dv">255</span>, <span class="dv">37</span><span class="op">/</span><span class="dv">255</span>, <span class="dv">41</span><span class="op">/</span><span class="dv">255</span>,)</span>
+<span id="cb403-40"><a href="tables-and-graphs.html#cb403-40"></a>st_line_<span class="dv">3</span>_black &lt;-<span class="st"> &#39;black&#39;</span></span>
+<span id="cb403-41"><a href="tables-and-graphs.html#cb403-41"></a>st_line_<span class="dv">4</span>_purple &lt;-<span class="st"> &#39;orange&#39;</span></span>
+<span id="cb403-42"><a href="tables-and-graphs.html#cb403-42"></a></span>
+<span id="cb403-43"><a href="tables-and-graphs.html#cb403-43"></a><span class="co"># point type</span></span>
+<span id="cb403-44"><a href="tables-and-graphs.html#cb403-44"></a>st_point_<span class="dv">1</span>_pch &lt;-<span class="st"> </span><span class="dv">10</span></span>
+<span id="cb403-45"><a href="tables-and-graphs.html#cb403-45"></a><span class="co"># point size</span></span>
+<span id="cb403-46"><a href="tables-and-graphs.html#cb403-46"></a>st_point_<span class="dv">1</span>_cex &lt;-<span class="st"> </span><span class="dv">2</span></span>
+<span id="cb403-47"><a href="tables-and-graphs.html#cb403-47"></a></span>
+<span id="cb403-48"><a href="tables-and-graphs.html#cb403-48"></a><span class="co"># line type</span></span>
+<span id="cb403-49"><a href="tables-and-graphs.html#cb403-49"></a>st_line_<span class="dv">2</span>_lty &lt;-<span class="st"> &#39;dashed&#39;</span></span>
+<span id="cb403-50"><a href="tables-and-graphs.html#cb403-50"></a>st_line_<span class="dv">3</span>_lty &lt;-<span class="st"> &#39;dotted&#39;</span></span>
+<span id="cb403-51"><a href="tables-and-graphs.html#cb403-51"></a>st_line_<span class="dv">4</span>_lty &lt;-<span class="st"> &#39;dotdash&#39;</span></span>
+<span id="cb403-52"><a href="tables-and-graphs.html#cb403-52"></a><span class="co"># line width</span></span>
+<span id="cb403-53"><a href="tables-and-graphs.html#cb403-53"></a>st_line_<span class="dv">2</span>_lwd &lt;-<span class="st"> </span><span class="dv">3</span></span>
+<span id="cb403-54"><a href="tables-and-graphs.html#cb403-54"></a>st_line_<span class="dv">3</span>_lwd &lt;-<span class="st"> </span><span class="fl">2.5</span></span>
+<span id="cb403-55"><a href="tables-and-graphs.html#cb403-55"></a>st_line_<span class="dv">4</span>_lwd &lt;-<span class="st"> </span><span class="fl">3.5</span></span>
+<span id="cb403-56"><a href="tables-and-graphs.html#cb403-56"></a></span>
+<span id="cb403-57"><a href="tables-and-graphs.html#cb403-57"></a><span class="co">#######################################################</span></span>
+<span id="cb403-58"><a href="tables-and-graphs.html#cb403-58"></a><span class="co"># Fourth: Share xlim and ylim</span></span>
+<span id="cb403-59"><a href="tables-and-graphs.html#cb403-59"></a><span class="co">#######################################################</span></span>
+<span id="cb403-60"><a href="tables-and-graphs.html#cb403-60"></a>ar_xlim =<span class="st"> </span><span class="kw">c</span>(<span class="kw">min</span>(x), <span class="kw">max</span>(x))</span>
+<span id="cb403-61"><a href="tables-and-graphs.html#cb403-61"></a>ar_ylim =<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="fl">3.5</span>, <span class="fl">3.5</span>)</span>
+<span id="cb403-62"><a href="tables-and-graphs.html#cb403-62"></a></span>
+<span id="cb403-63"><a href="tables-and-graphs.html#cb403-63"></a><span class="co">#######################################################</span></span>
+<span id="cb403-64"><a href="tables-and-graphs.html#cb403-64"></a><span class="co"># Fifth: the legend will be long, will place it to the right of figure,</span></span>
+<span id="cb403-65"><a href="tables-and-graphs.html#cb403-65"></a><span class="co">#######################################################</span></span>
+<span id="cb403-66"><a href="tables-and-graphs.html#cb403-66"></a><span class="kw">par</span>(<span class="dt">new=</span><span class="ot">FALSE</span>, <span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">10</span>))</span>
+<span id="cb403-67"><a href="tables-and-graphs.html#cb403-67"></a></span>
+<span id="cb403-68"><a href="tables-and-graphs.html#cb403-68"></a><span class="co">#######################################################</span></span>
+<span id="cb403-69"><a href="tables-and-graphs.html#cb403-69"></a><span class="co"># Sixth, the four objects and do not print yet:</span></span>
+<span id="cb403-70"><a href="tables-and-graphs.html#cb403-70"></a><span class="co">#######################################################</span></span>
+<span id="cb403-71"><a href="tables-and-graphs.html#cb403-71"></a><span class="co"># pdf(NULL)</span></span>
+<span id="cb403-72"><a href="tables-and-graphs.html#cb403-72"></a><span class="co"># Graph Scatter 1</span></span>
+<span id="cb403-73"><a href="tables-and-graphs.html#cb403-73"></a><span class="kw">plot</span>(x, y1, <span class="dt">type=</span><span class="st">&quot;p&quot;</span>,</span>
+<span id="cb403-74"><a href="tables-and-graphs.html#cb403-74"></a>     <span class="dt">col =</span> st_point_<span class="dv">1</span>_blue,</span>
+<span id="cb403-75"><a href="tables-and-graphs.html#cb403-75"></a>     <span class="dt">pch =</span> st_point_<span class="dv">1</span>_pch, <span class="dt">cex =</span> st_point_<span class="dv">1</span>_cex,</span>
+<span id="cb403-76"><a href="tables-and-graphs.html#cb403-76"></a>     <span class="dt">xlim =</span> ar_xlim, <span class="dt">ylim =</span> ar_ylim,</span>
+<span id="cb403-77"><a href="tables-and-graphs.html#cb403-77"></a>     <span class="dt">panel.first =</span> <span class="kw">grid</span>(),</span>
+<span id="cb403-78"><a href="tables-and-graphs.html#cb403-78"></a>     <span class="dt">ylab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">xlab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">yaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">ann=</span><span class="ot">FALSE</span>)</span>
+<span id="cb403-79"><a href="tables-and-graphs.html#cb403-79"></a>pl_scatter_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">recordPlot</span>()</span>
+<span id="cb403-80"><a href="tables-and-graphs.html#cb403-80"></a></span>
+<span id="cb403-81"><a href="tables-and-graphs.html#cb403-81"></a><span class="co"># Graph Line 2</span></span>
+<span id="cb403-82"><a href="tables-and-graphs.html#cb403-82"></a><span class="kw">par</span>(<span class="dt">new=</span>T)</span>
+<span id="cb403-83"><a href="tables-and-graphs.html#cb403-83"></a><span class="kw">plot</span>(x, y2, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>,</span>
+<span id="cb403-84"><a href="tables-and-graphs.html#cb403-84"></a>     <span class="dt">col =</span> st_line_<span class="dv">2</span>_red,</span>
+<span id="cb403-85"><a href="tables-and-graphs.html#cb403-85"></a>     <span class="dt">lwd =</span> st_line_<span class="dv">2</span>_lwd, <span class="dt">lty =</span> st_line_<span class="dv">2</span>_lty,</span>
+<span id="cb403-86"><a href="tables-and-graphs.html#cb403-86"></a>     <span class="dt">xlim =</span> ar_xlim, <span class="dt">ylim =</span> ar_ylim,</span>
+<span id="cb403-87"><a href="tables-and-graphs.html#cb403-87"></a>     <span class="dt">ylab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">xlab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">yaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">ann=</span><span class="ot">FALSE</span>)</span>
+<span id="cb403-88"><a href="tables-and-graphs.html#cb403-88"></a>pl_<span class="dv">12</span> &lt;-<span class="st"> </span><span class="kw">recordPlot</span>()</span>
+<span id="cb403-89"><a href="tables-and-graphs.html#cb403-89"></a></span>
+<span id="cb403-90"><a href="tables-and-graphs.html#cb403-90"></a><span class="co"># Graph Curve 3</span></span>
+<span id="cb403-91"><a href="tables-and-graphs.html#cb403-91"></a><span class="kw">par</span>(<span class="dt">new=</span>T)</span>
+<span id="cb403-92"><a href="tables-and-graphs.html#cb403-92"></a><span class="kw">curve</span>(fc_sin_cos_diff,</span>
+<span id="cb403-93"><a href="tables-and-graphs.html#cb403-93"></a>      <span class="dt">col =</span> st_line_<span class="dv">3</span>_black,</span>
+<span id="cb403-94"><a href="tables-and-graphs.html#cb403-94"></a>      <span class="dt">lwd =</span> st_line_<span class="dv">3</span>_lwd, <span class="dt">lty =</span> st_line_<span class="dv">3</span>_lty,</span>
+<span id="cb403-95"><a href="tables-and-graphs.html#cb403-95"></a>      <span class="dt">from =</span> ar_xlim[<span class="dv">1</span>], <span class="dt">to =</span> ar_xlim[<span class="dv">2</span>], <span class="dt">ylim =</span> ar_ylim,</span>
+<span id="cb403-96"><a href="tables-and-graphs.html#cb403-96"></a>      <span class="dt">ylab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">xlab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">yaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">ann=</span><span class="ot">FALSE</span>)</span>
+<span id="cb403-97"><a href="tables-and-graphs.html#cb403-97"></a>pl_<span class="dv">123</span> &lt;-<span class="st"> </span><span class="kw">recordPlot</span>()</span>
+<span id="cb403-98"><a href="tables-and-graphs.html#cb403-98"></a></span>
+<span id="cb403-99"><a href="tables-and-graphs.html#cb403-99"></a><span class="co"># Graph Curve 4</span></span>
+<span id="cb403-100"><a href="tables-and-graphs.html#cb403-100"></a><span class="kw">par</span>(<span class="dt">new=</span>T)</span>
+<span id="cb403-101"><a href="tables-and-graphs.html#cb403-101"></a><span class="kw">curve</span>(fc_sin_cos_tan,</span>
+<span id="cb403-102"><a href="tables-and-graphs.html#cb403-102"></a>      <span class="dt">col =</span> st_line_<span class="dv">4</span>_purple,</span>
+<span id="cb403-103"><a href="tables-and-graphs.html#cb403-103"></a>      <span class="dt">lwd =</span> st_line_<span class="dv">4</span>_lwd, <span class="dt">lty =</span> st_line_<span class="dv">4</span>_lty,</span>
+<span id="cb403-104"><a href="tables-and-graphs.html#cb403-104"></a>      <span class="dt">from =</span> ar_xlim[<span class="dv">1</span>], <span class="dt">to =</span> ar_xlim[<span class="dv">2</span>], <span class="dt">ylim =</span> ar_ylim,</span>
+<span id="cb403-105"><a href="tables-and-graphs.html#cb403-105"></a>      <span class="dt">ylab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">xlab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">yaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">ann=</span><span class="ot">FALSE</span>)</span>
+<span id="cb403-106"><a href="tables-and-graphs.html#cb403-106"></a>pl_<span class="dv">1234</span> &lt;-<span class="st"> </span><span class="kw">recordPlot</span>()</span>
+<span id="cb403-107"><a href="tables-and-graphs.html#cb403-107"></a><span class="co"># invisible(dev.off())</span></span>
+<span id="cb403-108"><a href="tables-and-graphs.html#cb403-108"></a></span>
+<span id="cb403-109"><a href="tables-and-graphs.html#cb403-109"></a><span class="co">#######################################################</span></span>
+<span id="cb403-110"><a href="tables-and-graphs.html#cb403-110"></a><span class="co"># Seventh, Set Title and Legend and Plot Jointly</span></span>
+<span id="cb403-111"><a href="tables-and-graphs.html#cb403-111"></a><span class="co">#######################################################</span></span>
+<span id="cb403-112"><a href="tables-and-graphs.html#cb403-112"></a><span class="co"># CEX sizing Contorl Titling and Legend Sizes</span></span>
+<span id="cb403-113"><a href="tables-and-graphs.html#cb403-113"></a>fl_ces_fig_reg =<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb403-114"><a href="tables-and-graphs.html#cb403-114"></a>fl_ces_fig_small =<span class="st"> </span><span class="fl">0.75</span></span>
+<span id="cb403-115"><a href="tables-and-graphs.html#cb403-115"></a></span>
+<span id="cb403-116"><a href="tables-and-graphs.html#cb403-116"></a><span class="co"># R Legend</span></span>
+<span id="cb403-117"><a href="tables-and-graphs.html#cb403-117"></a><span class="kw">title</span>(<span class="dt">main =</span> st_title, <span class="dt">sub =</span> st_subtitle, <span class="dt">xlab =</span> st_x_label, <span class="dt">ylab =</span> st_y_label,</span>
+<span id="cb403-118"><a href="tables-and-graphs.html#cb403-118"></a>      <span class="dt">cex.lab=</span>fl_ces_fig_reg,</span>
+<span id="cb403-119"><a href="tables-and-graphs.html#cb403-119"></a>      <span class="dt">cex.main=</span>fl_ces_fig_reg,</span>
+<span id="cb403-120"><a href="tables-and-graphs.html#cb403-120"></a>      <span class="dt">cex.sub=</span>fl_ces_fig_small)</span>
+<span id="cb403-121"><a href="tables-and-graphs.html#cb403-121"></a><span class="kw">axis</span>(<span class="dv">1</span>, <span class="dt">cex.axis=</span>fl_ces_fig_reg)</span>
+<span id="cb403-122"><a href="tables-and-graphs.html#cb403-122"></a><span class="kw">axis</span>(<span class="dv">2</span>, <span class="dt">cex.axis=</span>fl_ces_fig_reg)</span>
+<span id="cb403-123"><a href="tables-and-graphs.html#cb403-123"></a><span class="kw">grid</span>()</span>
+<span id="cb403-124"><a href="tables-and-graphs.html#cb403-124"></a></span>
+<span id="cb403-125"><a href="tables-and-graphs.html#cb403-125"></a><span class="co"># Legend sizing CEX</span></span>
+<span id="cb403-126"><a href="tables-and-graphs.html#cb403-126"></a><span class="kw">legend</span>(<span class="st">&quot;topright&quot;</span>,</span>
+<span id="cb403-127"><a href="tables-and-graphs.html#cb403-127"></a>       <span class="dt">inset=</span><span class="kw">c</span>(<span class="op">-</span><span class="fl">0.4</span>,<span class="dv">0</span>),</span>
+<span id="cb403-128"><a href="tables-and-graphs.html#cb403-128"></a>       <span class="dt">xpd=</span><span class="ot">TRUE</span>,</span>
+<span id="cb403-129"><a href="tables-and-graphs.html#cb403-129"></a>       <span class="kw">c</span>(st_point_<span class="dv">1</span>_y_legend, st_line_<span class="dv">2</span>_y_legend, st_line_<span class="dv">3</span>_y_legend, st_line_<span class="dv">4</span>_y_legend),</span>
+<span id="cb403-130"><a href="tables-and-graphs.html#cb403-130"></a>       <span class="dt">col =</span> <span class="kw">c</span>(st_point_<span class="dv">1</span>_blue, st_line_<span class="dv">2</span>_red, st_line_<span class="dv">3</span>_black, st_line_<span class="dv">4</span>_purple),</span>
+<span id="cb403-131"><a href="tables-and-graphs.html#cb403-131"></a>       <span class="dt">pch =</span> <span class="kw">c</span>(st_point_<span class="dv">1</span>_pch, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>),</span>
+<span id="cb403-132"><a href="tables-and-graphs.html#cb403-132"></a>       <span class="dt">cex =</span> fl_ces_fig_small,</span>
+<span id="cb403-133"><a href="tables-and-graphs.html#cb403-133"></a>       <span class="dt">lty =</span> <span class="kw">c</span>(<span class="ot">NA</span>, st_line_<span class="dv">2</span>_lty, st_line_<span class="dv">3</span>_lty, st_line_<span class="dv">4</span>_lty),</span>
+<span id="cb403-134"><a href="tables-and-graphs.html#cb403-134"></a>       <span class="dt">lwd =</span> <span class="kw">c</span>(<span class="ot">NA</span>, st_line_<span class="dv">2</span>_lwd, st_line_<span class="dv">3</span>_lwd,st_line_<span class="dv">4</span>_lwd),</span>
+<span id="cb403-135"><a href="tables-and-graphs.html#cb403-135"></a>       <span class="dt">title =</span> <span class="st">&#39;Legends&#39;</span>,</span>
+<span id="cb403-136"><a href="tables-and-graphs.html#cb403-136"></a>       <span class="dt">y.intersp=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-188-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb404"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb404-1"><a href="tables-and-graphs.html#cb404-1"></a><span class="co"># record final plot</span></span>
+<span id="cb404-2"><a href="tables-and-graphs.html#cb404-2"></a>pl_<span class="dv">1234</span>_final &lt;-<span class="st"> </span><span class="kw">recordPlot</span>()</span></code></pre></div>
 <p>We used recordplot() earlier. So now we can print just the first two constructed plots.</p>
-<div class="sourceCode" id="cb398"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb398-1"><a href="tables-and-graphs.html#cb398-1"></a><span class="co">#######################################################</span></span>
-<span id="cb398-2"><a href="tables-and-graphs.html#cb398-2"></a><span class="co"># Eighth, Plot just the first two saved lines</span></span>
-<span id="cb398-3"><a href="tables-and-graphs.html#cb398-3"></a><span class="co">#######################################################</span></span>
-<span id="cb398-4"><a href="tables-and-graphs.html#cb398-4"></a><span class="co"># mar: margin, bottom, left, top, right</span></span>
-<span id="cb398-5"><a href="tables-and-graphs.html#cb398-5"></a>pl_<span class="dv">12</span></span>
-<span id="cb398-6"><a href="tables-and-graphs.html#cb398-6"></a><span class="co"># R Legend</span></span>
-<span id="cb398-7"><a href="tables-and-graphs.html#cb398-7"></a><span class="kw">par</span>(<span class="dt">new=</span>T)</span>
-<span id="cb398-8"><a href="tables-and-graphs.html#cb398-8"></a><span class="kw">title</span>(<span class="dt">main =</span> st_title, <span class="dt">sub =</span> st_subtitle, <span class="dt">xlab =</span> st_x_label, <span class="dt">ylab =</span> st_y_label,</span>
-<span id="cb398-9"><a href="tables-and-graphs.html#cb398-9"></a>      <span class="dt">cex.lab =</span> fl_ces_fig_reg,</span>
-<span id="cb398-10"><a href="tables-and-graphs.html#cb398-10"></a>      <span class="dt">cex.main =</span> fl_ces_fig_reg,</span>
-<span id="cb398-11"><a href="tables-and-graphs.html#cb398-11"></a>      <span class="dt">cex.sub =</span> fl_ces_fig_small)</span>
-<span id="cb398-12"><a href="tables-and-graphs.html#cb398-12"></a></span>
-<span id="cb398-13"><a href="tables-and-graphs.html#cb398-13"></a><span class="co"># Legend sizing CEX</span></span>
-<span id="cb398-14"><a href="tables-and-graphs.html#cb398-14"></a><span class="kw">par</span>(<span class="dt">new=</span>T)</span>
-<span id="cb398-15"><a href="tables-and-graphs.html#cb398-15"></a><span class="kw">legend</span>(<span class="st">&quot;topright&quot;</span>,</span>
-<span id="cb398-16"><a href="tables-and-graphs.html#cb398-16"></a>       <span class="dt">inset=</span><span class="kw">c</span>(<span class="op">-</span><span class="fl">0.4</span>,<span class="dv">0</span>),</span>
-<span id="cb398-17"><a href="tables-and-graphs.html#cb398-17"></a>       <span class="dt">xpd=</span><span class="ot">TRUE</span>,</span>
-<span id="cb398-18"><a href="tables-and-graphs.html#cb398-18"></a>       <span class="kw">c</span>(st_point_<span class="dv">1</span>_y_legend, st_line_<span class="dv">2</span>_y_legend),</span>
-<span id="cb398-19"><a href="tables-and-graphs.html#cb398-19"></a>       <span class="dt">col =</span> <span class="kw">c</span>(st_point_<span class="dv">1</span>_blue, st_line_<span class="dv">2</span>_red),</span>
-<span id="cb398-20"><a href="tables-and-graphs.html#cb398-20"></a>       <span class="dt">pch =</span> <span class="kw">c</span>(st_point_<span class="dv">1</span>_pch, <span class="ot">NA</span>),</span>
-<span id="cb398-21"><a href="tables-and-graphs.html#cb398-21"></a>       <span class="dt">cex =</span> fl_ces_fig_small,</span>
-<span id="cb398-22"><a href="tables-and-graphs.html#cb398-22"></a>       <span class="dt">lty =</span> <span class="kw">c</span>(<span class="ot">NA</span>, st_line_<span class="dv">2</span>_lty),</span>
-<span id="cb398-23"><a href="tables-and-graphs.html#cb398-23"></a>       <span class="dt">lwd =</span> <span class="kw">c</span>(<span class="ot">NA</span>, st_line_<span class="dv">2</span>_lwd),</span>
-<span id="cb398-24"><a href="tables-and-graphs.html#cb398-24"></a>       <span class="dt">title =</span> <span class="st">&#39;Legends&#39;</span>,</span>
-<span id="cb398-25"><a href="tables-and-graphs.html#cb398-25"></a>       <span class="dt">y.intersp=</span><span class="dv">2</span>)</span></code></pre></div>
-<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-180-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb405"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb405-1"><a href="tables-and-graphs.html#cb405-1"></a><span class="co">#######################################################</span></span>
+<span id="cb405-2"><a href="tables-and-graphs.html#cb405-2"></a><span class="co"># Eighth, Plot just the first two saved lines</span></span>
+<span id="cb405-3"><a href="tables-and-graphs.html#cb405-3"></a><span class="co">#######################################################</span></span>
+<span id="cb405-4"><a href="tables-and-graphs.html#cb405-4"></a><span class="co"># mar: margin, bottom, left, top, right</span></span>
+<span id="cb405-5"><a href="tables-and-graphs.html#cb405-5"></a>pl_<span class="dv">12</span></span>
+<span id="cb405-6"><a href="tables-and-graphs.html#cb405-6"></a><span class="co"># R Legend</span></span>
+<span id="cb405-7"><a href="tables-and-graphs.html#cb405-7"></a><span class="kw">par</span>(<span class="dt">new=</span>T)</span>
+<span id="cb405-8"><a href="tables-and-graphs.html#cb405-8"></a><span class="kw">title</span>(<span class="dt">main =</span> st_title, <span class="dt">sub =</span> st_subtitle, <span class="dt">xlab =</span> st_x_label, <span class="dt">ylab =</span> st_y_label,</span>
+<span id="cb405-9"><a href="tables-and-graphs.html#cb405-9"></a>      <span class="dt">cex.lab =</span> fl_ces_fig_reg,</span>
+<span id="cb405-10"><a href="tables-and-graphs.html#cb405-10"></a>      <span class="dt">cex.main =</span> fl_ces_fig_reg,</span>
+<span id="cb405-11"><a href="tables-and-graphs.html#cb405-11"></a>      <span class="dt">cex.sub =</span> fl_ces_fig_small)</span>
+<span id="cb405-12"><a href="tables-and-graphs.html#cb405-12"></a></span>
+<span id="cb405-13"><a href="tables-and-graphs.html#cb405-13"></a><span class="co"># Legend sizing CEX</span></span>
+<span id="cb405-14"><a href="tables-and-graphs.html#cb405-14"></a><span class="kw">par</span>(<span class="dt">new=</span>T)</span>
+<span id="cb405-15"><a href="tables-and-graphs.html#cb405-15"></a><span class="kw">legend</span>(<span class="st">&quot;topright&quot;</span>,</span>
+<span id="cb405-16"><a href="tables-and-graphs.html#cb405-16"></a>       <span class="dt">inset=</span><span class="kw">c</span>(<span class="op">-</span><span class="fl">0.4</span>,<span class="dv">0</span>),</span>
+<span id="cb405-17"><a href="tables-and-graphs.html#cb405-17"></a>       <span class="dt">xpd=</span><span class="ot">TRUE</span>,</span>
+<span id="cb405-18"><a href="tables-and-graphs.html#cb405-18"></a>       <span class="kw">c</span>(st_point_<span class="dv">1</span>_y_legend, st_line_<span class="dv">2</span>_y_legend),</span>
+<span id="cb405-19"><a href="tables-and-graphs.html#cb405-19"></a>       <span class="dt">col =</span> <span class="kw">c</span>(st_point_<span class="dv">1</span>_blue, st_line_<span class="dv">2</span>_red),</span>
+<span id="cb405-20"><a href="tables-and-graphs.html#cb405-20"></a>       <span class="dt">pch =</span> <span class="kw">c</span>(st_point_<span class="dv">1</span>_pch, <span class="ot">NA</span>),</span>
+<span id="cb405-21"><a href="tables-and-graphs.html#cb405-21"></a>       <span class="dt">cex =</span> fl_ces_fig_small,</span>
+<span id="cb405-22"><a href="tables-and-graphs.html#cb405-22"></a>       <span class="dt">lty =</span> <span class="kw">c</span>(<span class="ot">NA</span>, st_line_<span class="dv">2</span>_lty),</span>
+<span id="cb405-23"><a href="tables-and-graphs.html#cb405-23"></a>       <span class="dt">lwd =</span> <span class="kw">c</span>(<span class="ot">NA</span>, st_line_<span class="dv">2</span>_lwd),</span>
+<span id="cb405-24"><a href="tables-and-graphs.html#cb405-24"></a>       <span class="dt">title =</span> <span class="st">&#39;Legends&#39;</span>,</span>
+<span id="cb405-25"><a href="tables-and-graphs.html#cb405-25"></a>       <span class="dt">y.intersp=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-189-1.png" width="672" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>
@@ -579,182 +581,182 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="generate-and-record-a-plot" class="section level5" number="9.2.1.1.1">
 <h5><span class="header-section-number">9.2.1.1.1</span> Generate and Record A Plot</h5>
 <p>Generate a graph and recordPlot() it. The generated graph does not have legends Yet. Crucially, there are no titles, legends, axis, labels in the figures. As we stack the figures together, do not add those. Only add at the end jointly for all figure elements together to control at one spot things.</p>
-<div class="sourceCode" id="cb399"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb399-1"><a href="tables-and-graphs.html#cb399-1"></a><span class="co">#######################################################</span></span>
-<span id="cb399-2"><a href="tables-and-graphs.html#cb399-2"></a><span class="co"># First, Strings</span></span>
-<span id="cb399-3"><a href="tables-and-graphs.html#cb399-3"></a><span class="co">#######################################################</span></span>
-<span id="cb399-4"><a href="tables-and-graphs.html#cb399-4"></a><span class="co"># Labeling</span></span>
-<span id="cb399-5"><a href="tables-and-graphs.html#cb399-5"></a>st_title &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;Scatter, Line and Curve Joint Ploting Example Using Base R</span><span class="ch">\n</span><span class="st">&#39;</span>,</span>
-<span id="cb399-6"><a href="tables-and-graphs.html#cb399-6"></a>                   <span class="st">&#39;plot() + curve():sin(x)*cos(x), sin(x)+tan(x)+cos(x)&#39;</span>)</span>
-<span id="cb399-7"><a href="tables-and-graphs.html#cb399-7"></a>st_subtitle &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;https://fanwangecon.github.io/&#39;</span>,</span>
-<span id="cb399-8"><a href="tables-and-graphs.html#cb399-8"></a>                      <span class="st">&#39;R4Econ/tabgraph/inout/htmlpdfr/fs_base_curve.html&#39;</span>)</span>
-<span id="cb399-9"><a href="tables-and-graphs.html#cb399-9"></a>st_x_label &lt;-<span class="st"> &#39;x&#39;</span></span>
-<span id="cb399-10"><a href="tables-and-graphs.html#cb399-10"></a>st_y_label &lt;-<span class="st"> &#39;f(x)&#39;</span></span>
-<span id="cb399-11"><a href="tables-and-graphs.html#cb399-11"></a></span>
-<span id="cb399-12"><a href="tables-and-graphs.html#cb399-12"></a><span class="co">#######################################################</span></span>
-<span id="cb399-13"><a href="tables-and-graphs.html#cb399-13"></a><span class="co"># Second, functions</span></span>
-<span id="cb399-14"><a href="tables-and-graphs.html#cb399-14"></a><span class="co">#######################################################</span></span>
-<span id="cb399-15"><a href="tables-and-graphs.html#cb399-15"></a>fc_sin_cos_diff &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">sin</span>(x)<span class="op">*</span><span class="kw">cos</span>(x)</span>
-<span id="cb399-16"><a href="tables-and-graphs.html#cb399-16"></a>st_line_<span class="dv">3</span>_y_legend &lt;-<span class="st"> &#39;sin(x)*cos(x)&#39;</span></span>
-<span id="cb399-17"><a href="tables-and-graphs.html#cb399-17"></a>fc_sin_cos_tan &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">sin</span>(x) <span class="op">+</span><span class="st"> </span><span class="kw">cos</span>(x) <span class="op">+</span><span class="st"> </span><span class="kw">tan</span>(x)</span>
-<span id="cb399-18"><a href="tables-and-graphs.html#cb399-18"></a>st_line_<span class="dv">4</span>_y_legend &lt;-<span class="st"> &#39;sin(x) + tan(x) + cos(x)&#39;</span></span>
-<span id="cb399-19"><a href="tables-and-graphs.html#cb399-19"></a></span>
-<span id="cb399-20"><a href="tables-and-graphs.html#cb399-20"></a><span class="co">#######################################################</span></span>
-<span id="cb399-21"><a href="tables-and-graphs.html#cb399-21"></a><span class="co"># Third, patterns</span></span>
-<span id="cb399-22"><a href="tables-and-graphs.html#cb399-22"></a><span class="co">#######################################################</span></span>
-<span id="cb399-23"><a href="tables-and-graphs.html#cb399-23"></a>st_line_<span class="dv">3</span>_black &lt;-<span class="st"> &#39;black&#39;</span></span>
-<span id="cb399-24"><a href="tables-and-graphs.html#cb399-24"></a>st_line_<span class="dv">4</span>_purple &lt;-<span class="st"> &#39;orange&#39;</span></span>
-<span id="cb399-25"><a href="tables-and-graphs.html#cb399-25"></a><span class="co"># line type</span></span>
-<span id="cb399-26"><a href="tables-and-graphs.html#cb399-26"></a>st_line_<span class="dv">3</span>_lty &lt;-<span class="st"> &#39;dotted&#39;</span></span>
-<span id="cb399-27"><a href="tables-and-graphs.html#cb399-27"></a>st_line_<span class="dv">4</span>_lty &lt;-<span class="st"> &#39;dotdash&#39;</span></span>
-<span id="cb399-28"><a href="tables-and-graphs.html#cb399-28"></a><span class="co"># line width</span></span>
-<span id="cb399-29"><a href="tables-and-graphs.html#cb399-29"></a>st_line_<span class="dv">3</span>_lwd &lt;-<span class="st"> </span><span class="fl">2.5</span></span>
-<span id="cb399-30"><a href="tables-and-graphs.html#cb399-30"></a>st_line_<span class="dv">4</span>_lwd &lt;-<span class="st"> </span><span class="fl">3.5</span></span>
-<span id="cb399-31"><a href="tables-and-graphs.html#cb399-31"></a></span>
-<span id="cb399-32"><a href="tables-and-graphs.html#cb399-32"></a><span class="co">#######################################################</span></span>
-<span id="cb399-33"><a href="tables-and-graphs.html#cb399-33"></a><span class="co"># Fourth: Share xlim and ylim</span></span>
-<span id="cb399-34"><a href="tables-and-graphs.html#cb399-34"></a><span class="co">#######################################################</span></span>
-<span id="cb399-35"><a href="tables-and-graphs.html#cb399-35"></a>ar_xlim =<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>)</span>
-<span id="cb399-36"><a href="tables-and-graphs.html#cb399-36"></a>ar_ylim =<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="fl">3.5</span>, <span class="fl">3.5</span>)</span>
-<span id="cb399-37"><a href="tables-and-graphs.html#cb399-37"></a></span>
-<span id="cb399-38"><a href="tables-and-graphs.html#cb399-38"></a><span class="co">#######################################################</span></span>
-<span id="cb399-39"><a href="tables-and-graphs.html#cb399-39"></a><span class="co"># Fifth: Even margins</span></span>
-<span id="cb399-40"><a href="tables-and-graphs.html#cb399-40"></a><span class="co">#######################################################</span></span>
-<span id="cb399-41"><a href="tables-and-graphs.html#cb399-41"></a><span class="kw">par</span>(<span class="dt">new=</span><span class="ot">FALSE</span>)</span>
-<span id="cb399-42"><a href="tables-and-graphs.html#cb399-42"></a></span>
-<span id="cb399-43"><a href="tables-and-graphs.html#cb399-43"></a><span class="co">#######################################################</span></span>
-<span id="cb399-44"><a href="tables-and-graphs.html#cb399-44"></a><span class="co"># Sixth, the four objects and do not print yet:</span></span>
-<span id="cb399-45"><a href="tables-and-graphs.html#cb399-45"></a><span class="co">#######################################################</span></span>
-<span id="cb399-46"><a href="tables-and-graphs.html#cb399-46"></a><span class="co"># Graph Curve 3</span></span>
-<span id="cb399-47"><a href="tables-and-graphs.html#cb399-47"></a><span class="kw">par</span>(<span class="dt">new=</span>T)</span>
-<span id="cb399-48"><a href="tables-and-graphs.html#cb399-48"></a><span class="kw">curve</span>(fc_sin_cos_diff,</span>
-<span id="cb399-49"><a href="tables-and-graphs.html#cb399-49"></a>      <span class="dt">col =</span> st_line_<span class="dv">3</span>_black,</span>
-<span id="cb399-50"><a href="tables-and-graphs.html#cb399-50"></a>      <span class="dt">lwd =</span> st_line_<span class="dv">3</span>_lwd, <span class="dt">lty =</span> st_line_<span class="dv">3</span>_lty,</span>
-<span id="cb399-51"><a href="tables-and-graphs.html#cb399-51"></a>      <span class="dt">from =</span> ar_xlim[<span class="dv">1</span>], <span class="dt">to =</span> ar_xlim[<span class="dv">2</span>], <span class="dt">ylim =</span> ar_ylim,</span>
-<span id="cb399-52"><a href="tables-and-graphs.html#cb399-52"></a>      <span class="dt">ylab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">xlab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">yaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">ann=</span><span class="ot">FALSE</span>)</span>
-<span id="cb399-53"><a href="tables-and-graphs.html#cb399-53"></a><span class="co"># Graph Curve 4</span></span>
-<span id="cb399-54"><a href="tables-and-graphs.html#cb399-54"></a><span class="kw">par</span>(<span class="dt">new=</span>T)</span>
-<span id="cb399-55"><a href="tables-and-graphs.html#cb399-55"></a><span class="kw">curve</span>(fc_sin_cos_tan,</span>
-<span id="cb399-56"><a href="tables-and-graphs.html#cb399-56"></a>      <span class="dt">col =</span> st_line_<span class="dv">4</span>_purple,</span>
-<span id="cb399-57"><a href="tables-and-graphs.html#cb399-57"></a>      <span class="dt">lwd =</span> st_line_<span class="dv">4</span>_lwd, <span class="dt">lty =</span> st_line_<span class="dv">4</span>_lty,</span>
-<span id="cb399-58"><a href="tables-and-graphs.html#cb399-58"></a>      <span class="dt">from =</span> ar_xlim[<span class="dv">1</span>], <span class="dt">to =</span> ar_xlim[<span class="dv">2</span>], <span class="dt">ylim =</span> ar_ylim,</span>
-<span id="cb399-59"><a href="tables-and-graphs.html#cb399-59"></a>      <span class="dt">ylab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">xlab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">yaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">ann=</span><span class="ot">FALSE</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb400"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb400-1"><a href="tables-and-graphs.html#cb400-1"></a>pl_curves_save &lt;-<span class="st"> </span><span class="kw">recordPlot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb406-1"><a href="tables-and-graphs.html#cb406-1"></a><span class="co">#######################################################</span></span>
+<span id="cb406-2"><a href="tables-and-graphs.html#cb406-2"></a><span class="co"># First, Strings</span></span>
+<span id="cb406-3"><a href="tables-and-graphs.html#cb406-3"></a><span class="co">#######################################################</span></span>
+<span id="cb406-4"><a href="tables-and-graphs.html#cb406-4"></a><span class="co"># Labeling</span></span>
+<span id="cb406-5"><a href="tables-and-graphs.html#cb406-5"></a>st_title &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;Scatter, Line and Curve Joint Ploting Example Using Base R</span><span class="ch">\n</span><span class="st">&#39;</span>,</span>
+<span id="cb406-6"><a href="tables-and-graphs.html#cb406-6"></a>                   <span class="st">&#39;plot() + curve():sin(x)*cos(x), sin(x)+tan(x)+cos(x)&#39;</span>)</span>
+<span id="cb406-7"><a href="tables-and-graphs.html#cb406-7"></a>st_subtitle &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;https://fanwangecon.github.io/&#39;</span>,</span>
+<span id="cb406-8"><a href="tables-and-graphs.html#cb406-8"></a>                      <span class="st">&#39;R4Econ/tabgraph/inout/htmlpdfr/fs_base_curve.html&#39;</span>)</span>
+<span id="cb406-9"><a href="tables-and-graphs.html#cb406-9"></a>st_x_label &lt;-<span class="st"> &#39;x&#39;</span></span>
+<span id="cb406-10"><a href="tables-and-graphs.html#cb406-10"></a>st_y_label &lt;-<span class="st"> &#39;f(x)&#39;</span></span>
+<span id="cb406-11"><a href="tables-and-graphs.html#cb406-11"></a></span>
+<span id="cb406-12"><a href="tables-and-graphs.html#cb406-12"></a><span class="co">#######################################################</span></span>
+<span id="cb406-13"><a href="tables-and-graphs.html#cb406-13"></a><span class="co"># Second, functions</span></span>
+<span id="cb406-14"><a href="tables-and-graphs.html#cb406-14"></a><span class="co">#######################################################</span></span>
+<span id="cb406-15"><a href="tables-and-graphs.html#cb406-15"></a>fc_sin_cos_diff &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">sin</span>(x)<span class="op">*</span><span class="kw">cos</span>(x)</span>
+<span id="cb406-16"><a href="tables-and-graphs.html#cb406-16"></a>st_line_<span class="dv">3</span>_y_legend &lt;-<span class="st"> &#39;sin(x)*cos(x)&#39;</span></span>
+<span id="cb406-17"><a href="tables-and-graphs.html#cb406-17"></a>fc_sin_cos_tan &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">sin</span>(x) <span class="op">+</span><span class="st"> </span><span class="kw">cos</span>(x) <span class="op">+</span><span class="st"> </span><span class="kw">tan</span>(x)</span>
+<span id="cb406-18"><a href="tables-and-graphs.html#cb406-18"></a>st_line_<span class="dv">4</span>_y_legend &lt;-<span class="st"> &#39;sin(x) + tan(x) + cos(x)&#39;</span></span>
+<span id="cb406-19"><a href="tables-and-graphs.html#cb406-19"></a></span>
+<span id="cb406-20"><a href="tables-and-graphs.html#cb406-20"></a><span class="co">#######################################################</span></span>
+<span id="cb406-21"><a href="tables-and-graphs.html#cb406-21"></a><span class="co"># Third, patterns</span></span>
+<span id="cb406-22"><a href="tables-and-graphs.html#cb406-22"></a><span class="co">#######################################################</span></span>
+<span id="cb406-23"><a href="tables-and-graphs.html#cb406-23"></a>st_line_<span class="dv">3</span>_black &lt;-<span class="st"> &#39;black&#39;</span></span>
+<span id="cb406-24"><a href="tables-and-graphs.html#cb406-24"></a>st_line_<span class="dv">4</span>_purple &lt;-<span class="st"> &#39;orange&#39;</span></span>
+<span id="cb406-25"><a href="tables-and-graphs.html#cb406-25"></a><span class="co"># line type</span></span>
+<span id="cb406-26"><a href="tables-and-graphs.html#cb406-26"></a>st_line_<span class="dv">3</span>_lty &lt;-<span class="st"> &#39;dotted&#39;</span></span>
+<span id="cb406-27"><a href="tables-and-graphs.html#cb406-27"></a>st_line_<span class="dv">4</span>_lty &lt;-<span class="st"> &#39;dotdash&#39;</span></span>
+<span id="cb406-28"><a href="tables-and-graphs.html#cb406-28"></a><span class="co"># line width</span></span>
+<span id="cb406-29"><a href="tables-and-graphs.html#cb406-29"></a>st_line_<span class="dv">3</span>_lwd &lt;-<span class="st"> </span><span class="fl">2.5</span></span>
+<span id="cb406-30"><a href="tables-and-graphs.html#cb406-30"></a>st_line_<span class="dv">4</span>_lwd &lt;-<span class="st"> </span><span class="fl">3.5</span></span>
+<span id="cb406-31"><a href="tables-and-graphs.html#cb406-31"></a></span>
+<span id="cb406-32"><a href="tables-and-graphs.html#cb406-32"></a><span class="co">#######################################################</span></span>
+<span id="cb406-33"><a href="tables-and-graphs.html#cb406-33"></a><span class="co"># Fourth: Share xlim and ylim</span></span>
+<span id="cb406-34"><a href="tables-and-graphs.html#cb406-34"></a><span class="co">#######################################################</span></span>
+<span id="cb406-35"><a href="tables-and-graphs.html#cb406-35"></a>ar_xlim =<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb406-36"><a href="tables-and-graphs.html#cb406-36"></a>ar_ylim =<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="fl">3.5</span>, <span class="fl">3.5</span>)</span>
+<span id="cb406-37"><a href="tables-and-graphs.html#cb406-37"></a></span>
+<span id="cb406-38"><a href="tables-and-graphs.html#cb406-38"></a><span class="co">#######################################################</span></span>
+<span id="cb406-39"><a href="tables-and-graphs.html#cb406-39"></a><span class="co"># Fifth: Even margins</span></span>
+<span id="cb406-40"><a href="tables-and-graphs.html#cb406-40"></a><span class="co">#######################################################</span></span>
+<span id="cb406-41"><a href="tables-and-graphs.html#cb406-41"></a><span class="kw">par</span>(<span class="dt">new=</span><span class="ot">FALSE</span>)</span>
+<span id="cb406-42"><a href="tables-and-graphs.html#cb406-42"></a></span>
+<span id="cb406-43"><a href="tables-and-graphs.html#cb406-43"></a><span class="co">#######################################################</span></span>
+<span id="cb406-44"><a href="tables-and-graphs.html#cb406-44"></a><span class="co"># Sixth, the four objects and do not print yet:</span></span>
+<span id="cb406-45"><a href="tables-and-graphs.html#cb406-45"></a><span class="co">#######################################################</span></span>
+<span id="cb406-46"><a href="tables-and-graphs.html#cb406-46"></a><span class="co"># Graph Curve 3</span></span>
+<span id="cb406-47"><a href="tables-and-graphs.html#cb406-47"></a><span class="kw">par</span>(<span class="dt">new=</span>T)</span>
+<span id="cb406-48"><a href="tables-and-graphs.html#cb406-48"></a><span class="kw">curve</span>(fc_sin_cos_diff,</span>
+<span id="cb406-49"><a href="tables-and-graphs.html#cb406-49"></a>      <span class="dt">col =</span> st_line_<span class="dv">3</span>_black,</span>
+<span id="cb406-50"><a href="tables-and-graphs.html#cb406-50"></a>      <span class="dt">lwd =</span> st_line_<span class="dv">3</span>_lwd, <span class="dt">lty =</span> st_line_<span class="dv">3</span>_lty,</span>
+<span id="cb406-51"><a href="tables-and-graphs.html#cb406-51"></a>      <span class="dt">from =</span> ar_xlim[<span class="dv">1</span>], <span class="dt">to =</span> ar_xlim[<span class="dv">2</span>], <span class="dt">ylim =</span> ar_ylim,</span>
+<span id="cb406-52"><a href="tables-and-graphs.html#cb406-52"></a>      <span class="dt">ylab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">xlab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">yaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">ann=</span><span class="ot">FALSE</span>)</span>
+<span id="cb406-53"><a href="tables-and-graphs.html#cb406-53"></a><span class="co"># Graph Curve 4</span></span>
+<span id="cb406-54"><a href="tables-and-graphs.html#cb406-54"></a><span class="kw">par</span>(<span class="dt">new=</span>T)</span>
+<span id="cb406-55"><a href="tables-and-graphs.html#cb406-55"></a><span class="kw">curve</span>(fc_sin_cos_tan,</span>
+<span id="cb406-56"><a href="tables-and-graphs.html#cb406-56"></a>      <span class="dt">col =</span> st_line_<span class="dv">4</span>_purple,</span>
+<span id="cb406-57"><a href="tables-and-graphs.html#cb406-57"></a>      <span class="dt">lwd =</span> st_line_<span class="dv">4</span>_lwd, <span class="dt">lty =</span> st_line_<span class="dv">4</span>_lty,</span>
+<span id="cb406-58"><a href="tables-and-graphs.html#cb406-58"></a>      <span class="dt">from =</span> ar_xlim[<span class="dv">1</span>], <span class="dt">to =</span> ar_xlim[<span class="dv">2</span>], <span class="dt">ylim =</span> ar_ylim,</span>
+<span id="cb406-59"><a href="tables-and-graphs.html#cb406-59"></a>      <span class="dt">ylab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">xlab =</span> <span class="st">&#39;&#39;</span>, <span class="dt">yaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>, <span class="dt">ann=</span><span class="ot">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb407"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb407-1"><a href="tables-and-graphs.html#cb407-1"></a>pl_curves_save &lt;-<span class="st"> </span><span class="kw">recordPlot</span>()</span></code></pre></div>
 </div>
 <div id="generate-large-font-and-small-font-versions-of-plot" class="section level5" number="9.2.1.1.2">
 <h5><span class="header-section-number">9.2.1.1.2</span> Generate Large Font and Small Font Versions of PLot</h5>
 <p>Generate larger font version:</p>
-<div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb401-1"><a href="tables-and-graphs.html#cb401-1"></a><span class="co"># Replay</span></span>
-<span id="cb401-2"><a href="tables-and-graphs.html#cb401-2"></a>pl_curves_save</span>
-<span id="cb401-3"><a href="tables-and-graphs.html#cb401-3"></a></span>
-<span id="cb401-4"><a href="tables-and-graphs.html#cb401-4"></a><span class="co">#######################################################</span></span>
-<span id="cb401-5"><a href="tables-and-graphs.html#cb401-5"></a><span class="co"># Seventh, Set Title and Legend and Plot Jointly</span></span>
-<span id="cb401-6"><a href="tables-and-graphs.html#cb401-6"></a><span class="co">#######################################################</span></span>
-<span id="cb401-7"><a href="tables-and-graphs.html#cb401-7"></a><span class="co"># CEX sizing Contorl Titling and Legend Sizes</span></span>
-<span id="cb401-8"><a href="tables-and-graphs.html#cb401-8"></a>fl_ces_fig_reg =<span class="st"> </span><span class="fl">0.75</span></span>
-<span id="cb401-9"><a href="tables-and-graphs.html#cb401-9"></a>fl_ces_fig_leg =<span class="st"> </span><span class="fl">0.75</span></span>
-<span id="cb401-10"><a href="tables-and-graphs.html#cb401-10"></a>fl_ces_fig_small =<span class="st"> </span><span class="fl">0.65</span></span>
-<span id="cb401-11"><a href="tables-and-graphs.html#cb401-11"></a></span>
-<span id="cb401-12"><a href="tables-and-graphs.html#cb401-12"></a><span class="co"># R Legend</span></span>
-<span id="cb401-13"><a href="tables-and-graphs.html#cb401-13"></a><span class="kw">title</span>(<span class="dt">main =</span> st_title, <span class="dt">sub =</span> st_subtitle, <span class="dt">xlab =</span> st_x_label, <span class="dt">ylab =</span> st_y_label,</span>
-<span id="cb401-14"><a href="tables-and-graphs.html#cb401-14"></a>      <span class="dt">cex.lab=</span>fl_ces_fig_reg,</span>
-<span id="cb401-15"><a href="tables-and-graphs.html#cb401-15"></a>      <span class="dt">cex.main=</span>fl_ces_fig_reg,</span>
-<span id="cb401-16"><a href="tables-and-graphs.html#cb401-16"></a>      <span class="dt">cex.sub=</span>fl_ces_fig_small)</span>
-<span id="cb401-17"><a href="tables-and-graphs.html#cb401-17"></a><span class="kw">axis</span>(<span class="dv">1</span>, <span class="dt">cex.axis=</span>fl_ces_fig_reg)</span>
-<span id="cb401-18"><a href="tables-and-graphs.html#cb401-18"></a><span class="kw">axis</span>(<span class="dv">2</span>, <span class="dt">cex.axis=</span>fl_ces_fig_reg)</span>
-<span id="cb401-19"><a href="tables-and-graphs.html#cb401-19"></a><span class="kw">grid</span>()</span>
-<span id="cb401-20"><a href="tables-and-graphs.html#cb401-20"></a></span>
-<span id="cb401-21"><a href="tables-and-graphs.html#cb401-21"></a><span class="co"># Legend sizing CEX</span></span>
-<span id="cb401-22"><a href="tables-and-graphs.html#cb401-22"></a><span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>,</span>
-<span id="cb401-23"><a href="tables-and-graphs.html#cb401-23"></a>       <span class="dt">bg=</span><span class="st">&quot;transparent&quot;</span>,</span>
-<span id="cb401-24"><a href="tables-and-graphs.html#cb401-24"></a>       <span class="dt">bty =</span> <span class="st">&quot;n&quot;</span>,</span>
-<span id="cb401-25"><a href="tables-and-graphs.html#cb401-25"></a>       <span class="kw">c</span>(st_line_<span class="dv">3</span>_y_legend, st_line_<span class="dv">4</span>_y_legend),</span>
-<span id="cb401-26"><a href="tables-and-graphs.html#cb401-26"></a>       <span class="dt">col =</span> <span class="kw">c</span>(st_line_<span class="dv">3</span>_black, st_line_<span class="dv">4</span>_purple),</span>
-<span id="cb401-27"><a href="tables-and-graphs.html#cb401-27"></a>       <span class="dt">pch =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="ot">NA</span>),</span>
-<span id="cb401-28"><a href="tables-and-graphs.html#cb401-28"></a>       <span class="dt">cex =</span> fl_ces_fig_leg,</span>
-<span id="cb401-29"><a href="tables-and-graphs.html#cb401-29"></a>       <span class="dt">lty =</span> <span class="kw">c</span>(st_line_<span class="dv">3</span>_lty, st_line_<span class="dv">4</span>_lty),</span>
-<span id="cb401-30"><a href="tables-and-graphs.html#cb401-30"></a>       <span class="dt">lwd =</span> <span class="kw">c</span>(st_line_<span class="dv">3</span>_lwd,st_line_<span class="dv">4</span>_lwd),</span>
-<span id="cb401-31"><a href="tables-and-graphs.html#cb401-31"></a>       <span class="dt">y.intersp=</span><span class="dv">2</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb402"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb402-1"><a href="tables-and-graphs.html#cb402-1"></a><span class="co"># record final plot</span></span>
-<span id="cb402-2"><a href="tables-and-graphs.html#cb402-2"></a>pl_curves_large &lt;-<span class="st"> </span><span class="kw">recordPlot</span>()</span>
-<span id="cb402-3"><a href="tables-and-graphs.html#cb402-3"></a><span class="kw">dev.off</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb408"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb408-1"><a href="tables-and-graphs.html#cb408-1"></a><span class="co"># Replay</span></span>
+<span id="cb408-2"><a href="tables-and-graphs.html#cb408-2"></a>pl_curves_save</span>
+<span id="cb408-3"><a href="tables-and-graphs.html#cb408-3"></a></span>
+<span id="cb408-4"><a href="tables-and-graphs.html#cb408-4"></a><span class="co">#######################################################</span></span>
+<span id="cb408-5"><a href="tables-and-graphs.html#cb408-5"></a><span class="co"># Seventh, Set Title and Legend and Plot Jointly</span></span>
+<span id="cb408-6"><a href="tables-and-graphs.html#cb408-6"></a><span class="co">#######################################################</span></span>
+<span id="cb408-7"><a href="tables-and-graphs.html#cb408-7"></a><span class="co"># CEX sizing Contorl Titling and Legend Sizes</span></span>
+<span id="cb408-8"><a href="tables-and-graphs.html#cb408-8"></a>fl_ces_fig_reg =<span class="st"> </span><span class="fl">0.75</span></span>
+<span id="cb408-9"><a href="tables-and-graphs.html#cb408-9"></a>fl_ces_fig_leg =<span class="st"> </span><span class="fl">0.75</span></span>
+<span id="cb408-10"><a href="tables-and-graphs.html#cb408-10"></a>fl_ces_fig_small =<span class="st"> </span><span class="fl">0.65</span></span>
+<span id="cb408-11"><a href="tables-and-graphs.html#cb408-11"></a></span>
+<span id="cb408-12"><a href="tables-and-graphs.html#cb408-12"></a><span class="co"># R Legend</span></span>
+<span id="cb408-13"><a href="tables-and-graphs.html#cb408-13"></a><span class="kw">title</span>(<span class="dt">main =</span> st_title, <span class="dt">sub =</span> st_subtitle, <span class="dt">xlab =</span> st_x_label, <span class="dt">ylab =</span> st_y_label,</span>
+<span id="cb408-14"><a href="tables-and-graphs.html#cb408-14"></a>      <span class="dt">cex.lab=</span>fl_ces_fig_reg,</span>
+<span id="cb408-15"><a href="tables-and-graphs.html#cb408-15"></a>      <span class="dt">cex.main=</span>fl_ces_fig_reg,</span>
+<span id="cb408-16"><a href="tables-and-graphs.html#cb408-16"></a>      <span class="dt">cex.sub=</span>fl_ces_fig_small)</span>
+<span id="cb408-17"><a href="tables-and-graphs.html#cb408-17"></a><span class="kw">axis</span>(<span class="dv">1</span>, <span class="dt">cex.axis=</span>fl_ces_fig_reg)</span>
+<span id="cb408-18"><a href="tables-and-graphs.html#cb408-18"></a><span class="kw">axis</span>(<span class="dv">2</span>, <span class="dt">cex.axis=</span>fl_ces_fig_reg)</span>
+<span id="cb408-19"><a href="tables-and-graphs.html#cb408-19"></a><span class="kw">grid</span>()</span>
+<span id="cb408-20"><a href="tables-and-graphs.html#cb408-20"></a></span>
+<span id="cb408-21"><a href="tables-and-graphs.html#cb408-21"></a><span class="co"># Legend sizing CEX</span></span>
+<span id="cb408-22"><a href="tables-and-graphs.html#cb408-22"></a><span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>,</span>
+<span id="cb408-23"><a href="tables-and-graphs.html#cb408-23"></a>       <span class="dt">bg=</span><span class="st">&quot;transparent&quot;</span>,</span>
+<span id="cb408-24"><a href="tables-and-graphs.html#cb408-24"></a>       <span class="dt">bty =</span> <span class="st">&quot;n&quot;</span>,</span>
+<span id="cb408-25"><a href="tables-and-graphs.html#cb408-25"></a>       <span class="kw">c</span>(st_line_<span class="dv">3</span>_y_legend, st_line_<span class="dv">4</span>_y_legend),</span>
+<span id="cb408-26"><a href="tables-and-graphs.html#cb408-26"></a>       <span class="dt">col =</span> <span class="kw">c</span>(st_line_<span class="dv">3</span>_black, st_line_<span class="dv">4</span>_purple),</span>
+<span id="cb408-27"><a href="tables-and-graphs.html#cb408-27"></a>       <span class="dt">pch =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="ot">NA</span>),</span>
+<span id="cb408-28"><a href="tables-and-graphs.html#cb408-28"></a>       <span class="dt">cex =</span> fl_ces_fig_leg,</span>
+<span id="cb408-29"><a href="tables-and-graphs.html#cb408-29"></a>       <span class="dt">lty =</span> <span class="kw">c</span>(st_line_<span class="dv">3</span>_lty, st_line_<span class="dv">4</span>_lty),</span>
+<span id="cb408-30"><a href="tables-and-graphs.html#cb408-30"></a>       <span class="dt">lwd =</span> <span class="kw">c</span>(st_line_<span class="dv">3</span>_lwd,st_line_<span class="dv">4</span>_lwd),</span>
+<span id="cb408-31"><a href="tables-and-graphs.html#cb408-31"></a>       <span class="dt">y.intersp=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb409"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb409-1"><a href="tables-and-graphs.html#cb409-1"></a><span class="co"># record final plot</span></span>
+<span id="cb409-2"><a href="tables-and-graphs.html#cb409-2"></a>pl_curves_large &lt;-<span class="st"> </span><span class="kw">recordPlot</span>()</span>
+<span id="cb409-3"><a href="tables-and-graphs.html#cb409-3"></a><span class="kw">dev.off</span>()</span></code></pre></div>
 <p>Generate smaller font version:</p>
-<div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb403-1"><a href="tables-and-graphs.html#cb403-1"></a><span class="co"># Replay</span></span>
-<span id="cb403-2"><a href="tables-and-graphs.html#cb403-2"></a>pl_curves_save</span>
-<span id="cb403-3"><a href="tables-and-graphs.html#cb403-3"></a></span>
-<span id="cb403-4"><a href="tables-and-graphs.html#cb403-4"></a><span class="co">#######################################################</span></span>
-<span id="cb403-5"><a href="tables-and-graphs.html#cb403-5"></a><span class="co"># Seventh, Set Title and Legend and Plot Jointly</span></span>
-<span id="cb403-6"><a href="tables-and-graphs.html#cb403-6"></a><span class="co">#######################################################</span></span>
-<span id="cb403-7"><a href="tables-and-graphs.html#cb403-7"></a><span class="co"># CEX sizing Contorl Titling and Legend Sizes</span></span>
-<span id="cb403-8"><a href="tables-and-graphs.html#cb403-8"></a>fl_ces_fig_reg =<span class="st"> </span><span class="fl">0.45</span></span>
-<span id="cb403-9"><a href="tables-and-graphs.html#cb403-9"></a>fl_ces_fig_leg =<span class="st"> </span><span class="fl">0.45</span></span>
-<span id="cb403-10"><a href="tables-and-graphs.html#cb403-10"></a>fl_ces_fig_small =<span class="st"> </span><span class="fl">0.25</span></span>
-<span id="cb403-11"><a href="tables-and-graphs.html#cb403-11"></a></span>
-<span id="cb403-12"><a href="tables-and-graphs.html#cb403-12"></a><span class="co"># R Legend</span></span>
-<span id="cb403-13"><a href="tables-and-graphs.html#cb403-13"></a><span class="kw">title</span>(<span class="dt">main =</span> st_title, <span class="dt">sub =</span> st_subtitle, <span class="dt">xlab =</span> st_x_label, <span class="dt">ylab =</span> st_y_label,</span>
-<span id="cb403-14"><a href="tables-and-graphs.html#cb403-14"></a>      <span class="dt">cex.lab=</span>fl_ces_fig_reg,</span>
-<span id="cb403-15"><a href="tables-and-graphs.html#cb403-15"></a>      <span class="dt">cex.main=</span>fl_ces_fig_reg,</span>
-<span id="cb403-16"><a href="tables-and-graphs.html#cb403-16"></a>      <span class="dt">cex.sub=</span>fl_ces_fig_small)</span>
-<span id="cb403-17"><a href="tables-and-graphs.html#cb403-17"></a><span class="kw">axis</span>(<span class="dv">1</span>, <span class="dt">cex.axis=</span>fl_ces_fig_reg)</span>
-<span id="cb403-18"><a href="tables-and-graphs.html#cb403-18"></a><span class="kw">axis</span>(<span class="dv">2</span>, <span class="dt">cex.axis=</span>fl_ces_fig_reg)</span>
-<span id="cb403-19"><a href="tables-and-graphs.html#cb403-19"></a><span class="kw">grid</span>()</span>
-<span id="cb403-20"><a href="tables-and-graphs.html#cb403-20"></a></span>
-<span id="cb403-21"><a href="tables-and-graphs.html#cb403-21"></a><span class="co"># Legend sizing CEX</span></span>
-<span id="cb403-22"><a href="tables-and-graphs.html#cb403-22"></a><span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>,</span>
-<span id="cb403-23"><a href="tables-and-graphs.html#cb403-23"></a>       <span class="dt">bg=</span><span class="st">&quot;transparent&quot;</span>,</span>
-<span id="cb403-24"><a href="tables-and-graphs.html#cb403-24"></a>       <span class="dt">bty =</span> <span class="st">&quot;n&quot;</span>,</span>
-<span id="cb403-25"><a href="tables-and-graphs.html#cb403-25"></a>       <span class="kw">c</span>(st_line_<span class="dv">3</span>_y_legend, st_line_<span class="dv">4</span>_y_legend),</span>
-<span id="cb403-26"><a href="tables-and-graphs.html#cb403-26"></a>       <span class="dt">col =</span> <span class="kw">c</span>(st_line_<span class="dv">3</span>_black, st_line_<span class="dv">4</span>_purple),</span>
-<span id="cb403-27"><a href="tables-and-graphs.html#cb403-27"></a>       <span class="dt">pch =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="ot">NA</span>),</span>
-<span id="cb403-28"><a href="tables-and-graphs.html#cb403-28"></a>       <span class="dt">cex =</span> fl_ces_fig_leg,</span>
-<span id="cb403-29"><a href="tables-and-graphs.html#cb403-29"></a>       <span class="dt">lty =</span> <span class="kw">c</span>(st_line_<span class="dv">3</span>_lty, st_line_<span class="dv">4</span>_lty),</span>
-<span id="cb403-30"><a href="tables-and-graphs.html#cb403-30"></a>       <span class="dt">lwd =</span> <span class="kw">c</span>(st_line_<span class="dv">3</span>_lwd,st_line_<span class="dv">4</span>_lwd),</span>
-<span id="cb403-31"><a href="tables-and-graphs.html#cb403-31"></a>       <span class="dt">y.intersp=</span><span class="dv">2</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb404"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb404-1"><a href="tables-and-graphs.html#cb404-1"></a><span class="co"># record final plot</span></span>
-<span id="cb404-2"><a href="tables-and-graphs.html#cb404-2"></a>pl_curves_small &lt;-<span class="st"> </span><span class="kw">recordPlot</span>()</span>
-<span id="cb404-3"><a href="tables-and-graphs.html#cb404-3"></a><span class="kw">dev.off</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb410"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb410-1"><a href="tables-and-graphs.html#cb410-1"></a><span class="co"># Replay</span></span>
+<span id="cb410-2"><a href="tables-and-graphs.html#cb410-2"></a>pl_curves_save</span>
+<span id="cb410-3"><a href="tables-and-graphs.html#cb410-3"></a></span>
+<span id="cb410-4"><a href="tables-and-graphs.html#cb410-4"></a><span class="co">#######################################################</span></span>
+<span id="cb410-5"><a href="tables-and-graphs.html#cb410-5"></a><span class="co"># Seventh, Set Title and Legend and Plot Jointly</span></span>
+<span id="cb410-6"><a href="tables-and-graphs.html#cb410-6"></a><span class="co">#######################################################</span></span>
+<span id="cb410-7"><a href="tables-and-graphs.html#cb410-7"></a><span class="co"># CEX sizing Contorl Titling and Legend Sizes</span></span>
+<span id="cb410-8"><a href="tables-and-graphs.html#cb410-8"></a>fl_ces_fig_reg =<span class="st"> </span><span class="fl">0.45</span></span>
+<span id="cb410-9"><a href="tables-and-graphs.html#cb410-9"></a>fl_ces_fig_leg =<span class="st"> </span><span class="fl">0.45</span></span>
+<span id="cb410-10"><a href="tables-and-graphs.html#cb410-10"></a>fl_ces_fig_small =<span class="st"> </span><span class="fl">0.25</span></span>
+<span id="cb410-11"><a href="tables-and-graphs.html#cb410-11"></a></span>
+<span id="cb410-12"><a href="tables-and-graphs.html#cb410-12"></a><span class="co"># R Legend</span></span>
+<span id="cb410-13"><a href="tables-and-graphs.html#cb410-13"></a><span class="kw">title</span>(<span class="dt">main =</span> st_title, <span class="dt">sub =</span> st_subtitle, <span class="dt">xlab =</span> st_x_label, <span class="dt">ylab =</span> st_y_label,</span>
+<span id="cb410-14"><a href="tables-and-graphs.html#cb410-14"></a>      <span class="dt">cex.lab=</span>fl_ces_fig_reg,</span>
+<span id="cb410-15"><a href="tables-and-graphs.html#cb410-15"></a>      <span class="dt">cex.main=</span>fl_ces_fig_reg,</span>
+<span id="cb410-16"><a href="tables-and-graphs.html#cb410-16"></a>      <span class="dt">cex.sub=</span>fl_ces_fig_small)</span>
+<span id="cb410-17"><a href="tables-and-graphs.html#cb410-17"></a><span class="kw">axis</span>(<span class="dv">1</span>, <span class="dt">cex.axis=</span>fl_ces_fig_reg)</span>
+<span id="cb410-18"><a href="tables-and-graphs.html#cb410-18"></a><span class="kw">axis</span>(<span class="dv">2</span>, <span class="dt">cex.axis=</span>fl_ces_fig_reg)</span>
+<span id="cb410-19"><a href="tables-and-graphs.html#cb410-19"></a><span class="kw">grid</span>()</span>
+<span id="cb410-20"><a href="tables-and-graphs.html#cb410-20"></a></span>
+<span id="cb410-21"><a href="tables-and-graphs.html#cb410-21"></a><span class="co"># Legend sizing CEX</span></span>
+<span id="cb410-22"><a href="tables-and-graphs.html#cb410-22"></a><span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>,</span>
+<span id="cb410-23"><a href="tables-and-graphs.html#cb410-23"></a>       <span class="dt">bg=</span><span class="st">&quot;transparent&quot;</span>,</span>
+<span id="cb410-24"><a href="tables-and-graphs.html#cb410-24"></a>       <span class="dt">bty =</span> <span class="st">&quot;n&quot;</span>,</span>
+<span id="cb410-25"><a href="tables-and-graphs.html#cb410-25"></a>       <span class="kw">c</span>(st_line_<span class="dv">3</span>_y_legend, st_line_<span class="dv">4</span>_y_legend),</span>
+<span id="cb410-26"><a href="tables-and-graphs.html#cb410-26"></a>       <span class="dt">col =</span> <span class="kw">c</span>(st_line_<span class="dv">3</span>_black, st_line_<span class="dv">4</span>_purple),</span>
+<span id="cb410-27"><a href="tables-and-graphs.html#cb410-27"></a>       <span class="dt">pch =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="ot">NA</span>),</span>
+<span id="cb410-28"><a href="tables-and-graphs.html#cb410-28"></a>       <span class="dt">cex =</span> fl_ces_fig_leg,</span>
+<span id="cb410-29"><a href="tables-and-graphs.html#cb410-29"></a>       <span class="dt">lty =</span> <span class="kw">c</span>(st_line_<span class="dv">3</span>_lty, st_line_<span class="dv">4</span>_lty),</span>
+<span id="cb410-30"><a href="tables-and-graphs.html#cb410-30"></a>       <span class="dt">lwd =</span> <span class="kw">c</span>(st_line_<span class="dv">3</span>_lwd,st_line_<span class="dv">4</span>_lwd),</span>
+<span id="cb410-31"><a href="tables-and-graphs.html#cb410-31"></a>       <span class="dt">y.intersp=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb411"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb411-1"><a href="tables-and-graphs.html#cb411-1"></a><span class="co"># record final plot</span></span>
+<span id="cb411-2"><a href="tables-and-graphs.html#cb411-2"></a>pl_curves_small &lt;-<span class="st"> </span><span class="kw">recordPlot</span>()</span>
+<span id="cb411-3"><a href="tables-and-graphs.html#cb411-3"></a><span class="kw">dev.off</span>()</span></code></pre></div>
 </div>
 <div id="save-plot-with-varying-resolutions-and-heights" class="section level5" number="9.2.1.1.3">
 <h5><span class="header-section-number">9.2.1.1.3</span> Save Plot with Varying Resolutions and Heights</h5>
 <p>Export recorded plot.</p>
 <p>A4 paper is 8.3 x 11.7, with 1 inch margins, the remaining area is 6.3 x 9.7. For figures that should take half of the page, the height should be 4.8 inch. One third of a page should be 3.2 inch. 6.3 inch is 160mm and 3 inch is 76 mm. In the example below, use</p>
-<div class="sourceCode" id="cb405"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb405-1"><a href="tables-and-graphs.html#cb405-1"></a><span class="co"># Store both in within folder directory and root image directory:</span></span>
-<span id="cb405-2"><a href="tables-and-graphs.html#cb405-2"></a><span class="co"># C:\Users\fan\R4Econ\tabgraph\inout\_img</span></span>
-<span id="cb405-3"><a href="tables-and-graphs.html#cb405-3"></a><span class="co"># C:\Users\fan\R4Econ\_img</span></span>
-<span id="cb405-4"><a href="tables-and-graphs.html#cb405-4"></a><span class="co"># need to store in both because bookdown and indi pdf path differ.</span></span>
-<span id="cb405-5"><a href="tables-and-graphs.html#cb405-5"></a><span class="co"># Wrap in try because will not work underbookdown, but images already created</span></span>
-<span id="cb405-6"><a href="tables-and-graphs.html#cb405-6"></a></span>
-<span id="cb405-7"><a href="tables-and-graphs.html#cb405-7"></a>ls_spt_root &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;..//..//&#39;</span>, <span class="st">&#39;&#39;</span>)</span>
-<span id="cb405-8"><a href="tables-and-graphs.html#cb405-8"></a>spt_prefix &lt;-<span class="st"> &#39;_img/fs_img_io_2curve&#39;</span></span>
-<span id="cb405-9"><a href="tables-and-graphs.html#cb405-9"></a></span>
-<span id="cb405-10"><a href="tables-and-graphs.html#cb405-10"></a><span class="cf">for</span> (spt_root <span class="cf">in</span> ls_spt_root) {</span>
-<span id="cb405-11"><a href="tables-and-graphs.html#cb405-11"></a>  <span class="co"># Changing pointsize will not change font sizes inside, just rescale</span></span>
-<span id="cb405-12"><a href="tables-and-graphs.html#cb405-12"></a>  <span class="co"># PNG 72</span></span>
-<span id="cb405-13"><a href="tables-and-graphs.html#cb405-13"></a>  <span class="kw">try</span>(<span class="kw">png</span>(<span class="kw">paste0</span>(spt_root, spt_prefix, <span class="st">&quot;_w135h76_res72.png&quot;</span>),</span>
-<span id="cb405-14"><a href="tables-and-graphs.html#cb405-14"></a>      <span class="dt">width =</span> <span class="dv">135</span> , <span class="dt">height =</span> <span class="dv">76</span>, <span class="dt">units=</span><span class="st">&#39;mm&#39;</span>, <span class="dt">res =</span> <span class="dv">72</span>, <span class="dt">pointsize=</span><span class="dv">7</span>))</span>
-<span id="cb405-15"><a href="tables-and-graphs.html#cb405-15"></a>  <span class="kw">print</span>(pl_curves_large)</span>
-<span id="cb405-16"><a href="tables-and-graphs.html#cb405-16"></a>  <span class="kw">dev.off</span>()</span>
-<span id="cb405-17"><a href="tables-and-graphs.html#cb405-17"></a>  <span class="co"># PNG 300</span></span>
-<span id="cb405-18"><a href="tables-and-graphs.html#cb405-18"></a>  <span class="kw">try</span>(<span class="kw">png</span>(<span class="kw">paste0</span>(spt_root, spt_prefix, <span class="st">&quot;_w135h76_res300.png&quot;</span>),</span>
-<span id="cb405-19"><a href="tables-and-graphs.html#cb405-19"></a>      <span class="dt">width =</span> <span class="dv">135</span>, <span class="dt">height =</span> <span class="dv">76</span>, <span class="dt">units=</span><span class="st">&#39;mm&#39;</span>, <span class="dt">res =</span> <span class="dv">300</span>, <span class="dt">pointsize=</span><span class="dv">7</span>))</span>
-<span id="cb405-20"><a href="tables-and-graphs.html#cb405-20"></a>  <span class="kw">print</span>(pl_curves_large)</span>
-<span id="cb405-21"><a href="tables-and-graphs.html#cb405-21"></a>  <span class="kw">dev.off</span>()</span>
-<span id="cb405-22"><a href="tables-and-graphs.html#cb405-22"></a>  <span class="co"># PNG 300, SMALL, POINT SIZE LOWER</span></span>
-<span id="cb405-23"><a href="tables-and-graphs.html#cb405-23"></a>  <span class="kw">try</span>(<span class="kw">png</span>(<span class="kw">paste0</span>(spt_root, spt_prefix, <span class="st">&quot;_w80h48_res300.png&quot;</span>),</span>
-<span id="cb405-24"><a href="tables-and-graphs.html#cb405-24"></a>      <span class="dt">width =</span> <span class="dv">80</span>, <span class="dt">height =</span> <span class="dv">48</span>, <span class="dt">units=</span><span class="st">&#39;mm&#39;</span>, <span class="dt">res =</span> <span class="dv">300</span>, <span class="dt">pointsize=</span><span class="dv">7</span>))</span>
-<span id="cb405-25"><a href="tables-and-graphs.html#cb405-25"></a>  <span class="kw">print</span>(pl_curves_small)</span>
-<span id="cb405-26"><a href="tables-and-graphs.html#cb405-26"></a>  <span class="kw">dev.off</span>()</span>
-<span id="cb405-27"><a href="tables-and-graphs.html#cb405-27"></a>  <span class="co"># PNG 300</span></span>
-<span id="cb405-28"><a href="tables-and-graphs.html#cb405-28"></a>  <span class="kw">try</span>(<span class="kw">png</span>(<span class="kw">paste0</span>(spt_root, spt_prefix, <span class="st">&quot;_w160h100_res300.png&quot;</span>),</span>
-<span id="cb405-29"><a href="tables-and-graphs.html#cb405-29"></a>      <span class="dt">width =</span> <span class="dv">160</span>, <span class="dt">height =</span> <span class="dv">100</span>, <span class="dt">units=</span><span class="st">&#39;mm&#39;</span>, <span class="dt">res =</span> <span class="dv">300</span>))</span>
-<span id="cb405-30"><a href="tables-and-graphs.html#cb405-30"></a>  <span class="kw">print</span>(pl_curves_large)</span>
-<span id="cb405-31"><a href="tables-and-graphs.html#cb405-31"></a>  <span class="kw">dev.off</span>()</span>
-<span id="cb405-32"><a href="tables-and-graphs.html#cb405-32"></a></span>
-<span id="cb405-33"><a href="tables-and-graphs.html#cb405-33"></a>  <span class="co"># EPS</span></span>
-<span id="cb405-34"><a href="tables-and-graphs.html#cb405-34"></a>  <span class="kw">setEPS</span>()</span>
-<span id="cb405-35"><a href="tables-and-graphs.html#cb405-35"></a>  <span class="kw">try</span>(<span class="kw">postscript</span>(<span class="kw">paste0</span>(spt_root, spt_prefix, <span class="st">&quot;_fs_2curve.eps&quot;</span>)))</span>
-<span id="cb405-36"><a href="tables-and-graphs.html#cb405-36"></a>  <span class="kw">print</span>(pl_curves_large)</span>
-<span id="cb405-37"><a href="tables-and-graphs.html#cb405-37"></a>  <span class="kw">dev.off</span>()</span>
-<span id="cb405-38"><a href="tables-and-graphs.html#cb405-38"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb412"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb412-1"><a href="tables-and-graphs.html#cb412-1"></a><span class="co"># Store both in within folder directory and root image directory:</span></span>
+<span id="cb412-2"><a href="tables-and-graphs.html#cb412-2"></a><span class="co"># C:\Users\fan\R4Econ\tabgraph\inout\_img</span></span>
+<span id="cb412-3"><a href="tables-and-graphs.html#cb412-3"></a><span class="co"># C:\Users\fan\R4Econ\_img</span></span>
+<span id="cb412-4"><a href="tables-and-graphs.html#cb412-4"></a><span class="co"># need to store in both because bookdown and indi pdf path differ.</span></span>
+<span id="cb412-5"><a href="tables-and-graphs.html#cb412-5"></a><span class="co"># Wrap in try because will not work underbookdown, but images already created</span></span>
+<span id="cb412-6"><a href="tables-and-graphs.html#cb412-6"></a></span>
+<span id="cb412-7"><a href="tables-and-graphs.html#cb412-7"></a>ls_spt_root &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;..//..//&#39;</span>, <span class="st">&#39;&#39;</span>)</span>
+<span id="cb412-8"><a href="tables-and-graphs.html#cb412-8"></a>spt_prefix &lt;-<span class="st"> &#39;_img/fs_img_io_2curve&#39;</span></span>
+<span id="cb412-9"><a href="tables-and-graphs.html#cb412-9"></a></span>
+<span id="cb412-10"><a href="tables-and-graphs.html#cb412-10"></a><span class="cf">for</span> (spt_root <span class="cf">in</span> ls_spt_root) {</span>
+<span id="cb412-11"><a href="tables-and-graphs.html#cb412-11"></a>  <span class="co"># Changing pointsize will not change font sizes inside, just rescale</span></span>
+<span id="cb412-12"><a href="tables-and-graphs.html#cb412-12"></a>  <span class="co"># PNG 72</span></span>
+<span id="cb412-13"><a href="tables-and-graphs.html#cb412-13"></a>  <span class="kw">try</span>(<span class="kw">png</span>(<span class="kw">paste0</span>(spt_root, spt_prefix, <span class="st">&quot;_w135h76_res72.png&quot;</span>),</span>
+<span id="cb412-14"><a href="tables-and-graphs.html#cb412-14"></a>      <span class="dt">width =</span> <span class="dv">135</span> , <span class="dt">height =</span> <span class="dv">76</span>, <span class="dt">units=</span><span class="st">&#39;mm&#39;</span>, <span class="dt">res =</span> <span class="dv">72</span>, <span class="dt">pointsize=</span><span class="dv">7</span>))</span>
+<span id="cb412-15"><a href="tables-and-graphs.html#cb412-15"></a>  <span class="kw">print</span>(pl_curves_large)</span>
+<span id="cb412-16"><a href="tables-and-graphs.html#cb412-16"></a>  <span class="kw">dev.off</span>()</span>
+<span id="cb412-17"><a href="tables-and-graphs.html#cb412-17"></a>  <span class="co"># PNG 300</span></span>
+<span id="cb412-18"><a href="tables-and-graphs.html#cb412-18"></a>  <span class="kw">try</span>(<span class="kw">png</span>(<span class="kw">paste0</span>(spt_root, spt_prefix, <span class="st">&quot;_w135h76_res300.png&quot;</span>),</span>
+<span id="cb412-19"><a href="tables-and-graphs.html#cb412-19"></a>      <span class="dt">width =</span> <span class="dv">135</span>, <span class="dt">height =</span> <span class="dv">76</span>, <span class="dt">units=</span><span class="st">&#39;mm&#39;</span>, <span class="dt">res =</span> <span class="dv">300</span>, <span class="dt">pointsize=</span><span class="dv">7</span>))</span>
+<span id="cb412-20"><a href="tables-and-graphs.html#cb412-20"></a>  <span class="kw">print</span>(pl_curves_large)</span>
+<span id="cb412-21"><a href="tables-and-graphs.html#cb412-21"></a>  <span class="kw">dev.off</span>()</span>
+<span id="cb412-22"><a href="tables-and-graphs.html#cb412-22"></a>  <span class="co"># PNG 300, SMALL, POINT SIZE LOWER</span></span>
+<span id="cb412-23"><a href="tables-and-graphs.html#cb412-23"></a>  <span class="kw">try</span>(<span class="kw">png</span>(<span class="kw">paste0</span>(spt_root, spt_prefix, <span class="st">&quot;_w80h48_res300.png&quot;</span>),</span>
+<span id="cb412-24"><a href="tables-and-graphs.html#cb412-24"></a>      <span class="dt">width =</span> <span class="dv">80</span>, <span class="dt">height =</span> <span class="dv">48</span>, <span class="dt">units=</span><span class="st">&#39;mm&#39;</span>, <span class="dt">res =</span> <span class="dv">300</span>, <span class="dt">pointsize=</span><span class="dv">7</span>))</span>
+<span id="cb412-25"><a href="tables-and-graphs.html#cb412-25"></a>  <span class="kw">print</span>(pl_curves_small)</span>
+<span id="cb412-26"><a href="tables-and-graphs.html#cb412-26"></a>  <span class="kw">dev.off</span>()</span>
+<span id="cb412-27"><a href="tables-and-graphs.html#cb412-27"></a>  <span class="co"># PNG 300</span></span>
+<span id="cb412-28"><a href="tables-and-graphs.html#cb412-28"></a>  <span class="kw">try</span>(<span class="kw">png</span>(<span class="kw">paste0</span>(spt_root, spt_prefix, <span class="st">&quot;_w160h100_res300.png&quot;</span>),</span>
+<span id="cb412-29"><a href="tables-and-graphs.html#cb412-29"></a>      <span class="dt">width =</span> <span class="dv">160</span>, <span class="dt">height =</span> <span class="dv">100</span>, <span class="dt">units=</span><span class="st">&#39;mm&#39;</span>, <span class="dt">res =</span> <span class="dv">300</span>))</span>
+<span id="cb412-30"><a href="tables-and-graphs.html#cb412-30"></a>  <span class="kw">print</span>(pl_curves_large)</span>
+<span id="cb412-31"><a href="tables-and-graphs.html#cb412-31"></a>  <span class="kw">dev.off</span>()</span>
+<span id="cb412-32"><a href="tables-and-graphs.html#cb412-32"></a></span>
+<span id="cb412-33"><a href="tables-and-graphs.html#cb412-33"></a>  <span class="co"># EPS</span></span>
+<span id="cb412-34"><a href="tables-and-graphs.html#cb412-34"></a>  <span class="kw">setEPS</span>()</span>
+<span id="cb412-35"><a href="tables-and-graphs.html#cb412-35"></a>  <span class="kw">try</span>(<span class="kw">postscript</span>(<span class="kw">paste0</span>(spt_root, spt_prefix, <span class="st">&quot;_fs_2curve.eps&quot;</span>)))</span>
+<span id="cb412-36"><a href="tables-and-graphs.html#cb412-36"></a>  <span class="kw">print</span>(pl_curves_large)</span>
+<span id="cb412-37"><a href="tables-and-graphs.html#cb412-37"></a>  <span class="kw">dev.off</span>()</span>
+<span id="cb412-38"><a href="tables-and-graphs.html#cb412-38"></a>}</span></code></pre></div>
 <pre><code>## Error in png(paste0(spt_root, spt_prefix, &quot;_w135h76_res72.png&quot;), width = 135,  : 
 ##   unable to start png() device
 ## Error in png(paste0(spt_root, spt_prefix, &quot;_w135h76_res300.png&quot;), width = 135,  : 

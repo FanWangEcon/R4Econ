@@ -1,5 +1,5 @@
 ---
-title: "pyfan Refreshes Package, Generates RMD based PDF, HTML and R Files"
+title: "Math4Econ Refreshes Package, Generates RMD based PDF, HTML and R Files"
 titleshort: "Knit PDF, HTML and Curl R based on RMD"
 description: |
   Knit PDF, HTML and Curl R based on RMD.
@@ -25,7 +25,7 @@ urlcolor: blue
 ### Process RMD Files
 
 ```{r global_options, include = FALSE}
-try(source("C:/Users/fan/R4Econ/.Rprofile"))
+try(source("C:/Users/fan/Math4Econ/.Rprofile"))
 library(reticulate)
 ```
 
@@ -33,41 +33,55 @@ library(reticulate)
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
 
-pyfan Rmd to PDF and HTML.
+Math4Econ Rmd to PDF and HTML.
 
 ```{r}
-# file_path_root <- 'C:/Users/fan/pyfan/support/development/fs_pkg_pyfan'
+# file_path_root <- 'C:/Users/fan/Math4Econ/support/development/fs_pkg_Math4Econ'
 # file_path_r <- paste0(file_path_root, '.R')
 # file_path_rmd <- paste0(file_path_root, '.Rmd')
 # knitr::purl(file_path_rmd, output=file_path_r, documentation = 1)
 ```
 
+#### TOC
+
+Toc and Numbered list possible through external specification pandoc yaml for pdf, but not possible for HTML. HTML needs to be specified via rmd yaml directly. Use the follow replacement strategy:
+
+- Use *notepad++*
+- Search: *html_document:\r\n*
+- Replace: *html_document:\r\n    toc: true\r\n    number_sections: true\r\n    toc_float:\r\n      collapsed: false\r\n      smooth_scroll: false\r\n      toc_depth: 3\r\n*
+
 
 #### Testing Which Files Have Changed
 
-Check through *pyfan* and see which files have been added, and which files have been modified. bl_test set to TRUE. Not generating any new files, just checking.
+Check through *Math4Econ* and see which files have been added, and which files have been modified. bl_test set to TRUE. Not generating any new files, just checking.
 
 Note: new files that should not get pdf and html should have *.rmd* rather than *.Rmd* as suffix.
 
 ```{r}
 # run examples
-spt_root <- 'C:/Users/fan/pyfan'
-spt_log <- 'C:/Users/fan/pyfan/_log/rmdclean/'
+spt_root <- 'C:/Users/fan/Math4Econ'
+spt_log <- 'C:/Users/fan/Math4Econ/_log/rmdclean/'
 sink(paste0(spt_log, 'rmd_clean_test.log'))
 start_time <- Sys.time()
 setwd(spt_root)
 
 bl_test = TRUE
 bl_gen_if_git_old = FALSE
-ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/pyfan'),
-                 ar_spn_skip = c('pkgtest','index.Rmd', 'main.Rmd', 'README'),
+
+ar_spt_root = 'C:/Users/fan/Math4Econ/'
+# ar_spt_root = 'C:/Users/fan/Math4Econ/development/inout/'
+
+ff_sup_clean_rmd(ar_spt_root = ar_spt_root,
+                 ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
+                                 '_mod.Rmd', 'title.Rmd'),
                  st_folder_pdf = '/htmlpdfr/',
                  st_folder_html = '/htmlpdfr/',
                  st_folder_R = '/htmlpdfr/',
                  bl_gen_if_git_old = bl_gen_if_git_old,
                  bl_recursive = TRUE,
                  bl_verbose = FALSE,
-                 bl_test = bl_test)
+                 bl_test = bl_test,
+                 it_hierachy_shift=2, it_toc_depth=3)
 
 end_time <- Sys.time()
 print(paste0('ff_sup_clean_rmd(), bl_test = TRUE, took:', end_time - start_time))
@@ -80,23 +94,41 @@ Only generate pdf and html for files that have git changes or are new.
 
 
 ```{r}
-spt_root <- 'C:/Users/fan/pyfan'
-spt_log <- 'C:/Users/fan/pyfan/_log/rmdclean/'
+spt_root <- 'C:/Users/fan/Math4Econ'
+spt_log <- 'C:/Users/fan/Math4Econ/_log/rmdclean/'
 sink(paste0(spt_log, 'rmd_clean_actual.log'))
 start_time <- Sys.time()
 setwd(spt_root)
 
 bl_test = FALSE
-bl_gen_if_git_old = TRUE
-ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/pyfan'),
-                 ar_spn_skip = c('pkgtest','index.Rmd', 'main.Rmd', 'README'),
+bl_gen_if_git_old = FALSE
+
+# ar_spt_root = c('C:/Users/fan/Math4Econ/amto',
+#                 'C:/Users/fan/Math4Econ/development',
+#                 'C:/Users/fan/Math4Econ/function',
+#                 'C:/Users/fan/Math4Econ/linreg',
+#                 'C:/Users/fan/Math4Econ/math',
+#                 'C:/Users/fan/Math4Econ/optimization',
+#                 'C:/Users/fan/Math4Econ/panel',
+#                 'C:/Users/fan/Math4Econ/regnonlin',
+#                 'C:/Users/fan/Math4Econ/tabgraph',
+#                 'C:/Users/fan/Math4Econ/summarize')
+
+ar_spt_root = 'C:/Users/fan/Math4Econ/'
+# ar_spt_root = 'C:/Users/fan/Math4Econ/development/inout/'
+
+ff_sup_clean_rmd(ar_spt_root = ar_spt_root,
+                 ar_spn_skip = c('support', 'index.Rmd', 'README',
+                                 'main.Rmd', '_mod.Rmd', 'title.Rmd',
+                                 'Introductory Mathematics for Economists with Matlab'),
                  st_folder_pdf = '/htmlpdfr/',
                  st_folder_html = '/htmlpdfr/',
                  st_folder_R = '/htmlpdfr/',
                  bl_gen_if_git_old = bl_gen_if_git_old,
                  bl_recursive = TRUE,
-                 bl_verbose = FALSE,
-                 bl_test = bl_test)
+                 bl_verbose = TRUE,
+                 bl_test = bl_test,
+                 it_hierachy_shift=1, it_toc_depth=3)
 
 end_time <- Sys.time()
 print(paste0('ff_sup_clean_rmd(), bl_test = FALSE, took:', end_time - start_time))
@@ -113,8 +145,8 @@ There is python file that parses rmd front matters and goes through rmd files in
 import pyfan.util.rmd.bookdownparse as ft_bookdownparse
 
 # Path Roots
-sfc_prj = 'pyfan'
-sph_prj = 'C:/Users/fan/pyfan/'
+sfc_prj = 'Math4Econ'
+sph_prj = 'C:/Users/fan/Math4Econ/'
 spn_prj_bookdown_yml = '_bookdown.yml'
 
 # Read me preamble, and endnotes
@@ -125,7 +157,7 @@ spn_prj_readme_toc = 'README_toc.md'
 spn_prj_readme_ful = 'README.md'
 
 # FIles to Ignore
-ls_st_ignore=['index.Rmd', 'README_appendix.md', 'title.Rmd']
+ls_st_ignore=['index.Rmd', 'README_appendix.md', 'title.Rmd', 'main.Rmd']
 
 # Generate README TOC
 ft_bookdownparse.fs_yml2readme(sfc_prj=sfc_prj, sph_prj=sph_prj,
@@ -148,7 +180,7 @@ with open(sph_prj + spn_prj_readme_ful, 'w') as outfile:
 Generate contenxt for bookdown appendix.
 
 ```{python}
-sph_prj = 'C:/Users/fan/pyfan/'
+sph_prj = 'C:/Users/fan/Math4Econ/'
 spn_prj_readme_toc = 'README_toc.md'
 spn_prj_appendix = 'README_appendix.md'
 spn_in = open(sph_prj + spn_prj_readme_toc, "r")
@@ -213,8 +245,8 @@ spn_out.close()
 Render HTML:
 
 ```{r}
-spt_root <- 'C:/Users/fan/pyfan'
-spt_log <- 'C:/Users/fan/pyfan/_log/rmdclean/'
+spt_root <- 'C:/Users/fan/Math4Econ'
+spt_log <- 'C:/Users/fan/Math4Econ/_log/rmdclean/'
 
 sink(paste0(spt_log, 'render_bookdown_html.log'))
 start_time <- Sys.time()
@@ -231,8 +263,8 @@ sink()
 Render PDF:
 
 ```{r}
-spt_root <- 'C:/Users/fan/pyfan'
-spt_log <- 'C:/Users/fan/pyfan/_log/rmdclean/'
+spt_root <- 'C:/Users/fan/Math4Econ'
+spt_log <- 'C:/Users/fan/Math4Econ/_log/rmdclean/'
 
 sink(paste0(spt_log, 'render_bookdown_pdf.log'))
 start_time <- Sys.time()

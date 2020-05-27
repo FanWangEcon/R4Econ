@@ -1,8 +1,8 @@
 ---
-title: "R dplyr Evaluate Function Do Anything Group Stack Results"
-titleshort: "Evaluate Function Do Anything Group Stack Results"
+title: "R Do Anything Function over Dataframe Subset and Stack Output Scalars, (MxP by N) to (Mx1 by 1)"
+titleshort: "Dataframe Subset to Scalar (MxP by N) to (Mx1 by 1)"
 description: |
-  Group dataframe by categories, compute category specific output scalar or arrays based on within category variable information.
+  MxQ rows to Mx1 Rows. Group dataframe by categories, compute category specific output scalar or arrays based on within category variable information.
 core:
   - package: dplyr
     code: |
@@ -10,7 +10,8 @@ core:
       do(inc = rnorm(.$N, mean=.$mn, sd=.$sd))
       unnest(c(inc))
       left_join(df, by="ID")
-date: 2020-04-01
+date: 2020-05-27
+date_start: 2020-04-01
 output:
   pdf_document:
     pandoc_args: '../../_output_kniti_pdf.yaml'
@@ -24,7 +25,7 @@ always_allow_html: true
 urlcolor: blue
 ---
 
-### MxQ to MxP Rows
+### (MxP by N) to (Mx1 by 1)
 
 ```{r global_options, include = FALSE}
 try(source("../../.Rprofile"))
@@ -34,7 +35,6 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
 
-#### MxQ to Mx1 Rows: Within Group Gini
 
 There is a Panel with $M$ individuals and each individual has $Q$ records/rows. A function generate an individual specific outcome given the $Q$ individual specific inputs, along with shared parameters and arrays across the $M$ individuals.
 
@@ -44,7 +44,7 @@ Given the within $m$ income observations, we can compute gini statistics that ar
 
 To make this more interesting, we will generate large dataframe with more $M$ and more $Q$ each $m$.
 
-##### Large Dataframe
+#### Income Rows for Individuals in Many Groups
 
 There are up to ten thousand income observation per person. And there are ten people.
 
@@ -63,7 +63,7 @@ tb_M <- as_tibble(mt_data) %>% rowid_to_column(var = "ID") %>%
                 mutate(mean = fl_rnorm_mu)
 ```
 
-##### Compute Group specific gini, NORMAL
+#### Compute Group Specific Gini
 
 There is only one input for the gini function *ar_pos*.  Note that the gini are not very large even with large SD, because these are normal distributions. By Construction, most peple are in the middle. So with almost zero standard deviation, we have perfect equality, as standard deviation increases, inequality increases, but still pretty equal overall, there is no fat upper tail.
 
@@ -72,6 +72,8 @@ Note that there are three ways of referring to variable names with dot, which ar
 1. We can explicitly refer to names
 2. We can use the [dollar dot structure](https://stackoverflow.com/a/18228613/8280804) to use string variable names in do anything.
 3. We can use dot bracket, this is the only option that works with string variable names
+
+First: Generate individual group all incomes: 
 
 ```{r }
 # A. Normal Draw Expansion, Explicitly Name
@@ -105,19 +107,19 @@ tb_income_norm_dot_bracket_db <- tb_M %>% group_by(ID) %>%
   left_join(tb_M, by="ID")
 
 # display
-sum(sum(tb_income_norm_dollar_dot - tb_income_norm_dot_dollar - tb_income_norm_dot_bracket_db))
-# display
-head(tb_income_norm_dot_dollar, 20)
+print(dim(tb_income_norm_dot_bracket_db))
+kable(head(tb_income_norm_dot_bracket_db, 20)) %>% kable_styling_fc()
 ```
+
+Second, compute gini: 
 
 ```{r}
 # Gini by Group
-tb_gini_norm <- tb_income_norm_dollar_dot %>% group_by(ID) %>%
+tb_gini_norm <- tb_income_norm_dot_bracket_db %>% group_by(ID) %>%
   do(inc_gini_norm = ff_dist_gini_vector_pos(.$income)) %>%
   unnest(c(inc_gini_norm)) %>%
   left_join(tb_M, by="ID")
 
 # display
-kable(tb_gini_norm) %>%
-  kable_styling_fc()
+kable(tb_gini_norm) %>% kable_styling_fc()
 ```

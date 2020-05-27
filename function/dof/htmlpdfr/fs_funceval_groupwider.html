@@ -13,7 +13,7 @@
 
 <meta name="date" content="2020-05-27" />
 
-<title>R Wide Data to Long Data Example (TIDYR Pivot Longer)</title>
+<title>R Do Anything Function over Dataframe Subset and Stack Output Dataframes, (MxP by N) to (MxQ by N+Z-1)</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1819,101 +1819,65 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">R Wide Data to Long Data Example (TIDYR Pivot Longer)</h1>
+<h1 class="title toc-ignore">R Do Anything Function over Dataframe Subset and Stack Output Dataframes, (MxP by N) to (MxQ by N+Z-1)</h1>
 <h4 class="author"><a href="https://fanwangecon.github.io/">Fan Wang</a></h4>
 <h4 class="date">2020-05-27</h4>
 
 </div>
 
 
-<div id="wide-to-long" class="section level1" number="1">
-<h1 number="1"><span class="header-section-number">1</span> Wide to Long</h1>
+<div id="mxp-by-n-to-mxq-by-nz" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> (MxP by N) to (MxQ by N+Z)</h1>
 <blockquote>
-<p>Go to the <a href="https://github.com/FanWangEcon//R4Econ/blob/master/panel/widelong//fs_pivotlonger.Rmd"><strong>RMD</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/panel/widelong//htmlpdfr/fs_pivotlonger.R"><strong>R</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/panel/widelong//htmlpdfr/fs_pivotlonger.pdf"><strong>PDF</strong></a>, or <a href="https://fanwangecon.github.io//R4Econ/panel/widelong//htmlpdfr/fs_pivotlonger.html"><strong>HTML</strong></a> version of this file. Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R Code Examples</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository (<a href="https://fanwangecon.github.io/Stat4Econ/bookdown">bookdown site</a>).</p>
+<p>Go to the <a href="https://github.com/FanWangEcon//R4Econ/blob/master/function/dof//fs_funceval_groupwider.Rmd"><strong>RMD</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/function/dof//htmlpdfr/fs_funceval_groupwider.R"><strong>R</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/function/dof//htmlpdfr/fs_funceval_groupwider.pdf"><strong>PDF</strong></a>, or <a href="https://fanwangecon.github.io//R4Econ/function/dof//htmlpdfr/fs_funceval_groupwider.html"><strong>HTML</strong></a> version of this file. Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R Code Examples</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository (<a href="https://fanwangecon.github.io/Stat4Econ/bookdown">bookdown site</a>).</p>
 </blockquote>
-<p>Using the <a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a> function in tidyr to reshape panel or other data structures</p>
-<div id="generated-matrix-by-states-to-long-table" class="section level2" number="1.1">
-<h2 number="1.1"><span class="header-section-number">1.1</span> Generated Matrix by States to Long Table</h2>
-<p>A matrix of ev given states, rows are states and cols are shocks. Convert to Long table with shock and state values and ev.</p>
-<p>Generated Matrix by States to Long Table where state values are stored as variables, with correct value labels for states:</p>
+<p>There is a dataframe composed of <em>M</em> mini-dataframes. Group by a variable that identifies each unique sub-dataframe, and use the sub-dataframes with <em>P</em> rows as inputs to a function.</p>
+<p>The function outputs <em>Q by Z</em> rows and columns of results, stack the results. The output file has <em>MxQ</em> rows and the <em>Z</em> columns of additional results should be appended.</p>
+<div id="generate-the-mxp-by-n-dataframe" class="section level2" number="1.1">
+<h2 number="1.1"><span class="header-section-number">1.1</span> Generate the MxP by N Dataframe</h2>
+<p><em>M</em> Grouping characteristics, <em>P</em> rows for each group, and <em>N</em> Variables.</p>
 <ol style="list-style-type: decimal">
-<li>Generate a matrix</li>
-<li>Convert matrix to tibble</li>
-<li>Tibble make longer, and store column and row id var names</li>
+<li><em>M</em> are individuals</li>
+<li><em>P</em> are dates</li>
+<li>A wage variable for individual wage at each date. And a savings varaible as well.</li>
 </ol>
-<pre class="r"><code># Generate A Matrix
+<pre class="r"><code># Define
+it_M &lt;- 3
+it_P &lt;- 5
+svr_m &lt;- &#39;group_m&#39;
+svr_mp &lt;- &#39;info_mp&#39;
+
+# dataframe
 set.seed(123)
-ar_a &lt;- c(1.1,5.1)
-ar_z &lt;- seq(-2.5, 2.53, length.out=11)
-mt_ev = matrix(rnorm(ar_a*ar_z), nrow=length(ar_a), ncol=length(ar_z))
+df_panel_skeleton &lt;- as_tibble(matrix(it_P, nrow=it_M, ncol=1)) %&gt;%
+  rowid_to_column(var = svr_m) %&gt;%
+  uncount(V1) %&gt;%
+  group_by(!!sym(svr_m)) %&gt;% mutate(!!sym(svr_mp) := row_number()) %&gt;%
+  ungroup() %&gt;%
+  rowwise() %&gt;% mutate(wage = rnorm(1, 100, 10), 
+                       savings = rnorm(1, 200, 30)) %&gt;%
+  ungroup() %&gt;% 
+  rowid_to_column(var = &quot;id_ji&quot;)
 
-# Name Matrix
-rownames(mt_ev) &lt;- paste0(&#39;ai&#39;, seq(1:length(ar_a)))
-colnames(mt_ev) &lt;- paste0(&#39;zi&#39;, seq(1:length(ar_z)))
-
-# to tibble
-tb_ev &lt;- as_tibble(mt_ev) %&gt;% rowid_to_column(var = &quot;ai&quot;)
-
-# longer
-tb_ev_long &lt;- tb_ev %&gt;%
-  pivot_longer(cols = starts_with(&#39;zi&#39;),
-               names_to = c(&#39;zi&#39;),
-               names_pattern = paste0(&quot;zi(.*)&quot;),
-               values_to = &quot;ev&quot;) %&gt;%
-  mutate(zi = as.numeric(zi))
-
-# Merge with a and z values
-tb_ev_long &lt;- tb_ev_long %&gt;%
-  left_join(as_tibble(ar_a) %&gt;%
-              rowid_to_column(var = &quot;ai&quot;) %&gt;%
-              rename(a = value)
-              , by = &#39;ai&#39;) %&gt;%
-  left_join(as_tibble(ar_z) %&gt;%
-              rowid_to_column(var = &quot;zi&quot;) %&gt;%
-              rename(z = value),
-            by = &#39;zi&#39;) %&gt;%
-  select(a,ai,z,zi,ev)
-
-# Display
-kable(tb_ev) %&gt;% kable_styling_fc()</code></pre>
+# Print
+kable(df_panel_skeleton) %&gt;% kable_styling_fc()</code></pre>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-ai
+id_ji
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi1
+group_m
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi2
+info_mp
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi3
+wage
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi4
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi5
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi6
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi7
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi8
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi9
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi10
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi11
+savings
 </th>
 </tr>
 </thead>
@@ -1923,37 +1887,16 @@ zi11
 1
 </td>
 <td style="text-align:right;">
--0.5604756
+1
 </td>
 <td style="text-align:right;">
-1.5587083
+1
 </td>
 <td style="text-align:right;">
-0.1292877
+94.39524
 </td>
 <td style="text-align:right;">
-0.4609162
-</td>
-<td style="text-align:right;">
--0.6868529
-</td>
-<td style="text-align:right;">
-1.2240818
-</td>
-<td style="text-align:right;">
--0.2301775
-</td>
-<td style="text-align:right;">
-0.0705084
-</td>
-<td style="text-align:right;">
-1.7150650
-</td>
-<td style="text-align:right;">
--1.2650612
-</td>
-<td style="text-align:right;">
--0.445662
+253.6074
 </td>
 </tr>
 <tr>
@@ -1961,439 +1904,512 @@ zi11
 2
 </td>
 <td style="text-align:right;">
--0.2301775
+1
 </td>
 <td style="text-align:right;">
-0.0705084
+2
 </td>
 <td style="text-align:right;">
-1.7150650
+97.69823
 </td>
 <td style="text-align:right;">
--1.2650612
+214.9355
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
 </td>
 <td style="text-align:right;">
--0.4456620
+1
 </td>
 <td style="text-align:right;">
--0.5604756
+3
 </td>
 <td style="text-align:right;">
-1.5587083
+115.58708
 </td>
 <td style="text-align:right;">
-0.1292877
+141.0015
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
 </td>
 <td style="text-align:right;">
-0.4609162
+1
 </td>
 <td style="text-align:right;">
--0.6868529
+4
 </td>
 <td style="text-align:right;">
-1.224082
+100.70508
+</td>
+<td style="text-align:right;">
+221.0407
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+101.29288
+</td>
+<td style="text-align:right;">
+185.8163
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+117.15065
+</td>
+<td style="text-align:right;">
+167.9653
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+104.60916
+</td>
+<td style="text-align:right;">
+193.4608
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+87.34939
+</td>
+<td style="text-align:right;">
+169.2199
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+93.13147
+</td>
+<td style="text-align:right;">
+178.1333
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+95.54338
+</td>
+<td style="text-align:right;">
+181.2488
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+112.24082
+</td>
+<td style="text-align:right;">
+149.3992
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+103.59814
+</td>
+<td style="text-align:right;">
+225.1336
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+104.00771
+</td>
+<td style="text-align:right;">
+204.6012
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+101.10683
+</td>
+<td style="text-align:right;">
+165.8559
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+94.44159
+</td>
+<td style="text-align:right;">
+237.6144
 </td>
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>kable(tb_ev_long) %&gt;% kable_styling_fc()</code></pre>
+</div>
+<div id="subgroup-compute-and-expand" class="section level2" number="1.2">
+<h2 number="1.2"><span class="header-section-number">1.2</span> Subgroup Compute and Expand</h2>
+<p>Use the <em>M</em> sub-dataframes, generate <em>Q</em> by <em>Z</em> result for each of the <em>M</em> groups. Stack all results together.</p>
+<p>Base on all the wages for each individual, generate individual specific mean and standard deviations. Do this for three things, the wage variable, the savings variable, and the sum of wage and savings:</p>
+<ol style="list-style-type: decimal">
+<li><em>Z=2</em>: 2 columns, mean and standard deviation</li>
+<li><em>Q=3</em>: 3 rows, statistics based on wage, savings, and the sum of both</li>
+</ol>
+<p>First, here is the processing function that takes the dataframe as input, with a parameter for rounding:</p>
+<pre class="r"><code># define function
+ffi_subset_mean_sd &lt;- function(df_sub, it_round=1) {
+  #&#39; A function that generates mean and sd for several variables
+  #&#39;
+  #&#39; @description
+  #&#39; Assume there are two variables in df_sub wage and savings
+  #&#39;
+  #&#39; @param df_sub dataframe where each individual row is a different 
+  #&#39; data point, over which we compute mean and sd, Assum there are two 
+  #&#39; variables, savings and wage
+  #&#39; @param it_round integer rounding for resulting dataframe
+  #&#39; @return a dataframe where each row is aggregate for a different type
+  #&#39; of variablea and each column is a different statistics
+  
+  fl_wage_mn = mean(df_sub$wage)
+  fl_wage_sd = sd(df_sub$wage)
+  
+  fl_save_mn = mean(df_sub$savings)
+  fl_save_sd = sd(df_sub$savings)
+  
+  fl_wgsv_mn = mean(df_sub$wage + df_sub$savings)
+  fl_wgsv_sd = sd(df_sub$wage + df_sub$savings)  
+  
+  ar_mn &lt;- c(fl_wage_mn, fl_save_mn, fl_wgsv_mn)
+  ar_sd &lt;- c(fl_wage_sd, fl_save_sd, fl_wgsv_sd)
+  ar_st_row_lab &lt;- c(&#39;wage&#39;, &#39;savings&#39;, &#39;wage_and_savings&#39;)
+  
+  mt_stats &lt;- cbind(ar_mn, ar_sd)
+  mt_stats &lt;- round(mt_stats, it_round)
+  
+  ar_st_varnames &lt;- c(&#39;mean&#39;, &#39;sd&#39;, &#39;variables&#39;)
+  df_combine &lt;- as_tibble(mt_stats) %&gt;% 
+    add_column(ar_st_row_lab) %&gt;%
+    rename_all(~c(ar_st_varnames)) %&gt;%
+    select(variables, &#39;mean&#39;, &#39;sd&#39;) %&gt;%
+    rowid_to_column(var = &quot;id_q&quot;)
+    
+  return(df_combine)
+}
+# testing function
+ffi_subset_mean_sd(df_panel_skeleton %&gt;% filter(!!sym(svr_m)==1))</code></pre>
+<p>Second, call <em>ffi_subset_mean_sd</em> function for each of the groups indexed by <em>j</em> and stack results together with <em>j</em> index:</p>
+<ol style="list-style-type: decimal">
+<li>group by</li>
+<li>call function</li>
+<li>unnest</li>
+</ol>
+<pre class="r"><code># run group stats and stack dataframes
+df_outputs &lt;- df_panel_skeleton %&gt;% group_by(!!sym(svr_m)) %&gt;%
+  do(df_stats = ffi_subset_mean_sd(., it_round=2)) %&gt;%
+  unnest() %&gt;%
+  rowid_to_column(var = &quot;id_mq&quot;)
+# print
+kable(df_outputs) %&gt;% kable_styling_fc()</code></pre>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-a
+id_mq
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-ai
+group_m
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-z
+id_q
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+variables
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi
+mean
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-ev
+sd
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:right;">
-1.1
+1
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
--2.500
-</td>
-<td style="text-align:right;">
 1
 </td>
+<td style="text-align:left;">
+wage
+</td>
 <td style="text-align:right;">
--0.5604756
+101.94
+</td>
+<td style="text-align:right;">
+8.11
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
-1.1
+2
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
--1.997
+2
+</td>
+<td style="text-align:left;">
+savings
+</td>
+<td style="text-align:right;">
+203.28
+</td>
+<td style="text-align:right;">
+42.33
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+wage_and_savings
+</td>
+<td style="text-align:right;">
+305.22
+</td>
+<td style="text-align:right;">
+34.83
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
 </td>
 <td style="text-align:right;">
 2
 </td>
 <td style="text-align:right;">
-1.5587083
+1
+</td>
+<td style="text-align:left;">
+wage
+</td>
+<td style="text-align:right;">
+99.56
+</td>
+<td style="text-align:right;">
+11.63
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
-1.1
+5
 </td>
 <td style="text-align:right;">
-1
+2
 </td>
 <td style="text-align:right;">
--1.494
+2
+</td>
+<td style="text-align:left;">
+savings
+</td>
+<td style="text-align:right;">
+178.01
+</td>
+<td style="text-align:right;">
+10.34
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+wage_and_savings
+</td>
+<td style="text-align:right;">
+277.56
+</td>
+<td style="text-align:right;">
+15.48
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
 </td>
 <td style="text-align:right;">
 3
 </td>
 <td style="text-align:right;">
-0.1292877
+1
+</td>
+<td style="text-align:left;">
+wage
+</td>
+<td style="text-align:right;">
+103.08
+</td>
+<td style="text-align:right;">
+6.39
 </td>
 </tr>
 <tr>
-<td style="text-align:right;">
-1.1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
--0.991
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-0.4609162
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
--0.488
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
--0.6868529
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.015
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-1.2240818
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.518
-</td>
-<td style="text-align:right;">
-7
-</td>
-<td style="text-align:right;">
--0.2301775
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1.021
-</td>
 <td style="text-align:right;">
 8
-</td>
-<td style="text-align:right;">
-0.0705084
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1.524
-</td>
-<td style="text-align:right;">
-9
-</td>
-<td style="text-align:right;">
-1.7150650
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2.027
-</td>
-<td style="text-align:right;">
-10
-</td>
-<td style="text-align:right;">
--1.2650612
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2.530
-</td>
-<td style="text-align:right;">
-11
-</td>
-<td style="text-align:right;">
--0.4456620
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
--2.500
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
--0.2301775
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
--1.997
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.0705084
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
--1.494
 </td>
 <td style="text-align:right;">
 3
 </td>
 <td style="text-align:right;">
-1.7150650
+2
+</td>
+<td style="text-align:left;">
+savings
+</td>
+<td style="text-align:right;">
+196.52
+</td>
+<td style="text-align:right;">
+37.86
 </td>
 </tr>
 <tr>
-<td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
--0.991
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
--1.2650612
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
--0.488
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
--0.4456620
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.015
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
--0.5604756
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.518
-</td>
-<td style="text-align:right;">
-7
-</td>
-<td style="text-align:right;">
-1.5587083
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1.021
-</td>
-<td style="text-align:right;">
-8
-</td>
-<td style="text-align:right;">
-0.1292877
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1.524
-</td>
 <td style="text-align:right;">
 9
 </td>
 <td style="text-align:right;">
-0.4609162
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5.1
+3
 </td>
 <td style="text-align:right;">
-2
+3
+</td>
+<td style="text-align:left;">
+wage_and_savings
 </td>
 <td style="text-align:right;">
-2.027
+299.60
 </td>
 <td style="text-align:right;">
-10
-</td>
-<td style="text-align:right;">
--0.6868529
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2.530
-</td>
-<td style="text-align:right;">
-11
-</td>
-<td style="text-align:right;">
-1.2240818
+33.50
 </td>
 </tr>
 </tbody>
 </table>
+<p>In the resulting file, we went from a matrix with <em>MxP</em> rows to a matrix with <em>MxQ</em> Rows.</p>
 </div>
 </div>
 
