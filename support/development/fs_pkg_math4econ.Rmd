@@ -2,12 +2,12 @@
 title: "Math4Econ Refreshes Package, Generates RMD based PDF, HTML and R Files"
 titleshort: "Knit PDF, HTML and Curl R based on RMD"
 description: |
-  Knit PDF, HTML and Curl R based on RMD.
+Knit PDF, HTML and Curl R based on RMD.
 core:
   - package: REconTools
     code: |
-      ff_sup_clean_rmd()
-date: 2020-04-18
+    ff_sup_clean_rmd()
+    date: 2020-04-18
 date_start: 2020-04-18
 output:
   pdf_document:
@@ -42,6 +42,12 @@ Math4Econ Rmd to PDF and HTML.
 # knitr::purl(file_path_rmd, output=file_path_r, documentation = 1)
 ```
 
+Math 4 Econ File Updating:
+
+1. Matlab: MLX to HTML, PDF and TEX
+2. Python: Tex to MD, MD to RMD
+3. R: Rmd Processing as Usual 
+
 #### TOC
 
 Toc and Numbered list possible through external specification pandoc yaml for pdf, but not possible for HTML. HTML needs to be specified via rmd yaml directly. Use the follow replacement strategy:
@@ -50,8 +56,7 @@ Toc and Numbered list possible through external specification pandoc yaml for pd
 - Search: *html_document:\r\n*
 - Replace: *html_document:\r\n    toc: true\r\n    number_sections: true\r\n    toc_float:\r\n      collapsed: false\r\n      smooth_scroll: false\r\n      toc_depth: 3\r\n*
 
-
-#### Testing Which Files Have Changed
+#### Testing Changes in MLX file
 
 Check through *Math4Econ* and see which files have been added, and which files have been modified. bl_test set to TRUE. Not generating any new files, just checking.
 
@@ -68,70 +73,132 @@ setwd(spt_root)
 bl_test = TRUE
 bl_gen_if_git_old = FALSE
 
-ar_spt_root = 'C:/Users/fan/Math4Econ/'
-# ar_spt_root = 'C:/Users/fan/Math4Econ/development/inout/'
-
-ff_sup_clean_rmd(ar_spt_root = ar_spt_root,
+ar_spt_root = c('C:/Users/fan/Math4Econ/calconevar/',
+                'C:/Users/fan/Math4Econ/explog/',
+                'C:/Users/fan/Math4Econ/derivative/',
+                'C:/Users/fan/Math4Econ/derivative_application/',
+                'C:/Users/fan/Math4Econ/matrix_basics/',
+                'C:/Users/fan/Math4Econ/matrix_system_of_equations/',
+                'C:/Users/fan/Math4Econ/matrix_application/',
+                'C:/Users/fan/Math4Econ/uncertainty/',
+                'C:/Users/fan/Math4Econ/opti_firm_constrained/',
+                'C:/Users/fan/Math4Econ/opti_hh_constrained_brsv/',
+                'C:/Users/fan/Math4Econ/opti_hh_constrained_brsv_inequality/',
+                'C:/Users/fan/Math4Econ/equilibrium/')
+ff_sup_clean_mlx(ar_spt_root = ar_spt_root,
                  ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
                                  '_mod.Rmd', 'title.Rmd'),
-                 st_folder_pdf = '/htmlpdfr/',
-                 st_folder_html = '/htmlpdfr/',
-                 st_folder_R = '/htmlpdfr/',
+                 st_pattern='.mlx',
                  bl_gen_if_git_old = bl_gen_if_git_old,
                  bl_recursive = TRUE,
                  bl_verbose = FALSE,
                  bl_test = bl_test,
-                 it_hierachy_shift=2, it_toc_depth=3)
+                 it_hierachy_shift=1, it_toc_depth=3)
 
 end_time <- Sys.time()
 print(paste0('ff_sup_clean_rmd(), bl_test = TRUE, took:', end_time - start_time))
 sink()
 ```
 
-#### Run And Generate Pdfs and HTMLs Updates Only
+#### Convert MLX to RMD
 
-Only generate pdf and html for files that have git changes or are new.
+Check through *Math4Econ* and see which files have been added, and which files have been modified. bl_test set to TRUE. Not generating any new files, just checking.
 
+Note: new files that should not get pdf and html should have *.rmd* rather than *.Rmd* as suffix.
 
 ```{r}
+# run examples
 spt_root <- 'C:/Users/fan/Math4Econ'
 spt_log <- 'C:/Users/fan/Math4Econ/_log/rmdclean/'
-sink(paste0(spt_log, 'rmd_clean_actual.log'))
+sink(paste0(spt_log, 'rmd_clean_test.log'))
+start_time <- Sys.time()
+setwd(spt_root)
+
+bl_test = FALSE
+bl_gen_if_git_old = TRUE
+
+st_prj_root = 'C:/Users/fan/Math4Econ/'
+ar_spt_root = c('C:/Users/fan/Math4Econ/calconevar/',
+                'C:/Users/fan/Math4Econ/explog/',
+                'C:/Users/fan/Math4Econ/derivative/',
+                'C:/Users/fan/Math4Econ/derivative_application/',
+                'C:/Users/fan/Math4Econ/matrix_basics/',
+                'C:/Users/fan/Math4Econ/matrix_system_of_equations/',
+                'C:/Users/fan/Math4Econ/matrix_application/',
+                'C:/Users/fan/Math4Econ/uncertainty/',
+                'C:/Users/fan/Math4Econ/opti_firm_constrained/',
+                'C:/Users/fan/Math4Econ/opti_hh_constrained_brsv/',
+                'C:/Users/fan/Math4Econ/opti_hh_constrained_brsv_inequality/',
+                'C:/Users/fan/Math4Econ/equilibrium/')
+ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
+               '_mod.Rmd', 'title.Rmd')
+# ar_spt_root = c('C:/Users/fan/Math4Econ/calconevar/')
+# ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
+#                '_mod.Rmd', 'title.Rmd', 'func', 'interval', 'real', 'poly')
+ff_sup_clean_mlx(st_prj_root = st_prj_root,
+                ar_spt_root = ar_spt_root,
+                 ar_spn_skip = ar_spn_skip,
+                 st_folder_pdf = 'htmlpdfm/',
+                 st_folder_m = 'htmlpdfm/',
+                 st_folder_html_m = '',
+                 st_folder_rmd = '',
+                 bl_gen_if_git_old = bl_gen_if_git_old,
+                 bl_recursive = TRUE,
+                 bl_verbose = FALSE,
+                 bl_test = bl_test,
+                 it_hierachy_shift=1, it_toc_depth=3)
+
+end_time <- Sys.time()
+print(paste0('ff_sup_clean_rmd(), bl_test = TRUE, took:', end_time - start_time))
+sink()
+```
+
+#### Convert RMD to HTML and PDF Etc
+
+```{r}
+# run examples
+spt_root <- 'C:/Users/fan/Math4Econ'
+spt_log <- 'C:/Users/fan/Math4Econ/_log/rmdclean/'
+sink(paste0(spt_log, 'rmd_clean_test.log'))
 start_time <- Sys.time()
 setwd(spt_root)
 
 bl_test = FALSE
 bl_gen_if_git_old = FALSE
 
-# ar_spt_root = c('C:/Users/fan/Math4Econ/amto',
-#                 'C:/Users/fan/Math4Econ/development',
-#                 'C:/Users/fan/Math4Econ/function',
-#                 'C:/Users/fan/Math4Econ/linreg',
-#                 'C:/Users/fan/Math4Econ/math',
-#                 'C:/Users/fan/Math4Econ/optimization',
-#                 'C:/Users/fan/Math4Econ/panel',
-#                 'C:/Users/fan/Math4Econ/regnonlin',
-#                 'C:/Users/fan/Math4Econ/tabgraph',
-#                 'C:/Users/fan/Math4Econ/summarize')
-
-ar_spt_root = 'C:/Users/fan/Math4Econ/'
-# ar_spt_root = 'C:/Users/fan/Math4Econ/development/inout/'
-
+st_prj_root = 'C:/Users/fan/Math4Econ/'
+ar_spt_root = c('C:/Users/fan/Math4Econ/calconevar/',
+                'C:/Users/fan/Math4Econ/explog/',
+                'C:/Users/fan/Math4Econ/derivative/',
+                'C:/Users/fan/Math4Econ/derivative_application/',
+                'C:/Users/fan/Math4Econ/matrix_basics/',
+                'C:/Users/fan/Math4Econ/matrix_system_of_equations/',
+                'C:/Users/fan/Math4Econ/matrix_application/',
+                'C:/Users/fan/Math4Econ/uncertainty/',
+                'C:/Users/fan/Math4Econ/opti_firm_constrained/',
+                'C:/Users/fan/Math4Econ/opti_hh_constrained_brsv/',
+                'C:/Users/fan/Math4Econ/opti_hh_constrained_brsv_inequality/',
+                'C:/Users/fan/Math4Econ/equilibrium/')
+ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
+               '_mod.Rmd', 'title.Rmd')
+# ar_spt_root = c('C:/Users/fan/Math4Econ/calconevar/')
+# ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
+#                '_mod.Rmd', 'title.Rmd', 'func', 'interval', 'real', 'poly')
 ff_sup_clean_rmd(ar_spt_root = ar_spt_root,
-                 ar_spn_skip = c('support', 'index.Rmd', 'README',
-                                 'main.Rmd', '_mod.Rmd', 'title.Rmd',
-                                 'Introductory Mathematics for Economists with Matlab'),
-                 st_folder_pdf = '/htmlpdfr/',
-                 st_folder_html = '/htmlpdfr/',
-                 st_folder_R = '/htmlpdfr/',
+                 ar_spn_skip = ar_spn_skip,
+                 st_folder_pdf = '/htmlpdfm/',
+                 st_folder_html = '/htmlpdfm/',
+                 st_folder_R = '/htmlpdfm/',
                  bl_gen_if_git_old = bl_gen_if_git_old,
                  bl_recursive = TRUE,
-                 bl_verbose = TRUE,
+                 bl_verbose = FALSE,
                  bl_test = bl_test,
-                 it_hierachy_shift=1, it_toc_depth=3)
+                 it_hierachy_shift=1, it_toc_depth=3,
+                 ls_bool_convert=list(bl_pdf=FALSE, bl_html=TRUE, bl_R=FALSE),
+                 ls_bool_remove=list(bl_remove_html=FALSE))
 
 end_time <- Sys.time()
-print(paste0('ff_sup_clean_rmd(), bl_test = FALSE, took:', end_time - start_time))
+print(paste0('ff_sup_clean_rmd(), bl_test = TRUE, took:', end_time - start_time))
 sink()
 ```
 
@@ -140,6 +207,8 @@ sink()
 There is python file that parses rmd front matters and goes through rmd files in the bookdown yaml file to automatically generate README contents.
 
 - 'C:/Users/fan/Py4Econ/support/inout/bookdownparse.py'
+
+Generate TOC:
 
 ```{python}
 import pyfan.util.rmd.bookdownparse as ft_bookdownparse
@@ -150,11 +219,7 @@ sph_prj = 'C:/Users/fan/Math4Econ/'
 spn_prj_bookdown_yml = '_bookdown.yml'
 
 # Read me preamble, and endnotes
-spn_prj_readme_pre = 'README_pre.md'
-spn_prj_readme_end = 'README_end.md'
 spn_prj_readme_toc = 'README_toc.md'
-# combine preamble, contents, suffix together
-spn_prj_readme_ful = 'README.md'
 
 # FIles to Ignore
 ls_st_ignore=['index.Rmd', 'README_appendix.md', 'title.Rmd', 'main.Rmd']
@@ -163,7 +228,27 @@ ls_st_ignore=['index.Rmd', 'README_appendix.md', 'title.Rmd', 'main.Rmd']
 ft_bookdownparse.fs_yml2readme(sfc_prj=sfc_prj, sph_prj=sph_prj,
                                spn_prj_bookdown_yml=spn_prj_bookdown_yml,
                                spn_prj_readme_toc=spn_prj_readme_toc,
-                               ls_st_ignore=ls_st_ignore)
+                               ls_st_ignore=ls_st_ignore,
+                               sph_pdf='htmlpdfm',
+                               sph_html='htmlpdfm',
+                               sph_r='htmlpdfm',
+                               st_file_type='m')
+```
+
+Combine Front and End and TOC:
+
+```{python}
+import pyfan.util.rmd.bookdownparse as ft_bookdownparse
+
+# Path Roots
+sph_prj = 'C:/Users/fan/Math4Econ/'
+
+# Read me preamble, and endnotes
+spn_prj_readme_pre = 'README_pre.md'
+spn_prj_readme_end = 'README_end.md'
+spn_prj_readme_toc = 'README_toc.md'
+# combine preamble, contents, suffix together
+spn_prj_readme_ful = 'README.md'
 
 # Combine README Files
 filenames = [spn_prj_readme_pre, spn_prj_readme_toc, spn_prj_readme_end]
@@ -190,16 +275,18 @@ spn_out.write('# (APPENDIX) Appendix {-}\n\n')
 spn_out.write('# Index and Code Links\n\n')
 
 for line in spn_in:
+
     if '# ' in line:
         st_text = line.replace('### ', '')
         st_text = st_text.replace('## ', '')
         st_text = st_text.replace('# ', '')
         st_text = st_text.lstrip('0123456789.- ')
-
+        
         st_line_prefix = ''
         st_line_suffix = ''
         st_head_level = ''
         it_level = 0
+        
         if '### ' in line:
             line = line.replace('### ', '')
             st_head_level = 'Subsection'
@@ -219,16 +306,16 @@ for line in spn_in:
             st_line_prefix = '## '
             st_line_suffix = ' links'
             it_level = 1
-
-        line = line.replace('  ', ' ')
-        line = line.replace('\n', '')
-        st_text = st_text.replace('\n', '')
-
+            
+            line = line.replace('  ', ' ')
+            line = line.replace('\n', '')
+            st_text = st_text.replace('\n', '')
+        
         if it_level == 1:
             line = st_line_prefix + line + st_line_suffix + '\n'
         else:
             line = st_line_prefix + '[' + line + '][' + st_text + ']' + st_line_suffix + '\n'
-
+        
     spn_out.write(line)
 
 # (APPENDIX) Appendix {-}

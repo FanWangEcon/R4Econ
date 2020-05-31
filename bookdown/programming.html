@@ -30,7 +30,7 @@ Modify markdown pounds hierarchy.</p>" />
 <meta name="author" content="Fan Wang" />
 
 
-<meta name="date" content="2020-05-27" />
+<meta name="date" content="2020-05-31" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -386,53 +386,53 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="latex-table-to-file" class="section level4" number="10.1.1.1">
 <h4><span class="header-section-number">10.1.1.1</span> Latex Table to File</h4>
 <p>Tabular outputs, text outputs, etc are saved as variables, which could be printed in console. They can also be saved to file for future re-used. For example, latex outputs need to be saved to file.</p>
-<div class="sourceCode" id="cb414"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb414-1"><a href="programming.html#cb414-1"></a><span class="co"># Load Data</span></span>
-<span id="cb414-2"><a href="programming.html#cb414-2"></a>dt &lt;-<span class="st"> </span>mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>]</span>
-<span id="cb414-3"><a href="programming.html#cb414-3"></a><span class="co"># Generate latex string variable</span></span>
-<span id="cb414-4"><a href="programming.html#cb414-4"></a>st_out_tex &lt;-<span class="st"> </span><span class="kw">kable</span>(dt, <span class="st">&quot;latex&quot;</span>)</span>
-<span id="cb414-5"><a href="programming.html#cb414-5"></a><span class="kw">print</span>(st_out_tex)</span>
-<span id="cb414-6"><a href="programming.html#cb414-6"></a><span class="co"># File out</span></span>
-<span id="cb414-7"><a href="programming.html#cb414-7"></a><span class="co"># fileConn &lt;- file(&quot;./../../_file/tex/tex_sample_a_tab.tex&quot;)</span></span>
-<span id="cb414-8"><a href="programming.html#cb414-8"></a>fileConn &lt;-<span class="st"> </span><span class="kw">file</span>(<span class="st">&quot;_file/tex/tex_sample_a_tab.tex&quot;</span>)</span>
-<span id="cb414-9"><a href="programming.html#cb414-9"></a><span class="kw">writeLines</span>(st_out_tex, fileConn)</span>
-<span id="cb414-10"><a href="programming.html#cb414-10"></a><span class="kw">close</span>(fileConn)</span></code></pre></div>
+<div class="sourceCode" id="cb416"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb416-1"><a href="programming.html#cb416-1"></a><span class="co"># Load Data</span></span>
+<span id="cb416-2"><a href="programming.html#cb416-2"></a>dt &lt;-<span class="st"> </span>mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>]</span>
+<span id="cb416-3"><a href="programming.html#cb416-3"></a><span class="co"># Generate latex string variable</span></span>
+<span id="cb416-4"><a href="programming.html#cb416-4"></a>st_out_tex &lt;-<span class="st"> </span><span class="kw">kable</span>(dt, <span class="st">&quot;latex&quot;</span>)</span>
+<span id="cb416-5"><a href="programming.html#cb416-5"></a><span class="kw">print</span>(st_out_tex)</span>
+<span id="cb416-6"><a href="programming.html#cb416-6"></a><span class="co"># File out</span></span>
+<span id="cb416-7"><a href="programming.html#cb416-7"></a><span class="co"># fileConn &lt;- file(&quot;./../../_file/tex/tex_sample_a_tab.tex&quot;)</span></span>
+<span id="cb416-8"><a href="programming.html#cb416-8"></a>fileConn &lt;-<span class="st"> </span><span class="kw">file</span>(<span class="st">&quot;_file/tex/tex_sample_a_tab.tex&quot;</span>)</span>
+<span id="cb416-9"><a href="programming.html#cb416-9"></a><span class="kw">writeLines</span>(st_out_tex, fileConn)</span>
+<span id="cb416-10"><a href="programming.html#cb416-10"></a><span class="kw">close</span>(fileConn)</span></code></pre></div>
 </div>
 <div id="create-a-text-file-from-strings" class="section level4" number="10.1.1.2">
 <h4><span class="header-section-number">10.1.1.2</span> Create a Text File from Strings</h4>
-<div class="sourceCode" id="cb415"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb415-1"><a href="programming.html#cb415-1"></a>st_file &lt;-<span class="st"> &quot;</span><span class="ch">\\</span><span class="st">documentclass[12pt,english]{article}</span></span>
-<span id="cb415-2"><a href="programming.html#cb415-2"></a><span class="ch">\\</span><span class="st">usepackage[bottom]{footmisc}</span></span>
-<span id="cb415-3"><a href="programming.html#cb415-3"></a><span class="ch">\\</span><span class="st">usepackage[urlcolor=blue]{hyperref}</span></span>
-<span id="cb415-4"><a href="programming.html#cb415-4"></a><span class="ch">\\</span><span class="st">begin{document}</span></span>
-<span id="cb415-5"><a href="programming.html#cb415-5"></a><span class="ch">\\</span><span class="st">title{A Latex Testing File}</span></span>
-<span id="cb415-6"><a href="programming.html#cb415-6"></a><span class="ch">\\</span><span class="st">author{</span><span class="ch">\\</span><span class="st">href{http://fanwangecon.github.io/}{Fan Wang} </span><span class="ch">\\</span><span class="st">thanks{See information </span><span class="ch">\\</span><span class="st">href{https://fanwangecon.github.io/Tex4Econ/}{Tex4Econ} for more.}}</span></span>
-<span id="cb415-7"><a href="programming.html#cb415-7"></a><span class="ch">\\</span><span class="st">maketitle</span></span>
-<span id="cb415-8"><a href="programming.html#cb415-8"></a><span class="st">Ipsum information dolor sit amet, consectetur adipiscing elit. Integer Latex placerat nunc orci.</span></span>
-<span id="cb415-9"><a href="programming.html#cb415-9"></a><span class="ch">\\</span><span class="st">paragraph{</span><span class="ch">\\</span><span class="st">href{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3140132}{Data}}</span></span>
-<span id="cb415-10"><a href="programming.html#cb415-10"></a><span class="st">Village closure information is taken from a village head survey.</span><span class="ch">\\</span><span class="st">footnote{Generally students went to schools.}</span></span>
-<span id="cb415-11"><a href="programming.html#cb415-11"></a><span class="st">output:</span></span>
-<span id="cb415-12"><a href="programming.html#cb415-12"></a><span class="st">  pdf_document:</span></span>
-<span id="cb415-13"><a href="programming.html#cb415-13"></a><span class="st">    pandoc_args: &#39;..//..//_output_kniti_pdf.yaml&#39;</span></span>
-<span id="cb415-14"><a href="programming.html#cb415-14"></a><span class="st">    includes:</span></span>
-<span id="cb415-15"><a href="programming.html#cb415-15"></a><span class="st">      in_header: &#39;..//..//preamble.tex&#39;</span></span>
-<span id="cb415-16"><a href="programming.html#cb415-16"></a><span class="st">  html_document:</span></span>
-<span id="cb415-17"><a href="programming.html#cb415-17"></a><span class="st">    pandoc_args: &#39;..//..//_output_kniti_html.yaml&#39;</span></span>
-<span id="cb415-18"><a href="programming.html#cb415-18"></a><span class="st">    includes:</span></span>
-<span id="cb415-19"><a href="programming.html#cb415-19"></a><span class="st">      in_header: &#39;..//..//hdga.html&#39;</span></span>
-<span id="cb415-20"><a href="programming.html#cb415-20"></a><span class="ch">\\</span><span class="st">end{document}&quot;</span></span>
-<span id="cb415-21"><a href="programming.html#cb415-21"></a></span>
-<span id="cb415-22"><a href="programming.html#cb415-22"></a><span class="kw">print</span>(st_file)</span></code></pre></div>
+<div class="sourceCode" id="cb417"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb417-1"><a href="programming.html#cb417-1"></a>st_file &lt;-<span class="st"> &quot;</span><span class="ch">\\</span><span class="st">documentclass[12pt,english]{article}</span></span>
+<span id="cb417-2"><a href="programming.html#cb417-2"></a><span class="ch">\\</span><span class="st">usepackage[bottom]{footmisc}</span></span>
+<span id="cb417-3"><a href="programming.html#cb417-3"></a><span class="ch">\\</span><span class="st">usepackage[urlcolor=blue]{hyperref}</span></span>
+<span id="cb417-4"><a href="programming.html#cb417-4"></a><span class="ch">\\</span><span class="st">begin{document}</span></span>
+<span id="cb417-5"><a href="programming.html#cb417-5"></a><span class="ch">\\</span><span class="st">title{A Latex Testing File}</span></span>
+<span id="cb417-6"><a href="programming.html#cb417-6"></a><span class="ch">\\</span><span class="st">author{</span><span class="ch">\\</span><span class="st">href{http://fanwangecon.github.io/}{Fan Wang} </span><span class="ch">\\</span><span class="st">thanks{See information </span><span class="ch">\\</span><span class="st">href{https://fanwangecon.github.io/Tex4Econ/}{Tex4Econ} for more.}}</span></span>
+<span id="cb417-7"><a href="programming.html#cb417-7"></a><span class="ch">\\</span><span class="st">maketitle</span></span>
+<span id="cb417-8"><a href="programming.html#cb417-8"></a><span class="st">Ipsum information dolor sit amet, consectetur adipiscing elit. Integer Latex placerat nunc orci.</span></span>
+<span id="cb417-9"><a href="programming.html#cb417-9"></a><span class="ch">\\</span><span class="st">paragraph{</span><span class="ch">\\</span><span class="st">href{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3140132}{Data}}</span></span>
+<span id="cb417-10"><a href="programming.html#cb417-10"></a><span class="st">Village closure information is taken from a village head survey.</span><span class="ch">\\</span><span class="st">footnote{Generally students went to schools.}</span></span>
+<span id="cb417-11"><a href="programming.html#cb417-11"></a><span class="st">output:</span></span>
+<span id="cb417-12"><a href="programming.html#cb417-12"></a><span class="st">  pdf_document:</span></span>
+<span id="cb417-13"><a href="programming.html#cb417-13"></a><span class="st">    pandoc_args: &#39;..//..//_output_kniti_pdf.yaml&#39;</span></span>
+<span id="cb417-14"><a href="programming.html#cb417-14"></a><span class="st">    includes:</span></span>
+<span id="cb417-15"><a href="programming.html#cb417-15"></a><span class="st">      in_header: &#39;..//..//preamble.tex&#39;</span></span>
+<span id="cb417-16"><a href="programming.html#cb417-16"></a><span class="st">  html_document:</span></span>
+<span id="cb417-17"><a href="programming.html#cb417-17"></a><span class="st">    pandoc_args: &#39;..//..//_output_kniti_html.yaml&#39;</span></span>
+<span id="cb417-18"><a href="programming.html#cb417-18"></a><span class="st">    includes:</span></span>
+<span id="cb417-19"><a href="programming.html#cb417-19"></a><span class="st">      in_header: &#39;..//..//hdga.html&#39;</span></span>
+<span id="cb417-20"><a href="programming.html#cb417-20"></a><span class="ch">\\</span><span class="st">end{document}&quot;</span></span>
+<span id="cb417-21"><a href="programming.html#cb417-21"></a></span>
+<span id="cb417-22"><a href="programming.html#cb417-22"></a><span class="kw">print</span>(st_file)</span></code></pre></div>
 <pre><code>## [1] &quot;\\documentclass[12pt,english]{article}\n\\usepackage[bottom]{footmisc}\n\\usepackage[urlcolor=blue]{hyperref}\n\\begin{document}\n\\title{A Latex Testing File}\n\\author{\\href{http://fanwangecon.github.io/}{Fan Wang} \\thanks{See information \\href{https://fanwangecon.github.io/Tex4Econ/}{Tex4Econ} for more.}}\n\\maketitle\nIpsum information dolor sit amet, consectetur adipiscing elit. Integer Latex placerat nunc orci.\n\\paragraph{\\href{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3140132}{Data}}\nVillage closure information is taken from a village head survey.\\footnote{Generally students went to schools.}\noutput:\n  pdf_document:\n    pandoc_args: &#39;..//..//_output_kniti_pdf.yaml&#39;\n    includes:\n      in_header: &#39;..//..//preamble.tex&#39;\n  html_document:\n    pandoc_args: &#39;..//..//_output_kniti_html.yaml&#39;\n    includes:\n      in_header: &#39;..//..//hdga.html&#39;\n\\end{document}&quot;</code></pre>
-<div class="sourceCode" id="cb417"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb417-1"><a href="programming.html#cb417-1"></a>fl_test_tex &lt;-<span class="st"> &quot;_file/tex/test_fan.tex&quot;</span></span>
-<span id="cb417-2"><a href="programming.html#cb417-2"></a>fileConn &lt;-<span class="st"> </span><span class="kw">file</span>(fl_test_tex)</span>
-<span id="cb417-3"><a href="programming.html#cb417-3"></a><span class="kw">writeLines</span>(st_file, fileConn)</span>
-<span id="cb417-4"><a href="programming.html#cb417-4"></a><span class="kw">close</span>(fileConn)</span></code></pre></div>
+<div class="sourceCode" id="cb419"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb419-1"><a href="programming.html#cb419-1"></a>fl_test_tex &lt;-<span class="st"> &quot;_file/tex/test_fan.tex&quot;</span></span>
+<span id="cb419-2"><a href="programming.html#cb419-2"></a>fileConn &lt;-<span class="st"> </span><span class="kw">file</span>(fl_test_tex)</span>
+<span id="cb419-3"><a href="programming.html#cb419-3"></a><span class="kw">writeLines</span>(st_file, fileConn)</span>
+<span id="cb419-4"><a href="programming.html#cb419-4"></a><span class="kw">close</span>(fileConn)</span></code></pre></div>
 </div>
 <div id="open-a-file-and-read-lines" class="section level4" number="10.1.1.3">
 <h4><span class="header-section-number">10.1.1.3</span> Open A File and Read Lines</h4>
 <p>Open and Replace Text in File:</p>
-<div class="sourceCode" id="cb418"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb418-1"><a href="programming.html#cb418-1"></a>fileConn &lt;-<span class="st"> </span><span class="kw">file</span>(fl_test_tex, <span class="st">&quot;r&quot;</span>)</span>
-<span id="cb418-2"><a href="programming.html#cb418-2"></a>st_file_read &lt;-<span class="st"> </span><span class="kw">readLines</span>(fileConn)</span>
-<span id="cb418-3"><a href="programming.html#cb418-3"></a><span class="kw">print</span>(st_file_read)</span></code></pre></div>
+<div class="sourceCode" id="cb420"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb420-1"><a href="programming.html#cb420-1"></a>fileConn &lt;-<span class="st"> </span><span class="kw">file</span>(fl_test_tex, <span class="st">&quot;r&quot;</span>)</span>
+<span id="cb420-2"><a href="programming.html#cb420-2"></a>st_file_read &lt;-<span class="st"> </span><span class="kw">readLines</span>(fileConn)</span>
+<span id="cb420-3"><a href="programming.html#cb420-3"></a><span class="kw">print</span>(st_file_read)</span></code></pre></div>
 <pre><code>##  [1] &quot;\\documentclass[12pt,english]{article}&quot;                                                                                                                 
 ##  [2] &quot;\\usepackage[bottom]{footmisc}&quot;                                                                                                                         
 ##  [3] &quot;\\usepackage[urlcolor=blue]{hyperref}&quot;                                                                                                                  
@@ -453,33 +453,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## [18] &quot;    includes:&quot;                                                                                                                                          
 ## [19] &quot;      in_header: &#39;..//..//hdga.html&#39;&quot;                                                                                                                   
 ## [20] &quot;\\end{document}&quot;</code></pre>
-<div class="sourceCode" id="cb420"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb420-1"><a href="programming.html#cb420-1"></a><span class="kw">close</span>(fileConn)</span></code></pre></div>
+<div class="sourceCode" id="cb422"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb422-1"><a href="programming.html#cb422-1"></a><span class="kw">close</span>(fileConn)</span></code></pre></div>
 </div>
 <div id="open-a-file-and-replace-some-lines" class="section level4" number="10.1.1.4">
 <h4><span class="header-section-number">10.1.1.4</span> Open a File and Replace Some Lines</h4>
 <p>Append additional strings into the file after <em>html_document</em> with proper spacings:</p>
-<div class="sourceCode" id="cb421"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb421-1"><a href="programming.html#cb421-1"></a><span class="co"># Read in Lines from existing file</span></span>
-<span id="cb421-2"><a href="programming.html#cb421-2"></a>fileConn &lt;-<span class="st"> </span><span class="kw">file</span>(fl_test_tex, <span class="st">&quot;r&quot;</span>)</span>
-<span id="cb421-3"><a href="programming.html#cb421-3"></a>st_file_read &lt;-<span class="st"> </span><span class="kw">readLines</span>(fileConn)</span>
-<span id="cb421-4"><a href="programming.html#cb421-4"></a><span class="kw">close</span>(fileConn)</span>
-<span id="cb421-5"><a href="programming.html#cb421-5"></a></span>
-<span id="cb421-6"><a href="programming.html#cb421-6"></a><span class="co"># Search and Replace String</span></span>
-<span id="cb421-7"><a href="programming.html#cb421-7"></a>st_search &lt;-<span class="st"> &quot;html_document:&quot;</span></span>
-<span id="cb421-8"><a href="programming.html#cb421-8"></a>st_replace &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;html_document:</span><span class="ch">\r\n</span><span class="st">&quot;</span>,</span>
-<span id="cb421-9"><a href="programming.html#cb421-9"></a>                     <span class="st">&quot;    toc: true</span><span class="ch">\r\n</span><span class="st">&quot;</span>,</span>
-<span id="cb421-10"><a href="programming.html#cb421-10"></a>                     <span class="st">&quot;    number_sections: true</span><span class="ch">\r\n</span><span class="st">&quot;</span>,</span>
-<span id="cb421-11"><a href="programming.html#cb421-11"></a>                     <span class="st">&quot;    toc_float:</span><span class="ch">\r\n</span><span class="st">&quot;</span>,</span>
-<span id="cb421-12"><a href="programming.html#cb421-12"></a>                     <span class="st">&quot;      collapsed: false</span><span class="ch">\r\n</span><span class="st">&quot;</span>,</span>
-<span id="cb421-13"><a href="programming.html#cb421-13"></a>                     <span class="st">&quot;      smooth_scroll: false</span><span class="ch">\r\n</span><span class="st">&quot;</span>,</span>
-<span id="cb421-14"><a href="programming.html#cb421-14"></a>                     <span class="st">&quot;      toc_depth: 3&quot;</span>)</span>
-<span id="cb421-15"><a href="programming.html#cb421-15"></a></span>
-<span id="cb421-16"><a href="programming.html#cb421-16"></a><span class="co"># Search and Replace</span></span>
-<span id="cb421-17"><a href="programming.html#cb421-17"></a>st_file_updated &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="dt">x =</span> st_file_read,</span>
-<span id="cb421-18"><a href="programming.html#cb421-18"></a>                        <span class="dt">pattern =</span> st_search,</span>
-<span id="cb421-19"><a href="programming.html#cb421-19"></a>                        <span class="dt">replacement =</span> st_replace)</span>
-<span id="cb421-20"><a href="programming.html#cb421-20"></a></span>
-<span id="cb421-21"><a href="programming.html#cb421-21"></a><span class="co"># Print</span></span>
-<span id="cb421-22"><a href="programming.html#cb421-22"></a><span class="kw">print</span>(st_file_updated)</span></code></pre></div>
+<div class="sourceCode" id="cb423"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb423-1"><a href="programming.html#cb423-1"></a><span class="co"># Read in Lines from existing file</span></span>
+<span id="cb423-2"><a href="programming.html#cb423-2"></a>fileConn &lt;-<span class="st"> </span><span class="kw">file</span>(fl_test_tex, <span class="st">&quot;r&quot;</span>)</span>
+<span id="cb423-3"><a href="programming.html#cb423-3"></a>st_file_read &lt;-<span class="st"> </span><span class="kw">readLines</span>(fileConn)</span>
+<span id="cb423-4"><a href="programming.html#cb423-4"></a><span class="kw">close</span>(fileConn)</span>
+<span id="cb423-5"><a href="programming.html#cb423-5"></a></span>
+<span id="cb423-6"><a href="programming.html#cb423-6"></a><span class="co"># Search and Replace String</span></span>
+<span id="cb423-7"><a href="programming.html#cb423-7"></a>st_search &lt;-<span class="st"> &quot;html_document:&quot;</span></span>
+<span id="cb423-8"><a href="programming.html#cb423-8"></a>st_replace &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;html_document:</span><span class="ch">\r\n</span><span class="st">&quot;</span>,</span>
+<span id="cb423-9"><a href="programming.html#cb423-9"></a>                     <span class="st">&quot;    toc: true</span><span class="ch">\r\n</span><span class="st">&quot;</span>,</span>
+<span id="cb423-10"><a href="programming.html#cb423-10"></a>                     <span class="st">&quot;    number_sections: true</span><span class="ch">\r\n</span><span class="st">&quot;</span>,</span>
+<span id="cb423-11"><a href="programming.html#cb423-11"></a>                     <span class="st">&quot;    toc_float:</span><span class="ch">\r\n</span><span class="st">&quot;</span>,</span>
+<span id="cb423-12"><a href="programming.html#cb423-12"></a>                     <span class="st">&quot;      collapsed: false</span><span class="ch">\r\n</span><span class="st">&quot;</span>,</span>
+<span id="cb423-13"><a href="programming.html#cb423-13"></a>                     <span class="st">&quot;      smooth_scroll: false</span><span class="ch">\r\n</span><span class="st">&quot;</span>,</span>
+<span id="cb423-14"><a href="programming.html#cb423-14"></a>                     <span class="st">&quot;      toc_depth: 3&quot;</span>)</span>
+<span id="cb423-15"><a href="programming.html#cb423-15"></a></span>
+<span id="cb423-16"><a href="programming.html#cb423-16"></a><span class="co"># Search and Replace</span></span>
+<span id="cb423-17"><a href="programming.html#cb423-17"></a>st_file_updated &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="dt">x =</span> st_file_read,</span>
+<span id="cb423-18"><a href="programming.html#cb423-18"></a>                        <span class="dt">pattern =</span> st_search,</span>
+<span id="cb423-19"><a href="programming.html#cb423-19"></a>                        <span class="dt">replacement =</span> st_replace)</span>
+<span id="cb423-20"><a href="programming.html#cb423-20"></a></span>
+<span id="cb423-21"><a href="programming.html#cb423-21"></a><span class="co"># Print</span></span>
+<span id="cb423-22"><a href="programming.html#cb423-22"></a><span class="kw">print</span>(st_file_updated)</span></code></pre></div>
 <pre><code>##  [1] &quot;\\documentclass[12pt,english]{article}&quot;                                                                                                                        
 ##  [2] &quot;\\usepackage[bottom]{footmisc}&quot;                                                                                                                                
 ##  [3] &quot;\\usepackage[urlcolor=blue]{hyperref}&quot;                                                                                                                         
@@ -500,11 +500,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## [18] &quot;    includes:&quot;                                                                                                                                                 
 ## [19] &quot;      in_header: &#39;..//..//hdga.html&#39;&quot;                                                                                                                          
 ## [20] &quot;\\end{document}&quot;</code></pre>
-<div class="sourceCode" id="cb423"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb423-1"><a href="programming.html#cb423-1"></a><span class="co"># Save Updated File</span></span>
-<span id="cb423-2"><a href="programming.html#cb423-2"></a>fl_srcrep_tex &lt;-<span class="st"> &quot;_file/tex/test_fan_search_replace.tex&quot;</span></span>
-<span id="cb423-3"><a href="programming.html#cb423-3"></a>fileConn_sr &lt;-<span class="st"> </span><span class="kw">file</span>(fl_srcrep_tex)</span>
-<span id="cb423-4"><a href="programming.html#cb423-4"></a><span class="kw">writeLines</span>(st_file_updated, fileConn_sr)</span>
-<span id="cb423-5"><a href="programming.html#cb423-5"></a><span class="kw">close</span>(fileConn_sr)</span></code></pre></div>
+<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb425-1"><a href="programming.html#cb425-1"></a><span class="co"># Save Updated File</span></span>
+<span id="cb425-2"><a href="programming.html#cb425-2"></a>fl_srcrep_tex &lt;-<span class="st"> &quot;_file/tex/test_fan_search_replace.tex&quot;</span></span>
+<span id="cb425-3"><a href="programming.html#cb425-3"></a>fileConn_sr &lt;-<span class="st"> </span><span class="kw">file</span>(fl_srcrep_tex)</span>
+<span id="cb425-4"><a href="programming.html#cb425-4"></a><span class="kw">writeLines</span>(st_file_updated, fileConn_sr)</span>
+<span id="cb425-5"><a href="programming.html#cb425-5"></a><span class="kw">close</span>(fileConn_sr)</span></code></pre></div>
 
 </div>
 </div>
@@ -516,23 +516,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="search-and-find-all-files-in-repository" class="section level4" number="10.1.2.1">
 <h4><span class="header-section-number">10.1.2.1</span> Search and Find all Files in Repository</h4>
 <p>Search inside directories, for all files in a repository that have a particular suffix and that don’t contain skip pattern list string items.</p>
-<div class="sourceCode" id="cb424"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb424-1"><a href="programming.html#cb424-1"></a><span class="co"># Serch Folder and skip list</span></span>
-<span id="cb424-2"><a href="programming.html#cb424-2"></a>spt_roots &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;C:/Users/fan/R4Econ/amto&#39;</span>, <span class="st">&#39;C:/Users/fan/R4Econ/summarize&#39;</span>)</span>
-<span id="cb424-3"><a href="programming.html#cb424-3"></a>spn_skip &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;summarize&#39;</span>, <span class="st">&#39;panel&#39;</span>, <span class="st">&#39;support&#39;</span>)</span>
-<span id="cb424-4"><a href="programming.html#cb424-4"></a></span>
-<span id="cb424-5"><a href="programming.html#cb424-5"></a><span class="co"># Search and get all Path</span></span>
-<span id="cb424-6"><a href="programming.html#cb424-6"></a>ls_sfls &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">path=</span>spt_roots, <span class="dt">recursive=</span>T, <span class="dt">pattern=</span><span class="st">&quot;.Rmd&quot;</span>, <span class="dt">full.names=</span>T)</span>
-<span id="cb424-7"><a href="programming.html#cb424-7"></a></span>
-<span id="cb424-8"><a href="programming.html#cb424-8"></a><span class="co"># Skip path if contains words in skip list</span></span>
-<span id="cb424-9"><a href="programming.html#cb424-9"></a><span class="cf">if</span>(<span class="op">!</span><span class="kw">missing</span>(spn_skip)) {</span>
-<span id="cb424-10"><a href="programming.html#cb424-10"></a>  ls_sfls &lt;-<span class="st"> </span>ls_sfls[<span class="op">!</span><span class="kw">grepl</span>(<span class="kw">paste</span>(spn_skip, <span class="dt">collapse =</span> <span class="st">&quot;|&quot;</span>), ls_sfls)]</span>
-<span id="cb424-11"><a href="programming.html#cb424-11"></a>}</span>
-<span id="cb424-12"><a href="programming.html#cb424-12"></a></span>
-<span id="cb424-13"><a href="programming.html#cb424-13"></a><span class="co"># Loop and print</span></span>
-<span id="cb424-14"><a href="programming.html#cb424-14"></a><span class="cf">for</span> (spt_file <span class="cf">in</span> ls_sfls) {</span>
-<span id="cb424-15"><a href="programming.html#cb424-15"></a>    st_fullpath_nosufx &lt;-<span class="st"> </span><span class="kw">tail</span>(<span class="kw">strsplit</span>(spt_file, <span class="st">&quot;/&quot;</span>)[[<span class="dv">1</span>]],<span class="dt">n=</span><span class="dv">1</span>)</span>
-<span id="cb424-16"><a href="programming.html#cb424-16"></a>    <span class="kw">print</span>(<span class="kw">paste0</span>(spt_file, <span class="st">&#39;---&#39;</span>, st_fullpath_nosufx))</span>
-<span id="cb424-17"><a href="programming.html#cb424-17"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb426"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb426-1"><a href="programming.html#cb426-1"></a><span class="co"># Serch Folder and skip list</span></span>
+<span id="cb426-2"><a href="programming.html#cb426-2"></a>spt_roots &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;C:/Users/fan/R4Econ/amto&#39;</span>, <span class="st">&#39;C:/Users/fan/R4Econ/summarize&#39;</span>)</span>
+<span id="cb426-3"><a href="programming.html#cb426-3"></a>spn_skip &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;summarize&#39;</span>, <span class="st">&#39;panel&#39;</span>, <span class="st">&#39;support&#39;</span>)</span>
+<span id="cb426-4"><a href="programming.html#cb426-4"></a></span>
+<span id="cb426-5"><a href="programming.html#cb426-5"></a><span class="co"># Search and get all Path</span></span>
+<span id="cb426-6"><a href="programming.html#cb426-6"></a>ls_sfls &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">path=</span>spt_roots, <span class="dt">recursive=</span>T, <span class="dt">pattern=</span><span class="st">&quot;.Rmd&quot;</span>, <span class="dt">full.names=</span>T)</span>
+<span id="cb426-7"><a href="programming.html#cb426-7"></a></span>
+<span id="cb426-8"><a href="programming.html#cb426-8"></a><span class="co"># Skip path if contains words in skip list</span></span>
+<span id="cb426-9"><a href="programming.html#cb426-9"></a><span class="cf">if</span>(<span class="op">!</span><span class="kw">missing</span>(spn_skip)) {</span>
+<span id="cb426-10"><a href="programming.html#cb426-10"></a>  ls_sfls &lt;-<span class="st"> </span>ls_sfls[<span class="op">!</span><span class="kw">grepl</span>(<span class="kw">paste</span>(spn_skip, <span class="dt">collapse =</span> <span class="st">&quot;|&quot;</span>), ls_sfls)]</span>
+<span id="cb426-11"><a href="programming.html#cb426-11"></a>}</span>
+<span id="cb426-12"><a href="programming.html#cb426-12"></a></span>
+<span id="cb426-13"><a href="programming.html#cb426-13"></a><span class="co"># Loop and print</span></span>
+<span id="cb426-14"><a href="programming.html#cb426-14"></a><span class="cf">for</span> (spt_file <span class="cf">in</span> ls_sfls) {</span>
+<span id="cb426-15"><a href="programming.html#cb426-15"></a>    st_fullpath_nosufx &lt;-<span class="st"> </span><span class="kw">tail</span>(<span class="kw">strsplit</span>(spt_file, <span class="st">&quot;/&quot;</span>)[[<span class="dv">1</span>]],<span class="dt">n=</span><span class="dv">1</span>)</span>
+<span id="cb426-16"><a href="programming.html#cb426-16"></a>    <span class="kw">print</span>(<span class="kw">paste0</span>(spt_file, <span class="st">&#39;---&#39;</span>, st_fullpath_nosufx))</span>
+<span id="cb426-17"><a href="programming.html#cb426-17"></a>}</span></code></pre></div>
 <pre><code>## [1] &quot;C:/Users/fan/R4Econ/amto/array/fs_ary_basics.Rmd---fs_ary_basics.Rmd&quot;
 ## [1] &quot;C:/Users/fan/R4Econ/amto/array/fs_ary_generate.Rmd---fs_ary_generate.Rmd&quot;
 ## [1] &quot;C:/Users/fan/R4Econ/amto/array/fs_ary_mesh.Rmd---fs_ary_mesh.Rmd&quot;
@@ -554,33 +554,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="search-and-find-all-git-modified-or-new-rmd" class="section level4" number="10.1.2.2">
 <h4><span class="header-section-number">10.1.2.2</span> Search and Find all Git Modified or New Rmd</h4>
 <p>Search inside directories, for all files in a git repo folder that are new or have been modified. Ignore possible subset of file based on string search.</p>
-<div class="sourceCode" id="cb426"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb426-1"><a href="programming.html#cb426-1"></a><span class="co"># Serch Folder and skip list</span></span>
-<span id="cb426-2"><a href="programming.html#cb426-2"></a>spt_roots &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;C:/Users/fan/R4Econ/amto&#39;</span>, <span class="st">&#39;C:/Users/fan/R4Econ/development&#39;</span>)</span>
-<span id="cb426-3"><a href="programming.html#cb426-3"></a>spn_skip &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;summarize&#39;</span>, <span class="st">&#39;panel&#39;</span>, <span class="st">&#39;support&#39;</span>)</span>
-<span id="cb426-4"><a href="programming.html#cb426-4"></a>ls_sfls &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">path=</span>spt_roots, <span class="dt">recursive=</span>T, <span class="dt">pattern=</span><span class="st">&quot;.Rmd&quot;</span>, <span class="dt">full.names=</span>T)</span>
-<span id="cb426-5"><a href="programming.html#cb426-5"></a><span class="cf">if</span>(<span class="op">!</span><span class="kw">missing</span>(spn_skip)) {</span>
-<span id="cb426-6"><a href="programming.html#cb426-6"></a>  ls_sfls &lt;-<span class="st"> </span>ls_sfls[<span class="op">!</span><span class="kw">grepl</span>(<span class="kw">paste</span>(spn_skip, <span class="dt">collapse =</span> <span class="st">&quot;|&quot;</span>), ls_sfls)]</span>
-<span id="cb426-7"><a href="programming.html#cb426-7"></a>}</span>
-<span id="cb426-8"><a href="programming.html#cb426-8"></a></span>
-<span id="cb426-9"><a href="programming.html#cb426-9"></a><span class="co"># Loop and print</span></span>
-<span id="cb426-10"><a href="programming.html#cb426-10"></a><span class="cf">for</span> (spt_file <span class="cf">in</span> ls_sfls) {</span>
-<span id="cb426-11"><a href="programming.html#cb426-11"></a>  spg_check_git_status &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;git status -s &#39;</span>, spt_file)</span>
-<span id="cb426-12"><a href="programming.html#cb426-12"></a>  st_git_status &lt;-<span class="st"> </span><span class="kw">toString</span>(<span class="kw">system</span>(spg_check_git_status, <span class="dt">intern=</span><span class="ot">TRUE</span>))</span>
-<span id="cb426-13"><a href="programming.html#cb426-13"></a>  bl_modified &lt;-<span class="st"> </span><span class="kw">grepl</span>(<span class="st">&#39; M &#39;</span>, st_git_status, <span class="dt">fixed=</span><span class="ot">TRUE</span>)</span>
-<span id="cb426-14"><a href="programming.html#cb426-14"></a>  bl_anewfile &lt;-<span class="st"> </span><span class="kw">grepl</span>(<span class="st">&#39;?? &#39;</span>, st_git_status, <span class="dt">fixed=</span><span class="ot">TRUE</span>)</span>
-<span id="cb426-15"><a href="programming.html#cb426-15"></a>  bl_nochange &lt;-<span class="st"> </span>(st_git_status <span class="op">==</span><span class="st"> &quot;&quot;</span>)</span>
-<span id="cb426-16"><a href="programming.html#cb426-16"></a></span>
-<span id="cb426-17"><a href="programming.html#cb426-17"></a>  <span class="cf">if</span> (bl_modified <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) {</span>
-<span id="cb426-18"><a href="programming.html#cb426-18"></a>    <span class="kw">print</span>(<span class="kw">paste0</span>(<span class="st">&#39;MODIFIED: &#39;</span>, spt_file))</span>
-<span id="cb426-19"><a href="programming.html#cb426-19"></a>  } <span class="cf">else</span> <span class="cf">if</span> (bl_anewfile <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) {</span>
-<span id="cb426-20"><a href="programming.html#cb426-20"></a>    <span class="kw">print</span>(<span class="kw">paste0</span>(<span class="st">&#39;A NEW FL: &#39;</span>, spt_file))</span>
-<span id="cb426-21"><a href="programming.html#cb426-21"></a>  } <span class="cf">else</span> {</span>
-<span id="cb426-22"><a href="programming.html#cb426-22"></a>    <span class="kw">print</span>(<span class="kw">paste0</span>(<span class="st">&#39;NO CHNGE: &#39;</span>, spt_file))</span>
-<span id="cb426-23"><a href="programming.html#cb426-23"></a>  }</span>
-<span id="cb426-24"><a href="programming.html#cb426-24"></a>}</span></code></pre></div>
-<pre><code>## [1] &quot;MODIFIED: C:/Users/fan/R4Econ/amto/array/fs_ary_basics.Rmd&quot;
+<div class="sourceCode" id="cb428"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb428-1"><a href="programming.html#cb428-1"></a><span class="co"># Serch Folder and skip list</span></span>
+<span id="cb428-2"><a href="programming.html#cb428-2"></a>spt_roots &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;C:/Users/fan/R4Econ/amto&#39;</span>, <span class="st">&#39;C:/Users/fan/R4Econ/development&#39;</span>)</span>
+<span id="cb428-3"><a href="programming.html#cb428-3"></a>spn_skip &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;summarize&#39;</span>, <span class="st">&#39;panel&#39;</span>, <span class="st">&#39;support&#39;</span>)</span>
+<span id="cb428-4"><a href="programming.html#cb428-4"></a>ls_sfls &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">path=</span>spt_roots, <span class="dt">recursive=</span>T, <span class="dt">pattern=</span><span class="st">&quot;.Rmd&quot;</span>, <span class="dt">full.names=</span>T)</span>
+<span id="cb428-5"><a href="programming.html#cb428-5"></a><span class="cf">if</span>(<span class="op">!</span><span class="kw">missing</span>(spn_skip)) {</span>
+<span id="cb428-6"><a href="programming.html#cb428-6"></a>  ls_sfls &lt;-<span class="st"> </span>ls_sfls[<span class="op">!</span><span class="kw">grepl</span>(<span class="kw">paste</span>(spn_skip, <span class="dt">collapse =</span> <span class="st">&quot;|&quot;</span>), ls_sfls)]</span>
+<span id="cb428-7"><a href="programming.html#cb428-7"></a>}</span>
+<span id="cb428-8"><a href="programming.html#cb428-8"></a></span>
+<span id="cb428-9"><a href="programming.html#cb428-9"></a><span class="co"># Loop and print</span></span>
+<span id="cb428-10"><a href="programming.html#cb428-10"></a><span class="cf">for</span> (spt_file <span class="cf">in</span> ls_sfls) {</span>
+<span id="cb428-11"><a href="programming.html#cb428-11"></a>  spg_check_git_status &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;git status -s &#39;</span>, spt_file)</span>
+<span id="cb428-12"><a href="programming.html#cb428-12"></a>  st_git_status &lt;-<span class="st"> </span><span class="kw">toString</span>(<span class="kw">system</span>(spg_check_git_status, <span class="dt">intern=</span><span class="ot">TRUE</span>))</span>
+<span id="cb428-13"><a href="programming.html#cb428-13"></a>  bl_modified &lt;-<span class="st"> </span><span class="kw">grepl</span>(<span class="st">&#39; M &#39;</span>, st_git_status, <span class="dt">fixed=</span><span class="ot">TRUE</span>)</span>
+<span id="cb428-14"><a href="programming.html#cb428-14"></a>  bl_anewfile &lt;-<span class="st"> </span><span class="kw">grepl</span>(<span class="st">&#39;?? &#39;</span>, st_git_status, <span class="dt">fixed=</span><span class="ot">TRUE</span>)</span>
+<span id="cb428-15"><a href="programming.html#cb428-15"></a>  bl_nochange &lt;-<span class="st"> </span>(st_git_status <span class="op">==</span><span class="st"> &quot;&quot;</span>)</span>
+<span id="cb428-16"><a href="programming.html#cb428-16"></a></span>
+<span id="cb428-17"><a href="programming.html#cb428-17"></a>  <span class="cf">if</span> (bl_modified <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) {</span>
+<span id="cb428-18"><a href="programming.html#cb428-18"></a>    <span class="kw">print</span>(<span class="kw">paste0</span>(<span class="st">&#39;MODIFIED: &#39;</span>, spt_file))</span>
+<span id="cb428-19"><a href="programming.html#cb428-19"></a>  } <span class="cf">else</span> <span class="cf">if</span> (bl_anewfile <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) {</span>
+<span id="cb428-20"><a href="programming.html#cb428-20"></a>    <span class="kw">print</span>(<span class="kw">paste0</span>(<span class="st">&#39;A NEW FL: &#39;</span>, spt_file))</span>
+<span id="cb428-21"><a href="programming.html#cb428-21"></a>  } <span class="cf">else</span> {</span>
+<span id="cb428-22"><a href="programming.html#cb428-22"></a>    <span class="kw">print</span>(<span class="kw">paste0</span>(<span class="st">&#39;NO CHNGE: &#39;</span>, spt_file))</span>
+<span id="cb428-23"><a href="programming.html#cb428-23"></a>  }</span>
+<span id="cb428-24"><a href="programming.html#cb428-24"></a>}</span></code></pre></div>
+<pre><code>## [1] &quot;NO CHNGE: C:/Users/fan/R4Econ/amto/array/fs_ary_basics.Rmd&quot;
 ## [1] &quot;NO CHNGE: C:/Users/fan/R4Econ/amto/array/fs_ary_generate.Rmd&quot;
-## [1] &quot;MODIFIED: C:/Users/fan/R4Econ/amto/array/fs_ary_mesh.Rmd&quot;
+## [1] &quot;NO CHNGE: C:/Users/fan/R4Econ/amto/array/fs_ary_mesh.Rmd&quot;
 ## [1] &quot;NO CHNGE: C:/Users/fan/R4Econ/amto/array/fs_ary_string.Rmd&quot;
 ## [1] &quot;NO CHNGE: C:/Users/fan/R4Econ/amto/array/main.Rmd&quot;
 ## [1] &quot;NO CHNGE: C:/Users/fan/R4Econ/amto/list/fs_lst_basics.Rmd&quot;
@@ -610,30 +610,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>old file: <em>/R4Econ/development/fs_rmd_pdf_html.Rmd</em></li>
 <li>new file: *R4Econ/development/inout/_file/rmd/fs_rmd_pdf_html_mod.Rmd*</li>
 </ul>
-<div class="sourceCode" id="cb428"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb428-1"><a href="programming.html#cb428-1"></a><span class="co"># Serch Folder and skip list</span></span>
-<span id="cb428-2"><a href="programming.html#cb428-2"></a>spt_roots &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;C:/Users/fan/R4Econ/development/inout/&#39;</span>)</span>
-<span id="cb428-3"><a href="programming.html#cb428-3"></a>spn_skip &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;_main&#39;</span>, <span class="st">&#39;_file&#39;</span>)</span>
-<span id="cb428-4"><a href="programming.html#cb428-4"></a>ls_sfls &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">path=</span>spt_roots, <span class="dt">recursive=</span>T, <span class="dt">pattern=</span><span class="st">&quot;.Rmd&quot;</span>, <span class="dt">full.names=</span>T)</span>
-<span id="cb428-5"><a href="programming.html#cb428-5"></a><span class="cf">if</span>(<span class="op">!</span><span class="kw">missing</span>(spn_skip)) {</span>
-<span id="cb428-6"><a href="programming.html#cb428-6"></a>  ls_sfls &lt;-<span class="st"> </span>ls_sfls[<span class="op">!</span><span class="kw">grepl</span>(<span class="kw">paste</span>(spn_skip, <span class="dt">collapse =</span> <span class="st">&quot;|&quot;</span>), ls_sfls)]</span>
-<span id="cb428-7"><a href="programming.html#cb428-7"></a>}</span>
-<span id="cb428-8"><a href="programming.html#cb428-8"></a></span>
-<span id="cb428-9"><a href="programming.html#cb428-9"></a><span class="co"># Loop and print</span></span>
-<span id="cb428-10"><a href="programming.html#cb428-10"></a><span class="cf">for</span> (spt_file <span class="cf">in</span> ls_sfls) {</span>
-<span id="cb428-11"><a href="programming.html#cb428-11"></a>  spt_new &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;_file/rmd/&#39;</span>)</span>
-<span id="cb428-12"><a href="programming.html#cb428-12"></a>  spn_new &lt;-<span class="st"> </span><span class="kw">paste0</span>(spt_new, <span class="kw">sub</span>(<span class="st">&#39;</span><span class="ch">\\</span><span class="st">.Rmd$&#39;</span>, <span class="st">&#39;&#39;</span>, <span class="kw">basename</span>(spt_file)), <span class="st">&#39;_mod.Rmd&#39;</span>)</span>
-<span id="cb428-13"><a href="programming.html#cb428-13"></a>  <span class="kw">print</span>(spt_new)</span>
-<span id="cb428-14"><a href="programming.html#cb428-14"></a>  <span class="kw">print</span>(spn_new)</span>
-<span id="cb428-15"><a href="programming.html#cb428-15"></a></span>
-<span id="cb428-16"><a href="programming.html#cb428-16"></a>  fileConn_rd &lt;-<span class="st"> </span><span class="kw">file</span>(spt_file, <span class="st">&quot;r&quot;</span>)</span>
-<span id="cb428-17"><a href="programming.html#cb428-17"></a>  st_file_read &lt;-<span class="st"> </span><span class="kw">readLines</span>(fileConn_rd)</span>
-<span id="cb428-18"><a href="programming.html#cb428-18"></a></span>
-<span id="cb428-19"><a href="programming.html#cb428-19"></a>  fileConn_sr &lt;-<span class="st"> </span><span class="kw">file</span>(spn_new)</span>
-<span id="cb428-20"><a href="programming.html#cb428-20"></a>  <span class="kw">writeLines</span>(st_file_read, fileConn_sr)</span>
-<span id="cb428-21"><a href="programming.html#cb428-21"></a></span>
-<span id="cb428-22"><a href="programming.html#cb428-22"></a>  <span class="kw">close</span>(fileConn_rd)</span>
-<span id="cb428-23"><a href="programming.html#cb428-23"></a>  <span class="kw">close</span>(fileConn_sr)</span>
-<span id="cb428-24"><a href="programming.html#cb428-24"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb430"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb430-1"><a href="programming.html#cb430-1"></a><span class="co"># Serch Folder and skip list</span></span>
+<span id="cb430-2"><a href="programming.html#cb430-2"></a>spt_roots &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;C:/Users/fan/R4Econ/development/inout/&#39;</span>)</span>
+<span id="cb430-3"><a href="programming.html#cb430-3"></a>spn_skip &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;_main&#39;</span>, <span class="st">&#39;_file&#39;</span>)</span>
+<span id="cb430-4"><a href="programming.html#cb430-4"></a>ls_sfls &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">path=</span>spt_roots, <span class="dt">recursive=</span>T, <span class="dt">pattern=</span><span class="st">&quot;.Rmd&quot;</span>, <span class="dt">full.names=</span>T)</span>
+<span id="cb430-5"><a href="programming.html#cb430-5"></a><span class="cf">if</span>(<span class="op">!</span><span class="kw">missing</span>(spn_skip)) {</span>
+<span id="cb430-6"><a href="programming.html#cb430-6"></a>  ls_sfls &lt;-<span class="st"> </span>ls_sfls[<span class="op">!</span><span class="kw">grepl</span>(<span class="kw">paste</span>(spn_skip, <span class="dt">collapse =</span> <span class="st">&quot;|&quot;</span>), ls_sfls)]</span>
+<span id="cb430-7"><a href="programming.html#cb430-7"></a>}</span>
+<span id="cb430-8"><a href="programming.html#cb430-8"></a></span>
+<span id="cb430-9"><a href="programming.html#cb430-9"></a><span class="co"># Loop and print</span></span>
+<span id="cb430-10"><a href="programming.html#cb430-10"></a><span class="cf">for</span> (spt_file <span class="cf">in</span> ls_sfls) {</span>
+<span id="cb430-11"><a href="programming.html#cb430-11"></a>  spt_new &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;_file/rmd/&#39;</span>)</span>
+<span id="cb430-12"><a href="programming.html#cb430-12"></a>  spn_new &lt;-<span class="st"> </span><span class="kw">paste0</span>(spt_new, <span class="kw">sub</span>(<span class="st">&#39;</span><span class="ch">\\</span><span class="st">.Rmd$&#39;</span>, <span class="st">&#39;&#39;</span>, <span class="kw">basename</span>(spt_file)), <span class="st">&#39;_mod.Rmd&#39;</span>)</span>
+<span id="cb430-13"><a href="programming.html#cb430-13"></a>  <span class="kw">print</span>(spt_new)</span>
+<span id="cb430-14"><a href="programming.html#cb430-14"></a>  <span class="kw">print</span>(spn_new)</span>
+<span id="cb430-15"><a href="programming.html#cb430-15"></a></span>
+<span id="cb430-16"><a href="programming.html#cb430-16"></a>  fileConn_rd &lt;-<span class="st"> </span><span class="kw">file</span>(spt_file, <span class="st">&quot;r&quot;</span>)</span>
+<span id="cb430-17"><a href="programming.html#cb430-17"></a>  st_file_read &lt;-<span class="st"> </span><span class="kw">readLines</span>(fileConn_rd)</span>
+<span id="cb430-18"><a href="programming.html#cb430-18"></a></span>
+<span id="cb430-19"><a href="programming.html#cb430-19"></a>  fileConn_sr &lt;-<span class="st"> </span><span class="kw">file</span>(spn_new)</span>
+<span id="cb430-20"><a href="programming.html#cb430-20"></a>  <span class="kw">writeLines</span>(st_file_read, fileConn_sr)</span>
+<span id="cb430-21"><a href="programming.html#cb430-21"></a></span>
+<span id="cb430-22"><a href="programming.html#cb430-22"></a>  <span class="kw">close</span>(fileConn_rd)</span>
+<span id="cb430-23"><a href="programming.html#cb430-23"></a>  <span class="kw">close</span>(fileConn_sr)</span>
+<span id="cb430-24"><a href="programming.html#cb430-24"></a>}</span></code></pre></div>
 <pre><code>## [1] &quot;_file/rmd/&quot;
 ## [1] &quot;_file/rmd/fs_rmd_pdf_html_mod.Rmd&quot;
 ## [1] &quot;_file/rmd/&quot;
@@ -643,48 +643,48 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="replacment-function-change-markdown-hierarchy-and-add-to-yaml" class="section level5" number="10.1.2.3.1">
 <h5><span class="header-section-number">10.1.2.3.1</span> Replacment Function Change Markdown Hierarchy and Add to YAML</h5>
 <p>Given an existing Rmd File, Resave it with a different name, and replace (add in) additional yaml contents.</p>
-<div class="sourceCode" id="cb430"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb430-1"><a href="programming.html#cb430-1"></a>spn_file =<span class="st"> &#39;_file/rmd/fs_rmd_pdf_html_mod.Rmd&#39;</span></span>
-<span id="cb430-2"><a href="programming.html#cb430-2"></a>fileConn_sr &lt;-<span class="st"> </span><span class="kw">file</span>(spn_file)</span>
-<span id="cb430-3"><a href="programming.html#cb430-3"></a>st_file &lt;-<span class="st"> </span><span class="kw">readLines</span>(fileConn_sr)</span>
-<span id="cb430-4"><a href="programming.html#cb430-4"></a><span class="co"># print(st_file)</span></span>
-<span id="cb430-5"><a href="programming.html#cb430-5"></a></span>
-<span id="cb430-6"><a href="programming.html#cb430-6"></a>st_search &lt;-<span class="st"> &quot;html_document:</span></span>
-<span id="cb430-7"><a href="programming.html#cb430-7"></a><span class="st">    toc: true</span></span>
-<span id="cb430-8"><a href="programming.html#cb430-8"></a><span class="st">    number_sections: true</span></span>
-<span id="cb430-9"><a href="programming.html#cb430-9"></a><span class="st">    toc_float:</span></span>
-<span id="cb430-10"><a href="programming.html#cb430-10"></a><span class="st">      collapsed: false</span></span>
-<span id="cb430-11"><a href="programming.html#cb430-11"></a><span class="st">      smooth_scroll: false</span></span>
-<span id="cb430-12"><a href="programming.html#cb430-12"></a><span class="st">      toc_depth: 3&quot;</span></span>
-<span id="cb430-13"><a href="programming.html#cb430-13"></a>st_replace &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;html_document:</span></span>
-<span id="cb430-14"><a href="programming.html#cb430-14"></a><span class="st">    toc: true</span></span>
-<span id="cb430-15"><a href="programming.html#cb430-15"></a><span class="st">    number_sections: true</span></span>
-<span id="cb430-16"><a href="programming.html#cb430-16"></a><span class="st">    toc_float:</span></span>
-<span id="cb430-17"><a href="programming.html#cb430-17"></a><span class="st">      collapsed: false</span></span>
-<span id="cb430-18"><a href="programming.html#cb430-18"></a><span class="st">      smooth_scroll: false</span></span>
-<span id="cb430-19"><a href="programming.html#cb430-19"></a><span class="st">      toc_depth: 3</span><span class="ch">\n</span><span class="st">&quot;</span>,</span>
-<span id="cb430-20"><a href="programming.html#cb430-20"></a>                     <span class="st">&quot;    toc: true</span><span class="ch">\n</span><span class="st">&quot;</span>,</span>
-<span id="cb430-21"><a href="programming.html#cb430-21"></a>                     <span class="st">&quot;    number_sections: true</span><span class="ch">\n</span><span class="st">&quot;</span>,</span>
-<span id="cb430-22"><a href="programming.html#cb430-22"></a>                     <span class="st">&quot;    toc_float:</span><span class="ch">\n</span><span class="st">&quot;</span>,</span>
-<span id="cb430-23"><a href="programming.html#cb430-23"></a>                     <span class="st">&quot;      collapsed: false</span><span class="ch">\n</span><span class="st">&quot;</span>,</span>
-<span id="cb430-24"><a href="programming.html#cb430-24"></a>                     <span class="st">&quot;      smooth_scroll: false</span><span class="ch">\n</span><span class="st">&quot;</span>,</span>
-<span id="cb430-25"><a href="programming.html#cb430-25"></a>                     <span class="st">&quot;      toc_depth: 3&quot;</span>)</span>
-<span id="cb430-26"><a href="programming.html#cb430-26"></a>st_file_updated &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="dt">x =</span> st_file,</span>
-<span id="cb430-27"><a href="programming.html#cb430-27"></a>                        <span class="dt">pattern =</span> st_search,</span>
-<span id="cb430-28"><a href="programming.html#cb430-28"></a>                        <span class="dt">replacement =</span> st_replace)</span>
-<span id="cb430-29"><a href="programming.html#cb430-29"></a></span>
-<span id="cb430-30"><a href="programming.html#cb430-30"></a>st_search &lt;-<span class="st"> &quot;../../&quot;</span></span>
-<span id="cb430-31"><a href="programming.html#cb430-31"></a>st_replace &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;../../../../&quot;</span>)</span>
-<span id="cb430-32"><a href="programming.html#cb430-32"></a>st_file_updated &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="dt">x =</span> st_file_updated,</span>
-<span id="cb430-33"><a href="programming.html#cb430-33"></a>                        <span class="dt">pattern =</span> st_search,</span>
-<span id="cb430-34"><a href="programming.html#cb430-34"></a>                        <span class="dt">replacement =</span> st_replace)</span>
-<span id="cb430-35"><a href="programming.html#cb430-35"></a></span>
-<span id="cb430-36"><a href="programming.html#cb430-36"></a>st_file_updated &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="dt">x =</span> st_file_updated, <span class="dt">pattern =</span> <span class="st">&#39;# &#39;</span>, <span class="dt">replacement =</span> <span class="st">&#39;# &#39;</span>)</span>
-<span id="cb430-37"><a href="programming.html#cb430-37"></a>st_file_updated &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="dt">x =</span> st_file_updated, <span class="dt">pattern =</span> <span class="st">&#39;## &#39;</span>, <span class="dt">replacement =</span> <span class="st">&#39;## &#39;</span>)</span>
-<span id="cb430-38"><a href="programming.html#cb430-38"></a>st_file_updated &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="dt">x =</span> st_file_updated, <span class="dt">pattern =</span> <span class="st">&#39;### &#39;</span>, <span class="dt">replacement =</span> <span class="st">&#39;# &#39;</span>)</span>
-<span id="cb430-39"><a href="programming.html#cb430-39"></a></span>
-<span id="cb430-40"><a href="programming.html#cb430-40"></a>spn_file =<span class="st"> &#39;_file/rmd/fs_rmd_pdf_html_mod.Rmd&#39;</span></span>
-<span id="cb430-41"><a href="programming.html#cb430-41"></a>fileConn_sr &lt;-<span class="st"> </span><span class="kw">file</span>(spn_file)</span>
-<span id="cb430-42"><a href="programming.html#cb430-42"></a>st_file &lt;-<span class="st"> </span><span class="kw">writeLines</span>(st_file_updated, fileConn_sr)</span></code></pre></div>
+<div class="sourceCode" id="cb432"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb432-1"><a href="programming.html#cb432-1"></a>spn_file =<span class="st"> &#39;_file/rmd/fs_rmd_pdf_html_mod.Rmd&#39;</span></span>
+<span id="cb432-2"><a href="programming.html#cb432-2"></a>fileConn_sr &lt;-<span class="st"> </span><span class="kw">file</span>(spn_file)</span>
+<span id="cb432-3"><a href="programming.html#cb432-3"></a>st_file &lt;-<span class="st"> </span><span class="kw">readLines</span>(fileConn_sr)</span>
+<span id="cb432-4"><a href="programming.html#cb432-4"></a><span class="co"># print(st_file)</span></span>
+<span id="cb432-5"><a href="programming.html#cb432-5"></a></span>
+<span id="cb432-6"><a href="programming.html#cb432-6"></a>st_search &lt;-<span class="st"> &quot;html_document:</span></span>
+<span id="cb432-7"><a href="programming.html#cb432-7"></a><span class="st">    toc: true</span></span>
+<span id="cb432-8"><a href="programming.html#cb432-8"></a><span class="st">    number_sections: true</span></span>
+<span id="cb432-9"><a href="programming.html#cb432-9"></a><span class="st">    toc_float:</span></span>
+<span id="cb432-10"><a href="programming.html#cb432-10"></a><span class="st">      collapsed: false</span></span>
+<span id="cb432-11"><a href="programming.html#cb432-11"></a><span class="st">      smooth_scroll: false</span></span>
+<span id="cb432-12"><a href="programming.html#cb432-12"></a><span class="st">      toc_depth: 3&quot;</span></span>
+<span id="cb432-13"><a href="programming.html#cb432-13"></a>st_replace &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;html_document:</span></span>
+<span id="cb432-14"><a href="programming.html#cb432-14"></a><span class="st">    toc: true</span></span>
+<span id="cb432-15"><a href="programming.html#cb432-15"></a><span class="st">    number_sections: true</span></span>
+<span id="cb432-16"><a href="programming.html#cb432-16"></a><span class="st">    toc_float:</span></span>
+<span id="cb432-17"><a href="programming.html#cb432-17"></a><span class="st">      collapsed: false</span></span>
+<span id="cb432-18"><a href="programming.html#cb432-18"></a><span class="st">      smooth_scroll: false</span></span>
+<span id="cb432-19"><a href="programming.html#cb432-19"></a><span class="st">      toc_depth: 3</span><span class="ch">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb432-20"><a href="programming.html#cb432-20"></a>                     <span class="st">&quot;    toc: true</span><span class="ch">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb432-21"><a href="programming.html#cb432-21"></a>                     <span class="st">&quot;    number_sections: true</span><span class="ch">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb432-22"><a href="programming.html#cb432-22"></a>                     <span class="st">&quot;    toc_float:</span><span class="ch">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb432-23"><a href="programming.html#cb432-23"></a>                     <span class="st">&quot;      collapsed: false</span><span class="ch">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb432-24"><a href="programming.html#cb432-24"></a>                     <span class="st">&quot;      smooth_scroll: false</span><span class="ch">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb432-25"><a href="programming.html#cb432-25"></a>                     <span class="st">&quot;      toc_depth: 3&quot;</span>)</span>
+<span id="cb432-26"><a href="programming.html#cb432-26"></a>st_file_updated &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="dt">x =</span> st_file,</span>
+<span id="cb432-27"><a href="programming.html#cb432-27"></a>                        <span class="dt">pattern =</span> st_search,</span>
+<span id="cb432-28"><a href="programming.html#cb432-28"></a>                        <span class="dt">replacement =</span> st_replace)</span>
+<span id="cb432-29"><a href="programming.html#cb432-29"></a></span>
+<span id="cb432-30"><a href="programming.html#cb432-30"></a>st_search &lt;-<span class="st"> &quot;../../&quot;</span></span>
+<span id="cb432-31"><a href="programming.html#cb432-31"></a>st_replace &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;../../../../&quot;</span>)</span>
+<span id="cb432-32"><a href="programming.html#cb432-32"></a>st_file_updated &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="dt">x =</span> st_file_updated,</span>
+<span id="cb432-33"><a href="programming.html#cb432-33"></a>                        <span class="dt">pattern =</span> st_search,</span>
+<span id="cb432-34"><a href="programming.html#cb432-34"></a>                        <span class="dt">replacement =</span> st_replace)</span>
+<span id="cb432-35"><a href="programming.html#cb432-35"></a></span>
+<span id="cb432-36"><a href="programming.html#cb432-36"></a>st_file_updated &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="dt">x =</span> st_file_updated, <span class="dt">pattern =</span> <span class="st">&#39;# &#39;</span>, <span class="dt">replacement =</span> <span class="st">&#39;# &#39;</span>)</span>
+<span id="cb432-37"><a href="programming.html#cb432-37"></a>st_file_updated &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="dt">x =</span> st_file_updated, <span class="dt">pattern =</span> <span class="st">&#39;## &#39;</span>, <span class="dt">replacement =</span> <span class="st">&#39;## &#39;</span>)</span>
+<span id="cb432-38"><a href="programming.html#cb432-38"></a>st_file_updated &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="dt">x =</span> st_file_updated, <span class="dt">pattern =</span> <span class="st">&#39;### &#39;</span>, <span class="dt">replacement =</span> <span class="st">&#39;# &#39;</span>)</span>
+<span id="cb432-39"><a href="programming.html#cb432-39"></a></span>
+<span id="cb432-40"><a href="programming.html#cb432-40"></a>spn_file =<span class="st"> &#39;_file/rmd/fs_rmd_pdf_html_mod.Rmd&#39;</span></span>
+<span id="cb432-41"><a href="programming.html#cb432-41"></a>fileConn_sr &lt;-<span class="st"> </span><span class="kw">file</span>(spn_file)</span>
+<span id="cb432-42"><a href="programming.html#cb432-42"></a>st_file &lt;-<span class="st"> </span><span class="kw">writeLines</span>(st_file_updated, fileConn_sr)</span></code></pre></div>
 
 </div>
 </div>

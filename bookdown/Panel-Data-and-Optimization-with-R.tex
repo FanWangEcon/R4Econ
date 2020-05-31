@@ -144,7 +144,7 @@
 
 \title{Panel Data and Optimization with R}
 \author{Fan Wang}
-\date{2020-05-27}
+\date{2020-05-31}
 
 \begin{document}
 \maketitle
@@ -158,11 +158,11 @@
 \chapter*{Preface}\label{preface}}
 \addcontentsline{toc}{chapter}{Preface}
 
-This is a work-in-progress \href{https://fanwangecon.github.io/R4Econ/}{website} consisting of R panel data and optimization examples for Statistics/Econometrics/Economic Analysis. Materials gathered from various \href{https://fanwangecon.github.io/research}{projects} in which R code is used. Files are from \href{https://fanwangecon.github.io/}{\textbf{Fan}}'s \href{https://github.com/FanWangEcon/R4Econ}{R4Econ} repository. This is not a R package, but a list of examples in PDF/HTML/Rmd formats. \href{https://fanwangecon.github.io/REconTools/}{REconTools} is a package that can be installed with tools used in \href{https://fanwangecon.github.io/research}{projects} involving R.
+This is a work-in-progress \href{https://fanwangecon.github.io/R4Econ/}{website} consisting of R panel data and optimization examples for Statistics/Econometrics/Economic Analysis. Materials gathered from various \href{https://fanwangecon.github.io/research}{projects} in which R code is used. Files are from the \href{https://github.com/FanWangEcon/R4Econ}{R4Econ} repository. This is not a R package, but a list of examples in PDF/HTML/Rmd formats. \href{https://fanwangecon.github.io/REconTools/}{REconTools} is a package that can be installed with tools used in \href{https://fanwangecon.github.io/research}{projects} involving R.
 
 Bullet points show which \href{https://www.rdocumentation.org/packages/base/versions/3.5.2}{base R}, \href{https://www.tidyverse.org/}{tidyverse} or other functions/commands are used to achieve various objectives. An effort is made to use only \href{https://www.rdocumentation.org/packages/base/versions/3.5.2}{base R} \citep{R-base} and \href{https://www.tidyverse.org/}{tidyverse} \citep{R-tidyverse} packages whenever possible to reduce dependencies. The goal of this repository is to make it easier to find/re-use codes produced for various projects. Some functions also rely on or correspond to functions from \href{https://fanwangecon.github.io/REconTools/}{REconTools} \citep{R-REconTools}.
 
-From \href{https://fanwangecon.github.io/}{Fan}'s other repositories: For dynamic borrowing and savings problems, see \href{https://fanwangecon.github.io/CodeDynaAsset/}{Dynamic Asset Repository}; For code examples, see also \href{https://fanwangecon.github.io/M4Econ/}{Matlab Example Code} and \href{https://fanwangecon.github.io/Stata4Econ/}{Stata Example Code}; For intro econ with Matlab, see \href{https://fanwangecon.github.io/Math4Econ/}{Intro Mathematics for Economists}, and for intro stat with R, see \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Statistics for Undergraduates}. See \href{https://github.com/FanWangEcon}{here} for all of \href{https://fanwangecon.github.io/}{Fan}'s public repositories.
+From other repositories: For dynamic borrowing and savings problems, see \href{https://fanwangecon.github.io/CodeDynaAsset/}{Dynamic Asset Repository}; For code examples, see also \href{https://fanwangecon.github.io/M4Econ/}{Matlab Example Code} and \href{https://fanwangecon.github.io/Stata4Econ/}{Stata Example Code}; For intro econ with Matlab, see \href{https://fanwangecon.github.io/Math4Econ/}{Intro Mathematics for Economists}, and for intro stat with R, see \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Statistics for Undergraduates}. See \href{https://github.com/FanWangEcon}{here} for all of \href{https://fanwangecon.github.io/}{Fan}'s public repositories.
 
 The site is built using \href{https://bookdown.org/}{Bookdown} \citep{R-bookdown}.
 
@@ -198,6 +198,49 @@ Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon
 \item
   r named list to string
 \end{itemize}
+
+\hypertarget{named-list-of-matrixes}{%
+\subsubsection{Named List of Matrixes}\label{named-list-of-matrixes}}
+
+Save a list of matrixes. Retrieve Element of that list via loop.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Define an array to loop over}
+\NormalTok{ar\_fl\_mean \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{10}\NormalTok{, }\DecValTok{20}\NormalTok{, }\DecValTok{30}\NormalTok{)}
+
+\CommentTok{\# store restuls in named list}
+\NormalTok{ls\_mt\_res =}\StringTok{ }\KeywordTok{vector}\NormalTok{(}\DataTypeTok{mode =} \StringTok{"list"}\NormalTok{, }\DataTypeTok{length =} \KeywordTok{length}\NormalTok{(ar\_fl\_mean))}
+\NormalTok{ar\_st\_names \textless{}{-}}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}mean\textquotesingle{}}\NormalTok{, ar\_fl\_mean)}
+\KeywordTok{names}\NormalTok{(ls\_mt\_res) \textless{}{-}}\StringTok{ }\NormalTok{ar\_st\_names}
+
+\CommentTok{\# Loop and generat a list of dataframes}
+\ControlFlowTok{for}\NormalTok{ (it\_fl\_mean }\ControlFlowTok{in} \KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{length}\NormalTok{(ar\_fl\_mean))) \{}
+\NormalTok{  fl\_mean =}\StringTok{ }\NormalTok{ar\_fl\_mean[it\_fl\_mean]}
+
+  \CommentTok{\# dataframe}
+  \KeywordTok{set.seed}\NormalTok{(it\_fl\_mean)}
+\NormalTok{  tb\_combine \textless{}{-}}\StringTok{ }\KeywordTok{as\_tibble}\NormalTok{(}
+    \KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{4}\NormalTok{,}\DataTypeTok{mean=}\NormalTok{fl\_mean,}\DataTypeTok{sd=}\DecValTok{1}\NormalTok{), }\DataTypeTok{nrow=}\DecValTok{2}\NormalTok{, }\DataTypeTok{ncol=}\DecValTok{3}\NormalTok{)}
+\NormalTok{    ) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{    }\KeywordTok{rowid\_to\_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"id"}\NormalTok{) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{    }\KeywordTok{rename\_all}\NormalTok{(}\OperatorTok{\textasciitilde{}}\KeywordTok{c}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{\textquotesingle{}id\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}var1\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}varb\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}vartheta\textquotesingle{}}\NormalTok{)))}
+
+\NormalTok{  ls\_mt\_res[[it\_fl\_mean]] =}\StringTok{ }\NormalTok{tb\_combine}
+\NormalTok{\}}
+
+\CommentTok{\# Retrieve elements}
+\KeywordTok{print}\NormalTok{(ls\_mt\_res[[}\DecValTok{1}\NormalTok{]])}
+\KeywordTok{print}\NormalTok{(ls\_mt\_res}\OperatorTok{$}\NormalTok{mean10)}
+\KeywordTok{print}\NormalTok{(ls\_mt\_res[[}\StringTok{\textquotesingle{}mean10\textquotesingle{}}\NormalTok{]])}
+
+\CommentTok{\# Print via Loop }
+\ControlFlowTok{for}\NormalTok{ (it\_fl\_mean }\ControlFlowTok{in} \KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{length}\NormalTok{(ar\_fl\_mean))) \{}
+\NormalTok{  tb\_combine =}\StringTok{ }\NormalTok{ls\_mt\_res[[it\_fl\_mean]]}
+  \KeywordTok{print}\NormalTok{(tb\_combine)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
 
 \hypertarget{one-dimensional-named-list}{%
 \subsubsection{One Dimensional Named List}\label{one-dimensional-named-list}}
@@ -1599,6 +1642,46 @@ Multiply Together a 3 by 2 matrix and a 2 by 1 vector
 Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R Code Examples} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository (\href{https://fanwangecon.github.io/Stat4Econ/bookdown}{bookdown site}).
 \end{quote}
 
+\hypertarget{simple-meshed-dataframe-name-columns}{%
+\subsubsection{Simple Meshed Dataframe Name Columns}\label{simple-meshed-dataframe-name-columns}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# 5 by 3 matrix}
+\NormalTok{mt\_rnorm\_a \textless{}{-}}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{4}\NormalTok{,}\DataTypeTok{mean=}\DecValTok{0}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{1}\NormalTok{), }\DataTypeTok{nrow=}\DecValTok{5}\NormalTok{, }\DataTypeTok{ncol=}\DecValTok{3}\NormalTok{)}
+
+\CommentTok{\# Column Names}
+\NormalTok{ar\_st\_varnames \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{\textquotesingle{}id\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}var1\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}varb\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}vartheta\textquotesingle{}}\NormalTok{)}
+
+\CommentTok{\# Combine to tibble, add name col1, col2, etc.}
+\NormalTok{tb\_combine \textless{}{-}}\StringTok{ }\KeywordTok{as\_tibble}\NormalTok{(mt\_rnorm\_a) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{rowid\_to\_column}\NormalTok{(}\DataTypeTok{var =} \StringTok{"id"}\NormalTok{) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{rename\_all}\NormalTok{(}\OperatorTok{\textasciitilde{}}\KeywordTok{c}\NormalTok{(ar\_st\_varnames))}
+
+\CommentTok{\# Display}
+\KeywordTok{kable}\NormalTok{(tb\_combine) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{r|r|r|r}
+\hline
+id & var1 & varb & vartheta\\
+\hline
+\rowcolor{gray!6}  1 & -1.1655448 & -0.8185157 & 0.6849361\\
+\hline
+2 & -0.8185157 & 0.6849361 & -0.3200564\\
+\hline
+\rowcolor{gray!6}  3 & 0.6849361 & -0.3200564 & -1.1655448\\
+\hline
+4 & -0.3200564 & -1.1655448 & -0.8185157\\
+\hline
+\rowcolor{gray!6}  5 & -1.1655448 & -0.8185157 & 0.6849361\\
+\hline
+\end{tabular}
+\end{table}
+
 \hypertarget{generate-tibble-given-matrixes-and-arrays}{%
 \subsubsection{Generate Tibble given Matrixes and Arrays}\label{generate-tibble-given-matrixes-and-arrays}}
 
@@ -1666,9 +1749,9 @@ Given Arrays and Matrixes, Generate Tibble and Name Variables/Columns
 \hline
 ar\_col & matcolvar\_grpa\_1 & matcolvar\_grpa\_2 & matcolvar\_grpb\_1 & matcolvar\_grpb\_2 & matcolvar\_grpb\_3 & matcolvar\_grpb\_4\\
 \hline
-\rowcolor{gray!6}  -1 & -1.1655448 & 0.6849361 & -1.3115224 & -0.1294107 & -1.3115224 & -0.1294107\\
+\rowcolor{gray!6}  -1 & -1.3115224 & -0.1294107 & -0.1513960 & -3.2273228 & -0.1513960 & -3.2273228\\
 \hline
-1 & -0.8185157 & -0.3200564 & -0.5996083 & 0.8867361 & -0.5996083 & 0.8867361\\
+1 & -0.5996083 & 0.8867361 & 0.3297912 & -0.7717918 & 0.3297912 & -0.7717918\\
 \hline
 \end{tabular}}
 \end{table}
@@ -1686,9 +1769,9 @@ ar\_col & matcolvar\_grpa\_1 & matcolvar\_grpa\_2 & matcolvar\_grpb\_1 & matcolv
 \hline
 ID & var\_one & tibcolvar\_ga\_1 & tibcolvar\_ga\_2 & tibcolvar\_gbrenamed\_1 & tibcolvar\_gbrenamed\_2 & tibcolvar\_gbrenamed\_3 & tibcolvar\_gbrenamed\_4\\
 \hline
-\rowcolor{gray!6}  1 & -1 & -1.1655448 & 0.6849361 & -1.3115224 & -0.1294107 & -1.3115224 & -0.1294107\\
+\rowcolor{gray!6}  1 & -1 & -1.3115224 & -0.1294107 & -0.1513960 & -3.2273228 & -0.1513960 & -3.2273228\\
 \hline
-2 & 1 & -0.8185157 & -0.3200564 & -0.5996083 & 0.8867361 & -0.5996083 & 0.8867361\\
+2 & 1 & -0.5996083 & 0.8867361 & 0.3297912 & -0.7717918 & 0.3297912 & -0.7717918\\
 \hline
 \end{tabular}}
 \end{table}
@@ -1706,9 +1789,9 @@ ID & var\_one & tibcolvar\_ga\_1 & tibcolvar\_ga\_2 & tibcolvar\_gbrenamed\_1 & 
 \hline
 ID & var\_one & tibcolvar\_ga\_1 & tibcolvar\_ga\_2 & tibcolvar\_gbrenamed\_1 & tibcolvar\_gbrenamed\_2 & tibcolvar\_gbrenamed\_3 & tibcolvar\_gbrenamed\_4\\
 \hline
-\rowcolor{gray!6}  1 & -1 & -1.1655448 & 0.6849361 & -1.3115224 & -0.1294107 & -1.3115224 & -0.1294107\\
+\rowcolor{gray!6}  1 & -1 & -1.3115224 & -0.1294107 & -0.1513960 & -3.2273228 & -0.1513960 & -3.2273228\\
 \hline
-2 & 1 & -0.8185157 & -0.3200564 & -0.5996083 & 0.8867361 & -0.5996083 & 0.8867361\\
+2 & 1 & -0.5996083 & 0.8867361 & 0.3297912 & -0.7717918 & 0.3297912 & -0.7717918\\
 \hline
 \end{tabular}}
 \end{table}
@@ -1754,15 +1837,15 @@ After reshaping, often could end up with variable names that are all numeric, in
 \hline
 ID & var\_one & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10\\
 \hline
-\rowcolor{gray!6}  1 & -1 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912\\
+\rowcolor{gray!6}  1 & -1 & 0.2865486 & -1.2205120 & 0.4345504 & 0.8001769 & 0.2865486 & -1.2205120 & 0.4345504 & 0.8001769 & 0.2865486 & -1.2205120\\
 \hline
-2 & 1 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228\\
+2 & 1 & -1.2205120 & 0.4345504 & 0.8001769 & 0.2865486 & -1.2205120 & 0.4345504 & 0.8001769 & 0.2865486 & -1.2205120 & 0.4345504\\
 \hline
-\rowcolor{gray!6}  3 & -1 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918\\
+\rowcolor{gray!6}  3 & -1 & 0.4345504 & 0.8001769 & 0.2865486 & -1.2205120 & 0.4345504 & 0.8001769 & 0.2865486 & -1.2205120 & 0.4345504 & 0.8001769\\
 \hline
-4 & 1 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960\\
+4 & 1 & 0.8001769 & 0.2865486 & -1.2205120 & 0.4345504 & 0.8001769 & 0.2865486 & -1.2205120 & 0.4345504 & 0.8001769 & 0.2865486\\
 \hline
-\rowcolor{gray!6}  5 & -1 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912\\
+\rowcolor{gray!6}  5 & -1 & 0.2865486 & -1.2205120 & 0.4345504 & 0.8001769 & 0.2865486 & -1.2205120 & 0.4345504 & 0.8001769 & 0.2865486 & -1.2205120\\
 \hline
 \end{tabular}}
 \end{table}
@@ -1780,15 +1863,15 @@ ID & var\_one & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10\\
 \hline
 ID & var\_one & rho1var & rho2var & rho3var & rho4var & rho5var & rho6var & rho7var & rho8var & rho9var & rho10var\\
 \hline
-\rowcolor{gray!6}  1 & -1 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912\\
+\rowcolor{gray!6}  1 & -1 & 0.2865486 & -1.2205120 & 0.4345504 & 0.8001769 & 0.2865486 & -1.2205120 & 0.4345504 & 0.8001769 & 0.2865486 & -1.2205120\\
 \hline
-2 & 1 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228\\
+2 & 1 & -1.2205120 & 0.4345504 & 0.8001769 & 0.2865486 & -1.2205120 & 0.4345504 & 0.8001769 & 0.2865486 & -1.2205120 & 0.4345504\\
 \hline
-\rowcolor{gray!6}  3 & -1 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918\\
+\rowcolor{gray!6}  3 & -1 & 0.4345504 & 0.8001769 & 0.2865486 & -1.2205120 & 0.4345504 & 0.8001769 & 0.2865486 & -1.2205120 & 0.4345504 & 0.8001769\\
 \hline
-4 & 1 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960\\
+4 & 1 & 0.8001769 & 0.2865486 & -1.2205120 & 0.4345504 & 0.8001769 & 0.2865486 & -1.2205120 & 0.4345504 & 0.8001769 & 0.2865486\\
 \hline
-\rowcolor{gray!6}  5 & -1 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912 & -3.2273228 & -0.7717918 & -0.1513960 & 0.3297912\\
+\rowcolor{gray!6}  5 & -1 & 0.2865486 & -1.2205120 & 0.4345504 & 0.8001769 & 0.2865486 & -1.2205120 & 0.4345504 & 0.8001769 & 0.2865486 & -1.2205120\\
 \hline
 \end{tabular}}
 \end{table}
@@ -2043,7 +2126,7 @@ Now we generate scatter plot based on the combined factors
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-36-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-38-1} \end{center}
 
 \hypertarget{drawly-random-rows}{%
 \subsection{Drawly Random Rows}\label{drawly-random-rows}}
@@ -2314,7 +2397,7 @@ Now we generate scatter plot based on the combined factors
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-41-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-43-1} \end{center}
 
 \hypertarget{generate-na-values-if-variables-have-certain-value}{%
 \subsubsection{Generate NA values if Variables have Certain Value}\label{generate-na-values-if-variables-have-certain-value}}
@@ -2469,7 +2552,7 @@ Now we generate scatter plot based on the combined factors, but now with the NA 
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-43-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-45-1} \end{center}
 
 \hypertarget{approximate-values-comparison}{%
 \subsubsection{Approximate Values Comparison}\label{approximate-values-comparison}}
@@ -3971,7 +4054,7 @@ First, we will generate a test score dataset, directly from string. Below we typ
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-81-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-83-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -3983,7 +4066,7 @@ First, we will generate a test score dataset, directly from string. Below we typ
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-82-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-84-1} \end{center}
 
 \hypertarget{summarize-multiple-variables}{%
 \section{Summarize Multiple Variables}\label{summarize-multiple-variables}}
@@ -5674,14 +5757,12 @@ Sapply with anonymous function generating a list of arrays of different lengths.
 \CommentTok{\# Show overall Results}
 \NormalTok{mt\_results \textless{}{-}}\StringTok{ }\KeywordTok{cbind}\NormalTok{(ar\_func\_apply, ar\_func\_sapply)}
 \KeywordTok{colnames}\NormalTok{(mt\_results) \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{\textquotesingle{}eval\_lin\_apply\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}eval\_lin\_sapply\textquotesingle{}}\NormalTok{)}
-\KeywordTok{kable}\NormalTok{(mt\_results) }\OperatorTok{\%\textgreater{}\%}
-\StringTok{  }\KeywordTok{kable\_styling\_fc\_wide}\NormalTok{()}
+\KeywordTok{kable}\NormalTok{(mt\_results) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{kable\_styling\_fc}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{table}[!h]
 \centering
-\resizebox{\linewidth}{!}{
 \begin{tabular}{l|r|r}
 \hline
   & eval\_lin\_apply & eval\_lin\_sapply\\
@@ -5696,7 +5777,7 @@ X4 & 1.733708 & 1.733708\\
 \hline
 \rowcolor{gray!6}  X5 & 1.599477 & 1.599477\\
 \hline
-\end{tabular}}
+\end{tabular}
 \end{table}
 
 \hypertarget{mutate-evaluate-functions}{%
@@ -6808,12 +6889,13 @@ Generated Matrix by States to Long Table where state values are stored as variab
 \StringTok{  }\KeywordTok{select}\NormalTok{(a,ai,z,zi,ev)}
 
 \CommentTok{\# Display}
-\KeywordTok{kable}\NormalTok{(tb\_ev) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{kable\_styling\_fc}\NormalTok{()}
+\KeywordTok{kable}\NormalTok{(tb\_ev) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{kable\_styling\_fc\_wide}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{table}[!h]
 \centering
+\resizebox{\linewidth}{!}{
 \begin{tabular}{r|r|r|r|r|r|r|r|r|r|r|r}
 \hline
 ai & zi1 & zi2 & zi3 & zi4 & zi5 & zi6 & zi7 & zi8 & zi9 & zi10 & zi11\\
@@ -6822,7 +6904,7 @@ ai & zi1 & zi2 & zi3 & zi4 & zi5 & zi6 & zi7 & zi8 & zi9 & zi10 & zi11\\
 \hline
 2 & -0.2301775 & 0.0705084 & 1.7150650 & -1.2650612 & -0.4456620 & -0.5604756 & 1.5587083 & 0.1292877 & 0.4609162 & -0.6868529 & 1.224082\\
 \hline
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \begin{Shaded}
@@ -8633,7 +8715,7 @@ hgt & 77.8 & 73.13353 & 70.97578 & 71.45823\\
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-162-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-164-1} \end{center}
 
 \hypertarget{additional-decomposition-testings}{%
 \subsubsection{Additional Decomposition Testings}\label{additional-decomposition-testings}}
@@ -9009,21 +9091,21 @@ Given the x-variables included in the logit regression, how do they relate to A\
 ## [[1]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-166-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-168-1} \end{center}
 
 \begin{verbatim}
 ## 
 ## [[2]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-166-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-168-2} \end{center}
 
 \begin{verbatim}
 ## 
 ## [[3]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-166-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-168-3} \end{center}
 
 \hypertarget{optimization}{%
 \chapter{Optimization}\label{optimization}}
@@ -9643,7 +9725,7 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-174-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-176-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9661,7 +9743,7 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-174-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-176-2} \end{center}
 
 \hypertarget{integration-by-symmetric-uneven-rectangle}{%
 \subsubsection{Integration By Symmetric Uneven Rectangle}\label{integration-by-symmetric-uneven-rectangle}}
@@ -9720,7 +9802,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-175-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-177-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9738,7 +9820,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-175-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-177-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9756,7 +9838,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-175-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-177-3} \end{center}
 
 \hypertarget{integration-by-constant-width-rectangle-trapezoidal-rule}{%
 \subsubsection{Integration By Constant Width Rectangle (Trapezoidal rule)}\label{integration-by-constant-width-rectangle-trapezoidal-rule}}
@@ -9811,7 +9893,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-176-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-178-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9829,7 +9911,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-176-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-178-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9847,7 +9929,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-176-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-178-3} \end{center}
 
 \hypertarget{analytical-solutions}{%
 \section{Analytical Solutions}\label{analytical-solutions}}
@@ -10326,7 +10408,7 @@ Note that many more A grid points are needed to fully plot out the leontief line
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-184-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-186-1} \end{center}
 
 \hypertarget{tables-and-graphs}{%
 \chapter{Tables and Graphs}\label{tables-and-graphs}}
@@ -10509,7 +10591,7 @@ Jointly plot:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-186-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-188-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10550,7 +10632,7 @@ We used recordplot() earlier. So now we can print just the first two constructed
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-187-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-189-1} \end{center}
 
 \hypertarget{write-and-read-plots}{%
 \section{Write and Read Plots}\label{write-and-read-plots}}
@@ -11100,9 +11182,9 @@ Search inside directories, for all files in a git repo folder that are new or ha
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "MODIFIED: C:/Users/fan/R4Econ/amto/array/fs_ary_basics.Rmd"
+## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/array/fs_ary_basics.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/array/fs_ary_generate.Rmd"
-## [1] "MODIFIED: C:/Users/fan/R4Econ/amto/array/fs_ary_mesh.Rmd"
+## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/array/fs_ary_mesh.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/array/fs_ary_string.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/array/main.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/list/fs_lst_basics.Rmd"
@@ -11251,7 +11333,7 @@ Given an existing Rmd File, Resave it with a different name, and replace (add in
   \begin{itemize}
   \tightlist
   \item
-    Initiate Empty List. Named one and two dimensional lists.
+    Initiate Empty List. Named one and two dimensional lists. List of Dataframes.
   \item
     Collapse named and unamed list to string and print input code.
   \item

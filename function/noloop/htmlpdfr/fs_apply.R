@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE-------------------------------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ----setup---------------------------------------------------------------------------------------------------------------------------------------------
+## ----setup--------------------------------------------------------------------------------------------------------------------------
 # it_child_count = N, the number of children
 it_N_child_cnt = 5
 # it_heter_param = Q, number of parameters that are
@@ -22,7 +22,7 @@ kable(mt_nN_by_nQ_A_alpha) %>%
   kable_styling_fc()
 
 
-## ----linear_apply--------------------------------------------------------------------------------------------------------------------------------------
+## ----linear_apply-------------------------------------------------------------------------------------------------------------------
 
 # Define Implicit Function
 ffi_linear_hardcode <- function(ar_A_alpha){
@@ -39,7 +39,7 @@ ffi_linear_hardcode <- function(ar_A_alpha){
 ar_func_apply = apply(mt_nN_by_nQ_A_alpha, 1, ffi_linear_hardcode)
 
 
-## ----func noloop apply anonymous norm shares-----------------------------------------------------------------------------------------------------------
+## ----func noloop apply anonymous norm shares----------------------------------------------------------------------------------------
 set.seed(1039)
 
 # Define the number of draws each row and total amount
@@ -73,7 +73,7 @@ ls_ar_draws_shares_lvls =
 print(ls_ar_draws_shares_lvls)
 
 
-## ----func noloop apply anonymous norm shares-----------------------------------------------------------------------------------------------------------
+## ----func noloop apply anonymous norm shares----------------------------------------------------------------------------------------
 set.seed(1039)
 # apply row by row, anonymous function has hard coded min and max
 ls_mt_draws_shares_lvls =
@@ -103,7 +103,7 @@ mt_draws_shares_lvls_all <- do.call(rbind, ls_mt_draws_shares_lvls)
 kable(mt_draws_shares_lvls_all) %>% kable_styling_fc()
 
 
-## ----linear_sapply-------------------------------------------------------------------------------------------------------------------------------------
+## ----linear_sapply------------------------------------------------------------------------------------------------------------------
 
 ls_ar_nN_by_nQ_A_alpha = as.list(data.frame(t(mt_nN_by_nQ_A_alpha)))
 
@@ -123,7 +123,7 @@ ar_func_sapply = sapply(ls_ar_nN_by_nQ_A_alpha, ffi_linear_sapply,
                         ar_A=ar_nN_A, ar_alpha=ar_nN_alpha)
 
 
-## ----func noloop sapply anonymous norm shares----------------------------------------------------------------------------------------------------------
+## ----func noloop sapply anonymous norm shares---------------------------------------------------------------------------------------
 it_N <- 4
 fl_unif_min <- 1
 fl_unif_max <- 2
@@ -152,10 +152,9 @@ sapply(seq(it_N), function(x) {sum(ls_ar_draws[[x]])})
 sapply(seq(it_N), function(x) {sum(ls_ar_draws_shares[[x]])})
 
 
-## ----linear_combine------------------------------------------------------------------------------------------------------------------------------------
+## ----linear_combine-----------------------------------------------------------------------------------------------------------------
 # Show overall Results
 mt_results <- cbind(ar_func_apply, ar_func_sapply)
 colnames(mt_results) <- c('eval_lin_apply', 'eval_lin_sapply')
-kable(mt_results) %>%
-  kable_styling_fc_wide()
+kable(mt_results) %>% kable_styling_fc()
 

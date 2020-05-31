@@ -1,10 +1,14 @@
 [![HitCount](http://hits.dwyl.io/fanwangecon/R4Econ.svg)](https://github.com/FanWangEcon/R4Econ)  [![Star](https://img.shields.io/github/stars/fanwangecon/R4Econ?style=social)](https://github.com/FanWangEcon/R4Econ/stargazers) [![Fork](https://img.shields.io/github/forks/fanwangecon/R4Econ?style=social)](https://github.com/FanWangEcon/R4Econ/network/members) [![Star](https://img.shields.io/github/watchers/fanwangecon/R4Econ?style=social)](https://github.com/FanWangEcon/R4Econ/watchers)
 
-This is a work-in-progress [website](https://fanwangecon.github.io/R4Econ/) consisting of R panel data and optimization examples for Statistics/Econometrics/Economic Analysis. Book version: [bookdown site](https://fanwangecon.github.io/R4Econ/bookdown) and [bookdown pdf](https://fanwangecon.github.io/R4Econ/bookdown/Panel-Data-and-Optimization-with-R.pdf). Materials gathered from various [projects](https://fanwangecon.github.io/research) in which R code is used. Files are from [**Fan**](https://fanwangecon.github.io/)'s [R4Econ](https://github.com/FanWangEcon/R4Econ) repository. This is not a R package, but a list of examples in PDF/HTML/Rmd formats. [REconTools](https://fanwangecon.github.io/REconTools/) is a package that can be installed with tools used in [projects](https://fanwangecon.github.io/research) involving R.
+This is a work-in-progress [website](https://fanwangecon.github.io/R4Econ/) consisting of R panel data and optimization examples for Statistics/Econometrics/Economic Analysis.
+
+> [**bookdown site**](https://fanwangecon.github.io/R4Econ/bookdown) and [**bookdown pdf**](https://fanwangecon.github.io/R4Econ/bookdown/Panel-Data-and-Optimization-with-R.pdf).
+
+Materials gathered from various [projects](https://fanwangecon.github.io/research) in which R code is used. Files are from the [R4Econ](https://github.com/FanWangEcon/R4Econ) repository. This is not a R package, but a list of examples in PDF/HTML/Rmd formats. [REconTools](https://fanwangecon.github.io/REconTools/) is a package that can be installed with tools used in [projects](https://fanwangecon.github.io/research) involving R.
 
 Bullet points show which [base R](https://www.rdocumentation.org/packages/base/versions/3.5.2), [tidyverse](https://www.tidyverse.org/) or other functions/commands are used to achieve various objectives. An effort is made to use only [base R](https://www.rdocumentation.org/packages/base/versions/3.5.2) and [tidyverse](https://www.tidyverse.org/) packages whenever possible to reduce dependencies. The goal of this repository is to make it easier to find/re-use codes produced for various projects.
 
-From [Fan](https://fanwangecon.github.io/)'s other repositories: For dynamic borrowing and savings problems, see [Dynamic Asset Repository](https://fanwangecon.github.io/CodeDynaAsset/); For code examples, see also [Matlab Example Code](https://fanwangecon.github.io/M4Econ/) and [Stata Example Code](https://fanwangecon.github.io/Stata4Econ/); For intro econ with Matlab, see [Intro Mathematics for Economists](https://fanwangecon.github.io/Math4Econ/), and for intro stat with R, see [Intro Statistics for Undergraduates](https://fanwangecon.github.io/Stat4Econ/). See [here](https://github.com/FanWangEcon) for all of [Fan](https://fanwangecon.github.io/)'s public repositories.
+From other repositories: For dynamic borrowing and savings problems, see [Dynamic Asset Repository](https://fanwangecon.github.io/CodeDynaAsset/); For code examples, see also [Matlab Example Code](https://fanwangecon.github.io/M4Econ/) and [Stata Example Code](https://fanwangecon.github.io/Stata4Econ/); For intro econ with Matlab, see [Intro Mathematics for Economists](https://fanwangecon.github.io/Math4Econ/), and for intro stat with R, see [Intro Statistics for Undergraduates](https://fanwangecon.github.io/Stat4Econ/). See [here](https://github.com/FanWangEcon) for all of [Fan](https://fanwangecon.github.io/)'s public repositories.
 
 Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or problems.
 
@@ -15,7 +19,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 ## 1.1  List
 
 1. [Multi-dimensional Named Lists](https://fanwangecon.github.io/R4Econ/amto/list/htmlpdfr/fs_lst_basics.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/list//fs_lst_basics.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/list/htmlpdfr/fs_lst_basics.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/list/htmlpdfr/fs_lst_basics.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/list/htmlpdfr/fs_lst_basics.html)
-	+ Initiate Empty List. Named one and two dimensional lists.
+	+ Initiate Empty List. Named one and two dimensional lists. List of Dataframes.
 	+ Collapse named and unamed list to string and print input code.
 	+ **r**: *deparse(substitute()) + vector(mode = "list", length = it_N) + names(list) <- paste0('e',seq()) + dimnames(ls2d)[[1]] <- paste0('r',seq()) + dimnames(ls2d)[[2]] <- paste0('c',seq())*
 	+ **tidyr**: *unnest()*

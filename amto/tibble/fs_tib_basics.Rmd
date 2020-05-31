@@ -14,7 +14,8 @@ core:
       rowid_to_column()
       colnames
       rownames
-date: 2020-04-01
+date: 2020-05-27
+date_start: 2020-04-01
 output:
   pdf_document:
     pandoc_args: '../../_output_kniti_pdf.yaml'
@@ -40,6 +41,24 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_one`
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
+
+#### Simple Meshed Dataframe Name Columns
+
+```{r}
+# 5 by 3 matrix
+mt_rnorm_a <- matrix(rnorm(4,mean=0,sd=1), nrow=5, ncol=3)
+
+# Column Names
+ar_st_varnames <- c('id','var1','varb','vartheta')
+
+# Combine to tibble, add name col1, col2, etc.
+tb_combine <- as_tibble(mt_rnorm_a) %>%
+  rowid_to_column(var = "id") %>%
+  rename_all(~c(ar_st_varnames))
+
+# Display
+kable(tb_combine) %>% kable_styling_fc()
+```
 
 #### Generate Tibble given Matrixes and Arrays
 
