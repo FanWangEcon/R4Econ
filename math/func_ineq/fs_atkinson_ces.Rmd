@@ -1,5 +1,5 @@
 ---
-title: "R Analyze Constant Elasticity of Substitution (Atkinson Family Utility)"
+title: "Atkinson Inequality Index and utility Family"
 titleshort: "CES abd Atkinson Utility"
 description: |
   Analyze how changing individual outcomes shift utility given inequality preference parameters.
@@ -16,7 +16,10 @@ core:
     code: |
       geom_line()
       facet_wrap()
-date: 2020-04-14
+  - package: econ
+    code: |
+      Atkinson (JET, 1970)
+date: 2020-06-12
 date_start: 2020-04-01
 output:
   pdf_document:
@@ -31,7 +34,7 @@ always_allow_html: true
 urlcolor: blue
 ---
 
-### Atkinson Family Utility
+### Atkinson Inequality Index
 
 ```{r global_options, include = FALSE}
 try(source("../../.Rprofile"))
@@ -41,7 +44,122 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
 
-#### Individual Outcomes and Preference
+#### Atkinson Inequality Measures
+
+[Atkinson (JET, 1970)](https://linkinghub.elsevier.com/retrieve/pii/0022053170900396) studies five standard inequality measures. Atkinson finds that given the same income data across countries, different inequality measure lead to different rankings of which country is more unequal. Atkinson develops an measure of inequality that changes depending on an inequality aversion parameter. 
+
+$$
+\text{Atkinson Inequality} = 
+A\left(
+\left\{Y_i\right\}_{i=1}^N,
+\lambda
+\right) 
+= 1 - 
+\left(
+\sum_{i=1}^N \frac{1}{N}
+  \left(
+    \frac{Y_i}{\sum_{j=1}^N \left( \frac{Y_j}{N} \right) }
+  \right)^{\lambda}  
+\right)^{\frac{1}{\lambda}}
+\in \left[0,1\right]
+$$
+
+$A\left(\left\{Y_i\right\}_{i=1}^N,\lambda\right)$ equals to zero is perfect equality. 1 is Perfect inequality. If $\lambda=1$, the inequality measure is always equal to 0 because the planner does not care abouot inequality anymore.
+
+#### Atkinson Inequality Function 
+
+Programming up the equation above, we have:
+
+```{r}
+# Formula
+ffi_atkinson_ineq <- function(ar_data, fl_rho) {
+  ar_data_demean <- ar_data/mean(ar_data)
+  it_len <- length(ar_data_demean)
+  fl_atkinson <- 1 - sum(ar_data_demean^{fl_rho}*(1/it_len))^(1/fl_rho)
+  return(fl_atkinson)
+}
+```
+
+#### Atkinson Inequality Examples
+
+Given a vectr of observables, compute the atkinson inequality measure given different inequality aversion. 
+
+Preference vector and data vector:
+
+```{r}
+# Preference Vector 
+ar_rho <- c(1, 1 - (10^(c(seq(-2.2,2.2, length.out=60)))))
+ar_rho <- unique(ar_rho)
+mt_rho <- matrix(ar_rho, nrow=length(ar_rho), ncol=1)
+  
+# Random Data Vector (not equal outcomes)
+set.seed(123)
+ar_data_rand <- rnorm(15, mean=0,sd=1)
+ar_data_rand <- ar_data_rand - min(ar_data_rand) + 1
+
+# Uniform Data Vector (Equal)
+ar_data_unif <- rep(1, length(ar_data_rand))
+
+# One Rich (last person has income equal to the sum of all others*100)
+ar_data_onerich <- rep(0.1, length(ar_data_rand))
+ar_data_onerich[length(ar_data_onerich)] = sum(head(ar_data_onerich,-1))*10
+```
+
+Testing Atkinson with different data arrays:
+
+```{r}
+# ATK = 0.1180513
+ffi_atkinson_ineq(ar_data_rand, -1)
+# ATK = 0
+ffi_atkinson_ineq(ar_data_unif, -1)
+# ATK = 0.89
+ffi_atkinson_ineq(ar_data_onerich, -1)
+```
+
+##### Atkinson Inequality as Inequality Aversion Changes
+
+This is the vector of inequality aversion parameters:
+
+```{r}
+ar_rho
+```
+
+How does Atkinson Inequality measure change with respect to a vector of random data as inequality aversion shifts:
+
+```{r}
+par(new=T)
+st_x_label <- 'Lambda, left Rawlsian, right (1) is Utilitarian'
+st_y_label <- 'Atkinson Inequality, 0 = perfect equal'
+ar_ylim = c(0,1)
+ffi_atkinson_ineq(ar_data_rand, -1)
+ar_atkinson <- apply(mt_rho, 1, function(row){ffi_atkinson_ineq(ar_data_rand, row[1])})
+plot(ar_rho, ar_atkinson, ylim = ar_ylim)
+title(main = 'A vector of Random data', xlab = st_x_label, ylab = st_y_label)
+grid()
+```
+Now with the one person has the wealth of all others in the vector times 10:
+
+```{r}
+par(new=T)
+ffi_atkinson_ineq(ar_data_onerich, -1)
+ar_atkinson <- apply(mt_rho, 1, function(row){ffi_atkinson_ineq(ar_data_onerich, row[1])})
+plot(ar_rho, ar_atkinson, ylim = ar_ylim)
+title(main = '1 person has the (income of all others summed up)*10', xlab = st_x_label, ylab = st_y_label)
+grid()
+```
+
+The Uniform Results, since allocations are uniform, zero for all:
+
+```{r}
+par(new=T)
+ffi_atkinson_ineq(ar_data_unif, -1)
+ar_atkinson <- apply(mt_rho, 1, function(row){ffi_atkinson_ineq(ar_data_unif, row[1])})
+plot(ar_rho, ar_atkinson, ylim = ar_ylim)
+title(main = 'uniform distribution', xlab = st_x_label, ylab = st_y_label)
+grid()
+```
+
+#### Analyzing Equation Mechanics
 
 How does the Aktinson Family utility function work? THe Atkinson Family Utility has the following functional form.
 
