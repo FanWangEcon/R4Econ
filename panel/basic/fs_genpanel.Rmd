@@ -1,16 +1,26 @@
 ---
-title: "TIDYVERSE Generate Panel Data Structures"
+title: "R dplyr Group by Index and Generate Panel Data Structure"
 description: |
-  Build skeleton panel frame with N observations and T periods.
+  Build skeleton panel frame with N observations and T periods with gender and height.
+  Generate group Index based on a list of grouping variables.  
 core:
-  - package: tidyr
+  - package: r
     code: |
-      rowid_to_column()
-      uncount()
+      runif()
+      rnorm()
+      rbinom(n(), 1, 0.5)
+      cumsum()
+  - package: dplyr
+    code: |
       group_by()
       row_number()
       ungroup()
-date: 2020-04-14
+      one_of()
+      mutate(var = (row_number()==1)*1)
+  - package: tidyr
+    code: |
+      uncount()
+date: 2020-06-13
 date_start: 2020-04-01
 output:
   pdf_document:
@@ -56,4 +66,66 @@ df_panel_skeleton <- as_tibble(matrix(it_M, nrow=it_N, ncol=1)) %>%
 # Print
 kable(df_panel_skeleton) %>%
   kable_styling_fc()
+```
+
+#### Panel of Children with Height Growth
+
+Given $N$ individuals, each with $G$ observations. There is an initial height variable and height grows every year. There are growth variables, variables for cumulative growth and variables for height at each age for each child.
+
+Individuals are defined by gender (1 = female), race (1=asian), and birth height. Within individual yearly information includes height at each year of age.
+
+```{r}
+# Define
+it_N <- 5
+it_M <- 3
+svr_id <- 'indi_id'
+svr_gender <- 'female'
+svr_asian <- 'asian'
+svr_age <- 'year_of_age'
+# Define Height Related Variables
+svr_brthgt <- 'birth_height'
+svr_hgtgrow <- 'hgt_growth'
+svr_hgtgrow_cumu <- 'hgt_growcumu'
+svr_height <- 'height'
+
+# panel dataframe following
+set.seed(123)
+df_panel_indiage <- as_tibble(matrix(it_M, nrow=it_N, ncol=1)) %>%
+  mutate(!!sym(svr_gender) := rbinom(n(), 1, 0.5),
+         !!sym(svr_asian) := rbinom(n(), 1, 0.5),
+         !!sym(svr_brthgt) := rnorm(n(), mean=60,sd=3)) %>%
+  uncount(V1) %>%
+  group_by(!!sym(svr_gender), !!sym(svr_asian), !!sym(svr_brthgt)) %>%
+  mutate(!!sym(svr_age) := row_number(),
+         !!sym(svr_hgtgrow) := runif(n(), min=5, max=15),
+         !!sym(svr_hgtgrow_cumu) := cumsum(!!sym(svr_hgtgrow)),
+         !!sym(svr_height) := !!sym(svr_brthgt) + !!sym(svr_hgtgrow_cumu))  %>%
+  ungroup()
+
+# Add Height Index
+kable(df_panel_indiage) %>% kable_styling_fc()
+```
+
+#### Create Group IDs
+
+Given the dataframe just created, generate group IDs for each Gender and Race Groups. Given that both are binary, there can only be 4 unique groups.
+
+```{r}
+# group id
+svr_group_id <- 'female_asian_id'
+# Define
+ls_svr_group_vars <- c('female', 'asian')
+
+# panel dataframe following
+df_panel_indiage_id <- df_panel_indiage %>%
+  arrange(!!!syms(ls_svr_group_vars)) %>%
+  group_by(!!!syms(ls_svr_group_vars)) %>%
+  mutate(!!sym(svr_group_id) := (row_number()==1)*1) %>%
+  ungroup() %>%
+  mutate(!!sym(svr_group_id) := cumsum(!!sym(svr_group_id))) %>%
+  select(one_of(svr_group_id, ls_svr_group_vars), everything())
+
+# Add Height Index
+kable(df_panel_indiage_id) %>%
+  kable_styling_fc_wide()
 ```
