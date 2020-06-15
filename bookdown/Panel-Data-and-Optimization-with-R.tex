@@ -144,7 +144,7 @@
 
 \title{Panel Data and Optimization with R}
 \author{Fan Wang}
-\date{2020-05-31}
+\date{2020-06-14}
 
 \begin{document}
 \maketitle
@@ -3226,25 +3226,25 @@ Cebu & 1 & 10 & 87.67222 & 10.5 & 36.508127 & 0 & 18 & 18\\
 \hline
 S.country & vil.id & indi.id & hgt\_mean & momEdu\_mean & hgt\_sd & momEdu\_sd & hgt\_n & momEdu\_n\\
 \hline
-\rowcolor{gray!6}  Guatemala & 14 & 2014 & 66.97000 & NaN & 8.967974 & NaN & 10 & 0\\
+\rowcolor{gray!6}  Guatemala & 14 & 2014 & 66.97000 & NaN & 8.967974 & NA & 10 & 0\\
 \hline
-Guatemala & 14 & 2015 & 71.71818 & NaN & 11.399984 & NaN & 11 & 0\\
+Guatemala & 14 & 2015 & 71.71818 & NaN & 11.399984 & NA & 11 & 0\\
 \hline
-\rowcolor{gray!6}  Guatemala & 14 & 2016 & 66.33000 & NaN & 9.490352 & NaN & 10 & 0\\
+\rowcolor{gray!6}  Guatemala & 14 & 2016 & 66.33000 & NaN & 9.490352 & NA & 10 & 0\\
 \hline
-Guatemala & 14 & 2017 & 76.40769 & NaN & 14.827871 & NaN & 13 & 0\\
+Guatemala & 14 & 2017 & 76.40769 & NaN & 14.827871 & NA & 13 & 0\\
 \hline
-\rowcolor{gray!6}  Guatemala & 14 & 2018 & 74.55385 & NaN & 12.707846 & NaN & 13 & 0\\
+\rowcolor{gray!6}  Guatemala & 14 & 2018 & 74.55385 & NaN & 12.707846 & NA & 13 & 0\\
 \hline
-Guatemala & 14 & 2019 & 70.47500 & NaN & 11.797390 & NaN & 12 & 0\\
+Guatemala & 14 & 2019 & 70.47500 & NaN & 11.797390 & NA & 12 & 0\\
 \hline
-\rowcolor{gray!6}  Guatemala & 14 & 2020 & 60.28750 & NaN & 7.060036 & NaN & 8 & 0\\
+\rowcolor{gray!6}  Guatemala & 14 & 2020 & 60.28750 & NaN & 7.060036 & NA & 8 & 0\\
 \hline
-Guatemala & 14 & 2021 & 84.96000 & NaN & 15.446193 & NaN & 10 & 0\\
+Guatemala & 14 & 2021 & 84.96000 & NaN & 15.446193 & NA & 10 & 0\\
 \hline
-\rowcolor{gray!6}  Guatemala & 14 & 2022 & 79.38667 & NaN & 15.824749 & NaN & 15 & 0\\
+\rowcolor{gray!6}  Guatemala & 14 & 2022 & 79.38667 & NaN & 15.824749 & NA & 15 & 0\\
 \hline
-Guatemala & 14 & 2023 & 66.50000 & NaN & 8.613113 & NaN & 8 & 0\\
+Guatemala & 14 & 2023 & 66.50000 & NaN & 8.613113 & NA & 8 & 0\\
 \hline
 \end{tabular}}
 \end{table}
@@ -6277,6 +6277,153 @@ student\_id & class\_day\\
 \end{tabular}
 \end{table}
 
+\hypertarget{panel-of-children-with-height-growth}{%
+\subsubsection{Panel of Children with Height Growth}\label{panel-of-children-with-height-growth}}
+
+Given \(N\) individuals, each with \(G\) observations. There is an initial height variable and height grows every year. There are growth variables, variables for cumulative growth and variables for height at each age for each child.
+
+Individuals are defined by gender (1 = female), race (1=asian), and birth height. Within individual yearly information includes height at each year of age.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Define}
+\NormalTok{it\_N \textless{}{-}}\StringTok{ }\DecValTok{5}
+\NormalTok{it\_M \textless{}{-}}\StringTok{ }\DecValTok{3}
+\NormalTok{svr\_id \textless{}{-}}\StringTok{ \textquotesingle{}indi\_id\textquotesingle{}}
+\NormalTok{svr\_gender \textless{}{-}}\StringTok{ \textquotesingle{}female\textquotesingle{}}
+\NormalTok{svr\_asian \textless{}{-}}\StringTok{ \textquotesingle{}asian\textquotesingle{}}
+\NormalTok{svr\_age \textless{}{-}}\StringTok{ \textquotesingle{}year\_of\_age\textquotesingle{}}
+\CommentTok{\# Define Height Related Variables}
+\NormalTok{svr\_brthgt \textless{}{-}}\StringTok{ \textquotesingle{}birth\_height\textquotesingle{}}
+\NormalTok{svr\_hgtgrow \textless{}{-}}\StringTok{ \textquotesingle{}hgt\_growth\textquotesingle{}}
+\NormalTok{svr\_hgtgrow\_cumu \textless{}{-}}\StringTok{ \textquotesingle{}hgt\_growcumu\textquotesingle{}}
+\NormalTok{svr\_height \textless{}{-}}\StringTok{ \textquotesingle{}height\textquotesingle{}}
+
+\CommentTok{\# panel dataframe following}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{df\_panel\_indiage \textless{}{-}}\StringTok{ }\KeywordTok{as\_tibble}\NormalTok{(}\KeywordTok{matrix}\NormalTok{(it\_M, }\DataTypeTok{nrow=}\NormalTok{it\_N, }\DataTypeTok{ncol=}\DecValTok{1}\NormalTok{)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_gender) }\OperatorTok{:}\ErrorTok{=}\StringTok{ }\KeywordTok{rbinom}\NormalTok{(}\KeywordTok{n}\NormalTok{(), }\DecValTok{1}\NormalTok{, }\FloatTok{0.5}\NormalTok{),}
+         \OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_asian) }\OperatorTok{:}\ErrorTok{=}\StringTok{ }\KeywordTok{rbinom}\NormalTok{(}\KeywordTok{n}\NormalTok{(), }\DecValTok{1}\NormalTok{, }\FloatTok{0.5}\NormalTok{),}
+         \OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_brthgt) }\OperatorTok{:}\ErrorTok{=}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(}\KeywordTok{n}\NormalTok{(), }\DataTypeTok{mean=}\DecValTok{60}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{3}\NormalTok{)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{uncount}\NormalTok{(V1) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{group\_by}\NormalTok{(}\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_gender), }\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_asian), }\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_brthgt)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_age) }\OperatorTok{:}\ErrorTok{=}\StringTok{ }\KeywordTok{row\_number}\NormalTok{(),}
+         \OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_hgtgrow) }\OperatorTok{:}\ErrorTok{=}\StringTok{ }\KeywordTok{runif}\NormalTok{(}\KeywordTok{n}\NormalTok{(), }\DataTypeTok{min=}\DecValTok{5}\NormalTok{, }\DataTypeTok{max=}\DecValTok{15}\NormalTok{),}
+         \OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_hgtgrow\_cumu) }\OperatorTok{:}\ErrorTok{=}\StringTok{ }\KeywordTok{cumsum}\NormalTok{(}\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_hgtgrow)),}
+         \OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_height) }\OperatorTok{:}\ErrorTok{=}\StringTok{ }\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_brthgt) }\OperatorTok{+}\StringTok{ }\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_hgtgrow\_cumu))  }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{ungroup}\NormalTok{()}
+
+\CommentTok{\# Add Height Index}
+\KeywordTok{kable}\NormalTok{(df\_panel\_indiage) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{r|r|r|r|r|r|r}
+\hline
+female & asian & birth\_height & year\_of\_age & hgt\_growth & hgt\_growcumu & height\\
+\hline
+\rowcolor{gray!6}  0 & 0 & 65.14520 & 1 & 13.895393 & 13.895393 & 79.04059\\
+\hline
+0 & 0 & 65.14520 & 2 & 11.928034 & 25.823427 & 90.96862\\
+\hline
+\rowcolor{gray!6}  0 & 0 & 65.14520 & 3 & 11.405068 & 37.228495 & 102.37369\\
+\hline
+1 & 1 & 61.38275 & 1 & 11.907053 & 11.907053 & 73.28980\\
+\hline
+\rowcolor{gray!6}  1 & 1 & 61.38275 & 2 & 12.954674 & 24.861727 & 86.24448\\
+\hline
+1 & 1 & 61.38275 & 3 & 5.246137 & 30.107864 & 91.49061\\
+\hline
+\rowcolor{gray!6}  0 & 1 & 56.20482 & 1 & 14.942698 & 14.942698 & 71.14751\\
+\hline
+0 & 1 & 56.20482 & 2 & 11.557058 & 26.499756 & 82.70457\\
+\hline
+\rowcolor{gray!6}  0 & 1 & 56.20482 & 3 & 12.085305 & 38.585060 & 94.78988\\
+\hline
+1 & 1 & 57.93944 & 1 & 6.471137 & 6.471137 & 64.41058\\
+\hline
+\rowcolor{gray!6}  1 & 1 & 57.93944 & 2 & 14.630242 & 21.101379 & 79.04082\\
+\hline
+1 & 1 & 57.93944 & 3 & 14.022991 & 35.124369 & 93.06381\\
+\hline
+\rowcolor{gray!6}  1 & 0 & 58.66301 & 1 & 10.440660 & 10.440660 & 69.10367\\
+\hline
+1 & 0 & 58.66301 & 2 & 10.941420 & 21.382081 & 80.04509\\
+\hline
+\rowcolor{gray!6}  1 & 0 & 58.66301 & 3 & 7.891597 & 29.273678 & 87.93669\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{create-group-ids}{%
+\subsubsection{Create Group IDs}\label{create-group-ids}}
+
+Given the dataframe just created, generate group IDs for each Gender and Race Groups. Given that both are binary, there can only be 4 unique groups.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# group id}
+\NormalTok{svr\_group\_id \textless{}{-}}\StringTok{ \textquotesingle{}female\_asian\_id\textquotesingle{}}
+\CommentTok{\# Define}
+\NormalTok{ls\_svr\_group\_vars \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{\textquotesingle{}female\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}asian\textquotesingle{}}\NormalTok{)}
+
+\CommentTok{\# panel dataframe following}
+\NormalTok{df\_panel\_indiage\_id \textless{}{-}}\StringTok{ }\NormalTok{df\_panel\_indiage }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(ls\_svr\_group\_vars)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{group\_by}\NormalTok{(}\OperatorTok{!!!}\KeywordTok{syms}\NormalTok{(ls\_svr\_group\_vars)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_group\_id) }\OperatorTok{:}\ErrorTok{=}\StringTok{ }\NormalTok{(}\KeywordTok{row\_number}\NormalTok{()}\OperatorTok{==}\DecValTok{1}\NormalTok{)}\OperatorTok{*}\DecValTok{1}\NormalTok{) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{ungroup}\NormalTok{() }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_group\_id) }\OperatorTok{:}\ErrorTok{=}\StringTok{ }\KeywordTok{cumsum}\NormalTok{(}\OperatorTok{!!}\KeywordTok{sym}\NormalTok{(svr\_group\_id))) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(}\KeywordTok{one\_of}\NormalTok{(svr\_group\_id, ls\_svr\_group\_vars), }\KeywordTok{everything}\NormalTok{())}
+
+\CommentTok{\# Add Height Index}
+\KeywordTok{kable}\NormalTok{(df\_panel\_indiage\_id) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{kable\_styling\_fc\_wide}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{r|r|r|r|r|r|r|r}
+\hline
+female\_asian\_id & female & asian & birth\_height & year\_of\_age & hgt\_growth & hgt\_growcumu & height\\
+\hline
+\rowcolor{gray!6}  1 & 0 & 0 & 65.14520 & 1 & 13.895393 & 13.895393 & 79.04059\\
+\hline
+1 & 0 & 0 & 65.14520 & 2 & 11.928034 & 25.823427 & 90.96862\\
+\hline
+\rowcolor{gray!6}  1 & 0 & 0 & 65.14520 & 3 & 11.405068 & 37.228495 & 102.37369\\
+\hline
+2 & 0 & 1 & 56.20482 & 1 & 14.942698 & 14.942698 & 71.14751\\
+\hline
+\rowcolor{gray!6}  2 & 0 & 1 & 56.20482 & 2 & 11.557058 & 26.499756 & 82.70457\\
+\hline
+2 & 0 & 1 & 56.20482 & 3 & 12.085305 & 38.585060 & 94.78988\\
+\hline
+\rowcolor{gray!6}  3 & 1 & 0 & 58.66301 & 1 & 10.440660 & 10.440660 & 69.10367\\
+\hline
+3 & 1 & 0 & 58.66301 & 2 & 10.941420 & 21.382081 & 80.04509\\
+\hline
+\rowcolor{gray!6}  3 & 1 & 0 & 58.66301 & 3 & 7.891597 & 29.273678 & 87.93669\\
+\hline
+4 & 1 & 1 & 61.38275 & 1 & 11.907053 & 11.907053 & 73.28980\\
+\hline
+\rowcolor{gray!6}  4 & 1 & 1 & 61.38275 & 2 & 12.954674 & 24.861727 & 86.24448\\
+\hline
+4 & 1 & 1 & 61.38275 & 3 & 5.246137 & 30.107864 & 91.49061\\
+\hline
+\rowcolor{gray!6}  4 & 1 & 1 & 57.93944 & 1 & 6.471137 & 6.471137 & 64.41058\\
+\hline
+4 & 1 & 1 & 57.93944 & 2 & 14.630242 & 21.101379 & 79.04082\\
+\hline
+\rowcolor{gray!6}  4 & 1 & 1 & 57.93944 & 3 & 14.022991 & 35.124369 & 93.06381\\
+\hline
+\end{tabular}}
+\end{table}
+
 \hypertarget{join-datasets}{%
 \subsection{Join Datasets}\label{join-datasets}}
 
@@ -8715,7 +8862,7 @@ hgt & 77.8 & 73.13353 & 70.97578 & 71.45823\\
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-164-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-166-1} \end{center}
 
 \hypertarget{additional-decomposition-testings}{%
 \subsubsection{Additional Decomposition Testings}\label{additional-decomposition-testings}}
@@ -9091,21 +9238,21 @@ Given the x-variables included in the logit regression, how do they relate to A\
 ## [[1]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-168-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-170-1} \end{center}
 
 \begin{verbatim}
 ## 
 ## [[2]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-168-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-170-2} \end{center}
 
 \begin{verbatim}
 ## 
 ## [[3]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-168-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-170-3} \end{center}
 
 \hypertarget{optimization}{%
 \chapter{Optimization}\label{optimization}}
@@ -9725,7 +9872,7 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-176-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-178-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9743,7 +9890,7 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-176-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-178-2} \end{center}
 
 \hypertarget{integration-by-symmetric-uneven-rectangle}{%
 \subsubsection{Integration By Symmetric Uneven Rectangle}\label{integration-by-symmetric-uneven-rectangle}}
@@ -9802,7 +9949,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-177-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-179-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9820,7 +9967,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-177-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-179-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9838,7 +9985,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-177-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-179-3} \end{center}
 
 \hypertarget{integration-by-constant-width-rectangle-trapezoidal-rule}{%
 \subsubsection{Integration By Constant Width Rectangle (Trapezoidal rule)}\label{integration-by-constant-width-rectangle-trapezoidal-rule}}
@@ -9893,7 +10040,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-178-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-180-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9911,7 +10058,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-178-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-180-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9929,7 +10076,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-178-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-180-3} \end{center}
 
 \hypertarget{analytical-solutions}{%
 \section{Analytical Solutions}\label{analytical-solutions}}
@@ -10214,15 +10361,214 @@ Now test the example arrays above using the function based no our formula:
 ## ar_ineql_extr_n10: 0.8181549
 \end{verbatim}
 
-\hypertarget{atkinson-family-utility}{%
-\subsection{Atkinson Family Utility}\label{atkinson-family-utility}}
+\hypertarget{atkinson-inequality-index}{%
+\subsection{Atkinson Inequality Index}\label{atkinson-inequality-index}}
 
 \begin{quote}
 Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R Code Examples} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository (\href{https://fanwangecon.github.io/Stat4Econ/bookdown}{bookdown site}).
 \end{quote}
 
-\hypertarget{individual-outcomes-and-preference}{%
-\subsubsection{Individual Outcomes and Preference}\label{individual-outcomes-and-preference}}
+\hypertarget{atkinson-inequality-measures}{%
+\subsubsection{Atkinson Inequality Measures}\label{atkinson-inequality-measures}}
+
+\href{https://linkinghub.elsevier.com/retrieve/pii/0022053170900396}{Atkinson (JET, 1970)} studies five standard inequality measures. Atkinson finds that given the same income data across countries, different inequality measure lead to different rankings of which country is more unequal. Atkinson develops an measure of inequality that changes depending on an inequality aversion parameter.
+
+\[
+\text{Atkinson Inequality} = 
+A\left(
+\left\{Y_i\right\}_{i=1}^N,
+\lambda
+\right) 
+= 1 - 
+\left(
+\sum_{i=1}^N \frac{1}{N}
+  \left(
+    \frac{Y_i}{\sum_{j=1}^N \left( \frac{Y_j}{N} \right) }
+  \right)^{\lambda}  
+\right)^{\frac{1}{\lambda}}
+\in \left[0,1\right]
+\]
+
+\(A\left(\left\{Y_i\right\}_{i=1}^N,\lambda\right)\) equals to zero is perfect equality. 1 is Perfect inequality. If \(\lambda=1\), the inequality measure is always equal to 0 because the planner does not care abouot inequality anymore.
+
+\hypertarget{atkinson-inequality-function}{%
+\subsubsection{Atkinson Inequality Function}\label{atkinson-inequality-function}}
+
+Programming up the equation above, we have:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Formula}
+\NormalTok{ffi\_atkinson\_ineq \textless{}{-}}\StringTok{ }\ControlFlowTok{function}\NormalTok{(ar\_data, fl\_rho) \{}
+\NormalTok{  ar\_data\_demean \textless{}{-}}\StringTok{ }\NormalTok{ar\_data}\OperatorTok{/}\KeywordTok{mean}\NormalTok{(ar\_data)}
+\NormalTok{  it\_len \textless{}{-}}\StringTok{ }\KeywordTok{length}\NormalTok{(ar\_data\_demean)}
+\NormalTok{  fl\_atkinson \textless{}{-}}\StringTok{ }\DecValTok{1} \OperatorTok{{-}}\StringTok{ }\KeywordTok{sum}\NormalTok{(ar\_data\_demean}\OperatorTok{\^{}}\NormalTok{\{fl\_rho\}}\OperatorTok{*}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\NormalTok{it\_len))}\OperatorTok{\^{}}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\NormalTok{fl\_rho)}
+  \KeywordTok{return}\NormalTok{(fl\_atkinson)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{atkinson-inequality-examples}{%
+\subsubsection{Atkinson Inequality Examples}\label{atkinson-inequality-examples}}
+
+Given a vectr of observables, compute the atkinson inequality measure given different inequality aversion.
+
+Preference vector and data vector:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Preference Vector }
+\NormalTok{ar\_rho \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1} \OperatorTok{{-}}\StringTok{ }\NormalTok{(}\DecValTok{10}\OperatorTok{\^{}}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\KeywordTok{seq}\NormalTok{(}\OperatorTok{{-}}\FloatTok{2.2}\NormalTok{,}\FloatTok{2.2}\NormalTok{, }\DataTypeTok{length.out=}\DecValTok{60}\NormalTok{)))))}
+\NormalTok{ar\_rho \textless{}{-}}\StringTok{ }\KeywordTok{unique}\NormalTok{(ar\_rho)}
+\NormalTok{mt\_rho \textless{}{-}}\StringTok{ }\KeywordTok{matrix}\NormalTok{(ar\_rho, }\DataTypeTok{nrow=}\KeywordTok{length}\NormalTok{(ar\_rho), }\DataTypeTok{ncol=}\DecValTok{1}\NormalTok{)}
+  
+\CommentTok{\# Random Data Vector (not equal outcomes)}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{ar\_data\_rand \textless{}{-}}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(}\DecValTok{15}\NormalTok{, }\DataTypeTok{mean=}\DecValTok{0}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{1}\NormalTok{)}
+\NormalTok{ar\_data\_rand \textless{}{-}}\StringTok{ }\NormalTok{ar\_data\_rand }\OperatorTok{{-}}\StringTok{ }\KeywordTok{min}\NormalTok{(ar\_data\_rand) }\OperatorTok{+}\StringTok{ }\DecValTok{1}
+
+\CommentTok{\# Uniform Data Vector (Equal)}
+\NormalTok{ar\_data\_unif \textless{}{-}}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{length}\NormalTok{(ar\_data\_rand))}
+
+\CommentTok{\# One Rich (last person has income equal to the sum of all others*100)}
+\NormalTok{ar\_data\_onerich \textless{}{-}}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\KeywordTok{length}\NormalTok{(ar\_data\_rand))}
+\NormalTok{ar\_data\_onerich[}\KeywordTok{length}\NormalTok{(ar\_data\_onerich)] =}\StringTok{ }\KeywordTok{sum}\NormalTok{(}\KeywordTok{head}\NormalTok{(ar\_data\_onerich,}\OperatorTok{{-}}\DecValTok{1}\NormalTok{))}\OperatorTok{*}\DecValTok{10}
+\end{Highlighting}
+\end{Shaded}
+
+Testing Atkinson with different data arrays:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# ATK = 0.1180513}
+\KeywordTok{ffi\_atkinson\_ineq}\NormalTok{(ar\_data\_rand, }\DecValTok{{-}1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.1180513
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# ATK = 0}
+\KeywordTok{ffi\_atkinson\_ineq}\NormalTok{(ar\_data\_unif, }\DecValTok{{-}1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# ATK = 0.89}
+\KeywordTok{ffi\_atkinson\_ineq}\NormalTok{(ar\_data\_onerich, }\DecValTok{{-}1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.8956933
+\end{verbatim}
+
+\hypertarget{atkinson-inequality-as-inequality-aversion-changes}{%
+\paragraph{Atkinson Inequality as Inequality Aversion Changes}\label{atkinson-inequality-as-inequality-aversion-changes}}
+
+This is the vector of inequality aversion parameters:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ar\_rho}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1]    1.00000000    0.99369043    0.99250837    0.99110487    0.98943842    0.98745978    0.98511046    0.98232100    0.97900896
+## [10]    0.97507643    0.97040717    0.96486316    0.95828051    0.95046465    0.94118454    0.93016586    0.91708291    0.90154895
+## [19]    0.88310482    0.86120530    0.83520306    0.80432947    0.76767192    0.72414684    0.67246762    0.61110666    0.53825013
+## [28]    0.45174443    0.34903248    0.22707813    0.08227648   -0.08965279   -0.29379184   -0.53617495   -0.82396688   -1.16567469
+## [37]   -1.57139912   -2.05313328   -2.62511705   -3.30425810   -4.11063160   -5.06807371   -6.20488608   -7.55467254   -9.15733231
+## [46]  -11.06023949  -13.31964342  -16.00233131  -19.18760255  -22.96961271  -27.46015678  -32.79197376  -39.12267043  -46.63938010
+## [55]  -55.56429426  -66.16123043  -78.74343059  -93.68282046 -111.42100351 -132.48231461 -157.48931925
+\end{verbatim}
+
+How does Atkinson Inequality measure change with respect to a vector of random data as inequality aversion shifts:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T)}
+\NormalTok{st\_x\_label \textless{}{-}}\StringTok{ \textquotesingle{}Lambda, left Rawlsian, right (1) is Utilitarian\textquotesingle{}}
+\NormalTok{st\_y\_label \textless{}{-}}\StringTok{ \textquotesingle{}Atkinson Inequality, 0 = perfect equal\textquotesingle{}}
+\NormalTok{ar\_ylim =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{)}
+\KeywordTok{ffi\_atkinson\_ineq}\NormalTok{(ar\_data\_rand, }\DecValTok{{-}1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.1180513
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ar\_atkinson \textless{}{-}}\StringTok{ }\KeywordTok{apply}\NormalTok{(mt\_rho, }\DecValTok{1}\NormalTok{, }\ControlFlowTok{function}\NormalTok{(row)\{}\KeywordTok{ffi\_atkinson\_ineq}\NormalTok{(ar\_data\_rand, row[}\DecValTok{1}\NormalTok{])\})}
+\KeywordTok{plot}\NormalTok{(ar\_rho, ar\_atkinson, }\DataTypeTok{ylim =}\NormalTok{ ar\_ylim)}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{main =} \StringTok{\textquotesingle{}A vector of Random data\textquotesingle{}}\NormalTok{, }\DataTypeTok{xlab =}\NormalTok{ st\_x\_label, }\DataTypeTok{ylab =}\NormalTok{ st\_y\_label)}
+\KeywordTok{grid}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-191-1} \end{center}
+
+Now with the one person has the wealth of all others in the vector times 10:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T)}
+\KeywordTok{ffi\_atkinson\_ineq}\NormalTok{(ar\_data\_onerich, }\DecValTok{{-}1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.8956933
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ar\_atkinson \textless{}{-}}\StringTok{ }\KeywordTok{apply}\NormalTok{(mt\_rho, }\DecValTok{1}\NormalTok{, }\ControlFlowTok{function}\NormalTok{(row)\{}\KeywordTok{ffi\_atkinson\_ineq}\NormalTok{(ar\_data\_onerich, row[}\DecValTok{1}\NormalTok{])\})}
+\KeywordTok{plot}\NormalTok{(ar\_rho, ar\_atkinson, }\DataTypeTok{ylim =}\NormalTok{ ar\_ylim)}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{main =} \StringTok{\textquotesingle{}1 person has the (income of all others summed up)*10\textquotesingle{}}\NormalTok{, }\DataTypeTok{xlab =}\NormalTok{ st\_x\_label, }\DataTypeTok{ylab =}\NormalTok{ st\_y\_label)}
+\KeywordTok{grid}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-192-1} \end{center}
+
+The Uniform Results, since allocations are uniform, zero for all:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T)}
+\KeywordTok{ffi\_atkinson\_ineq}\NormalTok{(ar\_data\_unif, }\DecValTok{{-}1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ar\_atkinson \textless{}{-}}\StringTok{ }\KeywordTok{apply}\NormalTok{(mt\_rho, }\DecValTok{1}\NormalTok{, }\ControlFlowTok{function}\NormalTok{(row)\{}\KeywordTok{ffi\_atkinson\_ineq}\NormalTok{(ar\_data\_unif, row[}\DecValTok{1}\NormalTok{])\})}
+\KeywordTok{plot}\NormalTok{(ar\_rho, ar\_atkinson, }\DataTypeTok{ylim =}\NormalTok{ ar\_ylim)}
+\KeywordTok{title}\NormalTok{(}\DataTypeTok{main =} \StringTok{\textquotesingle{}uniform distribution\textquotesingle{}}\NormalTok{, }\DataTypeTok{xlab =}\NormalTok{ st\_x\_label, }\DataTypeTok{ylab =}\NormalTok{ st\_y\_label)}
+\KeywordTok{grid}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-193-1} \end{center}
+
+\hypertarget{analyzing-equation-mechanics}{%
+\subsubsection{Analyzing Equation Mechanics}\label{analyzing-equation-mechanics}}
 
 How does the Aktinson Family utility function work? THe Atkinson Family Utility has the following functional form.
 
@@ -10408,7 +10754,7 @@ Note that many more A grid points are needed to fully plot out the leontief line
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-186-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-195-1} \end{center}
 
 \hypertarget{tables-and-graphs}{%
 \chapter{Tables and Graphs}\label{tables-and-graphs}}
@@ -10591,7 +10937,7 @@ Jointly plot:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-188-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-197-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10632,7 +10978,7 @@ We used recordplot() earlier. So now we can print just the first two constructed
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-189-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-198-1} \end{center}
 
 \hypertarget{write-and-read-plots}{%
 \section{Write and Read Plots}\label{write-and-read-plots}}
@@ -10910,8 +11256,8 @@ Smaller and larger figures with different font size comparison. Note that earlie
 \includegraphics[width=\linewidth]{_img/fs_img_io_2curve_w160h100_res300.png}
 \end{figure}
 
-\hypertarget{programming}{%
-\chapter{Programming}\label{programming}}
+\hypertarget{code-and-development}{%
+\chapter{Code and Development}\label{code-and-development}}
 
 \hypertarget{file-in-and-out}{%
 \section{File in and Out}\label{file-in-and-out}}
@@ -11205,7 +11551,7 @@ Search inside directories, for all files in a git repo folder that are new or ha
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/inout/fs_rmd_pdf_html.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/inout/fs_text_save.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/inout/main.Rmd"
-## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/main.Rmd"
+## [1] "MODIFIED: C:/Users/fan/R4Econ/development/main.Rmd"
 \end{verbatim}
 
 \hypertarget{resave-an-existing-file-with-different-name-different-folder}{%
@@ -11731,14 +12077,20 @@ Given an existing Rmd File, Resave it with a different name, and replace (add in
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \href{https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_genpanel.html}{TIDYVERSE Generate Panel Data Structures}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic//fs_genpanel.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_genpanel.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_genpanel.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_genpanel.html}{\textbf{html}}
+  \href{https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_genpanel.html}{R dplyr Group by Index and Generate Panel Data Structure}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic//fs_genpanel.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_genpanel.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_genpanel.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_genpanel.html}{\textbf{html}}
 
   \begin{itemize}
   \tightlist
   \item
-    Build skeleton panel frame with N observations and T periods.
+    Build skeleton panel frame with N observations and T periods with gender and height.
   \item
-    \textbf{tidyr}: \emph{rowid\_to\_column() + uncount() + group\_by() + row\_number() + ungroup()}
+    Generate group Index based on a list of grouping variables.\\
+  \item
+    \textbf{r}: \emph{runif() + rnorm() + rbinom(n(), 1, 0.5) + cumsum()}
+  \item
+    \textbf{dplyr}: \emph{group\_by() + row\_number() + ungroup() + one\_of() + mutate(var = (row\_number()==1)}1)*
+  \item
+    \textbf{tidyr}: \emph{uncount()}
   \end{itemize}
 \item
   \href{https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_joining.html}{R DPLYR Join Multiple Dataframes Together}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic//fs_joining.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_joining.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_joining.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_joining.html}{\textbf{html}}
@@ -11941,6 +12293,8 @@ Given an existing Rmd File, Resave it with a different name, and replace (add in
     \textbf{tidyr}: \emph{expand\_grid()}
   \item
     \textbf{ggplot2}: \emph{geom\_line() + facet\_wrap()}
+  \item
+    \textbf{econ}: \emph{Atkinson (JET, 1970)}
   \end{itemize}
 \end{enumerate}
 
@@ -11987,8 +12341,8 @@ Given an existing Rmd File, Resave it with a different name, and replace (add in
   \end{itemize}
 \end{enumerate}
 
-\hypertarget{programming-links}{%
-\section{Programming links}\label{programming-links}}
+\hypertarget{code-and-development-links}{%
+\section{Code and Development links}\label{code-and-development-links}}
 
 \hypertarget{section-10.1-file-in-and-outfile-in-and-out-links}{%
 \subsection{\texorpdfstring{\protect\hyperlink{file-in-and-out}{Section 10.1 File in and Out} links}{Section 10.1 File in and Out links}}\label{section-10.1-file-in-and-outfile-in-and-out-links}}

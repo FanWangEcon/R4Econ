@@ -51,10 +51,13 @@ Main String
 
 ### Various non-numeric data objects
 
-**files**
+**Files**
 
 - *fl* = file object
 
+**Figures**
+
+- *pl* = internal plot object
 
 - oj = some kind of generic anything object
 - fl = float

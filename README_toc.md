@@ -145,9 +145,12 @@
 
 ## 4.1  Generate and Join
 
-1. [TIDYVERSE Generate Panel Data Structures](https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_genpanel.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic//fs_genpanel.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_genpanel.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_genpanel.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_genpanel.html)
-	+ Build skeleton panel frame with N observations and T periods.
-	+ **tidyr**: *rowid_to_column() + uncount() + group_by() + row_number() + ungroup()*
+1. [R dplyr Group by Index and Generate Panel Data Structure](https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_genpanel.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic//fs_genpanel.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_genpanel.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_genpanel.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_genpanel.html)
+	+ Build skeleton panel frame with N observations and T periods with gender and height.
+	+ Generate group Index based on a list of grouping variables.  
+	+ **r**: *runif() + rnorm() + rbinom(n(), 1, 0.5) + cumsum()*
+	+ **dplyr**: *group_by() + row_number() + ungroup() + one_of() + mutate(var = (row_number()==1)*1)*
+	+ **tidyr**: *uncount()*
 2. [R DPLYR Join Multiple Dataframes Together](https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_joining.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic//fs_joining.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_joining.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_joining.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_joining.html)
 	+ Join dataframes together with one or multiple keys. Stack dataframes together.
 	+ **dplyr**: *filter() + rename(!!sym(vsta) := !!sym(vstb)) + mutate(var = rnom(n())) + left_join(df, by=(c('id'='id', 'vt'='vt'))) + left_join(df, by=setNames(c('id', 'vt'), c('id', 'vt'))) + bind_rows()*
@@ -219,6 +222,7 @@
 	+ **r**: *apply(mt, 1, funct(x){}) + do.call(rbind, ls_mt)*
 	+ **tidyr**: *expand_grid()*
 	+ **ggplot2**: *geom_line() + facet_wrap()*
+	+ **econ**: *Atkinson (JET, 1970)*
 
 # 9  Tables and Graphs
 
@@ -236,7 +240,7 @@
 	+ Base R store image core, add legends/titles/labels/axis of different sizes to save figures of different sizes.
 	+ **r**: *png() + setEPS() + postscript() + dev.off()*
 
-# 10  Programming
+# 10  Code and Development
 
 ## 10.1  File in and Out
 
