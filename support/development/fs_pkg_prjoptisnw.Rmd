@@ -1,0 +1,324 @@
+---
+title: "PrjOptiSNW Refreshes Package, Generates RMD based PDF, HTML and R Files"
+titleshort: "Knit PDF, HTML and Curl R based on RMD"
+description: |
+Knit PDF, HTML and Curl R based on RMD.
+core:
+  - package: REconTools
+    code: |
+    ff_sup_clean_rmd()
+    date: 2020-04-18
+date_start: 2020-04-18
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+### Process RMD Files
+
+```{r global_options, include = FALSE}
+try(source("C:/Users/fan/R4Econ/.Rprofile"))
+library(reticulate)
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+PrjOptiSNW Rmd to PDF and HTML.
+
+```{r}
+# file_path_root <- 'C:/Users/fan/PrjOptiSNW/support/development/fs_pkg_PrjOptiSNW'
+# file_path_r <- paste0(file_path_root, '.R')
+# file_path_rmd <- paste0(file_path_root, '.Rmd')
+# knitr::purl(file_path_rmd, output=file_path_r, documentation = 1)
+```
+
+#### Local Outputs
+
+```
+file:///C:/Users/fan/PrjOptiSNW/bookdown/index.html
+file:///C:/Users/fan/PrjOptiSNW/PrjOptiSNW/doc/vfi/
+file:///C:/Users/fan/PrjOptiSNW/PrjOptiSNW/doc/sdist/
+file:///C:/Users/fan/PrjOptiSNW/PrjOptiSNW/doc/stats/htmlpdfm/
+```
+
+#### Testing Changes in MLX file
+
+Check through *PrjOptiSNW* and see which files have been added, and which files have been modified. bl_test set to TRUE. Not generating any new files, just checking.
+
+Note: new files that should not get pdf and html should have *.rmd* rather than *.Rmd* as suffix.
+
+```{r}
+# run examples
+spt_root <- 'C:/Users/fan/PrjOptiSNW'
+spt_log <- 'C:/Users/fan/PrjOptiSNW/_log/rmdclean/'
+sink(paste0(spt_log, 'rmd_clean_test.log'))
+start_time <- Sys.time()
+setwd(spt_root)
+
+bl_test = TRUE
+bl_gen_if_git_old = FALSE
+
+ar_spt_root = c('C:/Users/fan/PrjOptiSNW/PrjOptiSNW/doc/')
+ff_sup_clean_mlx(ar_spt_root = ar_spt_root,
+                 ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
+                                 '_mod.Rmd', 'title.Rmd', 'GettingStarted'),
+                 st_pattern='.mlx',
+                 bl_gen_if_git_old = bl_gen_if_git_old,
+                 bl_recursive = TRUE,
+                 bl_verbose = FALSE,
+                 bl_test = bl_test)
+
+end_time <- Sys.time()
+print(paste0('ff_sup_clean_rmd(), bl_test = TRUE, took:', end_time - start_time))
+sink()
+```
+
+#### Convert MLX to RMD
+
+Check through *PrjOptiSNW* and see which files have been added, and which files have been modified. bl_test set to TRUE. Not generating any new files, just checking.
+
+Note: new files that should not get pdf and html should have *.rmd* rather than *.Rmd* as suffix.
+
+```{r}
+# run examples
+spt_root <- 'C:/Users/fan/PrjOptiSNW'
+spt_log <- 'C:/Users/fan/PrjOptiSNW/_log/rmdclean/'
+sink(paste0(spt_log, 'rmd_clean_test.log'))
+start_time <- Sys.time()
+setwd(spt_root)
+
+bl_test = FALSE
+bl_gen_if_git_old = FALSE
+
+st_prj_root = 'C:/Users/fan/PrjOptiSNW/'
+ar_spt_root = c('C:/Users/fan/PrjOptiSNW/PrjOptiSNW/doc/')
+ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
+               '_mod.Rmd', 'title.Rmd', 'GettingStarted')
+ff_sup_clean_mlx(st_prj_root = st_prj_root,
+                 ar_spt_root = ar_spt_root,
+                 ar_spn_skip = ar_spn_skip,
+                 st_folder_pdf = 'htmlpdfm/',
+                 st_folder_m = 'htmlpdfm/',
+                 st_folder_html_m = '',
+                 st_folder_rmd = '',
+                 bl_gen_if_git_old = bl_gen_if_git_old,
+                 bl_recursive = TRUE,
+                 bl_verbose = TRUE,
+                 bl_test = bl_test)
+
+end_time <- Sys.time()
+print(paste0('ff_sup_clean_rmd(), bl_test = TRUE, took:', end_time - start_time))
+sink()
+```
+
+#### Convert RMD to HTML and PDF Etc
+
+```{r}
+# run examples
+spt_root <- 'C:/Users/fan/PrjOptiSNW'
+spt_log <- 'C:/Users/fan/PrjOptiSNW/_log/rmdclean/'
+sink(paste0(spt_log, 'rmd_clean_test.log'))
+start_time <- Sys.time()
+setwd(spt_root)
+
+bl_test = FALSE
+bl_gen_if_git_old = FALSE
+
+st_prj_root = 'C:/Users/fan/PrjOptiSNW/'
+ar_spt_root = c('C:/Users/fan/PrjOptiSNW/PrjOptiSNW/doc/')
+ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
+               '_mod.Rmd', 'title.Rmd', 'GettingStarted')
+ff_sup_clean_rmd(ar_spt_root = ar_spt_root,
+                 ar_spn_skip = ar_spn_skip,
+                 st_file_pattern='.Rmd',
+                 st_git_pattern='.mlx',
+                 st_folder_pdf = '/htmlpdfm/',
+                 st_folder_html = '/htmlpdfm/',
+                 st_folder_R = '/htmlpdfm/',
+                 bl_gen_if_git_old = bl_gen_if_git_old,
+                 bl_recursive = TRUE,
+                 bl_verbose = FALSE,
+                 bl_test = bl_test,
+                 it_hierachy_lower_rmd = 0,
+                 it_hierachy_shift=1, it_toc_depth=3,
+                 ls_bool_convert=list(bl_pdf=FALSE, bl_html=TRUE, bl_R=FALSE),
+                 ls_bool_remove=list(bl_remove_html=FALSE))
+
+end_time <- Sys.time()
+print(paste0('ff_sup_clean_rmd(), bl_test = TRUE, took:', end_time - start_time))
+sink()
+```
+
+#### Update README.md File and Bookdown Appendix
+
+There is python file that parses rmd front matters and goes through rmd files in the bookdown yaml file to automatically generate README contents.
+
+- 'C:/Users/fan/Py4Econ/support/inout/bookdownparse.py'
+
+Generate TOC:
+
+```{python}
+import pyfan.util.rmd.bookdownparse as ft_bookdownparse
+
+# Path Roots
+sfc_prj = 'PrjOptiSNW'
+sph_prj = 'C:/Users/fan/PrjOptiSNW/'
+spn_prj_bookdown_yml = '_bookdown.yml'
+
+# Read me preamble, and endnotes
+spn_prj_readme_toc = 'README_toc.md'
+
+# FIles to Ignore
+ls_st_ignore=['index.Rmd', 'README_appendix.md', 'title.Rmd', 'main.Rmd']
+
+# Generate README TOC
+ft_bookdownparse.fs_yml2readme(sfc_prj=sfc_prj, sph_prj=sph_prj,
+                               spn_prj_bookdown_yml=spn_prj_bookdown_yml,
+                               spn_prj_readme_toc=spn_prj_readme_toc,
+                               ls_st_ignore=ls_st_ignore,
+                               sph_pdf='htmlpdfm',
+                               sph_html='htmlpdfm',
+                               sph_r='htmlpdfm',
+                               st_file_type='m')
+print('finished')
+```
+
+Combine Front and End and TOC:
+
+```{python}
+import pyfan.util.rmd.bookdownparse as ft_bookdownparse
+
+# Path Roots
+sph_prj = 'C:/Users/fan/PrjOptiSNW/'
+
+# Read me preamble, and endnotes
+spn_prj_readme_pre = 'README_pre.md'
+spn_prj_readme_end = 'README_end.md'
+spn_prj_readme_toc = 'README_toc.md'
+# combine preamble, contents, suffix together
+spn_prj_readme_ful = 'README.md'
+
+# Combine README Files
+filenames = [spn_prj_readme_pre, spn_prj_readme_toc, spn_prj_readme_end]
+with open(sph_prj + spn_prj_readme_ful, 'w') as outfile:
+    for fname in filenames:
+        sph_full_fnmae = sph_prj + fname
+        with open(sph_full_fnmae) as infile:
+            outfile.write(infile.read())
+            outfile.write('\n')
+
+# Also Generate Appendix for bookdown file
+```
+
+Generate contenxt for bookdown appendix.
+
+```{python}
+sph_prj = 'C:/Users/fan/PrjOptiSNW/'
+spn_prj_readme_toc = 'README_toc.md'
+spn_prj_appendix = 'README_appendix.md'
+spn_in = open(sph_prj + spn_prj_readme_toc, "r")
+spn_out = open(sph_prj + spn_prj_appendix, "w")
+
+spn_out.write('# (APPENDIX) Appendix {-}\n\n')
+spn_out.write('# Index and Code Links\n\n')
+
+for line in spn_in:
+
+    if '# ' in line:
+        st_text = line.replace('### ', '')
+        st_text = st_text.replace('## ', '')
+        st_text = st_text.replace('# ', '')
+        st_text = st_text.lstrip('0123456789.- ')
+
+        st_line_prefix = ''
+        st_line_suffix = ''
+        st_head_level = ''
+        it_level = 0
+
+        if '### ' in line:
+            line = line.replace('### ', '')
+            st_head_level = 'Subsection'
+            line = st_head_level + ' ' + line
+            it_level = 3
+        elif '## ' in line:
+            line = line.replace('## ', '')
+            st_head_level = 'Section'
+            line = st_head_level + ' ' + line
+            st_line_prefix = '### '
+            st_line_suffix = ' links'
+            it_level = 2
+        elif '# ' in line:
+            line = line.replace('# ', '')
+            st_head_level = ''
+            line = st_head_level + '' + st_text
+            st_line_prefix = '## '
+            st_line_suffix = ' links'
+            it_level = 1
+
+            line = line.replace('  ', ' ')
+            line = line.replace('\n', '')
+            st_text = st_text.replace('\n', '')
+
+        if it_level == 1:
+            line = st_line_prefix + line + st_line_suffix + '\n'
+        else:
+            line = st_line_prefix + '[' + line + '][' + st_text + ']' + st_line_suffix + '\n'
+
+    spn_out.write(line)
+
+# (APPENDIX) Appendix {-}
+
+# Code Summary and Links
+
+spn_in.close()
+spn_out.close()
+```
+
+
+#### Update Bookdown
+
+Render HTML:
+
+```{r}
+spt_root <- 'C:/Users/fan/PrjOptiSNW'
+spt_log <- 'C:/Users/fan/PrjOptiSNW/_log/rmdclean/'
+
+sink(paste0(spt_log, 'render_bookdown_html.log'))
+start_time <- Sys.time()
+setwd(spt_root)
+
+# render html
+bookdown::render_book('index.Rmd', 'bookdown::gitbook')
+
+end_time <- Sys.time()
+print(paste0('bookdown::render_book, html, took:', end_time - start_time))
+sink()
+```
+
+Render PDF:
+
+```{r}
+spt_root <- 'C:/Users/fan/PrjOptiSNW'
+spt_log <- 'C:/Users/fan/PrjOptiSNW/_log/rmdclean/'
+
+sink(paste0(spt_log, 'render_bookdown_pdf.log'))
+start_time <- Sys.time()
+setwd(spt_root)
+
+bookdown::render_book('index.Rmd', 'bookdown::pdf_book')
+
+end_time <- Sys.time()
+print(paste0('bookdown::render_book, pdf, took:', end_time - start_time))
+sink()
+
+```

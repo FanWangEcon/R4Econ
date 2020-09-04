@@ -99,7 +99,7 @@ Given an existing Rmd File, Resave it with a different name (add to name suffix)
 - old file: */R4Econ/development/fs_rmd_pdf_html.Rmd*
 - new file: *R4Econ/development/inout/_file/rmd/fs_rmd_pdf_html_mod.Rmd*
 
-```{r}
+```{r, include=TRUE, eval = FALSE, echo = TRUE}
 # Serch Folder and skip list
 spt_roots <- c('C:/Users/fan/R4Econ/development/inout/')
 spn_skip <- c('_main', '_file')
@@ -130,7 +130,7 @@ for (spt_file in ls_sfls) {
 
 Given an existing Rmd File, Resave it with a different name, and replace (add in) additional yaml contents.
 
-```{r}
+```{r, include=TRUE, eval = FALSE, echo = TRUE}
 spn_file = '_file/rmd/fs_rmd_pdf_html_mod.Rmd'
 fileConn_sr <- file(spn_file)
 st_file <- readLines(fileConn_sr)
@@ -174,4 +174,76 @@ spn_file = '_file/rmd/fs_rmd_pdf_html_mod.Rmd'
 fileConn_sr <- file(spn_file)
 st_file <- writeLines(st_file_updated, fileConn_sr)
 
+```
+
+#### Search and Render Rmd File and Save HTML, PDF or R
+
+1. Search files satisfying conditions in a folder
+2. knit files to HTML (and re-run the contents of the file)
+3. Save output to a different folder
+
+```{r, include=TRUE, eval = FALSE, echo = TRUE}
+# Specify Parameters
+ar_spt_root = c('C:/Users/fan/R4Econ/amto/array/', 'C:/Users/fan/R4Econ/math/integration')
+bl_recursive = TRUE
+st_rmd_suffix_pattern = "*.Rmd"
+ar_spn_skip <- c('basics', 'integrate', 'main', 'mesh')
+ls_bool_convert <- list(bl_pdf=TRUE, bl_html=TRUE, bl_R=TRUE)
+spt_out_directory <- 'C:/Users/fan/Downloads/_data'
+bl_verbose <- TRUE
+
+# Get Path
+ls_sfls  <- list.files(path=ar_spt_root,
+                       recursive=bl_recursive,
+                       pattern=st_rmd_suffix_pattern,
+                       full.names=T)
+
+# Exclude Some Files given ar_spn_skip
+if(!missing(ar_spn_skip)) {
+  ls_sfls <- ls_sfls[!grepl(paste(ar_spn_skip, collapse = "|"), ls_sfls)]
+}
+
+# Loop over files
+for (spn_file in ls_sfls) {
+
+  # Parse File Name
+  spt_file <- dirname(spn_file)
+  sna_file <- tools::file_path_sans_ext(basename(spn_file))
+
+  # Output FIles
+  spn_file_pdf <- paste0(spt_file, sna_file, '.pdf')
+  spn_file_html <- paste0(spt_file, sna_file, '.html')
+  spn_file_R <- paste0(spt_file, sna_file, '.R')
+
+  # render to PDF
+  if (ls_bool_convert$bl_pdf) {
+    if (bl_verbose) message(paste0('spn_file_pdf:',spn_file_pdf, ', PDF started'))
+    rmarkdown::render(spn_file, output_format='pdf_document',
+                      output_dir = spt_out_directory, output_file = sna_file)
+    if (bl_verbose) message(paste0('spn_file_pdf:',spn_file_pdf, ', PDF finished'))
+    spn_pdf_generated <- paste0(spt_out_directory, '/', spn_file_pdf)
+  }
+
+  # render to HTML
+  if (ls_bool_convert$bl_html) {
+    if (bl_verbose) message(paste0('spth_html:',spn_file_html, ', HTML started.'))
+    rmarkdown::render(spn_file, output_format='html_document',
+                      output_dir = spt_out_directory, output_file = sna_file)
+    if (bl_verbose) message(paste0('spth_html:',spn_file_html, ', HTML finished.'))
+    spn_html_generated <- paste0(spt_out_directory, '/', spn_file_html)
+  }
+
+  # purl to R
+  if (ls_bool_convert$bl_R) {
+    if (bl_verbose) message(paste0('purl_to:', paste0(spn_file_R, ".R")))
+    knitr::purl(spn_file, output=paste0(spt_out_directory, '/', sna_file, '.R'), documentation = 1)
+    spn_R_generated <- paste0(spt_out_directory, '/', sna_file, '.R')
+  }
+
+  # return(list(ls_spt_pdf_generated=ls_spt_pdf_generated,
+  #             ls_spt_html_generated=ls_spt_html_generated,
+  #             ls_spt_R_generated=ls_spt_R_generated))
+
+
+}
 ```

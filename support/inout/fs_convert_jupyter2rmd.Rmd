@@ -11,7 +11,7 @@ urlcolor: blue
 always_allow_html: yes
 ---
 
-Back to [Fan](https://fanwangecon.github.io)'s [Reusable R =Code](https://fanwangecon.github.io/R4Econ/) table of content.
+Back to [Fan](https://fanwangecon.github.io)'s [Reusable R Code](https://fanwangecon.github.io/R4Econ/) table of content.
 
 ```{r GlobalOptions, echo = T, results = 'hide', message=F, warning=F}
 options(knitr.duplicate.label = 'allow')
@@ -106,7 +106,7 @@ for (spt_file in ls_sfls) {
   # 4. delete tex and other files
 
   # print(paste0('spt_file:', spt_file))
-  
+
   st_fullpath_noname <- dirname(spt_file)
   st_fullpath_nosufx <- sub('\\.ipynb$', '', spt_file)
   st_file_wno_suffix <- sub('\\.ipynb$', '', basename(spt_file))
@@ -117,7 +117,7 @@ for (spt_file in ls_sfls) {
   print(paste0('st_fullpath_noname:', st_fullpath_noname))
   print(paste0('spt_file:', spt_file))
   print(paste0('spt_file_full_rmd:', spt_file_full_rmd))
-  
+
   # Convert from IPYNB to RMD
   file_nb_rmd = rmarkdown:::convert_ipynb(spt_file)
   st_nb_rmd = xfun::file_string(file_nb_rmd)

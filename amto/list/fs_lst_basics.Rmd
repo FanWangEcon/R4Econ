@@ -111,6 +111,28 @@ names(ls_num_str_named) <- ar_st_names
 ls_num_str_named$e4 <- 'this is added'
 ```
 
+Initiate an empty list and add to it
+
+```{r}
+# Initiate List
+ls_abc <- vector(mode = "list", length = 0)
+# Add Named Elements to List Sequentially
+ls_abc$a = 1
+ls_abc$b = 2
+ls_abc$c = 'abc\'s third element'
+# Get all Names Added to List
+ar_st_list_names <- names(ls_abc)
+# Print list in a loop
+print(ls_abc)
+for (it_list_ele_ctr in seq(1,length(ar_st_list_names))) {
+  st_list_ele_name <- ar_st_list_names[it_list_ele_ctr]
+  st_list_ele_val <- ls_abc[it_list_ele_ctr]
+  print(paste0(st_list_ele_name,'=',st_list_ele_val))
+}
+```
+
+#### Named List Print Function
+
 - r print input as string
 - r print parameter code as string
 - [How to convert variable (object) name into String](https://stackoverflow.com/a/14577878/8280804)

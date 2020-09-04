@@ -1,30 +1,42 @@
 # Naming Conventions
+mp_valpol_out
+## Across Language Naming Conventions
 
-Try to use the same naming convention across languages, fan varible naming Conventions:
+### Numeric Structures
 
-To help clarify data types for inputs, add prefix to variable names:
+- *fl*: float
+- *it*: integer
+- *ar*: single dimensional array
+- *mt*: two dimensional matrix
+- *ts*: three dimensional tensor
+- *mn*: any larger than two dimensional array
 
-## Strings
+### Other Structures
 
-Various string prefixes:
+- *pl*: plot or figure object
+- *ob*: a generic object of any time
+- *fc*: a function anonymous function for example, function to be passed as parameters
+
 
 ### Strings
 
-Main String
+- *st*: any kind of words, single sentence.
 
-- *st*: main string prefix, for lines
+#### Special Strings
+
+**Strings for Special Purposes**
+
 - *stf*: prefix for entire string files, all lines, including read in and to be reading in.
+- *stm*: time variables values etc that can used for calculations	
+- *stg*: graph strings
 
-**Time**
-
-- *tm*: time variables values etc that can used for calculations
-
-**Dataset Variable Names**
+**Strings but not Actually Strings**
 
 - *svr*: variable string, as in data variable name
-- *slb*: string variables labels etc
+- *sfc*: function string name
+- *spg*: not string, but code, to be interpreted as code later
 
-**File Names and Path**
+#### String Path and File Names
 
 - *spt*: absolute string path, path only, does not include name.
 - *spn*: absolute string path, including name.
@@ -32,24 +44,27 @@ Main String
 - *srt*: relative file path, no name
 - *srn*: relative file path, with name
 
-- *snm*: function name with suffix or not by itself, no path.
+- *snm*: function name with suffix, no path.
 - *sna*: no suffix function name
 
 - *suf*: suffix only
 
-**Function name strings**
+## R Conventions
 
-- *sfc*: function string name
+## Matlab Conventions
 
-**String Code**
+- *ar*: matlab array single
+- *mt*: matlab array matrix
+- *ts*: matlab array three dimensional
+- *cl*: matlab cell
+	+ *cln*: cell matrix, meaning some n by m cells
+- *mp*: matlab container 
 
-- *spg* = not string, but code, to be interpreted as code later
+## python conventions
 
-**Graph String**
+- *co*: class object
 
-- *stg*
-
-### Various non-numeric data objects
+## Various non-numeric data objects
 
 **Files**
 
@@ -60,9 +75,6 @@ Main String
 - *pl* = internal plot object
 
 - oj = some kind of generic anything object
-- fl = float
-- it = integer
-- ar = single dimensional array
   + ar.st
   + ar.fl
   + ar_it

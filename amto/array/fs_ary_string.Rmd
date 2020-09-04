@@ -2,7 +2,7 @@
 title: "R String Arrays"
 titleshort: "String Operations"
 description: |
-  Split, concatenate, subset strings
+  Split, concatenate, subset, replace, substring strings
 core:
   - package: r
     code: |
@@ -15,7 +15,8 @@ core:
       strsplit()
       basename()
       dirname()
-date: 2020-04-11
+      substring()
+date: 2020-08-21
 date_start: 2020-04-11
 output:
   pdf_document:
@@ -102,7 +103,20 @@ str_if_contains <- paste(ls_str_if_contains, collapse = "|")
 grepl(str_if_contains, ls_spn)
 ```
 
+#### String Split
 
+Given some string, generated for example by cut, get the lower cut starting points, and also the higher end point
+
+```{r}
+# Extract 0.216 and 0.500 as lower and upper bounds
+st_cut_cate <- '(0.216,0.500]'
+# Extract Lower Part
+substring(strsplit(st_cut_cate, ",")[[1]][1], 2)
+# Extract second part except final bracket Option 1
+intToUtf8(rev(utf8ToInt(substring(intToUtf8(rev(utf8ToInt(strsplit(st_cut_cate, ",")[[1]][2]))), 2))))
+# Extract second part except final bracket Option 2
+gsub(strsplit(st_cut_cate, ",")[[1]][2],  pattern = "]", replacement = "")
+```
 
 #### String Concatenate
 
@@ -123,6 +137,23 @@ print(sprintf("%02d", it_z_n))
 print(sprintf("%04d", it_a_n))
 ```
 
+#### Substring Components
+
+Given a string, with certain structure, get components.
+
+- r time string get month and year and day
+
+```{r}
+snm_full <- "20100701"
+snm_year <-substr(snm_full,0,4)
+snm_month <-substr(snm_full,5,6)
+snm_day <-substr(snm_full,7,8)
+print(paste0('full:', snm_full, 
+             ', year:', snm_year, 
+             ', month:', snm_month,
+             ', day:', snm_day))
+```
+
 #### Substring and File Name
 
 From path, get file name without suffix.
@@ -135,15 +166,13 @@ From path, get file name without suffix.
 ```{r}
 st_example <- 'C:/Users/fan/R4Econ/amto/tibble/fs_tib_basics.Rmd'
 st_file_wth_suffix_s <- tail(strsplit(st_example, "/")[[1]],n=1)
-st_file_wno_suffix_s <- sub('\\.Rmd$', '', basename(st_example))
+st_file_wno_suffix_s <- tools::file_path_sans_ext(basename(st_example))
 st_fullpath_nosufx_s <- sub('\\.Rmd$', '', st_example)
-st_lastpath_noname_s <- (dirname(st_example))
 st_fullpath_noname_s <- dirname(st_example)
 
 print(strsplit(st_example, "/"))
-print(st_file_wth_suffix_s)
-print(st_file_wno_suffix_s)
-print(st_fullpath_nosufx_s)
-print(st_lastpath_noname_s)
-print(st_fullpath_noname_s)
+print(paste0('st_file_wth_suffix_s:', st_file_wth_suffix_s))
+print(paste0('st_file_wno_suffix_s:', st_file_wno_suffix_s))
+print(paste0('st_fullpath_nosufx_s:', st_fullpath_nosufx_s))
+print(paste0('st_fullpath_noname_s:', st_fullpath_noname_s))
 ```

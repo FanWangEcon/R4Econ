@@ -139,12 +139,15 @@
 }
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{5}
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
 \usepackage[]{natbib}
 \bibliographystyle{apalike}
 
 \title{Panel Data and Optimization with R}
 \author{Fan Wang}
-\date{2020-06-14}
+\date{2020-09-04}
 
 \begin{document}
 \maketitle
@@ -278,6 +281,53 @@ Save a list of matrixes. Retrieve Element of that list via loop.
 \NormalTok{ls\_num\_str\_named}\OperatorTok{$}\NormalTok{e4 \textless{}{-}}\StringTok{ \textquotesingle{}this is added\textquotesingle{}}
 \end{Highlighting}
 \end{Shaded}
+
+Initiate an empty list and add to it
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Initiate List}
+\NormalTok{ls\_abc \textless{}{-}}\StringTok{ }\KeywordTok{vector}\NormalTok{(}\DataTypeTok{mode =} \StringTok{"list"}\NormalTok{, }\DataTypeTok{length =} \DecValTok{0}\NormalTok{)}
+\CommentTok{\# Add Named Elements to List Sequentially}
+\NormalTok{ls\_abc}\OperatorTok{$}\NormalTok{a =}\StringTok{ }\DecValTok{1}
+\NormalTok{ls\_abc}\OperatorTok{$}\NormalTok{b =}\StringTok{ }\DecValTok{2}
+\NormalTok{ls\_abc}\OperatorTok{$}\NormalTok{c =}\StringTok{ \textquotesingle{}abc}\CharTok{\textbackslash{}\textquotesingle{}}\StringTok{s third element\textquotesingle{}}
+\CommentTok{\# Get all Names Added to List}
+\NormalTok{ar\_st\_list\_names \textless{}{-}}\StringTok{ }\KeywordTok{names}\NormalTok{(ls\_abc)}
+\CommentTok{\# Print list in a loop}
+\KeywordTok{print}\NormalTok{(ls\_abc)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $a
+## [1] 1
+## 
+## $b
+## [1] 2
+## 
+## $c
+## [1] "abc's third element"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{for}\NormalTok{ (it\_list\_ele\_ctr }\ControlFlowTok{in} \KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,}\KeywordTok{length}\NormalTok{(ar\_st\_list\_names))) \{}
+\NormalTok{  st\_list\_ele\_name \textless{}{-}}\StringTok{ }\NormalTok{ar\_st\_list\_names[it\_list\_ele\_ctr]}
+\NormalTok{  st\_list\_ele\_val \textless{}{-}}\StringTok{ }\NormalTok{ls\_abc[it\_list\_ele\_ctr]}
+  \KeywordTok{print}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(st\_list\_ele\_name,}\StringTok{\textquotesingle{}=\textquotesingle{}}\NormalTok{,st\_list\_ele\_val))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "a=1"
+## [1] "b=2"
+## [1] "c=abc's third element"
+\end{verbatim}
+
+\hypertarget{named-list-print-function}{%
+\subsubsection{Named List Print Function}\label{named-list-print-function}}
 
 \begin{itemize}
 \tightlist
@@ -1021,6 +1071,46 @@ Search for if one of a set of substring exists in a set of strings. In particula
 ## [1] FALSE  TRUE  TRUE
 \end{verbatim}
 
+\hypertarget{string-split}{%
+\subsubsection{String Split}\label{string-split}}
+
+Given some string, generated for example by cut, get the lower cut starting points, and also the higher end point
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Extract 0.216 and 0.500 as lower and upper bounds}
+\NormalTok{st\_cut\_cate \textless{}{-}}\StringTok{ \textquotesingle{}(0.216,0.500]\textquotesingle{}}
+\CommentTok{\# Extract Lower Part}
+\KeywordTok{substring}\NormalTok{(}\KeywordTok{strsplit}\NormalTok{(st\_cut\_cate, }\StringTok{","}\NormalTok{)[[}\DecValTok{1}\NormalTok{]][}\DecValTok{1}\NormalTok{], }\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "0.216"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Extract second part except final bracket Option 1}
+\KeywordTok{intToUtf8}\NormalTok{(}\KeywordTok{rev}\NormalTok{(}\KeywordTok{utf8ToInt}\NormalTok{(}\KeywordTok{substring}\NormalTok{(}\KeywordTok{intToUtf8}\NormalTok{(}\KeywordTok{rev}\NormalTok{(}\KeywordTok{utf8ToInt}\NormalTok{(}\KeywordTok{strsplit}\NormalTok{(st\_cut\_cate, }\StringTok{","}\NormalTok{)[[}\DecValTok{1}\NormalTok{]][}\DecValTok{2}\NormalTok{]))), }\DecValTok{2}\NormalTok{))))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "0.500"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Extract second part except final bracket Option 2}
+\KeywordTok{gsub}\NormalTok{(}\KeywordTok{strsplit}\NormalTok{(st\_cut\_cate, }\StringTok{","}\NormalTok{)[[}\DecValTok{1}\NormalTok{]][}\DecValTok{2}\NormalTok{],  }\DataTypeTok{pattern =} \StringTok{"]"}\NormalTok{, }\DataTypeTok{replacement =} \StringTok{""}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "0.500"
+\end{verbatim}
+
 \hypertarget{string-concatenate}{%
 \subsubsection{String Concatenate}\label{string-concatenate}}
 
@@ -1063,6 +1153,34 @@ Search for if one of a set of substring exists in a set of strings. In particula
 ## [1] "0192"
 \end{verbatim}
 
+\hypertarget{substring-components}{%
+\subsubsection{Substring Components}\label{substring-components}}
+
+Given a string, with certain structure, get components.
+
+\begin{itemize}
+\tightlist
+\item
+  r time string get month and year and day
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{snm\_full \textless{}{-}}\StringTok{ "20100701"}
+\NormalTok{snm\_year \textless{}{-}}\KeywordTok{substr}\NormalTok{(snm\_full,}\DecValTok{0}\NormalTok{,}\DecValTok{4}\NormalTok{)}
+\NormalTok{snm\_month \textless{}{-}}\KeywordTok{substr}\NormalTok{(snm\_full,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{)}
+\NormalTok{snm\_day \textless{}{-}}\KeywordTok{substr}\NormalTok{(snm\_full,}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{)}
+\KeywordTok{print}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}full:\textquotesingle{}}\NormalTok{, snm\_full, }
+             \StringTok{\textquotesingle{}, year:\textquotesingle{}}\NormalTok{, snm\_year, }
+             \StringTok{\textquotesingle{}, month:\textquotesingle{}}\NormalTok{, snm\_month,}
+             \StringTok{\textquotesingle{}, day:\textquotesingle{}}\NormalTok{, snm\_day))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "full:20100701, year:2010, month:07, day:01"
+\end{verbatim}
+
 \hypertarget{substring-and-file-name}{%
 \subsubsection{Substring and File Name}\label{substring-and-file-name}}
 
@@ -1084,9 +1202,8 @@ From path, get file name without suffix.
 \begin{Highlighting}[]
 \NormalTok{st\_example \textless{}{-}}\StringTok{ \textquotesingle{}C:/Users/fan/R4Econ/amto/tibble/fs\_tib\_basics.Rmd\textquotesingle{}}
 \NormalTok{st\_file\_wth\_suffix\_s \textless{}{-}}\StringTok{ }\KeywordTok{tail}\NormalTok{(}\KeywordTok{strsplit}\NormalTok{(st\_example, }\StringTok{"/"}\NormalTok{)[[}\DecValTok{1}\NormalTok{]],}\DataTypeTok{n=}\DecValTok{1}\NormalTok{)}
-\NormalTok{st\_file\_wno\_suffix\_s \textless{}{-}}\StringTok{ }\KeywordTok{sub}\NormalTok{(}\StringTok{\textquotesingle{}}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.Rmd$\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{, }\KeywordTok{basename}\NormalTok{(st\_example))}
+\NormalTok{st\_file\_wno\_suffix\_s \textless{}{-}}\StringTok{ }\NormalTok{tools}\OperatorTok{::}\KeywordTok{file\_path\_sans\_ext}\NormalTok{(}\KeywordTok{basename}\NormalTok{(st\_example))}
 \NormalTok{st\_fullpath\_nosufx\_s \textless{}{-}}\StringTok{ }\KeywordTok{sub}\NormalTok{(}\StringTok{\textquotesingle{}}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.Rmd$\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{, st\_example)}
-\NormalTok{st\_lastpath\_noname\_s \textless{}{-}}\StringTok{ }\NormalTok{(}\KeywordTok{dirname}\NormalTok{(st\_example))}
 \NormalTok{st\_fullpath\_noname\_s \textless{}{-}}\StringTok{ }\KeywordTok{dirname}\NormalTok{(st\_example)}
 
 \KeywordTok{print}\NormalTok{(}\KeywordTok{strsplit}\NormalTok{(st\_example, }\StringTok{"/"}\NormalTok{))}
@@ -1095,58 +1212,47 @@ From path, get file name without suffix.
 
 \begin{verbatim}
 ## [[1]]
-## [1] "C:"                "Users"             "fan"               "R4Econ"            "amto"              "tibble"           
-## [7] "fs_tib_basics.Rmd"
+## [1] "C:"                "Users"             "fan"               "R4Econ"            "amto"              "tibble"            "fs_tib_basics.Rmd"
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{print}\NormalTok{(st\_file\_wth\_suffix\_s)}
+\KeywordTok{print}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}st\_file\_wth\_suffix\_s:\textquotesingle{}}\NormalTok{, st\_file\_wth\_suffix\_s))}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "fs_tib_basics.Rmd"
+## [1] "st_file_wth_suffix_s:fs_tib_basics.Rmd"
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{print}\NormalTok{(st\_file\_wno\_suffix\_s)}
+\KeywordTok{print}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}st\_file\_wno\_suffix\_s:\textquotesingle{}}\NormalTok{, st\_file\_wno\_suffix\_s))}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "fs_tib_basics"
+## [1] "st_file_wno_suffix_s:fs_tib_basics"
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{print}\NormalTok{(st\_fullpath\_nosufx\_s)}
+\KeywordTok{print}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}st\_fullpath\_nosufx\_s:\textquotesingle{}}\NormalTok{, st\_fullpath\_nosufx\_s))}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "C:/Users/fan/R4Econ/amto/tibble/fs_tib_basics"
+## [1] "st_fullpath_nosufx_s:C:/Users/fan/R4Econ/amto/tibble/fs_tib_basics"
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{print}\NormalTok{(st\_lastpath\_noname\_s)}
+\KeywordTok{print}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}st\_fullpath\_noname\_s:\textquotesingle{}}\NormalTok{, st\_fullpath\_noname\_s))}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "C:/Users/fan/R4Econ/amto/tibble"
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{print}\NormalTok{(st\_fullpath\_noname\_s)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## [1] "C:/Users/fan/R4Econ/amto/tibble"
+## [1] "st_fullpath_noname_s:C:/Users/fan/R4Econ/amto/tibble"
 \end{verbatim}
 
 \hypertarget{mesh-matrices-arrays-and-scalars}{%
@@ -1889,14 +1995,13 @@ Show what is in the table: 1, column and row names; 2, contents inside table.
 \end{Shaded}
 
 \begin{verbatim}
-##   [1] "1"   "2"   "3"   "4"   "5"   "6"   "7"   "8"   "9"   "10"  "11"  "12"  "13"  "14"  "15"  "16"  "17"  "18"  "19"  "20"  "21" 
-##  [22] "22"  "23"  "24"  "25"  "26"  "27"  "28"  "29"  "30"  "31"  "32"  "33"  "34"  "35"  "36"  "37"  "38"  "39"  "40"  "41"  "42" 
-##  [43] "43"  "44"  "45"  "46"  "47"  "48"  "49"  "50"  "51"  "52"  "53"  "54"  "55"  "56"  "57"  "58"  "59"  "60"  "61"  "62"  "63" 
-##  [64] "64"  "65"  "66"  "67"  "68"  "69"  "70"  "71"  "72"  "73"  "74"  "75"  "76"  "77"  "78"  "79"  "80"  "81"  "82"  "83"  "84" 
-##  [85] "85"  "86"  "87"  "88"  "89"  "90"  "91"  "92"  "93"  "94"  "95"  "96"  "97"  "98"  "99"  "100" "101" "102" "103" "104" "105"
-## [106] "106" "107" "108" "109" "110" "111" "112" "113" "114" "115" "116" "117" "118" "119" "120" "121" "122" "123" "124" "125" "126"
-## [127] "127" "128" "129" "130" "131" "132" "133" "134" "135" "136" "137" "138" "139" "140" "141" "142" "143" "144" "145" "146" "147"
-## [148] "148" "149" "150"
+##   [1] "1"   "2"   "3"   "4"   "5"   "6"   "7"   "8"   "9"   "10"  "11"  "12"  "13"  "14"  "15"  "16"  "17"  "18"  "19"  "20"  "21"  "22"  "23" 
+##  [24] "24"  "25"  "26"  "27"  "28"  "29"  "30"  "31"  "32"  "33"  "34"  "35"  "36"  "37"  "38"  "39"  "40"  "41"  "42"  "43"  "44"  "45"  "46" 
+##  [47] "47"  "48"  "49"  "50"  "51"  "52"  "53"  "54"  "55"  "56"  "57"  "58"  "59"  "60"  "61"  "62"  "63"  "64"  "65"  "66"  "67"  "68"  "69" 
+##  [70] "70"  "71"  "72"  "73"  "74"  "75"  "76"  "77"  "78"  "79"  "80"  "81"  "82"  "83"  "84"  "85"  "86"  "87"  "88"  "89"  "90"  "91"  "92" 
+##  [93] "93"  "94"  "95"  "96"  "97"  "98"  "99"  "100" "101" "102" "103" "104" "105" "106" "107" "108" "109" "110" "111" "112" "113" "114" "115"
+## [116] "116" "117" "118" "119" "120" "121" "122" "123" "124" "125" "126" "127" "128" "129" "130" "131" "132" "133" "134" "135" "136" "137" "138"
+## [139] "139" "140" "141" "142" "143" "144" "145" "146" "147" "148" "149" "150"
 \end{verbatim}
 
 \begin{Shaded}
@@ -2037,17 +2142,17 @@ Use R4Econ's summary tool.
 \begin{table}[!h]
 \centering
 \resizebox{\linewidth}{!}{
-\begin{tabular}{l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l}
+\begin{tabular}{l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l}
 \hline
-stats & n & NAobs & ZEROobs & mean & sd & cv & min & p01 & p05 & p10 & p25 & p50 & p75 & p90 & p95 & p99 & max\\
+stats & n & unique & NAobs & ZEROobs & mean & sd & cv & min & p01 & p05 & p10 & p25 & p50 & p75 & p90 & p95 & p99 & max\\
 \hline
-\rowcolor{gray!6}  Petal.Length & 150 & 0 & 0 & 3.758000 & 1.7652982 & 0.4697441 & 1.0 & 1.149 & 1.300 & 1.4 & 1.6 & 4.35 & 5.1 & 5.80 & 6.100 & 6.700 & 6.9\\
+\rowcolor{gray!6}  Petal.Length & 150 & 43 & 0 & 0 & 3.758000 & 1.7652982 & 0.4697441 & 1.0 & 1.149 & 1.300 & 1.4 & 1.6 & 4.35 & 5.1 & 5.80 & 6.100 & 6.700 & 6.9\\
 \hline
-Petal.Width & 150 & 0 & 0 & 1.199333 & 0.7622377 & 0.6355511 & 0.1 & 0.100 & 0.200 & 0.2 & 0.3 & 1.30 & 1.8 & 2.20 & 2.300 & 2.500 & 2.5\\
+Petal.Width & 150 & 22 & 0 & 0 & 1.199333 & 0.7622377 & 0.6355511 & 0.1 & 0.100 & 0.200 & 0.2 & 0.3 & 1.30 & 1.8 & 2.20 & 2.300 & 2.500 & 2.5\\
 \hline
-\rowcolor{gray!6}  Sepal.Length & 150 & 0 & 0 & 5.843333 & 0.8280661 & 0.1417113 & 4.3 & 4.400 & 4.600 & 4.8 & 5.1 & 5.80 & 6.4 & 6.90 & 7.255 & 7.700 & 7.9\\
+\rowcolor{gray!6}  Sepal.Length & 150 & 35 & 0 & 0 & 5.843333 & 0.8280661 & 0.1417113 & 4.3 & 4.400 & 4.600 & 4.8 & 5.1 & 5.80 & 6.4 & 6.90 & 7.255 & 7.700 & 7.9\\
 \hline
-Sepal.Width & 150 & 0 & 0 & 3.057333 & 0.4358663 & 0.1425642 & 2.0 & 2.200 & 2.345 & 2.5 & 2.8 & 3.00 & 3.3 & 3.61 & 3.800 & 4.151 & 4.4\\
+Sepal.Width & 150 & 23 & 0 & 0 & 3.057333 & 0.4358663 & 0.1425642 & 2.0 & 2.200 & 2.345 & 2.5 & 2.8 & 3.00 & 3.3 & 3.61 & 3.800 & 4.151 & 4.4\\
 \hline
 \end{tabular}}
 \end{table}
@@ -2126,7 +2231,7 @@ Now we generate scatter plot based on the combined factors
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-38-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-41-1} \end{center}
 
 \hypertarget{drawly-random-rows}{%
 \subsection{Drawly Random Rows}\label{drawly-random-rows}}
@@ -2397,7 +2502,7 @@ Now we generate scatter plot based on the combined factors
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-43-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-46-1} \end{center}
 
 \hypertarget{generate-na-values-if-variables-have-certain-value}{%
 \subsubsection{Generate NA values if Variables have Certain Value}\label{generate-na-values-if-variables-have-certain-value}}
@@ -2552,7 +2657,7 @@ Now we generate scatter plot based on the combined factors, but now with the NA 
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-45-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-48-1} \end{center}
 
 \hypertarget{approximate-values-comparison}{%
 \subsubsection{Approximate Values Comparison}\label{approximate-values-comparison}}
@@ -3704,12 +3809,11 @@ This is the tabular version of results
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] "S.country"      "indi.id"        "cal_m12_c1"     "cal_m12_c2"     "cal_m12t24_c0"  "cal_m12t24_c1"  "cal_m3_c1"     
-##  [8] "cal_m3_c2"      "cal_m3_c3"      "cal_m3_c4"      "cal_m3_c5"      "cal_m3_c6"      "cal_m3_c7"      "cal_m3_c8"     
-## [15] "cal_m6_c1"      "cal_m6_c2"      "cal_m6_c3"      "cal_m6_c4"      "cal_m8t24_c0"   "cal_m8t24_c1"   "prot_m12_c1"   
-## [22] "prot_m12_c2"    "prot_m12t24_c0" "prot_m12t24_c1" "prot_m3_c1"     "prot_m3_c2"     "prot_m3_c3"     "prot_m3_c4"    
-## [29] "prot_m3_c5"     "prot_m3_c6"     "prot_m3_c7"     "prot_m3_c8"     "prot_m6_c1"     "prot_m6_c2"     "prot_m6_c3"    
-## [36] "prot_m6_c4"     "prot_m8t24_c0"  "prot_m8t24_c1"
+##  [1] "S.country"      "indi.id"        "cal_m12_c1"     "cal_m12_c2"     "cal_m12t24_c0"  "cal_m12t24_c1"  "cal_m3_c1"      "cal_m3_c2"     
+##  [9] "cal_m3_c3"      "cal_m3_c4"      "cal_m3_c5"      "cal_m3_c6"      "cal_m3_c7"      "cal_m3_c8"      "cal_m6_c1"      "cal_m6_c2"     
+## [17] "cal_m6_c3"      "cal_m6_c4"      "cal_m8t24_c0"   "cal_m8t24_c1"   "prot_m12_c1"    "prot_m12_c2"    "prot_m12t24_c0" "prot_m12t24_c1"
+## [25] "prot_m3_c1"     "prot_m3_c2"     "prot_m3_c3"     "prot_m3_c4"     "prot_m3_c5"     "prot_m3_c6"     "prot_m3_c7"     "prot_m3_c8"    
+## [33] "prot_m6_c1"     "prot_m6_c2"     "prot_m6_c3"     "prot_m6_c4"     "prot_m8t24_c0"  "prot_m8t24_c1"
 \end{verbatim}
 
 \begin{Shaded}
@@ -4054,7 +4158,7 @@ First, we will generate a test score dataset, directly from string. Below we typ
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-83-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-86-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4066,7 +4170,7 @@ First, we will generate a test score dataset, directly from string. Below we typ
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-84-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-87-1} \end{center}
 
 \hypertarget{summarize-multiple-variables}{%
 \section{Summarize Multiple Variables}\label{summarize-multiple-variables}}
@@ -8541,8 +8645,7 @@ Setting Up Parameters.
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "prot_Estimate"        "male_Estimate"        "wgt0_Estimate"        "hgt0_Estimate"        "svymthRound_Estimate"
-## [6] "vars_var.y"
+## [1] "prot_Estimate"        "male_Estimate"        "wgt0_Estimate"        "hgt0_Estimate"        "svymthRound_Estimate" "vars_var.y"
 \end{verbatim}
 
 \begin{Shaded}
@@ -8862,7 +8965,7 @@ hgt & 77.8 & 73.13353 & 70.97578 & 71.45823\\
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-166-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-169-1} \end{center}
 
 \hypertarget{additional-decomposition-testings}{%
 \subsubsection{Additional Decomposition Testings}\label{additional-decomposition-testings}}
@@ -9238,21 +9341,21 @@ Given the x-variables included in the logit regression, how do they relate to A\
 ## [[1]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-170-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-173-1} \end{center}
 
 \begin{verbatim}
 ## 
 ## [[2]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-170-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-173-2} \end{center}
 
 \begin{verbatim}
 ## 
 ## [[3]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-170-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-173-3} \end{center}
 
 \hypertarget{optimization}{%
 \chapter{Optimization}\label{optimization}}
@@ -9872,7 +9975,7 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-178-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-181-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9890,7 +9993,7 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-178-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-181-2} \end{center}
 
 \hypertarget{integration-by-symmetric-uneven-rectangle}{%
 \subsubsection{Integration By Symmetric Uneven Rectangle}\label{integration-by-symmetric-uneven-rectangle}}
@@ -9949,7 +10052,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-179-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-182-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9967,7 +10070,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-179-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-182-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9985,7 +10088,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-179-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-182-3} \end{center}
 
 \hypertarget{integration-by-constant-width-rectangle-trapezoidal-rule}{%
 \subsubsection{Integration By Constant Width Rectangle (Trapezoidal rule)}\label{integration-by-constant-width-rectangle-trapezoidal-rule}}
@@ -10040,7 +10143,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-180-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-183-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10058,7 +10161,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-180-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-183-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10076,7 +10179,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-180-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-183-3} \end{center}
 
 \hypertarget{analytical-solutions}{%
 \section{Analytical Solutions}\label{analytical-solutions}}
@@ -10483,13 +10586,13 @@ This is the vector of inequality aversion parameters:
 \end{Shaded}
 
 \begin{verbatim}
-##  [1]    1.00000000    0.99369043    0.99250837    0.99110487    0.98943842    0.98745978    0.98511046    0.98232100    0.97900896
-## [10]    0.97507643    0.97040717    0.96486316    0.95828051    0.95046465    0.94118454    0.93016586    0.91708291    0.90154895
-## [19]    0.88310482    0.86120530    0.83520306    0.80432947    0.76767192    0.72414684    0.67246762    0.61110666    0.53825013
-## [28]    0.45174443    0.34903248    0.22707813    0.08227648   -0.08965279   -0.29379184   -0.53617495   -0.82396688   -1.16567469
-## [37]   -1.57139912   -2.05313328   -2.62511705   -3.30425810   -4.11063160   -5.06807371   -6.20488608   -7.55467254   -9.15733231
-## [46]  -11.06023949  -13.31964342  -16.00233131  -19.18760255  -22.96961271  -27.46015678  -32.79197376  -39.12267043  -46.63938010
-## [55]  -55.56429426  -66.16123043  -78.74343059  -93.68282046 -111.42100351 -132.48231461 -157.48931925
+##  [1]    1.00000000    0.99369043    0.99250837    0.99110487    0.98943842    0.98745978    0.98511046    0.98232100    0.97900896    0.97507643
+## [11]    0.97040717    0.96486316    0.95828051    0.95046465    0.94118454    0.93016586    0.91708291    0.90154895    0.88310482    0.86120530
+## [21]    0.83520306    0.80432947    0.76767192    0.72414684    0.67246762    0.61110666    0.53825013    0.45174443    0.34903248    0.22707813
+## [31]    0.08227648   -0.08965279   -0.29379184   -0.53617495   -0.82396688   -1.16567469   -1.57139912   -2.05313328   -2.62511705   -3.30425810
+## [41]   -4.11063160   -5.06807371   -6.20488608   -7.55467254   -9.15733231  -11.06023949  -13.31964342  -16.00233131  -19.18760255  -22.96961271
+## [51]  -27.46015678  -32.79197376  -39.12267043  -46.63938010  -55.56429426  -66.16123043  -78.74343059  -93.68282046 -111.42100351 -132.48231461
+## [61] -157.48931925
 \end{verbatim}
 
 How does Atkinson Inequality measure change with respect to a vector of random data as inequality aversion shifts:
@@ -10517,7 +10620,7 @@ How does Atkinson Inequality measure change with respect to a vector of random d
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-191-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-194-1} \end{center}
 
 Now with the one person has the wealth of all others in the vector times 10:
 
@@ -10541,7 +10644,7 @@ Now with the one person has the wealth of all others in the vector times 10:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-192-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-195-1} \end{center}
 
 The Uniform Results, since allocations are uniform, zero for all:
 
@@ -10565,7 +10668,7 @@ The Uniform Results, since allocations are uniform, zero for all:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-193-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-196-1} \end{center}
 
 \hypertarget{analyzing-equation-mechanics}{%
 \subsubsection{Analyzing Equation Mechanics}\label{analyzing-equation-mechanics}}
@@ -10754,7 +10857,7 @@ Note that many more A grid points are needed to fully plot out the leontief line
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-195-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-198-1} \end{center}
 
 \hypertarget{tables-and-graphs}{%
 \chapter{Tables and Graphs}\label{tables-and-graphs}}
@@ -10937,7 +11040,7 @@ Jointly plot:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-197-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-200-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10978,7 +11081,7 @@ We used recordplot() earlier. So now we can print just the first two constructed
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-198-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-201-1} \end{center}
 
 \hypertarget{write-and-read-plots}{%
 \section{Write and Read Plots}\label{write-and-read-plots}}
@@ -11256,6 +11359,296 @@ Smaller and larger figures with different font size comparison. Note that earlie
 \includegraphics[width=\linewidth]{_img/fs_img_io_2curve_w160h100_res300.png}
 \end{figure}
 
+\hypertarget{get-data}{%
+\chapter{Get Data}\label{get-data}}
+
+\hypertarget{environmental-data}{%
+\section{Environmental Data}\label{environmental-data}}
+
+\hypertarget{ecmwf-era5-data}{%
+\subsection{ECMWF ERA5 Data}\label{ecmwf-era5-data}}
+
+\begin{quote}
+Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R Code Examples} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository (\href{https://fanwangecon.github.io/Stat4Econ/bookdown}{bookdown site}).
+\end{quote}
+
+This files uses R with the reticulate package to download ECMWF ERA5 data. See \href{https://fanwangecon.github.io/pyfan/vig/getdata/envir/htmlpdfr/fs_ecmwf.html}{this file} for instructions and tutorials for downloading the data.
+
+\hypertarget{program-to-download-unzip-convert-to-combined-csv-derived-utci-historical-data}{%
+\subsubsection{Program to Download, Unzip, Convert to combined CSV, derived-utci-historical data}\label{program-to-download-unzip-convert-to-combined-csv-derived-utci-historical-data}}
+
+The data downloaded from CDS climate could become very large in size. We want to process parts of the data one part at a time, summarize and aggregate over each part, and generate a file output file with aggregate statistics over the entire time period of interest.
+
+This code below accompalishes the following tasks:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  download data from derived-utci-historical as ZIP
+\item
+  unzip
+\item
+  convert \emph{nc} files to \emph{csv} files
+\item
+  individual csv files are half year groups
+\end{enumerate}
+
+Parameter Control for the code below:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \emph{spt\_root}: root folder where everything will be at
+\item
+  \emph{spth\_conda\_env}: the conda virtual environment python path, eccodes and cdsapi packages are installed in the conda virtual environment. In the example below, the first env is: wk\_ecmwf
+\item
+  \emph{st\_nc\_prefix}: the downloaded individual nc files have dates and prefix before and after the date string in the nc file names. This is the string before that.
+\item
+  \emph{st\_nc\_suffix}: see (3), this is the suffix
+\item
+  \emph{ar\_years}: array of years to download and aggregate over
+\item
+  \emph{ar\_months\_g1}: months to download in first half year
+\item
+  \emph{ar\_months\_g2}: months to download in second half year
+\end{enumerate}
+
+Note: \emph{area} below corresponds to \emph{North, West, South, East}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} Parameters}
+\CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+
+\CommentTok{\# Where to store everything}
+\NormalTok{spt\_root \textless{}{-}}\StringTok{ "C:/Users/fan/Downloads/\_data/"}
+\NormalTok{spth\_conda\_env \textless{}{-}}\StringTok{ "C:/ProgramData/Anaconda3/envs/wk\_ecmwf/python.exe"}
+
+\CommentTok{\# nc name prefix}
+\NormalTok{st\_nc\_prefix \textless{}{-}}\StringTok{ "ECMWF\_utci\_"}
+\NormalTok{st\_nc\_suffix \textless{}{-}}\StringTok{ "\_v1.0\_con.nc"}
+
+\CommentTok{\# Years list}
+\CommentTok{\# ar\_years \textless{}{-} 2001:2019}
+\NormalTok{ar\_years \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{2005}\NormalTok{, }\DecValTok{2015}\NormalTok{)}
+\CommentTok{\# ar\_months\_g1 \textless{}{-} c(\textquotesingle{}01\textquotesingle{},\textquotesingle{}02\textquotesingle{},\textquotesingle{}03\textquotesingle{},\textquotesingle{}04\textquotesingle{},\textquotesingle{}05\textquotesingle{},\textquotesingle{}06\textquotesingle{})}
+\NormalTok{ar\_months\_g1 \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{\textquotesingle{}01\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}03\textquotesingle{}}\NormalTok{)}
+\CommentTok{\# ar\_months\_g2 \textless{}{-} c(\textquotesingle{}07\textquotesingle{},\textquotesingle{}08\textquotesingle{},\textquotesingle{}09\textquotesingle{},\textquotesingle{}10\textquotesingle{},\textquotesingle{}11\textquotesingle{},\textquotesingle{}12\textquotesingle{})}
+\NormalTok{ar\_months\_g2 \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{\textquotesingle{}07\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}09\textquotesingle{}}\NormalTok{)}
+
+\CommentTok{\# Area}
+\CommentTok{\# \# China}
+\CommentTok{\# fl\_area\_north \textless{}{-} 53.31}
+\CommentTok{\# fl\_area\_west \textless{}{-} 73}
+\CommentTok{\# fl\_area\_south \textless{}{-} 4.15}
+\CommentTok{\# fl\_area\_east \textless{}{-} 135}
+\NormalTok{fl\_area\_north \textless{}{-}}\StringTok{ }\DecValTok{53}
+\NormalTok{fl\_area\_west \textless{}{-}}\StringTok{ }\DecValTok{73}
+\NormalTok{fl\_area\_south \textless{}{-}}\StringTok{ }\DecValTok{52}
+\NormalTok{fl\_area\_east \textless{}{-}}\StringTok{ }\DecValTok{74}
+
+\CommentTok{\# folder to download any nc zips to}
+\NormalTok{nczippath \textless{}{-}}\StringTok{ }\NormalTok{spt\_root}
+\CommentTok{\# we are changing the python api file with different requests stirngs and storing it here}
+\NormalTok{pyapipath \textless{}{-}}\StringTok{ }\NormalTok{spt\_root}
+\CommentTok{\# output directory for AGGREGATE CSV with all DATES from this search}
+\NormalTok{csvpath \textless{}{-}}\StringTok{ }\NormalTok{spt\_root}
+
+\CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} Packages}
+\CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+
+\KeywordTok{library}\NormalTok{(}\StringTok{"ncdf4"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"chron"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"lattice"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"RColorBrewer"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"stringr"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"tibble"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"dplyr"}\NormalTok{)}
+\KeywordTok{Sys.setenv}\NormalTok{(}\DataTypeTok{RETICULATE\_PYTHON =}\NormalTok{ spth\_conda\_env)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"reticulate"}\NormalTok{)}
+
+\CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} Define Loops}
+\CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\ControlFlowTok{for}\NormalTok{ (it\_yr }\ControlFlowTok{in}\NormalTok{ ar\_years) \{}
+  \ControlFlowTok{for}\NormalTok{ (it\_mth\_group }\ControlFlowTok{in} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{)) \{}
+    \ControlFlowTok{if}\NormalTok{(it\_mth\_group }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{) \{}
+\NormalTok{      ar\_months =}\StringTok{ }\NormalTok{ar\_months\_g1}
+\NormalTok{    \}}
+    \ControlFlowTok{if}\NormalTok{(it\_mth\_group }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{) \{}
+\NormalTok{      ar\_months =}\StringTok{ }\NormalTok{ar\_months\_g2}
+\NormalTok{    \}}
+
+    \CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+    \CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} Define Python API Call}
+    \CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+
+    \CommentTok{\# name of zip file}
+\NormalTok{    nczipname \textless{}{-}}\StringTok{ "derived\_utci\_2010\_2.zip"}
+\NormalTok{    unzipfolder \textless{}{-}}\StringTok{ "derived\_utci\_2010\_2"}
+
+\NormalTok{    st\_file \textless{}{-}}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{"import cdsapi}
+\StringTok{import urllib.request}
+\StringTok{\# download folder}
+\StringTok{spt\_root = \textquotesingle{}"}\NormalTok{, nczippath, }\StringTok{"\textquotesingle{}}
+\StringTok{spn\_dl\_test\_grib = spt\_root + \textquotesingle{}"}\NormalTok{, nczipname, }\StringTok{"\textquotesingle{}}
+\StringTok{\# request}
+\StringTok{c = cdsapi.Client()}
+\StringTok{res = c.retrieve(}
+\StringTok{    \textquotesingle{}derived{-}utci{-}historical\textquotesingle{},}
+\StringTok{    \{}
+\StringTok{        \textquotesingle{}format\textquotesingle{}: \textquotesingle{}zip\textquotesingle{},}
+\StringTok{        \textquotesingle{}variable\textquotesingle{}: \textquotesingle{}Universal thermal climate index\textquotesingle{},}
+\StringTok{        \textquotesingle{}product\_type\textquotesingle{}: \textquotesingle{}Consolidated dataset\textquotesingle{},}
+\StringTok{        \textquotesingle{}year\textquotesingle{}: \textquotesingle{}"}\NormalTok{,it\_yr, }\StringTok{"\textquotesingle{},}
+\StringTok{        \textquotesingle{}month\textquotesingle{}: [}
+\StringTok{            "}\NormalTok{, }\KeywordTok{paste}\NormalTok{(}\StringTok{"\textquotesingle{}"}\NormalTok{, ar\_months, }\StringTok{"\textquotesingle{}"}\NormalTok{, }\DataTypeTok{sep =} \StringTok{""}\NormalTok{, }\DataTypeTok{collapse =} \StringTok{", "}\NormalTok{), }\StringTok{"}
+\StringTok{        ],}
+\StringTok{        \textquotesingle{}day\textquotesingle{}: [}
+\StringTok{            \textquotesingle{}01\textquotesingle{},\textquotesingle{}03\textquotesingle{}}
+\StringTok{        ],}
+\StringTok{        \textquotesingle{}area\textquotesingle{}  : ["}\NormalTok{, fl\_area\_north ,}\StringTok{", "}\NormalTok{, fl\_area\_west ,}\StringTok{", "}\NormalTok{, fl\_area\_south ,}\StringTok{", "}\NormalTok{, fl\_area\_east ,}\StringTok{"],}
+\StringTok{        \textquotesingle{}grid\textquotesingle{}  : [0.25, 0.25],}
+\StringTok{    \},}
+\StringTok{    spn\_dl\_test\_grib)}
+\StringTok{\# show results}
+\StringTok{print(\textquotesingle{}print results\textquotesingle{})}
+\StringTok{print(res)}
+\StringTok{print(type(res))"}\NormalTok{)}
+
+    \CommentTok{\# st\_file = "print(1+1)"}
+
+    \CommentTok{\# Store Python Api File}
+\NormalTok{    fl\_test\_tex \textless{}{-}}\StringTok{ }\KeywordTok{paste0}\NormalTok{(pyapipath, }\StringTok{"api.py"}\NormalTok{)}
+\NormalTok{    fileConn \textless{}{-}}\StringTok{ }\KeywordTok{file}\NormalTok{(fl\_test\_tex)}
+    \KeywordTok{writeLines}\NormalTok{(st\_file, fileConn)}
+    \KeywordTok{close}\NormalTok{(fileConn)}
+
+    \CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+    \CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} Run Python File}
+    \CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+    \CommentTok{\# Set Path}
+    \KeywordTok{setwd}\NormalTok{(pyapipath)}
+    \CommentTok{\# Run py file, api.py name just defined}
+    \KeywordTok{use\_python}\NormalTok{(spth\_conda\_env)}
+    \KeywordTok{source\_python}\NormalTok{(}\StringTok{\textquotesingle{}api.py\textquotesingle{}}\NormalTok{)}
+
+    \CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+    \CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} uNZIP}
+    \CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\NormalTok{    spn\_zip \textless{}{-}}\StringTok{ }\KeywordTok{paste0}\NormalTok{(nczippath, nczipname)}
+\NormalTok{    spn\_unzip\_folder \textless{}{-}}\StringTok{ }\KeywordTok{paste0}\NormalTok{(nczippath, unzipfolder)}
+    \KeywordTok{unzip}\NormalTok{(spn\_zip, }\DataTypeTok{exdir=}\NormalTok{spn\_unzip\_folder)}
+
+    \CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+    \CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} Find All files}
+    \CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+    \CommentTok{\# Get all files with nc suffix in folder}
+\NormalTok{    ncpath \textless{}{-}}\StringTok{ }\KeywordTok{paste0}\NormalTok{(nczippath, unzipfolder)}
+\NormalTok{    ls\_sfls \textless{}{-}}\StringTok{ }\KeywordTok{list.files}\NormalTok{(}\DataTypeTok{path=}\NormalTok{ncpath, }\DataTypeTok{recursive=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{pattern=}\StringTok{".nc"}\NormalTok{, }\DataTypeTok{full.names=}\NormalTok{T)}
+
+    \CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+    \CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} Combine individual NC files to JOINT Dataframe}
+    \CommentTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+    \CommentTok{\# List to gather dataframes}
+\NormalTok{    ls\_df \textless{}{-}}\StringTok{ }\KeywordTok{vector}\NormalTok{(}\DataTypeTok{mode =} \StringTok{"list"}\NormalTok{, }\DataTypeTok{length =} \KeywordTok{length}\NormalTok{(ls\_sfls))}
+    \CommentTok{\# Loop over files and convert nc to csv}
+\NormalTok{    it\_df\_ctr \textless{}{-}}\StringTok{ }\DecValTok{0}
+    \ControlFlowTok{for}\NormalTok{ (spt\_file }\ControlFlowTok{in}\NormalTok{ ls\_sfls) \{}
+\NormalTok{      it\_df\_ctr \textless{}{-}}\StringTok{ }\NormalTok{it\_df\_ctr }\OperatorTok{+}\StringTok{ }\DecValTok{1}
+
+      \CommentTok{\# Get file name without Path}
+\NormalTok{      snm\_file\_date \textless{}{-}}\StringTok{ }\KeywordTok{sub}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{\textquotesingle{}}\NormalTok{,st\_nc\_suffix,}\StringTok{\textquotesingle{}$\textquotesingle{}}\NormalTok{), }\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{, }\KeywordTok{basename}\NormalTok{(spt\_file))}
+\NormalTok{      snm\_file\_date \textless{}{-}}\StringTok{ }\KeywordTok{sub}\NormalTok{(st\_nc\_prefix, }\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{, }\KeywordTok{basename}\NormalTok{(snm\_file\_date))}
+
+      \CommentTok{\# Dates Start and End: list.files is auto sorted in ascending order}
+      \ControlFlowTok{if}\NormalTok{ (it\_df\_ctr }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{) \{}
+\NormalTok{        snm\_start\_date \textless{}{-}}\StringTok{ }\NormalTok{snm\_file\_date}
+\NormalTok{      \}}
+      \ControlFlowTok{else}\NormalTok{ \{}
+        \CommentTok{\# this will give the final date}
+\NormalTok{        snm\_end\_date \textless{}{-}}\StringTok{ }\NormalTok{snm\_file\_date}
+\NormalTok{      \}}
+
+      \CommentTok{\# Given this structure: ECMWF\_utci\_20100702\_v1.0\_con, sub out prefix and suffix}
+      \KeywordTok{print}\NormalTok{(spt\_file)}
+\NormalTok{      ncin \textless{}{-}}\StringTok{ }\KeywordTok{nc\_open}\NormalTok{(spt\_file)}
+
+\NormalTok{      nchist \textless{}{-}}\StringTok{ }\KeywordTok{ncatt\_get}\NormalTok{(ncin, }\DecValTok{0}\NormalTok{, }\StringTok{"history"}\NormalTok{)}
+
+      \CommentTok{\# not using this missing value flag at the moment}
+\NormalTok{      missingval \textless{}{-}}\StringTok{ }\KeywordTok{str\_match}\NormalTok{(nchist}\OperatorTok{$}\NormalTok{value, }\StringTok{"setmisstoc,}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{s*(.*?)}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{s* "}\NormalTok{)[,}\DecValTok{2}\NormalTok{]}
+\NormalTok{      missingval \textless{}{-}}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(missingval)}
+
+\NormalTok{      lon \textless{}{-}}\StringTok{ }\KeywordTok{ncvar\_get}\NormalTok{(ncin, }\StringTok{"lon"}\NormalTok{)}
+\NormalTok{      lat \textless{}{-}}\StringTok{ }\KeywordTok{ncvar\_get}\NormalTok{(ncin, }\StringTok{"lat"}\NormalTok{)}
+\NormalTok{      tim \textless{}{-}}\StringTok{ }\KeywordTok{ncvar\_get}\NormalTok{(ncin, }\StringTok{"time"}\NormalTok{)}
+\NormalTok{      tunits \textless{}{-}}\StringTok{ }\KeywordTok{ncatt\_get}\NormalTok{(ncin, }\StringTok{"time"}\NormalTok{, }\StringTok{"units"}\NormalTok{)}
+
+\NormalTok{      nlon \textless{}{-}}\StringTok{ }\KeywordTok{dim}\NormalTok{(lon)}
+\NormalTok{      nlat \textless{}{-}}\StringTok{ }\KeywordTok{dim}\NormalTok{(lat)}
+\NormalTok{      ntim \textless{}{-}}\StringTok{ }\KeywordTok{dim}\NormalTok{(tim)}
+
+      \CommentTok{\# convert time {-}{-} split the time units string into fields}
+      \CommentTok{\# tustr \textless{}{-} strsplit(tunits$value, " ")}
+      \CommentTok{\# tdstr \textless{}{-} strsplit(unlist(tustr)[3], "{-}")}
+      \CommentTok{\# tmonth \textless{}{-} as.integer(unlist(tdstr)[2])}
+      \CommentTok{\# tday \textless{}{-} as.integer(unlist(tdstr)[3])}
+      \CommentTok{\# tyear \textless{}{-} as.integer(unlist(tdstr)[1])}
+      \CommentTok{\# mytim \textless{}{-} chron(tim, origin = c(tmonth, tday, tyear))}
+
+\NormalTok{      tmp\_array \textless{}{-}}\StringTok{ }\KeywordTok{ncvar\_get}\NormalTok{(ncin, }\StringTok{"utci"}\NormalTok{)}
+\NormalTok{      tmp\_array \textless{}{-}}\StringTok{ }\NormalTok{tmp\_array }\OperatorTok{{-}}\StringTok{ }\FloatTok{273.15}
+
+\NormalTok{      lonlat \textless{}{-}}\StringTok{ }\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{expand.grid}\NormalTok{(}\DataTypeTok{lon =}\NormalTok{ lon, }\DataTypeTok{lat =}\NormalTok{ lat, }\DataTypeTok{hours =}\NormalTok{ tim))}
+\NormalTok{      temperature \textless{}{-}}\StringTok{ }\KeywordTok{as.vector}\NormalTok{(tmp\_array)}
+\NormalTok{      tmp\_df \textless{}{-}}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(lonlat, temperature))}
+
+      \CommentTok{\# extract a rectangle}
+\NormalTok{      eps \textless{}{-}}\StringTok{ }\FloatTok{1e{-}8}
+\NormalTok{      minlat \textless{}{-}}\StringTok{ }\FloatTok{22.25} \OperatorTok{{-}}\StringTok{ }\NormalTok{eps}
+\NormalTok{      maxlat \textless{}{-}}\StringTok{ }\FloatTok{23.50} \OperatorTok{+}\StringTok{ }\NormalTok{eps}
+\NormalTok{      minlon \textless{}{-}}\StringTok{ }\FloatTok{113.00} \OperatorTok{{-}}\StringTok{ }\NormalTok{eps}
+\NormalTok{      maxlon \textless{}{-}}\StringTok{ }\FloatTok{114.50} \OperatorTok{+}\StringTok{ }\NormalTok{eps}
+      \CommentTok{\# subset data}
+\NormalTok{      subset\_df \textless{}{-}}\StringTok{ }\NormalTok{tmp\_df[tmp\_df}\OperatorTok{$}\NormalTok{lat }\OperatorTok{\textgreater{}=}\StringTok{ }\NormalTok{minlat }\OperatorTok{\&}\StringTok{ }\NormalTok{tmp\_df}\OperatorTok{$}\NormalTok{lat }\OperatorTok{\textless{}=}\StringTok{ }\NormalTok{maxlat }\OperatorTok{\&}
+\StringTok{                            }\NormalTok{tmp\_df}\OperatorTok{$}\NormalTok{lon }\OperatorTok{\textgreater{}=}\StringTok{ }\NormalTok{minlon }\OperatorTok{\&}\StringTok{ }\NormalTok{tmp\_df}\OperatorTok{$}\NormalTok{lon }\OperatorTok{\textless{}=}\StringTok{ }\NormalTok{maxlon, ]}
+
+      \CommentTok{\# add Date}
+\NormalTok{      subset\_df\_date \textless{}{-}}\StringTok{ }\KeywordTok{as\_tibble}\NormalTok{(subset\_df) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{date =}\NormalTok{ snm\_file\_date)}
+
+      \CommentTok{\# Add to list}
+\NormalTok{      ls\_df[[it\_df\_ctr]] \textless{}{-}}\StringTok{ }\NormalTok{subset\_df\_date}
+
+      \CommentTok{\# Close NC}
+      \KeywordTok{nc\_close}\NormalTok{(ncin)}
+\NormalTok{    \}}
+
+    \CommentTok{\# List of DF to one DF}
+\NormalTok{    df\_all\_nc \textless{}{-}}\StringTok{ }\KeywordTok{do.call}\NormalTok{(rbind, ls\_df)}
+
+    \CommentTok{\# Save File}
+\NormalTok{    fname \textless{}{-}}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(st\_nc\_prefix,}
+\NormalTok{                           snm\_start\_date, }\StringTok{"\_to\_"}\NormalTok{, snm\_end\_date,}
+                           \StringTok{".csv"}\NormalTok{))}
+\NormalTok{    csvfile \textless{}{-}}\StringTok{ }\KeywordTok{paste0}\NormalTok{(csvpath, fname)}
+    \KeywordTok{write.table}\NormalTok{(}\KeywordTok{na.omit}\NormalTok{(df\_all\_nc), csvfile, }\DataTypeTok{row.names =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{sep =} \StringTok{","}\NormalTok{)}
+
+    \CommentTok{\# Delete folders}
+    \KeywordTok{unlink}\NormalTok{(spn\_zip, }\DataTypeTok{recursive=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{force=}\OtherTok{TRUE}\NormalTok{)}
+    \KeywordTok{unlink}\NormalTok{(spn\_unzip\_folder, }\DataTypeTok{recursive=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{force=}\OtherTok{TRUE}\NormalTok{)}
+
+  \CommentTok{\# end loop months groups}
+\NormalTok{  \}}
+\CommentTok{\# end loop year}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
 \hypertarget{code-and-development}{%
 \chapter{Code and Development}\label{code-and-development}}
 
@@ -11531,9 +11924,9 @@ Search inside directories, for all files in a git repo folder that are new or ha
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/array/fs_ary_basics.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/array/fs_ary_generate.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/array/fs_ary_mesh.Rmd"
-## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/array/fs_ary_string.Rmd"
+## [1] "MODIFIED: C:/Users/fan/R4Econ/amto/array/fs_ary_string.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/array/main.Rmd"
-## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/list/fs_lst_basics.Rmd"
+## [1] "MODIFIED: C:/Users/fan/R4Econ/amto/list/fs_lst_basics.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/list/main.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/main.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/matrix/fs_mat_generate.Rmd"
@@ -11545,13 +11938,14 @@ Search inside directories, for all files in a git repo folder that are new or ha
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/tibble/fs_tib_random_draws.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/tibble/fs_tib_string.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/amto/tibble/main.Rmd"
-## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/inout/_file/rmd/fs_rmd_pdf_html_mod.Rmd"
-## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/inout/_file/rmd/fs_text_save_mod.Rmd"
+## [1] "MODIFIED: C:/Users/fan/R4Econ/development/inout/_file/rmd/fs_rmd_pdf_html_mod.Rmd"
+## [1] "A NEW FL: C:/Users/fan/R4Econ/development/inout/_file/rmd/fs_rmd_pdf_html_mod_mod.Rmd"
+## [1] "MODIFIED: C:/Users/fan/R4Econ/development/inout/_file/rmd/fs_text_save_mod.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/inout/_file/rmd/main_mod.Rmd"
-## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/inout/fs_rmd_pdf_html.Rmd"
+## [1] "MODIFIED: C:/Users/fan/R4Econ/development/inout/fs_rmd_pdf_html.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/inout/fs_text_save.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/inout/main.Rmd"
-## [1] "MODIFIED: C:/Users/fan/R4Econ/development/main.Rmd"
+## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/main.Rmd"
 \end{verbatim}
 
 \hypertarget{resave-an-existing-file-with-different-name-different-folder}{%
@@ -11595,15 +11989,6 @@ Given an existing Rmd File, Resave it with a different name (add to name suffix)
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-## [1] "_file/rmd/"
-## [1] "_file/rmd/fs_rmd_pdf_html_mod.Rmd"
-## [1] "_file/rmd/"
-## [1] "_file/rmd/fs_text_save_mod.Rmd"
-## [1] "_file/rmd/"
-## [1] "_file/rmd/main_mod.Rmd"
-\end{verbatim}
 
 \hypertarget{replacment-function-change-markdown-hierarchy-and-add-to-yaml}{%
 \paragraph{Replacment Function Change Markdown Hierarchy and Add to YAML}\label{replacment-function-change-markdown-hierarchy-and-add-to-yaml}}
@@ -11654,6 +12039,88 @@ Given an existing Rmd File, Resave it with a different name, and replace (add in
 \NormalTok{spn\_file =}\StringTok{ \textquotesingle{}\_file/rmd/fs\_rmd\_pdf\_html\_mod.Rmd\textquotesingle{}}
 \NormalTok{fileConn\_sr \textless{}{-}}\StringTok{ }\KeywordTok{file}\NormalTok{(spn\_file)}
 \NormalTok{st\_file \textless{}{-}}\StringTok{ }\KeywordTok{writeLines}\NormalTok{(st\_file\_updated, fileConn\_sr)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{search-and-render-rmd-file-and-save-html-pdf-or-r}{%
+\subsubsection{Search and Render Rmd File and Save HTML, PDF or R}\label{search-and-render-rmd-file-and-save-html-pdf-or-r}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Search files satisfying conditions in a folder
+\item
+  knit files to HTML (and re-run the contents of the file)
+\item
+  Save output to a different folder
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Specify Parameters}
+\NormalTok{ar\_spt\_root =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{\textquotesingle{}C:/Users/fan/R4Econ/amto/array/\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}C:/Users/fan/R4Econ/math/integration\textquotesingle{}}\NormalTok{)}
+\NormalTok{bl\_recursive =}\StringTok{ }\OtherTok{TRUE}
+\NormalTok{st\_rmd\_suffix\_pattern =}\StringTok{ "*.Rmd"}
+\NormalTok{ar\_spn\_skip \textless{}{-}}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{\textquotesingle{}basics\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}integrate\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}main\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}mesh\textquotesingle{}}\NormalTok{)}
+\NormalTok{ls\_bool\_convert \textless{}{-}}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{bl\_pdf=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{bl\_html=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{bl\_R=}\OtherTok{TRUE}\NormalTok{)}
+\NormalTok{spt\_out\_directory \textless{}{-}}\StringTok{ \textquotesingle{}C:/Users/fan/Downloads/\_data\textquotesingle{}}
+\NormalTok{bl\_verbose \textless{}{-}}\StringTok{ }\OtherTok{TRUE}
+
+\CommentTok{\# Get Path}
+\NormalTok{ls\_sfls  \textless{}{-}}\StringTok{ }\KeywordTok{list.files}\NormalTok{(}\DataTypeTok{path=}\NormalTok{ar\_spt\_root,}
+                       \DataTypeTok{recursive=}\NormalTok{bl\_recursive,}
+                       \DataTypeTok{pattern=}\NormalTok{st\_rmd\_suffix\_pattern,}
+                       \DataTypeTok{full.names=}\NormalTok{T)}
+
+\CommentTok{\# Exclude Some Files given ar\_spn\_skip}
+\ControlFlowTok{if}\NormalTok{(}\OperatorTok{!}\KeywordTok{missing}\NormalTok{(ar\_spn\_skip)) \{}
+\NormalTok{  ls\_sfls \textless{}{-}}\StringTok{ }\NormalTok{ls\_sfls[}\OperatorTok{!}\KeywordTok{grepl}\NormalTok{(}\KeywordTok{paste}\NormalTok{(ar\_spn\_skip, }\DataTypeTok{collapse =} \StringTok{"|"}\NormalTok{), ls\_sfls)]}
+\NormalTok{\}}
+
+\CommentTok{\# Loop over files}
+\ControlFlowTok{for}\NormalTok{ (spn\_file }\ControlFlowTok{in}\NormalTok{ ls\_sfls) \{}
+
+  \CommentTok{\# Parse File Name}
+\NormalTok{  spt\_file \textless{}{-}}\StringTok{ }\KeywordTok{dirname}\NormalTok{(spn\_file)}
+\NormalTok{  sna\_file \textless{}{-}}\StringTok{ }\NormalTok{tools}\OperatorTok{::}\KeywordTok{file\_path\_sans\_ext}\NormalTok{(}\KeywordTok{basename}\NormalTok{(spn\_file))}
+
+  \CommentTok{\# Output FIles}
+\NormalTok{  spn\_file\_pdf \textless{}{-}}\StringTok{ }\KeywordTok{paste0}\NormalTok{(spt\_file, sna\_file, }\StringTok{\textquotesingle{}.pdf\textquotesingle{}}\NormalTok{)}
+\NormalTok{  spn\_file\_html \textless{}{-}}\StringTok{ }\KeywordTok{paste0}\NormalTok{(spt\_file, sna\_file, }\StringTok{\textquotesingle{}.html\textquotesingle{}}\NormalTok{)}
+\NormalTok{  spn\_file\_R \textless{}{-}}\StringTok{ }\KeywordTok{paste0}\NormalTok{(spt\_file, sna\_file, }\StringTok{\textquotesingle{}.R\textquotesingle{}}\NormalTok{)}
+
+  \CommentTok{\# render to PDF}
+  \ControlFlowTok{if}\NormalTok{ (ls\_bool\_convert}\OperatorTok{$}\NormalTok{bl\_pdf) \{}
+    \ControlFlowTok{if}\NormalTok{ (bl\_verbose) }\KeywordTok{message}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}spn\_file\_pdf:\textquotesingle{}}\NormalTok{,spn\_file\_pdf, }\StringTok{\textquotesingle{}, PDF started\textquotesingle{}}\NormalTok{))}
+\NormalTok{    rmarkdown}\OperatorTok{::}\KeywordTok{render}\NormalTok{(spn\_file, }\DataTypeTok{output\_format=}\StringTok{\textquotesingle{}pdf\_document\textquotesingle{}}\NormalTok{,}
+                      \DataTypeTok{output\_dir =}\NormalTok{ spt\_out\_directory, }\DataTypeTok{output\_file =}\NormalTok{ sna\_file)}
+    \ControlFlowTok{if}\NormalTok{ (bl\_verbose) }\KeywordTok{message}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}spn\_file\_pdf:\textquotesingle{}}\NormalTok{,spn\_file\_pdf, }\StringTok{\textquotesingle{}, PDF finished\textquotesingle{}}\NormalTok{))}
+\NormalTok{    spn\_pdf\_generated \textless{}{-}}\StringTok{ }\KeywordTok{paste0}\NormalTok{(spt\_out\_directory, }\StringTok{\textquotesingle{}/\textquotesingle{}}\NormalTok{, spn\_file\_pdf)}
+\NormalTok{  \}}
+
+  \CommentTok{\# render to HTML}
+  \ControlFlowTok{if}\NormalTok{ (ls\_bool\_convert}\OperatorTok{$}\NormalTok{bl\_html) \{}
+    \ControlFlowTok{if}\NormalTok{ (bl\_verbose) }\KeywordTok{message}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}spth\_html:\textquotesingle{}}\NormalTok{,spn\_file\_html, }\StringTok{\textquotesingle{}, HTML started.\textquotesingle{}}\NormalTok{))}
+\NormalTok{    rmarkdown}\OperatorTok{::}\KeywordTok{render}\NormalTok{(spn\_file, }\DataTypeTok{output\_format=}\StringTok{\textquotesingle{}html\_document\textquotesingle{}}\NormalTok{,}
+                      \DataTypeTok{output\_dir =}\NormalTok{ spt\_out\_directory, }\DataTypeTok{output\_file =}\NormalTok{ sna\_file)}
+    \ControlFlowTok{if}\NormalTok{ (bl\_verbose) }\KeywordTok{message}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}spth\_html:\textquotesingle{}}\NormalTok{,spn\_file\_html, }\StringTok{\textquotesingle{}, HTML finished.\textquotesingle{}}\NormalTok{))}
+\NormalTok{    spn\_html\_generated \textless{}{-}}\StringTok{ }\KeywordTok{paste0}\NormalTok{(spt\_out\_directory, }\StringTok{\textquotesingle{}/\textquotesingle{}}\NormalTok{, spn\_file\_html)}
+\NormalTok{  \}}
+
+  \CommentTok{\# purl to R}
+  \ControlFlowTok{if}\NormalTok{ (ls\_bool\_convert}\OperatorTok{$}\NormalTok{bl\_R) \{}
+    \ControlFlowTok{if}\NormalTok{ (bl\_verbose) }\KeywordTok{message}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}purl\_to:\textquotesingle{}}\NormalTok{, }\KeywordTok{paste0}\NormalTok{(spn\_file\_R, }\StringTok{".R"}\NormalTok{)))}
+\NormalTok{    knitr}\OperatorTok{::}\KeywordTok{purl}\NormalTok{(spn\_file, }\DataTypeTok{output=}\KeywordTok{paste0}\NormalTok{(spt\_out\_directory, }\StringTok{\textquotesingle{}/\textquotesingle{}}\NormalTok{, sna\_file, }\StringTok{\textquotesingle{}.R\textquotesingle{}}\NormalTok{), }\DataTypeTok{documentation =} \DecValTok{1}\NormalTok{)}
+\NormalTok{    spn\_R\_generated \textless{}{-}}\StringTok{ }\KeywordTok{paste0}\NormalTok{(spt\_out\_directory, }\StringTok{\textquotesingle{}/\textquotesingle{}}\NormalTok{, sna\_file, }\StringTok{\textquotesingle{}.R\textquotesingle{}}\NormalTok{)}
+\NormalTok{  \}}
+
+  \CommentTok{\# return(list(ls\_spt\_pdf\_generated=ls\_spt\_pdf\_generated,}
+  \CommentTok{\#             ls\_spt\_html\_generated=ls\_spt\_html\_generated,}
+  \CommentTok{\#             ls\_spt\_R\_generated=ls\_spt\_R\_generated))}
+
+
+\NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
 
@@ -11723,9 +12190,9 @@ Given an existing Rmd File, Resave it with a different name, and replace (add in
   \begin{itemize}
   \tightlist
   \item
-    Split, concatenate, subset strings
+    Split, concatenate, subset, replace, substring strings
   \item
-    \textbf{r}: \emph{paste0() + sub() + gsub() + grepl() + sprintf() + tail() + strsplit() + basename() + dirname()}
+    \textbf{r}: \emph{paste0() + sub() + gsub() + grepl() + sprintf() + tail() + strsplit() + basename() + dirname() + substring()}
   \end{itemize}
 \item
   \href{https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_mesh.html}{Meshgrid Matrices, Arrays and Scalars}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_mesh.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_mesh.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_mesh.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_mesh.html}{\textbf{html}}
@@ -12341,11 +12808,36 @@ Given an existing Rmd File, Resave it with a different name, and replace (add in
   \end{itemize}
 \end{enumerate}
 
+\hypertarget{get-data-links}{%
+\section{Get Data links}\label{get-data-links}}
+
+\hypertarget{section-10.1-environmental-dataenvironmental-data-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{environmental-data}{Section 10.1 Environmental Data} links}{Section 10.1 Environmental Data links}}\label{section-10.1-environmental-dataenvironmental-data-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/getdata/envir/htmlpdfr/fs_ecmwf.html}{CDS ECMWF Global Enviornmental Data Download}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/getdata/envir//fs_ecmwf.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/getdata/envir/htmlpdfr/fs_ecmwf.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/getdata/envir/htmlpdfr/fs_ecmwf.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/getdata/envir/htmlpdfr/fs_ecmwf.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Using Python API get get ECMWF ERA5 data.
+  \item
+    Dynamically modify a python API file, run python inside a Conda virtual environment with R-reticulate.
+  \item
+    \textbf{r}: \emph{file() + writeLines() + unzip() + list.files() + unlink()}
+  \item
+    \textbf{r-reticulate}: \emph{use\_python() + Sys.setenv(RETICULATE\_PYTHON = spth\_conda\_env)}
+  \end{itemize}
+\end{enumerate}
+
 \hypertarget{code-and-development-links}{%
 \section{Code and Development links}\label{code-and-development-links}}
 
-\hypertarget{section-10.1-file-in-and-outfile-in-and-out-links}{%
-\subsection{\texorpdfstring{\protect\hyperlink{file-in-and-out}{Section 10.1 File in and Out} links}{Section 10.1 File in and Out links}}\label{section-10.1-file-in-and-outfile-in-and-out-links}}
+\hypertarget{section-11.1-file-in-and-outfile-in-and-out-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{file-in-and-out}{Section 11.1 File in and Out} links}{Section 11.1 File in and Out links}}\label{section-11.1-file-in-and-outfile-in-and-out-links}}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}

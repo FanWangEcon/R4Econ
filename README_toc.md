@@ -18,8 +18,8 @@
 	+ Generate special arrays: log spaced array
 	+ **r**: *seq()*
 3. [String Operations](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_string.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_string.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_string.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_string.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_string.html)
-	+ Split, concatenate, subset strings
-	+ **r**: *paste0() + sub() + gsub() + grepl() + sprintf() + tail() + strsplit() + basename() + dirname()*
+	+ Split, concatenate, subset, replace, substring strings
+	+ **r**: *paste0() + sub() + gsub() + grepl() + sprintf() + tail() + strsplit() + basename() + dirname() + substring()*
 4. [Meshgrid Matrices, Arrays and Scalars](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_mesh.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_mesh.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_mesh.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_mesh.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_mesh.html)
 	+ Meshgrid Matrices, Arrays and Scalars to form all combination dataframe.
 	+ **tidyr**: *expand_grid() + expand.grid()*
@@ -240,9 +240,19 @@
 	+ Base R store image core, add legends/titles/labels/axis of different sizes to save figures of different sizes.
 	+ **r**: *png() + setEPS() + postscript() + dev.off()*
 
-# 10  Code and Development
+# 10  Get Data
 
-## 10.1  File in and Out
+## 10.1  Environmental Data
+
+1. [CDS ECMWF Global Enviornmental Data Download](https://fanwangecon.github.io/R4Econ/getdata/envir/htmlpdfr/fs_ecmwf.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/getdata/envir//fs_ecmwf.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/getdata/envir/htmlpdfr/fs_ecmwf.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/getdata/envir/htmlpdfr/fs_ecmwf.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/getdata/envir/htmlpdfr/fs_ecmwf.html)
+	+ Using Python API get get ECMWF ERA5 data.
+	+ Dynamically modify a python API file, run python inside a Conda virtual environment with R-reticulate.
+	+ **r**: *file() + writeLines() + unzip() + list.files() + unlink()*
+	+ **r-reticulate**: *use_python() + Sys.setenv(RETICULATE_PYTHON = spth_conda_env)*
+
+# 11  Code and Development
+
+## 11.1  File in and Out
 
 1. [Save Text to File, Read Text from File, Replace Text in File](https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_text_save.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout//fs_text_save.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_text_save.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_text_save.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_text_save.html)
 	+ Save data to file, read text from file, replace text in file.
