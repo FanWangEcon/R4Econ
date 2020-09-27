@@ -1,0 +1,104 @@
+---
+title: "Use Python in R with Reticulate"
+titleshort: "Python in R with Reticulate"
+description: |
+  Use Python in R with Reticulate
+core:
+  - package: reticulate
+    code: |
+      py_config()
+      use_condaenv()
+      py_run_string()
+      Sys.which('python')
+date: 2020-09-09
+date_start: 2020-09-09
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+### Reticulate Basics
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+
+#### Basic Python Tests with RMD
+
+Could specify: *python, engine.path = "C:/ProgramData/Anaconda3/envs/wk_pyfan/python.exe"*, this is already set inside Rprofile: *knitr::opts_chunk$set(engine.path = "C:/ProgramData/Anaconda3/envs/wk_pyfan/python.exe")*
+
+
+```{python}
+1+1
+```
+
+#### Install and Python Path
+
+Install reticulate from github directly to get latest version: *devtools::install_github("rstudio/reticulate")*
+
+Check python version on computer:
+
+```{R}
+Sys.which('python')
+```
+
+After installing reticulate, load in the library: library(reticulate). With "py_config()"
+to see python config. First time, might generate "No non-system installation of Python could be found." and ask if want to install Miniconda. Answer NO.
+
+Correct outputs upon checking py_config():
+
+```{}
+python:         C:/ProgramData/Anaconda3/python.exe
+libpython:      C:/ProgramData/Anaconda3/python37.dll
+pythonhome:     C:/ProgramData/Anaconda3
+version:        3.7.9 (default, Aug 31 2020, 17:10:11) [MSC v.1916 64 bit (AMD64)]
+Architecture:   64bit
+numpy:          C:/ProgramData/Anaconda3/Lib/site-packages/numpy
+numpy_version:  1.19.1
+
+python versions found:
+ C:/ProgramData/Anaconda3/python.exe
+ C:/ProgramData/Anaconda3/envs/wk_cgefi/python.exe
+ C:/ProgramData/Anaconda3/envs/wk_jinja/python.exe
+ C:/ProgramData/Anaconda3/envs/wk_pyfan/python.exe
+```
+
+Set which python to use:
+
+```{R}
+# Sys.setenv(RETICULATE_PYTHON = "C:/programdata/Anaconda3/python.exe")
+# Sys.setenv(RETICULATE_PYTHON = "C:/ProgramData/Anaconda3/envs/wk_pyfan/python.exe")
+library(reticulate)
+# What is the python config
+py_config()
+# set python
+# use_python("C:/programdata/Anaconda3/python.exe")
+# use_python("C:/ProgramData/Anaconda3/envs/wk_pyfan/python.exe")
+use_condaenv('wk_pyfan')
+# Sys.which('python')
+py_run_string('print(1+1)')
+```
+
+#### Error
+
+##### py_call_impl error
+
+The error appeared when calling any python operations, including "1+1", resolved after installing reticulate from github: *devtools::install_github("rstudio/reticulate")*
+
+```
+Error in py_call_impl(callable, dots$args, dots$keywords) :
+  TypeError: use() got an unexpected keyword argument 'warn'
+```

@@ -189,6 +189,12 @@
 	+ Logit regression testing and prediction.
 	+ **stats**: *glm(as.formula(), data, family='binomial') + predict(rs, newdata, type = "response")*
 
+## 6.2  Quantile Regression
+
+1. [Quantile Regressions with Quantreg](https://fanwangecon.github.io/R4Econ/regnonlin/quantreg/htmlpdfr/fs_quantreg_intro.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/quantreg//fs_quantreg_intro.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/quantreg/htmlpdfr/fs_quantreg_intro.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/quantreg/htmlpdfr/fs_quantreg_intro.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/regnonlin/quantreg/htmlpdfr/fs_quantreg_intro.html)
+	+ Quantile regression with continuous outcomes. Estimates and tests quantile coefficients.
+	+ **quantreg**: *rq(mpg ~ disp + hp + factor(am), tau = c(0.25, 0.50, 0.75), data = mtcars) + anova(rq(), test = "Wald", joint=TRUE) + anova(rq(), test = "Wald", joint=FALSE)*
+
 # 7  Optimization
 
 ## 7.1  Bisection
@@ -262,3 +268,9 @@
 	+ Convert R Markdow File to R, PDF and HTML.
 	+ Modify markdown pounds hierarchy.
 	+ **r**: *file() + writeLines() + readLines() + close() + gsub()*
+
+## 11.2  Python with R
+
+1. [Python in R with Reticulate](https://fanwangecon.github.io/R4Econ/development/python/htmlpdfr/fs_python_reticulate.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/development/python//fs_python_reticulate.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/development/python/htmlpdfr/fs_python_reticulate.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/development/python/htmlpdfr/fs_python_reticulate.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/development/python/htmlpdfr/fs_python_reticulate.html)
+	+ Use Python in R with Reticulate
+	+ **reticulate**: *py_config() + use_condaenv() + py_run_string() + Sys.which('python')*

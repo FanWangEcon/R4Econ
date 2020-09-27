@@ -1,0 +1,108 @@
+---
+title: "R Example Quantile Regression and Testing with Quantreg"
+titleshort: "Quantile Regressions with Quantreg"
+description: |
+  Quantile regression with continuous outcomes. Estimates and tests quantile coefficients.
+core:
+  - package: quantreg
+    code: |
+      rq(mpg ~ disp + hp + factor(am), tau = c(0.25, 0.50, 0.75), data = mtcars)
+      anova(rq(), test = "Wald", joint=TRUE)
+      anova(rq(), test = "Wald", joint=FALSE)
+date: 2020-09-26
+date_start: 2020-09-26
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+### Quantile Regression Basics
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+library('quantreg')
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+#### Estimate Mean and Quantile Coefficients using mtcars dataset
+
+First, estimate the mean regression:
+
+```{r}
+fit_mean <- lm(mpg ~ disp + hp + factor(am) + factor(vs), data = mtcars)
+summary(fit_mean)
+```
+
+Now estimate the quantile regressions at various quantiles, standard error obtained via bootstrap. Note that there is a gradient in the quantile hp coefficients as well as disp. disp sign reverses, also the coefficient on factor am is different by quantiles:
+
+```{r}
+ls_fl_quantiles <- c(0.25, 0.50, 0.75)
+fit_quantiles <- rq(mpg ~ disp + hp + factor(am),
+               tau = ls_fl_quantiles,
+               data = mtcars)
+summary(fit_quantiles, se = "boot")
+```
+
+
+#### Test Quantile Coefficients if Different
+
+Use the rq.anova function frm the quantile regression packge to conduct WALD test. Remember WALD test says given unrestricted model's estimates, test where null is that the coefficients satisfy some linear restrictions.
+
+To test, use the returned object from running rq with different numbers of quantiles, and set the option *joint* to true or false. When joint is true: "equality of slopes should be done as joint tests on all slope parameters", when joint is false: "separate tests on each of the slope parameters should be reported". A slope parameter refers to one of the RHS variables.
+
+Note that quantile tests are "parallel line" tests. Meaning that we should except to have different x-intercepts for each quantile, because they represents the levels of the conditional shocks distributions. However, if quantile coefficients for the slopes are all the same, then there are no quantile specific effects, mean effects would be sufficient.
+
+see:
+- [anova.rq() in quantreg package in R](https://stackoverflow.com/questions/32743758/anova-rq-in-quantreg-package-in-r)
+
+##### Test Statistical Difference between 0.25 and 0.50
+
+Given the quantile estimates above, the difference between 0.25 and 0.50 quantiles exists, but are they sufficiently large to be statistically different? What is the p-value? Reviewing the results below, they are not statistically different.
+
+First, joint = TRUE. This is not testing if the coefficien on disp is the same as the coefficient on hp. This is testing jointly if the coefficients for different quantiles of disp, and different quantiles of hp are the same for each RHS variable.
+
+```{r}
+ls_fl_quantiles <- c(0.25, 0.50)
+fit_quantiles <- rq(mpg ~ disp + hp + factor(am),
+               tau = ls_fl_quantiles,
+               data = mtcars)
+anova(fit_quantiles, test = "Wald", joint=TRUE)
+```
+
+Second, joint = False:
+
+```{r}
+anova(fit_quantiles, test = "Wald", joint=FALSE)
+```
+
+
+##### Test Statistical Difference between 0.25, 0.50 and 0.75
+
+The 1st quartile and median do not seem to be statistically different, now include the 3rd quartile. As seen earlier, the quartiles jointly show a gradient. Now, we can see that idisp, hp and am are separately have statistically different
+
+First, joint = TRUE:
+
+```{r}
+ls_fl_quantiles <- c(0.25, 0.50, 0.75)
+fit_quantiles <- rq(mpg ~ disp + hp + factor(am),
+               tau = ls_fl_quantiles,
+               data = mtcars)
+anova(fit_quantiles, test = "Wald", joint=TRUE)
+```
+
+Second, joint = False:
+
+```{r}
+anova(fit_quantiles, test = "Wald", joint=FALSE)
+```
