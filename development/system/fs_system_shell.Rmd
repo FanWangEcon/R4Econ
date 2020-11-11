@@ -1,0 +1,68 @@
+---
+title: "Run System and Shell Commands in R"
+titleshort: "System and Shell Commands in R"
+description: |
+  Run system executable and shell commands.
+  Activate conda environment with shell script.
+core:
+  - package: r
+    code: |
+      system()
+      shell()
+date: 2020-11-09
+date_start: 2020-11-09
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+### Shell and System Commands
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+
+#### Basic Shell Commands
+
+Run basic shell commands in windows:
+
+```{r}
+# detect current path
+print(toString(shell(paste0("echo %cd%"), intern=TRUE)))
+# Show directory
+print(toString(shell(paste0("dir"), intern=TRUE)))
+```
+
+#### Run Python Inside a Conda Environment
+
+Use shell rather than system to activate a conda environment, check python version:
+
+```{r}
+# activate conda env
+print(toString(shell(paste0("activate base & python --version"), intern=TRUE)))
+```
+
+Activate conda env and run a line:
+
+```{r}
+spg_runpython <- paste0("activate base &",
+                        "python --version &",
+                        "python -c ",
+                        "\"st_var='this is string var';",
+                        "print(f'{st_var}');",
+                        "\"")
+print(toString(shell(spg_runpython, intern=TRUE)))
+```

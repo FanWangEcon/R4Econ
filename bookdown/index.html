@@ -5,26 +5,29 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Data Structures, Estimation and Optimization with R</title>
-  <meta name="description" content="Use Python in R with Reticulate" />
+  <meta name="description" content="<p>Run system executable and shell commands.
+Activate conda environment with shell script.</p>" />
   <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Data Structures, Estimation and Optimization with R" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="Use Python in R with Reticulate" />
+  <meta property="og:description" content="<p>Run system executable and shell commands.
+Activate conda environment with shell script.</p>" />
   <meta name="github-repo" content="fanwangecon/R4Econ" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Data Structures, Estimation and Optimization with R" />
   
-  <meta name="twitter:description" content="Use Python in R with Reticulate" />
+  <meta name="twitter:description" content="<p>Run system executable and shell commands.
+Activate conda environment with shell script.</p>" />
   
 
 <meta name="author" content="Fan Wang" />
 
 
-<meta name="date" content="2020-09-27" />
+<meta name="date" content="2020-11-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +36,7 @@
   
 
 <link rel="next" href="array-matrix-dataframe.html"/>
-<script src="libs/header-attrs-2.3/header-attrs.js"></script>
+<script src="libs/header-attrs-2.5/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -51,6 +54,8 @@
 
 
 
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -140,7 +145,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">Panel Data and Optimization with R</a></li>
+<li><a href="./">Data Structures and Estimation with R</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
@@ -303,6 +308,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="11.2.1" data-path="code-and-development.html"><a href="code-and-development.html#reticulate-basics"><i class="fa fa-check"></i><b>11.2.1</b> Reticulate Basics</a></li>
 </ul></li>
+<li class="chapter" data-level="11.3" data-path="code-and-development.html"><a href="code-and-development.html#command-line"><i class="fa fa-check"></i><b>11.3</b> Command Line</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="code-and-development.html"><a href="code-and-development.html#shell-and-system-commands"><i class="fa fa-check"></i><b>11.3.1</b> Shell and System Commands</a></li>
+</ul></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
 <li class="chapter" data-level="A" data-path="index-and-code-links.html"><a href="index-and-code-links.html"><i class="fa fa-check"></i><b>A</b> Index and Code Links</a>
@@ -366,6 +375,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="A.11.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-11.1-file-in-and-outfile-in-and-out-links"><i class="fa fa-check"></i><b>A.11.1</b> <span>Section 11.1 File in and Out</span> links</a></li>
 <li class="chapter" data-level="A.11.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-11.2-python-with-rpython-with-r-links"><i class="fa fa-check"></i><b>A.11.2</b> <span>Section 11.2 Python with R</span> links</a></li>
+<li class="chapter" data-level="A.11.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-11.3-command-linecommand-line-links"><i class="fa fa-check"></i><b>A.11.3</b> <span>Section 11.3 Command Line</span> links</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -391,33 +401,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Data Structures, Estimation and Optimization with R</h1>
 <p class="author"><em>Fan Wang</em></p>
-<p class="date"><em>2020-09-27</em></p>
+<p class="date"><em>2020-11-11</em></p>
 </div>
 <div id="preface" class="section level1 unnumbered">
 <h1>Preface</h1>
-<p><a href="https://github.com/FanWangEcon/R4Econ"><img src="http://hits.dwyl.io/fanwangecon/R4Econ.svg" alt="HitCount" /></a> <a href="https://github.com/FanWangEcon/R4Econ/stargazers"><img src="https://img.shields.io/github/stars/fanwangecon/R4Econ?style=social" alt="Star" /></a> <a href="https://github.com/FanWangEcon/R4Econ/network/members"><img src="https://img.shields.io/github/forks/fanwangecon/R4Econ?style=social" alt="Fork" /></a> <a href="https://github.com/FanWangEcon/R4Econ/watchers"><img src="https://img.shields.io/github/watchers/fanwangecon/R4Econ?style=social" alt="Star" /></a></p>
+<p><a href="https://github.com/FanWangEcon/R4Econ"><img src="http://hits.dwyl.com/fanwangecon/R4Econ.svg" alt="HitCount" /></a> <a href="https://github.com/FanWangEcon/R4Econ/stargazers"><img src="https://img.shields.io/github/stars/fanwangecon/R4Econ?style=social" alt="Star" /></a> <a href="https://github.com/FanWangEcon/R4Econ/network/members"><img src="https://img.shields.io/github/forks/fanwangecon/R4Econ?style=social" alt="Fork" /></a> <a href="https://github.com/FanWangEcon/R4Econ/watchers"><img src="https://img.shields.io/github/watchers/fanwangecon/R4Econ?style=social" alt="Star" /></a> <a href="https://zenodo.org/badge/latestdoi/173583807"><img src="https://zenodo.org/badge/173583807.svg" alt="DOI" /></a></p>
 <p>This is a work-in-progress <a href="https://fanwangecon.github.io/R4Econ/">website</a> consisting of R panel data and optimization examples for Statistics/Econometrics/Economic Analysis. Materials gathered from various <a href="https://fanwangecon.github.io/research">projects</a> in which R code is used. Files are from the <a href="https://github.com/FanWangEcon/R4Econ">R4Econ</a> repository. This is not a R package, but a list of examples in PDF/HTML/Rmd formats. <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> is a package that can be installed with tools used in <a href="https://fanwangecon.github.io/research">projects</a> involving R.</p>
-<p>Bullet points show which <a href="https://www.rdocumentation.org/packages/base/versions/3.5.2">base R</a>, <a href="https://www.tidyverse.org/">tidyverse</a> or other functions/commands are used to achieve various objectives. An effort is made to use only <a href="https://www.rdocumentation.org/packages/base/versions/3.5.2">base R</a> <span class="citation">(R Core Team <a href="#ref-R-base" role="doc-biblioref">2019</a>)</span> and <a href="https://www.tidyverse.org/">tidyverse</a> <span class="citation">(Wickham <a href="#ref-R-tidyverse" role="doc-biblioref">2019</a>)</span> packages whenever possible to reduce dependencies. The goal of this repository is to make it easier to find/re-use codes produced for various projects. Some functions also rely on or correspond to functions from <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> <span class="citation">(Wang <a href="#ref-R-REconTools" role="doc-biblioref">2020</a>)</span>.</p>
+<p>Bullet points show which <a href="https://www.rdocumentation.org/packages/base/versions/3.5.2">base R</a>, <a href="https://www.tidyverse.org/">tidyverse</a> or other functions/commands are used to achieve various objectives. An effort is made to use only <a href="https://www.rdocumentation.org/packages/base/versions/3.5.2">base R</a> <span class="citation">(<a href="index-and-code-links.html#ref-R-base" role="doc-biblioref">R Core Team 2019</a>)</span> and <a href="https://www.tidyverse.org/">tidyverse</a> <span class="citation">(<a href="index-and-code-links.html#ref-R-tidyverse" role="doc-biblioref">Wickham 2019</a>)</span> packages whenever possible to reduce dependencies. The goal of this repository is to make it easier to find/re-use codes produced for various projects. Some functions also rely on or correspond to functions from <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> <span class="citation">(<a href="index-and-code-links.html#ref-R-REconTools" role="doc-biblioref">Wang 2020</a>)</span>.</p>
 <p>From other repositories: For dynamic borrowing and savings problems, see <a href="https://fanwangecon.github.io/MEconTools/">MEconTools</a> and <a href="https://fanwangecon.github.io/CodeDynaAsset/">Dynamic Asset Repository</a>; For code examples, see also <a href="https://fanwangecon.github.io/M4Econ/">Matlab Example Code</a>, <a href="https://fanwangecon.github.io/Stata4Econ/">Stata Example Code</a>, <a href="https://fanwangecon.github.io/pyfan/">Python Example Code</a>; For intro econ with Matlab, see <a href="https://fanwangecon.github.io/Math4Econ/">Intro Mathematics for Economists</a>, and for intro stat with R, see <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Statistics for Undergraduates</a>. See <a href="https://github.com/FanWangEcon">here</a> for all of <a href="https://fanwangecon.github.io/">Fan</a>’s public repositories.</p>
-<p>The site is built using <a href="https://bookdown.org/">Bookdown</a> <span class="citation">(Xie <a href="#ref-R-bookdown" role="doc-biblioref">2020</a>)</span>.</p>
+<p>The site is built using <a href="https://bookdown.org/">Bookdown</a> <span class="citation">(<a href="index-and-code-links.html#ref-R-bookdown" role="doc-biblioref">Xie 2020</a>)</span>.</p>
 <p>Please contact <a href="https://fanwangecon.github.io/">FanWangEcon</a> for issues or problems.</p>
 <p><a href="https://github.com/FanWangEcon/R4Econ/commits/master"><img src="https://img.shields.io/github/last-commit/fanwangecon/R4Econ" /></a> <a href="https://github.com/FanWangEcon/R4Econ/graphs/commit-activity"><img src="https://img.shields.io/github/commit-activity/m/fanwangecon/R4Econ" /></a> <a href="https://github.com/FanWangEcon/R4Econ/issues"><img src="https://img.shields.io/github/issues/fanwangecon/R4Econ" /></a> <a href="https://github.com/FanWangEcon/R4Econ/pulls"><img src="https://img.shields.io/github/issues-pr/fanwangecon/R4Econ" /></a></p>
 
-</div>
-<h3>References</h3>
-<div id="refs" class="references">
-<div id="ref-R-base">
-<p>R Core Team. 2019. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.</p>
-</div>
-<div id="ref-R-REconTools">
-<p>Wang, Fan. 2020. <em>REconTools: R Tools for Panel Data and Optimization</em>. <a href="https://fanwangecon.github.io/REconTools/">https://fanwangecon.github.io/REconTools/</a>.</p>
-</div>
-<div id="ref-R-tidyverse">
-<p>Wickham, Hadley. 2019. <em>Tidyverse: Easily Install and Load the ’Tidyverse’</em>. <a href="https://CRAN.R-project.org/package=tidyverse">https://CRAN.R-project.org/package=tidyverse</a>.</p>
-</div>
-<div id="ref-R-bookdown">
-<p>Xie, Yihui. 2020. <em>Bookdown: Authoring Books and Technical Documents with R Markdown</em>. <a href="https://CRAN.R-project.org/package=bookdown">https://CRAN.R-project.org/package=bookdown</a>.</p>
-</div>
 </div>
             </section>
 

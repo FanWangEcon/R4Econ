@@ -5,26 +5,29 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 4 Panel | Data Structures, Estimation and Optimization with R</title>
-  <meta name="description" content="Use Python in R with Reticulate" />
+  <meta name="description" content="<p>Run system executable and shell commands.
+Activate conda environment with shell script.</p>" />
   <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 4 Panel | Data Structures, Estimation and Optimization with R" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="Use Python in R with Reticulate" />
+  <meta property="og:description" content="<p>Run system executable and shell commands.
+Activate conda environment with shell script.</p>" />
   <meta name="github-repo" content="fanwangecon/R4Econ" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Chapter 4 Panel | Data Structures, Estimation and Optimization with R" />
   
-  <meta name="twitter:description" content="Use Python in R with Reticulate" />
+  <meta name="twitter:description" content="<p>Run system executable and shell commands.
+Activate conda environment with shell script.</p>" />
   
 
 <meta name="author" content="Fan Wang" />
 
 
-<meta name="date" content="2020-09-27" />
+<meta name="date" content="2020-11-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +36,7 @@
   
 <link rel="prev" href="functions.html"/>
 <link rel="next" href="linear-regression.html"/>
-<script src="libs/header-attrs-2.3/header-attrs.js"></script>
+<script src="libs/header-attrs-2.5/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -51,6 +54,8 @@
 
 
 
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -140,7 +145,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">Panel Data and Optimization with R</a></li>
+<li><a href="./">Data Structures and Estimation with R</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
@@ -303,6 +308,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="11.2.1" data-path="code-and-development.html"><a href="code-and-development.html#reticulate-basics"><i class="fa fa-check"></i><b>11.2.1</b> Reticulate Basics</a></li>
 </ul></li>
+<li class="chapter" data-level="11.3" data-path="code-and-development.html"><a href="code-and-development.html#command-line"><i class="fa fa-check"></i><b>11.3</b> Command Line</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="code-and-development.html"><a href="code-and-development.html#shell-and-system-commands"><i class="fa fa-check"></i><b>11.3.1</b> Shell and System Commands</a></li>
+</ul></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
 <li class="chapter" data-level="A" data-path="index-and-code-links.html"><a href="index-and-code-links.html"><i class="fa fa-check"></i><b>A</b> Index and Code Links</a>
@@ -366,6 +375,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="A.11.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-11.1-file-in-and-outfile-in-and-out-links"><i class="fa fa-check"></i><b>A.11.1</b> <span>Section 11.1 File in and Out</span> links</a></li>
 <li class="chapter" data-level="A.11.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-11.2-python-with-rpython-with-r-links"><i class="fa fa-check"></i><b>A.11.2</b> <span>Section 11.2 Python with R</span> links</a></li>
+<li class="chapter" data-level="A.11.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-11.3-command-linecommand-line-links"><i class="fa fa-check"></i><b>A.11.3</b> <span>Section 11.3 Command Line</span> links</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -402,22 +412,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="balanced-panel-skeleton" class="section level4" number="4.1.1.1">
 <h4><span class="header-section-number">4.1.1.1</span> Balanced Panel Skeleton</h4>
 <p>There are <span class="math inline">\(N\)</span> individuals, each could be observed <span class="math inline">\(M\)</span> times. In the example below, there are 3 students, each observed over 4 dates. This just uses the <a href="https://tidyr.tidyverse.org/reference/uncount.html">uncount</a> function from <em>tidyr</em>.</p>
-<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="panel.html#cb269-1" aria-hidden="true"></a><span class="co"># Define</span></span>
-<span id="cb269-2"><a href="panel.html#cb269-2" aria-hidden="true"></a>it_N &lt;-<span class="st"> </span><span class="dv">3</span></span>
-<span id="cb269-3"><a href="panel.html#cb269-3" aria-hidden="true"></a>it_M &lt;-<span class="st"> </span><span class="dv">5</span></span>
-<span id="cb269-4"><a href="panel.html#cb269-4" aria-hidden="true"></a>svr_id &lt;-<span class="st"> &#39;student_id&#39;</span></span>
-<span id="cb269-5"><a href="panel.html#cb269-5" aria-hidden="true"></a>svr_date &lt;-<span class="st"> &#39;class_day&#39;</span></span>
-<span id="cb269-6"><a href="panel.html#cb269-6" aria-hidden="true"></a></span>
-<span id="cb269-7"><a href="panel.html#cb269-7" aria-hidden="true"></a><span class="co"># dataframe</span></span>
-<span id="cb269-8"><a href="panel.html#cb269-8" aria-hidden="true"></a>df_panel_skeleton &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">matrix</span>(it_M, <span class="dt">nrow=</span>it_N, <span class="dt">ncol=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb269-9"><a href="panel.html#cb269-9" aria-hidden="true"></a><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> svr_id) <span class="op">%&gt;%</span></span>
-<span id="cb269-10"><a href="panel.html#cb269-10" aria-hidden="true"></a><span class="st">  </span><span class="kw">uncount</span>(V1) <span class="op">%&gt;%</span></span>
-<span id="cb269-11"><a href="panel.html#cb269-11" aria-hidden="true"></a><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_date) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">row_number</span>()) <span class="op">%&gt;%</span></span>
-<span id="cb269-12"><a href="panel.html#cb269-12" aria-hidden="true"></a><span class="st">  </span><span class="kw">ungroup</span>()</span>
-<span id="cb269-13"><a href="panel.html#cb269-13" aria-hidden="true"></a></span>
-<span id="cb269-14"><a href="panel.html#cb269-14" aria-hidden="true"></a><span class="co"># Print</span></span>
-<span id="cb269-15"><a href="panel.html#cb269-15" aria-hidden="true"></a><span class="kw">kable</span>(df_panel_skeleton) <span class="op">%&gt;%</span></span>
-<span id="cb269-16"><a href="panel.html#cb269-16" aria-hidden="true"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="panel.html#cb269-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define</span></span>
+<span id="cb269-2"><a href="panel.html#cb269-2" aria-hidden="true" tabindex="-1"></a>it_N <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb269-3"><a href="panel.html#cb269-3" aria-hidden="true" tabindex="-1"></a>it_M <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb269-4"><a href="panel.html#cb269-4" aria-hidden="true" tabindex="-1"></a>svr_id <span class="ot">&lt;-</span> <span class="st">&#39;student_id&#39;</span></span>
+<span id="cb269-5"><a href="panel.html#cb269-5" aria-hidden="true" tabindex="-1"></a>svr_date <span class="ot">&lt;-</span> <span class="st">&#39;class_day&#39;</span></span>
+<span id="cb269-6"><a href="panel.html#cb269-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb269-7"><a href="panel.html#cb269-7" aria-hidden="true" tabindex="-1"></a><span class="co"># dataframe</span></span>
+<span id="cb269-8"><a href="panel.html#cb269-8" aria-hidden="true" tabindex="-1"></a>df_panel_skeleton <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">matrix</span>(it_M, <span class="at">nrow=</span>it_N, <span class="at">ncol=</span><span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb269-9"><a href="panel.html#cb269-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowid_to_column</span>(<span class="at">var =</span> svr_id) <span class="sc">%&gt;%</span></span>
+<span id="cb269-10"><a href="panel.html#cb269-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uncount</span>(V1) <span class="sc">%&gt;%</span></span>
+<span id="cb269-11"><a href="panel.html#cb269-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_id)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_date) <span class="sc">:</span><span class="er">=</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb269-12"><a href="panel.html#cb269-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb269-13"><a href="panel.html#cb269-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb269-14"><a href="panel.html#cb269-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Print</span></span>
+<span id="cb269-15"><a href="panel.html#cb269-15" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(df_panel_skeleton) <span class="sc">%&gt;%</span></span>
+<span id="cb269-16"><a href="panel.html#cb269-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -557,35 +567,35 @@ class_day
 <h4><span class="header-section-number">4.1.1.2</span> Panel of Children with Height Growth</h4>
 <p>Given <span class="math inline">\(N\)</span> individuals, each with <span class="math inline">\(G\)</span> observations. There is an initial height variable and height grows every year. There are growth variables, variables for cumulative growth and variables for height at each age for each child.</p>
 <p>Individuals are defined by gender (1 = female), race (1=asian), and birth height. Within individual yearly information includes height at each year of age.</p>
-<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb270-1"><a href="panel.html#cb270-1" aria-hidden="true"></a><span class="co"># Define</span></span>
-<span id="cb270-2"><a href="panel.html#cb270-2" aria-hidden="true"></a>it_N &lt;-<span class="st"> </span><span class="dv">5</span></span>
-<span id="cb270-3"><a href="panel.html#cb270-3" aria-hidden="true"></a>it_M &lt;-<span class="st"> </span><span class="dv">3</span></span>
-<span id="cb270-4"><a href="panel.html#cb270-4" aria-hidden="true"></a>svr_id &lt;-<span class="st"> &#39;indi_id&#39;</span></span>
-<span id="cb270-5"><a href="panel.html#cb270-5" aria-hidden="true"></a>svr_gender &lt;-<span class="st"> &#39;female&#39;</span></span>
-<span id="cb270-6"><a href="panel.html#cb270-6" aria-hidden="true"></a>svr_asian &lt;-<span class="st"> &#39;asian&#39;</span></span>
-<span id="cb270-7"><a href="panel.html#cb270-7" aria-hidden="true"></a>svr_age &lt;-<span class="st"> &#39;year_of_age&#39;</span></span>
-<span id="cb270-8"><a href="panel.html#cb270-8" aria-hidden="true"></a><span class="co"># Define Height Related Variables</span></span>
-<span id="cb270-9"><a href="panel.html#cb270-9" aria-hidden="true"></a>svr_brthgt &lt;-<span class="st"> &#39;birth_height&#39;</span></span>
-<span id="cb270-10"><a href="panel.html#cb270-10" aria-hidden="true"></a>svr_hgtgrow &lt;-<span class="st"> &#39;hgt_growth&#39;</span></span>
-<span id="cb270-11"><a href="panel.html#cb270-11" aria-hidden="true"></a>svr_hgtgrow_cumu &lt;-<span class="st"> &#39;hgt_growcumu&#39;</span></span>
-<span id="cb270-12"><a href="panel.html#cb270-12" aria-hidden="true"></a>svr_height &lt;-<span class="st"> &#39;height&#39;</span></span>
-<span id="cb270-13"><a href="panel.html#cb270-13" aria-hidden="true"></a></span>
-<span id="cb270-14"><a href="panel.html#cb270-14" aria-hidden="true"></a><span class="co"># panel dataframe following</span></span>
-<span id="cb270-15"><a href="panel.html#cb270-15" aria-hidden="true"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb270-16"><a href="panel.html#cb270-16" aria-hidden="true"></a>df_panel_indiage &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">matrix</span>(it_M, <span class="dt">nrow=</span>it_N, <span class="dt">ncol=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb270-17"><a href="panel.html#cb270-17" aria-hidden="true"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_gender) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">rbinom</span>(<span class="kw">n</span>(), <span class="dv">1</span>, <span class="fl">0.5</span>),</span>
-<span id="cb270-18"><a href="panel.html#cb270-18" aria-hidden="true"></a>         <span class="op">!!</span><span class="kw">sym</span>(svr_asian) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">rbinom</span>(<span class="kw">n</span>(), <span class="dv">1</span>, <span class="fl">0.5</span>),</span>
-<span id="cb270-19"><a href="panel.html#cb270-19" aria-hidden="true"></a>         <span class="op">!!</span><span class="kw">sym</span>(svr_brthgt) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="kw">n</span>(), <span class="dt">mean=</span><span class="dv">60</span>,<span class="dt">sd=</span><span class="dv">3</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb270-20"><a href="panel.html#cb270-20" aria-hidden="true"></a><span class="st">  </span><span class="kw">uncount</span>(V1) <span class="op">%&gt;%</span></span>
-<span id="cb270-21"><a href="panel.html#cb270-21" aria-hidden="true"></a><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_gender), <span class="op">!!</span><span class="kw">sym</span>(svr_asian), <span class="op">!!</span><span class="kw">sym</span>(svr_brthgt)) <span class="op">%&gt;%</span></span>
-<span id="cb270-22"><a href="panel.html#cb270-22" aria-hidden="true"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_age) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">row_number</span>(),</span>
-<span id="cb270-23"><a href="panel.html#cb270-23" aria-hidden="true"></a>         <span class="op">!!</span><span class="kw">sym</span>(svr_hgtgrow) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">runif</span>(<span class="kw">n</span>(), <span class="dt">min=</span><span class="dv">5</span>, <span class="dt">max=</span><span class="dv">15</span>),</span>
-<span id="cb270-24"><a href="panel.html#cb270-24" aria-hidden="true"></a>         <span class="op">!!</span><span class="kw">sym</span>(svr_hgtgrow_cumu) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">cumsum</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_hgtgrow)),</span>
-<span id="cb270-25"><a href="panel.html#cb270-25" aria-hidden="true"></a>         <span class="op">!!</span><span class="kw">sym</span>(svr_height) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_brthgt) <span class="op">+</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_hgtgrow_cumu))  <span class="op">%&gt;%</span></span>
-<span id="cb270-26"><a href="panel.html#cb270-26" aria-hidden="true"></a><span class="st">  </span><span class="kw">ungroup</span>()</span>
-<span id="cb270-27"><a href="panel.html#cb270-27" aria-hidden="true"></a></span>
-<span id="cb270-28"><a href="panel.html#cb270-28" aria-hidden="true"></a><span class="co"># Add Height Index</span></span>
-<span id="cb270-29"><a href="panel.html#cb270-29" aria-hidden="true"></a><span class="kw">kable</span>(df_panel_indiage) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb270-1"><a href="panel.html#cb270-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define</span></span>
+<span id="cb270-2"><a href="panel.html#cb270-2" aria-hidden="true" tabindex="-1"></a>it_N <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb270-3"><a href="panel.html#cb270-3" aria-hidden="true" tabindex="-1"></a>it_M <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb270-4"><a href="panel.html#cb270-4" aria-hidden="true" tabindex="-1"></a>svr_id <span class="ot">&lt;-</span> <span class="st">&#39;indi_id&#39;</span></span>
+<span id="cb270-5"><a href="panel.html#cb270-5" aria-hidden="true" tabindex="-1"></a>svr_gender <span class="ot">&lt;-</span> <span class="st">&#39;female&#39;</span></span>
+<span id="cb270-6"><a href="panel.html#cb270-6" aria-hidden="true" tabindex="-1"></a>svr_asian <span class="ot">&lt;-</span> <span class="st">&#39;asian&#39;</span></span>
+<span id="cb270-7"><a href="panel.html#cb270-7" aria-hidden="true" tabindex="-1"></a>svr_age <span class="ot">&lt;-</span> <span class="st">&#39;year_of_age&#39;</span></span>
+<span id="cb270-8"><a href="panel.html#cb270-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Define Height Related Variables</span></span>
+<span id="cb270-9"><a href="panel.html#cb270-9" aria-hidden="true" tabindex="-1"></a>svr_brthgt <span class="ot">&lt;-</span> <span class="st">&#39;birth_height&#39;</span></span>
+<span id="cb270-10"><a href="panel.html#cb270-10" aria-hidden="true" tabindex="-1"></a>svr_hgtgrow <span class="ot">&lt;-</span> <span class="st">&#39;hgt_growth&#39;</span></span>
+<span id="cb270-11"><a href="panel.html#cb270-11" aria-hidden="true" tabindex="-1"></a>svr_hgtgrow_cumu <span class="ot">&lt;-</span> <span class="st">&#39;hgt_growcumu&#39;</span></span>
+<span id="cb270-12"><a href="panel.html#cb270-12" aria-hidden="true" tabindex="-1"></a>svr_height <span class="ot">&lt;-</span> <span class="st">&#39;height&#39;</span></span>
+<span id="cb270-13"><a href="panel.html#cb270-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb270-14"><a href="panel.html#cb270-14" aria-hidden="true" tabindex="-1"></a><span class="co"># panel dataframe following</span></span>
+<span id="cb270-15"><a href="panel.html#cb270-15" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb270-16"><a href="panel.html#cb270-16" aria-hidden="true" tabindex="-1"></a>df_panel_indiage <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">matrix</span>(it_M, <span class="at">nrow=</span>it_N, <span class="at">ncol=</span><span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb270-17"><a href="panel.html#cb270-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_gender) <span class="sc">:</span><span class="er">=</span> <span class="fu">rbinom</span>(<span class="fu">n</span>(), <span class="dv">1</span>, <span class="fl">0.5</span>),</span>
+<span id="cb270-18"><a href="panel.html#cb270-18" aria-hidden="true" tabindex="-1"></a>         <span class="sc">!!</span><span class="fu">sym</span>(svr_asian) <span class="sc">:</span><span class="er">=</span> <span class="fu">rbinom</span>(<span class="fu">n</span>(), <span class="dv">1</span>, <span class="fl">0.5</span>),</span>
+<span id="cb270-19"><a href="panel.html#cb270-19" aria-hidden="true" tabindex="-1"></a>         <span class="sc">!!</span><span class="fu">sym</span>(svr_brthgt) <span class="sc">:</span><span class="er">=</span> <span class="fu">rnorm</span>(<span class="fu">n</span>(), <span class="at">mean=</span><span class="dv">60</span>,<span class="at">sd=</span><span class="dv">3</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb270-20"><a href="panel.html#cb270-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uncount</span>(V1) <span class="sc">%&gt;%</span></span>
+<span id="cb270-21"><a href="panel.html#cb270-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_gender), <span class="sc">!!</span><span class="fu">sym</span>(svr_asian), <span class="sc">!!</span><span class="fu">sym</span>(svr_brthgt)) <span class="sc">%&gt;%</span></span>
+<span id="cb270-22"><a href="panel.html#cb270-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_age) <span class="sc">:</span><span class="er">=</span> <span class="fu">row_number</span>(),</span>
+<span id="cb270-23"><a href="panel.html#cb270-23" aria-hidden="true" tabindex="-1"></a>         <span class="sc">!!</span><span class="fu">sym</span>(svr_hgtgrow) <span class="sc">:</span><span class="er">=</span> <span class="fu">runif</span>(<span class="fu">n</span>(), <span class="at">min=</span><span class="dv">5</span>, <span class="at">max=</span><span class="dv">15</span>),</span>
+<span id="cb270-24"><a href="panel.html#cb270-24" aria-hidden="true" tabindex="-1"></a>         <span class="sc">!!</span><span class="fu">sym</span>(svr_hgtgrow_cumu) <span class="sc">:</span><span class="er">=</span> <span class="fu">cumsum</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_hgtgrow)),</span>
+<span id="cb270-25"><a href="panel.html#cb270-25" aria-hidden="true" tabindex="-1"></a>         <span class="sc">!!</span><span class="fu">sym</span>(svr_height) <span class="sc">:</span><span class="er">=</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_brthgt) <span class="sc">+</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_hgtgrow_cumu))  <span class="sc">%&gt;%</span></span>
+<span id="cb270-26"><a href="panel.html#cb270-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb270-27"><a href="panel.html#cb270-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb270-28"><a href="panel.html#cb270-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Add Height Index</span></span>
+<span id="cb270-29"><a href="panel.html#cb270-29" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(df_panel_indiage) <span class="sc">%&gt;%</span> <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -964,23 +974,23 @@ height
 <div id="create-group-ids" class="section level4" number="4.1.1.3">
 <h4><span class="header-section-number">4.1.1.3</span> Create Group IDs</h4>
 <p>Given the dataframe just created, generate group IDs for each Gender and Race Groups. Given that both are binary, there can only be 4 unique groups.</p>
-<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="panel.html#cb271-1" aria-hidden="true"></a><span class="co"># group id</span></span>
-<span id="cb271-2"><a href="panel.html#cb271-2" aria-hidden="true"></a>svr_group_id &lt;-<span class="st"> &#39;female_asian_id&#39;</span></span>
-<span id="cb271-3"><a href="panel.html#cb271-3" aria-hidden="true"></a><span class="co"># Define</span></span>
-<span id="cb271-4"><a href="panel.html#cb271-4" aria-hidden="true"></a>ls_svr_group_vars &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;female&#39;</span>, <span class="st">&#39;asian&#39;</span>)</span>
-<span id="cb271-5"><a href="panel.html#cb271-5" aria-hidden="true"></a></span>
-<span id="cb271-6"><a href="panel.html#cb271-6" aria-hidden="true"></a><span class="co"># panel dataframe following</span></span>
-<span id="cb271-7"><a href="panel.html#cb271-7" aria-hidden="true"></a>df_panel_indiage_id &lt;-<span class="st"> </span>df_panel_indiage <span class="op">%&gt;%</span></span>
-<span id="cb271-8"><a href="panel.html#cb271-8" aria-hidden="true"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="op">!!!</span><span class="kw">syms</span>(ls_svr_group_vars)) <span class="op">%&gt;%</span></span>
-<span id="cb271-9"><a href="panel.html#cb271-9" aria-hidden="true"></a><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!!</span><span class="kw">syms</span>(ls_svr_group_vars)) <span class="op">%&gt;%</span></span>
-<span id="cb271-10"><a href="panel.html#cb271-10" aria-hidden="true"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_group_id) <span class="op">:</span><span class="er">=</span><span class="st"> </span>(<span class="kw">row_number</span>()<span class="op">==</span><span class="dv">1</span>)<span class="op">*</span><span class="dv">1</span>) <span class="op">%&gt;%</span></span>
-<span id="cb271-11"><a href="panel.html#cb271-11" aria-hidden="true"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span></span>
-<span id="cb271-12"><a href="panel.html#cb271-12" aria-hidden="true"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_group_id) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">cumsum</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_group_id))) <span class="op">%&gt;%</span></span>
-<span id="cb271-13"><a href="panel.html#cb271-13" aria-hidden="true"></a><span class="st">  </span><span class="kw">select</span>(<span class="kw">one_of</span>(svr_group_id, ls_svr_group_vars), <span class="kw">everything</span>())</span>
-<span id="cb271-14"><a href="panel.html#cb271-14" aria-hidden="true"></a></span>
-<span id="cb271-15"><a href="panel.html#cb271-15" aria-hidden="true"></a><span class="co"># Add Height Index</span></span>
-<span id="cb271-16"><a href="panel.html#cb271-16" aria-hidden="true"></a><span class="kw">kable</span>(df_panel_indiage_id) <span class="op">%&gt;%</span></span>
-<span id="cb271-17"><a href="panel.html#cb271-17" aria-hidden="true"></a><span class="st">  </span><span class="kw">kable_styling_fc_wide</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="panel.html#cb271-1" aria-hidden="true" tabindex="-1"></a><span class="co"># group id</span></span>
+<span id="cb271-2"><a href="panel.html#cb271-2" aria-hidden="true" tabindex="-1"></a>svr_group_id <span class="ot">&lt;-</span> <span class="st">&#39;female_asian_id&#39;</span></span>
+<span id="cb271-3"><a href="panel.html#cb271-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define</span></span>
+<span id="cb271-4"><a href="panel.html#cb271-4" aria-hidden="true" tabindex="-1"></a>ls_svr_group_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;female&#39;</span>, <span class="st">&#39;asian&#39;</span>)</span>
+<span id="cb271-5"><a href="panel.html#cb271-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb271-6"><a href="panel.html#cb271-6" aria-hidden="true" tabindex="-1"></a><span class="co"># panel dataframe following</span></span>
+<span id="cb271-7"><a href="panel.html#cb271-7" aria-hidden="true" tabindex="-1"></a>df_panel_indiage_id <span class="ot">&lt;-</span> df_panel_indiage <span class="sc">%&gt;%</span></span>
+<span id="cb271-8"><a href="panel.html#cb271-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">!!!</span><span class="fu">syms</span>(ls_svr_group_vars)) <span class="sc">%&gt;%</span></span>
+<span id="cb271-9"><a href="panel.html#cb271-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="sc">!!!</span><span class="fu">syms</span>(ls_svr_group_vars)) <span class="sc">%&gt;%</span></span>
+<span id="cb271-10"><a href="panel.html#cb271-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_group_id) <span class="sc">:</span><span class="er">=</span> (<span class="fu">row_number</span>()<span class="sc">==</span><span class="dv">1</span>)<span class="sc">*</span><span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb271-11"><a href="panel.html#cb271-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb271-12"><a href="panel.html#cb271-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_group_id) <span class="sc">:</span><span class="er">=</span> <span class="fu">cumsum</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_group_id))) <span class="sc">%&gt;%</span></span>
+<span id="cb271-13"><a href="panel.html#cb271-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">one_of</span>(svr_group_id, ls_svr_group_vars), <span class="fu">everything</span>())</span>
+<span id="cb271-14"><a href="panel.html#cb271-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb271-15"><a href="panel.html#cb271-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Add Height Index</span></span>
+<span id="cb271-16"><a href="panel.html#cb271-16" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(df_panel_indiage_id) <span class="sc">%&gt;%</span></span>
+<span id="cb271-17"><a href="panel.html#cb271-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc_wide</span>()</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -1417,22 +1427,22 @@ height
 <h4><span class="header-section-number">4.1.2.1</span> Join Panel with Multiple Keys</h4>
 <p>We have two datasets, one for student enrollment, panel over time, but some students do not show up on some dates. The other is a skeleton panel with all student ID and all dates. Often we need to join dataframes together, and we need to join by the student ID and the panel time Key at the same time. When students show up, there is a quiz score for that day, so the joined panel should have as data column quiz score</p>
 <p>Student count is <span class="math inline">\(N\)</span>, total dates are <span class="math inline">\(M\)</span>. First we generate two panels below, then we join by both keys using <em>left_join</em>. First, define dataframes:</p>
-<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="panel.html#cb272-1" aria-hidden="true"></a><span class="co"># Define</span></span>
-<span id="cb272-2"><a href="panel.html#cb272-2" aria-hidden="true"></a>it_N &lt;-<span class="st"> </span><span class="dv">4</span></span>
-<span id="cb272-3"><a href="panel.html#cb272-3" aria-hidden="true"></a>it_M &lt;-<span class="st"> </span><span class="dv">3</span></span>
-<span id="cb272-4"><a href="panel.html#cb272-4" aria-hidden="true"></a>svr_id &lt;-<span class="st"> &#39;sid&#39;</span></span>
-<span id="cb272-5"><a href="panel.html#cb272-5" aria-hidden="true"></a>svr_date &lt;-<span class="st"> &#39;classday&#39;</span></span>
-<span id="cb272-6"><a href="panel.html#cb272-6" aria-hidden="true"></a>svr_attend &lt;-<span class="st"> &#39;date_in_class&#39;</span></span>
-<span id="cb272-7"><a href="panel.html#cb272-7" aria-hidden="true"></a></span>
-<span id="cb272-8"><a href="panel.html#cb272-8" aria-hidden="true"></a><span class="co"># Panel Skeleton</span></span>
-<span id="cb272-9"><a href="panel.html#cb272-9" aria-hidden="true"></a>df_panel_balanced_skeleton &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">matrix</span>(it_M, <span class="dt">nrow=</span>it_N, <span class="dt">ncol=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb272-10"><a href="panel.html#cb272-10" aria-hidden="true"></a><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> svr_id) <span class="op">%&gt;%</span></span>
-<span id="cb272-11"><a href="panel.html#cb272-11" aria-hidden="true"></a><span class="st">  </span><span class="kw">uncount</span>(V1) <span class="op">%&gt;%</span></span>
-<span id="cb272-12"><a href="panel.html#cb272-12" aria-hidden="true"></a><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_date) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">row_number</span>()) <span class="op">%&gt;%</span></span>
-<span id="cb272-13"><a href="panel.html#cb272-13" aria-hidden="true"></a><span class="st">  </span><span class="kw">ungroup</span>()</span>
-<span id="cb272-14"><a href="panel.html#cb272-14" aria-hidden="true"></a><span class="co"># Print</span></span>
-<span id="cb272-15"><a href="panel.html#cb272-15" aria-hidden="true"></a><span class="kw">kable</span>(df_panel_balanced_skeleton) <span class="op">%&gt;%</span></span>
-<span id="cb272-16"><a href="panel.html#cb272-16" aria-hidden="true"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="panel.html#cb272-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define</span></span>
+<span id="cb272-2"><a href="panel.html#cb272-2" aria-hidden="true" tabindex="-1"></a>it_N <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb272-3"><a href="panel.html#cb272-3" aria-hidden="true" tabindex="-1"></a>it_M <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb272-4"><a href="panel.html#cb272-4" aria-hidden="true" tabindex="-1"></a>svr_id <span class="ot">&lt;-</span> <span class="st">&#39;sid&#39;</span></span>
+<span id="cb272-5"><a href="panel.html#cb272-5" aria-hidden="true" tabindex="-1"></a>svr_date <span class="ot">&lt;-</span> <span class="st">&#39;classday&#39;</span></span>
+<span id="cb272-6"><a href="panel.html#cb272-6" aria-hidden="true" tabindex="-1"></a>svr_attend <span class="ot">&lt;-</span> <span class="st">&#39;date_in_class&#39;</span></span>
+<span id="cb272-7"><a href="panel.html#cb272-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb272-8"><a href="panel.html#cb272-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Panel Skeleton</span></span>
+<span id="cb272-9"><a href="panel.html#cb272-9" aria-hidden="true" tabindex="-1"></a>df_panel_balanced_skeleton <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">matrix</span>(it_M, <span class="at">nrow=</span>it_N, <span class="at">ncol=</span><span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb272-10"><a href="panel.html#cb272-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowid_to_column</span>(<span class="at">var =</span> svr_id) <span class="sc">%&gt;%</span></span>
+<span id="cb272-11"><a href="panel.html#cb272-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uncount</span>(V1) <span class="sc">%&gt;%</span></span>
+<span id="cb272-12"><a href="panel.html#cb272-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_id)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_date) <span class="sc">:</span><span class="er">=</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb272-13"><a href="panel.html#cb272-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb272-14"><a href="panel.html#cb272-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Print</span></span>
+<span id="cb272-15"><a href="panel.html#cb272-15" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(df_panel_balanced_skeleton) <span class="sc">%&gt;%</span></span>
+<span id="cb272-16"><a href="panel.html#cb272-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1543,19 +1553,19 @@ classday
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="panel.html#cb273-1" aria-hidden="true"></a><span class="co"># Smaller Panel of Random Days in School</span></span>
-<span id="cb273-2"><a href="panel.html#cb273-2" aria-hidden="true"></a><span class="kw">set.seed</span>(<span class="dv">456</span>)</span>
-<span id="cb273-3"><a href="panel.html#cb273-3" aria-hidden="true"></a>df_panel_attend &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">matrix</span>(it_M, <span class="dt">nrow=</span>it_N, <span class="dt">ncol=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb273-4"><a href="panel.html#cb273-4" aria-hidden="true"></a><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> svr_id) <span class="op">%&gt;%</span></span>
-<span id="cb273-5"><a href="panel.html#cb273-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">uncount</span>(V1) <span class="op">%&gt;%</span></span>
-<span id="cb273-6"><a href="panel.html#cb273-6" aria-hidden="true"></a><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_date) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">row_number</span>()) <span class="op">%&gt;%</span></span>
-<span id="cb273-7"><a href="panel.html#cb273-7" aria-hidden="true"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">in_class =</span> <span class="kw">case_when</span>(<span class="kw">rnorm</span>(<span class="kw">n</span>(),<span class="dt">mean=</span><span class="dv">0</span>,<span class="dt">sd=</span><span class="dv">1</span>) <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb273-8"><a href="panel.html#cb273-8" aria-hidden="true"></a><span class="st">  </span><span class="kw">filter</span>(in_class <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id), <span class="op">!!</span><span class="kw">sym</span>(svr_date)) <span class="op">%&gt;%</span></span>
-<span id="cb273-9"><a href="panel.html#cb273-9" aria-hidden="true"></a><span class="st">  </span><span class="kw">rename</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_attend) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="op">!!</span><span class="kw">sym</span>(svr_date)) <span class="op">%&gt;%</span></span>
-<span id="cb273-10"><a href="panel.html#cb273-10" aria-hidden="true"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">dayquizscore =</span> <span class="kw">rnorm</span>(<span class="kw">n</span>(),<span class="dt">mean=</span><span class="dv">80</span>,<span class="dt">sd=</span><span class="dv">10</span>))</span>
-<span id="cb273-11"><a href="panel.html#cb273-11" aria-hidden="true"></a><span class="co"># Print</span></span>
-<span id="cb273-12"><a href="panel.html#cb273-12" aria-hidden="true"></a><span class="kw">kable</span>(df_panel_attend) <span class="op">%&gt;%</span></span>
-<span id="cb273-13"><a href="panel.html#cb273-13" aria-hidden="true"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="panel.html#cb273-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Smaller Panel of Random Days in School</span></span>
+<span id="cb273-2"><a href="panel.html#cb273-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">456</span>)</span>
+<span id="cb273-3"><a href="panel.html#cb273-3" aria-hidden="true" tabindex="-1"></a>df_panel_attend <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">matrix</span>(it_M, <span class="at">nrow=</span>it_N, <span class="at">ncol=</span><span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb273-4"><a href="panel.html#cb273-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowid_to_column</span>(<span class="at">var =</span> svr_id) <span class="sc">%&gt;%</span></span>
+<span id="cb273-5"><a href="panel.html#cb273-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uncount</span>(V1) <span class="sc">%&gt;%</span></span>
+<span id="cb273-6"><a href="panel.html#cb273-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_id)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_date) <span class="sc">:</span><span class="er">=</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb273-7"><a href="panel.html#cb273-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">in_class =</span> <span class="fu">case_when</span>(<span class="fu">rnorm</span>(<span class="fu">n</span>(),<span class="at">mean=</span><span class="dv">0</span>,<span class="at">sd=</span><span class="dv">1</span>) <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> <span class="dv">1</span>, <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb273-8"><a href="panel.html#cb273-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(in_class <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_id), <span class="sc">!!</span><span class="fu">sym</span>(svr_date)) <span class="sc">%&gt;%</span></span>
+<span id="cb273-9"><a href="panel.html#cb273-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_attend) <span class="sc">:</span><span class="er">=</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_date)) <span class="sc">%&gt;%</span></span>
+<span id="cb273-10"><a href="panel.html#cb273-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dayquizscore =</span> <span class="fu">rnorm</span>(<span class="fu">n</span>(),<span class="at">mean=</span><span class="dv">80</span>,<span class="at">sd=</span><span class="dv">10</span>))</span>
+<span id="cb273-11"><a href="panel.html#cb273-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Print</span></span>
+<span id="cb273-12"><a href="panel.html#cb273-12" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(df_panel_attend) <span class="sc">%&gt;%</span></span>
+<span id="cb273-13"><a href="panel.html#cb273-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1629,18 +1639,18 @@ dayquizscore
 </tbody>
 </table>
 <p>Second, now join dataframes:</p>
-<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="panel.html#cb274-1" aria-hidden="true"></a><span class="co"># Join with explicit names</span></span>
-<span id="cb274-2"><a href="panel.html#cb274-2" aria-hidden="true"></a>df_quiz_joined_multikey &lt;-<span class="st"> </span>df_panel_balanced_skeleton <span class="op">%&gt;%</span></span>
-<span id="cb274-3"><a href="panel.html#cb274-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">left_join</span>(df_panel_attend,</span>
-<span id="cb274-4"><a href="panel.html#cb274-4" aria-hidden="true"></a>            <span class="dt">by=</span>(<span class="kw">c</span>(<span class="st">&#39;sid&#39;</span>=<span class="st">&#39;sid&#39;</span>, <span class="st">&#39;classday&#39;</span>=<span class="st">&#39;date_in_class&#39;</span>)))</span>
-<span id="cb274-5"><a href="panel.html#cb274-5" aria-hidden="true"></a></span>
-<span id="cb274-6"><a href="panel.html#cb274-6" aria-hidden="true"></a><span class="co"># Join with setname strings</span></span>
-<span id="cb274-7"><a href="panel.html#cb274-7" aria-hidden="true"></a>df_quiz_joined_multikey_setnames &lt;-<span class="st"> </span>df_panel_balanced_skeleton <span class="op">%&gt;%</span></span>
-<span id="cb274-8"><a href="panel.html#cb274-8" aria-hidden="true"></a><span class="st">  </span><span class="kw">left_join</span>(df_panel_attend, <span class="dt">by=</span><span class="kw">setNames</span>(<span class="kw">c</span>(<span class="st">&#39;sid&#39;</span>, <span class="st">&#39;date_in_class&#39;</span>), <span class="kw">c</span>(<span class="st">&#39;sid&#39;</span>, <span class="st">&#39;classday&#39;</span>)))</span>
-<span id="cb274-9"><a href="panel.html#cb274-9" aria-hidden="true"></a></span>
-<span id="cb274-10"><a href="panel.html#cb274-10" aria-hidden="true"></a><span class="co"># Print</span></span>
-<span id="cb274-11"><a href="panel.html#cb274-11" aria-hidden="true"></a><span class="kw">kable</span>(df_quiz_joined_multikey) <span class="op">%&gt;%</span></span>
-<span id="cb274-12"><a href="panel.html#cb274-12" aria-hidden="true"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="panel.html#cb274-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Join with explicit names</span></span>
+<span id="cb274-2"><a href="panel.html#cb274-2" aria-hidden="true" tabindex="-1"></a>df_quiz_joined_multikey <span class="ot">&lt;-</span> df_panel_balanced_skeleton <span class="sc">%&gt;%</span></span>
+<span id="cb274-3"><a href="panel.html#cb274-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(df_panel_attend,</span>
+<span id="cb274-4"><a href="panel.html#cb274-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">by=</span>(<span class="fu">c</span>(<span class="st">&#39;sid&#39;</span><span class="ot">=</span><span class="st">&#39;sid&#39;</span>, <span class="st">&#39;classday&#39;</span><span class="ot">=</span><span class="st">&#39;date_in_class&#39;</span>)))</span>
+<span id="cb274-5"><a href="panel.html#cb274-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb274-6"><a href="panel.html#cb274-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Join with setname strings</span></span>
+<span id="cb274-7"><a href="panel.html#cb274-7" aria-hidden="true" tabindex="-1"></a>df_quiz_joined_multikey_setnames <span class="ot">&lt;-</span> df_panel_balanced_skeleton <span class="sc">%&gt;%</span></span>
+<span id="cb274-8"><a href="panel.html#cb274-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(df_panel_attend, <span class="at">by=</span><span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">&#39;sid&#39;</span>, <span class="st">&#39;date_in_class&#39;</span>), <span class="fu">c</span>(<span class="st">&#39;sid&#39;</span>, <span class="st">&#39;classday&#39;</span>)))</span>
+<span id="cb274-9"><a href="panel.html#cb274-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb274-10"><a href="panel.html#cb274-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Print</span></span>
+<span id="cb274-11"><a href="panel.html#cb274-11" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(df_quiz_joined_multikey) <span class="sc">%&gt;%</span></span>
+<span id="cb274-12"><a href="panel.html#cb274-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1790,8 +1800,8 @@ NA
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="panel.html#cb275-1" aria-hidden="true"></a><span class="kw">kable</span>(df_quiz_joined_multikey_setnames) <span class="op">%&gt;%</span></span>
-<span id="cb275-2"><a href="panel.html#cb275-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="panel.html#cb275-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(df_quiz_joined_multikey_setnames) <span class="sc">%&gt;%</span></span>
+<span id="cb275-2"><a href="panel.html#cb275-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1945,32 +1955,32 @@ NA
 <div id="stack-panel-frames-together" class="section level4" number="4.1.2.2">
 <h4><span class="header-section-number">4.1.2.2</span> Stack Panel Frames Together</h4>
 <p>There are multiple panel dataframe, each for different subsets of dates. All variable names and units of observations are identical. Use DPLYR <a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a>.</p>
-<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="panel.html#cb276-1" aria-hidden="true"></a><span class="co"># Define</span></span>
-<span id="cb276-2"><a href="panel.html#cb276-2" aria-hidden="true"></a>it_N &lt;-<span class="st"> </span><span class="dv">2</span> <span class="co"># Number of individuals</span></span>
-<span id="cb276-3"><a href="panel.html#cb276-3" aria-hidden="true"></a>it_M &lt;-<span class="st"> </span><span class="dv">3</span> <span class="co"># Number of Months</span></span>
-<span id="cb276-4"><a href="panel.html#cb276-4" aria-hidden="true"></a>svr_id &lt;-<span class="st"> &#39;sid&#39;</span></span>
-<span id="cb276-5"><a href="panel.html#cb276-5" aria-hidden="true"></a>svr_date &lt;-<span class="st"> &#39;date&#39;</span></span>
-<span id="cb276-6"><a href="panel.html#cb276-6" aria-hidden="true"></a></span>
-<span id="cb276-7"><a href="panel.html#cb276-7" aria-hidden="true"></a><span class="co"># Panel First Half of Year</span></span>
-<span id="cb276-8"><a href="panel.html#cb276-8" aria-hidden="true"></a>df_panel_m1tom3 &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">matrix</span>(it_M, <span class="dt">nrow=</span>it_N, <span class="dt">ncol=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb276-9"><a href="panel.html#cb276-9" aria-hidden="true"></a><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> svr_id) <span class="op">%&gt;%</span></span>
-<span id="cb276-10"><a href="panel.html#cb276-10" aria-hidden="true"></a><span class="st">  </span><span class="kw">uncount</span>(V1) <span class="op">%&gt;%</span></span>
-<span id="cb276-11"><a href="panel.html#cb276-11" aria-hidden="true"></a><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_date) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">row_number</span>()) <span class="op">%&gt;%</span></span>
-<span id="cb276-12"><a href="panel.html#cb276-12" aria-hidden="true"></a><span class="st">  </span><span class="kw">ungroup</span>()</span>
-<span id="cb276-13"><a href="panel.html#cb276-13" aria-hidden="true"></a></span>
-<span id="cb276-14"><a href="panel.html#cb276-14" aria-hidden="true"></a><span class="co"># Panel Second Half of Year</span></span>
-<span id="cb276-15"><a href="panel.html#cb276-15" aria-hidden="true"></a>df_panel_m4tom6 &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">matrix</span>(it_M, <span class="dt">nrow=</span>it_N, <span class="dt">ncol=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb276-16"><a href="panel.html#cb276-16" aria-hidden="true"></a><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> svr_id) <span class="op">%&gt;%</span></span>
-<span id="cb276-17"><a href="panel.html#cb276-17" aria-hidden="true"></a><span class="st">  </span><span class="kw">uncount</span>(V1) <span class="op">%&gt;%</span></span>
-<span id="cb276-18"><a href="panel.html#cb276-18" aria-hidden="true"></a><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_date) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">row_number</span>() <span class="op">+</span><span class="st"> </span><span class="dv">3</span>) <span class="op">%&gt;%</span></span>
-<span id="cb276-19"><a href="panel.html#cb276-19" aria-hidden="true"></a><span class="st">  </span><span class="kw">ungroup</span>()</span>
-<span id="cb276-20"><a href="panel.html#cb276-20" aria-hidden="true"></a></span>
-<span id="cb276-21"><a href="panel.html#cb276-21" aria-hidden="true"></a><span class="co"># Bind Rows</span></span>
-<span id="cb276-22"><a href="panel.html#cb276-22" aria-hidden="true"></a>df_panel_m1tm6 &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(df_panel_m1tom3, df_panel_m4tom6) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="op">!!!</span><span class="kw">syms</span>(<span class="kw">c</span>(svr_id, svr_date)))</span>
-<span id="cb276-23"><a href="panel.html#cb276-23" aria-hidden="true"></a></span>
-<span id="cb276-24"><a href="panel.html#cb276-24" aria-hidden="true"></a><span class="co"># Print</span></span>
-<span id="cb276-25"><a href="panel.html#cb276-25" aria-hidden="true"></a><span class="kw">kable</span>(df_panel_m1tom3) <span class="op">%&gt;%</span></span>
-<span id="cb276-26"><a href="panel.html#cb276-26" aria-hidden="true"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="panel.html#cb276-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define</span></span>
+<span id="cb276-2"><a href="panel.html#cb276-2" aria-hidden="true" tabindex="-1"></a>it_N <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co"># Number of individuals</span></span>
+<span id="cb276-3"><a href="panel.html#cb276-3" aria-hidden="true" tabindex="-1"></a>it_M <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="co"># Number of Months</span></span>
+<span id="cb276-4"><a href="panel.html#cb276-4" aria-hidden="true" tabindex="-1"></a>svr_id <span class="ot">&lt;-</span> <span class="st">&#39;sid&#39;</span></span>
+<span id="cb276-5"><a href="panel.html#cb276-5" aria-hidden="true" tabindex="-1"></a>svr_date <span class="ot">&lt;-</span> <span class="st">&#39;date&#39;</span></span>
+<span id="cb276-6"><a href="panel.html#cb276-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb276-7"><a href="panel.html#cb276-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Panel First Half of Year</span></span>
+<span id="cb276-8"><a href="panel.html#cb276-8" aria-hidden="true" tabindex="-1"></a>df_panel_m1tom3 <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">matrix</span>(it_M, <span class="at">nrow=</span>it_N, <span class="at">ncol=</span><span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb276-9"><a href="panel.html#cb276-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowid_to_column</span>(<span class="at">var =</span> svr_id) <span class="sc">%&gt;%</span></span>
+<span id="cb276-10"><a href="panel.html#cb276-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uncount</span>(V1) <span class="sc">%&gt;%</span></span>
+<span id="cb276-11"><a href="panel.html#cb276-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_id)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_date) <span class="sc">:</span><span class="er">=</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb276-12"><a href="panel.html#cb276-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb276-13"><a href="panel.html#cb276-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb276-14"><a href="panel.html#cb276-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Panel Second Half of Year</span></span>
+<span id="cb276-15"><a href="panel.html#cb276-15" aria-hidden="true" tabindex="-1"></a>df_panel_m4tom6 <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">matrix</span>(it_M, <span class="at">nrow=</span>it_N, <span class="at">ncol=</span><span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb276-16"><a href="panel.html#cb276-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowid_to_column</span>(<span class="at">var =</span> svr_id) <span class="sc">%&gt;%</span></span>
+<span id="cb276-17"><a href="panel.html#cb276-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uncount</span>(V1) <span class="sc">%&gt;%</span></span>
+<span id="cb276-18"><a href="panel.html#cb276-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_id)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_date) <span class="sc">:</span><span class="er">=</span> <span class="fu">row_number</span>() <span class="sc">+</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb276-19"><a href="panel.html#cb276-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb276-20"><a href="panel.html#cb276-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb276-21"><a href="panel.html#cb276-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Bind Rows</span></span>
+<span id="cb276-22"><a href="panel.html#cb276-22" aria-hidden="true" tabindex="-1"></a>df_panel_m1tm6 <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(df_panel_m1tom3, df_panel_m4tom6) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="sc">!!!</span><span class="fu">syms</span>(<span class="fu">c</span>(svr_id, svr_date)))</span>
+<span id="cb276-23"><a href="panel.html#cb276-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb276-24"><a href="panel.html#cb276-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Print</span></span>
+<span id="cb276-25"><a href="panel.html#cb276-25" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(df_panel_m1tom3) <span class="sc">%&gt;%</span></span>
+<span id="cb276-26"><a href="panel.html#cb276-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -2033,8 +2043,8 @@ date
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb277-1"><a href="panel.html#cb277-1" aria-hidden="true"></a><span class="kw">kable</span>(df_panel_m4tom6) <span class="op">%&gt;%</span></span>
-<span id="cb277-2"><a href="panel.html#cb277-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb277-1"><a href="panel.html#cb277-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(df_panel_m4tom6) <span class="sc">%&gt;%</span></span>
+<span id="cb277-2"><a href="panel.html#cb277-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -2097,8 +2107,8 @@ date
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="panel.html#cb278-1" aria-hidden="true"></a><span class="kw">kable</span>(df_panel_m1tm6) <span class="op">%&gt;%</span></span>
-<span id="cb278-2"><a href="panel.html#cb278-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="panel.html#cb278-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(df_panel_m1tm6) <span class="sc">%&gt;%</span></span>
+<span id="cb278-2"><a href="panel.html#cb278-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -2227,24 +2237,24 @@ date
 <p>There are <span class="math inline">\(N\)</span> students in class, but only a subset of them attend class each day. If student <span class="math inline">\(id_i\)</span> is in class on day <span class="math inline">\(Q\)</span>, the teacher records on a sheet the date and the student ID. So if the student has been in class 10 times, the teacher has ten rows of recorded data for the student with two columns: column one is the student ID, and column two is the date on which the student was in class. Suppose there were 50 students, who on average attended exactly 10 classes each during the semester, this means we have <span class="math inline">\(10 \cdot 50\)</span> rows of data, with differing numbers of rows for each student. This is shown as <em>df_panel_attend_date</em> generated below.</p>
 <p>Now we want to generate a new dataframe, where each row is a date, and each column is a student. The values in the new dataframe shows, at the <span class="math inline">\(Q^{th}\)</span> day, how many classes student <span class="math inline">\(i\)</span> has attended so far. The following results is also in a REconTools Function. This is shown as <em>df_attend_cumu_by_day</em> generated below.</p>
 <p><strong>First</strong>, generate the raw data structure, <em>df_panel_attend_date</em>:</p>
-<div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb279-1"><a href="panel.html#cb279-1" aria-hidden="true"></a><span class="co"># Define</span></span>
-<span id="cb279-2"><a href="panel.html#cb279-2" aria-hidden="true"></a>it_N &lt;-<span class="st"> </span><span class="dv">3</span></span>
-<span id="cb279-3"><a href="panel.html#cb279-3" aria-hidden="true"></a>it_M &lt;-<span class="st"> </span><span class="dv">5</span></span>
-<span id="cb279-4"><a href="panel.html#cb279-4" aria-hidden="true"></a>svr_id &lt;-<span class="st"> &#39;student_id&#39;</span></span>
-<span id="cb279-5"><a href="panel.html#cb279-5" aria-hidden="true"></a></span>
-<span id="cb279-6"><a href="panel.html#cb279-6" aria-hidden="true"></a><span class="co"># from : support/rand/fs_rand_draws.Rmd</span></span>
-<span id="cb279-7"><a href="panel.html#cb279-7" aria-hidden="true"></a><span class="kw">set.seed</span>(<span class="dv">222</span>)</span>
-<span id="cb279-8"><a href="panel.html#cb279-8" aria-hidden="true"></a>df_panel_attend_date &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">matrix</span>(it_M, <span class="dt">nrow=</span>it_N, <span class="dt">ncol=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb279-9"><a href="panel.html#cb279-9" aria-hidden="true"></a><span class="st">  </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> svr_id) <span class="op">%&gt;%</span></span>
-<span id="cb279-10"><a href="panel.html#cb279-10" aria-hidden="true"></a><span class="st">  </span><span class="kw">uncount</span>(V1) <span class="op">%&gt;%</span></span>
-<span id="cb279-11"><a href="panel.html#cb279-11" aria-hidden="true"></a><span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">date =</span> <span class="kw">row_number</span>()) <span class="op">%&gt;%</span></span>
-<span id="cb279-12"><a href="panel.html#cb279-12" aria-hidden="true"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">in_class =</span> <span class="kw">case_when</span>(<span class="kw">rnorm</span>(<span class="kw">n</span>(),<span class="dt">mean=</span><span class="dv">0</span>,<span class="dt">sd=</span><span class="dv">1</span>) <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb279-13"><a href="panel.html#cb279-13" aria-hidden="true"></a><span class="st">  </span><span class="kw">filter</span>(in_class <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id), date) <span class="op">%&gt;%</span></span>
-<span id="cb279-14"><a href="panel.html#cb279-14" aria-hidden="true"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">date_in_class =</span> date)</span>
-<span id="cb279-15"><a href="panel.html#cb279-15" aria-hidden="true"></a></span>
-<span id="cb279-16"><a href="panel.html#cb279-16" aria-hidden="true"></a><span class="co"># Print</span></span>
-<span id="cb279-17"><a href="panel.html#cb279-17" aria-hidden="true"></a><span class="kw">kable</span>(df_panel_attend_date) <span class="op">%&gt;%</span></span>
-<span id="cb279-18"><a href="panel.html#cb279-18" aria-hidden="true"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb279-1"><a href="panel.html#cb279-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define</span></span>
+<span id="cb279-2"><a href="panel.html#cb279-2" aria-hidden="true" tabindex="-1"></a>it_N <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb279-3"><a href="panel.html#cb279-3" aria-hidden="true" tabindex="-1"></a>it_M <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb279-4"><a href="panel.html#cb279-4" aria-hidden="true" tabindex="-1"></a>svr_id <span class="ot">&lt;-</span> <span class="st">&#39;student_id&#39;</span></span>
+<span id="cb279-5"><a href="panel.html#cb279-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb279-6"><a href="panel.html#cb279-6" aria-hidden="true" tabindex="-1"></a><span class="co"># from : support/rand/fs_rand_draws.Rmd</span></span>
+<span id="cb279-7"><a href="panel.html#cb279-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">222</span>)</span>
+<span id="cb279-8"><a href="panel.html#cb279-8" aria-hidden="true" tabindex="-1"></a>df_panel_attend_date <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">matrix</span>(it_M, <span class="at">nrow=</span>it_N, <span class="at">ncol=</span><span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb279-9"><a href="panel.html#cb279-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowid_to_column</span>(<span class="at">var =</span> svr_id) <span class="sc">%&gt;%</span></span>
+<span id="cb279-10"><a href="panel.html#cb279-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uncount</span>(V1) <span class="sc">%&gt;%</span></span>
+<span id="cb279-11"><a href="panel.html#cb279-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_id)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb279-12"><a href="panel.html#cb279-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">in_class =</span> <span class="fu">case_when</span>(<span class="fu">rnorm</span>(<span class="fu">n</span>(),<span class="at">mean=</span><span class="dv">0</span>,<span class="at">sd=</span><span class="dv">1</span>) <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> <span class="dv">1</span>, <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb279-13"><a href="panel.html#cb279-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(in_class <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_id), date) <span class="sc">%&gt;%</span></span>
+<span id="cb279-14"><a href="panel.html#cb279-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">date_in_class =</span> date)</span>
+<span id="cb279-15"><a href="panel.html#cb279-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb279-16"><a href="panel.html#cb279-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Print</span></span>
+<span id="cb279-17"><a href="panel.html#cb279-17" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(df_panel_attend_date) <span class="sc">%&gt;%</span></span>
+<span id="cb279-18"><a href="panel.html#cb279-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -2324,15 +2334,15 @@ date_in_class
 </tbody>
 </table>
 <p><strong>Second</strong>, generate wider data structure, <em>df_attend_cumu_by_day</em>:</p>
-<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="panel.html#cb280-1" aria-hidden="true"></a><span class="co"># Define</span></span>
-<span id="cb280-2"><a href="panel.html#cb280-2" aria-hidden="true"></a>svr_id &lt;-<span class="st"> &#39;student_id&#39;</span></span>
-<span id="cb280-3"><a href="panel.html#cb280-3" aria-hidden="true"></a>svr_date &lt;-<span class="st"> &#39;date_in_class&#39;</span></span>
-<span id="cb280-4"><a href="panel.html#cb280-4" aria-hidden="true"></a>st_idcol_prefix &lt;-<span class="st"> &#39;sid_&#39;</span></span>
-<span id="cb280-5"><a href="panel.html#cb280-5" aria-hidden="true"></a></span>
-<span id="cb280-6"><a href="panel.html#cb280-6" aria-hidden="true"></a><span class="co"># Generate cumulative enrollment counts by date</span></span>
-<span id="cb280-7"><a href="panel.html#cb280-7" aria-hidden="true"></a>df_panel_attend_date_addone &lt;-<span class="st"> </span>df_panel_attend_date <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">attended =</span> <span class="dv">1</span>)</span>
-<span id="cb280-8"><a href="panel.html#cb280-8" aria-hidden="true"></a><span class="kw">kable</span>(df_panel_attend_date_addone) <span class="op">%&gt;%</span></span>
-<span id="cb280-9"><a href="panel.html#cb280-9" aria-hidden="true"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="panel.html#cb280-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define</span></span>
+<span id="cb280-2"><a href="panel.html#cb280-2" aria-hidden="true" tabindex="-1"></a>svr_id <span class="ot">&lt;-</span> <span class="st">&#39;student_id&#39;</span></span>
+<span id="cb280-3"><a href="panel.html#cb280-3" aria-hidden="true" tabindex="-1"></a>svr_date <span class="ot">&lt;-</span> <span class="st">&#39;date_in_class&#39;</span></span>
+<span id="cb280-4"><a href="panel.html#cb280-4" aria-hidden="true" tabindex="-1"></a>st_idcol_prefix <span class="ot">&lt;-</span> <span class="st">&#39;sid_&#39;</span></span>
+<span id="cb280-5"><a href="panel.html#cb280-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb280-6"><a href="panel.html#cb280-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate cumulative enrollment counts by date</span></span>
+<span id="cb280-7"><a href="panel.html#cb280-7" aria-hidden="true" tabindex="-1"></a>df_panel_attend_date_addone <span class="ot">&lt;-</span> df_panel_attend_date <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">attended =</span> <span class="dv">1</span>)</span>
+<span id="cb280-8"><a href="panel.html#cb280-8" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(df_panel_attend_date_addone) <span class="sc">%&gt;%</span></span>
+<span id="cb280-9"><a href="panel.html#cb280-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -2438,12 +2448,12 @@ attended
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb281-1"><a href="panel.html#cb281-1" aria-hidden="true"></a><span class="co"># Pivot Wide</span></span>
-<span id="cb281-2"><a href="panel.html#cb281-2" aria-hidden="true"></a>df_panel_attend_date_wider &lt;-<span class="st"> </span>df_panel_attend_date_addone <span class="op">%&gt;%</span></span>
-<span id="cb281-3"><a href="panel.html#cb281-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from =</span> svr_id,</span>
-<span id="cb281-4"><a href="panel.html#cb281-4" aria-hidden="true"></a>              <span class="dt">values_from =</span> attended)</span>
-<span id="cb281-5"><a href="panel.html#cb281-5" aria-hidden="true"></a><span class="kw">kable</span>(df_panel_attend_date_wider) <span class="op">%&gt;%</span></span>
-<span id="cb281-6"><a href="panel.html#cb281-6" aria-hidden="true"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb281-1"><a href="panel.html#cb281-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pivot Wide</span></span>
+<span id="cb281-2"><a href="panel.html#cb281-2" aria-hidden="true" tabindex="-1"></a>df_panel_attend_date_wider <span class="ot">&lt;-</span> df_panel_attend_date_addone <span class="sc">%&gt;%</span></span>
+<span id="cb281-3"><a href="panel.html#cb281-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> svr_id,</span>
+<span id="cb281-4"><a href="panel.html#cb281-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> attended)</span>
+<span id="cb281-5"><a href="panel.html#cb281-5" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(df_panel_attend_date_wider) <span class="sc">%&gt;%</span></span>
+<span id="cb281-6"><a href="panel.html#cb281-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -2534,16 +2544,16 @@ NA
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb282-1"><a href="panel.html#cb282-1" aria-hidden="true"></a><span class="co"># Sort and rename</span></span>
-<span id="cb282-2"><a href="panel.html#cb282-2" aria-hidden="true"></a><span class="co"># rename see: https://fanwangecon.github.io/R4Econ/amto/tibble/fs_tib_basics.html</span></span>
-<span id="cb282-3"><a href="panel.html#cb282-3" aria-hidden="true"></a>ar_unique_ids &lt;-<span class="st"> </span><span class="kw">sort</span>(<span class="kw">unique</span>(df_panel_attend_date <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_id))))</span>
-<span id="cb282-4"><a href="panel.html#cb282-4" aria-hidden="true"></a>df_panel_attend_date_wider_sort &lt;-<span class="st"> </span>df_panel_attend_date_wider <span class="op">%&gt;%</span></span>
-<span id="cb282-5"><a href="panel.html#cb282-5" aria-hidden="true"></a><span class="st">    </span><span class="kw">arrange</span>(<span class="op">!!</span><span class="kw">sym</span>(svr_date)) <span class="op">%&gt;%</span></span>
-<span id="cb282-6"><a href="panel.html#cb282-6" aria-hidden="true"></a><span class="st">    </span><span class="kw">rename_at</span>(<span class="kw">vars</span>(<span class="kw">num_range</span>(<span class="st">&#39;&#39;</span>,ar_unique_ids))</span>
-<span id="cb282-7"><a href="panel.html#cb282-7" aria-hidden="true"></a>              , <span class="kw">list</span>(<span class="op">~</span><span class="kw">paste0</span>(st_idcol_prefix, . , <span class="st">&#39;&#39;</span>))</span>
-<span id="cb282-8"><a href="panel.html#cb282-8" aria-hidden="true"></a>              )</span>
-<span id="cb282-9"><a href="panel.html#cb282-9" aria-hidden="true"></a><span class="kw">kable</span>(df_panel_attend_date_wider_sort) <span class="op">%&gt;%</span></span>
-<span id="cb282-10"><a href="panel.html#cb282-10" aria-hidden="true"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb282-1"><a href="panel.html#cb282-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort and rename</span></span>
+<span id="cb282-2"><a href="panel.html#cb282-2" aria-hidden="true" tabindex="-1"></a><span class="co"># rename see: https://fanwangecon.github.io/R4Econ/amto/tibble/fs_tib_basics.html</span></span>
+<span id="cb282-3"><a href="panel.html#cb282-3" aria-hidden="true" tabindex="-1"></a>ar_unique_ids <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(df_panel_attend_date <span class="sc">%&gt;%</span> <span class="fu">pull</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_id))))</span>
+<span id="cb282-4"><a href="panel.html#cb282-4" aria-hidden="true" tabindex="-1"></a>df_panel_attend_date_wider_sort <span class="ot">&lt;-</span> df_panel_attend_date_wider <span class="sc">%&gt;%</span></span>
+<span id="cb282-5"><a href="panel.html#cb282-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_date)) <span class="sc">%&gt;%</span></span>
+<span id="cb282-6"><a href="panel.html#cb282-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename_at</span>(<span class="fu">vars</span>(<span class="fu">num_range</span>(<span class="st">&#39;&#39;</span>,ar_unique_ids))</span>
+<span id="cb282-7"><a href="panel.html#cb282-7" aria-hidden="true" tabindex="-1"></a>              , <span class="fu">list</span>(<span class="sc">~</span><span class="fu">paste0</span>(st_idcol_prefix, . , <span class="st">&#39;&#39;</span>))</span>
+<span id="cb282-8"><a href="panel.html#cb282-8" aria-hidden="true" tabindex="-1"></a>              )</span>
+<span id="cb282-9"><a href="panel.html#cb282-9" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(df_panel_attend_date_wider_sort) <span class="sc">%&gt;%</span></span>
+<span id="cb282-10"><a href="panel.html#cb282-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -2634,14 +2644,14 @@ NA
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb283"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb283-1"><a href="panel.html#cb283-1" aria-hidden="true"></a><span class="co"># replace NA and cumusum again</span></span>
-<span id="cb283-2"><a href="panel.html#cb283-2" aria-hidden="true"></a><span class="co"># see: R4Econ/support/function/fs_func_multivar for renaming and replacing</span></span>
-<span id="cb283-3"><a href="panel.html#cb283-3" aria-hidden="true"></a>df_attend_cumu_by_day &lt;-<span class="st"> </span>df_panel_attend_date_wider_sort <span class="op">%&gt;%</span></span>
-<span id="cb283-4"><a href="panel.html#cb283-4" aria-hidden="true"></a><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(<span class="kw">contains</span>(st_idcol_prefix)), <span class="kw">list</span>(<span class="op">~</span><span class="kw">replace_na</span>(., <span class="dv">0</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb283-5"><a href="panel.html#cb283-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(<span class="kw">contains</span>(st_idcol_prefix)), <span class="kw">list</span>(<span class="op">~</span><span class="kw">cumsum</span>(.)))</span>
-<span id="cb283-6"><a href="panel.html#cb283-6" aria-hidden="true"></a></span>
-<span id="cb283-7"><a href="panel.html#cb283-7" aria-hidden="true"></a><span class="kw">kable</span>(df_attend_cumu_by_day) <span class="op">%&gt;%</span></span>
-<span id="cb283-8"><a href="panel.html#cb283-8" aria-hidden="true"></a><span class="st">  </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb283"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb283-1"><a href="panel.html#cb283-1" aria-hidden="true" tabindex="-1"></a><span class="co"># replace NA and cumusum again</span></span>
+<span id="cb283-2"><a href="panel.html#cb283-2" aria-hidden="true" tabindex="-1"></a><span class="co"># see: R4Econ/support/function/fs_func_multivar for renaming and replacing</span></span>
+<span id="cb283-3"><a href="panel.html#cb283-3" aria-hidden="true" tabindex="-1"></a>df_attend_cumu_by_day <span class="ot">&lt;-</span> df_panel_attend_date_wider_sort <span class="sc">%&gt;%</span></span>
+<span id="cb283-4"><a href="panel.html#cb283-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="fu">contains</span>(st_idcol_prefix)), <span class="fu">list</span>(<span class="sc">~</span><span class="fu">replace_na</span>(., <span class="dv">0</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb283-5"><a href="panel.html#cb283-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="fu">contains</span>(st_idcol_prefix)), <span class="fu">list</span>(<span class="sc">~</span><span class="fu">cumsum</span>(.)))</span>
+<span id="cb283-6"><a href="panel.html#cb283-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb283-7"><a href="panel.html#cb283-7" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(df_attend_cumu_by_day) <span class="sc">%&gt;%</span></span>
+<span id="cb283-8"><a href="panel.html#cb283-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -2733,20 +2743,20 @@ sid_3
 </tbody>
 </table>
 <p>The structure above is also a function in Fan’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, here the function is tested:</p>
-<div class="sourceCode" id="cb284"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb284-1"><a href="panel.html#cb284-1" aria-hidden="true"></a><span class="co"># Parameters</span></span>
-<span id="cb284-2"><a href="panel.html#cb284-2" aria-hidden="true"></a>df &lt;-<span class="st"> </span>df_panel_attend_date</span>
-<span id="cb284-3"><a href="panel.html#cb284-3" aria-hidden="true"></a>svr_id_i &lt;-<span class="st"> &#39;student_id&#39;</span></span>
-<span id="cb284-4"><a href="panel.html#cb284-4" aria-hidden="true"></a>svr_id_t &lt;-<span class="st"> &#39;date_in_class&#39;</span></span>
-<span id="cb284-5"><a href="panel.html#cb284-5" aria-hidden="true"></a>st_idcol_prefix &lt;-<span class="st"> &#39;sid_&#39;</span></span>
-<span id="cb284-6"><a href="panel.html#cb284-6" aria-hidden="true"></a></span>
-<span id="cb284-7"><a href="panel.html#cb284-7" aria-hidden="true"></a><span class="co"># Invoke Function</span></span>
-<span id="cb284-8"><a href="panel.html#cb284-8" aria-hidden="true"></a>ls_df_rosterwide &lt;-<span class="st"> </span><span class="kw">ff_panel_expand_longrosterwide</span>(df, svr_id_t, svr_id_i, st_idcol_prefix)</span>
-<span id="cb284-9"><a href="panel.html#cb284-9" aria-hidden="true"></a>df_roster_wide_func &lt;-<span class="st"> </span>ls_df_rosterwide<span class="op">$</span>df_roster_wide</span>
-<span id="cb284-10"><a href="panel.html#cb284-10" aria-hidden="true"></a>df_roster_wide_cumu_func &lt;-<span class="st"> </span>ls_df_rosterwide<span class="op">$</span>df_roster_wide_cumu</span>
-<span id="cb284-11"><a href="panel.html#cb284-11" aria-hidden="true"></a></span>
-<span id="cb284-12"><a href="panel.html#cb284-12" aria-hidden="true"></a><span class="co"># Print</span></span>
-<span id="cb284-13"><a href="panel.html#cb284-13" aria-hidden="true"></a><span class="kw">print</span>(df_roster_wide_func)</span>
-<span id="cb284-14"><a href="panel.html#cb284-14" aria-hidden="true"></a><span class="kw">print</span>(df_roster_wide_cumu_func)</span></code></pre></div>
+<div class="sourceCode" id="cb284"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb284-1"><a href="panel.html#cb284-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters</span></span>
+<span id="cb284-2"><a href="panel.html#cb284-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df_panel_attend_date</span>
+<span id="cb284-3"><a href="panel.html#cb284-3" aria-hidden="true" tabindex="-1"></a>svr_id_i <span class="ot">&lt;-</span> <span class="st">&#39;student_id&#39;</span></span>
+<span id="cb284-4"><a href="panel.html#cb284-4" aria-hidden="true" tabindex="-1"></a>svr_id_t <span class="ot">&lt;-</span> <span class="st">&#39;date_in_class&#39;</span></span>
+<span id="cb284-5"><a href="panel.html#cb284-5" aria-hidden="true" tabindex="-1"></a>st_idcol_prefix <span class="ot">&lt;-</span> <span class="st">&#39;sid_&#39;</span></span>
+<span id="cb284-6"><a href="panel.html#cb284-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb284-7"><a href="panel.html#cb284-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Invoke Function</span></span>
+<span id="cb284-8"><a href="panel.html#cb284-8" aria-hidden="true" tabindex="-1"></a>ls_df_rosterwide <span class="ot">&lt;-</span> <span class="fu">ff_panel_expand_longrosterwide</span>(df, svr_id_t, svr_id_i, st_idcol_prefix)</span>
+<span id="cb284-9"><a href="panel.html#cb284-9" aria-hidden="true" tabindex="-1"></a>df_roster_wide_func <span class="ot">&lt;-</span> ls_df_rosterwide<span class="sc">$</span>df_roster_wide</span>
+<span id="cb284-10"><a href="panel.html#cb284-10" aria-hidden="true" tabindex="-1"></a>df_roster_wide_cumu_func <span class="ot">&lt;-</span> ls_df_rosterwide<span class="sc">$</span>df_roster_wide_cumu</span>
+<span id="cb284-11"><a href="panel.html#cb284-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb284-12"><a href="panel.html#cb284-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Print</span></span>
+<span id="cb284-13"><a href="panel.html#cb284-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(df_roster_wide_func)</span>
+<span id="cb284-14"><a href="panel.html#cb284-14" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(df_roster_wide_cumu_func)</span></code></pre></div>
 
 </div>
 </div>
@@ -2765,41 +2775,41 @@ sid_3
 <li>Convert matrix to tibble</li>
 <li>Tibble make longer, and store column and row id var names</li>
 </ol>
-<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb285-1"><a href="panel.html#cb285-1" aria-hidden="true"></a><span class="co"># Generate A Matrix</span></span>
-<span id="cb285-2"><a href="panel.html#cb285-2" aria-hidden="true"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb285-3"><a href="panel.html#cb285-3" aria-hidden="true"></a>ar_a &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">1.1</span>,<span class="fl">5.1</span>)</span>
-<span id="cb285-4"><a href="panel.html#cb285-4" aria-hidden="true"></a>ar_z &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="fl">2.5</span>, <span class="fl">2.53</span>, <span class="dt">length.out=</span><span class="dv">11</span>)</span>
-<span id="cb285-5"><a href="panel.html#cb285-5" aria-hidden="true"></a>mt_ev =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(ar_a<span class="op">*</span>ar_z), <span class="dt">nrow=</span><span class="kw">length</span>(ar_a), <span class="dt">ncol=</span><span class="kw">length</span>(ar_z))</span>
-<span id="cb285-6"><a href="panel.html#cb285-6" aria-hidden="true"></a></span>
-<span id="cb285-7"><a href="panel.html#cb285-7" aria-hidden="true"></a><span class="co"># Name Matrix</span></span>
-<span id="cb285-8"><a href="panel.html#cb285-8" aria-hidden="true"></a><span class="kw">rownames</span>(mt_ev) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;ai&#39;</span>, <span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(ar_a)))</span>
-<span id="cb285-9"><a href="panel.html#cb285-9" aria-hidden="true"></a><span class="kw">colnames</span>(mt_ev) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;zi&#39;</span>, <span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(ar_z)))</span>
-<span id="cb285-10"><a href="panel.html#cb285-10" aria-hidden="true"></a></span>
-<span id="cb285-11"><a href="panel.html#cb285-11" aria-hidden="true"></a><span class="co"># to tibble</span></span>
-<span id="cb285-12"><a href="panel.html#cb285-12" aria-hidden="true"></a>tb_ev &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mt_ev) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> <span class="st">&quot;ai&quot;</span>)</span>
-<span id="cb285-13"><a href="panel.html#cb285-13" aria-hidden="true"></a></span>
-<span id="cb285-14"><a href="panel.html#cb285-14" aria-hidden="true"></a><span class="co"># longer</span></span>
-<span id="cb285-15"><a href="panel.html#cb285-15" aria-hidden="true"></a>tb_ev_long &lt;-<span class="st"> </span>tb_ev <span class="op">%&gt;%</span></span>
-<span id="cb285-16"><a href="panel.html#cb285-16" aria-hidden="true"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> <span class="kw">starts_with</span>(<span class="st">&#39;zi&#39;</span>),</span>
-<span id="cb285-17"><a href="panel.html#cb285-17" aria-hidden="true"></a>               <span class="dt">names_to =</span> <span class="kw">c</span>(<span class="st">&#39;zi&#39;</span>),</span>
-<span id="cb285-18"><a href="panel.html#cb285-18" aria-hidden="true"></a>               <span class="dt">names_pattern =</span> <span class="kw">paste0</span>(<span class="st">&quot;zi(.*)&quot;</span>),</span>
-<span id="cb285-19"><a href="panel.html#cb285-19" aria-hidden="true"></a>               <span class="dt">values_to =</span> <span class="st">&quot;ev&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb285-20"><a href="panel.html#cb285-20" aria-hidden="true"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">zi =</span> <span class="kw">as.numeric</span>(zi))</span>
-<span id="cb285-21"><a href="panel.html#cb285-21" aria-hidden="true"></a></span>
-<span id="cb285-22"><a href="panel.html#cb285-22" aria-hidden="true"></a><span class="co"># Merge with a and z values</span></span>
-<span id="cb285-23"><a href="panel.html#cb285-23" aria-hidden="true"></a>tb_ev_long &lt;-<span class="st"> </span>tb_ev_long <span class="op">%&gt;%</span></span>
-<span id="cb285-24"><a href="panel.html#cb285-24" aria-hidden="true"></a><span class="st">  </span><span class="kw">left_join</span>(<span class="kw">as_tibble</span>(ar_a) <span class="op">%&gt;%</span></span>
-<span id="cb285-25"><a href="panel.html#cb285-25" aria-hidden="true"></a><span class="st">              </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> <span class="st">&quot;ai&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb285-26"><a href="panel.html#cb285-26" aria-hidden="true"></a><span class="st">              </span><span class="kw">rename</span>(<span class="dt">a =</span> value)</span>
-<span id="cb285-27"><a href="panel.html#cb285-27" aria-hidden="true"></a>              , <span class="dt">by =</span> <span class="st">&#39;ai&#39;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb285-28"><a href="panel.html#cb285-28" aria-hidden="true"></a><span class="st">  </span><span class="kw">left_join</span>(<span class="kw">as_tibble</span>(ar_z) <span class="op">%&gt;%</span></span>
-<span id="cb285-29"><a href="panel.html#cb285-29" aria-hidden="true"></a><span class="st">              </span><span class="kw">rowid_to_column</span>(<span class="dt">var =</span> <span class="st">&quot;zi&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb285-30"><a href="panel.html#cb285-30" aria-hidden="true"></a><span class="st">              </span><span class="kw">rename</span>(<span class="dt">z =</span> value),</span>
-<span id="cb285-31"><a href="panel.html#cb285-31" aria-hidden="true"></a>            <span class="dt">by =</span> <span class="st">&#39;zi&#39;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb285-32"><a href="panel.html#cb285-32" aria-hidden="true"></a><span class="st">  </span><span class="kw">select</span>(a,ai,z,zi,ev)</span>
-<span id="cb285-33"><a href="panel.html#cb285-33" aria-hidden="true"></a></span>
-<span id="cb285-34"><a href="panel.html#cb285-34" aria-hidden="true"></a><span class="co"># Display</span></span>
-<span id="cb285-35"><a href="panel.html#cb285-35" aria-hidden="true"></a><span class="kw">kable</span>(tb_ev) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling_fc_wide</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb285-1"><a href="panel.html#cb285-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate A Matrix</span></span>
+<span id="cb285-2"><a href="panel.html#cb285-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb285-3"><a href="panel.html#cb285-3" aria-hidden="true" tabindex="-1"></a>ar_a <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.1</span>,<span class="fl">5.1</span>)</span>
+<span id="cb285-4"><a href="panel.html#cb285-4" aria-hidden="true" tabindex="-1"></a>ar_z <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">2.5</span>, <span class="fl">2.53</span>, <span class="at">length.out=</span><span class="dv">11</span>)</span>
+<span id="cb285-5"><a href="panel.html#cb285-5" aria-hidden="true" tabindex="-1"></a>mt_ev <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(ar_a<span class="sc">*</span>ar_z), <span class="at">nrow=</span><span class="fu">length</span>(ar_a), <span class="at">ncol=</span><span class="fu">length</span>(ar_z))</span>
+<span id="cb285-6"><a href="panel.html#cb285-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb285-7"><a href="panel.html#cb285-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Name Matrix</span></span>
+<span id="cb285-8"><a href="panel.html#cb285-8" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(mt_ev) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&#39;ai&#39;</span>, <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(ar_a)))</span>
+<span id="cb285-9"><a href="panel.html#cb285-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(mt_ev) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&#39;zi&#39;</span>, <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(ar_z)))</span>
+<span id="cb285-10"><a href="panel.html#cb285-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb285-11"><a href="panel.html#cb285-11" aria-hidden="true" tabindex="-1"></a><span class="co"># to tibble</span></span>
+<span id="cb285-12"><a href="panel.html#cb285-12" aria-hidden="true" tabindex="-1"></a>tb_ev <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(mt_ev) <span class="sc">%&gt;%</span> <span class="fu">rowid_to_column</span>(<span class="at">var =</span> <span class="st">&quot;ai&quot;</span>)</span>
+<span id="cb285-13"><a href="panel.html#cb285-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb285-14"><a href="panel.html#cb285-14" aria-hidden="true" tabindex="-1"></a><span class="co"># longer</span></span>
+<span id="cb285-15"><a href="panel.html#cb285-15" aria-hidden="true" tabindex="-1"></a>tb_ev_long <span class="ot">&lt;-</span> tb_ev <span class="sc">%&gt;%</span></span>
+<span id="cb285-16"><a href="panel.html#cb285-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">&#39;zi&#39;</span>),</span>
+<span id="cb285-17"><a href="panel.html#cb285-17" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">&#39;zi&#39;</span>),</span>
+<span id="cb285-18"><a href="panel.html#cb285-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_pattern =</span> <span class="fu">paste0</span>(<span class="st">&quot;zi(.*)&quot;</span>),</span>
+<span id="cb285-19"><a href="panel.html#cb285-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;ev&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb285-20"><a href="panel.html#cb285-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">zi =</span> <span class="fu">as.numeric</span>(zi))</span>
+<span id="cb285-21"><a href="panel.html#cb285-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb285-22"><a href="panel.html#cb285-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge with a and z values</span></span>
+<span id="cb285-23"><a href="panel.html#cb285-23" aria-hidden="true" tabindex="-1"></a>tb_ev_long <span class="ot">&lt;-</span> tb_ev_long <span class="sc">%&gt;%</span></span>
+<span id="cb285-24"><a href="panel.html#cb285-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">as_tibble</span>(ar_a) <span class="sc">%&gt;%</span></span>
+<span id="cb285-25"><a href="panel.html#cb285-25" aria-hidden="true" tabindex="-1"></a>              <span class="fu">rowid_to_column</span>(<span class="at">var =</span> <span class="st">&quot;ai&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb285-26"><a href="panel.html#cb285-26" aria-hidden="true" tabindex="-1"></a>              <span class="fu">rename</span>(<span class="at">a =</span> value)</span>
+<span id="cb285-27"><a href="panel.html#cb285-27" aria-hidden="true" tabindex="-1"></a>              , <span class="at">by =</span> <span class="st">&#39;ai&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb285-28"><a href="panel.html#cb285-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">as_tibble</span>(ar_z) <span class="sc">%&gt;%</span></span>
+<span id="cb285-29"><a href="panel.html#cb285-29" aria-hidden="true" tabindex="-1"></a>              <span class="fu">rowid_to_column</span>(<span class="at">var =</span> <span class="st">&quot;zi&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb285-30"><a href="panel.html#cb285-30" aria-hidden="true" tabindex="-1"></a>              <span class="fu">rename</span>(<span class="at">z =</span> value),</span>
+<span id="cb285-31"><a href="panel.html#cb285-31" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="st">&#39;zi&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb285-32"><a href="panel.html#cb285-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(a,ai,z,zi,ev)</span>
+<span id="cb285-33"><a href="panel.html#cb285-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb285-34"><a href="panel.html#cb285-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Display</span></span>
+<span id="cb285-35"><a href="panel.html#cb285-35" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(tb_ev) <span class="sc">%&gt;%</span> <span class="fu">kable_styling_fc_wide</span>()</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -2922,7 +2932,7 @@ zi11
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb286-1"><a href="panel.html#cb286-1" aria-hidden="true"></a><span class="kw">kable</span>(tb_ev_long) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb286-1"><a href="panel.html#cb286-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(tb_ev_long) <span class="sc">%&gt;%</span> <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>

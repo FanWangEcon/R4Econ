@@ -274,3 +274,10 @@
 1. [Python in R with Reticulate](https://fanwangecon.github.io/R4Econ/development/python/htmlpdfr/fs_python_reticulate.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/development/python//fs_python_reticulate.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/development/python/htmlpdfr/fs_python_reticulate.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/development/python/htmlpdfr/fs_python_reticulate.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/development/python/htmlpdfr/fs_python_reticulate.html)
 	+ Use Python in R with Reticulate
 	+ **reticulate**: *py_config() + use_condaenv() + py_run_string() + Sys.which('python')*
+
+## 11.3  Command Line
+
+1. [System and Shell Commands in R](https://fanwangecon.github.io/R4Econ/development/system/htmlpdfr/fs_system_shell.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/development/system//fs_system_shell.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/development/system/htmlpdfr/fs_system_shell.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/development/system/htmlpdfr/fs_system_shell.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/development/system/htmlpdfr/fs_system_shell.html)
+	+ Run system executable and shell commands.
+	+ Activate conda environment with shell script.
+	+ **r**: *system() + shell()*

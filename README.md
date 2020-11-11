@@ -1,4 +1,4 @@
-[![HitCount](http://hits.dwyl.io/fanwangecon/R4Econ.svg)](https://github.com/FanWangEcon/R4Econ)  [![Star](https://img.shields.io/github/stars/fanwangecon/R4Econ?style=social)](https://github.com/FanWangEcon/R4Econ/stargazers) [![Fork](https://img.shields.io/github/forks/fanwangecon/R4Econ?style=social)](https://github.com/FanWangEcon/R4Econ/network/members) [![Star](https://img.shields.io/github/watchers/fanwangecon/R4Econ?style=social)](https://github.com/FanWangEcon/R4Econ/watchers)
+[![HitCount](http://hits.dwyl.com/fanwangecon/R4Econ.svg)](https://github.com/FanWangEcon/R4Econ)  [![Star](https://img.shields.io/github/stars/fanwangecon/R4Econ?style=social)](https://github.com/FanWangEcon/R4Econ/stargazers) [![Fork](https://img.shields.io/github/forks/fanwangecon/R4Econ?style=social)](https://github.com/FanWangEcon/R4Econ/network/members) [![Star](https://img.shields.io/github/watchers/fanwangecon/R4Econ?style=social)](https://github.com/FanWangEcon/R4Econ/watchers) [![DOI](https://zenodo.org/badge/173583807.svg)](https://zenodo.org/badge/latestdoi/173583807)
 
 This is a work-in-progress [website](https://fanwangecon.github.io/R4Econ/) consisting of R panel data and optimization examples for Statistics/Econometrics/Economic Analysis.
 
@@ -291,8 +291,17 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ Use Python in R with Reticulate
 	+ **reticulate**: *py_config() + use_condaenv() + py_run_string() + Sys.which('python')*
 
+## 11.3  Command Line
+
+1. [System and Shell Commands in R](https://fanwangecon.github.io/R4Econ/development/system/htmlpdfr/fs_system_shell.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/development/system//fs_system_shell.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/development/system/htmlpdfr/fs_system_shell.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/development/system/htmlpdfr/fs_system_shell.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/development/system/htmlpdfr/fs_system_shell.html)
+	+ Run system executable and shell commands.
+	+ Activate conda environment with shell script.
+	+ **r**: *system() + shell()*
+
 ----
 Please contact [![](https://img.shields.io/github/followers/fanwangecon?label=FanWangEcon&style=social)](https://github.com/FanWangEcon) [![](https://img.shields.io/twitter/follow/fanwangecon?label=%20&style=social)](https://twitter.com/fanwangecon) for issues or problems.
+
+[![DOI](https://zenodo.org/badge/173583807.svg)](https://zenodo.org/badge/latestdoi/173583807)
 
 ![RepoSize](https://img.shields.io/github/repo-size/fanwangecon/R4Econ)
 ![CodeSize](https://img.shields.io/github/languages/code-size/fanwangecon/R4Econ)
