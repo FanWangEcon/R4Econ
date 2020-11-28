@@ -58,6 +58,8 @@ Check through *PrjOptiSNW* and see which files have been added, and which files 
 Note: new files that should not get pdf and html should have *.rmd* rather than *.Rmd* as suffix.
 
 ```{r}
+bl_update_book = TRUE
+
 # run examples
 spt_root <- 'C:/Users/fan/PrjOptiSNW'
 spt_log <- 'C:/Users/fan/PrjOptiSNW/_log/rmdclean/'
@@ -291,35 +293,38 @@ spn_out.close()
 Render HTML:
 
 ```{r}
-spt_root <- 'C:/Users/fan/PrjOptiSNW'
-spt_log <- 'C:/Users/fan/PrjOptiSNW/_log/rmdclean/'
-
-sink(paste0(spt_log, 'render_bookdown_html.log'))
-start_time <- Sys.time()
-setwd(spt_root)
-
-# render html
-bookdown::render_book('index.Rmd', 'bookdown::gitbook')
-
-end_time <- Sys.time()
-print(paste0('bookdown::render_book, html, took:', end_time - start_time))
-sink()
+if (bl_update_book) {
+  spt_root <- 'C:/Users/fan/PrjOptiSNW'
+  spt_log <- 'C:/Users/fan/PrjOptiSNW/_log/rmdclean/'
+  
+  sink(paste0(spt_log, 'render_bookdown_html.log'))
+  start_time <- Sys.time()
+  setwd(spt_root)
+  
+  # render html
+  bookdown::render_book('index.Rmd', 'bookdown::gitbook')
+  
+  end_time <- Sys.time()
+  print(paste0('bookdown::render_book, html, took:', end_time - start_time))
+  sink()
+}
 ```
 
 Render PDF:
 
 ```{r}
-spt_root <- 'C:/Users/fan/PrjOptiSNW'
-spt_log <- 'C:/Users/fan/PrjOptiSNW/_log/rmdclean/'
-
-sink(paste0(spt_log, 'render_bookdown_pdf.log'))
-start_time <- Sys.time()
-setwd(spt_root)
-
-bookdown::render_book('index.Rmd', 'bookdown::pdf_book')
-
-end_time <- Sys.time()
-print(paste0('bookdown::render_book, pdf, took:', end_time - start_time))
-sink()
-
+if (bl_update_book) {
+  spt_root <- 'C:/Users/fan/PrjOptiSNW'
+  spt_log <- 'C:/Users/fan/PrjOptiSNW/_log/rmdclean/'
+  
+  sink(paste0(spt_log, 'render_bookdown_pdf.log'))
+  start_time <- Sys.time()
+  setwd(spt_root)
+  
+  bookdown::render_book('index.Rmd', 'bookdown::pdf_book')
+  
+  end_time <- Sys.time()
+  print(paste0('bookdown::render_book, pdf, took:', end_time - start_time))
+  sink()
+}
 ```

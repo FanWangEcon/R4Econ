@@ -11,6 +11,10 @@ mp_valpol_out
 - *ts*: three dimensional tensor
 - *mn*: any larger than two dimensional array
 
+And a special name is
+
+- *gn*: stands for generic type, could be typed differently, the function will parse the parameter type and then behave accordingly.
+
 ### Other Structures
 
 - *pl*: plot or figure object
@@ -27,7 +31,7 @@ mp_valpol_out
 **Strings for Special Purposes**
 
 - *stf*: prefix for entire string files, all lines, including read in and to be reading in.
-- *stm*: time variables values etc that can used for calculations	
+- *stm*: time variables values etc that can used for calculations
 - *stg*: graph strings
 
 **Strings but not Actually Strings**
@@ -58,7 +62,7 @@ mp_valpol_out
 - *ts*: matlab array three dimensional
 - *cl*: matlab cell
 	+ *cln*: cell matrix, meaning some n by m cells
-- *mp*: matlab container 
+- *mp*: matlab container
 
 ## python conventions
 

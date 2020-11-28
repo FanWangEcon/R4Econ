@@ -60,15 +60,15 @@ Note: new files that should not get pdf and html should have *.rmd* rather than 
 bl_update_book = TRUE
   
 # run examples
-spt_root <- 'C:/Users/fan/pyfan'
-spt_log <- 'C:/Users/fan/pyfan/_log/rmdclean/'
+spt_root_pf <- 'C:/Users/fan/pyfan'
+spt_log <- paste0(spt_root_pf, '/_log/rmdclean/')
 sink(paste0(spt_log, 'rmd_clean_test.log'))
 start_time <- Sys.time()
-setwd(spt_root)
+setwd(spt_root_pf)
 
 bl_test = TRUE
 bl_gen_if_git_old = FALSE
-ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/pyfan'),
+ff_sup_clean_rmd(ar_spt_root = c(spt_root_pf),
                  ar_spn_skip = c('pkgtest','index.Rmd', 'main.Rmd',
                                   '_mod.Rmd', 'README', 'title.Rmd'),
                  st_folder_pdf = '/htmlpdfr/',
@@ -90,15 +90,14 @@ Only generate pdf and html for files that have git changes or are new.
 
 
 ```{r}
-spt_root <- 'C:/Users/fan/pyfan'
-spt_log <- 'C:/Users/fan/pyfan/_log/rmdclean/'
+spt_log <- paste0(spt_root_pf, '/_log/rmdclean/')
 sink(paste0(spt_log, 'rmd_clean_actual.log'))
 start_time <- Sys.time()
-setwd(spt_root)
+setwd(spt_root_pf)
 
 bl_test = FALSE
 bl_gen_if_git_old = FALSE
-ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/pyfan'),
+ff_sup_clean_rmd(ar_spt_root = c(spt_root_pf),
                  ar_spn_skip = c('pkgtest','index.Rmd', 'main.Rmd',
                                  '_mod.Rmd', 'README', 'title.Rmd'),
                  st_folder_pdf = '/htmlpdfr/',
@@ -125,7 +124,7 @@ import pyfan.util.rmd.bookdownparse as ft_bookdownparse
 
 # Path Roots
 sfc_prj = 'pyfan'
-sph_prj = 'C:/Users/fan/pyfan/'
+sph_prj = spt_root_pf
 spn_prj_bookdown_yml = '_bookdown.yml'
 
 # Read me preamble, and endnotes
@@ -159,7 +158,7 @@ with open(sph_prj + spn_prj_readme_ful, 'w') as outfile:
 Generate contenxt for bookdown appendix.
 
 ```{python}
-sph_prj = 'C:/Users/fan/pyfan/'
+sph_prj = spt_root_pf
 spn_prj_readme_toc = 'README_toc.md'
 spn_prj_appendix = 'README_appendix.md'
 spn_in = open(sph_prj + spn_prj_readme_toc, "r")
@@ -225,12 +224,11 @@ Render HTML:
 
 ```{r}
 if (bl_update_book) {
-  spt_root <- 'C:/Users/fan/pyfan'
-  spt_log <- 'C:/Users/fan/pyfan/_log/rmdclean/'
+  spt_log <- paste0(spt_root_pf, '/_log/rmdclean/')
   
   sink(paste0(spt_log, 'render_bookdown_html.log'))
   start_time <- Sys.time()
-  setwd(spt_root)
+  setwd(spt_root_pf)
   
   # render html
   bookdown::render_book('index.Rmd', 'bookdown::gitbook')
@@ -245,12 +243,11 @@ Render PDF:
 
 ```{r}
 if (bl_update_book) {
-  spt_root <- 'C:/Users/fan/pyfan'
-  spt_log <- 'C:/Users/fan/pyfan/_log/rmdclean/'
+  spt_log <- paste0(spt_root_pf, '/_log/rmdclean/')
   
   sink(paste0(spt_log, 'render_bookdown_pdf.log'))
   start_time <- Sys.time()
-  setwd(spt_root)
+  setwd(spt_root_pf)
   
   bookdown::render_book('index.Rmd', 'bookdown::pdf_book')
   

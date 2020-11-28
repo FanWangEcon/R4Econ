@@ -1,0 +1,192 @@
+---
+title: "Factor Basics with R"
+description: |
+  Basics of unobserved factor models.
+core:
+  - package: r
+    code: |
+      rep()
+      head()
+      tail()
+      na_if()
+date: 2020-11-12
+date_start: 2020-11-12
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+
+### Factor Basics
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+#### Unobserved Factor and Measurements
+
+##### Ability and English and Math Scores
+
+There are two tests, $j=1$ the math test, and $j=2$ the word test. Student ID=1 takes both tests. What determines his test scores? (1) how the test is designed, max and min points, and grading difficulty and points per question; (2) his own ability; (3) the extend to which the test reflects his ability versus random other factors. 
+
+We have:
+
+$$Z_{i,j=\text{math}} = \mu_{j=\text{math}} + \alpha_{j=\text{math}}\cdot\theta_{i} + \epsilon_{i,j=\text{math}}$$
+
+Note that there are three possibilities for index:
+
+1. An element is $i$ specific: $\theta$
+2. An element is $j$ specific: $\mu$ and $\alpha$
+3. An element is $i,j$ specific: $Z$ and $\epsilon$
+
+We can ignore the $i$ subscripts, and think of $Z$ and $\theta$ and $\epsilon$ as vectors:
+
+$$Z_{j} = \mu_{j} + \alpha_{j}\cdot{\theta} + \epsilon_{j}$$
+
+##### Simulate Scores and Ability
+
+We are interested in the distribution of $\theta$, when we have multiple test scores, suppose:
+
+1. $\theta$ is normal, and suppose its mean is 0.
+2. Suppose $\alpha_{\text{math}} = 1$.
+3. $\epsilon$ are zero mean and normal.
+
+Set some parameters:
+
+```{r}
+# define parameters fixed
+alpha_math <- 1
+theta_cognitive_mean <- 0
+
+# Parameters to estiamtes
+mu_math <- 60
+mu_engl <- 80
+sd_eps_math <- 6
+sd_eps_engl <- 3
+# alpha_math fixed at 1
+alpha_engl <- 5
+# theta_cognitive_mean fixed at 0
+theta_cognitive_stdv <- 5
+```
+
+Simulate Math and English scores:
+
+```{r}
+# set seed
+set.seed(1)
+
+# Number of students
+N <- 100
+
+# Draw vectors of the epsilon terms
+ar_eps_math <- rnorm(N, mean=0, sd=sd_eps_math)
+ar_eps_engl <- rnorm(N, mean=0, sd=sd_eps_engl)
+
+# Draw the Theta Ability vector
+ar_theta_cognitive <- rnorm(N, mean=theta_cognitive_mean, sd=theta_cognitive_stdv)
+
+# Simulate the English and Math Test Scores
+ar_math <- mu_math + alpha_math*ar_theta_cognitive + ar_eps_math
+ar_engl <- mu_engl + alpha_engl*ar_theta_cognitive + ar_eps_engl
+```
+
+Generate a Dataframe with all the information:
+
+```{r}
+# Gather all data together
+mt_data <- cbind(ar_math, ar_engl, ar_theta_cognitive, ar_eps_math, ar_eps_engl)
+
+# Column Names
+ar_st_varnames <- c('id', 'scores_math','scores_english','cog_ability','math_eps', 'engl_eps')
+
+# Combine to tibble, add name col1, col2, etc.
+tb_combine <- as_tibble(mt_data) %>%
+  rowid_to_column(var = "id") %>%
+  rename_all(~c(ar_st_varnames))
+
+# Display
+kable(tb_combine[1:10,]) %>% kable_styling_fc_wide()
+```
+
+Draw scatter plot of test score and ability:
+
+```{r}
+# Pivot Longer
+tb_combine_long <- tb_combine %>%
+  pivot_longer(cols = starts_with('scores'),
+               names_to = c('test'),
+               names_pattern = paste0("scores_(.*)"),
+               values_to = "scores") %>%
+  mutate(scores = as.numeric(scores))
+
+# Draw Scatter Plot
+scatter <- ggplot(tb_combine_long, aes(x=cog_ability, y=scores,
+                                       colour=test)) +
+      geom_jitter(size=1, width = 0.15) +
+      labs(title = 'Coginitive Ability and Test Scores',
+           x = 'Unobserved Cognitive Ability',
+           y = 'Test Scores in Math and English',
+           caption = 'Simulated Data https://github.com/FanWangEcon/R4Econ') +
+      theme_bw()
+print(scatter)
+```
+
+##### Mean, Variance and Covariance Formula
+
+Note that we assume that $\mathrm{E}[\theta]=0$, and $\alpha_m=1$, and we also assume that the measurement errors for Math and English scores are uncorrelated. 
+
+First, we can either set one of the $\mu$ to be 0 or $\mathrm{E}[\theta]$ to 0. From the mean scores, given our assumption, we can identify $\mu_m$ and $\mu_e$:
+
+$$\mathrm{E}[Z_{m}] = \mu_m + \alpha_m\cdot\mathrm{E}[\theta] = \mu_m$$
+$$\mathrm{E}[Z_{e}] = \mu_e + \alpha_e\cdot\mathrm{E}[\theta] = \mu_e $$
+
+Second, we have two observed variance and one observed covariance, since $\alpha_m=1$, we have three equations with three unknowns, where the three unkonwns are $\mathrm{Var}[\theta]$, $\mathrm{Var}[\epsilon_m]$ and $\alpha_e$:
+
+$$\mathrm{Var}[Z_{m}] = \alpha_m^2 \cdot\mathrm{Var}[\theta] + \mathrm{Var}[\epsilon_m] = \mathrm{Var}[\theta] + \mathrm{Var}[\epsilon_m]$$
+$$\mathrm{Var}[Z_{e}] = \alpha_e^2 \cdot\mathrm{Var}[\theta] + \mathrm{Var}[\epsilon_e]$$
+
+$$\mathrm{Cov}[Z_{m}, Z_{e}] = \alpha_m \cdot \alpha_e \cdot\mathrm{Var}[\theta] = \alpha_e \cdot\mathrm{Var}[\theta] $$
+
+Third, replace the $\alpha_e$ in the variance of English equation as a function of covariance:
+
+$$\mathrm{Var}[Z_{e}] = \left(\frac{\mathrm{Cov}[Z_{m}, Z_{e}]}{\mathrm{Var}[\theta]}\right)^2 \cdot\mathrm{Var}[\theta] + \mathrm{Var}[\epsilon_e]$$
+
+##### Estimate/Solve for the Measurement Equation Parameters
+
+
+We can compute a number of objects from the data:
+
+1. the mean of Math scores
+2. the mean of English scores
+3. the variance of Math scores
+4. the variance of English scores
+5. the covariance of Math and English scores
+
+```{r}
+# 1. the mean of Math scores
+fl_mean_math = mean(tb_combine[['scores_math']])
+# 2. the mean of English scores
+fl_mean_english = mean(tb_combine[['scores_english']])
+# 3. the variance of Math scores
+fl_var_math = cov(tb_combine[['scores_math']], tb_combine[['scores_math']])
+# 4. the variance of English scores
+fl_var_english = cov(tb_combine[['scores_english']], tb_combine[['scores_english']])
+# 5. the covariance of Math and English scores
+fl_cov = cov(tb_combine[['scores_math']], tb_combine[['scores_english']])
+# Print means
+print(paste0('fl_mean_math=', fl_mean_math, ', fl_mean_english=', fl_mean_english))
+# Print var and cov
+print(paste0('fl_cov=', fl_cov, ', fl_var_math=', fl_var_math, ', fl_var_english=', fl_var_english))
+```
