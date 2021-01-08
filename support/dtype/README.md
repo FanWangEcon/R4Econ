@@ -1,5 +1,5 @@
 # Naming Conventions
-mp_valpol_out
+
 ## Across Language Naming Conventions
 
 ### Numeric Structures
@@ -17,10 +17,10 @@ And a special name is
 
 ### Other Structures
 
+- *tp*: immutable tuple if tuple is supported by the language
 - *pl*: plot or figure object
 - *ob*: a generic object of any time
 - *fc*: a function anonymous function for example, function to be passed as parameters
-
 
 ### Strings
 
@@ -55,59 +55,16 @@ And a special name is
 
 ## R Conventions
 
+- *tb*: a tibble
+- *df*: a dataframe
+
 ## Matlab Conventions
 
-- *ar*: matlab array single
-- *mt*: matlab array matrix
-- *ts*: matlab array three dimensional
 - *cl*: matlab cell
 	+ *cln*: cell matrix, meaning some n by m cells
 - *mp*: matlab container
+- *sa*: structure array
 
 ## python conventions
 
 - *co*: class object
-
-## Various non-numeric data objects
-
-**Files**
-
-- *fl* = file object
-
-**Figures**
-
-- *pl* = internal plot object
-
-- oj = some kind of generic anything object
-  + ar.st
-  + ar.fl
-  + ar_it
-- mt = matrix
-- ts = higher dimensions matrix, 3d tensor
-- ls = list
-  + list.ar.st: list of arrays of strings
-  + ls_svr: list of string variable namess
-- sc = structure, generic large store
-- df = dataframe
-  + tb if tb, but tb can also be called df.
-- fc = functions
-
-Regressions
-
-- rs: reg results
-- rsm: result summary
-- vf: factor variable
-
-acronyms
-
-- drv: discrete random variable
-- smp: sample
-
-files
-
-- fst: fan_script_test
-
-function naming
-
-- ff: generic
-- ffi: inner small local function

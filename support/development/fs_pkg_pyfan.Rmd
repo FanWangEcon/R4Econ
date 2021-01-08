@@ -26,7 +26,7 @@ urlcolor: blue
 
 ```{r global_options, include = FALSE}
 rm(list = ls(all.names = TRUE))
-try(source("C:/Users/fan/R4Econ/.Rprofile"))
+try(source("G:/repos/R4Econ/.Rprofile"))
 library(reticulate)
 ```
 
@@ -43,11 +43,18 @@ pyfan Rmd to PDF and HTML.
 # knitr::purl(file_path_rmd, output=file_path_r, documentation = 1)
 ```
 
+#### Check
+
+1. Make sure files are available under C drive user fan
+2. Make sure AWS credentials are in .aws under user fan
+
 #### Local Outputs
 
 ```
 file://C:/Users/fan/pyfan/bookdown/index.html
 file://C:/Users/fan/pyfan/amto/string/
+file://G:/repos/pyfan/bookdown/index.html
+file://G:/repos/pyfan/amto/string/
 ```
 
 #### Testing Which Files Have Changed
@@ -60,7 +67,8 @@ Note: new files that should not get pdf and html should have *.rmd* rather than 
 bl_update_book = TRUE
   
 # run examples
-spt_root_pf <- 'C:/Users/fan/pyfan'
+# spt_root_pf <- 'C:/Users/fan/pyfan'
+spt_root_pf <- 'G:/repos/pyfan/'
 spt_log <- paste0(spt_root_pf, '/_log/rmdclean/')
 sink(paste0(spt_log, 'rmd_clean_test.log'))
 start_time <- Sys.time()
@@ -122,6 +130,8 @@ There is python file that parses rmd front matters and goes through rmd files in
 ```{python}
 import pyfan.util.rmd.bookdownparse as ft_bookdownparse
 
+spt_root_pf = 'G:/repos/pyfan/'
+
 # Path Roots
 sfc_prj = 'pyfan'
 sph_prj = spt_root_pf
@@ -158,6 +168,7 @@ with open(sph_prj + spn_prj_readme_ful, 'w') as outfile:
 Generate contenxt for bookdown appendix.
 
 ```{python}
+spt_root_pf = 'G:/repos/pyfan/'
 sph_prj = spt_root_pf
 spn_prj_readme_toc = 'README_toc.md'
 spn_prj_appendix = 'README_appendix.md'
@@ -223,6 +234,7 @@ spn_out.close()
 Render HTML:
 
 ```{r}
+spt_root_pf <- 'G:/repos/pyfan/'
 if (bl_update_book) {
   spt_log <- paste0(spt_root_pf, '/_log/rmdclean/')
   
@@ -242,6 +254,7 @@ if (bl_update_book) {
 Render PDF:
 
 ```{r}
+spt_root_pf <- 'G:/repos/pyfan/'
 if (bl_update_book) {
   spt_log <- paste0(spt_root_pf, '/_log/rmdclean/')
   

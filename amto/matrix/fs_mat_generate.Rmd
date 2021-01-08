@@ -6,6 +6,7 @@ description: |
 core:
   - package: R
     code: |
+      rep()
       rbind()
       matrix(NA)
       matrix(NA_real_)
@@ -95,6 +96,23 @@ mt_runif <- matrix(runif(15,min=0,max=1), nrow=5, ncol=5)
 mt_rnorm_runif <- cbind(mt_rnorm, mt_runif)
 
 # Display
-kable(mt_rnorm_runif) %>%
-  kable_styling_fc_wide()
+kable(mt_rnorm_runif) %>% kable_styling_fc_wide()
 ```
+
+#### Add Column to Matrix with Common Scalar Value
+
+Given some matrix of information, add a column, where all rows of the column have the same numerical value. Use the matrix created prior. 
+- R add column to matrix
+- r append column to matrix constant value
+
+```{r}
+fl_new_first_col_val <- 111
+fl_new_last_col_val <- 999
+mt_with_more_columns <- cbind(rep(fl_new_first_col_val, dim(mt_rnorm_runif)[1]), 
+                              mt_rnorm_runif,
+                              rep(fl_new_last_col_val, dim(mt_rnorm_runif)[1]))
+# Display
+kable(mt_with_more_columns) %>% kable_styling_fc_wide()
+```
+
+

@@ -7,7 +7,7 @@
   <title>A Index and Code Links | Data Structures, Estimation and Optimization with R</title>
   <meta name="description" content="<p>Run system executable and shell commands.
 Activate conda environment with shell script.</p>" />
-  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="A Index and Code Links | Data Structures, Estimation and Optimization with R" />
   <meta property="og:type" content="book" />
@@ -27,7 +27,7 @@ Activate conda environment with shell script.</p>" />
 <meta name="author" content="Fan Wang" />
 
 
-<meta name="date" content="2020-11-11" />
+<meta name="date" content="2021-01-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -185,12 +185,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="summarize-data.html"><a href="summarize-data.html#sorting-indexing-slicing"><i class="fa fa-check"></i><b>2.2</b> Sorting, Indexing, Slicing</a>
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="summarize-data.html"><a href="summarize-data.html#sorting"><i class="fa fa-check"></i><b>2.2.1</b> Sorting</a></li>
+<li class="chapter" data-level="2.2.2" data-path="summarize-data.html"><a href="summarize-data.html#group-sort-and-slice"><i class="fa fa-check"></i><b>2.2.2</b> Group, Sort and Slice</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="summarize-data.html"><a href="summarize-data.html#group-statistics"><i class="fa fa-check"></i><b>2.3</b> Group Statistics</a>
 <ul>
-<li class="chapter" data-level="2.3.1" data-path="summarize-data.html"><a href="summarize-data.html#groups-statistics"><i class="fa fa-check"></i><b>2.3.1</b> Groups Statistics</a></li>
-<li class="chapter" data-level="2.3.2" data-path="summarize-data.html"><a href="summarize-data.html#one-variable-group-summary"><i class="fa fa-check"></i><b>2.3.2</b> One Variable Group Summary</a></li>
-<li class="chapter" data-level="2.3.3" data-path="summarize-data.html"><a href="summarize-data.html#nested-within-group-stats"><i class="fa fa-check"></i><b>2.3.3</b> Nested within Group Stats</a></li>
+<li class="chapter" data-level="2.3.1" data-path="summarize-data.html"><a href="summarize-data.html#cumulative-statistics-within-group"><i class="fa fa-check"></i><b>2.3.1</b> Cumulative Statistics within Group</a></li>
+<li class="chapter" data-level="2.3.2" data-path="summarize-data.html"><a href="summarize-data.html#groups-statistics"><i class="fa fa-check"></i><b>2.3.2</b> Groups Statistics</a></li>
+<li class="chapter" data-level="2.3.3" data-path="summarize-data.html"><a href="summarize-data.html#one-variable-group-summary"><i class="fa fa-check"></i><b>2.3.3</b> One Variable Group Summary</a></li>
+<li class="chapter" data-level="2.3.4" data-path="summarize-data.html"><a href="summarize-data.html#nested-within-group-stats"><i class="fa fa-check"></i><b>2.3.4</b> Nested within Group Stats</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="summarize-data.html"><a href="summarize-data.html#distributional-statistics"><i class="fa fa-check"></i><b>2.4</b> Distributional Statistics</a>
 <ul>
@@ -446,7 +448,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="https://fanwangecon.github.io/R4Econ/amto/matrix/htmlpdfr/fs_mat_generate.html">Matrix Basics</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix//fs_mat_generate.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/htmlpdfr/fs_mat_generate.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/htmlpdfr/fs_mat_generate.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/matrix/htmlpdfr/fs_mat_generate.html"><strong>html</strong></a>
 <ul>
 <li>Generate and combine NA, fixed and random matrixes. Name columns and rows.</li>
-<li><strong>R</strong>: <em>rbind() + matrix(NA) + matrix(NA_real_) + matrix(NA_integer_) + colnames() + rownames()</em></li>
+<li><strong>R</strong>: <em>rep() + rbind() + matrix(NA) + matrix(NA_real_) + matrix(NA_integer_) + colnames() + rownames()</em></li>
 </ul></li>
 <li><a href="https://fanwangecon.github.io/R4Econ/amto/matrix/htmlpdfr/fs_mat_linear_algebra.html">Linear Algebra Operations</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix//fs_mat_linear_algebra.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/htmlpdfr/fs_mat_linear_algebra.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/htmlpdfr/fs_mat_linear_algebra.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/matrix/htmlpdfr/fs_mat_linear_algebra.html"><strong>html</strong></a></li>
 </ol>
@@ -504,11 +506,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Populate Values from one row to other rows</li>
 <li><strong>dplyr</strong>: <em>arrange() + row_number() + mutate(lowest = min(Sepal.Length)) + case_when(row_number()==x ~ Septal.Length) + mutate(Sepal.New = Sepal.Length[Sepal.Index == 1])</em></li>
 </ul></li>
+<li><a href="https://fanwangecon.github.io/R4Econ/summarize/index/htmlpdfr/fs_group_sort.html">Group and sort, and Slice and Summarize</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index//fs_group_sort.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index/htmlpdfr/fs_group_sort.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index/htmlpdfr/fs_group_sort.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/summarize/index/htmlpdfr/fs_group_sort.html"><strong>html</strong></a>
+<ul>
+<li>Group a dataframe by a variable, sort within group by another variable, keep only highest rows.</li>
+<li><strong>dplyr</strong>: <em>arrange() + group_by() + slice_head(n=1)</em></li>
+</ul></li>
 </ol>
 </div>
 <div id="section-2.3-group-statisticsgroup-statistics-links" class="section level3" number="12.2.3">
 <h3><span class="header-section-number">A.2.3</span> <a href="summarize-data.html#group-statistics">Section 2.3 Group Statistics</a> links</h3>
 <ol style="list-style-type: decimal">
+<li><a href="https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_cumall.html">Cummean Test, Cumulative Mean within Group</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate//fs_group_cumall.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_cumall.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_cumall.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_cumall.html"><strong>html</strong></a>
+<ul>
+<li>There is a dataframe with a grouping variable and some statistics sorted by another within group</li>
+<li>variable, calculate the cumulative mean of that variable.</li>
+<li><strong>dplyr</strong>: <em>cummean() + group_by(id, isna = is.na(val)) + mutate(val_cummean = ifelse(isna, NA, cummean(val)))</em></li>
+</ul></li>
 <li><a href="https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_unique_agg.html">Count Unique Groups and Mean within Groups</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate//fs_group_unique_agg.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_unique_agg.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_unique_agg.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_unique_agg.html"><strong>html</strong></a>
 <ul>
 <li>Unique groups defined by multiple values and count obs within group.</li>
@@ -749,7 +762,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Given sample of data points that are discrete, compute the approximate gini coefficient.</li>
 <li><strong>r</strong>: <em>sort() + cumsum() + sum()</em></li>
 </ul></li>
-<li><a href="https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_atkinson_ces.html">CES abd Atkinson Utility</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_atkinson_ces.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_atkinson_ces.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_atkinson_ces.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_atkinson_ces.html"><strong>html</strong></a>
+<li><a href="https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_atkinson_ces.html">CES and Atkinson Utility</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_atkinson_ces.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_atkinson_ces.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_atkinson_ces.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_atkinson_ces.html"><strong>html</strong></a>
 <ul>
 <li>Analyze how changing individual outcomes shift utility given inequality preference parameters.</li>
 <li>Draw Cobb-Douglas, Utilitarian and Leontief indifference curve</li>

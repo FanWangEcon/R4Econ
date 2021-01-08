@@ -7,7 +7,7 @@
   <title>Chapter 7 Optimization | Data Structures, Estimation and Optimization with R</title>
   <meta name="description" content="<p>Run system executable and shell commands.
 Activate conda environment with shell script.</p>" />
-  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 7 Optimization | Data Structures, Estimation and Optimization with R" />
   <meta property="og:type" content="book" />
@@ -27,7 +27,7 @@ Activate conda environment with shell script.</p>" />
 <meta name="author" content="Fan Wang" />
 
 
-<meta name="date" content="2020-11-11" />
+<meta name="date" content="2021-01-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -185,12 +185,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="summarize-data.html"><a href="summarize-data.html#sorting-indexing-slicing"><i class="fa fa-check"></i><b>2.2</b> Sorting, Indexing, Slicing</a>
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="summarize-data.html"><a href="summarize-data.html#sorting"><i class="fa fa-check"></i><b>2.2.1</b> Sorting</a></li>
+<li class="chapter" data-level="2.2.2" data-path="summarize-data.html"><a href="summarize-data.html#group-sort-and-slice"><i class="fa fa-check"></i><b>2.2.2</b> Group, Sort and Slice</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="summarize-data.html"><a href="summarize-data.html#group-statistics"><i class="fa fa-check"></i><b>2.3</b> Group Statistics</a>
 <ul>
-<li class="chapter" data-level="2.3.1" data-path="summarize-data.html"><a href="summarize-data.html#groups-statistics"><i class="fa fa-check"></i><b>2.3.1</b> Groups Statistics</a></li>
-<li class="chapter" data-level="2.3.2" data-path="summarize-data.html"><a href="summarize-data.html#one-variable-group-summary"><i class="fa fa-check"></i><b>2.3.2</b> One Variable Group Summary</a></li>
-<li class="chapter" data-level="2.3.3" data-path="summarize-data.html"><a href="summarize-data.html#nested-within-group-stats"><i class="fa fa-check"></i><b>2.3.3</b> Nested within Group Stats</a></li>
+<li class="chapter" data-level="2.3.1" data-path="summarize-data.html"><a href="summarize-data.html#cumulative-statistics-within-group"><i class="fa fa-check"></i><b>2.3.1</b> Cumulative Statistics within Group</a></li>
+<li class="chapter" data-level="2.3.2" data-path="summarize-data.html"><a href="summarize-data.html#groups-statistics"><i class="fa fa-check"></i><b>2.3.2</b> Groups Statistics</a></li>
+<li class="chapter" data-level="2.3.3" data-path="summarize-data.html"><a href="summarize-data.html#one-variable-group-summary"><i class="fa fa-check"></i><b>2.3.3</b> One Variable Group Summary</a></li>
+<li class="chapter" data-level="2.3.4" data-path="summarize-data.html"><a href="summarize-data.html#nested-within-group-stats"><i class="fa fa-check"></i><b>2.3.4</b> Nested within Group Stats</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="summarize-data.html"><a href="summarize-data.html#distributional-statistics"><i class="fa fa-check"></i><b>2.4</b> Distributional Statistics</a>
 <ul>
@@ -428,127 +430,127 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="initialize-matrix" class="section level4" number="7.1.1.1">
 <h4><span class="header-section-number">7.1.1.1</span> Initialize Matrix</h4>
 <p>Prepare Input Data:</p>
-<div class="sourceCode" id="cb387"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb387-1"><a href="optimization.html#cb387-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters</span></span>
-<span id="cb387-2"><a href="optimization.html#cb387-2" aria-hidden="true" tabindex="-1"></a>fl_rho <span class="ot">=</span> <span class="fl">0.20</span></span>
-<span id="cb387-3"><a href="optimization.html#cb387-3" aria-hidden="true" tabindex="-1"></a>svr_id_var <span class="ot">=</span> <span class="st">&#39;INDI_ID&#39;</span></span>
-<span id="cb387-4"><a href="optimization.html#cb387-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb387-5"><a href="optimization.html#cb387-5" aria-hidden="true" tabindex="-1"></a><span class="co"># P fixed parameters, nN is N dimensional, nP is P dimensional</span></span>
-<span id="cb387-6"><a href="optimization.html#cb387-6" aria-hidden="true" tabindex="-1"></a>ar_nN_A <span class="ot">=</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">4</span>)</span>
-<span id="cb387-7"><a href="optimization.html#cb387-7" aria-hidden="true" tabindex="-1"></a>ar_nN_alpha <span class="ot">=</span> <span class="fu">seq</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="at">length.out =</span> <span class="dv">4</span>)</span>
-<span id="cb387-8"><a href="optimization.html#cb387-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb387-9"><a href="optimization.html#cb387-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Choice Grid for nutritional feasible choices for each</span></span>
-<span id="cb387-10"><a href="optimization.html#cb387-10" aria-hidden="true" tabindex="-1"></a>fl_N_agg <span class="ot">=</span> <span class="dv">100</span></span>
-<span id="cb387-11"><a href="optimization.html#cb387-11" aria-hidden="true" tabindex="-1"></a>fl_N_min <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb387-12"><a href="optimization.html#cb387-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb387-13"><a href="optimization.html#cb387-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Mesh Expand</span></span>
-<span id="cb387-14"><a href="optimization.html#cb387-14" aria-hidden="true" tabindex="-1"></a>tb_states_choices <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">cbind</span>(ar_nN_A, ar_nN_alpha)) <span class="sc">%&gt;%</span> </span>
-<span id="cb387-15"><a href="optimization.html#cb387-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowid_to_column</span>(<span class="at">var=</span>svr_id_var)</span>
-<span id="cb387-16"><a href="optimization.html#cb387-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb387-17"><a href="optimization.html#cb387-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert Matrix to Tibble</span></span>
-<span id="cb387-18"><a href="optimization.html#cb387-18" aria-hidden="true" tabindex="-1"></a>ar_st_col_names <span class="ot">=</span> <span class="fu">c</span>(svr_id_var,<span class="st">&#39;fl_A&#39;</span>, <span class="st">&#39;fl_alpha&#39;</span>)</span>
-<span id="cb387-19"><a href="optimization.html#cb387-19" aria-hidden="true" tabindex="-1"></a>tb_states_choices <span class="ot">&lt;-</span> tb_states_choices <span class="sc">%&gt;%</span> <span class="fu">rename_all</span>(<span class="sc">~</span><span class="fu">c</span>(ar_st_col_names))</span></code></pre></div>
+<div class="sourceCode" id="cb396"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb396-1"><a href="optimization.html#cb396-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters</span></span>
+<span id="cb396-2"><a href="optimization.html#cb396-2" aria-hidden="true" tabindex="-1"></a>fl_rho <span class="ot">=</span> <span class="fl">0.20</span></span>
+<span id="cb396-3"><a href="optimization.html#cb396-3" aria-hidden="true" tabindex="-1"></a>svr_id_var <span class="ot">=</span> <span class="st">&#39;INDI_ID&#39;</span></span>
+<span id="cb396-4"><a href="optimization.html#cb396-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb396-5"><a href="optimization.html#cb396-5" aria-hidden="true" tabindex="-1"></a><span class="co"># P fixed parameters, nN is N dimensional, nP is P dimensional</span></span>
+<span id="cb396-6"><a href="optimization.html#cb396-6" aria-hidden="true" tabindex="-1"></a>ar_nN_A <span class="ot">=</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">4</span>)</span>
+<span id="cb396-7"><a href="optimization.html#cb396-7" aria-hidden="true" tabindex="-1"></a>ar_nN_alpha <span class="ot">=</span> <span class="fu">seq</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="at">length.out =</span> <span class="dv">4</span>)</span>
+<span id="cb396-8"><a href="optimization.html#cb396-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb396-9"><a href="optimization.html#cb396-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Choice Grid for nutritional feasible choices for each</span></span>
+<span id="cb396-10"><a href="optimization.html#cb396-10" aria-hidden="true" tabindex="-1"></a>fl_N_agg <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb396-11"><a href="optimization.html#cb396-11" aria-hidden="true" tabindex="-1"></a>fl_N_min <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb396-12"><a href="optimization.html#cb396-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb396-13"><a href="optimization.html#cb396-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Mesh Expand</span></span>
+<span id="cb396-14"><a href="optimization.html#cb396-14" aria-hidden="true" tabindex="-1"></a>tb_states_choices <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">cbind</span>(ar_nN_A, ar_nN_alpha)) <span class="sc">%&gt;%</span> </span>
+<span id="cb396-15"><a href="optimization.html#cb396-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowid_to_column</span>(<span class="at">var=</span>svr_id_var)</span>
+<span id="cb396-16"><a href="optimization.html#cb396-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb396-17"><a href="optimization.html#cb396-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert Matrix to Tibble</span></span>
+<span id="cb396-18"><a href="optimization.html#cb396-18" aria-hidden="true" tabindex="-1"></a>ar_st_col_names <span class="ot">=</span> <span class="fu">c</span>(svr_id_var,<span class="st">&#39;fl_A&#39;</span>, <span class="st">&#39;fl_alpha&#39;</span>)</span>
+<span id="cb396-19"><a href="optimization.html#cb396-19" aria-hidden="true" tabindex="-1"></a>tb_states_choices <span class="ot">&lt;-</span> tb_states_choices <span class="sc">%&gt;%</span> <span class="fu">rename_all</span>(<span class="sc">~</span><span class="fu">c</span>(ar_st_col_names))</span></code></pre></div>
 <p>Prepare Function:</p>
-<div class="sourceCode" id="cb388"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb388-1"><a href="optimization.html#cb388-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define Implicit Function</span></span>
-<span id="cb388-2"><a href="optimization.html#cb388-2" aria-hidden="true" tabindex="-1"></a>ffi_nonlin_dplyrdo <span class="ot">&lt;-</span> <span class="cf">function</span>(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, fl_rho){</span>
-<span id="cb388-3"><a href="optimization.html#cb388-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb388-4"><a href="optimization.html#cb388-4" aria-hidden="true" tabindex="-1"></a>  ar_p1_s1 <span class="ot">=</span> <span class="fu">exp</span>((fl_A <span class="sc">-</span> ar_A)<span class="sc">*</span>fl_rho)</span>
-<span id="cb388-5"><a href="optimization.html#cb388-5" aria-hidden="true" tabindex="-1"></a>  ar_p1_s2 <span class="ot">=</span> (fl_alpha<span class="sc">/</span>ar_alpha)</span>
-<span id="cb388-6"><a href="optimization.html#cb388-6" aria-hidden="true" tabindex="-1"></a>  ar_p1_s3 <span class="ot">=</span> (<span class="dv">1</span><span class="sc">/</span>(ar_alpha<span class="sc">*</span>fl_rho <span class="sc">-</span> <span class="dv">1</span>))</span>
-<span id="cb388-7"><a href="optimization.html#cb388-7" aria-hidden="true" tabindex="-1"></a>  ar_p1 <span class="ot">=</span> (ar_p1_s1<span class="sc">*</span>ar_p1_s2)<span class="sc">^</span>ar_p1_s3</span>
-<span id="cb388-8"><a href="optimization.html#cb388-8" aria-hidden="true" tabindex="-1"></a>  ar_p2 <span class="ot">=</span> fl_N<span class="sc">^</span>((fl_alpha<span class="sc">*</span>fl_rho<span class="dv">-1</span>)<span class="sc">/</span>(ar_alpha<span class="sc">*</span>fl_rho<span class="dv">-1</span>))</span>
-<span id="cb388-9"><a href="optimization.html#cb388-9" aria-hidden="true" tabindex="-1"></a>  ar_overall <span class="ot">=</span> ar_p1<span class="sc">*</span>ar_p2</span>
-<span id="cb388-10"><a href="optimization.html#cb388-10" aria-hidden="true" tabindex="-1"></a>  fl_overall <span class="ot">=</span> fl_N_agg <span class="sc">-</span> <span class="fu">sum</span>(ar_overall)</span>
-<span id="cb388-11"><a href="optimization.html#cb388-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb388-12"><a href="optimization.html#cb388-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(fl_overall)</span>
-<span id="cb388-13"><a href="optimization.html#cb388-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb397"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb397-1"><a href="optimization.html#cb397-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define Implicit Function</span></span>
+<span id="cb397-2"><a href="optimization.html#cb397-2" aria-hidden="true" tabindex="-1"></a>ffi_nonlin_dplyrdo <span class="ot">&lt;-</span> <span class="cf">function</span>(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, fl_rho){</span>
+<span id="cb397-3"><a href="optimization.html#cb397-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb397-4"><a href="optimization.html#cb397-4" aria-hidden="true" tabindex="-1"></a>  ar_p1_s1 <span class="ot">=</span> <span class="fu">exp</span>((fl_A <span class="sc">-</span> ar_A)<span class="sc">*</span>fl_rho)</span>
+<span id="cb397-5"><a href="optimization.html#cb397-5" aria-hidden="true" tabindex="-1"></a>  ar_p1_s2 <span class="ot">=</span> (fl_alpha<span class="sc">/</span>ar_alpha)</span>
+<span id="cb397-6"><a href="optimization.html#cb397-6" aria-hidden="true" tabindex="-1"></a>  ar_p1_s3 <span class="ot">=</span> (<span class="dv">1</span><span class="sc">/</span>(ar_alpha<span class="sc">*</span>fl_rho <span class="sc">-</span> <span class="dv">1</span>))</span>
+<span id="cb397-7"><a href="optimization.html#cb397-7" aria-hidden="true" tabindex="-1"></a>  ar_p1 <span class="ot">=</span> (ar_p1_s1<span class="sc">*</span>ar_p1_s2)<span class="sc">^</span>ar_p1_s3</span>
+<span id="cb397-8"><a href="optimization.html#cb397-8" aria-hidden="true" tabindex="-1"></a>  ar_p2 <span class="ot">=</span> fl_N<span class="sc">^</span>((fl_alpha<span class="sc">*</span>fl_rho<span class="dv">-1</span>)<span class="sc">/</span>(ar_alpha<span class="sc">*</span>fl_rho<span class="dv">-1</span>))</span>
+<span id="cb397-9"><a href="optimization.html#cb397-9" aria-hidden="true" tabindex="-1"></a>  ar_overall <span class="ot">=</span> ar_p1<span class="sc">*</span>ar_p2</span>
+<span id="cb397-10"><a href="optimization.html#cb397-10" aria-hidden="true" tabindex="-1"></a>  fl_overall <span class="ot">=</span> fl_N_agg <span class="sc">-</span> <span class="fu">sum</span>(ar_overall)</span>
+<span id="cb397-11"><a href="optimization.html#cb397-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb397-12"><a href="optimization.html#cb397-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(fl_overall)</span>
+<span id="cb397-13"><a href="optimization.html#cb397-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>Initialize the matrix with <span class="math inline">\(a_0\)</span> and <span class="math inline">\(b_0\)</span>, the initial min and max points:</p>
-<div class="sourceCode" id="cb389"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb389-1"><a href="optimization.html#cb389-1" aria-hidden="true" tabindex="-1"></a><span class="co"># common prefix to make reshaping easier</span></span>
-<span id="cb389-2"><a href="optimization.html#cb389-2" aria-hidden="true" tabindex="-1"></a>st_bisec_prefix <span class="ot">&lt;-</span> <span class="st">&#39;bisec_&#39;</span></span>
-<span id="cb389-3"><a href="optimization.html#cb389-3" aria-hidden="true" tabindex="-1"></a>svr_a_lst <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;a_0&#39;</span>)</span>
-<span id="cb389-4"><a href="optimization.html#cb389-4" aria-hidden="true" tabindex="-1"></a>svr_b_lst <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;b_0&#39;</span>)</span>
-<span id="cb389-5"><a href="optimization.html#cb389-5" aria-hidden="true" tabindex="-1"></a>svr_fa_lst <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;fa_0&#39;</span>)</span>
-<span id="cb389-6"><a href="optimization.html#cb389-6" aria-hidden="true" tabindex="-1"></a>svr_fb_lst <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;fb_0&#39;</span>)</span>
-<span id="cb389-7"><a href="optimization.html#cb389-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb389-8"><a href="optimization.html#cb389-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Add initial a and b</span></span>
-<span id="cb389-9"><a href="optimization.html#cb389-9" aria-hidden="true" tabindex="-1"></a>tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices <span class="sc">%&gt;%</span></span>
-<span id="cb389-10"><a href="optimization.html#cb389-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_a_lst) <span class="sc">:</span><span class="er">=</span> fl_N_min, <span class="sc">!!</span><span class="fu">sym</span>(svr_b_lst) <span class="sc">:</span><span class="er">=</span> fl_N_agg)</span>
-<span id="cb389-11"><a href="optimization.html#cb389-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb389-12"><a href="optimization.html#cb389-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate function f(a_0) and f(b_0)</span></span>
-<span id="cb389-13"><a href="optimization.html#cb389-13" aria-hidden="true" tabindex="-1"></a>tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
-<span id="cb389-14"><a href="optimization.html#cb389-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb389-15"><a href="optimization.html#cb389-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_fa_lst) <span class="sc">:</span><span class="er">=</span> <span class="fu">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, <span class="sc">!!</span><span class="fu">sym</span>(svr_a_lst),</span>
-<span id="cb389-16"><a href="optimization.html#cb389-16" aria-hidden="true" tabindex="-1"></a>                                                ar_nN_A, ar_nN_alpha,</span>
-<span id="cb389-17"><a href="optimization.html#cb389-17" aria-hidden="true" tabindex="-1"></a>                                                fl_N_agg, fl_rho),</span>
-<span id="cb389-18"><a href="optimization.html#cb389-18" aria-hidden="true" tabindex="-1"></a>         <span class="sc">!!</span><span class="fu">sym</span>(svr_fb_lst) <span class="sc">:</span><span class="er">=</span> <span class="fu">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, <span class="sc">!!</span><span class="fu">sym</span>(svr_b_lst),</span>
-<span id="cb389-19"><a href="optimization.html#cb389-19" aria-hidden="true" tabindex="-1"></a>                                                ar_nN_A, ar_nN_alpha,</span>
-<span id="cb389-20"><a href="optimization.html#cb389-20" aria-hidden="true" tabindex="-1"></a>                                                fl_N_agg, fl_rho))</span>
-<span id="cb389-21"><a href="optimization.html#cb389-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize</span></span>
-<span id="cb389-22"><a href="optimization.html#cb389-22" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(tb_states_choices_bisec)</span></code></pre></div>
+<div class="sourceCode" id="cb398"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb398-1"><a href="optimization.html#cb398-1" aria-hidden="true" tabindex="-1"></a><span class="co"># common prefix to make reshaping easier</span></span>
+<span id="cb398-2"><a href="optimization.html#cb398-2" aria-hidden="true" tabindex="-1"></a>st_bisec_prefix <span class="ot">&lt;-</span> <span class="st">&#39;bisec_&#39;</span></span>
+<span id="cb398-3"><a href="optimization.html#cb398-3" aria-hidden="true" tabindex="-1"></a>svr_a_lst <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;a_0&#39;</span>)</span>
+<span id="cb398-4"><a href="optimization.html#cb398-4" aria-hidden="true" tabindex="-1"></a>svr_b_lst <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;b_0&#39;</span>)</span>
+<span id="cb398-5"><a href="optimization.html#cb398-5" aria-hidden="true" tabindex="-1"></a>svr_fa_lst <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;fa_0&#39;</span>)</span>
+<span id="cb398-6"><a href="optimization.html#cb398-6" aria-hidden="true" tabindex="-1"></a>svr_fb_lst <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;fb_0&#39;</span>)</span>
+<span id="cb398-7"><a href="optimization.html#cb398-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb398-8"><a href="optimization.html#cb398-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Add initial a and b</span></span>
+<span id="cb398-9"><a href="optimization.html#cb398-9" aria-hidden="true" tabindex="-1"></a>tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices <span class="sc">%&gt;%</span></span>
+<span id="cb398-10"><a href="optimization.html#cb398-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_a_lst) <span class="sc">:</span><span class="er">=</span> fl_N_min, <span class="sc">!!</span><span class="fu">sym</span>(svr_b_lst) <span class="sc">:</span><span class="er">=</span> fl_N_agg)</span>
+<span id="cb398-11"><a href="optimization.html#cb398-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb398-12"><a href="optimization.html#cb398-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate function f(a_0) and f(b_0)</span></span>
+<span id="cb398-13"><a href="optimization.html#cb398-13" aria-hidden="true" tabindex="-1"></a>tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
+<span id="cb398-14"><a href="optimization.html#cb398-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb398-15"><a href="optimization.html#cb398-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_fa_lst) <span class="sc">:</span><span class="er">=</span> <span class="fu">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, <span class="sc">!!</span><span class="fu">sym</span>(svr_a_lst),</span>
+<span id="cb398-16"><a href="optimization.html#cb398-16" aria-hidden="true" tabindex="-1"></a>                                                ar_nN_A, ar_nN_alpha,</span>
+<span id="cb398-17"><a href="optimization.html#cb398-17" aria-hidden="true" tabindex="-1"></a>                                                fl_N_agg, fl_rho),</span>
+<span id="cb398-18"><a href="optimization.html#cb398-18" aria-hidden="true" tabindex="-1"></a>         <span class="sc">!!</span><span class="fu">sym</span>(svr_fb_lst) <span class="sc">:</span><span class="er">=</span> <span class="fu">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, <span class="sc">!!</span><span class="fu">sym</span>(svr_b_lst),</span>
+<span id="cb398-19"><a href="optimization.html#cb398-19" aria-hidden="true" tabindex="-1"></a>                                                ar_nN_A, ar_nN_alpha,</span>
+<span id="cb398-20"><a href="optimization.html#cb398-20" aria-hidden="true" tabindex="-1"></a>                                                fl_N_agg, fl_rho))</span>
+<span id="cb398-21"><a href="optimization.html#cb398-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize</span></span>
+<span id="cb398-22"><a href="optimization.html#cb398-22" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(tb_states_choices_bisec)</span></code></pre></div>
 <pre><code>## [1] 4 7</code></pre>
-<div class="sourceCode" id="cb391"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb391-1"><a href="optimization.html#cb391-1" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(tb_states_choices_bisec)</span></span></code></pre></div>
+<div class="sourceCode" id="cb400"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb400-1"><a href="optimization.html#cb400-1" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(tb_states_choices_bisec)</span></span></code></pre></div>
 </div>
 <div id="iterate-and-solve-for-fp-update-fa-and-fb" class="section level4" number="7.1.1.2">
 <h4><span class="header-section-number">7.1.1.2</span> Iterate and Solve for f(p), update f(a) and f(b)</h4>
 <p>Implement the DPLYR based Concurrent bisection algorithm.</p>
-<div class="sourceCode" id="cb392"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb392-1"><a href="optimization.html#cb392-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fl_tol = float tolerance criteria</span></span>
-<span id="cb392-2"><a href="optimization.html#cb392-2" aria-hidden="true" tabindex="-1"></a><span class="co"># it_tol = number of interations to allow at most</span></span>
-<span id="cb392-3"><a href="optimization.html#cb392-3" aria-hidden="true" tabindex="-1"></a>fl_tol <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">^-</span><span class="dv">2</span></span>
-<span id="cb392-4"><a href="optimization.html#cb392-4" aria-hidden="true" tabindex="-1"></a>it_tol <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb392-5"><a href="optimization.html#cb392-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb392-6"><a href="optimization.html#cb392-6" aria-hidden="true" tabindex="-1"></a><span class="co"># fl_p_dist2zr = distance to zero to initalize</span></span>
-<span id="cb392-7"><a href="optimization.html#cb392-7" aria-hidden="true" tabindex="-1"></a>fl_p_dist2zr <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb392-8"><a href="optimization.html#cb392-8" aria-hidden="true" tabindex="-1"></a>it_cur <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb392-9"><a href="optimization.html#cb392-9" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (it_cur <span class="sc">&lt;=</span> it_tol <span class="sc">&amp;&amp;</span> fl_p_dist2zr <span class="sc">&gt;=</span> fl_tol ) {</span>
-<span id="cb392-10"><a href="optimization.html#cb392-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb392-11"><a href="optimization.html#cb392-11" aria-hidden="true" tabindex="-1"></a>  it_cur <span class="ot">&lt;-</span> it_cur <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb392-12"><a href="optimization.html#cb392-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb392-13"><a href="optimization.html#cb392-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># New Variables</span></span>
-<span id="cb392-14"><a href="optimization.html#cb392-14" aria-hidden="true" tabindex="-1"></a>  svr_a_cur <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;a_&#39;</span>, it_cur)</span>
-<span id="cb392-15"><a href="optimization.html#cb392-15" aria-hidden="true" tabindex="-1"></a>  svr_b_cur <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;b_&#39;</span>, it_cur)</span>
-<span id="cb392-16"><a href="optimization.html#cb392-16" aria-hidden="true" tabindex="-1"></a>  svr_fa_cur <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;fa_&#39;</span>, it_cur)</span>
-<span id="cb392-17"><a href="optimization.html#cb392-17" aria-hidden="true" tabindex="-1"></a>  svr_fb_cur <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;fb_&#39;</span>, it_cur)</span>
-<span id="cb392-18"><a href="optimization.html#cb392-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb392-19"><a href="optimization.html#cb392-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Evaluate function f(a_0) and f(b_0)</span></span>
-<span id="cb392-20"><a href="optimization.html#cb392-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. generate p</span></span>
-<span id="cb392-21"><a href="optimization.html#cb392-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. generate f_p</span></span>
-<span id="cb392-22"><a href="optimization.html#cb392-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. generate f_p*f_a</span></span>
-<span id="cb392-23"><a href="optimization.html#cb392-23" aria-hidden="true" tabindex="-1"></a>  tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
-<span id="cb392-24"><a href="optimization.html#cb392-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb392-25"><a href="optimization.html#cb392-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">p =</span> ((<span class="sc">!!</span><span class="fu">sym</span>(svr_a_lst) <span class="sc">+</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_b_lst))<span class="sc">/</span><span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb392-26"><a href="optimization.html#cb392-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">f_p =</span> <span class="fu">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, p,</span>
-<span id="cb392-27"><a href="optimization.html#cb392-27" aria-hidden="true" tabindex="-1"></a>                                    ar_nN_A, ar_nN_alpha,</span>
-<span id="cb392-28"><a href="optimization.html#cb392-28" aria-hidden="true" tabindex="-1"></a>                                    fl_N_agg, fl_rho)) <span class="sc">%&gt;%</span></span>
-<span id="cb392-29"><a href="optimization.html#cb392-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">f_p_t_f_a =</span> f_p<span class="sc">*!!</span><span class="fu">sym</span>(svr_fa_lst))</span>
-<span id="cb392-30"><a href="optimization.html#cb392-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># fl_p_dist2zr = sum(abs(p))</span></span>
-<span id="cb392-31"><a href="optimization.html#cb392-31" aria-hidden="true" tabindex="-1"></a>  fl_p_dist2zr <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(tb_states_choices_bisec <span class="sc">%&gt;%</span> <span class="fu">pull</span>(f_p)))</span>
-<span id="cb392-32"><a href="optimization.html#cb392-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb392-33"><a href="optimization.html#cb392-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Update a and b</span></span>
-<span id="cb392-34"><a href="optimization.html#cb392-34" aria-hidden="true" tabindex="-1"></a>  tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
-<span id="cb392-35"><a href="optimization.html#cb392-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_a_cur) <span class="sc">:</span><span class="er">=</span></span>
-<span id="cb392-36"><a href="optimization.html#cb392-36" aria-hidden="true" tabindex="-1"></a>             <span class="fu">case_when</span>(f_p_t_f_a <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_a_lst),</span>
-<span id="cb392-37"><a href="optimization.html#cb392-37" aria-hidden="true" tabindex="-1"></a>                       <span class="cn">TRUE</span> <span class="sc">~</span> p)) <span class="sc">%&gt;%</span></span>
-<span id="cb392-38"><a href="optimization.html#cb392-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_b_cur) <span class="sc">:</span><span class="er">=</span></span>
-<span id="cb392-39"><a href="optimization.html#cb392-39" aria-hidden="true" tabindex="-1"></a>             <span class="fu">case_when</span>(f_p_t_f_a <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> p,</span>
-<span id="cb392-40"><a href="optimization.html#cb392-40" aria-hidden="true" tabindex="-1"></a>                       <span class="cn">TRUE</span> <span class="sc">~</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_b_lst)))</span>
-<span id="cb392-41"><a href="optimization.html#cb392-41" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Update f(a) and f(b)</span></span>
-<span id="cb392-42"><a href="optimization.html#cb392-42" aria-hidden="true" tabindex="-1"></a>  tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
-<span id="cb392-43"><a href="optimization.html#cb392-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_fa_cur) <span class="sc">:</span><span class="er">=</span></span>
-<span id="cb392-44"><a href="optimization.html#cb392-44" aria-hidden="true" tabindex="-1"></a>             <span class="fu">case_when</span>(f_p_t_f_a <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_fa_lst),</span>
-<span id="cb392-45"><a href="optimization.html#cb392-45" aria-hidden="true" tabindex="-1"></a>                       <span class="cn">TRUE</span> <span class="sc">~</span> f_p)) <span class="sc">%&gt;%</span></span>
-<span id="cb392-46"><a href="optimization.html#cb392-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_fb_cur) <span class="sc">:</span><span class="er">=</span></span>
-<span id="cb392-47"><a href="optimization.html#cb392-47" aria-hidden="true" tabindex="-1"></a>             <span class="fu">case_when</span>(f_p_t_f_a <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> f_p,</span>
-<span id="cb392-48"><a href="optimization.html#cb392-48" aria-hidden="true" tabindex="-1"></a>                       <span class="cn">TRUE</span> <span class="sc">~</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_fb_lst)))</span>
-<span id="cb392-49"><a href="optimization.html#cb392-49" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Save from last</span></span>
-<span id="cb392-50"><a href="optimization.html#cb392-50" aria-hidden="true" tabindex="-1"></a>  svr_a_lst <span class="ot">&lt;-</span> svr_a_cur</span>
-<span id="cb392-51"><a href="optimization.html#cb392-51" aria-hidden="true" tabindex="-1"></a>  svr_b_lst <span class="ot">&lt;-</span> svr_b_cur</span>
-<span id="cb392-52"><a href="optimization.html#cb392-52" aria-hidden="true" tabindex="-1"></a>  svr_fa_lst <span class="ot">&lt;-</span> svr_fa_cur</span>
-<span id="cb392-53"><a href="optimization.html#cb392-53" aria-hidden="true" tabindex="-1"></a>  svr_fb_lst <span class="ot">&lt;-</span> svr_fb_cur</span>
-<span id="cb392-54"><a href="optimization.html#cb392-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb392-55"><a href="optimization.html#cb392-55" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Summar current round</span></span>
-<span id="cb392-56"><a href="optimization.html#cb392-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&#39;it_cur:&#39;</span>, it_cur, <span class="st">&#39;, fl_p_dist2zr:&#39;</span>, fl_p_dist2zr))</span>
-<span id="cb392-57"><a href="optimization.html#cb392-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
-<span id="cb392-58"><a href="optimization.html#cb392-58" aria-hidden="true" tabindex="-1"></a>            <span class="fu">select</span>(<span class="fu">one_of</span>(svr_a_cur, svr_b_cur, svr_fa_cur, svr_fb_cur)))</span>
-<span id="cb392-59"><a href="optimization.html#cb392-59" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb401-1"><a href="optimization.html#cb401-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fl_tol = float tolerance criteria</span></span>
+<span id="cb401-2"><a href="optimization.html#cb401-2" aria-hidden="true" tabindex="-1"></a><span class="co"># it_tol = number of interations to allow at most</span></span>
+<span id="cb401-3"><a href="optimization.html#cb401-3" aria-hidden="true" tabindex="-1"></a>fl_tol <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">^-</span><span class="dv">2</span></span>
+<span id="cb401-4"><a href="optimization.html#cb401-4" aria-hidden="true" tabindex="-1"></a>it_tol <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb401-5"><a href="optimization.html#cb401-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb401-6"><a href="optimization.html#cb401-6" aria-hidden="true" tabindex="-1"></a><span class="co"># fl_p_dist2zr = distance to zero to initalize</span></span>
+<span id="cb401-7"><a href="optimization.html#cb401-7" aria-hidden="true" tabindex="-1"></a>fl_p_dist2zr <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb401-8"><a href="optimization.html#cb401-8" aria-hidden="true" tabindex="-1"></a>it_cur <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb401-9"><a href="optimization.html#cb401-9" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (it_cur <span class="sc">&lt;=</span> it_tol <span class="sc">&amp;&amp;</span> fl_p_dist2zr <span class="sc">&gt;=</span> fl_tol ) {</span>
+<span id="cb401-10"><a href="optimization.html#cb401-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb401-11"><a href="optimization.html#cb401-11" aria-hidden="true" tabindex="-1"></a>  it_cur <span class="ot">&lt;-</span> it_cur <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb401-12"><a href="optimization.html#cb401-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb401-13"><a href="optimization.html#cb401-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># New Variables</span></span>
+<span id="cb401-14"><a href="optimization.html#cb401-14" aria-hidden="true" tabindex="-1"></a>  svr_a_cur <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;a_&#39;</span>, it_cur)</span>
+<span id="cb401-15"><a href="optimization.html#cb401-15" aria-hidden="true" tabindex="-1"></a>  svr_b_cur <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;b_&#39;</span>, it_cur)</span>
+<span id="cb401-16"><a href="optimization.html#cb401-16" aria-hidden="true" tabindex="-1"></a>  svr_fa_cur <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;fa_&#39;</span>, it_cur)</span>
+<span id="cb401-17"><a href="optimization.html#cb401-17" aria-hidden="true" tabindex="-1"></a>  svr_fb_cur <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;fb_&#39;</span>, it_cur)</span>
+<span id="cb401-18"><a href="optimization.html#cb401-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb401-19"><a href="optimization.html#cb401-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Evaluate function f(a_0) and f(b_0)</span></span>
+<span id="cb401-20"><a href="optimization.html#cb401-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. generate p</span></span>
+<span id="cb401-21"><a href="optimization.html#cb401-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. generate f_p</span></span>
+<span id="cb401-22"><a href="optimization.html#cb401-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. generate f_p*f_a</span></span>
+<span id="cb401-23"><a href="optimization.html#cb401-23" aria-hidden="true" tabindex="-1"></a>  tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
+<span id="cb401-24"><a href="optimization.html#cb401-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb401-25"><a href="optimization.html#cb401-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">p =</span> ((<span class="sc">!!</span><span class="fu">sym</span>(svr_a_lst) <span class="sc">+</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_b_lst))<span class="sc">/</span><span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb401-26"><a href="optimization.html#cb401-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">f_p =</span> <span class="fu">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, p,</span>
+<span id="cb401-27"><a href="optimization.html#cb401-27" aria-hidden="true" tabindex="-1"></a>                                    ar_nN_A, ar_nN_alpha,</span>
+<span id="cb401-28"><a href="optimization.html#cb401-28" aria-hidden="true" tabindex="-1"></a>                                    fl_N_agg, fl_rho)) <span class="sc">%&gt;%</span></span>
+<span id="cb401-29"><a href="optimization.html#cb401-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">f_p_t_f_a =</span> f_p<span class="sc">*!!</span><span class="fu">sym</span>(svr_fa_lst))</span>
+<span id="cb401-30"><a href="optimization.html#cb401-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># fl_p_dist2zr = sum(abs(p))</span></span>
+<span id="cb401-31"><a href="optimization.html#cb401-31" aria-hidden="true" tabindex="-1"></a>  fl_p_dist2zr <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(tb_states_choices_bisec <span class="sc">%&gt;%</span> <span class="fu">pull</span>(f_p)))</span>
+<span id="cb401-32"><a href="optimization.html#cb401-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb401-33"><a href="optimization.html#cb401-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Update a and b</span></span>
+<span id="cb401-34"><a href="optimization.html#cb401-34" aria-hidden="true" tabindex="-1"></a>  tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
+<span id="cb401-35"><a href="optimization.html#cb401-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_a_cur) <span class="sc">:</span><span class="er">=</span></span>
+<span id="cb401-36"><a href="optimization.html#cb401-36" aria-hidden="true" tabindex="-1"></a>             <span class="fu">case_when</span>(f_p_t_f_a <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_a_lst),</span>
+<span id="cb401-37"><a href="optimization.html#cb401-37" aria-hidden="true" tabindex="-1"></a>                       <span class="cn">TRUE</span> <span class="sc">~</span> p)) <span class="sc">%&gt;%</span></span>
+<span id="cb401-38"><a href="optimization.html#cb401-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_b_cur) <span class="sc">:</span><span class="er">=</span></span>
+<span id="cb401-39"><a href="optimization.html#cb401-39" aria-hidden="true" tabindex="-1"></a>             <span class="fu">case_when</span>(f_p_t_f_a <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> p,</span>
+<span id="cb401-40"><a href="optimization.html#cb401-40" aria-hidden="true" tabindex="-1"></a>                       <span class="cn">TRUE</span> <span class="sc">~</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_b_lst)))</span>
+<span id="cb401-41"><a href="optimization.html#cb401-41" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Update f(a) and f(b)</span></span>
+<span id="cb401-42"><a href="optimization.html#cb401-42" aria-hidden="true" tabindex="-1"></a>  tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
+<span id="cb401-43"><a href="optimization.html#cb401-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_fa_cur) <span class="sc">:</span><span class="er">=</span></span>
+<span id="cb401-44"><a href="optimization.html#cb401-44" aria-hidden="true" tabindex="-1"></a>             <span class="fu">case_when</span>(f_p_t_f_a <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_fa_lst),</span>
+<span id="cb401-45"><a href="optimization.html#cb401-45" aria-hidden="true" tabindex="-1"></a>                       <span class="cn">TRUE</span> <span class="sc">~</span> f_p)) <span class="sc">%&gt;%</span></span>
+<span id="cb401-46"><a href="optimization.html#cb401-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_fb_cur) <span class="sc">:</span><span class="er">=</span></span>
+<span id="cb401-47"><a href="optimization.html#cb401-47" aria-hidden="true" tabindex="-1"></a>             <span class="fu">case_when</span>(f_p_t_f_a <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> f_p,</span>
+<span id="cb401-48"><a href="optimization.html#cb401-48" aria-hidden="true" tabindex="-1"></a>                       <span class="cn">TRUE</span> <span class="sc">~</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_fb_lst)))</span>
+<span id="cb401-49"><a href="optimization.html#cb401-49" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Save from last</span></span>
+<span id="cb401-50"><a href="optimization.html#cb401-50" aria-hidden="true" tabindex="-1"></a>  svr_a_lst <span class="ot">&lt;-</span> svr_a_cur</span>
+<span id="cb401-51"><a href="optimization.html#cb401-51" aria-hidden="true" tabindex="-1"></a>  svr_b_lst <span class="ot">&lt;-</span> svr_b_cur</span>
+<span id="cb401-52"><a href="optimization.html#cb401-52" aria-hidden="true" tabindex="-1"></a>  svr_fa_lst <span class="ot">&lt;-</span> svr_fa_cur</span>
+<span id="cb401-53"><a href="optimization.html#cb401-53" aria-hidden="true" tabindex="-1"></a>  svr_fb_lst <span class="ot">&lt;-</span> svr_fb_cur</span>
+<span id="cb401-54"><a href="optimization.html#cb401-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb401-55"><a href="optimization.html#cb401-55" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Summar current round</span></span>
+<span id="cb401-56"><a href="optimization.html#cb401-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&#39;it_cur:&#39;</span>, it_cur, <span class="st">&#39;, fl_p_dist2zr:&#39;</span>, fl_p_dist2zr))</span>
+<span id="cb401-57"><a href="optimization.html#cb401-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
+<span id="cb401-58"><a href="optimization.html#cb401-58" aria-hidden="true" tabindex="-1"></a>            <span class="fu">select</span>(<span class="fu">one_of</span>(svr_a_cur, svr_b_cur, svr_fa_cur, svr_fb_cur)))</span>
+<span id="cb401-59"><a href="optimization.html#cb401-59" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <pre><code>## [1] &quot;it_cur:1, fl_p_dist2zr:1597.93916362849&quot;
 ## [1] &quot;it_cur:2, fl_p_dist2zr:676.06602535902&quot;
 ## [1] &quot;it_cur:3, fl_p_dist2zr:286.850590132782&quot;
@@ -575,8 +577,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h5><span class="header-section-number">7.1.1.3.1</span> Table One–Very Wide</h5>
 <p>Show what the <em>tb_states_choices_bisec</em> looks like.</p>
 <p>Variables are formatted like: <em>bisec_xx_yy</em>, where yy is the iteration indicator, and xx is either a, b, fa, or fb.</p>
-<div class="sourceCode" id="cb394"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb394-1"><a href="optimization.html#cb394-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(<span class="fu">t</span>(tb_states_choices_bisec), <span class="dv">25</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb394-2"><a href="optimization.html#cb394-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb403-1"><a href="optimization.html#cb403-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(<span class="fu">t</span>(tb_states_choices_bisec), <span class="dv">25</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb403-2"><a href="optimization.html#cb403-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <tbody>
 <tr>
@@ -1006,32 +1008,32 @@ bisec_fa_4
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb395"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb395-1"><a href="optimization.html#cb395-1" aria-hidden="true" tabindex="-1"></a><span class="co"># str(tb_states_choices_bisec)</span></span></code></pre></div>
+<div class="sourceCode" id="cb404"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb404-1"><a href="optimization.html#cb404-1" aria-hidden="true" tabindex="-1"></a><span class="co"># str(tb_states_choices_bisec)</span></span></code></pre></div>
 </div>
 <div id="table-twovery-wide-to-very-long" class="section level5" number="7.1.1.3.2">
 <h5><span class="header-section-number">7.1.1.3.2</span> Table Two–Very Wide to Very Long</h5>
 <p>We want to treat the iteration count information that is the suffix of variable names as a variable by itself. Additionally, we want to treat the a,b,fa,fb as a variable. Structuring the data very long like this allows for easy graphing and other types of analysis. Rather than dealing with many many variables, we have only 3 core variables that store bisection iteration information.</p>
 <p>Here we use the very nice <em>pivot_longer</em> function. Note that to achieve this, we put a common prefix in front of the variables we wanted to convert to long. THis is helpful, because we can easily identify which variables need to be reshaped.</p>
-<div class="sourceCode" id="cb396"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb396-1"><a href="optimization.html#cb396-1" aria-hidden="true" tabindex="-1"></a><span class="co"># New variables</span></span>
-<span id="cb396-2"><a href="optimization.html#cb396-2" aria-hidden="true" tabindex="-1"></a>svr_bisect_iter <span class="ot">&lt;-</span> <span class="st">&#39;biseciter&#39;</span></span>
-<span id="cb396-3"><a href="optimization.html#cb396-3" aria-hidden="true" tabindex="-1"></a>svr_abfafb_long_name <span class="ot">&lt;-</span> <span class="st">&#39;varname&#39;</span></span>
-<span id="cb396-4"><a href="optimization.html#cb396-4" aria-hidden="true" tabindex="-1"></a>svr_number_col <span class="ot">&lt;-</span> <span class="st">&#39;value&#39;</span></span>
-<span id="cb396-5"><a href="optimization.html#cb396-5" aria-hidden="true" tabindex="-1"></a>svr_id_bisect_iter <span class="ot">&lt;-</span> <span class="fu">paste0</span>(svr_id_var, <span class="st">&#39;_bisect_ier&#39;</span>)</span>
-<span id="cb396-6"><a href="optimization.html#cb396-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb396-7"><a href="optimization.html#cb396-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Pivot wide to very long</span></span>
-<span id="cb396-8"><a href="optimization.html#cb396-8" aria-hidden="true" tabindex="-1"></a>tb_states_choices_bisec_long <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
-<span id="cb396-9"><a href="optimization.html#cb396-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
-<span id="cb396-10"><a href="optimization.html#cb396-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">starts_with</span>(st_bisec_prefix),</span>
-<span id="cb396-11"><a href="optimization.html#cb396-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(svr_abfafb_long_name, svr_bisect_iter),</span>
-<span id="cb396-12"><a href="optimization.html#cb396-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_pattern =</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&quot;(.*)_(.*)&quot;</span>),</span>
-<span id="cb396-13"><a href="optimization.html#cb396-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> svr_number_col</span>
-<span id="cb396-14"><a href="optimization.html#cb396-14" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb396-15"><a href="optimization.html#cb396-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb396-16"><a href="optimization.html#cb396-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Print</span></span>
-<span id="cb396-17"><a href="optimization.html#cb396-17" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(tb_states_choices_bisec_long)</span></span>
-<span id="cb396-18"><a href="optimization.html#cb396-18" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(tb_states_choices_bisec_long <span class="sc">%&gt;%</span> </span>
-<span id="cb396-19"><a href="optimization.html#cb396-19" aria-hidden="true" tabindex="-1"></a>             <span class="fu">select</span>(<span class="sc">-</span><span class="fu">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">15</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb396-20"><a href="optimization.html#cb396-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb405"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb405-1"><a href="optimization.html#cb405-1" aria-hidden="true" tabindex="-1"></a><span class="co"># New variables</span></span>
+<span id="cb405-2"><a href="optimization.html#cb405-2" aria-hidden="true" tabindex="-1"></a>svr_bisect_iter <span class="ot">&lt;-</span> <span class="st">&#39;biseciter&#39;</span></span>
+<span id="cb405-3"><a href="optimization.html#cb405-3" aria-hidden="true" tabindex="-1"></a>svr_abfafb_long_name <span class="ot">&lt;-</span> <span class="st">&#39;varname&#39;</span></span>
+<span id="cb405-4"><a href="optimization.html#cb405-4" aria-hidden="true" tabindex="-1"></a>svr_number_col <span class="ot">&lt;-</span> <span class="st">&#39;value&#39;</span></span>
+<span id="cb405-5"><a href="optimization.html#cb405-5" aria-hidden="true" tabindex="-1"></a>svr_id_bisect_iter <span class="ot">&lt;-</span> <span class="fu">paste0</span>(svr_id_var, <span class="st">&#39;_bisect_ier&#39;</span>)</span>
+<span id="cb405-6"><a href="optimization.html#cb405-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb405-7"><a href="optimization.html#cb405-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Pivot wide to very long</span></span>
+<span id="cb405-8"><a href="optimization.html#cb405-8" aria-hidden="true" tabindex="-1"></a>tb_states_choices_bisec_long <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
+<span id="cb405-9"><a href="optimization.html#cb405-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb405-10"><a href="optimization.html#cb405-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">starts_with</span>(st_bisec_prefix),</span>
+<span id="cb405-11"><a href="optimization.html#cb405-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(svr_abfafb_long_name, svr_bisect_iter),</span>
+<span id="cb405-12"><a href="optimization.html#cb405-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_pattern =</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&quot;(.*)_(.*)&quot;</span>),</span>
+<span id="cb405-13"><a href="optimization.html#cb405-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> svr_number_col</span>
+<span id="cb405-14"><a href="optimization.html#cb405-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb405-15"><a href="optimization.html#cb405-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb405-16"><a href="optimization.html#cb405-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Print</span></span>
+<span id="cb405-17"><a href="optimization.html#cb405-17" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(tb_states_choices_bisec_long)</span></span>
+<span id="cb405-18"><a href="optimization.html#cb405-18" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(tb_states_choices_bisec_long <span class="sc">%&gt;%</span> </span>
+<span id="cb405-19"><a href="optimization.html#cb405-19" aria-hidden="true" tabindex="-1"></a>             <span class="fu">select</span>(<span class="sc">-</span><span class="fu">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">15</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb405-20"><a href="optimization.html#cb405-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1358,9 +1360,9 @@ fa
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb397"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb397-1"><a href="optimization.html#cb397-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">tail</span>(tb_states_choices_bisec_long <span class="sc">%&gt;%</span> </span>
-<span id="cb397-2"><a href="optimization.html#cb397-2" aria-hidden="true" tabindex="-1"></a>             <span class="fu">select</span>(<span class="sc">-</span><span class="fu">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">15</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb397-3"><a href="optimization.html#cb397-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb406-1"><a href="optimization.html#cb406-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">tail</span>(tb_states_choices_bisec_long <span class="sc">%&gt;%</span> </span>
+<span id="cb406-2"><a href="optimization.html#cb406-2" aria-hidden="true" tabindex="-1"></a>             <span class="fu">select</span>(<span class="sc">-</span><span class="fu">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">15</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb406-3"><a href="optimization.html#cb406-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1691,18 +1693,18 @@ fb
 <div id="table-twovery-very-long-to-wider-again" class="section level5" number="7.1.1.3.3">
 <h5><span class="header-section-number">7.1.1.3.3</span> Table Two–Very Very Long to Wider Again</h5>
 <p>But the previous results are too long, with the a, b, fa, and fb all in one column as different categories, they are really not different categories, they are in fact different types of variables. So we want to spread those four categories of this variable into four columns, each one representing the a, b, fa, and fb values. The rows would then be uniquly identified by the iteration counter and individual ID.</p>
-<div class="sourceCode" id="cb398"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb398-1"><a href="optimization.html#cb398-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pivot wide to very long to a little wide</span></span>
-<span id="cb398-2"><a href="optimization.html#cb398-2" aria-hidden="true" tabindex="-1"></a>tb_states_choices_bisec_wider <span class="ot">&lt;-</span> tb_states_choices_bisec_long <span class="sc">%&gt;%</span></span>
-<span id="cb398-3"><a href="optimization.html#cb398-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
-<span id="cb398-4"><a href="optimization.html#cb398-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name),</span>
-<span id="cb398-5"><a href="optimization.html#cb398-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> svr_number_col</span>
-<span id="cb398-6"><a href="optimization.html#cb398-6" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb398-7"><a href="optimization.html#cb398-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb398-8"><a href="optimization.html#cb398-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Print</span></span>
-<span id="cb398-9"><a href="optimization.html#cb398-9" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(tb_states_choices_bisec_wider)</span></span>
-<span id="cb398-10"><a href="optimization.html#cb398-10" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(tb_states_choices_bisec_wider <span class="sc">%&gt;%</span> </span>
-<span id="cb398-11"><a href="optimization.html#cb398-11" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(<span class="sc">-</span><span class="fu">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">10</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb398-12"><a href="optimization.html#cb398-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc_wide</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb407"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb407-1"><a href="optimization.html#cb407-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pivot wide to very long to a little wide</span></span>
+<span id="cb407-2"><a href="optimization.html#cb407-2" aria-hidden="true" tabindex="-1"></a>tb_states_choices_bisec_wider <span class="ot">&lt;-</span> tb_states_choices_bisec_long <span class="sc">%&gt;%</span></span>
+<span id="cb407-3"><a href="optimization.html#cb407-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb407-4"><a href="optimization.html#cb407-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name),</span>
+<span id="cb407-5"><a href="optimization.html#cb407-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> svr_number_col</span>
+<span id="cb407-6"><a href="optimization.html#cb407-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb407-7"><a href="optimization.html#cb407-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb407-8"><a href="optimization.html#cb407-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Print</span></span>
+<span id="cb407-9"><a href="optimization.html#cb407-9" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(tb_states_choices_bisec_wider)</span></span>
+<span id="cb407-10"><a href="optimization.html#cb407-10" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(tb_states_choices_bisec_wider <span class="sc">%&gt;%</span> </span>
+<span id="cb407-11"><a href="optimization.html#cb407-11" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(<span class="sc">-</span><span class="fu">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">10</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb407-12"><a href="optimization.html#cb407-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc_wide</span>()</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -1997,9 +1999,9 @@ fb
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb399"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb399-1"><a href="optimization.html#cb399-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(tb_states_choices_bisec_wider <span class="sc">%&gt;%</span> </span>
-<span id="cb399-2"><a href="optimization.html#cb399-2" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(<span class="sc">-</span><span class="fu">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">10</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb399-3"><a href="optimization.html#cb399-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc_wide</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb408"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb408-1"><a href="optimization.html#cb408-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(tb_states_choices_bisec_wider <span class="sc">%&gt;%</span> </span>
+<span id="cb408-2"><a href="optimization.html#cb408-2" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(<span class="sc">-</span><span class="fu">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">10</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb408-3"><a href="optimization.html#cb408-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc_wide</span>()</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -2299,23 +2301,23 @@ fb
 <div id="graph-bisection-iteration-results" class="section level4" number="7.1.1.4">
 <h4><span class="header-section-number">7.1.1.4</span> Graph Bisection Iteration Results</h4>
 <p>Actually we want to graph based on the long results, not the wider. Wider easier to view in table.</p>
-<div class="sourceCode" id="cb400"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb400-1"><a href="optimization.html#cb400-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph results</span></span>
-<span id="cb400-2"><a href="optimization.html#cb400-2" aria-hidden="true" tabindex="-1"></a>lineplot <span class="ot">&lt;-</span> tb_states_choices_bisec_long <span class="sc">%&gt;%</span></span>
-<span id="cb400-3"><a href="optimization.html#cb400-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_bisect_iter) <span class="sc">:</span><span class="er">=</span> <span class="fu">as.numeric</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_bisect_iter))) <span class="sc">%&gt;%</span></span>
-<span id="cb400-4"><a href="optimization.html#cb400-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb400-5"><a href="optimization.html#cb400-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_bisect_iter), <span class="at">y=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_number_col),</span>
-<span id="cb400-6"><a href="optimization.html#cb400-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">colour=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name),</span>
-<span id="cb400-7"><a href="optimization.html#cb400-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">linetype=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name),</span>
-<span id="cb400-8"><a href="optimization.html#cb400-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">shape=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name))) <span class="sc">+</span></span>
-<span id="cb400-9"><a href="optimization.html#cb400-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">facet_wrap</span>( <span class="sc">~</span> INDI_ID) <span class="sc">+</span></span>
-<span id="cb400-10"><a href="optimization.html#cb400-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb400-11"><a href="optimization.html#cb400-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb400-12"><a href="optimization.html#cb400-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&#39;Bisection Iteration over individuals Until Convergence&#39;</span>,</span>
-<span id="cb400-13"><a href="optimization.html#cb400-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> <span class="st">&#39;Bisection Iteration&#39;</span>,</span>
-<span id="cb400-14"><a href="optimization.html#cb400-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> <span class="st">&#39;a (left side point) and b (right side point) values&#39;</span>,</span>
-<span id="cb400-15"><a href="optimization.html#cb400-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption =</span> <span class="st">&#39;DPLYR concurrent bisection nonlinear multple individuals&#39;</span>) <span class="sc">+</span></span>
-<span id="cb400-16"><a href="optimization.html#cb400-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
-<span id="cb400-17"><a href="optimization.html#cb400-17" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(lineplot)</span></code></pre></div>
+<div class="sourceCode" id="cb409"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb409-1"><a href="optimization.html#cb409-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph results</span></span>
+<span id="cb409-2"><a href="optimization.html#cb409-2" aria-hidden="true" tabindex="-1"></a>lineplot <span class="ot">&lt;-</span> tb_states_choices_bisec_long <span class="sc">%&gt;%</span></span>
+<span id="cb409-3"><a href="optimization.html#cb409-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_bisect_iter) <span class="sc">:</span><span class="er">=</span> <span class="fu">as.numeric</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_bisect_iter))) <span class="sc">%&gt;%</span></span>
+<span id="cb409-4"><a href="optimization.html#cb409-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb409-5"><a href="optimization.html#cb409-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_bisect_iter), <span class="at">y=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_number_col),</span>
+<span id="cb409-6"><a href="optimization.html#cb409-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">colour=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name),</span>
+<span id="cb409-7"><a href="optimization.html#cb409-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">linetype=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name),</span>
+<span id="cb409-8"><a href="optimization.html#cb409-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">shape=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name))) <span class="sc">+</span></span>
+<span id="cb409-9"><a href="optimization.html#cb409-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">facet_wrap</span>( <span class="sc">~</span> INDI_ID) <span class="sc">+</span></span>
+<span id="cb409-10"><a href="optimization.html#cb409-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb409-11"><a href="optimization.html#cb409-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb409-12"><a href="optimization.html#cb409-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&#39;Bisection Iteration over individuals Until Convergence&#39;</span>,</span>
+<span id="cb409-13"><a href="optimization.html#cb409-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> <span class="st">&#39;Bisection Iteration&#39;</span>,</span>
+<span id="cb409-14"><a href="optimization.html#cb409-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> <span class="st">&#39;a (left side point) and b (right side point) values&#39;</span>,</span>
+<span id="cb409-15"><a href="optimization.html#cb409-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption =</span> <span class="st">&#39;DPLYR concurrent bisection nonlinear multple individuals&#39;</span>) <span class="sc">+</span></span>
+<span id="cb409-16"><a href="optimization.html#cb409-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb409-17"><a href="optimization.html#cb409-17" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(lineplot)</span></code></pre></div>
 <p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/reshape%20solution%20for%20graphing-1.png" width="672" style="display: block; margin: auto;" /></p>
 
 </div>

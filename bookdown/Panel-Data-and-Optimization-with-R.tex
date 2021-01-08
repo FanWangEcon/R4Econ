@@ -6,13 +6,12 @@
 \documentclass[
 ]{book}
 \usepackage{lmodern}
-\usepackage{amsmath}
+\usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
-  \usepackage{amssymb}
 \else % if luatex or xetex
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
@@ -88,7 +87,6 @@
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{longtable,booktabs}
-\usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
 \makeatletter
@@ -149,7 +147,7 @@
 
 \title{Data Structures, Estimation and Optimization with R}
 \author{Fan Wang}
-\date{2020-11-11}
+\date{2021-01-08}
 
 \begin{document}
 \maketitle
@@ -839,6 +837,36 @@ Get last two elements of array.
 ## [1] "dfa" "wer"
 \end{verbatim}
 
+Select all except for the first and the last element of an array.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# define array}
+\NormalTok{ar\_amin }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{0.25}\NormalTok{, }\FloatTok{0.50}\NormalTok{, }\FloatTok{0.75}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\CommentTok{\# select without head and tail}
+\FunctionTok{tail}\NormalTok{(}\FunctionTok{head}\NormalTok{(ar\_amin, }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{), }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.25 0.50 0.75
+\end{verbatim}
+
+Select the first and the last element of an array. The extreme values.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# define array}
+\NormalTok{ar\_amin }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{0.25}\NormalTok{, }\FloatTok{0.50}\NormalTok{, }\FloatTok{0.75}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\CommentTok{\# select head and tail}
+\FunctionTok{c}\NormalTok{(}\FunctionTok{head}\NormalTok{(ar\_amin, }\DecValTok{1}\NormalTok{), }\FunctionTok{tail}\NormalTok{(ar\_amin, }\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0 1
+\end{verbatim}
+
 \hypertarget{na-in-array}{%
 \subsubsection{NA in Array}\label{na-in-array}}
 
@@ -1463,13 +1491,13 @@ Given two arrays, mesh the two arrays together.
 \resizebox{\linewidth}{!}{
 \begin{tabular}{r|r|r|r|r|r|r|r|r|r}
 \hline
-0.1 & 0.1888889 & 0.2777778 & 0.3666667 & 0.4555556 & 0.5444444 & 0.6333333 & 0.7222222 & 0.8111111 & \vphantom{4}0.9\\
+0.1 & 0.1888889 & 0.2777778 & 0.3666667 & 0.4555556 & 0.5444444 & 0.6333333 & 0.7222222 & 0.8111111 & \vphantom{4} 0.9\\
 \hline
-\cellcolor{gray!6}{0.1} & \cellcolor{gray!6}{0.1888889} & \cellcolor{gray!6}{0.2777778} & \cellcolor{gray!6}{0.3666667} & \cellcolor{gray!6}{0.4555556} & \cellcolor{gray!6}{0.5444444} & \cellcolor{gray!6}{0.6333333} & \cellcolor{gray!6}{0.7222222} & \cellcolor{gray!6}{0.8111111} & \cellcolor{gray!6}{\vphantom{3}0.9}\\
+\cellcolor{gray!6}{0.1} & \cellcolor{gray!6}{0.1888889} & \cellcolor{gray!6}{0.2777778} & \cellcolor{gray!6}{0.3666667} & \cellcolor{gray!6}{0.4555556} & \cellcolor{gray!6}{0.5444444} & \cellcolor{gray!6}{0.6333333} & \cellcolor{gray!6}{0.7222222} & \cellcolor{gray!6}{0.8111111} & \cellcolor{gray!6}{\vphantom{3} 0.9}\\
 \hline
-0.1 & 0.1888889 & 0.2777778 & 0.3666667 & 0.4555556 & 0.5444444 & 0.6333333 & 0.7222222 & 0.8111111 & \vphantom{2}0.9\\
+0.1 & 0.1888889 & 0.2777778 & 0.3666667 & 0.4555556 & 0.5444444 & 0.6333333 & 0.7222222 & 0.8111111 & \vphantom{2} 0.9\\
 \hline
-\cellcolor{gray!6}{0.1} & \cellcolor{gray!6}{0.1888889} & \cellcolor{gray!6}{0.2777778} & \cellcolor{gray!6}{0.3666667} & \cellcolor{gray!6}{0.4555556} & \cellcolor{gray!6}{0.5444444} & \cellcolor{gray!6}{0.6333333} & \cellcolor{gray!6}{0.7222222} & \cellcolor{gray!6}{0.8111111} & \cellcolor{gray!6}{\vphantom{1}0.9}\\
+\cellcolor{gray!6}{0.1} & \cellcolor{gray!6}{0.1888889} & \cellcolor{gray!6}{0.2777778} & \cellcolor{gray!6}{0.3666667} & \cellcolor{gray!6}{0.4555556} & \cellcolor{gray!6}{0.5444444} & \cellcolor{gray!6}{0.6333333} & \cellcolor{gray!6}{0.7222222} & \cellcolor{gray!6}{0.8111111} & \cellcolor{gray!6}{\vphantom{1} 0.9}\\
 \hline
 0.1 & 0.1888889 & 0.2777778 & 0.3666667 & 0.4555556 & 0.5444444 & 0.6333333 & 0.7222222 & 0.8111111 & 0.9\\
 \hline
@@ -1525,13 +1553,13 @@ Two Identical Arrays, individual attributes, each column is an individual for a 
 \centering
 \begin{tabular}{r|r|r|r|r}
 \hline
--2 & -1 & 0 & 1 & \vphantom{4}2\\
+-2 & -1 & 0 & 1 & \vphantom{4} 2\\
 \hline
-\cellcolor{gray!6}{-2} & \cellcolor{gray!6}{-1} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{\vphantom{3}2}\\
+\cellcolor{gray!6}{-2} & \cellcolor{gray!6}{-1} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{\vphantom{3} 2}\\
 \hline
--2 & -1 & 0 & 1 & \vphantom{2}2\\
+-2 & -1 & 0 & 1 & \vphantom{2} 2\\
 \hline
-\cellcolor{gray!6}{-2} & \cellcolor{gray!6}{-1} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{\vphantom{1}2}\\
+\cellcolor{gray!6}{-2} & \cellcolor{gray!6}{-1} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{\vphantom{1} 2}\\
 \hline
 -2 & -1 & 0 & 1 & 2\\
 \hline
@@ -1661,8 +1689,7 @@ Random draw from the normal distribution, random draw from the uniform distribut
 \NormalTok{mt\_rnorm\_runif }\OtherTok{\textless{}{-}} \FunctionTok{cbind}\NormalTok{(mt\_rnorm, mt\_runif)}
 
 \CommentTok{\# Display}
-\FunctionTok{kable}\NormalTok{(mt\_rnorm\_runif) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{kable\_styling\_fc\_wide}\NormalTok{()}
+\FunctionTok{kable}\NormalTok{(mt\_rnorm\_runif) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable\_styling\_fc\_wide}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1680,6 +1707,43 @@ Random draw from the normal distribution, random draw from the uniform distribut
 \cellcolor{gray!6}{-1.2650612} & \cellcolor{gray!6}{0.4007715} & \cellcolor{gray!6}{-1.9666172} & \cellcolor{gray!6}{0.4145463} & \cellcolor{gray!6}{0.2330341} & \cellcolor{gray!6}{0.4422001} & \cellcolor{gray!6}{0.4145463} & \cellcolor{gray!6}{0.2330341}\\
 \hline
 -0.6868529 & 0.1106827 & 0.7013559 & 0.4137243 & 0.4659625 & 0.7989248 & 0.4137243 & 0.4659625\\
+\hline
+\end{tabular}}
+\end{table}
+
+\hypertarget{add-column-to-matrix-with-common-scalar-value}{%
+\subsubsection{Add Column to Matrix with Common Scalar Value}\label{add-column-to-matrix-with-common-scalar-value}}
+
+Given some matrix of information, add a column, where all rows of the column have the same numerical value. Use the matrix created prior.
+- R add column to matrix
+- r append column to matrix constant value
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fl\_new\_first\_col\_val }\OtherTok{\textless{}{-}} \DecValTok{111}
+\NormalTok{fl\_new\_last\_col\_val }\OtherTok{\textless{}{-}} \DecValTok{999}
+\NormalTok{mt\_with\_more\_columns }\OtherTok{\textless{}{-}} \FunctionTok{cbind}\NormalTok{(}\FunctionTok{rep}\NormalTok{(fl\_new\_first\_col\_val, }\FunctionTok{dim}\NormalTok{(mt\_rnorm\_runif)[}\DecValTok{1}\NormalTok{]), }
+\NormalTok{                              mt\_rnorm\_runif,}
+                              \FunctionTok{rep}\NormalTok{(fl\_new\_last\_col\_val, }\FunctionTok{dim}\NormalTok{(mt\_rnorm\_runif)[}\DecValTok{1}\NormalTok{]))}
+\CommentTok{\# Display}
+\FunctionTok{kable}\NormalTok{(mt\_with\_more\_columns) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable\_styling\_fc\_wide}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{r|r|r|r|r|r|r|r|r|r}
+\hline
+111 & 0.1292877 & -0.4456620 & -0.5558411 & 0.3181810 & 0.3688455 & 0.2659726 & 0.3181810 & 0.3688455 & 999\\
+\hline
+\cellcolor{gray!6}{111} & \cellcolor{gray!6}{1.7150650} & \cellcolor{gray!6}{1.2240818} & \cellcolor{gray!6}{1.7869131} & \cellcolor{gray!6}{0.2316258} & \cellcolor{gray!6}{0.1524447} & \cellcolor{gray!6}{0.8578277} & \cellcolor{gray!6}{0.2316258} & \cellcolor{gray!6}{0.1524447} & \cellcolor{gray!6}{999}\\
+\hline
+111 & 0.4609162 & 0.3598138 & 0.4978505 & 0.1428000 & 0.1388061 & 0.0458312 & 0.1428000 & 0.1388061 & 999\\
+\hline
+\cellcolor{gray!6}{111} & \cellcolor{gray!6}{-1.2650612} & \cellcolor{gray!6}{0.4007715} & \cellcolor{gray!6}{-1.9666172} & \cellcolor{gray!6}{0.4145463} & \cellcolor{gray!6}{0.2330341} & \cellcolor{gray!6}{0.4422001} & \cellcolor{gray!6}{0.4145463} & \cellcolor{gray!6}{0.2330341} & \cellcolor{gray!6}{999}\\
+\hline
+111 & -0.6868529 & 0.1106827 & 0.7013559 & 0.4137243 & 0.4659625 & 0.7989248 & 0.4137243 & 0.4659625 & 999\\
 \hline
 \end{tabular}}
 \end{table}
@@ -1998,15 +2062,14 @@ Show what is in the table: 1, column and row names; 2, contents inside table.
 \end{Shaded}
 
 \begin{verbatim}
-##   [1] "1"   "2"   "3"   "4"   "5"   "6"   "7"   "8"   "9"   "10"  "11"  "12"  "13"  "14"  "15"  "16"  "17"  "18" 
-##  [19] "19"  "20"  "21"  "22"  "23"  "24"  "25"  "26"  "27"  "28"  "29"  "30"  "31"  "32"  "33"  "34"  "35"  "36" 
-##  [37] "37"  "38"  "39"  "40"  "41"  "42"  "43"  "44"  "45"  "46"  "47"  "48"  "49"  "50"  "51"  "52"  "53"  "54" 
-##  [55] "55"  "56"  "57"  "58"  "59"  "60"  "61"  "62"  "63"  "64"  "65"  "66"  "67"  "68"  "69"  "70"  "71"  "72" 
-##  [73] "73"  "74"  "75"  "76"  "77"  "78"  "79"  "80"  "81"  "82"  "83"  "84"  "85"  "86"  "87"  "88"  "89"  "90" 
-##  [91] "91"  "92"  "93"  "94"  "95"  "96"  "97"  "98"  "99"  "100" "101" "102" "103" "104" "105" "106" "107" "108"
-## [109] "109" "110" "111" "112" "113" "114" "115" "116" "117" "118" "119" "120" "121" "122" "123" "124" "125" "126"
-## [127] "127" "128" "129" "130" "131" "132" "133" "134" "135" "136" "137" "138" "139" "140" "141" "142" "143" "144"
-## [145] "145" "146" "147" "148" "149" "150"
+##   [1] "1"   "2"   "3"   "4"   "5"   "6"   "7"   "8"   "9"   "10"  "11"  "12"  "13"  "14"  "15"  "16"  "17"  "18"  "19" 
+##  [20] "20"  "21"  "22"  "23"  "24"  "25"  "26"  "27"  "28"  "29"  "30"  "31"  "32"  "33"  "34"  "35"  "36"  "37"  "38" 
+##  [39] "39"  "40"  "41"  "42"  "43"  "44"  "45"  "46"  "47"  "48"  "49"  "50"  "51"  "52"  "53"  "54"  "55"  "56"  "57" 
+##  [58] "58"  "59"  "60"  "61"  "62"  "63"  "64"  "65"  "66"  "67"  "68"  "69"  "70"  "71"  "72"  "73"  "74"  "75"  "76" 
+##  [77] "77"  "78"  "79"  "80"  "81"  "82"  "83"  "84"  "85"  "86"  "87"  "88"  "89"  "90"  "91"  "92"  "93"  "94"  "95" 
+##  [96] "96"  "97"  "98"  "99"  "100" "101" "102" "103" "104" "105" "106" "107" "108" "109" "110" "111" "112" "113" "114"
+## [115] "115" "116" "117" "118" "119" "120" "121" "122" "123" "124" "125" "126" "127" "128" "129" "130" "131" "132" "133"
+## [134] "134" "135" "136" "137" "138" "139" "140" "141" "142" "143" "144" "145" "146" "147" "148" "149" "150"
 \end{verbatim}
 
 \begin{Shaded}
@@ -2236,7 +2299,7 @@ Now we generate scatter plot based on the combined factors
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-41-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-44-1} \end{center}
 
 \hypertarget{drawly-random-rows}{%
 \subsection{Drawly Random Rows}\label{drawly-random-rows}}
@@ -2507,7 +2570,7 @@ Now we generate scatter plot based on the combined factors
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-46-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-49-1} \end{center}
 
 \hypertarget{generate-na-values-if-variables-have-certain-value}{%
 \subsubsection{Generate NA values if Variables have Certain Value}\label{generate-na-values-if-variables-have-certain-value}}
@@ -2662,7 +2725,7 @@ Now we generate scatter plot based on the combined factors, but now with the NA 
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-48-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-51-1} \end{center}
 
 \hypertarget{approximate-values-comparison}{%
 \subsubsection{Approximate Values Comparison}\label{approximate-values-comparison}}
@@ -3177,8 +3240,275 @@ Sepal.Length & Sepal.Len.Index & Sepal.Len.Devi & Sepal.Len.Devi.Neg & Sepal.Len
 \end{tabular}}
 \end{table}
 
+\hypertarget{group-sort-and-slice}{%
+\subsection{Group, Sort and Slice}\label{group-sort-and-slice}}
+
+\begin{quote}
+Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R Code Examples} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository (\href{https://fanwangecon.github.io/Stat4Econ/bookdown}{bookdown site}).
+\end{quote}
+
+\hypertarget{get-highest-values-from-groups}{%
+\subsubsection{Get Highest Values from Groups}\label{get-highest-values-from-groups}}
+
+There is a dataframe with a grouping variable. Get N rows that have the highest sorted value for another numeric variable. In the example below, group by \emph{cyl} and get the cars with the highest \emph{mpg} in each \emph{cyl} group.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# use mtcars}
+\NormalTok{df\_groupby\_top\_mpg }\OtherTok{\textless{}{-}}\NormalTok{ mtcars }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(cyl, mpg) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(cyl) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{slice\_head}\NormalTok{(}\AttributeTok{n=}\DecValTok{1}\NormalTok{)}
+\CommentTok{\# display}
+\FunctionTok{kable}\NormalTok{(df\_groupby\_top\_mpg) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{r|r|r|r|r|r|r|r|r|r|r}
+\hline
+mpg & cyl & disp & hp & drat & wt & qsec & vs & am & gear & carb\\
+\hline
+\cellcolor{gray!6}{21.4} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{121.0} & \cellcolor{gray!6}{109} & \cellcolor{gray!6}{4.11} & \cellcolor{gray!6}{2.78} & \cellcolor{gray!6}{18.60} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{2}\\
+\hline
+17.8 & 6 & 167.6 & 123 & 3.92 & 3.44 & 18.90 & 1 & 0 & 4 & 4\\
+\hline
+\cellcolor{gray!6}{10.4} & \cellcolor{gray!6}{8} & \cellcolor{gray!6}{472.0} & \cellcolor{gray!6}{205} & \cellcolor{gray!6}{2.93} & \cellcolor{gray!6}{5.25} & \cellcolor{gray!6}{17.98} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{4}\\
+\hline
+\end{tabular}
+\end{table}
+
 \hypertarget{group-statistics}{%
 \section{Group Statistics}\label{group-statistics}}
+
+\hypertarget{cumulative-statistics-within-group}{%
+\subsection{Cumulative Statistics within Group}\label{cumulative-statistics-within-group}}
+
+\begin{quote}
+Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R Code Examples} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository (\href{https://fanwangecon.github.io/Stat4Econ/bookdown}{bookdown site}).
+\end{quote}
+
+\hypertarget{cumulative-mean}{%
+\subsubsection{Cumulative Mean}\label{cumulative-mean}}
+
+There is a dataset where there are different types of individuals, perhaps household size, that is the grouping variable. Within each group, we compute the incremental marginal propensity to consume for each additional check. We now also want to know the average propensity to consume up to each check considering all allocated checks. We needed to calculatet this for \href{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3691091}{Nygaard, Sørensen and Wang (2021)}. This can be dealt with by using the \href{https://dplyr.tidyverse.org/reference/cumall.html}{cumall} function.
+
+Use the \href{https://fanwangecon.github.io/REconTools/reference/df_hgt_wgt.html}{df\_hgt\_wgt} as the testing dataset. In the example below, group by individual id, sort by survey month, and cumulative mean over the protein variable.
+
+In the protein example
+
+First select the testing dataset and variables.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load the REconTools Dataset df\_hgt\_wgt}
+\FunctionTok{data}\NormalTok{(}\StringTok{"df\_hgt\_wgt"}\NormalTok{)}
+\CommentTok{\# str(df\_hgt\_wgt)}
+
+\CommentTok{\# Select several rows}
+\NormalTok{df\_hgt\_wgt\_sel }\OtherTok{\textless{}{-}}\NormalTok{ df\_hgt\_wgt }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{filter}\NormalTok{(S.country }\SpecialCharTok{==} \StringTok{"Cebu"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(indi.id, svymthRound, prot)}
+\end{Highlighting}
+\end{Shaded}
+
+Second, arrange, groupby, and cumulative mean. The protein variable is protein for each survey month, from month 2 to higher as babies grow. The protein intake observed is increasing quickly, hence, the cumulative mean is lower than the observed value for the survey month of the baby.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Group by indi.id and sort by protein}
+\NormalTok{df\_hgt\_wgt\_sel\_cummean }\OtherTok{\textless{}{-}}\NormalTok{ df\_hgt\_wgt\_sel }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(indi.id, svymthRound) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(indi.id) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{prot\_cummean =} \FunctionTok{cummean}\NormalTok{(prot))}
+
+\CommentTok{\# display results}
+\NormalTok{REconTools}\SpecialCharTok{::}\FunctionTok{ff\_summ\_percentiles}\NormalTok{(df\_hgt\_wgt\_sel\_cummean)}
+\CommentTok{\# display results}
+\NormalTok{df\_hgt\_wgt\_sel\_cummean }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(indi.id }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\DecValTok{17}\NormalTok{, }\DecValTok{18}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{kable}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{r|r|r|r}
+\hline
+indi.id & svymthRound & prot & prot\_cummean\\
+\hline
+\cellcolor{gray!6}{17} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{0.5} & \cellcolor{gray!6}{0.5000000}\\
+\hline
+17 & 2 & 0.7 & 0.6000000\\
+\hline
+\cellcolor{gray!6}{17} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{0.5} & \cellcolor{gray!6}{0.5666667}\\
+\hline
+17 & 6 & 0.5 & 0.5500000\\
+\hline
+\cellcolor{gray!6}{17} & \cellcolor{gray!6}{8} & \cellcolor{gray!6}{6.1} & \cellcolor{gray!6}{1.6600000}\\
+\hline
+17 & 10 & 5.0 & 2.2166667\\
+\hline
+\cellcolor{gray!6}{17} & \cellcolor{gray!6}{12} & \cellcolor{gray!6}{6.4} & \cellcolor{gray!6}{2.8142857}\\
+\hline
+17 & 14 & 20.1 & 4.9750000\\
+\hline
+\cellcolor{gray!6}{17} & \cellcolor{gray!6}{16} & \cellcolor{gray!6}{20.1} & \cellcolor{gray!6}{6.6555556}\\
+\hline
+17 & 18 & 23.0 & 8.2900000\\
+\hline
+\cellcolor{gray!6}{17} & \cellcolor{gray!6}{20} & \cellcolor{gray!6}{24.9} & \cellcolor{gray!6}{9.8000000}\\
+\hline
+17 & 22 & 20.1 & 10.6583333\\
+\hline
+\cellcolor{gray!6}{17} & \cellcolor{gray!6}{24} & \cellcolor{gray!6}{10.1} & \cellcolor{gray!6}{10.6153846}\\
+\hline
+17 & 102 & NA & NA\\
+\hline
+\cellcolor{gray!6}{17} & \cellcolor{gray!6}{138} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA}\\
+\hline
+17 & 187 & NA & NA\\
+\hline
+\cellcolor{gray!6}{17} & \cellcolor{gray!6}{224} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA}\\
+\hline
+17 & 258 & NA & NA\\
+\hline
+\cellcolor{gray!6}{18} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{1.2} & \cellcolor{gray!6}{1.2000000}\\
+\hline
+18 & 2 & 4.7 & 2.9500000\\
+\hline
+\cellcolor{gray!6}{18} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{17.2} & \cellcolor{gray!6}{7.7000000}\\
+\hline
+18 & 6 & 18.6 & 10.4250000\\
+\hline
+\cellcolor{gray!6}{18} & \cellcolor{gray!6}{8} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA}\\
+\hline
+18 & 10 & 16.8 & NA\\
+\hline
+\cellcolor{gray!6}{18} & \cellcolor{gray!6}{12} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA}\\
+\hline
+18 & 14 & NA & NA\\
+\hline
+\cellcolor{gray!6}{18} & \cellcolor{gray!6}{16} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA}\\
+\hline
+18 & 18 & NA & NA\\
+\hline
+\cellcolor{gray!6}{18} & \cellcolor{gray!6}{20} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA}\\
+\hline
+18 & 22 & 15.7 & NA\\
+\hline
+\cellcolor{gray!6}{18} & \cellcolor{gray!6}{24} & \cellcolor{gray!6}{22.5} & \cellcolor{gray!6}{NA}\\
+\hline
+18 & 102 & NA & NA\\
+\hline
+\cellcolor{gray!6}{18} & \cellcolor{gray!6}{138} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA}\\
+\hline
+18 & 187 & NA & NA\\
+\hline
+\cellcolor{gray!6}{18} & \cellcolor{gray!6}{224} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA}\\
+\hline
+18 & 258 & NA & NA\\
+\hline
+\end{tabular}
+\end{table}
+
+Third, in the basic implementation above, if an incremental month has NA, no values computed at that point or after. This is the case for individual 18 above. To ignore NA, we have, from \href{https://stackoverflow.com/a/49906718/8280804}{this}. Note how results for individual 18 changes.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# https://stackoverflow.com/a/49906718/8280804}
+\CommentTok{\# Group by indi.id and sort by protein}
+\NormalTok{df\_hgt\_wgt\_sel\_cummean\_noNA }\OtherTok{\textless{}{-}}\NormalTok{ df\_hgt\_wgt\_sel }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(indi.id, svymthRound) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(indi.id, }\AttributeTok{isna =} \FunctionTok{is.na}\NormalTok{(prot)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{prot\_cummean =} \FunctionTok{ifelse}\NormalTok{(isna, }\ConstantTok{NA}\NormalTok{, }\FunctionTok{cummean}\NormalTok{(prot)))}
+
+\CommentTok{\# display results}
+\NormalTok{df\_hgt\_wgt\_sel\_cummean\_noNA }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(indi.id }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\DecValTok{17}\NormalTok{, }\DecValTok{18}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{kable}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{r|r|r|l|r}
+\hline
+indi.id & svymthRound & prot & isna & prot\_cummean\\
+\hline
+\cellcolor{gray!6}{17} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{0.5} & \cellcolor{gray!6}{FALSE} & \cellcolor{gray!6}{0.5000000}\\
+\hline
+17 & 2 & 0.7 & FALSE & 0.6000000\\
+\hline
+\cellcolor{gray!6}{17} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{0.5} & \cellcolor{gray!6}{FALSE} & \cellcolor{gray!6}{0.5666667}\\
+\hline
+17 & 6 & 0.5 & FALSE & 0.5500000\\
+\hline
+\cellcolor{gray!6}{17} & \cellcolor{gray!6}{8} & \cellcolor{gray!6}{6.1} & \cellcolor{gray!6}{FALSE} & \cellcolor{gray!6}{1.6600000}\\
+\hline
+17 & 10 & 5.0 & FALSE & 2.2166667\\
+\hline
+\cellcolor{gray!6}{17} & \cellcolor{gray!6}{12} & \cellcolor{gray!6}{6.4} & \cellcolor{gray!6}{FALSE} & \cellcolor{gray!6}{2.8142857}\\
+\hline
+17 & 14 & 20.1 & FALSE & 4.9750000\\
+\hline
+\cellcolor{gray!6}{17} & \cellcolor{gray!6}{16} & \cellcolor{gray!6}{20.1} & \cellcolor{gray!6}{FALSE} & \cellcolor{gray!6}{6.6555556}\\
+\hline
+17 & 18 & 23.0 & FALSE & 8.2900000\\
+\hline
+\cellcolor{gray!6}{17} & \cellcolor{gray!6}{20} & \cellcolor{gray!6}{24.9} & \cellcolor{gray!6}{FALSE} & \cellcolor{gray!6}{9.8000000}\\
+\hline
+17 & 22 & 20.1 & FALSE & 10.6583333\\
+\hline
+\cellcolor{gray!6}{17} & \cellcolor{gray!6}{24} & \cellcolor{gray!6}{10.1} & \cellcolor{gray!6}{FALSE} & \cellcolor{gray!6}{10.6153846}\\
+\hline
+17 & 102 & NA & TRUE & NA\\
+\hline
+\cellcolor{gray!6}{17} & \cellcolor{gray!6}{138} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{TRUE} & \cellcolor{gray!6}{NA}\\
+\hline
+17 & 187 & NA & TRUE & NA\\
+\hline
+\cellcolor{gray!6}{17} & \cellcolor{gray!6}{224} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{TRUE} & \cellcolor{gray!6}{NA}\\
+\hline
+17 & 258 & NA & TRUE & NA\\
+\hline
+\cellcolor{gray!6}{18} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{1.2} & \cellcolor{gray!6}{FALSE} & \cellcolor{gray!6}{1.2000000}\\
+\hline
+18 & 2 & 4.7 & FALSE & 2.9500000\\
+\hline
+\cellcolor{gray!6}{18} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{17.2} & \cellcolor{gray!6}{FALSE} & \cellcolor{gray!6}{7.7000000}\\
+\hline
+18 & 6 & 18.6 & FALSE & 10.4250000\\
+\hline
+\cellcolor{gray!6}{18} & \cellcolor{gray!6}{8} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{TRUE} & \cellcolor{gray!6}{NA}\\
+\hline
+18 & 10 & 16.8 & FALSE & 11.7000000\\
+\hline
+\cellcolor{gray!6}{18} & \cellcolor{gray!6}{12} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{TRUE} & \cellcolor{gray!6}{NA}\\
+\hline
+18 & 14 & NA & TRUE & NA\\
+\hline
+\cellcolor{gray!6}{18} & \cellcolor{gray!6}{16} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{TRUE} & \cellcolor{gray!6}{NA}\\
+\hline
+18 & 18 & NA & TRUE & NA\\
+\hline
+\cellcolor{gray!6}{18} & \cellcolor{gray!6}{20} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{TRUE} & \cellcolor{gray!6}{NA}\\
+\hline
+18 & 22 & 15.7 & FALSE & 12.3666667\\
+\hline
+\cellcolor{gray!6}{18} & \cellcolor{gray!6}{24} & \cellcolor{gray!6}{22.5} & \cellcolor{gray!6}{FALSE} & \cellcolor{gray!6}{13.8142857}\\
+\hline
+18 & 102 & NA & TRUE & NA\\
+\hline
+\cellcolor{gray!6}{18} & \cellcolor{gray!6}{138} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{TRUE} & \cellcolor{gray!6}{NA}\\
+\hline
+18 & 187 & NA & TRUE & NA\\
+\hline
+\cellcolor{gray!6}{18} & \cellcolor{gray!6}{224} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{TRUE} & \cellcolor{gray!6}{NA}\\
+\hline
+18 & 258 & NA & TRUE & NA\\
+\hline
+\end{tabular}
+\end{table}
 
 \hypertarget{groups-statistics}{%
 \subsection{Groups Statistics}\label{groups-statistics}}
@@ -4165,7 +4495,7 @@ First, we will generate a test score dataset, directly from string. Below we typ
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-86-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-95-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4177,7 +4507,7 @@ First, we will generate a test score dataset, directly from string. Below we typ
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-87-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-96-1} \end{center}
 
 \hypertarget{summarize-multiple-variables}{%
 \section{Summarize Multiple Variables}\label{summarize-multiple-variables}}
@@ -8654,8 +8984,8 @@ Setting Up Parameters.
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "prot_Estimate"        "male_Estimate"        "wgt0_Estimate"        "hgt0_Estimate"       
-## [5] "svymthRound_Estimate" "vars_var.y"
+## [1] "prot_Estimate"        "male_Estimate"        "wgt0_Estimate"        "hgt0_Estimate"        "svymthRound_Estimate"
+## [6] "vars_var.y"
 \end{verbatim}
 
 \begin{Shaded}
@@ -8975,7 +9305,7 @@ hgt & 77.8 & 73.13353 & 70.97578 & 71.45823\\
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-169-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-178-1} \end{center}
 
 \hypertarget{additional-decomposition-testings}{%
 \subsubsection{Additional Decomposition Testings}\label{additional-decomposition-testings}}
@@ -9351,21 +9681,21 @@ Given the x-variables included in the logit regression, how do they relate to A\
 ## [[1]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-173-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-182-1} \end{center}
 
 \begin{verbatim}
 ## 
 ## [[2]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-173-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-182-2} \end{center}
 
 \begin{verbatim}
 ## 
 ## [[3]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-173-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-182-3} \end{center}
 
 \hypertarget{quantile-regression}{%
 \section{Quantile Regression}\label{quantile-regression}}
@@ -9434,10 +9764,10 @@ Now estimate the quantile regressions at various quantiles, standard error obtai
 ## 
 ## Coefficients:
 ##             Value    Std. Error t value  Pr(>|t|)
-## (Intercept) 25.34665  1.55988   16.24908  0.00000
-## disp        -0.02441  0.00804   -3.03384  0.00517
-## hp          -0.01672  0.01378   -1.21304  0.23525
-## factor(am)1  1.39719  1.40275    0.99604  0.32776
+## (Intercept) 25.34665  1.38870   18.25209  0.00000
+## disp        -0.02441  0.00798   -3.06028  0.00484
+## hp          -0.01672  0.01409   -1.18621  0.24551
+## factor(am)1  1.39719  1.41689    0.98610  0.33253
 ## 
 ## Call: rq(formula = mpg ~ disp + hp + factor(am), tau = ls_fl_quantiles, 
 ##     data = mtcars)
@@ -9446,10 +9776,10 @@ Now estimate the quantile regressions at various quantiles, standard error obtai
 ## 
 ## Coefficients:
 ##             Value    Std. Error t value  Pr(>|t|)
-## (Intercept) 27.49722  1.73565   15.84258  0.00000
-## disp        -0.02253  0.01607   -1.40204  0.17189
-## hp          -0.02713  0.02486   -1.09156  0.28433
-## factor(am)1  3.37328  1.92083    1.75616  0.08999
+## (Intercept) 27.49722  1.75659   15.65379  0.00000
+## disp        -0.02253  0.01634   -1.37904  0.17880
+## hp          -0.02713  0.02414   -1.12386  0.27062
+## factor(am)1  3.37328  2.25738    1.49434  0.14627
 ## 
 ## Call: rq(formula = mpg ~ disp + hp + factor(am), tau = ls_fl_quantiles, 
 ##     data = mtcars)
@@ -9458,10 +9788,10 @@ Now estimate the quantile regressions at various quantiles, standard error obtai
 ## 
 ## Coefficients:
 ##             Value    Std. Error t value  Pr(>|t|)
-## (Intercept) 28.06384  1.89184   14.83415  0.00000
-## disp         0.00445  0.01488    0.29914  0.76704
-## hp          -0.06662  0.01798   -3.70512  0.00092
-## factor(am)1  7.91402  2.34703    3.37193  0.00220
+## (Intercept) 28.06384  1.68640   16.64124  0.00000
+## disp         0.00445  0.01457    0.30566  0.76212
+## hp          -0.06662  0.01795   -3.71247  0.00090
+## factor(am)1  7.91402  2.36999    3.33926  0.00239
 \end{verbatim}
 
 \hypertarget{test-quantile-coefficients-if-different}{%
@@ -10192,7 +10522,7 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-188-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-197-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10210,7 +10540,7 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-188-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-197-2} \end{center}
 
 \hypertarget{integration-by-symmetric-uneven-rectangle}{%
 \subsubsection{Integration By Symmetric Uneven Rectangle}\label{integration-by-symmetric-uneven-rectangle}}
@@ -10269,7 +10599,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-189-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-198-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10287,7 +10617,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-189-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-198-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10305,7 +10635,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-189-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-198-3} \end{center}
 
 \hypertarget{integration-by-constant-width-rectangle-trapezoidal-rule}{%
 \subsubsection{Integration By Constant Width Rectangle (Trapezoidal rule)}\label{integration-by-constant-width-rectangle-trapezoidal-rule}}
@@ -10360,7 +10690,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-190-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-199-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10378,7 +10708,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-190-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-199-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10396,7 +10726,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-190-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-199-3} \end{center}
 
 \hypertarget{analytical-solutions}{%
 \section{Analytical Solutions}\label{analytical-solutions}}
@@ -10694,17 +11024,17 @@ Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon
 \href{https://linkinghub.elsevier.com/retrieve/pii/0022053170900396}{Atkinson (JET, 1970)} studies five standard inequality measures. Atkinson finds that given the same income data across countries, different inequality measure lead to different rankings of which country is more unequal. Atkinson develops an measure of inequality that changes depending on an inequality aversion parameter.
 
 \[
-\text{Atkinson Inequality} = 
+\text{Atkinson Inequality} =
 A\left(
 \left\{Y_i\right\}_{i=1}^N,
 \lambda
-\right) 
-= 1 - 
+\right)
+= 1 -
 \left(
 \sum_{i=1}^N \frac{1}{N}
   \left(
     \frac{Y_i}{\sum_{j=1}^N \left( \frac{Y_j}{N} \right) }
-  \right)^{\lambda}  
+  \right)^{\lambda}
 \right)^{\frac{1}{\lambda}}
 \in \left[0,1\right]
 \]
@@ -10737,11 +11067,11 @@ Preference vector and data vector:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# Preference Vector }
+\CommentTok{\# Preference Vector}
 \NormalTok{ar\_rho }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (}\DecValTok{10}\SpecialCharTok{\^{}}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\FunctionTok{seq}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{2.2}\NormalTok{,}\FloatTok{2.2}\NormalTok{, }\AttributeTok{length.out=}\DecValTok{60}\NormalTok{)))))}
 \NormalTok{ar\_rho }\OtherTok{\textless{}{-}} \FunctionTok{unique}\NormalTok{(ar\_rho)}
 \NormalTok{mt\_rho }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(ar\_rho, }\AttributeTok{nrow=}\FunctionTok{length}\NormalTok{(ar\_rho), }\AttributeTok{ncol=}\DecValTok{1}\NormalTok{)}
-  
+
 \CommentTok{\# Random Data Vector (not equal outcomes)}
 \FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
 \NormalTok{ar\_data\_rand }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(}\DecValTok{15}\NormalTok{, }\AttributeTok{mean=}\DecValTok{0}\NormalTok{,}\AttributeTok{sd=}\DecValTok{1}\NormalTok{)}
@@ -10803,14 +11133,13 @@ This is the vector of inequality aversion parameters:
 \end{Shaded}
 
 \begin{verbatim}
-##  [1]    1.00000000    0.99369043    0.99250837    0.99110487    0.98943842    0.98745978    0.98511046
-##  [8]    0.98232100    0.97900896    0.97507643    0.97040717    0.96486316    0.95828051    0.95046465
-## [15]    0.94118454    0.93016586    0.91708291    0.90154895    0.88310482    0.86120530    0.83520306
-## [22]    0.80432947    0.76767192    0.72414684    0.67246762    0.61110666    0.53825013    0.45174443
-## [29]    0.34903248    0.22707813    0.08227648   -0.08965279   -0.29379184   -0.53617495   -0.82396688
-## [36]   -1.16567469   -1.57139912   -2.05313328   -2.62511705   -3.30425810   -4.11063160   -5.06807371
-## [43]   -6.20488608   -7.55467254   -9.15733231  -11.06023949  -13.31964342  -16.00233131  -19.18760255
-## [50]  -22.96961271  -27.46015678  -32.79197376  -39.12267043  -46.63938010  -55.56429426  -66.16123043
+##  [1]    1.00000000    0.99369043    0.99250837    0.99110487    0.98943842    0.98745978    0.98511046    0.98232100
+##  [9]    0.97900896    0.97507643    0.97040717    0.96486316    0.95828051    0.95046465    0.94118454    0.93016586
+## [17]    0.91708291    0.90154895    0.88310482    0.86120530    0.83520306    0.80432947    0.76767192    0.72414684
+## [25]    0.67246762    0.61110666    0.53825013    0.45174443    0.34903248    0.22707813    0.08227648   -0.08965279
+## [33]   -0.29379184   -0.53617495   -0.82396688   -1.16567469   -1.57139912   -2.05313328   -2.62511705   -3.30425810
+## [41]   -4.11063160   -5.06807371   -6.20488608   -7.55467254   -9.15733231  -11.06023949  -13.31964342  -16.00233131
+## [49]  -19.18760255  -22.96961271  -27.46015678  -32.79197376  -39.12267043  -46.63938010  -55.56429426  -66.16123043
 ## [57]  -78.74343059  -93.68282046 -111.42100351 -132.48231461 -157.48931925
 \end{verbatim}
 
@@ -10839,7 +11168,7 @@ How does Atkinson Inequality measure change with respect to a vector of random d
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-201-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-210-1} \end{center}
 
 Now with the one person has the wealth of all others in the vector times 10:
 
@@ -10863,7 +11192,7 @@ Now with the one person has the wealth of all others in the vector times 10:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-202-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-211-1} \end{center}
 
 The Uniform Results, since allocations are uniform, zero for all:
 
@@ -10887,7 +11216,7 @@ The Uniform Results, since allocations are uniform, zero for all:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-203-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-212-1} \end{center}
 
 \hypertarget{analyzing-equation-mechanics}{%
 \subsubsection{Analyzing Equation Mechanics}\label{analyzing-equation-mechanics}}
@@ -11015,9 +11344,9 @@ Given \(V^{\ast}\), we can show the combinations of \(A\) and \(B\) points that 
 \NormalTok{ar\_beta }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FloatTok{0.25}\NormalTok{, }\FloatTok{0.75}\NormalTok{, }\AttributeTok{length.out =} \DecValTok{3}\NormalTok{)}
 \NormalTok{ar\_beta }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.3}\NormalTok{, }\FloatTok{0.5}\NormalTok{, }\FloatTok{0.7}\NormalTok{)}
 \NormalTok{ar\_v\_star }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\AttributeTok{length.out =} \DecValTok{1}\NormalTok{)}
-\NormalTok{tb\_pref }\OtherTok{\textless{}{-}} \FunctionTok{as\_tibble}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(ar\_lambda)) }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{expand\_grid}\NormalTok{(ar\_beta) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{expand\_grid}\NormalTok{(ar\_v\_star) }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{rename\_all}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}lambda\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}beta\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}vstar\textquotesingle{}}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{tb\_pref }\OtherTok{\textless{}{-}} \FunctionTok{as\_tibble}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(ar\_lambda)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{expand\_grid}\NormalTok{(ar\_beta) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{expand\_grid}\NormalTok{(ar\_v\_star) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rename\_all}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}lambda\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}beta\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}vstar\textquotesingle{}}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{rowid\_to\_column}\NormalTok{(}\AttributeTok{var =} \StringTok{"indiff\_id"}\NormalTok{)}
 
 \CommentTok{\# Generate indifference points with apply and anonymous function}
@@ -11029,14 +11358,14 @@ Given \(V^{\ast}\), we can show the combinations of \(A\) and \(B\) points that 
 \NormalTok{  beta }\OtherTok{\textless{}{-}}\NormalTok{ x[}\DecValTok{3}\NormalTok{]}
 \NormalTok{  vstar }\OtherTok{\textless{}{-}}\NormalTok{ x[}\DecValTok{4}\NormalTok{]}
 \NormalTok{  ar\_fl\_A\_indiff }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(fl\_A\_min, fl\_A\_max, }\AttributeTok{length.out=}\NormalTok{it\_A\_grid)}
-\NormalTok{  ar\_fl\_B\_indiff }\OtherTok{\textless{}{-}}\NormalTok{ (((vstar}\SpecialCharTok{\^{}}\NormalTok{lambda) }\SpecialCharTok{{-}} 
+\NormalTok{  ar\_fl\_B\_indiff }\OtherTok{\textless{}{-}}\NormalTok{ (((vstar}\SpecialCharTok{\^{}}\NormalTok{lambda) }\SpecialCharTok{{-}}
 \NormalTok{                        (beta}\SpecialCharTok{*}\NormalTok{ar\_fl\_A\_indiff}\SpecialCharTok{\^{}}\NormalTok{(lambda)))}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{beta))}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{/}\NormalTok{lambda)}
 \NormalTok{  mt\_A\_B\_indiff }\OtherTok{\textless{}{-}} \FunctionTok{cbind}\NormalTok{(indiff\_id, lambda, beta, vstar,}
 \NormalTok{                         ar\_fl\_A\_indiff, ar\_fl\_B\_indiff)}
   \FunctionTok{colnames}\NormalTok{(mt\_A\_B\_indiff) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}indiff\_id\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}lambda\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}beta\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}vstar\textquotesingle{}}\NormalTok{,}
                                \StringTok{\textquotesingle{}indiff\_A\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}indiff\_B\textquotesingle{}}\NormalTok{)}
-\NormalTok{  tb\_A\_B\_indiff }\OtherTok{\textless{}{-}} \FunctionTok{as\_tibble}\NormalTok{(mt\_A\_B\_indiff) }\SpecialCharTok{\%\textgreater{}\%} 
-    \FunctionTok{rowid\_to\_column}\NormalTok{(}\AttributeTok{var =} \StringTok{"A\_grid\_id"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{  tb\_A\_B\_indiff }\OtherTok{\textless{}{-}} \FunctionTok{as\_tibble}\NormalTok{(mt\_A\_B\_indiff) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{rowid\_to\_column}\NormalTok{(}\AttributeTok{var =} \StringTok{"A\_grid\_id"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
     \FunctionTok{filter}\NormalTok{(indiff\_B }\SpecialCharTok{\textgreater{}=} \DecValTok{0} \SpecialCharTok{\&}\NormalTok{ indiff\_B }\SpecialCharTok{\textless{}=} \FunctionTok{max}\NormalTok{(ar\_fl\_A\_indiff))}
   \FunctionTok{return}\NormalTok{(tb\_A\_B\_indiff)}
 \NormalTok{\})}
@@ -11059,7 +11388,7 @@ Note that many more A grid points are needed to fully plot out the leontief line
 \NormalTok{st\_y\_label }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}B\textquotesingle{}}
 
 \CommentTok{\# Graphing}
-\NormalTok{plt\_indiff }\OtherTok{\textless{}{-}} 
+\NormalTok{plt\_indiff }\OtherTok{\textless{}{-}}
 \NormalTok{  df\_indiff }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}\AttributeTok{lambda =} \FunctionTok{as\_factor}\NormalTok{(lambda),}
                        \AttributeTok{beta =} \FunctionTok{as\_factor}\NormalTok{(beta),}
                        \AttributeTok{vstar =} \FunctionTok{as\_factor}\NormalTok{(vstar)) }\SpecialCharTok{\%\textgreater{}\%}
@@ -11076,7 +11405,7 @@ Note that many more A grid points are needed to fully plot out the leontief line
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-205-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-214-1} \end{center}
 
 \hypertarget{tables-and-graphs}{%
 \chapter{Tables and Graphs}\label{tables-and-graphs}}
@@ -11259,7 +11588,7 @@ Jointly plot:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-207-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-216-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -11300,7 +11629,7 @@ We used recordplot() earlier. So now we can print just the first two constructed
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-208-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-217-1} \end{center}
 
 \hypertarget{write-and-read-plots}{%
 \section{Write and Read Plots}\label{write-and-read-plots}}
@@ -12167,8 +12496,8 @@ Search inside directories, for all files in a git repo folder that are new or ha
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/main.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/python/fs_python_reticulate.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/python/main.Rmd"
-## [1] "A NEW FL: C:/Users/fan/R4Econ/development/system/fs_system_shell.Rmd"
-## [1] "A NEW FL: C:/Users/fan/R4Econ/development/system/main.Rmd"
+## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/system/fs_system_shell.Rmd"
+## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/system/main.Rmd"
 \end{verbatim}
 
 \hypertarget{resave-an-existing-file-with-different-name-different-folder}{%
@@ -12386,8 +12715,8 @@ Check python version on computer:
 \end{Shaded}
 
 \begin{verbatim}
-##                                               python 
-## "C:\\PROGRA~3\\ANACON~1\\envs\\wk_pyfan\\python.exe"
+##                                                   python 
+## "G:\\ProgramData\\Anaconda3\\envs\\wk_pyfan\\python.exe"
 \end{verbatim}
 
 After installing reticulate, load in the library: library(reticulate). With ``py\_config()''
@@ -12424,12 +12753,12 @@ Set which python to use:
 \end{Shaded}
 
 \begin{verbatim}
-## python:         C:/ProgramData/Anaconda3/envs/wk_pyfan/python.exe
-## libpython:      C:/ProgramData/Anaconda3/envs/wk_pyfan/python38.dll
-## pythonhome:     C:/ProgramData/Anaconda3/envs/wk_pyfan
+## python:         G:/ProgramData/Anaconda3/envs/wk_pyfan/python.exe
+## libpython:      G:/ProgramData/Anaconda3/envs/wk_pyfan/python38.dll
+## pythonhome:     G:/ProgramData/Anaconda3/envs/wk_pyfan
 ## version:        3.8.5 (default, Sep  3 2020, 21:29:08) [MSC v.1916 64 bit (AMD64)]
 ## Architecture:   64bit
-## numpy:          C:/ProgramData/Anaconda3/envs/wk_pyfan/Lib/site-packages/numpy
+## numpy:          G:/ProgramData/Anaconda3/envs/wk_pyfan/Lib/site-packages/numpy
 ## numpy_version:  1.19.4
 ## 
 ## NOTE: Python version was forced by use_python function
@@ -12482,7 +12811,7 @@ Run basic shell commands in windows:
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "C:\\Users\\fan\\R4Econ"
+## [1] "G:\\repos\\R4Econ"
 \end{verbatim}
 
 \begin{Shaded}
@@ -12493,7 +12822,7 @@ Run basic shell commands in windows:
 \end{Shaded}
 
 \begin{verbatim}
-## [1] " Volume in drive C has no label.,  Volume Serial Number is 024A-FEC0, ,  Directory of C:\\Users\\fan\\R4Econ, , 11/11/2020  11:48 AM    <DIR>          ., 11/11/2020  11:48 AM    <DIR>          .., 06/16/2020  05:42 AM               203 .gitattributes, 03/29/2020  10:38 AM             1,460 .gitignore, 11/27/2019  04:28 PM                30 .Rbuildignore, 04/12/2020  01:53 AM            22,530 .Rhistory, 11/11/2020  10:37 AM             6,519 .Rprofile, 05/16/2020  02:39 PM    <DIR>          amto, 10/03/2020  09:10 PM               268 book.bib, 11/11/2020  11:47 AM    <DIR>          bookdown, 11/09/2020  07:52 PM    <DIR>          development, 05/18/2019  08:24 PM    <DIR>          dynamic, 05/16/2020  02:39 PM    <DIR>          function, 04/12/2020  12:38 AM    <DIR>          generate, 07/07/2020  01:46 PM    <DIR>          getdata, 11/27/2019  04:28 PM             2,951 gitsetup.md, 05/09/2020  05:04 PM               321 hdga.html, 05/16/2020  08:50 AM    <DIR>          htmlpdfr, 10/03/2020  08:20 PM             2,928 index.Rmd, 11/27/2019  04:28 PM             1,086 LICENSE, 09/16/2020  06:08 AM    <DIR>          linreg, 06/26/2020  08:03 AM    <DIR>          math, 05/16/2020  02:40 PM    <DIR>          optimization, 04/12/2020  01:26 AM            11,018 packages.bib, 06/14/2020  01:14 PM    <DIR>          panel, 11/11/2020  11:48 AM           313,369 Panel Data and Optimization with R.Rmd, 11/11/2020  11:43 AM            79,381 Panel-Data-and-Optimization-with-R.log, 11/11/2020  11:48 AM           313,369 Panel-Data-and-Optimization-with-R.Rmd, 04/12/2020  03:01 AM    <DIR>          Panel-Data-and-Optimization-with-R_files, 04/18/2020  11:09 AM               461 preamble.tex, 04/18/2020  11:08 AM               556 preamble_book.tex, 03/29/2020  01:52 PM               416 R4Econ.Rproj, 11/11/2020  11:46 AM            41,797 README.md, 11/11/2020  11:46 AM            38,850 README_appendix.md, 11/11/2020  10:37 AM               762 README_end.md, 11/11/2020  10:36 AM            30,249 README_OLD.md, 11/11/2020  10:37 AM             3,221 README_pre.md, 11/11/2020  11:46 AM            37,808 README_toc.md, 10/03/2020  08:20 PM    <DIR>          regnonlin, 05/16/2020  08:29 AM               561 style.css, 05/16/2020  02:41 PM    <DIR>          summarize, 08/01/2020  11:19 AM    <DIR>          support, 05/16/2020  02:42 PM    <DIR>          tabgraph, 10/03/2020  08:20 PM               136 title.Rmd, 03/29/2020  01:49 PM             2,443 toc.css, 11/11/2020  10:32 AM             3,325 _bookdown.yml, 11/11/2020  11:47 AM    <DIR>          _bookdown_files, 05/16/2020  08:13 PM               151 _config.yml, 11/27/2019  04:28 PM    <DIR>          _data, 05/16/2020  10:21 AM    <DIR>          _file, 10/03/2020  08:20 PM    <DIR>          _img, 04/19/2020  06:00 PM    <DIR>          _log, 10/03/2020  08:21 PM             1,437 _output.yml, 05/16/2020  07:27 PM                97 _output_kniti_html.yaml, 05/16/2020  08:25 AM               166 _output_kniti_pdf.yaml,               31 File(s)        917,869 bytes,               24 Dir(s)  58,415,222,784 bytes free"
+## [1] " Volume in drive G is New Volume,  Volume Serial Number is 009D-37E9, ,  Directory of G:\\repos\\R4Econ, , 01/08/2021  05:30 PM    <DIR>          ., 01/08/2021  05:30 PM    <DIR>          .., 11/28/2020  12:35 PM               203 .gitattributes, 11/28/2020  12:35 PM             1,460 .gitignore, 11/28/2020  12:35 PM                30 .Rbuildignore, 11/28/2020  04:36 PM             6,555 .Rprofile, 11/28/2020  12:35 PM    <DIR>          amto, 11/28/2020  12:35 PM               278 book.bib, 01/08/2021  05:30 PM    <DIR>          bookdown, 11/28/2020  12:35 PM    <DIR>          development, 11/28/2020  12:35 PM    <DIR>          dynamic, 11/28/2020  04:01 PM    <DIR>          factor, 11/28/2020  12:35 PM    <DIR>          function, 11/28/2020  12:35 PM    <DIR>          generate, 11/28/2020  12:35 PM    <DIR>          getdata, 11/28/2020  12:35 PM             2,951 gitsetup.md, 11/28/2020  12:35 PM               321 hdga.html, 11/28/2020  12:35 PM    <DIR>          htmlpdfr, 11/28/2020  12:35 PM             2,928 index.Rmd, 11/28/2020  12:35 PM             1,086 LICENSE, 11/28/2020  12:35 PM    <DIR>          linreg, 01/08/2021  07:50 AM    <DIR>          math, 11/28/2020  12:35 PM    <DIR>          optimization, 11/28/2020  12:35 PM            11,018 packages.bib, 11/28/2020  12:35 PM    <DIR>          panel, 01/08/2021  05:30 PM           320,857 Panel Data and Optimization with R.Rmd, 11/30/2020  10:50 PM            72,066 Panel-Data-and-Optimization-with-R.log, 01/08/2021  05:30 PM           320,857 Panel-Data-and-Optimization-with-R.Rmd, 11/30/2020  10:49 PM    <DIR>          Panel-Data-and-Optimization-with-R_files, 11/28/2020  12:35 PM               480 preamble.tex, 11/28/2020  12:35 PM               583 preamble_book.tex, 11/28/2020  12:35 PM               416 R4Econ.Rproj, 01/08/2021  05:28 PM            43,337 README.md, 01/08/2021  05:28 PM            40,390 README_appendix.md, 11/28/2020  12:35 PM               762 README_end.md, 11/28/2020  12:35 PM            30,249 README_OLD.md, 11/28/2020  12:35 PM             3,221 README_pre.md, 01/08/2021  05:28 PM            39,348 README_toc.md, 11/28/2020  12:35 PM    <DIR>          regnonlin, 11/28/2020  12:35 PM               595 style.css, 11/28/2020  12:35 PM    <DIR>          summarize, 11/28/2020  12:35 PM    <DIR>          support, 11/28/2020  12:35 PM    <DIR>          tabgraph, 11/28/2020  12:35 PM               136 title.Rmd, 11/28/2020  12:35 PM             2,570 toc.css, 01/08/2021  05:22 PM             3,409 _bookdown.yml, 01/08/2021  05:30 PM    <DIR>          _bookdown_files, 11/28/2020  12:35 PM               151 _config.yml, 11/28/2020  12:35 PM    <DIR>          _data, 11/28/2020  12:35 PM    <DIR>          _file, 11/28/2020  12:35 PM    <DIR>          _img, 11/28/2020  12:35 PM    <DIR>          _log, 11/28/2020  12:35 PM             1,437 _output.yml, 11/28/2020  12:35 PM                97 _output_kniti_html.yaml, 11/28/2020  12:35 PM               166 _output_kniti_pdf.yaml,               30 File(s)        907,957 bytes,               25 Dir(s)  476,319,150,080 bytes free"
 \end{verbatim}
 
 \hypertarget{run-python-inside-a-conda-environment}{%
@@ -12509,7 +12838,7 @@ Use shell rather than system to activate a conda environment, check python versi
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "Python 3.7.9"
+## [1] ", G:\\repos\\R4Econ>conda.bat activate base , Python 3.8.5"
 \end{verbatim}
 
 Activate conda env and run a line:
@@ -12527,7 +12856,7 @@ Activate conda env and run a line:
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "Python 3.7.9, this is string var"
+## [1] ", G:\\repos\\R4Econ>conda.bat activate base , Python 3.8.5, this is string var"
 \end{verbatim}
 
 \hypertarget{appendix-appendix}{%
@@ -12626,7 +12955,7 @@ Activate conda env and run a line:
   \item
     Generate and combine NA, fixed and random matrixes. Name columns and rows.
   \item
-    \textbf{R}: \emph{rbind() + matrix(NA) + matrix(NA\_real\_) + matrix(NA\_integer\_) + colnames() + rownames()}
+    \textbf{R}: \emph{rep() + rbind() + matrix(NA) + matrix(NA\_real\_) + matrix(NA\_integer\_) + colnames() + rownames()}
   \end{itemize}
 \item
   \href{https://fanwangecon.github.io/R4Econ/amto/matrix/htmlpdfr/fs_mat_linear_algebra.html}{Linear Algebra Operations}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix//fs_mat_linear_algebra.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/htmlpdfr/fs_mat_linear_algebra.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/htmlpdfr/fs_mat_linear_algebra.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/matrix/htmlpdfr/fs_mat_linear_algebra.html}{\textbf{html}}
@@ -12731,6 +13060,16 @@ Activate conda env and run a line:
   \item
     \textbf{dplyr}: \emph{arrange() + row\_number() + mutate(lowest = min(Sepal.Length)) + case\_when(row\_number()==x \textasciitilde{} Septal.Length) + mutate(Sepal.New = Sepal.Length{[}Sepal.Index == 1{]})}
   \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/summarize/index/htmlpdfr/fs_group_sort.html}{Group and sort, and Slice and Summarize}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index//fs_group_sort.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index/htmlpdfr/fs_group_sort.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index/htmlpdfr/fs_group_sort.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/summarize/index/htmlpdfr/fs_group_sort.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Group a dataframe by a variable, sort within group by another variable, keep only highest rows.
+  \item
+    \textbf{dplyr}: \emph{arrange() + group\_by() + slice\_head(n=1)}
+  \end{itemize}
 \end{enumerate}
 
 \hypertarget{section-2.3-group-statisticsgroup-statistics-links}{%
@@ -12739,6 +13078,18 @@ Activate conda env and run a line:
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_cumall.html}{Cummean Test, Cumulative Mean within Group}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate//fs_group_cumall.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_cumall.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_cumall.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_cumall.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    There is a dataframe with a grouping variable and some statistics sorted by another within group
+  \item
+    variable, calculate the cumulative mean of that variable.
+  \item
+    \textbf{dplyr}: \emph{cummean() + group\_by(id, isna = is.na(val)) + mutate(val\_cummean = ifelse(isna, NA, cummean(val)))}
+  \end{itemize}
 \item
   \href{https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_unique_agg.html}{Count Unique Groups and Mean within Groups}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate//fs_group_unique_agg.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_unique_agg.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_unique_agg.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_unique_agg.html}{\textbf{html}}
 
@@ -13170,7 +13521,7 @@ Activate conda env and run a line:
     \textbf{r}: \emph{sort() + cumsum() + sum()}
   \end{itemize}
 \item
-  \href{https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_atkinson_ces.html}{CES abd Atkinson Utility}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_atkinson_ces.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_atkinson_ces.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_atkinson_ces.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_atkinson_ces.html}{\textbf{html}}
+  \href{https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_atkinson_ces.html}{CES and Atkinson Utility}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_atkinson_ces.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_atkinson_ces.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_atkinson_ces.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_atkinson_ces.html}{\textbf{html}}
 
   \begin{itemize}
   \tightlist

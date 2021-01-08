@@ -1,6 +1,6 @@
 ---
 title: "Atkinson Inequality Index and utility Family"
-titleshort: "CES abd Atkinson Utility"
+titleshort: "CES and Atkinson Utility"
 description: |
   Analyze how changing individual outcomes shift utility given inequality preference parameters.
   Draw Cobb-Douglas, Utilitarian and Leontief indifference curve
@@ -46,27 +46,27 @@ try(source("../../.Rprofile"))
 
 #### Atkinson Inequality Measures
 
-[Atkinson (JET, 1970)](https://linkinghub.elsevier.com/retrieve/pii/0022053170900396) studies five standard inequality measures. Atkinson finds that given the same income data across countries, different inequality measure lead to different rankings of which country is more unequal. Atkinson develops an measure of inequality that changes depending on an inequality aversion parameter. 
+[Atkinson (JET, 1970)](https://linkinghub.elsevier.com/retrieve/pii/0022053170900396) studies five standard inequality measures. Atkinson finds that given the same income data across countries, different inequality measure lead to different rankings of which country is more unequal. Atkinson develops an measure of inequality that changes depending on an inequality aversion parameter.
 
 $$
-\text{Atkinson Inequality} = 
+\text{Atkinson Inequality} =
 A\left(
 \left\{Y_i\right\}_{i=1}^N,
 \lambda
-\right) 
-= 1 - 
+\right)
+= 1 -
 \left(
 \sum_{i=1}^N \frac{1}{N}
   \left(
     \frac{Y_i}{\sum_{j=1}^N \left( \frac{Y_j}{N} \right) }
-  \right)^{\lambda}  
+  \right)^{\lambda}
 \right)^{\frac{1}{\lambda}}
 \in \left[0,1\right]
 $$
 
 $A\left(\left\{Y_i\right\}_{i=1}^N,\lambda\right)$ equals to zero is perfect equality. 1 is Perfect inequality. If $\lambda=1$, the inequality measure is always equal to 0 because the planner does not care abouot inequality anymore.
 
-#### Atkinson Inequality Function 
+#### Atkinson Inequality Function
 
 Programming up the equation above, we have:
 
@@ -82,16 +82,16 @@ ffi_atkinson_ineq <- function(ar_data, fl_rho) {
 
 #### Atkinson Inequality Examples
 
-Given a vectr of observables, compute the atkinson inequality measure given different inequality aversion. 
+Given a vectr of observables, compute the atkinson inequality measure given different inequality aversion.
 
 Preference vector and data vector:
 
 ```{r}
-# Preference Vector 
+# Preference Vector
 ar_rho <- c(1, 1 - (10^(c(seq(-2.2,2.2, length.out=60)))))
 ar_rho <- unique(ar_rho)
 mt_rho <- matrix(ar_rho, nrow=length(ar_rho), ncol=1)
-  
+
 # Random Data Vector (not equal outcomes)
 set.seed(123)
 ar_data_rand <- rnorm(15, mean=0,sd=1)
@@ -254,9 +254,9 @@ $$
 so when $G$ is increasing and $\lambda <0$, $V$ would decrease. But when $G\left(A,B\right)$ is decreasing, as is the case with increasing $A$ when $\lambda <0$, $V$ will actually increase. This confirms that $\frac{\partial V}{\partial A}>0$ for $\lambda <0$. The result is symmetric for $\lambda >0$.
 
 
-#### Indifference Curve Graph 
+#### Indifference Curve Graph
 
-Given $V^{\ast}$, we can show the combinations of $A$ and $B$ points that provide the same utility. We want to be able to potentially draw multiple indifference curves at the same time. Note that indifference curves are defined by $\alpha$, $\lambda$ only. Each indifference curve is a set of $A$ and $B$ coordinates. So to generate multiple indifference curves means to generate many sets of $A$, $B$ associated with different planner preferences, and then these could be graphed out. 
+Given $V^{\ast}$, we can show the combinations of $A$ and $B$ points that provide the same utility. We want to be able to potentially draw multiple indifference curves at the same time. Note that indifference curves are defined by $\alpha$, $\lambda$ only. Each indifference curve is a set of $A$ and $B$ coordinates. So to generate multiple indifference curves means to generate many sets of $A$, $B$ associated with different planner preferences, and then these could be graphed out.
 
 
 ```{r}
@@ -271,9 +271,9 @@ ar_lambda <- c(1, 0.6, 0.06, -6)
 ar_beta <- seq(0.25, 0.75, length.out = 3)
 ar_beta <- c(0.3, 0.5, 0.7)
 ar_v_star <- seq(1, 2, length.out = 1)
-tb_pref <- as_tibble(cbind(ar_lambda)) %>% 
-  expand_grid(ar_beta) %>% expand_grid(ar_v_star) %>% 
-  rename_all(~c('lambda', 'beta', 'vstar')) %>% 
+tb_pref <- as_tibble(cbind(ar_lambda)) %>%
+  expand_grid(ar_beta) %>% expand_grid(ar_v_star) %>%
+  rename_all(~c('lambda', 'beta', 'vstar')) %>%
   rowid_to_column(var = "indiff_id")
 
 # Generate indifference points with apply and anonymous function
@@ -285,21 +285,21 @@ ls_df_indiff <- apply(tb_pref, 1, function(x){
   beta <- x[3]
   vstar <- x[4]
   ar_fl_A_indiff <- seq(fl_A_min, fl_A_max, length.out=it_A_grid)
-  ar_fl_B_indiff <- (((vstar^lambda) - 
+  ar_fl_B_indiff <- (((vstar^lambda) -
                         (beta*ar_fl_A_indiff^(lambda)))/(1-beta))^(1/lambda)
   mt_A_B_indiff <- cbind(indiff_id, lambda, beta, vstar,
                          ar_fl_A_indiff, ar_fl_B_indiff)
   colnames(mt_A_B_indiff) <- c('indiff_id', 'lambda', 'beta', 'vstar',
                                'indiff_A', 'indiff_B')
-  tb_A_B_indiff <- as_tibble(mt_A_B_indiff) %>% 
-    rowid_to_column(var = "A_grid_id") %>% 
+  tb_A_B_indiff <- as_tibble(mt_A_B_indiff) %>%
+    rowid_to_column(var = "A_grid_id") %>%
     filter(indiff_B >= 0 & indiff_B <= max(ar_fl_A_indiff))
   return(tb_A_B_indiff)
 })
 df_indiff <- do.call(rbind, ls_df_indiff) %>% drop_na()
 ```
 
-Note that many more A grid points are needed to fully plot out the leontief line. 
+Note that many more A grid points are needed to fully plot out the leontief line.
 
 ```{r}
 # Labeling
@@ -313,7 +313,7 @@ st_x_label <- 'A'
 st_y_label <- 'B'
 
 # Graphing
-plt_indiff <- 
+plt_indiff <-
   df_indiff %>% mutate(lambda = as_factor(lambda),
                        beta = as_factor(beta),
                        vstar = as_factor(vstar)) %>%

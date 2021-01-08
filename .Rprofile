@@ -20,7 +20,7 @@ options(bookdown.render.file_scope = FALSE)
 knitr::opts_chunk$set(fig.width=7, fig.height=4, fig.align="center")
 # knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60), tidy=TRUE)
 knitr::opts_chunk$set(warning=FALSE, message=FALSE, cache=FALSE)
-knitr::opts_chunk$set(engine.path = "C:/ProgramData/Anaconda3/envs/wk_pyfan/python.exe")
+knitr::opts_chunk$set(engine.path = "G:/ProgramData/Anaconda3/envs/wk_pyfan/python.exe")
 
 # Output HTML or Latex
 if (knitr::is_latex_output()) {
@@ -83,7 +83,8 @@ if(!is.null(spt_file_current)) {
   sph_html='/htmlpdfr'
   sph_r='/htmlpdfr'
 
-  spt_root <- 'C:/Users/fan/R4Econ/'
+  # spt_root <- 'C:/Users/fan/R4Econ/'
+  spt_root <- 'G:/repos/R4Econ/'
   spn_prj_rmd <- gsub(spt_root, "", spt_file_current)
   spt_rmd_path <- paste0('/',dirname(spn_prj_rmd))
 

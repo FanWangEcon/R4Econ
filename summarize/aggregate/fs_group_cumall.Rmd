@@ -1,0 +1,88 @@
+---
+title: "R DPLYR Cummean Test, Cumulative Mean within Group"
+titleshort: "Cummean Test, Cumulative Mean within Group"
+description: |
+  There is a dataframe with a grouping variable and some statistics sorted by another within group
+  variable, calculate the cumulative mean of that variable.
+core:
+  - package: dplyr
+    code: |
+      cummean()
+      group_by(id, isna = is.na(val))
+      mutate(val_cummean = ifelse(isna, NA, cummean(val)))
+date: 2021-01-08
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+### Cumulative Statistics within Group
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+
+#### Cumulative Mean
+
+There is a dataset where there are different types of individuals, perhaps household size, that is the grouping variable. Within each group, we compute the incremental marginal propensity to consume for each additional check. We now also want to know the average propensity to consume up to each check considering all allocated checks. We needed to calculatet this for [Nygaard, Sørensen and Wang (2021)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3691091). This can be dealt with by using the [cumall](https://dplyr.tidyverse.org/reference/cumall.html) function.
+
+Use the [df_hgt_wgt](https://fanwangecon.github.io/REconTools/reference/df_hgt_wgt.html) as the testing dataset. In the example below, group by individual id, sort by survey month, and cumulative mean over the protein variable. 
+
+In the protein example
+
+First select the testing dataset and variables.
+
+```{r}
+# Load the REconTools Dataset df_hgt_wgt
+data("df_hgt_wgt")
+# str(df_hgt_wgt)
+
+# Select several rows
+df_hgt_wgt_sel <- df_hgt_wgt %>% 
+  filter(S.country == "Cebu") %>%
+  select(indi.id, svymthRound, prot)
+```
+
+Second, arrange, groupby, and cumulative mean. The protein variable is protein for each survey month, from month 2 to higher as babies grow. The protein intake observed is increasing quickly, hence, the cumulative mean is lower than the observed value for the survey month of the baby.
+
+```{r}
+# Group by indi.id and sort by protein
+df_hgt_wgt_sel_cummean <- df_hgt_wgt_sel %>%
+  arrange(indi.id, svymthRound) %>%
+  group_by(indi.id) %>%
+  mutate(prot_cummean = cummean(prot))
+
+# display results
+REconTools::ff_summ_percentiles(df_hgt_wgt_sel_cummean)
+# display results
+df_hgt_wgt_sel_cummean %>% filter(indi.id %in% c(17, 18)) %>% 
+  kable() %>% kable_styling_fc()
+```
+
+Third, in the basic implementation above, if an incremental month has NA, no values computed at that point or after. This is the case for individual 18 above. To ignore NA, we have, from [this](https://stackoverflow.com/a/49906718/8280804). Note how results for individual 18 changes.
+
+```{r}
+# https://stackoverflow.com/a/49906718/8280804
+# Group by indi.id and sort by protein
+df_hgt_wgt_sel_cummean_noNA <- df_hgt_wgt_sel %>%
+  arrange(indi.id, svymthRound) %>%
+  group_by(indi.id, isna = is.na(prot)) %>%
+  mutate(prot_cummean = ifelse(isna, NA, cummean(prot)))
+
+# display results
+df_hgt_wgt_sel_cummean_noNA %>% filter(indi.id %in% c(17, 18)) %>% 
+  kable() %>% kable_styling_fc()
+```
