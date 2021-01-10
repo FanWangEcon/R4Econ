@@ -13,7 +13,7 @@
 
 <meta name="date" content="2021-01-10" />
 
-<title>R Tibble Dataframe String Manipulations</title>
+<title>R Gather Data Columns from Multiple CSV Files</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -2089,51 +2089,134 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">R Tibble Dataframe String Manipulations</h1>
+<h1 class="title toc-ignore">R Gather Data Columns from Multiple CSV Files</h1>
 <h4 class="author"><a href="https://fanwangecon.github.io/">Fan Wang</a></h4>
 <h4 class="date">2021-01-10</h4>
 
 </div>
 
 
-<div id="string-dataframes" class="section level1" number="1">
-<h1 number="1"><span class="header-section-number">1</span> String Dataframes</h1>
+<div id="gather-files" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> Gather Files</h1>
 <blockquote>
-<p>Go to the <a href="https://github.com/FanWangEcon//R4Econ/blob/master/amto/tibble//fs_tib_string.Rmd"><strong>RMD</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/amto/tibble//htmlpdfr/fs_tib_string.R"><strong>R</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/amto/tibble//htmlpdfr/fs_tib_string.pdf"><strong>PDF</strong></a>, or <a href="https://fanwangecon.github.io//R4Econ/amto/tibble//htmlpdfr/fs_tib_string.html"><strong>HTML</strong></a> version of this file. Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R Code Examples</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository (<a href="https://fanwangecon.github.io/Stat4Econ/bookdown">bookdown site</a>).</p>
+<p>Go to the <a href="https://github.com/FanWangEcon//R4Econ/blob/master/panel/basic//fs_csv_gather.Rmd"><strong>RMD</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/panel/basic//htmlpdfr/fs_csv_gather.R"><strong>R</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/panel/basic//htmlpdfr/fs_csv_gather.pdf"><strong>PDF</strong></a>, or <a href="https://fanwangecon.github.io//R4Econ/panel/basic//htmlpdfr/fs_csv_gather.html"><strong>HTML</strong></a> version of this file. Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R Code Examples</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository (<a href="https://fanwangecon.github.io/Stat4Econ/bookdown">bookdown site</a>).</p>
 </blockquote>
-<div id="list-of-strings-to-tibble-datfare" class="section level2" number="1.1">
-<h2 number="1.1"><span class="header-section-number">1.1</span> List of Strings to Tibble Datfare</h2>
-<p>There are several lists of strings, store them as variables in a dataframe.</p>
-<pre class="r"><code># Sting data inputs
-ls_st_abc &lt;- c(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;)
-ls_st_efg &lt;- c(&#39;e&#39;, &#39;f&#39;, &#39;g&#39;)
-ls_st_opq &lt;- c(&#39;o&#39;, &#39;p&#39;, &#39;q&#39;)
-mt_str = cbind(ls_st_abc, ls_st_efg, ls_st_opq)
+<div id="stack-csv-files-together-extract-and-select-variables" class="section level2" number="1.1">
+<h2 number="1.1"><span class="header-section-number">1.1</span> Stack CSV Files Together Extract and Select Variables</h2>
+<p>There are multiple csv files, each was simulated with a different combination of parameters, each file has the same columns and perhaps even the same number of rows. We want to combine the files together, and provide correct attributes to rows from each table stacked, based on each underlying csv file’s file name.</p>
+<p>This is necessary, for example, when running computational exercises across EC2 instances in <a href="https://fanwangecon.github.io/Py4Econ/aws/batch/htmlpdfr/fs_aws_batch.html">batch array</a> and files are saved to different <a href="https://fanwangecon.github.io/Py4Econ/aws/s3/htmlpdfr/fs_aws_s3.html">S3</a> folders. Need to gather parallel computational results together in a single file after syncing files locally with S3.</p>
+<p>In the <a href="https://github.com/FanWangEcon/R4Econ/tree/master/development/inout/_file/csv">csv</a> folder under this section, there are four subfolder, each containing 3 files with identical file structures.</p>
+<p>We want to find the relevant csv files from these directories, and stack the results together.</p>
+<ol style="list-style-type: decimal">
+<li>File search search string, search in all subfolders, the search string contains file prefix that is common across files that need to be gathered.</li>
+<li>Extract path folder hierarchy, each layer of folder is a different variable</li>
+<li>Stack files together, with variables for file name and folder name</li>
+<li>Extract from file name the component that is not in the search string, keep as separate variable</li>
+<li>Follow specific rules about how file suffix is constructed to obtain additional variables.</li>
+<li>Keep only a subset of columns of interest.</li>
+</ol>
+<p>First, <a href="https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_rmd_pdf_html.html#11_Search_and_Find_all_Files_in_Repository">search and find</a> all files with certain prefix.</p>
+<pre class="r"><code># can search in multiple paths, second path here has no relevant contents
+spt_roots &lt;- c(&#39;C:/Users/fan/R4Econ/panel/basic/_file/csv&#39;,
+               &#39;C:/Users/fan/R4Econ/panel/basic/_file/tex&#39;)
+# can skip file names with certain strings
+spn_skip &lt;- c(&#39;A3420&#39;)
+# prefix search patther,
+st_search_str &lt;- &#39;solu_19E1NEp99r99x_ITG_PE_cev_*&#39;
+
+# Search and get all Path
+ls_sfls &lt;- list.files(path=spt_roots,
+                      recursive=T,
+                      pattern=st_search_str,
+                      full.names=T)
+
+# Skip path if contains words in skip list
+if(!missing(spn_skip)) {
+  ls_sfls &lt;- ls_sfls[!grepl(paste(spn_skip, collapse = &quot;|&quot;), ls_sfls)]
+}</code></pre>
+<p>Second, show all the files found, show their full path, the file name and the two folder names above the file name.</p>
+<pre class="r"><code># Loop and print found files
+it_folders_names_to_keep = 2
+for (spt_file in ls_sfls) {
+    ls_srt_folders_name_keep &lt;- tail(strsplit(spt_file, &quot;/&quot;)[[1]], n=it_folders_names_to_keep+1)
+    snm_file_name &lt;- tail(ls_srt_folders_name_keep, 1)
+    ls_srt_folders_keep &lt;- head(ls_srt_folders_name_keep, it_folders_names_to_keep)
+    print(paste0(&#39;path:&#39;, spt_file))
+    print(snm_file_name)
+    print(ls_srt_folders_keep)
+}</code></pre>
+<pre><code>## [1] &quot;path:C:/Users/fan/R4Econ/panel/basic/_file/csv/cev-2000/solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000_A0.csv&quot;
+## [1] &quot;solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000_A0.csv&quot;
+## [1] &quot;csv&quot;      &quot;cev-2000&quot;
+## [1] &quot;path:C:/Users/fan/R4Econ/panel/basic/_file/csv/cev-2000/solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000_A6840.csv&quot;
+## [1] &quot;solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000_A6840.csv&quot;
+## [1] &quot;csv&quot;      &quot;cev-2000&quot;
+## [1] &quot;path:C:/Users/fan/R4Econ/panel/basic/_file/csv/cev-947/solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947_A0.csv&quot;
+## [1] &quot;solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947_A0.csv&quot;
+## [1] &quot;csv&quot;     &quot;cev-947&quot;
+## [1] &quot;path:C:/Users/fan/R4Econ/panel/basic/_file/csv/cev-947/solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947_A6840.csv&quot;
+## [1] &quot;solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947_A6840.csv&quot;
+## [1] &quot;csv&quot;     &quot;cev-947&quot;
+## [1] &quot;path:C:/Users/fan/R4Econ/panel/basic/_file/csv/cev2000/solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000_A0.csv&quot;
+## [1] &quot;solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000_A0.csv&quot;
+## [1] &quot;csv&quot;     &quot;cev2000&quot;
+## [1] &quot;path:C:/Users/fan/R4Econ/panel/basic/_file/csv/cev2000/solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000_A6840.csv&quot;
+## [1] &quot;solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000_A6840.csv&quot;
+## [1] &quot;csv&quot;     &quot;cev2000&quot;
+## [1] &quot;path:C:/Users/fan/R4Econ/panel/basic/_file/csv/cev947/solu_19E1NEp99r99x_ITG_PE_cev_c14_cev947_A0.csv&quot;
+## [1] &quot;solu_19E1NEp99r99x_ITG_PE_cev_c14_cev947_A0.csv&quot;
+## [1] &quot;csv&quot;    &quot;cev947&quot;
+## [1] &quot;path:C:/Users/fan/R4Econ/panel/basic/_file/csv/cev947/solu_19E1NEp99r99x_ITG_PE_cev_c14_cev947_A6840.csv&quot;
+## [1] &quot;solu_19E1NEp99r99x_ITG_PE_cev_c14_cev947_A6840.csv&quot;
+## [1] &quot;csv&quot;    &quot;cev947&quot;</code></pre>
+<p>Third, create a dataframe with the folder and file names:</p>
+<pre class="r"><code># String matrix empty
+mt_st_paths_names &lt;- matrix(data=NA, nrow=length(ls_sfls), ncol=4)
+
+# Loop and print found files
+it_folders_names_to_keep = 2
+it_file_counter = 0
+for (spt_file in ls_sfls) {
+    # row counter
+    it_file_counter = it_file_counter + 1
+
+    # get file paths
+    ls_srt_folders_name_keep &lt;- tail(strsplit(spt_file, &quot;/&quot;)[[1]], n=it_folders_names_to_keep+1)
+    snm_file_name &lt;- tail(ls_srt_folders_name_keep, 1)
+    ls_srt_folders_keep &lt;- head(ls_srt_folders_name_keep, it_folders_names_to_keep)
+
+    # store
+    # tools::file_path_sans_ext to drop suffix
+    mt_st_paths_names[it_file_counter,1] = tools::file_path_sans_ext(snm_file_name)
+    mt_st_paths_names[it_file_counter,2] = ls_srt_folders_keep[1]
+    mt_st_paths_names[it_file_counter,3] = ls_srt_folders_keep[2]
+    mt_st_paths_names[it_file_counter,4] = spt_file
+}
 
 # Column Names
-ar_st_varnames &lt;- c(&#39;id&#39;,&#39;var1&#39;,&#39;var2&#39;,&#39;var3&#39;)
+ar_st_varnames &lt;- c(&#39;fileid&#39;,&#39;name&#39;,&#39;folder1&#39;,&#39;folder2&#39;, &#39;fullpath&#39;)
 
 # Combine to tibble, add name col1, col2, etc.
-tb_st_combine &lt;- as_tibble(mt_str) %&gt;%
+tb_csv_info &lt;- as_tibble(mt_st_paths_names) %&gt;%
   rowid_to_column(var = &quot;id&quot;) %&gt;%
   rename_all(~c(ar_st_varnames))
 
 # Display
-kable(tb_st_combine) %&gt;% kable_styling_fc()</code></pre>
+kable(tb_csv_info[,1:4]) %&gt;% kable_styling_fc()</code></pre>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-id
+fileid
 </th>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-var1
+name
 </th>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-var2
+folder1
 </th>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-var3
+folder2
 </th>
 </tr>
 </thead>
@@ -2143,13 +2226,13 @@ var3
 1
 </td>
 <td style="text-align:left;">
-a
+solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000_A0
 </td>
 <td style="text-align:left;">
-e
+csv
 </td>
 <td style="text-align:left;">
-o
+cev-2000
 </td>
 </tr>
 <tr>
@@ -2157,13 +2240,13 @@ o
 2
 </td>
 <td style="text-align:left;">
-b
+solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000_A6840
 </td>
 <td style="text-align:left;">
-f
+csv
 </td>
 <td style="text-align:left;">
-p
+cev-2000
 </td>
 </tr>
 <tr>
@@ -2171,30 +2254,1298 @@ p
 3
 </td>
 <td style="text-align:left;">
-c
+solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947_A0
 </td>
 <td style="text-align:left;">
-g
+csv
 </td>
 <td style="text-align:left;">
-q
+cev-947
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947_A6840
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:left;">
+cev-947
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000_A0
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:left;">
+cev2000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000_A6840
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:left;">
+cev2000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c14_cev947_A0
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:left;">
+cev947
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c14_cev947_A6840
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:left;">
+cev947
+</td>
+</tr>
+</tbody>
+</table>
+<p>Fourth, create a dataframe by expanding each row with the datafile loaded in, use <a href="https://fanwangecon.github.io/R4Econ/function/noloop/htmlpdfr/fs_apply.html#122_anonymous_function">apply with anonymous function</a>.</p>
+<pre class="r"><code># Generate a list of dataframes
+ls_df_loaded_files =
+  apply(tb_csv_info,
+        1,
+        function(row) {
+          # Loading file
+          spn_full_path &lt;- row[5]
+          mt_csv = read.csv(file = spn_full_path)
+          # dataframe
+          it_fileid &lt;- row[1]
+          snm_filename &lt;- row[2]
+          srt_folder_level2 &lt;- row[3]
+          srt_folder_level1 &lt;- row[4]
+
+          tb_combine = as_tibble(mt_csv) %&gt;%
+            na.omit %&gt;%
+            rowid_to_column(var = &quot;statesid&quot;) %&gt;%
+            mutate(fileid = it_fileid,
+                   filename = snm_filename,
+                   folder_lvl1 = srt_folder_level1,
+                   folder_lvl2 = srt_folder_level2) %&gt;%
+            select(fileid, filename, folder_lvl1, folder_lvl2,
+                   statesid, everything())
+          # return
+          return(tb_combine)
+        })
+
+# Stack dataframes together
+df_all_files = do.call(bind_rows, ls_df_loaded_files)
+
+# show stacked table
+kable(df_all_files[seq(1,601,50),1:6]) %&gt;% kable_styling_fc_wide()</code></pre>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
+<table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+fileid
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+filename
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+folder_lvl1
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+folder_lvl2
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+statesid
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+EjV
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000_A0
+</td>
+<td style="text-align:left;">
+cev-2000
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-28.8586860
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000_A0
+</td>
+<td style="text-align:left;">
+cev-2000
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+51
+</td>
+<td style="text-align:right;">
+-0.2106603
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000_A6840
+</td>
+<td style="text-align:left;">
+cev-2000
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-28.8586860
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000_A6840
+</td>
+<td style="text-align:left;">
+cev-2000
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+53
+</td>
+<td style="text-align:right;">
+-0.0642997
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947_A0
+</td>
+<td style="text-align:left;">
+cev-947
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+-5.8826609
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947_A0
+</td>
+<td style="text-align:left;">
+cev-947
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+55
+</td>
+<td style="text-align:right;">
+0.0353187
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947_A6840
+</td>
+<td style="text-align:left;">
+cev-947
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+-2.7046907
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947_A6840
+</td>
+<td style="text-align:left;">
+cev-947
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:right;">
+0.1094474
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000_A0
+</td>
+<td style="text-align:left;">
+cev2000
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+-2.9782236
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000_A0
+</td>
+<td style="text-align:left;">
+cev2000
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:right;">
+0.3389275
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000_A6840
+</td>
+<td style="text-align:left;">
+cev2000
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+-1.7229647
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000_A6840
+</td>
+<td style="text-align:left;">
+cev2000
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+61
+</td>
+<td style="text-align:right;">
+-14.6880377
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+7
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c14_cev947_A0
+</td>
+<td style="text-align:left;">
+cev947
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+-1.7623279
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<div id="find-and-replace" class="section level2" number="1.2">
-<h2 number="1.2"><span class="header-section-number">1.2</span> Find and Replace</h2>
-<p>Find and Replace in Dataframe.</p>
-<pre class="r"><code># if string value is contained in variable
-(&quot;bridex.B&quot; %in% (df.reg.out.all$vars_var.y))
-# if string value is not contained in variable:
-# 1. type is variable name
-# 2. Toyota|Mazda are strings to be excluded
-filter(mtcars, !grepl(&#39;Toyota|Mazda&#39;, type))
-
-# filter does not contain string
-rs_hgt_prot_log_tidy %&gt;% filter(!str_detect(term, &#39;prot&#39;))</code></pre>
+<p>Fifth, get additional information from the file name and file folder. Extract those as separate variables. The file names is dash connected, with various information. First, split just the final element of the string file name out, which is <em>A###</em>. Then, also extract the number next to N as a separate numeric column. Additional <em>folder_lvl1</em> separate out the numeric number from the initial word <em>cev</em>.</p>
+<p><a href="https://stackoverflow.com/a/50518154/8280804">Split “solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000_A###” to “solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000” and “A###”</a>:</p>
+<pre class="r"><code># separate last eleemtnafter underscore
+df_all_files_finalA &lt;- df_all_files %&gt;%
+   separate(filename, into = c(&quot;filename_main&quot;, &quot;prod_type_st&quot;),
+            sep=&quot;_(?=[^_]+$)&quot;,
+            remove = FALSE) %&gt;%
+   select(fileid, filename, filename_main, prod_type_st, folder_lvl1, folder_lvl2,
+          statesid, everything())
+# show stacked table
+kable(df_all_files_finalA[seq(1,601,50),1:10]) %&gt;% kable_styling_fc_wide()</code></pre>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
+<table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+fileid
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+filename
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+filename_main
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+prod_type_st
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+folder_lvl1
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+folder_lvl2
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+statesid
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+EjV
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+k_tt
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+b_tt
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000_A0
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000
+</td>
+<td style="text-align:left;">
+A0
+</td>
+<td style="text-align:left;">
+cev-2000
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-28.8586860
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000_A0
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000
+</td>
+<td style="text-align:left;">
+A0
+</td>
+<td style="text-align:left;">
+cev-2000
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+51
+</td>
+<td style="text-align:right;">
+-0.2106603
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+<td style="text-align:right;">
+78.005300
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000_A6840
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000
+</td>
+<td style="text-align:left;">
+A6840
+</td>
+<td style="text-align:left;">
+cev-2000
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-28.8586860
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000_A6840
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000
+</td>
+<td style="text-align:left;">
+A6840
+</td>
+<td style="text-align:left;">
+cev-2000
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+53
+</td>
+<td style="text-align:right;">
+-0.0642997
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+<td style="text-align:right;">
+84.215368
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947_A0
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947
+</td>
+<td style="text-align:left;">
+A0
+</td>
+<td style="text-align:left;">
+cev-947
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+-5.8826609
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+<td style="text-align:right;">
+3.869909
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947_A0
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947
+</td>
+<td style="text-align:left;">
+A0
+</td>
+<td style="text-align:left;">
+cev-947
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+55
+</td>
+<td style="text-align:right;">
+0.0353187
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+<td style="text-align:right;">
+90.611739
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947_A6840
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947
+</td>
+<td style="text-align:left;">
+A6840
+</td>
+<td style="text-align:left;">
+cev-947
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+-2.7046907
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+<td style="text-align:right;">
+7.855916
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947_A6840
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947
+</td>
+<td style="text-align:left;">
+A6840
+</td>
+<td style="text-align:left;">
+cev-947
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:right;">
+0.1094474
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+<td style="text-align:right;">
+90.611739
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000_A0
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000
+</td>
+<td style="text-align:left;">
+A0
+</td>
+<td style="text-align:left;">
+cev2000
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+-2.9782236
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+<td style="text-align:right;">
+7.855916
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000_A0
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000
+</td>
+<td style="text-align:left;">
+A0
+</td>
+<td style="text-align:left;">
+cev2000
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:right;">
+0.3389275
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+<td style="text-align:right;">
+97.200000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000_A6840
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000
+</td>
+<td style="text-align:left;">
+A6840
+</td>
+<td style="text-align:left;">
+cev2000
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+-1.7229647
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+<td style="text-align:right;">
+11.961502
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000_A6840
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000
+</td>
+<td style="text-align:left;">
+A6840
+</td>
+<td style="text-align:left;">
+cev2000
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+61
+</td>
+<td style="text-align:right;">
+-14.6880377
+</td>
+<td style="text-align:right;">
+1.990694
+</td>
+<td style="text-align:right;">
+-1.879215
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+7
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c14_cev947_A0
+</td>
+<td style="text-align:left;">
+solu_19E1NEp99r99x_ITG_PE_cev_c14_cev947
+</td>
+<td style="text-align:left;">
+A0
+</td>
+<td style="text-align:left;">
+cev947
+</td>
+<td style="text-align:left;">
+csv
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+-1.7623279
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+<td style="text-align:right;">
+16.190257
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><a href="https://stackoverflow.com/a/47673097/8280804">Split “A###” to “A” and “A###”</a>. Additionally, also split <em>cev####</em> to <em>cev</em> and <em>####</em>, allow for positive and negative numbers. <a href="https://regex101.com">See regular expression 101 helper</a></p>
+<pre class="r"><code># string and number separation
+df_all_files_finalB &lt;- df_all_files_finalA %&gt;%
+  separate(prod_type_st,
+           into = c(&quot;prod_type_st_prefix&quot;, &quot;prod_type_lvl&quot;),
+           sep=&quot;(?&lt;=[A-Za-z])(?=[-0-9])&quot;, # positive or negative numbers
+           remove=FALSE) %&gt;%
+  separate(folder_lvl1,
+           into = c(&quot;cev_prefix&quot;, &quot;cev_lvl&quot;),
+           sep=&quot;(?&lt;=[A-Za-z])(?=[-0-9])&quot;, # positive or negative numbers
+           remove=FALSE) %&gt;%
+  mutate(cev_st = folder_lvl1,
+         prod_type_lvl = as.numeric(prod_type_lvl),
+         cev_lvl = as.numeric(cev_lvl)/10000) %&gt;%
+  select(fileid,
+         prod_type_st, prod_type_lvl,
+         cev_st, cev_lvl,
+         statesid, EjV,
+         filename, folder_lvl1, folder_lvl2)
+# Ordering, sort by cev_lvl, then prod_type_lvl, then stateid
+df_all_files_finalB &lt;- df_all_files_finalB %&gt;%
+  arrange(cev_lvl, prod_type_lvl, statesid)
+# show stacked table
+kable(df_all_files_finalB[seq(1,49*16,49),1:7]) %&gt;% kable_styling_fc_wide()</code></pre>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
+<table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+fileid
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+prod_type_st
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+prod_type_lvl
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+cev_st
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+cev_lvl
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+statesid
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+EjV
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+A0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+cev-2000
+</td>
+<td style="text-align:right;">
+-0.2000
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-28.8586860
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+A0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+cev-2000
+</td>
+<td style="text-align:right;">
+-0.2000
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+-0.2106603
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+A6840
+</td>
+<td style="text-align:right;">
+6840
+</td>
+<td style="text-align:left;">
+cev-2000
+</td>
+<td style="text-align:right;">
+-0.2000
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-28.8586860
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+A6840
+</td>
+<td style="text-align:right;">
+6840
+</td>
+<td style="text-align:left;">
+cev-2000
+</td>
+<td style="text-align:right;">
+-0.2000
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+-0.1311749
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+A0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+cev-947
+</td>
+<td style="text-align:right;">
+-0.0947
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-28.0399281
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+A0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+cev-947
+</td>
+<td style="text-align:right;">
+-0.0947
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+-0.0911499
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+A6840
+</td>
+<td style="text-align:right;">
+6840
+</td>
+<td style="text-align:left;">
+cev-947
+</td>
+<td style="text-align:right;">
+-0.0947
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-28.0399281
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+A6840
+</td>
+<td style="text-align:right;">
+6840
+</td>
+<td style="text-align:left;">
+cev-947
+</td>
+<td style="text-align:right;">
+-0.0947
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+-0.0134719
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+7
+</td>
+<td style="text-align:left;">
+A0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+cev947
+</td>
+<td style="text-align:right;">
+0.0947
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-26.8243673
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+7
+</td>
+<td style="text-align:left;">
+A0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+cev947
+</td>
+<td style="text-align:right;">
+0.0947
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+0.0857474
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+8
+</td>
+<td style="text-align:left;">
+A6840
+</td>
+<td style="text-align:right;">
+6840
+</td>
+<td style="text-align:left;">
+cev947
+</td>
+<td style="text-align:right;">
+0.0947
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-26.8243673
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+8
+</td>
+<td style="text-align:left;">
+A6840
+</td>
+<td style="text-align:right;">
+6840
+</td>
+<td style="text-align:left;">
+cev947
+</td>
+<td style="text-align:right;">
+0.0947
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+0.1608382
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+A0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+cev2000
+</td>
+<td style="text-align:right;">
+0.2000
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-26.2512036
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+A0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+cev2000
+</td>
+<td style="text-align:right;">
+0.2000
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+0.1694524
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+A6840
+</td>
+<td style="text-align:right;">
+6840
+</td>
+<td style="text-align:left;">
+cev2000
+</td>
+<td style="text-align:right;">
+0.2000
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-26.2512036
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+A6840
+</td>
+<td style="text-align:right;">
+6840
+</td>
+<td style="text-align:left;">
+cev2000
+</td>
+<td style="text-align:right;">
+0.2000
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+0.2432677
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 

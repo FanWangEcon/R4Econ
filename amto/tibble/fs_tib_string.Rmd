@@ -1,6 +1,16 @@
 ---
 title: "R Tibble Dataframe String Manipulations"
-date: 2020-04-01
+description: |
+  There are multiple CEV files, each containing the same file structure but simulated
+  with different parameters, gather a subset of columns from different files, and provide
+  with correct attributes based on CSV file names.
+core:
+  - package: r
+    code: |
+      cbind(ls_st, ls_st)
+      as_tibble(mt_st)
+date: 2021-01-10
+date_start: 2020-04-01
 output:
   pdf_document:
     pandoc_args: '../../_output_kniti_pdf.yaml'
@@ -14,7 +24,7 @@ always_allow_html: true
 urlcolor: blue
 ---
 
-### String Values
+### String Dataframes
 
 ```{r global_options, include = FALSE}
 try(source("../../.Rprofile"))
@@ -23,6 +33,30 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_one`
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
+
+#### List of Strings to Tibble Datfare
+
+There are several lists of strings, store them as variables in a dataframe. 
+
+```{r}
+# Sting data inputs
+ls_st_abc <- c('a', 'b', 'c')
+ls_st_efg <- c('e', 'f', 'g')
+ls_st_opq <- c('o', 'p', 'q')
+mt_str = cbind(ls_st_abc, ls_st_efg, ls_st_opq)
+
+# Column Names
+ar_st_varnames <- c('id','var1','var2','var3')
+
+# Combine to tibble, add name col1, col2, etc.
+tb_st_combine <- as_tibble(mt_str) %>%
+  rowid_to_column(var = "id") %>%
+  rename_all(~c(ar_st_varnames))
+
+# Display
+kable(tb_st_combine) %>% kable_styling_fc()
+```
+
 
 #### Find and Replace
 

@@ -13,7 +13,7 @@
 
 <meta name="date" content="2021-01-10" />
 
-<title>R Tibble Dataframe String Manipulations</title>
+<title>R Decompose File Paths to Get Folder and Files Names</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1335,230 +1335,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
-<script>$(document).ready(function(){
-    if (typeof $('[data-toggle="tooltip"]').tooltip === 'function') {
-        $('[data-toggle="tooltip"]').tooltip();
-    }
-    if ($('[data-toggle="popover"]').popover === 'function') {
-        $('[data-toggle="popover"]').popover();
-    }
-});
-</script>
-<style type="text/css">
-.lightable-minimal {
-border-collapse: separate;
-border-spacing: 16px 1px;
-width: 100%;
-margin-bottom: 10px;
-}
-.lightable-minimal td {
-margin-left: 5px;
-margin-right: 5px;
-}
-.lightable-minimal th {
-margin-left: 5px;
-margin-right: 5px;
-}
-.lightable-minimal thead tr:last-child th {
-border-bottom: 2px solid #00000050;
-empty-cells: hide;
-}
-.lightable-minimal tbody tr:first-child td {
-padding-top: 0.5em;
-}
-.lightable-minimal.lightable-hover tbody tr:hover {
-background-color: #f5f5f5;
-}
-.lightable-minimal.lightable-striped tbody tr:nth-child(even) {
-background-color: #f5f5f5;
-}
-.lightable-classic {
-border-top: 0.16em solid #111111;
-border-bottom: 0.16em solid #111111;
-width: 100%;
-margin-bottom: 10px;
-margin: 10px 5px;
-}
-.lightable-classic tfoot tr td {
-border: 0;
-}
-.lightable-classic tfoot tr:first-child td {
-border-top: 0.14em solid #111111;
-}
-.lightable-classic caption {
-color: #222222;
-}
-.lightable-classic td {
-padding-left: 5px;
-padding-right: 5px;
-color: #222222;
-}
-.lightable-classic th {
-padding-left: 5px;
-padding-right: 5px;
-font-weight: normal;
-color: #222222;
-}
-.lightable-classic thead tr:last-child th {
-border-bottom: 0.10em solid #111111;
-}
-.lightable-classic.lightable-hover tbody tr:hover {
-background-color: #F9EEC1;
-}
-.lightable-classic.lightable-striped tbody tr:nth-child(even) {
-background-color: #f5f5f5;
-}
-.lightable-classic-2 {
-border-top: 3px double #111111;
-border-bottom: 3px double #111111;
-width: 100%;
-margin-bottom: 10px;
-}
-.lightable-classic-2 tfoot tr td {
-border: 0;
-}
-.lightable-classic-2 tfoot tr:first-child td {
-border-top: 3px double #111111;
-}
-.lightable-classic-2 caption {
-color: #222222;
-}
-.lightable-classic-2 td {
-padding-left: 5px;
-padding-right: 5px;
-color: #222222;
-}
-.lightable-classic-2 th {
-padding-left: 5px;
-padding-right: 5px;
-font-weight: normal;
-color: #222222;
-}
-.lightable-classic-2 tbody tr:last-child td {
-border-bottom: 3px double #111111;
-}
-.lightable-classic-2 thead tr:last-child th {
-border-bottom: 1px solid #111111;
-}
-.lightable-classic-2.lightable-hover tbody tr:hover {
-background-color: #F9EEC1;
-}
-.lightable-classic-2.lightable-striped tbody tr:nth-child(even) {
-background-color: #f5f5f5;
-}
-.lightable-material {
-min-width: 100%;
-white-space: nowrap;
-table-layout: fixed;
-font-family: Roboto, sans-serif;
-border: 1px solid #EEE;
-border-collapse: collapse;
-margin-bottom: 10px;
-}
-.lightable-material tfoot tr td {
-border: 0;
-}
-.lightable-material tfoot tr:first-child td {
-border-top: 1px solid #EEE;
-}
-.lightable-material th {
-height: 56px;
-padding-left: 16px;
-padding-right: 16px;
-}
-.lightable-material td {
-height: 52px;
-padding-left: 16px;
-padding-right: 16px;
-border-top: 1px solid #eeeeee;
-}
-.lightable-material.lightable-hover tbody tr:hover {
-background-color: #f5f5f5;
-}
-.lightable-material.lightable-striped tbody tr:nth-child(even) {
-background-color: #f5f5f5;
-}
-.lightable-material.lightable-striped tbody td {
-border: 0;
-}
-.lightable-material.lightable-striped thead tr:last-child th {
-border-bottom: 1px solid #ddd;
-}
-.lightable-material-dark {
-min-width: 100%;
-white-space: nowrap;
-table-layout: fixed;
-font-family: Roboto, sans-serif;
-border: 1px solid #FFFFFF12;
-border-collapse: collapse;
-margin-bottom: 10px;
-background-color: #363640;
-}
-.lightable-material-dark tfoot tr td {
-border: 0;
-}
-.lightable-material-dark tfoot tr:first-child td {
-border-top: 1px solid #FFFFFF12;
-}
-.lightable-material-dark th {
-height: 56px;
-padding-left: 16px;
-padding-right: 16px;
-color: #FFFFFF60;
-}
-.lightable-material-dark td {
-height: 52px;
-padding-left: 16px;
-padding-right: 16px;
-color: #FFFFFF;
-border-top: 1px solid #FFFFFF12;
-}
-.lightable-material-dark.lightable-hover tbody tr:hover {
-background-color: #FFFFFF12;
-}
-.lightable-material-dark.lightable-striped tbody tr:nth-child(even) {
-background-color: #FFFFFF12;
-}
-.lightable-material-dark.lightable-striped tbody td {
-border: 0;
-}
-.lightable-material-dark.lightable-striped thead tr:last-child th {
-border-bottom: 1px solid #FFFFFF12;
-}
-.lightable-paper {
-width: 100%;
-margin-bottom: 10px;
-color: #444;
-}
-.lightable-paper tfoot tr td {
-border: 0;
-}
-.lightable-paper tfoot tr:first-child td {
-border-top: 1px solid #00000020;
-}
-.lightable-paper thead tr:last-child th {
-color: #666;
-vertical-align: bottom;
-border-bottom: 1px solid #00000020;
-line-height: 1.15em;
-padding: 10px 5px;
-}
-.lightable-paper td {
-vertical-align: middle;
-border-bottom: 1px solid #00000010;
-line-height: 1.15em;
-padding: 7px 5px;
-}
-.lightable-paper.lightable-hover tbody tr:hover {
-background-color: #F9EEC1;
-}
-.lightable-paper.lightable-striped tbody tr:nth-child(even) {
-background-color: #00000008;
-}
-.lightable-paper.lightable-striped tbody td {
-border: 0;
-}
-</style>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script>
 // Copyright 2012 Google Inc. All rights reserved.
@@ -2089,112 +1865,89 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">R Tibble Dataframe String Manipulations</h1>
+<h1 class="title toc-ignore">R Decompose File Paths to Get Folder and Files Names</h1>
 <h4 class="author"><a href="https://fanwangecon.github.io/">Fan Wang</a></h4>
 <h4 class="date">2021-01-10</h4>
 
 </div>
 
 
-<div id="string-dataframes" class="section level1" number="1">
-<h1 number="1"><span class="header-section-number">1</span> String Dataframes</h1>
+<div id="file-path" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> File Path</h1>
 <blockquote>
-<p>Go to the <a href="https://github.com/FanWangEcon//R4Econ/blob/master/amto/tibble//fs_tib_string.Rmd"><strong>RMD</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/amto/tibble//htmlpdfr/fs_tib_string.R"><strong>R</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/amto/tibble//htmlpdfr/fs_tib_string.pdf"><strong>PDF</strong></a>, or <a href="https://fanwangecon.github.io//R4Econ/amto/tibble//htmlpdfr/fs_tib_string.html"><strong>HTML</strong></a> version of this file. Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R Code Examples</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository (<a href="https://fanwangecon.github.io/Stat4Econ/bookdown">bookdown site</a>).</p>
+<p>Go to the <a href="https://github.com/FanWangEcon//R4Econ/blob/master/development/inout//fs_path.Rmd"><strong>RMD</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/development/inout//htmlpdfr/fs_path.R"><strong>R</strong></a>, <a href="https://github.com/FanWangEcon//R4Econ/blob/master/development/inout//htmlpdfr/fs_path.pdf"><strong>PDF</strong></a>, or <a href="https://fanwangecon.github.io//R4Econ/development/inout//htmlpdfr/fs_path.html"><strong>HTML</strong></a> version of this file. Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R Code Examples</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository (<a href="https://fanwangecon.github.io/Stat4Econ/bookdown">bookdown site</a>).</p>
 </blockquote>
-<div id="list-of-strings-to-tibble-datfare" class="section level2" number="1.1">
-<h2 number="1.1"><span class="header-section-number">1.1</span> List of Strings to Tibble Datfare</h2>
-<p>There are several lists of strings, store them as variables in a dataframe.</p>
-<pre class="r"><code># Sting data inputs
-ls_st_abc &lt;- c(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;)
-ls_st_efg &lt;- c(&#39;e&#39;, &#39;f&#39;, &#39;g&#39;)
-ls_st_opq &lt;- c(&#39;o&#39;, &#39;p&#39;, &#39;q&#39;)
-mt_str = cbind(ls_st_abc, ls_st_efg, ls_st_opq)
-
-# Column Names
-ar_st_varnames &lt;- c(&#39;id&#39;,&#39;var1&#39;,&#39;var2&#39;,&#39;var3&#39;)
-
-# Combine to tibble, add name col1, col2, etc.
-tb_st_combine &lt;- as_tibble(mt_str) %&gt;%
-  rowid_to_column(var = &quot;id&quot;) %&gt;%
-  rename_all(~c(ar_st_varnames))
-
-# Display
-kable(tb_st_combine) %&gt;% kable_styling_fc()</code></pre>
-<table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-id
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-var1
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-var2
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-var3
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-a
-</td>
-<td style="text-align:left;">
-e
-</td>
-<td style="text-align:left;">
-o
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-b
-</td>
-<td style="text-align:left;">
-f
-</td>
-<td style="text-align:left;">
-p
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:left;">
-c
-</td>
-<td style="text-align:left;">
-g
-</td>
-<td style="text-align:left;">
-q
-</td>
-</tr>
-</tbody>
-</table>
+<div id="compose-a-path" class="section level2" number="1.1">
+<h2 number="1.1"><span class="header-section-number">1.1</span> Compose a Path</h2>
+<p>File Path might contain information related to the file, decompose the file path, keep the final N folder names, to be possibled stored as a variable in the datafile stored inside.</p>
+<pre class="r"><code># Compose together a path 
+print(paste0(&#39;.Platform$file.sep=&#39;, .Platform$file.sep))</code></pre>
+<pre><code>## [1] &quot;.Platform$file.sep=/&quot;</code></pre>
+<pre class="r"><code>spn_file_path = file.path(&quot;C:&quot;, &quot;Users&quot;, &quot;fan&quot;, &quot;R4Econ&quot;, &quot;amto&quot;, &quot;tibble&quot;, 
+                          &quot;fs_tib_basics.Rmd&quot;, 
+                          fsep = .Platform$file.sep)
+# print
+print(spn_file_path)</code></pre>
+<pre><code>## [1] &quot;C:/Users/fan/R4Econ/amto/tibble/fs_tib_basics.Rmd&quot;</code></pre>
 </div>
-<div id="find-and-replace" class="section level2" number="1.2">
-<h2 number="1.2"><span class="header-section-number">1.2</span> Find and Replace</h2>
-<p>Find and Replace in Dataframe.</p>
-<pre class="r"><code># if string value is contained in variable
-(&quot;bridex.B&quot; %in% (df.reg.out.all$vars_var.y))
-# if string value is not contained in variable:
-# 1. type is variable name
-# 2. Toyota|Mazda are strings to be excluded
-filter(mtcars, !grepl(&#39;Toyota|Mazda&#39;, type))
+<div id="substring-and-file-name" class="section level2" number="1.2">
+<h2 number="1.2"><span class="header-section-number">1.2</span> Substring and File Name</h2>
+<p>From path, get file name without suffix.</p>
+<ul>
+<li>r string split</li>
+<li><a href="https://stackoverflow.com/a/83222/8280804">r list last element</a></li>
+<li><a href="https://stackoverflow.com/a/29114007/8280804">r get file name from path</a></li>
+<li><a href="https://stackoverflow.com/a/47189541/8280804">r get file path no name</a></li>
+</ul>
+<pre class="r"><code>st_example &lt;- &#39;C:/Users/fan/R4Econ/amto/tibble/fs_tib_basics.Rmd&#39;
+st_file_wth_suffix_s &lt;- tail(strsplit(st_example, &quot;/&quot;)[[1]],n=1)
+st_file_wno_suffix_s &lt;- tools::file_path_sans_ext(basename(st_example))
+st_fullpath_nosufx_s &lt;- sub(&#39;\\.Rmd$&#39;, &#39;&#39;, st_example)
+st_fullpath_noname_s &lt;- dirname(st_example)
 
-# filter does not contain string
-rs_hgt_prot_log_tidy %&gt;% filter(!str_detect(term, &#39;prot&#39;))</code></pre>
+print(paste0(&#39;st_file_wth_suffix_s:&#39;, st_file_wth_suffix_s))</code></pre>
+<pre><code>## [1] &quot;st_file_wth_suffix_s:fs_tib_basics.Rmd&quot;</code></pre>
+<pre class="r"><code>print(paste0(&#39;st_file_wno_suffix_s:&#39;, st_file_wno_suffix_s))</code></pre>
+<pre><code>## [1] &quot;st_file_wno_suffix_s:fs_tib_basics&quot;</code></pre>
+<pre class="r"><code>print(paste0(&#39;st_fullpath_nosufx_s:&#39;, st_fullpath_nosufx_s))</code></pre>
+<pre><code>## [1] &quot;st_fullpath_nosufx_s:C:/Users/fan/R4Econ/amto/tibble/fs_tib_basics&quot;</code></pre>
+<pre class="r"><code>print(paste0(&#39;st_fullpath_noname_s:&#39;, st_fullpath_noname_s))</code></pre>
+<pre><code>## [1] &quot;st_fullpath_noname_s:C:/Users/fan/R4Econ/amto/tibble&quot;</code></pre>
+</div>
+<div id="get-subset-of-path-folder-names" class="section level2" number="1.3">
+<h2 number="1.3"><span class="header-section-number">1.3</span> Get Subset of Path Folder Names</h2>
+<p>File Path might contain information related to the file, decompose the file path, keep the final N folder names, to be possibled stored as a variable in the datafile stored inside.</p>
+<pre class="r"><code># Compose together a path 
+spn_example &lt;- &#39;C:/Users/fan/R4Econ/amto/tibble/fs_tib_basics.Rmd&#39;
+# Replace default system slash, assume spn was generated by system. 
+ls_srt_folders_file &lt;- strsplit(st_example, .Platform$file.sep)[[1]]
+# Keep the last N layers
+it_folders_names_to_keep = 2
+snm_file_name &lt;- tail(strsplit(st_example, &quot;/&quot;)[[1]],n=1)
+ls_srt_folders_keep &lt;- head(tail(ls_srt_folders_file, it_folders_names_to_keep+1),
+                            it_folders_names_to_keep)
+# Show folder names
+print(paste0(&#39;snm_file_name:&#39;, snm_file_name))</code></pre>
+<pre><code>## [1] &quot;snm_file_name:fs_tib_basics.Rmd&quot;</code></pre>
+<pre class="r"><code>print(paste0(&#39;last &#39;, it_folders_names_to_keep, &#39; folders:&#39;))</code></pre>
+<pre><code>## [1] &quot;last 2 folders:&quot;</code></pre>
+<pre class="r"><code>print(ls_srt_folders_keep)</code></pre>
+<pre><code>## [1] &quot;amto&quot;   &quot;tibble&quot;</code></pre>
+<p>Shorter lines, to make copying easier.</p>
+<pre class="r"><code># inputs
+it_folders_names_to_keep = 2
+spn_example &lt;- &#39;C:/Users/fan/R4Econ/amto/tibble/fs_tib_basics.Rmd&#39;
+# copy these
+ls_srt_folders_name_keep &lt;- tail(strsplit(st_example, &quot;/&quot;)[[1]], n=it_folders_names_to_keep+1)
+snm_file_name &lt;- tail(ls_srt_folders_name_keep, 1)
+ls_srt_folders_keep &lt;- head(ls_srt_folders_name_keep, it_folders_names_to_keep)
+# print
+print(paste0(&#39;snm_file_name:&#39;, snm_file_name))</code></pre>
+<pre><code>## [1] &quot;snm_file_name:fs_tib_basics.Rmd&quot;</code></pre>
+<pre class="r"><code>print(paste0(&#39;last &#39;, it_folders_names_to_keep, &#39; folders:&#39;))</code></pre>
+<pre><code>## [1] &quot;last 2 folders:&quot;</code></pre>
+<pre class="r"><code>print(ls_srt_folders_keep)</code></pre>
+<pre><code>## [1] &quot;amto&quot;   &quot;tibble&quot;</code></pre>
 </div>
 </div>
 

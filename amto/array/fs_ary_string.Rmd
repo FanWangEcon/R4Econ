@@ -11,11 +11,6 @@ core:
       gsub()
       grepl()
       sprintf()
-      tail()
-      strsplit()
-      basename()
-      dirname()
-      substring()
 date: 2020-08-21
 date_start: 2020-04-11
 output:
@@ -148,31 +143,8 @@ snm_full <- "20100701"
 snm_year <-substr(snm_full,0,4)
 snm_month <-substr(snm_full,5,6)
 snm_day <-substr(snm_full,7,8)
-print(paste0('full:', snm_full, 
-             ', year:', snm_year, 
+print(paste0('full:', snm_full,
+             ', year:', snm_year,
              ', month:', snm_month,
              ', day:', snm_day))
-```
-
-#### Substring and File Name
-
-From path, get file name without suffix.
-
-- r string split
-- [r list last element](https://stackoverflow.com/a/83222/8280804)
-- [r get file name from path](https://stackoverflow.com/a/29114007/8280804)
-- [r get file path no name](https://stackoverflow.com/a/47189541/8280804)
-
-```{r}
-st_example <- 'C:/Users/fan/R4Econ/amto/tibble/fs_tib_basics.Rmd'
-st_file_wth_suffix_s <- tail(strsplit(st_example, "/")[[1]],n=1)
-st_file_wno_suffix_s <- tools::file_path_sans_ext(basename(st_example))
-st_fullpath_nosufx_s <- sub('\\.Rmd$', '', st_example)
-st_fullpath_noname_s <- dirname(st_example)
-
-print(strsplit(st_example, "/"))
-print(paste0('st_file_wth_suffix_s:', st_file_wth_suffix_s))
-print(paste0('st_file_wno_suffix_s:', st_file_wno_suffix_s))
-print(paste0('st_fullpath_nosufx_s:', st_fullpath_nosufx_s))
-print(paste0('st_fullpath_noname_s:', st_fullpath_noname_s))
 ```
