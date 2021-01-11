@@ -147,7 +147,7 @@
 
 \title{Data Structures, Estimation and Optimization with R}
 \author{Fan Wang}
-\date{2021-01-08}
+\date{2021-01-10}
 
 \begin{document}
 \maketitle
@@ -1200,8 +1200,8 @@ Given a string, with certain structure, get components.
 \NormalTok{snm\_year }\OtherTok{\textless{}{-}}\FunctionTok{substr}\NormalTok{(snm\_full,}\DecValTok{0}\NormalTok{,}\DecValTok{4}\NormalTok{)}
 \NormalTok{snm\_month }\OtherTok{\textless{}{-}}\FunctionTok{substr}\NormalTok{(snm\_full,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{)}
 \NormalTok{snm\_day }\OtherTok{\textless{}{-}}\FunctionTok{substr}\NormalTok{(snm\_full,}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{)}
-\FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}full:\textquotesingle{}}\NormalTok{, snm\_full, }
-             \StringTok{\textquotesingle{}, year:\textquotesingle{}}\NormalTok{, snm\_year, }
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}full:\textquotesingle{}}\NormalTok{, snm\_full,}
+             \StringTok{\textquotesingle{}, year:\textquotesingle{}}\NormalTok{, snm\_year,}
              \StringTok{\textquotesingle{}, month:\textquotesingle{}}\NormalTok{, snm\_month,}
              \StringTok{\textquotesingle{}, day:\textquotesingle{}}\NormalTok{, snm\_day))}
 \end{Highlighting}
@@ -1209,81 +1209,6 @@ Given a string, with certain structure, get components.
 
 \begin{verbatim}
 ## [1] "full:20100701, year:2010, month:07, day:01"
-\end{verbatim}
-
-\hypertarget{substring-and-file-name}{%
-\subsubsection{Substring and File Name}\label{substring-and-file-name}}
-
-From path, get file name without suffix.
-
-\begin{itemize}
-\tightlist
-\item
-  r string split
-\item
-  \href{https://stackoverflow.com/a/83222/8280804}{r list last element}
-\item
-  \href{https://stackoverflow.com/a/29114007/8280804}{r get file name from path}
-\item
-  \href{https://stackoverflow.com/a/47189541/8280804}{r get file path no name}
-\end{itemize}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{st\_example }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}C:/Users/fan/R4Econ/amto/tibble/fs\_tib\_basics.Rmd\textquotesingle{}}
-\NormalTok{st\_file\_wth\_suffix\_s }\OtherTok{\textless{}{-}} \FunctionTok{tail}\NormalTok{(}\FunctionTok{strsplit}\NormalTok{(st\_example, }\StringTok{"/"}\NormalTok{)[[}\DecValTok{1}\NormalTok{]],}\AttributeTok{n=}\DecValTok{1}\NormalTok{)}
-\NormalTok{st\_file\_wno\_suffix\_s }\OtherTok{\textless{}{-}}\NormalTok{ tools}\SpecialCharTok{::}\FunctionTok{file\_path\_sans\_ext}\NormalTok{(}\FunctionTok{basename}\NormalTok{(st\_example))}
-\NormalTok{st\_fullpath\_nosufx\_s }\OtherTok{\textless{}{-}} \FunctionTok{sub}\NormalTok{(}\StringTok{\textquotesingle{}}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{.Rmd$\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{, st\_example)}
-\NormalTok{st\_fullpath\_noname\_s }\OtherTok{\textless{}{-}} \FunctionTok{dirname}\NormalTok{(st\_example)}
-
-\FunctionTok{print}\NormalTok{(}\FunctionTok{strsplit}\NormalTok{(st\_example, }\StringTok{"/"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## [[1]]
-## [1] "C:"                "Users"             "fan"               "R4Econ"            "amto"             
-## [6] "tibble"            "fs_tib_basics.Rmd"
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}st\_file\_wth\_suffix\_s:\textquotesingle{}}\NormalTok{, st\_file\_wth\_suffix\_s))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## [1] "st_file_wth_suffix_s:fs_tib_basics.Rmd"
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}st\_file\_wno\_suffix\_s:\textquotesingle{}}\NormalTok{, st\_file\_wno\_suffix\_s))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## [1] "st_file_wno_suffix_s:fs_tib_basics"
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}st\_fullpath\_nosufx\_s:\textquotesingle{}}\NormalTok{, st\_fullpath\_nosufx\_s))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## [1] "st_fullpath_nosufx_s:C:/Users/fan/R4Econ/amto/tibble/fs_tib_basics"
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}st\_fullpath\_noname\_s:\textquotesingle{}}\NormalTok{, st\_fullpath\_noname\_s))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## [1] "st_fullpath_noname_s:C:/Users/fan/R4Econ/amto/tibble"
 \end{verbatim}
 
 \hypertarget{mesh-matrices-arrays-and-scalars}{%
@@ -2299,7 +2224,7 @@ Now we generate scatter plot based on the combined factors
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-44-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-43-1} \end{center}
 
 \hypertarget{drawly-random-rows}{%
 \subsection{Drawly Random Rows}\label{drawly-random-rows}}
@@ -2570,7 +2495,7 @@ Now we generate scatter plot based on the combined factors
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-49-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-48-1} \end{center}
 
 \hypertarget{generate-na-values-if-variables-have-certain-value}{%
 \subsubsection{Generate NA values if Variables have Certain Value}\label{generate-na-values-if-variables-have-certain-value}}
@@ -2725,7 +2650,7 @@ Now we generate scatter plot based on the combined factors, but now with the NA 
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-51-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-50-1} \end{center}
 
 \hypertarget{approximate-values-comparison}{%
 \subsubsection{Approximate Values Comparison}\label{approximate-values-comparison}}
@@ -2798,12 +2723,53 @@ V1 & V2 & V3 & V4 & V1\_V2\_ALMOST\_SAME & V3\_V4\_ALMOST\_SAME\\
 \end{tabular}}
 \end{table}
 
-\hypertarget{string-values}{%
-\subsection{String Values}\label{string-values}}
+\hypertarget{string-dataframes}{%
+\subsection{String Dataframes}\label{string-dataframes}}
 
 \begin{quote}
 Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R Code Examples} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository (\href{https://fanwangecon.github.io/Stat4Econ/bookdown}{bookdown site}).
 \end{quote}
+
+\hypertarget{list-of-strings-to-tibble-datfare}{%
+\subsubsection{List of Strings to Tibble Datfare}\label{list-of-strings-to-tibble-datfare}}
+
+There are several lists of strings, store them as variables in a dataframe.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Sting data inputs}
+\NormalTok{ls\_st\_abc }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}a\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}b\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}c\textquotesingle{}}\NormalTok{)}
+\NormalTok{ls\_st\_efg }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}e\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}f\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}g\textquotesingle{}}\NormalTok{)}
+\NormalTok{ls\_st\_opq }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}o\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}p\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}q\textquotesingle{}}\NormalTok{)}
+\NormalTok{mt\_str }\OtherTok{=} \FunctionTok{cbind}\NormalTok{(ls\_st\_abc, ls\_st\_efg, ls\_st\_opq)}
+
+\CommentTok{\# Column Names}
+\NormalTok{ar\_st\_varnames }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}id\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}var1\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}var2\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}var3\textquotesingle{}}\NormalTok{)}
+
+\CommentTok{\# Combine to tibble, add name col1, col2, etc.}
+\NormalTok{tb\_st\_combine }\OtherTok{\textless{}{-}} \FunctionTok{as\_tibble}\NormalTok{(mt\_str) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rowid\_to\_column}\NormalTok{(}\AttributeTok{var =} \StringTok{"id"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rename\_all}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\FunctionTok{c}\NormalTok{(ar\_st\_varnames))}
+
+\CommentTok{\# Display}
+\FunctionTok{kable}\NormalTok{(tb\_st\_combine) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{r|l|l|l}
+\hline
+id & var1 & var2 & var3\\
+\hline
+\cellcolor{gray!6}{1} & \cellcolor{gray!6}{a} & \cellcolor{gray!6}{e} & \cellcolor{gray!6}{o}\\
+\hline
+2 & b & f & p\\
+\hline
+\cellcolor{gray!6}{3} & \cellcolor{gray!6}{c} & \cellcolor{gray!6}{g} & \cellcolor{gray!6}{q}\\
+\hline
+\end{tabular}
+\end{table}
 
 \hypertarget{find-and-replace}{%
 \subsubsection{Find and Replace}\label{find-and-replace}}
@@ -3250,15 +3216,100 @@ Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon
 \hypertarget{get-highest-values-from-groups}{%
 \subsubsection{Get Highest Values from Groups}\label{get-highest-values-from-groups}}
 
-There is a dataframe with a grouping variable. Get N rows that have the highest sorted value for another numeric variable. In the example below, group by \emph{cyl} and get the cars with the highest \emph{mpg} in each \emph{cyl} group.
+There is a dataframe with a grouping variable. Get N rows that have the highest sorted value for another numeric variable. In the example below, group by \emph{cyl} and get the cars with the lowest \emph{mpg} in each \emph{cyl} group.
+
+Show all values.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# use mtcars}
+\FunctionTok{kable}\NormalTok{(mtcars }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{arrange}\NormalTok{(cyl, mpg)) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{l|r|r|r|r|r|r|r|r|r|r|r}
+\hline
+  & mpg & cyl & disp & hp & drat & wt & qsec & vs & am & gear & carb\\
+\hline
+\cellcolor{gray!6}{Volvo 142E} & \cellcolor{gray!6}{21.4} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{121.0} & \cellcolor{gray!6}{109} & \cellcolor{gray!6}{4.11} & \cellcolor{gray!6}{2.780} & \cellcolor{gray!6}{18.60} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{2}\\
+\hline
+Toyota Corona & 21.5 & 4 & 120.1 & 97 & 3.70 & 2.465 & 20.01 & 1 & 0 & 3 & 1\\
+\hline
+\cellcolor{gray!6}{Datsun 710} & \cellcolor{gray!6}{22.8} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{108.0} & \cellcolor{gray!6}{93} & \cellcolor{gray!6}{3.85} & \cellcolor{gray!6}{2.320} & \cellcolor{gray!6}{18.61} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{1}\\
+\hline
+Merc 230 & 22.8 & 4 & 140.8 & 95 & 3.92 & 3.150 & 22.90 & 1 & 0 & 4 & 2\\
+\hline
+\cellcolor{gray!6}{Merc 240D} & \cellcolor{gray!6}{24.4} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{146.7} & \cellcolor{gray!6}{62} & \cellcolor{gray!6}{3.69} & \cellcolor{gray!6}{3.190} & \cellcolor{gray!6}{20.00} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{2}\\
+\hline
+Porsche 914-2 & 26.0 & 4 & 120.3 & 91 & 4.43 & 2.140 & 16.70 & 0 & 1 & 5 & 2\\
+\hline
+\cellcolor{gray!6}{Fiat X1-9} & \cellcolor{gray!6}{27.3} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{79.0} & \cellcolor{gray!6}{66} & \cellcolor{gray!6}{4.08} & \cellcolor{gray!6}{1.935} & \cellcolor{gray!6}{18.90} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{1}\\
+\hline
+Honda Civic & 30.4 & 4 & 75.7 & 52 & 4.93 & 1.615 & 18.52 & 1 & 1 & 4 & 2\\
+\hline
+\cellcolor{gray!6}{Lotus Europa} & \cellcolor{gray!6}{30.4} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{95.1} & \cellcolor{gray!6}{113} & \cellcolor{gray!6}{3.77} & \cellcolor{gray!6}{1.513} & \cellcolor{gray!6}{16.90} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{5} & \cellcolor{gray!6}{2}\\
+\hline
+Fiat 128 & 32.4 & 4 & 78.7 & 66 & 4.08 & 2.200 & 19.47 & 1 & 1 & 4 & 1\\
+\hline
+\cellcolor{gray!6}{Toyota Corolla} & \cellcolor{gray!6}{33.9} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{71.1} & \cellcolor{gray!6}{65} & \cellcolor{gray!6}{4.22} & \cellcolor{gray!6}{1.835} & \cellcolor{gray!6}{19.90} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{1}\\
+\hline
+Merc 280C & 17.8 & 6 & 167.6 & 123 & 3.92 & 3.440 & 18.90 & 1 & 0 & 4 & 4\\
+\hline
+\cellcolor{gray!6}{Valiant} & \cellcolor{gray!6}{18.1} & \cellcolor{gray!6}{6} & \cellcolor{gray!6}{225.0} & \cellcolor{gray!6}{105} & \cellcolor{gray!6}{2.76} & \cellcolor{gray!6}{3.460} & \cellcolor{gray!6}{20.22} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{1}\\
+\hline
+Merc 280 & 19.2 & 6 & 167.6 & 123 & 3.92 & 3.440 & 18.30 & 1 & 0 & 4 & 4\\
+\hline
+\cellcolor{gray!6}{Ferrari Dino} & \cellcolor{gray!6}{19.7} & \cellcolor{gray!6}{6} & \cellcolor{gray!6}{145.0} & \cellcolor{gray!6}{175} & \cellcolor{gray!6}{3.62} & \cellcolor{gray!6}{2.770} & \cellcolor{gray!6}{15.50} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{5} & \cellcolor{gray!6}{6}\\
+\hline
+Mazda RX4 & 21.0 & 6 & 160.0 & 110 & 3.90 & 2.620 & 16.46 & 0 & 1 & 4 & 4\\
+\hline
+\cellcolor{gray!6}{Mazda RX4 Wag} & \cellcolor{gray!6}{21.0} & \cellcolor{gray!6}{6} & \cellcolor{gray!6}{160.0} & \cellcolor{gray!6}{110} & \cellcolor{gray!6}{3.90} & \cellcolor{gray!6}{2.875} & \cellcolor{gray!6}{17.02} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{4}\\
+\hline
+Hornet 4 Drive & 21.4 & 6 & 258.0 & 110 & 3.08 & 3.215 & 19.44 & 1 & 0 & 3 & 1\\
+\hline
+\cellcolor{gray!6}{Cadillac Fleetwood} & \cellcolor{gray!6}{10.4} & \cellcolor{gray!6}{8} & \cellcolor{gray!6}{472.0} & \cellcolor{gray!6}{205} & \cellcolor{gray!6}{2.93} & \cellcolor{gray!6}{5.250} & \cellcolor{gray!6}{17.98} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{4}\\
+\hline
+Lincoln Continental & 10.4 & 8 & 460.0 & 215 & 3.00 & 5.424 & 17.82 & 0 & 0 & 3 & 4\\
+\hline
+\cellcolor{gray!6}{Camaro Z28} & \cellcolor{gray!6}{13.3} & \cellcolor{gray!6}{8} & \cellcolor{gray!6}{350.0} & \cellcolor{gray!6}{245} & \cellcolor{gray!6}{3.73} & \cellcolor{gray!6}{3.840} & \cellcolor{gray!6}{15.41} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{4}\\
+\hline
+Duster 360 & 14.3 & 8 & 360.0 & 245 & 3.21 & 3.570 & 15.84 & 0 & 0 & 3 & 4\\
+\hline
+\cellcolor{gray!6}{Chrysler Imperial} & \cellcolor{gray!6}{14.7} & \cellcolor{gray!6}{8} & \cellcolor{gray!6}{440.0} & \cellcolor{gray!6}{230} & \cellcolor{gray!6}{3.23} & \cellcolor{gray!6}{5.345} & \cellcolor{gray!6}{17.42} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{4}\\
+\hline
+Maserati Bora & 15.0 & 8 & 301.0 & 335 & 3.54 & 3.570 & 14.60 & 0 & 1 & 5 & 8\\
+\hline
+\cellcolor{gray!6}{Merc 450SLC} & \cellcolor{gray!6}{15.2} & \cellcolor{gray!6}{8} & \cellcolor{gray!6}{275.8} & \cellcolor{gray!6}{180} & \cellcolor{gray!6}{3.07} & \cellcolor{gray!6}{3.780} & \cellcolor{gray!6}{18.00} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{3}\\
+\hline
+AMC Javelin & 15.2 & 8 & 304.0 & 150 & 3.15 & 3.435 & 17.30 & 0 & 0 & 3 & 2\\
+\hline
+\cellcolor{gray!6}{Dodge Challenger} & \cellcolor{gray!6}{15.5} & \cellcolor{gray!6}{8} & \cellcolor{gray!6}{318.0} & \cellcolor{gray!6}{150} & \cellcolor{gray!6}{2.76} & \cellcolor{gray!6}{3.520} & \cellcolor{gray!6}{16.87} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{2}\\
+\hline
+Ford Pantera L & 15.8 & 8 & 351.0 & 264 & 4.22 & 3.170 & 14.50 & 0 & 1 & 5 & 4\\
+\hline
+\cellcolor{gray!6}{Merc 450SE} & \cellcolor{gray!6}{16.4} & \cellcolor{gray!6}{8} & \cellcolor{gray!6}{275.8} & \cellcolor{gray!6}{180} & \cellcolor{gray!6}{3.07} & \cellcolor{gray!6}{4.070} & \cellcolor{gray!6}{17.40} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{3}\\
+\hline
+Merc 450SL & 17.3 & 8 & 275.8 & 180 & 3.07 & 3.730 & 17.60 & 0 & 0 & 3 & 3\\
+\hline
+\cellcolor{gray!6}{Hornet Sportabout} & \cellcolor{gray!6}{18.7} & \cellcolor{gray!6}{8} & \cellcolor{gray!6}{360.0} & \cellcolor{gray!6}{175} & \cellcolor{gray!6}{3.15} & \cellcolor{gray!6}{3.440} & \cellcolor{gray!6}{17.02} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{2}\\
+\hline
+Pontiac Firebird & 19.2 & 8 & 400.0 & 175 & 3.08 & 3.845 & 17.05 & 0 & 0 & 3 & 2\\
+\hline
+\end{tabular}
+\end{table}
+
+Three groups min mpg each group:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# use mtcars: slice\_head gets the lowest sorted value}
 \NormalTok{df\_groupby\_top\_mpg }\OtherTok{\textless{}{-}}\NormalTok{ mtcars }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{arrange}\NormalTok{(cyl, mpg) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{group\_by}\NormalTok{(cyl) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{slice\_head}\NormalTok{(}\AttributeTok{n=}\DecValTok{1}\NormalTok{)}
+  \FunctionTok{slice\_head}\NormalTok{(}\AttributeTok{n=}\DecValTok{1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(cyl, mpg)}
+
 \CommentTok{\# display}
 \FunctionTok{kable}\NormalTok{(df\_groupby\_top\_mpg) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable\_styling\_fc}\NormalTok{()}
 \end{Highlighting}
@@ -3266,15 +3317,15 @@ There is a dataframe with a grouping variable. Get N rows that have the highest 
 
 \begin{table}[!h]
 \centering
-\begin{tabular}{r|r|r|r|r|r|r|r|r|r|r}
+\begin{tabular}{r|r}
 \hline
-mpg & cyl & disp & hp & drat & wt & qsec & vs & am & gear & carb\\
+cyl & mpg\\
 \hline
-\cellcolor{gray!6}{21.4} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{121.0} & \cellcolor{gray!6}{109} & \cellcolor{gray!6}{4.11} & \cellcolor{gray!6}{2.78} & \cellcolor{gray!6}{18.60} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{2}\\
+\cellcolor{gray!6}{4} & \cellcolor{gray!6}{21.4}\\
 \hline
-17.8 & 6 & 167.6 & 123 & 3.92 & 3.44 & 18.90 & 1 & 0 & 4 & 4\\
+6 & 17.8\\
 \hline
-\cellcolor{gray!6}{10.4} & \cellcolor{gray!6}{8} & \cellcolor{gray!6}{472.0} & \cellcolor{gray!6}{205} & \cellcolor{gray!6}{2.93} & \cellcolor{gray!6}{5.25} & \cellcolor{gray!6}{17.98} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{4}\\
+\cellcolor{gray!6}{8} & \cellcolor{gray!6}{10.4}\\
 \hline
 \end{tabular}
 \end{table}
@@ -4495,7 +4546,7 @@ First, we will generate a test score dataset, directly from string. Below we typ
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-95-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-96-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4507,7 +4558,7 @@ First, we will generate a test score dataset, directly from string. Below we typ
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-96-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-97-1} \end{center}
 
 \hypertarget{summarize-multiple-variables}{%
 \section{Summarize Multiple Variables}\label{summarize-multiple-variables}}
@@ -6640,11 +6691,11 @@ eval\_dplyr\_mutate & eval\_dplyr\_mutate\_hcode & eval\_dplyr\_mutate\_pmap & e
 \end{tabular}}
 \end{table}
 
-\hypertarget{panel}{%
-\chapter{Panel}\label{panel}}
+\hypertarget{panel-and-multi-dimensional-data-structures}{%
+\chapter{Panel and Multi-dimensional Data Structures}\label{panel-and-multi-dimensional-data-structures}}
 
-\hypertarget{generate-and-join}{%
-\section{Generate and Join}\label{generate-and-join}}
+\hypertarget{generate-gather-bind-and-join}{%
+\section{Generate, Gather, Bind and Join}\label{generate-gather-bind-and-join}}
 
 \hypertarget{generate-panel-structure}{%
 \subsection{Generate Panel Structure}\label{generate-panel-structure}}
@@ -7187,6 +7238,376 @@ sid & date\\
 \end{tabular}
 \end{table}
 
+\hypertarget{gather-files}{%
+\subsection{Gather Files}\label{gather-files}}
+
+\begin{quote}
+Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R Code Examples} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository (\href{https://fanwangecon.github.io/Stat4Econ/bookdown}{bookdown site}).
+\end{quote}
+
+\hypertarget{stack-csv-files-together-extract-and-select-variables}{%
+\subsubsection{Stack CSV Files Together Extract and Select Variables}\label{stack-csv-files-together-extract-and-select-variables}}
+
+There are multiple csv files, each was simulated with a different combination of parameters, each file has the same columns and perhaps even the same number of rows. We want to combine the files together, and provide correct attributes to rows from each table stacked, based on each underlying csv file's file name.
+
+This is necessary, for example, when running computational exercises across EC2 instances in \href{https://fanwangecon.github.io/Py4Econ/aws/batch/htmlpdfr/fs_aws_batch.html}{batch array} and files are saved to different \href{https://fanwangecon.github.io/Py4Econ/aws/s3/htmlpdfr/fs_aws_s3.html}{S3} folders. Need to gather parallel computational results together in a single file after syncing files locally with S3.
+
+In the \href{https://github.com/FanWangEcon/R4Econ/tree/master/development/inout/_file/csv}{csv} folder under this section, there are four subfolder, each containing 3 files with identical file structures.
+
+We want to find the relevant csv files from these directories, and stack the results together.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  File search search string, search in all subfolders, the search string contains file prefix that is common across files that need to be gathered.
+\item
+  Extract path folder hierarchy, each layer of folder is a different variable
+\item
+  Stack files together, with variables for file name and folder name
+\item
+  Extract from file name the component that is not in the search string, keep as separate variable
+\item
+  Follow specific rules about how file suffix is constructed to obtain additional variables.
+\item
+  Keep only a subset of columns of interest.
+\end{enumerate}
+
+First, \href{https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_rmd_pdf_html.html\#11_Search_and_Find_all_Files_in_Repository}{search and find} all files with certain prefix.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# can search in multiple paths, second path here has no relevant contents}
+\NormalTok{spt\_roots }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}C:/Users/fan/R4Econ/panel/basic/\_file/csv\textquotesingle{}}\NormalTok{,}
+               \StringTok{\textquotesingle{}C:/Users/fan/R4Econ/panel/basic/\_file/tex\textquotesingle{}}\NormalTok{)}
+\CommentTok{\# can skip file names with certain strings}
+\NormalTok{spn\_skip }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}A3420\textquotesingle{}}\NormalTok{)}
+\CommentTok{\# prefix search patther,}
+\NormalTok{st\_search\_str }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}solu\_19E1NEp99r99x\_ITG\_PE\_cev\_*\textquotesingle{}}
+
+\CommentTok{\# Search and get all Path}
+\NormalTok{ls\_sfls }\OtherTok{\textless{}{-}} \FunctionTok{list.files}\NormalTok{(}\AttributeTok{path=}\NormalTok{spt\_roots,}
+                      \AttributeTok{recursive=}\NormalTok{T,}
+                      \AttributeTok{pattern=}\NormalTok{st\_search\_str,}
+                      \AttributeTok{full.names=}\NormalTok{T)}
+
+\CommentTok{\# Skip path if contains words in skip list}
+\ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{missing}\NormalTok{(spn\_skip)) \{}
+\NormalTok{  ls\_sfls }\OtherTok{\textless{}{-}}\NormalTok{ ls\_sfls[}\SpecialCharTok{!}\FunctionTok{grepl}\NormalTok{(}\FunctionTok{paste}\NormalTok{(spn\_skip, }\AttributeTok{collapse =} \StringTok{"|"}\NormalTok{), ls\_sfls)]}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Second, show all the files found, show their full path, the file name and the two folder names above the file name.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Loop and print found files}
+\NormalTok{it\_folders\_names\_to\_keep }\OtherTok{=} \DecValTok{2}
+\ControlFlowTok{for}\NormalTok{ (spt\_file }\ControlFlowTok{in}\NormalTok{ ls\_sfls) \{}
+\NormalTok{    ls\_srt\_folders\_name\_keep }\OtherTok{\textless{}{-}} \FunctionTok{tail}\NormalTok{(}\FunctionTok{strsplit}\NormalTok{(spt\_file, }\StringTok{"/"}\NormalTok{)[[}\DecValTok{1}\NormalTok{]], }\AttributeTok{n=}\NormalTok{it\_folders\_names\_to\_keep}\SpecialCharTok{+}\DecValTok{1}\NormalTok{)}
+\NormalTok{    snm\_file\_name }\OtherTok{\textless{}{-}} \FunctionTok{tail}\NormalTok{(ls\_srt\_folders\_name\_keep, }\DecValTok{1}\NormalTok{)}
+\NormalTok{    ls\_srt\_folders\_keep }\OtherTok{\textless{}{-}} \FunctionTok{head}\NormalTok{(ls\_srt\_folders\_name\_keep, it\_folders\_names\_to\_keep)}
+    \FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}path:\textquotesingle{}}\NormalTok{, spt\_file))}
+    \FunctionTok{print}\NormalTok{(snm\_file\_name)}
+    \FunctionTok{print}\NormalTok{(ls\_srt\_folders\_keep)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "path:C:/Users/fan/R4Econ/panel/basic/_file/csv/cev-2000/solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000_A0.csv"
+## [1] "solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000_A0.csv"
+## [1] "csv"      "cev-2000"
+## [1] "path:C:/Users/fan/R4Econ/panel/basic/_file/csv/cev-2000/solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000_A6840.csv"
+## [1] "solu_19E1NEp99r99x_ITG_PE_cev_c0_cev-2000_A6840.csv"
+## [1] "csv"      "cev-2000"
+## [1] "path:C:/Users/fan/R4Econ/panel/basic/_file/csv/cev-947/solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947_A0.csv"
+## [1] "solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947_A0.csv"
+## [1] "csv"     "cev-947"
+## [1] "path:C:/Users/fan/R4Econ/panel/basic/_file/csv/cev-947/solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947_A6840.csv"
+## [1] "solu_19E1NEp99r99x_ITG_PE_cev_c5_cev-947_A6840.csv"
+## [1] "csv"     "cev-947"
+## [1] "path:C:/Users/fan/R4Econ/panel/basic/_file/csv/cev2000/solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000_A0.csv"
+## [1] "solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000_A0.csv"
+## [1] "csv"     "cev2000"
+## [1] "path:C:/Users/fan/R4Econ/panel/basic/_file/csv/cev2000/solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000_A6840.csv"
+## [1] "solu_19E1NEp99r99x_ITG_PE_cev_c19_cev2000_A6840.csv"
+## [1] "csv"     "cev2000"
+## [1] "path:C:/Users/fan/R4Econ/panel/basic/_file/csv/cev947/solu_19E1NEp99r99x_ITG_PE_cev_c14_cev947_A0.csv"
+## [1] "solu_19E1NEp99r99x_ITG_PE_cev_c14_cev947_A0.csv"
+## [1] "csv"    "cev947"
+## [1] "path:C:/Users/fan/R4Econ/panel/basic/_file/csv/cev947/solu_19E1NEp99r99x_ITG_PE_cev_c14_cev947_A6840.csv"
+## [1] "solu_19E1NEp99r99x_ITG_PE_cev_c14_cev947_A6840.csv"
+## [1] "csv"    "cev947"
+\end{verbatim}
+
+Third, create a dataframe with the folder and file names:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# String matrix empty}
+\NormalTok{mt\_st\_paths\_names }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\AttributeTok{data=}\ConstantTok{NA}\NormalTok{, }\AttributeTok{nrow=}\FunctionTok{length}\NormalTok{(ls\_sfls), }\AttributeTok{ncol=}\DecValTok{4}\NormalTok{)}
+
+\CommentTok{\# Loop and print found files}
+\NormalTok{it\_folders\_names\_to\_keep }\OtherTok{=} \DecValTok{2}
+\NormalTok{it\_file\_counter }\OtherTok{=} \DecValTok{0}
+\ControlFlowTok{for}\NormalTok{ (spt\_file }\ControlFlowTok{in}\NormalTok{ ls\_sfls) \{}
+    \CommentTok{\# row counter}
+\NormalTok{    it\_file\_counter }\OtherTok{=}\NormalTok{ it\_file\_counter }\SpecialCharTok{+} \DecValTok{1}
+
+    \CommentTok{\# get file paths}
+\NormalTok{    ls\_srt\_folders\_name\_keep }\OtherTok{\textless{}{-}} \FunctionTok{tail}\NormalTok{(}\FunctionTok{strsplit}\NormalTok{(spt\_file, }\StringTok{"/"}\NormalTok{)[[}\DecValTok{1}\NormalTok{]], }\AttributeTok{n=}\NormalTok{it\_folders\_names\_to\_keep}\SpecialCharTok{+}\DecValTok{1}\NormalTok{)}
+\NormalTok{    snm\_file\_name }\OtherTok{\textless{}{-}} \FunctionTok{tail}\NormalTok{(ls\_srt\_folders\_name\_keep, }\DecValTok{1}\NormalTok{)}
+\NormalTok{    ls\_srt\_folders\_keep }\OtherTok{\textless{}{-}} \FunctionTok{head}\NormalTok{(ls\_srt\_folders\_name\_keep, it\_folders\_names\_to\_keep)}
+
+    \CommentTok{\# store}
+    \CommentTok{\# tools::file\_path\_sans\_ext to drop suffix}
+\NormalTok{    mt\_st\_paths\_names[it\_file\_counter,}\DecValTok{1}\NormalTok{] }\OtherTok{=}\NormalTok{ tools}\SpecialCharTok{::}\FunctionTok{file\_path\_sans\_ext}\NormalTok{(snm\_file\_name)}
+\NormalTok{    mt\_st\_paths\_names[it\_file\_counter,}\DecValTok{2}\NormalTok{] }\OtherTok{=}\NormalTok{ ls\_srt\_folders\_keep[}\DecValTok{1}\NormalTok{]}
+\NormalTok{    mt\_st\_paths\_names[it\_file\_counter,}\DecValTok{3}\NormalTok{] }\OtherTok{=}\NormalTok{ ls\_srt\_folders\_keep[}\DecValTok{2}\NormalTok{]}
+\NormalTok{    mt\_st\_paths\_names[it\_file\_counter,}\DecValTok{4}\NormalTok{] }\OtherTok{=}\NormalTok{ spt\_file}
+\NormalTok{\}}
+
+\CommentTok{\# Column Names}
+\NormalTok{ar\_st\_varnames }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}fileid\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}name\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}folder1\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}folder2\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}fullpath\textquotesingle{}}\NormalTok{)}
+
+\CommentTok{\# Combine to tibble, add name col1, col2, etc.}
+\NormalTok{tb\_csv\_info }\OtherTok{\textless{}{-}} \FunctionTok{as\_tibble}\NormalTok{(mt\_st\_paths\_names) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rowid\_to\_column}\NormalTok{(}\AttributeTok{var =} \StringTok{"id"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rename\_all}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\FunctionTok{c}\NormalTok{(ar\_st\_varnames))}
+
+\CommentTok{\# Display}
+\FunctionTok{kable}\NormalTok{(tb\_csv\_info[,}\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{]) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{r|l|l|l}
+\hline
+fileid & name & folder1 & folder2\\
+\hline
+\cellcolor{gray!6}{1} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c0\_cev-2000\_A0} & \cellcolor{gray!6}{csv} & \cellcolor{gray!6}{cev-2000}\\
+\hline
+2 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c0\_cev-2000\_A6840 & csv & cev-2000\\
+\hline
+\cellcolor{gray!6}{3} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c5\_cev-947\_A0} & \cellcolor{gray!6}{csv} & \cellcolor{gray!6}{cev-947}\\
+\hline
+4 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c5\_cev-947\_A6840 & csv & cev-947\\
+\hline
+\cellcolor{gray!6}{5} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c19\_cev2000\_A0} & \cellcolor{gray!6}{csv} & \cellcolor{gray!6}{cev2000}\\
+\hline
+6 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c19\_cev2000\_A6840 & csv & cev2000\\
+\hline
+\cellcolor{gray!6}{7} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c14\_cev947\_A0} & \cellcolor{gray!6}{csv} & \cellcolor{gray!6}{cev947}\\
+\hline
+8 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c14\_cev947\_A6840 & csv & cev947\\
+\hline
+\end{tabular}
+\end{table}
+
+Fourth, create a dataframe by expanding each row with the datafile loaded in, use \href{https://fanwangecon.github.io/R4Econ/function/noloop/htmlpdfr/fs_apply.html\#122_anonymous_function}{apply with anonymous function}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Generate a list of dataframes}
+\NormalTok{ls\_df\_loaded\_files }\OtherTok{=}
+  \FunctionTok{apply}\NormalTok{(tb\_csv\_info,}
+        \DecValTok{1}\NormalTok{,}
+        \ControlFlowTok{function}\NormalTok{(row) \{}
+          \CommentTok{\# Loading file}
+\NormalTok{          spn\_full\_path }\OtherTok{\textless{}{-}}\NormalTok{ row[}\DecValTok{5}\NormalTok{]}
+\NormalTok{          mt\_csv }\OtherTok{=} \FunctionTok{read.csv}\NormalTok{(}\AttributeTok{file =}\NormalTok{ spn\_full\_path)}
+          \CommentTok{\# dataframe}
+\NormalTok{          it\_fileid }\OtherTok{\textless{}{-}}\NormalTok{ row[}\DecValTok{1}\NormalTok{]}
+\NormalTok{          snm\_filename }\OtherTok{\textless{}{-}}\NormalTok{ row[}\DecValTok{2}\NormalTok{]}
+\NormalTok{          srt\_folder\_level2 }\OtherTok{\textless{}{-}}\NormalTok{ row[}\DecValTok{3}\NormalTok{]}
+\NormalTok{          srt\_folder\_level1 }\OtherTok{\textless{}{-}}\NormalTok{ row[}\DecValTok{4}\NormalTok{]}
+
+\NormalTok{          tb\_combine }\OtherTok{=} \FunctionTok{as\_tibble}\NormalTok{(mt\_csv) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{            na.omit }\SpecialCharTok{\%\textgreater{}\%}
+            \FunctionTok{rowid\_to\_column}\NormalTok{(}\AttributeTok{var =} \StringTok{"statesid"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+            \FunctionTok{mutate}\NormalTok{(}\AttributeTok{fileid =}\NormalTok{ it\_fileid,}
+                   \AttributeTok{filename =}\NormalTok{ snm\_filename,}
+                   \AttributeTok{folder\_lvl1 =}\NormalTok{ srt\_folder\_level1,}
+                   \AttributeTok{folder\_lvl2 =}\NormalTok{ srt\_folder\_level2) }\SpecialCharTok{\%\textgreater{}\%}
+            \FunctionTok{select}\NormalTok{(fileid, filename, folder\_lvl1, folder\_lvl2,}
+\NormalTok{                   statesid, }\FunctionTok{everything}\NormalTok{())}
+          \CommentTok{\# return}
+          \FunctionTok{return}\NormalTok{(tb\_combine)}
+\NormalTok{        \})}
+
+\CommentTok{\# Stack dataframes together}
+\NormalTok{df\_all\_files }\OtherTok{=} \FunctionTok{do.call}\NormalTok{(bind\_rows, ls\_df\_loaded\_files)}
+
+\CommentTok{\# show stacked table}
+\FunctionTok{kable}\NormalTok{(df\_all\_files[}\FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{601}\NormalTok{,}\DecValTok{50}\NormalTok{),}\DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{]) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable\_styling\_fc\_wide}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{l|l|l|l|r|r}
+\hline
+fileid & filename & folder\_lvl1 & folder\_lvl2 & statesid & EjV\\
+\hline
+\cellcolor{gray!6}{1} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c0\_cev-2000\_A0} & \cellcolor{gray!6}{cev-2000} & \cellcolor{gray!6}{csv} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{-28.8586860}\\
+\hline
+1 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c0\_cev-2000\_A0 & cev-2000 & csv & 51 & -0.2106603\\
+\hline
+\cellcolor{gray!6}{2} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c0\_cev-2000\_A6840} & \cellcolor{gray!6}{cev-2000} & \cellcolor{gray!6}{csv} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{-28.8586860}\\
+\hline
+2 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c0\_cev-2000\_A6840 & cev-2000 & csv & 53 & -0.0642997\\
+\hline
+\cellcolor{gray!6}{3} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c5\_cev-947\_A0} & \cellcolor{gray!6}{cev-947} & \cellcolor{gray!6}{csv} & \cellcolor{gray!6}{5} & \cellcolor{gray!6}{-5.8826609}\\
+\hline
+3 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c5\_cev-947\_A0 & cev-947 & csv & 55 & 0.0353187\\
+\hline
+\cellcolor{gray!6}{4} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c5\_cev-947\_A6840} & \cellcolor{gray!6}{cev-947} & \cellcolor{gray!6}{csv} & \cellcolor{gray!6}{7} & \cellcolor{gray!6}{-2.7046907}\\
+\hline
+4 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c5\_cev-947\_A6840 & cev-947 & csv & 57 & 0.1094474\\
+\hline
+\cellcolor{gray!6}{5} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c19\_cev2000\_A0} & \cellcolor{gray!6}{cev2000} & \cellcolor{gray!6}{csv} & \cellcolor{gray!6}{9} & \cellcolor{gray!6}{-2.9782236}\\
+\hline
+5 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c19\_cev2000\_A0 & cev2000 & csv & 59 & 0.3389275\\
+\hline
+\cellcolor{gray!6}{6} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c19\_cev2000\_A6840} & \cellcolor{gray!6}{cev2000} & \cellcolor{gray!6}{csv} & \cellcolor{gray!6}{11} & \cellcolor{gray!6}{-1.7229647}\\
+\hline
+6 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c19\_cev2000\_A6840 & cev2000 & csv & 61 & -14.6880377\\
+\hline
+\cellcolor{gray!6}{7} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c14\_cev947\_A0} & \cellcolor{gray!6}{cev947} & \cellcolor{gray!6}{csv} & \cellcolor{gray!6}{13} & \cellcolor{gray!6}{-1.7623279}\\
+\hline
+\end{tabular}}
+\end{table}
+
+Fifth, get additional information from the file name and file folder. Extract those as separate variables. The file names is dash connected, with various information. First, split just the final element of the string file name out, which is \emph{A\#\#\#}. Then, also extract the number next to N as a separate numeric column. Additional \emph{folder\_lvl1} separate out the numeric number from the initial word \emph{cev}.
+
+\href{https://stackoverflow.com/a/50518154/8280804}{Split ``solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c0\_cev-2000\_A\#\#\#'' to ``solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c0\_cev-2000'' and ``A\#\#\#''}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# separate last eleemtnafter underscore}
+\NormalTok{df\_all\_files\_finalA }\OtherTok{\textless{}{-}}\NormalTok{ df\_all\_files }\SpecialCharTok{\%\textgreater{}\%}
+   \FunctionTok{separate}\NormalTok{(filename, }\AttributeTok{into =} \FunctionTok{c}\NormalTok{(}\StringTok{"filename\_main"}\NormalTok{, }\StringTok{"prod\_type\_st"}\NormalTok{),}
+            \AttributeTok{sep=}\StringTok{"\_(?=[\^{}\_]+$)"}\NormalTok{,}
+            \AttributeTok{remove =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+   \FunctionTok{select}\NormalTok{(fileid, filename, filename\_main, prod\_type\_st, folder\_lvl1, folder\_lvl2,}
+\NormalTok{          statesid, }\FunctionTok{everything}\NormalTok{())}
+\CommentTok{\# show stacked table}
+\FunctionTok{kable}\NormalTok{(df\_all\_files\_finalA[}\FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{601}\NormalTok{,}\DecValTok{50}\NormalTok{),}\DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{]) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable\_styling\_fc\_wide}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{l|l|l|l|l|l|r|r|r|r}
+\hline
+fileid & filename & filename\_main & prod\_type\_st & folder\_lvl1 & folder\_lvl2 & statesid & EjV & k\_tt & b\_tt\\
+\hline
+\cellcolor{gray!6}{1} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c0\_cev-2000\_A0} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c0\_cev-2000} & \cellcolor{gray!6}{A0} & \cellcolor{gray!6}{cev-2000} & \cellcolor{gray!6}{csv} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{-28.8586860} & \cellcolor{gray!6}{0.000000} & \cellcolor{gray!6}{0.000000}\\
+\hline
+1 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c0\_cev-2000\_A0 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c0\_cev-2000 & A0 & cev-2000 & csv & 51 & -0.2106603 & 0.000000 & 78.005300\\
+\hline
+\cellcolor{gray!6}{2} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c0\_cev-2000\_A6840} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c0\_cev-2000} & \cellcolor{gray!6}{A6840} & \cellcolor{gray!6}{cev-2000} & \cellcolor{gray!6}{csv} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{-28.8586860} & \cellcolor{gray!6}{0.000000} & \cellcolor{gray!6}{0.000000}\\
+\hline
+2 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c0\_cev-2000\_A6840 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c0\_cev-2000 & A6840 & cev-2000 & csv & 53 & -0.0642997 & 0.000000 & 84.215368\\
+\hline
+\cellcolor{gray!6}{3} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c5\_cev-947\_A0} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c5\_cev-947} & \cellcolor{gray!6}{A0} & \cellcolor{gray!6}{cev-947} & \cellcolor{gray!6}{csv} & \cellcolor{gray!6}{5} & \cellcolor{gray!6}{-5.8826609} & \cellcolor{gray!6}{0.000000} & \cellcolor{gray!6}{3.869909}\\
+\hline
+3 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c5\_cev-947\_A0 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c5\_cev-947 & A0 & cev-947 & csv & 55 & 0.0353187 & 0.000000 & 90.611739\\
+\hline
+\cellcolor{gray!6}{4} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c5\_cev-947\_A6840} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c5\_cev-947} & \cellcolor{gray!6}{A6840} & \cellcolor{gray!6}{cev-947} & \cellcolor{gray!6}{csv} & \cellcolor{gray!6}{7} & \cellcolor{gray!6}{-2.7046907} & \cellcolor{gray!6}{0.000000} & \cellcolor{gray!6}{7.855916}\\
+\hline
+4 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c5\_cev-947\_A6840 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c5\_cev-947 & A6840 & cev-947 & csv & 57 & 0.1094474 & 0.000000 & 90.611739\\
+\hline
+\cellcolor{gray!6}{5} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c19\_cev2000\_A0} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c19\_cev2000} & \cellcolor{gray!6}{A0} & \cellcolor{gray!6}{cev2000} & \cellcolor{gray!6}{csv} & \cellcolor{gray!6}{9} & \cellcolor{gray!6}{-2.9782236} & \cellcolor{gray!6}{0.000000} & \cellcolor{gray!6}{7.855916}\\
+\hline
+5 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c19\_cev2000\_A0 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c19\_cev2000 & A0 & cev2000 & csv & 59 & 0.3389275 & 0.000000 & 97.200000\\
+\hline
+\cellcolor{gray!6}{6} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c19\_cev2000\_A6840} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c19\_cev2000} & \cellcolor{gray!6}{A6840} & \cellcolor{gray!6}{cev2000} & \cellcolor{gray!6}{csv} & \cellcolor{gray!6}{11} & \cellcolor{gray!6}{-1.7229647} & \cellcolor{gray!6}{0.000000} & \cellcolor{gray!6}{11.961502}\\
+\hline
+6 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c19\_cev2000\_A6840 & solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c19\_cev2000 & A6840 & cev2000 & csv & 61 & -14.6880377 & 1.990694 & -1.879215\\
+\hline
+\cellcolor{gray!6}{7} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c14\_cev947\_A0} & \cellcolor{gray!6}{solu\_19E1NEp99r99x\_ITG\_PE\_cev\_c14\_cev947} & \cellcolor{gray!6}{A0} & \cellcolor{gray!6}{cev947} & \cellcolor{gray!6}{csv} & \cellcolor{gray!6}{13} & \cellcolor{gray!6}{-1.7623279} & \cellcolor{gray!6}{0.000000} & \cellcolor{gray!6}{16.190257}\\
+\hline
+\end{tabular}}
+\end{table}
+
+\href{https://stackoverflow.com/a/47673097/8280804}{Split ``A\#\#\#'' to ``A'' and ``A\#\#\#''}. Additionally, also split \emph{cev\#\#\#\#} to \emph{cev} and \emph{\#\#\#\#}, allow for positive and negative numbers. \href{https://regex101.com}{See regular expression 101 helper}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# string and number separation}
+\NormalTok{df\_all\_files\_finalB }\OtherTok{\textless{}{-}}\NormalTok{ df\_all\_files\_finalA }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{separate}\NormalTok{(prod\_type\_st,}
+           \AttributeTok{into =} \FunctionTok{c}\NormalTok{(}\StringTok{"prod\_type\_st\_prefix"}\NormalTok{, }\StringTok{"prod\_type\_lvl"}\NormalTok{),}
+           \AttributeTok{sep=}\StringTok{"(?\textless{}=[A{-}Za{-}z])(?=[{-}0{-}9])"}\NormalTok{, }\CommentTok{\# positive or negative numbers}
+           \AttributeTok{remove=}\ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{separate}\NormalTok{(folder\_lvl1,}
+           \AttributeTok{into =} \FunctionTok{c}\NormalTok{(}\StringTok{"cev\_prefix"}\NormalTok{, }\StringTok{"cev\_lvl"}\NormalTok{),}
+           \AttributeTok{sep=}\StringTok{"(?\textless{}=[A{-}Za{-}z])(?=[{-}0{-}9])"}\NormalTok{, }\CommentTok{\# positive or negative numbers}
+           \AttributeTok{remove=}\ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{cev\_st =}\NormalTok{ folder\_lvl1,}
+         \AttributeTok{prod\_type\_lvl =} \FunctionTok{as.numeric}\NormalTok{(prod\_type\_lvl),}
+         \AttributeTok{cev\_lvl =} \FunctionTok{as.numeric}\NormalTok{(cev\_lvl)}\SpecialCharTok{/}\DecValTok{10000}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(fileid,}
+\NormalTok{         prod\_type\_st, prod\_type\_lvl,}
+\NormalTok{         cev\_st, cev\_lvl,}
+\NormalTok{         statesid, EjV,}
+\NormalTok{         filename, folder\_lvl1, folder\_lvl2)}
+\CommentTok{\# Ordering, sort by cev\_lvl, then prod\_type\_lvl, then stateid}
+\NormalTok{df\_all\_files\_finalB }\OtherTok{\textless{}{-}}\NormalTok{ df\_all\_files\_finalB }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(cev\_lvl, prod\_type\_lvl, statesid)}
+\CommentTok{\# show stacked table}
+\FunctionTok{kable}\NormalTok{(df\_all\_files\_finalB[}\FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{49}\SpecialCharTok{*}\DecValTok{16}\NormalTok{,}\DecValTok{49}\NormalTok{),}\DecValTok{1}\SpecialCharTok{:}\DecValTok{7}\NormalTok{]) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable\_styling\_fc\_wide}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{l|l|r|l|r|r|r}
+\hline
+fileid & prod\_type\_st & prod\_type\_lvl & cev\_st & cev\_lvl & statesid & EjV\\
+\hline
+\cellcolor{gray!6}{1} & \cellcolor{gray!6}{A0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{cev-2000} & \cellcolor{gray!6}{-0.2000} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{-28.8586860}\\
+\hline
+1 & A0 & 0 & cev-2000 & -0.2000 & 50 & -0.2106603\\
+\hline
+\cellcolor{gray!6}{2} & \cellcolor{gray!6}{A6840} & \cellcolor{gray!6}{6840} & \cellcolor{gray!6}{cev-2000} & \cellcolor{gray!6}{-0.2000} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{-28.8586860}\\
+\hline
+2 & A6840 & 6840 & cev-2000 & -0.2000 & 50 & -0.1311749\\
+\hline
+\cellcolor{gray!6}{3} & \cellcolor{gray!6}{A0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{cev-947} & \cellcolor{gray!6}{-0.0947} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{-28.0399281}\\
+\hline
+3 & A0 & 0 & cev-947 & -0.0947 & 50 & -0.0911499\\
+\hline
+\cellcolor{gray!6}{4} & \cellcolor{gray!6}{A6840} & \cellcolor{gray!6}{6840} & \cellcolor{gray!6}{cev-947} & \cellcolor{gray!6}{-0.0947} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{-28.0399281}\\
+\hline
+4 & A6840 & 6840 & cev-947 & -0.0947 & 50 & -0.0134719\\
+\hline
+\cellcolor{gray!6}{7} & \cellcolor{gray!6}{A0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{cev947} & \cellcolor{gray!6}{0.0947} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{-26.8243673}\\
+\hline
+7 & A0 & 0 & cev947 & 0.0947 & 50 & 0.0857474\\
+\hline
+\cellcolor{gray!6}{8} & \cellcolor{gray!6}{A6840} & \cellcolor{gray!6}{6840} & \cellcolor{gray!6}{cev947} & \cellcolor{gray!6}{0.0947} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{-26.8243673}\\
+\hline
+8 & A6840 & 6840 & cev947 & 0.0947 & 50 & 0.1608382\\
+\hline
+\cellcolor{gray!6}{5} & \cellcolor{gray!6}{A0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{cev2000} & \cellcolor{gray!6}{0.2000} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{-26.2512036}\\
+\hline
+5 & A0 & 0 & cev2000 & 0.2000 & 50 & 0.1694524\\
+\hline
+\cellcolor{gray!6}{6} & \cellcolor{gray!6}{A6840} & \cellcolor{gray!6}{6840} & \cellcolor{gray!6}{cev2000} & \cellcolor{gray!6}{0.2000} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{-26.2512036}\\
+\hline
+6 & A6840 & 6840 & cev2000 & 0.2000 & 50 & 0.2432677\\
+\hline
+\end{tabular}}
+\end{table}
+
 \hypertarget{wide-and-long}{%
 \section{Wide and Long}\label{wide-and-long}}
 
@@ -7553,6 +7974,248 @@ a & ai & z & zi & ev\\
 \hline
 \end{tabular}
 \end{table}
+
+\hypertarget{join-and-compare}{%
+\section{Join and Compare}\label{join-and-compare}}
+
+\hypertarget{find-closest-neighbor-on-grid}{%
+\subsection{Find Closest Neighbor on Grid}\label{find-closest-neighbor-on-grid}}
+
+\begin{quote}
+Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R Code Examples} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository (\href{https://fanwangecon.github.io/Stat4Econ/bookdown}{bookdown site}).
+\end{quote}
+
+Using the \href{https://tidyr.tidyverse.org/reference/pivot_wider.html}{pivot\_wider} function in tidyr to reshape panel or other data structures
+
+\hypertarget{closest-neighbor-on-grid}{%
+\subsubsection{Closest Neighbor on Grid}\label{closest-neighbor-on-grid}}
+
+There is a dataframe that provides \(V(coh, a, cev)\) levels. There is another dataframe with \(\hat{V}(coh, a)\), for each \(coh, a\), find the \(cev\) that such that the difference between \(\hat{V}(coh, a)\) and \(V(coh, a, cev)\) is minimized.
+
+\(V\) and \(\hat{V}\) information are stored in a dataframe in the \href{https://github.com/FanWangEcon/R4Econ/tree/master/panel/join/_file/csv}{csv folder} in the current directory. In fact, we have one \(V\) surface, but multiple \(\hat{V}\) files, so we want to do the find closest neighbor exercise for each one of the several \(\hat{V}\) files.
+
+The structure is as follows: (1) Load in the \(V\) file, where \(coh, a, cev\) are all variable attributes. (2) Merge with one \(\hat{V}\) file. (3) Take the difference between the \(V\) and \(\hat{V}\) columns, and take the absolute value of the difference. (4) Group by \(coh, a\), and sort to get the smallest absolute difference among the \(cev\) possibilities, and slice out the row for the smallest. (5) Now We have \(V(coh, a, cev^{\star}(coh, a))\). (6) Do this for each of the several \(\hat{V}\) files. (7) Stack the results from 1 through 6 together, generate a column that identifies which simulation/exercise/counterfactual each of the \(\hat{V}\) file comes from. (8) Visualize by plotting as subplot different \(a\), \(coh\) is x-axis, different \(\hat{V}\) outcome are different lines, and \(cev^{\star}\left(coh, a, \hat{V}\right)\) is the y-axis outcome.
+
+First, load the CEV file.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# folder}
+\NormalTok{spt\_root }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}C:/Users/fan/R4Econ/panel/join/\_file/csv\textquotesingle{}}\NormalTok{)}
+\CommentTok{\# cev surface file, the V file}
+\NormalTok{snm\_cev\_surface }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}e\_19E1NEp99r99\_ITG\_PE\_cev\_subsettest.csv\textquotesingle{}}
+\NormalTok{mt\_cev\_surface }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\AttributeTok{file =} \FunctionTok{file.path}\NormalTok{(spt\_root, snm\_cev\_surface))}
+\NormalTok{tb\_cev\_surface }\OtherTok{\textless{}{-}} \FunctionTok{as\_tibble}\NormalTok{(mt\_cev\_surface) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rename}\NormalTok{(}\AttributeTok{EjVcev =}\NormalTok{ EjV)}
+\end{Highlighting}
+\end{Shaded}
+
+Second, loop over the V hat files, join V with V hat:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ls\_tb\_cev\_surfhat }\OtherTok{=} \FunctionTok{vector}\NormalTok{(}\AttributeTok{mode =} \StringTok{"list"}\NormalTok{, }\AttributeTok{length =} \DecValTok{4}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ (it\_simu\_counter }\ControlFlowTok{in} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{)) \{}
+
+    \CommentTok{\# conditionally change file names}
+    \ControlFlowTok{if}\NormalTok{ (it\_simu\_counter }\SpecialCharTok{==} \DecValTok{1}\NormalTok{) \{}
+\NormalTok{        st\_counter }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}19E1NEp99r99\textquotesingle{}}
+\NormalTok{    \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (it\_simu\_counter }\SpecialCharTok{==} \DecValTok{2}\NormalTok{) \{}
+\NormalTok{        st\_counter }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}19E1NEp02r99\textquotesingle{}}
+\NormalTok{    \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (it\_simu\_counter }\SpecialCharTok{==} \DecValTok{3}\NormalTok{) \{}
+\NormalTok{        st\_counter }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}19E1NEp02per02ger99\textquotesingle{}}
+\NormalTok{    \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (it\_simu\_counter }\SpecialCharTok{==} \DecValTok{4}\NormalTok{) \{}
+\NormalTok{        st\_counter }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}19E1NEp02r02\textquotesingle{}}
+\NormalTok{    \}}
+\NormalTok{    snm\_v\_hat }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}e\_\textquotesingle{}}\NormalTok{, st\_counter, }\StringTok{\textquotesingle{}\_ITG\_PE\_subsettest.csv\textquotesingle{}}\NormalTok{)}
+    
+    \CommentTok{\# Overall path to files}
+\NormalTok{    mt\_v\_hat }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\AttributeTok{file =} \FunctionTok{file.path}\NormalTok{(spt\_root, snm\_v\_hat))}
+\NormalTok{    tb\_v\_hat }\OtherTok{\textless{}{-}} \FunctionTok{as\_tibble}\NormalTok{(mt\_v\_hat) }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{select}\NormalTok{(prod\_type\_lvl, statesid, EjV)}
+    
+    \CommentTok{\# Merge file using key }
+\NormalTok{    tb\_cev\_surfhat }\OtherTok{\textless{}{-}}\NormalTok{ tb\_cev\_surface }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{left\_join}\NormalTok{(tb\_v\_hat, }\AttributeTok{by=}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}prod\_type\_lvl\textquotesingle{}}\OtherTok{=}\StringTok{\textquotesingle{}prod\_type\_lvl\textquotesingle{}}\NormalTok{, }
+                                \StringTok{\textquotesingle{}statesid\textquotesingle{}}\OtherTok{=}\StringTok{\textquotesingle{}statesid\textquotesingle{}}\NormalTok{))) }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{arrange}\NormalTok{(statesid, prod\_type\_lvl, cev\_lvl) }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{mutate}\NormalTok{(}\AttributeTok{counter\_policy =}\NormalTok{ st\_counter)}
+    
+    \CommentTok{\# Store to list}
+\NormalTok{    ls\_tb\_cev\_surfhat[[it\_simu\_counter]] }\OtherTok{\textless{}{-}}\NormalTok{ tb\_cev\_surfhat}
+\NormalTok{\}}
+
+\CommentTok{\# Display}
+\FunctionTok{kable}\NormalTok{(ls\_tb\_cev\_surfhat[[}\DecValTok{1}\NormalTok{]][}\FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{40}\NormalTok{, }\DecValTok{5}\NormalTok{),]) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable\_styling\_fc\_wide}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{r|l|r|l|r|r|r|r|r|l}
+\hline
+X & cev\_st & cev\_lvl & prod\_type\_st & prod\_type\_lvl & statesid & cash\_tt & EjVcev & EjV & counter\_policy\\
+\hline
+\cellcolor{gray!6}{1} & \cellcolor{gray!6}{cev-2000} & \cellcolor{gray!6}{-0.2000} & \cellcolor{gray!6}{A0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{526} & \cellcolor{gray!6}{32.84747} & \cellcolor{gray!6}{-1.0479929} & \cellcolor{gray!6}{-0.7957419} & \cellcolor{gray!6}{19E1NEp99r99}\\
+\hline
+1501 & cev-947 & -0.0947 & A0 & 0 & 526 & 32.84747 & -0.9079859 & -0.7957419 & 19E1NEp99r99\\
+\hline
+\cellcolor{gray!6}{3001} & \cellcolor{gray!6}{cev105} & \cellcolor{gray!6}{0.0105} & \cellcolor{gray!6}{A0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{526} & \cellcolor{gray!6}{32.84747} & \cellcolor{gray!6}{-0.7880156} & \cellcolor{gray!6}{-0.7957419} & \cellcolor{gray!6}{19E1NEp99r99}\\
+\hline
+4501 & cev1157 & 0.1157 & A0 & 0 & 526 & 32.84747 & -0.6803586 & -0.7957419 & 19E1NEp99r99\\
+\hline
+\cellcolor{gray!6}{51} & \cellcolor{gray!6}{cev-2000} & \cellcolor{gray!6}{-0.2000} & \cellcolor{gray!6}{A2504} & \cellcolor{gray!6}{2504} & \cellcolor{gray!6}{526} & \cellcolor{gray!6}{32.90371} & \cellcolor{gray!6}{-1.0002921} & \cellcolor{gray!6}{-0.7504785} & \cellcolor{gray!6}{19E1NEp99r99}\\
+\hline
+1551 & cev-947 & -0.0947 & A2504 & 2504 & 526 & 32.90371 & -0.8613743 & -0.7504785 & 19E1NEp99r99\\
+\hline
+\cellcolor{gray!6}{3051} & \cellcolor{gray!6}{cev105} & \cellcolor{gray!6}{0.0105} & \cellcolor{gray!6}{A2504} & \cellcolor{gray!6}{2504} & \cellcolor{gray!6}{526} & \cellcolor{gray!6}{32.90371} & \cellcolor{gray!6}{-0.7423281} & \cellcolor{gray!6}{-0.7504785} & \cellcolor{gray!6}{19E1NEp99r99}\\
+\hline
+4551 & cev1157 & 0.1157 & A2504 & 2504 & 526 & 32.90371 & -0.6354620 & -0.7504785 & 19E1NEp99r99\\
+\hline
+\end{tabular}}
+\end{table}
+
+Third, sort each file, and keep only the best match rows that minimize the absolute distance between \emph{EjV} and \emph{EjVcev}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ls\_tb\_cev\_matched }\OtherTok{=} \FunctionTok{vector}\NormalTok{(}\AttributeTok{mode =} \StringTok{"list"}\NormalTok{, }\AttributeTok{length =} \DecValTok{4}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ (it\_simu\_counter }\ControlFlowTok{in} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{)) \{}
+
+    \CommentTok{\# Load merged file}
+\NormalTok{    tb\_cev\_surfhat }\OtherTok{\textless{}{-}}\NormalTok{ ls\_tb\_cev\_surfhat[[it\_simu\_counter]]}
+
+    \CommentTok{\# Difference Column}
+\NormalTok{    tb\_cev\_surfhat }\OtherTok{\textless{}{-}}\NormalTok{ tb\_cev\_surfhat }\SpecialCharTok{\%\textgreater{}\%} 
+      \FunctionTok{mutate}\NormalTok{(}\AttributeTok{EjVcev\_gap =} \FunctionTok{abs}\NormalTok{(EjVcev }\SpecialCharTok{{-}}\NormalTok{ EjV))}
+    
+    \CommentTok{\# Group by, Arrange and Slice, get lowest gap}
+\NormalTok{    tb\_cev\_matched }\OtherTok{\textless{}{-}}\NormalTok{ tb\_cev\_surfhat }\SpecialCharTok{\%\textgreater{}\%} 
+      \FunctionTok{arrange}\NormalTok{(statesid, prod\_type\_lvl, EjVcev\_gap) }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{group\_by}\NormalTok{(statesid, prod\_type\_lvl) }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{slice\_head}\NormalTok{(}\AttributeTok{n=}\DecValTok{1}\NormalTok{)}
+
+    \CommentTok{\# Store to list}
+\NormalTok{    ls\_tb\_cev\_matched[[it\_simu\_counter]] }\OtherTok{\textless{}{-}}\NormalTok{ tb\_cev\_matched}
+\NormalTok{\}}
+
+\CommentTok{\# Display}
+\FunctionTok{kable}\NormalTok{(ls\_tb\_cev\_matched[[}\DecValTok{2}\NormalTok{]][}\FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{30}\NormalTok{, }\DecValTok{1}\NormalTok{),]) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable\_styling\_fc\_wide}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{r|l|r|l|r|r|r|r|r|l|r}
+\hline
+X & cev\_st & cev\_lvl & prod\_type\_st & prod\_type\_lvl & statesid & cash\_tt & EjVcev & EjV & counter\_policy & EjVcev\_gap\\
+\hline
+\cellcolor{gray!6}{3001} & \cellcolor{gray!6}{cev105} & \cellcolor{gray!6}{0.0105} & \cellcolor{gray!6}{A0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{526} & \cellcolor{gray!6}{32.847471} & \cellcolor{gray!6}{-0.7880156} & \cellcolor{gray!6}{-0.7928034} & \cellcolor{gray!6}{19E1NEp02r99} & \cellcolor{gray!6}{0.0047878}\\
+\hline
+3051 & cev105 & 0.0105 & A2504 & 2504 & 526 & 32.903714 & -0.7423281 & -0.7480617 & 19E1NEp02r99 & 0.0057336\\
+\hline
+\cellcolor{gray!6}{3101} & \cellcolor{gray!6}{cev105} & \cellcolor{gray!6}{0.0105} & \cellcolor{gray!6}{A4145} & \cellcolor{gray!6}{4145} & \cellcolor{gray!6}{526} & \cellcolor{gray!6}{32.948970} & \cellcolor{gray!6}{-0.7082006} & \cellcolor{gray!6}{-0.7145418} & \cellcolor{gray!6}{19E1NEp02r99} & \cellcolor{gray!6}{0.0063412}\\
+\hline
+3151 & cev105 & 0.0105 & A5633 & 5633 & 526 & 32.996952 & -0.6753576 & -0.6818996 & 19E1NEp02r99 & 0.0065420\\
+\hline
+\cellcolor{gray!6}{3201} & \cellcolor{gray!6}{cev105} & \cellcolor{gray!6}{0.0105} & \cellcolor{gray!6}{A7274} & \cellcolor{gray!6}{7274} & \cellcolor{gray!6}{526} & \cellcolor{gray!6}{33.058832} & \cellcolor{gray!6}{-0.6368297} & \cellcolor{gray!6}{-0.6431710} & \cellcolor{gray!6}{19E1NEp02r99} & \cellcolor{gray!6}{0.0063413}\\
+\hline
+3251 & cev105 & 0.0105 & A9779 & 9779 & 526 & 33.175241 & -0.5711706 & -0.5774648 & 19E1NEp02r99 & 0.0062942\\
+\hline
+\cellcolor{gray!6}{3002} & \cellcolor{gray!6}{cev105} & \cellcolor{gray!6}{0.0105} & \cellcolor{gray!6}{A0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{555} & \cellcolor{gray!6}{53.346587} & \cellcolor{gray!6}{-0.2985944} & \cellcolor{gray!6}{-0.3041922} & \cellcolor{gray!6}{19E1NEp02r99} & \cellcolor{gray!6}{0.0055978}\\
+\hline
+3052 & cev105 & 0.0105 & A2504 & 2504 & 555 & 53.815772 & -0.2617572 & -0.2680026 & 19E1NEp02r99 & 0.0062454\\
+\hline
+\cellcolor{gray!6}{3102} & \cellcolor{gray!6}{cev105} & \cellcolor{gray!6}{0.0105} & \cellcolor{gray!6}{A4145} & \cellcolor{gray!6}{4145} & \cellcolor{gray!6}{555} & \cellcolor{gray!6}{54.193302} & \cellcolor{gray!6}{-0.2340822} & \cellcolor{gray!6}{-0.2406142} & \cellcolor{gray!6}{19E1NEp02r99} & \cellcolor{gray!6}{0.0065320}\\
+\hline
+3152 & cev105 & 0.0105 & A5633 & 5633 & 555 & 54.593579 & -0.2067964 & -0.2134634 & 19E1NEp02r99 & 0.0066670\\
+\hline
+\cellcolor{gray!6}{3202} & \cellcolor{gray!6}{cev105} & \cellcolor{gray!6}{0.0105} & \cellcolor{gray!6}{A7274} & \cellcolor{gray!6}{7274} & \cellcolor{gray!6}{555} & \cellcolor{gray!6}{55.109790} & \cellcolor{gray!6}{-0.1740126} & \cellcolor{gray!6}{-0.1806320} & \cellcolor{gray!6}{19E1NEp02r99} & \cellcolor{gray!6}{0.0066194}\\
+\hline
+3252 & cev105 & 0.0105 & A9779 & 9779 & 555 & 56.080888 & -0.1169470 & -0.1236111 & 19E1NEp02r99 & 0.0066641\\
+\hline
+\cellcolor{gray!6}{3603} & \cellcolor{gray!6}{cev526} & \cellcolor{gray!6}{0.0526} & \cellcolor{gray!6}{A0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{905} & \cellcolor{gray!6}{1.533025} & \cellcolor{gray!6}{-5.2530406} & \cellcolor{gray!6}{-5.2486887} & \cellcolor{gray!6}{19E1NEp02r99} & \cellcolor{gray!6}{0.0043519}\\
+\hline
+3353 & cev315 & 0.0315 & A2504 & 2504 & 905 & 1.714498 & -4.5517474 & -4.5408560 & 19E1NEp02r99 & 0.0108913\\
+\hline
+\cellcolor{gray!6}{3403} & \cellcolor{gray!6}{cev315} & \cellcolor{gray!6}{0.0315} & \cellcolor{gray!6}{A4145} & \cellcolor{gray!6}{4145} & \cellcolor{gray!6}{905} & \cellcolor{gray!6}{1.860521} & \cellcolor{gray!6}{-4.1039608} & \cellcolor{gray!6}{-4.1072736} & \cellcolor{gray!6}{19E1NEp02r99} & \cellcolor{gray!6}{0.0033128}\\
+\hline
+3453 & cev315 & 0.0315 & A5633 & 5633 & 905 & 2.015341 & -3.7465733 & -3.7611842 & 19E1NEp02r99 & 0.0146109\\
+\hline
+\cellcolor{gray!6}{3503} & \cellcolor{gray!6}{cev315} & \cellcolor{gray!6}{0.0315} & \cellcolor{gray!6}{A7274} & \cellcolor{gray!6}{7274} & \cellcolor{gray!6}{905} & \cellcolor{gray!6}{2.215003} & \cellcolor{gray!6}{-3.4101025} & \cellcolor{gray!6}{-3.4235413} & \cellcolor{gray!6}{19E1NEp02r99} & \cellcolor{gray!6}{0.0134388}\\
+\hline
+3553 & cev315 & 0.0315 & A9779 & 9779 & 905 & 2.590608 & -2.9413469 & -2.9535570 & 19E1NEp02r99 & 0.0122101\\
+\hline
+\cellcolor{gray!6}{3004} & \cellcolor{gray!6}{cev105} & \cellcolor{gray!6}{0.0105} & \cellcolor{gray!6}{A0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{953} & \cellcolor{gray!6}{20.125381} & \cellcolor{gray!6}{-1.3249909} & \cellcolor{gray!6}{-1.3290865} & \cellcolor{gray!6}{19E1NEp02r99} & \cellcolor{gray!6}{0.0040957}\\
+\hline
+3054 & cev105 & 0.0105 & A2504 & 2504 & 953 & 20.306854 & -1.2476021 & -1.2531860 & 19E1NEp02r99 & 0.0055839\\
+\hline
+\cellcolor{gray!6}{3104} & \cellcolor{gray!6}{cev105} & \cellcolor{gray!6}{0.0105} & \cellcolor{gray!6}{A4145} & \cellcolor{gray!6}{4145} & \cellcolor{gray!6}{953} & \cellcolor{gray!6}{20.452876} & \cellcolor{gray!6}{-1.1916003} & \cellcolor{gray!6}{-1.1975215} & \cellcolor{gray!6}{19E1NEp02r99} & \cellcolor{gray!6}{0.0059211}\\
+\hline
+3154 & cev105 & 0.0105 & A5633 & 5633 & 953 & 20.607697 & -1.1383665 & -1.1444048 & 19E1NEp02r99 & 0.0060383\\
+\hline
+\cellcolor{gray!6}{3204} & \cellcolor{gray!6}{cev105} & \cellcolor{gray!6}{0.0105} & \cellcolor{gray!6}{A7274} & \cellcolor{gray!6}{7274} & \cellcolor{gray!6}{953} & \cellcolor{gray!6}{20.807359} & \cellcolor{gray!6}{-1.0766095} & \cellcolor{gray!6}{-1.0823344} & \cellcolor{gray!6}{19E1NEp02r99} & \cellcolor{gray!6}{0.0057250}\\
+\hline
+3254 & cev105 & 0.0105 & A9779 & 9779 & 953 & 21.182964 & -0.9729832 & -0.9781408 & 19E1NEp02r99 & 0.0051576\\
+\hline
+\cellcolor{gray!6}{3005} & \cellcolor{gray!6}{cev105} & \cellcolor{gray!6}{0.0105} & \cellcolor{gray!6}{A0} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{1017} & \cellcolor{gray!6}{63.774766} & \cellcolor{gray!6}{-0.1284542} & \cellcolor{gray!6}{-0.1342653} & \cellcolor{gray!6}{19E1NEp02r99} & \cellcolor{gray!6}{0.0058110}\\
+\hline
+3055 & cev105 & 0.0105 & A2504 & 2504 & 1017 & 64.298911 & -0.0967695 & -0.1031112 & 19E1NEp02r99 & 0.0063417\\
+\hline
+\cellcolor{gray!6}{3105} & \cellcolor{gray!6}{cev105} & \cellcolor{gray!6}{0.0105} & \cellcolor{gray!6}{A4145} & \cellcolor{gray!6}{4145} & \cellcolor{gray!6}{1017} & \cellcolor{gray!6}{64.720664} & \cellcolor{gray!6}{-0.0728485} & \cellcolor{gray!6}{-0.0793940} & \cellcolor{gray!6}{19E1NEp02r99} & \cellcolor{gray!6}{0.0065454}\\
+\hline
+3155 & cev105 & 0.0105 & A5633 & 5633 & 1017 & 65.167829 & -0.0490898 & -0.0557238 & 19E1NEp02r99 & 0.0066341\\
+\hline
+\cellcolor{gray!6}{3205} & \cellcolor{gray!6}{cev105} & \cellcolor{gray!6}{0.0105} & \cellcolor{gray!6}{A7274} & \cellcolor{gray!6}{7274} & \cellcolor{gray!6}{1017} & \cellcolor{gray!6}{65.744507} & \cellcolor{gray!6}{-0.0203378} & \cellcolor{gray!6}{-0.0269149} & \cellcolor{gray!6}{19E1NEp02r99} & \cellcolor{gray!6}{0.0065772}\\
+\hline
+3255 & cev105 & 0.0105 & A9779 & 9779 & 1017 & 66.829359 & 0.0299397 & 0.0233507 & 19E1NEp02r99 & 0.0065890\\
+\hline
+\end{tabular}}
+\end{table}
+
+Fourth, row\_bind results together.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Single dataframe with all results}
+\NormalTok{tb\_cev\_matched\_all\_counter }\OtherTok{\textless{}{-}} \FunctionTok{do.call}\NormalTok{(bind\_rows, ls\_tb\_cev\_matched)}
+\CommentTok{\# check size}
+\FunctionTok{print}\NormalTok{(}\FunctionTok{dim}\NormalTok{(tb\_cev\_matched\_all\_counter))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1200   11
+\end{verbatim}
+
+Fifth, visualize results
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# select four from the productivity types}
+\NormalTok{ar\_prod\_type\_lvl\_unique }\OtherTok{\textless{}{-}} \FunctionTok{unique}\NormalTok{(tb\_cev\_matched\_all\_counter }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{pull}\NormalTok{(prod\_type\_lvl))}
+\NormalTok{ar\_prod\_type\_lvl\_selected }\OtherTok{\textless{}{-}}\NormalTok{ ar\_prod\_type\_lvl\_unique[}\FunctionTok{round}\NormalTok{(}\FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\FunctionTok{length}\NormalTok{(ar\_prod\_type\_lvl\_unique), }\AttributeTok{length.out=}\DecValTok{4}\NormalTok{))]}
+\CommentTok{\# graph}
+\NormalTok{lineplot }\OtherTok{\textless{}{-}}\NormalTok{ tb\_cev\_matched\_all\_counter }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{filter}\NormalTok{(prod\_type\_lvl }\SpecialCharTok{\%in\%}\NormalTok{ ar\_prod\_type\_lvl\_selected) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{group\_by}\NormalTok{(prod\_type\_st, cash\_tt) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{cash\_tt, }\AttributeTok{y=}\NormalTok{cev\_lvl,}
+               \AttributeTok{colour=}\NormalTok{counter\_policy, }\AttributeTok{linetype=}\NormalTok{counter\_policy, }\AttributeTok{shape=}\NormalTok{counter\_policy)) }\SpecialCharTok{+}
+        \FunctionTok{facet\_wrap}\NormalTok{( }\SpecialCharTok{\textasciitilde{}}\NormalTok{ prod\_type\_st) }\SpecialCharTok{+}
+        \FunctionTok{geom\_line}\NormalTok{() }\SpecialCharTok{+}
+        \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+        \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{\textquotesingle{}Visualizing the positions of matched values\textquotesingle{}}\NormalTok{,}
+             \AttributeTok{x =} \StringTok{\textquotesingle{}Resource Levels\textquotesingle{}}\NormalTok{,}
+             \AttributeTok{y =} \StringTok{\textquotesingle{}CEV\textquotesingle{}}\NormalTok{,}
+             \AttributeTok{caption =} \FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}https://fanwangecon.github.io/\textquotesingle{}}\NormalTok{,}
+                              \StringTok{\textquotesingle{}R4Econ/panel/join/htmlpdfr/fs\_join\_compare.html\textquotesingle{}}\NormalTok{)) }
+\FunctionTok{print}\NormalTok{(lineplot)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-146-1} \end{center}
 
 \hypertarget{linear-regression}{%
 \chapter{Linear Regression}\label{linear-regression}}
@@ -9305,7 +9968,7 @@ hgt & 77.8 & 73.13353 & 70.97578 & 71.45823\\
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-178-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-192-1} \end{center}
 
 \hypertarget{additional-decomposition-testings}{%
 \subsubsection{Additional Decomposition Testings}\label{additional-decomposition-testings}}
@@ -9681,21 +10344,21 @@ Given the x-variables included in the logit regression, how do they relate to A\
 ## [[1]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-182-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-196-1} \end{center}
 
 \begin{verbatim}
 ## 
 ## [[2]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-182-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-196-2} \end{center}
 
 \begin{verbatim}
 ## 
 ## [[3]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-182-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-196-3} \end{center}
 
 \hypertarget{quantile-regression}{%
 \section{Quantile Regression}\label{quantile-regression}}
@@ -10522,7 +11185,7 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-197-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-211-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10540,7 +11203,7 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-197-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-211-2} \end{center}
 
 \hypertarget{integration-by-symmetric-uneven-rectangle}{%
 \subsubsection{Integration By Symmetric Uneven Rectangle}\label{integration-by-symmetric-uneven-rectangle}}
@@ -10599,7 +11262,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-198-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-212-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10617,7 +11280,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-198-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-212-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10635,7 +11298,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-198-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-212-3} \end{center}
 
 \hypertarget{integration-by-constant-width-rectangle-trapezoidal-rule}{%
 \subsubsection{Integration By Constant Width Rectangle (Trapezoidal rule)}\label{integration-by-constant-width-rectangle-trapezoidal-rule}}
@@ -10690,7 +11353,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-199-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-213-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10708,7 +11371,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-199-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-213-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10726,7 +11389,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-199-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-213-3} \end{center}
 
 \hypertarget{analytical-solutions}{%
 \section{Analytical Solutions}\label{analytical-solutions}}
@@ -11168,7 +11831,7 @@ How does Atkinson Inequality measure change with respect to a vector of random d
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-210-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-224-1} \end{center}
 
 Now with the one person has the wealth of all others in the vector times 10:
 
@@ -11192,7 +11855,7 @@ Now with the one person has the wealth of all others in the vector times 10:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-211-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-225-1} \end{center}
 
 The Uniform Results, since allocations are uniform, zero for all:
 
@@ -11216,7 +11879,7 @@ The Uniform Results, since allocations are uniform, zero for all:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-212-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-226-1} \end{center}
 
 \hypertarget{analyzing-equation-mechanics}{%
 \subsubsection{Analyzing Equation Mechanics}\label{analyzing-equation-mechanics}}
@@ -11405,7 +12068,7 @@ Note that many more A grid points are needed to fully plot out the leontief line
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-214-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-228-1} \end{center}
 
 \hypertarget{tables-and-graphs}{%
 \chapter{Tables and Graphs}\label{tables-and-graphs}}
@@ -11588,7 +12251,7 @@ Jointly plot:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-216-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-230-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -11629,7 +12292,7 @@ We used recordplot() earlier. So now we can print just the first two constructed
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-217-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-231-1} \end{center}
 
 \hypertarget{write-and-read-plots}{%
 \section{Write and Read Plots}\label{write-and-read-plots}}
@@ -12200,8 +12863,193 @@ Note: \emph{area} below corresponds to \emph{North, West, South, East}.
 \hypertarget{code-and-development}{%
 \chapter{Code and Development}\label{code-and-development}}
 
-\hypertarget{file-in-and-out}{%
-\section{File in and Out}\label{file-in-and-out}}
+\hypertarget{files-in-and-out}{%
+\section{Files In and Out}\label{files-in-and-out}}
+
+\hypertarget{file-path}{%
+\subsection{File Path}\label{file-path}}
+
+\begin{quote}
+Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R Code Examples} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository (\href{https://fanwangecon.github.io/Stat4Econ/bookdown}{bookdown site}).
+\end{quote}
+
+\hypertarget{compose-a-path}{%
+\subsubsection{Compose a Path}\label{compose-a-path}}
+
+File Path might contain information related to the file, decompose the file path, keep the final N folder names, to be possibled stored as a variable in the datafile stored inside.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Compose together a path }
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}.Platform$file.sep=\textquotesingle{}}\NormalTok{, .Platform}\SpecialCharTok{$}\NormalTok{file.sep))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] ".Platform$file.sep=/"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{spn\_file\_path }\OtherTok{=} \FunctionTok{file.path}\NormalTok{(}\StringTok{"C:"}\NormalTok{, }\StringTok{"Users"}\NormalTok{, }\StringTok{"fan"}\NormalTok{, }\StringTok{"R4Econ"}\NormalTok{, }\StringTok{"amto"}\NormalTok{, }\StringTok{"tibble"}\NormalTok{, }
+                          \StringTok{"fs\_tib\_basics.Rmd"}\NormalTok{, }
+                          \AttributeTok{fsep =}\NormalTok{ .Platform}\SpecialCharTok{$}\NormalTok{file.sep)}
+\CommentTok{\# print}
+\FunctionTok{print}\NormalTok{(spn\_file\_path)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "C:/Users/fan/R4Econ/amto/tibble/fs_tib_basics.Rmd"
+\end{verbatim}
+
+\hypertarget{substring-and-file-name}{%
+\subsubsection{Substring and File Name}\label{substring-and-file-name}}
+
+From path, get file name without suffix.
+
+\begin{itemize}
+\tightlist
+\item
+  r string split
+\item
+  \href{https://stackoverflow.com/a/83222/8280804}{r list last element}
+\item
+  \href{https://stackoverflow.com/a/29114007/8280804}{r get file name from path}
+\item
+  \href{https://stackoverflow.com/a/47189541/8280804}{r get file path no name}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{st\_example }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}C:/Users/fan/R4Econ/amto/tibble/fs\_tib\_basics.Rmd\textquotesingle{}}
+\NormalTok{st\_file\_wth\_suffix\_s }\OtherTok{\textless{}{-}} \FunctionTok{tail}\NormalTok{(}\FunctionTok{strsplit}\NormalTok{(st\_example, }\StringTok{"/"}\NormalTok{)[[}\DecValTok{1}\NormalTok{]],}\AttributeTok{n=}\DecValTok{1}\NormalTok{)}
+\NormalTok{st\_file\_wno\_suffix\_s }\OtherTok{\textless{}{-}}\NormalTok{ tools}\SpecialCharTok{::}\FunctionTok{file\_path\_sans\_ext}\NormalTok{(}\FunctionTok{basename}\NormalTok{(st\_example))}
+\NormalTok{st\_fullpath\_nosufx\_s }\OtherTok{\textless{}{-}} \FunctionTok{sub}\NormalTok{(}\StringTok{\textquotesingle{}}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{.Rmd$\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{, st\_example)}
+\NormalTok{st\_fullpath\_noname\_s }\OtherTok{\textless{}{-}} \FunctionTok{dirname}\NormalTok{(st\_example)}
+
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}st\_file\_wth\_suffix\_s:\textquotesingle{}}\NormalTok{, st\_file\_wth\_suffix\_s))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "st_file_wth_suffix_s:fs_tib_basics.Rmd"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}st\_file\_wno\_suffix\_s:\textquotesingle{}}\NormalTok{, st\_file\_wno\_suffix\_s))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "st_file_wno_suffix_s:fs_tib_basics"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}st\_fullpath\_nosufx\_s:\textquotesingle{}}\NormalTok{, st\_fullpath\_nosufx\_s))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "st_fullpath_nosufx_s:C:/Users/fan/R4Econ/amto/tibble/fs_tib_basics"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}st\_fullpath\_noname\_s:\textquotesingle{}}\NormalTok{, st\_fullpath\_noname\_s))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "st_fullpath_noname_s:C:/Users/fan/R4Econ/amto/tibble"
+\end{verbatim}
+
+\hypertarget{get-subset-of-path-folder-names}{%
+\subsubsection{Get Subset of Path Folder Names}\label{get-subset-of-path-folder-names}}
+
+File Path might contain information related to the file, decompose the file path, keep the final N folder names, to be possibled stored as a variable in the datafile stored inside.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Compose together a path }
+\NormalTok{spn\_example }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}C:/Users/fan/R4Econ/amto/tibble/fs\_tib\_basics.Rmd\textquotesingle{}}
+\CommentTok{\# Replace default system slash, assume spn was generated by system. }
+\NormalTok{ls\_srt\_folders\_file }\OtherTok{\textless{}{-}} \FunctionTok{strsplit}\NormalTok{(st\_example, .Platform}\SpecialCharTok{$}\NormalTok{file.sep)[[}\DecValTok{1}\NormalTok{]]}
+\CommentTok{\# Keep the last N layers}
+\NormalTok{it\_folders\_names\_to\_keep }\OtherTok{=} \DecValTok{2}
+\NormalTok{snm\_file\_name }\OtherTok{\textless{}{-}} \FunctionTok{tail}\NormalTok{(}\FunctionTok{strsplit}\NormalTok{(st\_example, }\StringTok{"/"}\NormalTok{)[[}\DecValTok{1}\NormalTok{]],}\AttributeTok{n=}\DecValTok{1}\NormalTok{)}
+\NormalTok{ls\_srt\_folders\_keep }\OtherTok{\textless{}{-}} \FunctionTok{head}\NormalTok{(}\FunctionTok{tail}\NormalTok{(ls\_srt\_folders\_file, it\_folders\_names\_to\_keep}\SpecialCharTok{+}\DecValTok{1}\NormalTok{),}
+\NormalTok{                            it\_folders\_names\_to\_keep)}
+\CommentTok{\# Show folder names}
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}snm\_file\_name:\textquotesingle{}}\NormalTok{, snm\_file\_name))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "snm_file_name:fs_tib_basics.Rmd"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}last \textquotesingle{}}\NormalTok{, it\_folders\_names\_to\_keep, }\StringTok{\textquotesingle{} folders:\textquotesingle{}}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "last 2 folders:"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(ls\_srt\_folders\_keep)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "amto"   "tibble"
+\end{verbatim}
+
+Shorter lines, to make copying easier.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# inputs}
+\NormalTok{it\_folders\_names\_to\_keep }\OtherTok{=} \DecValTok{2}
+\NormalTok{spn\_example }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}C:/Users/fan/R4Econ/amto/tibble/fs\_tib\_basics.Rmd\textquotesingle{}}
+\CommentTok{\# copy these}
+\NormalTok{ls\_srt\_folders\_name\_keep }\OtherTok{\textless{}{-}} \FunctionTok{tail}\NormalTok{(}\FunctionTok{strsplit}\NormalTok{(st\_example, }\StringTok{"/"}\NormalTok{)[[}\DecValTok{1}\NormalTok{]], }\AttributeTok{n=}\NormalTok{it\_folders\_names\_to\_keep}\SpecialCharTok{+}\DecValTok{1}\NormalTok{)}
+\NormalTok{snm\_file\_name }\OtherTok{\textless{}{-}} \FunctionTok{tail}\NormalTok{(ls\_srt\_folders\_name\_keep, }\DecValTok{1}\NormalTok{)}
+\NormalTok{ls\_srt\_folders\_keep }\OtherTok{\textless{}{-}} \FunctionTok{head}\NormalTok{(ls\_srt\_folders\_name\_keep, it\_folders\_names\_to\_keep)}
+\CommentTok{\# print}
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}snm\_file\_name:\textquotesingle{}}\NormalTok{, snm\_file\_name))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "snm_file_name:fs_tib_basics.Rmd"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}last \textquotesingle{}}\NormalTok{, it\_folders\_names\_to\_keep, }\StringTok{\textquotesingle{} folders:\textquotesingle{}}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "last 2 folders:"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(ls\_srt\_folders\_keep)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "amto"   "tibble"
+\end{verbatim}
 
 \hypertarget{text-to-file}{%
 \subsection{Text to File}\label{text-to-file}}
@@ -12490,6 +13338,7 @@ Search inside directories, for all files in a git repo folder that are new or ha
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/inout/_file/rmd/fs_rmd_pdf_html_mod_mod.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/inout/_file/rmd/fs_text_save_mod.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/inout/_file/rmd/main_mod.Rmd"
+## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/inout/fs_path.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/inout/fs_rmd_pdf_html.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/inout/fs_text_save.Rmd"
 ## [1] "NO CHNGE: C:/Users/fan/R4Econ/development/inout/main.Rmd"
@@ -12822,7 +13671,7 @@ Run basic shell commands in windows:
 \end{Shaded}
 
 \begin{verbatim}
-## [1] " Volume in drive G is New Volume,  Volume Serial Number is 009D-37E9, ,  Directory of G:\\repos\\R4Econ, , 01/08/2021  05:30 PM    <DIR>          ., 01/08/2021  05:30 PM    <DIR>          .., 11/28/2020  12:35 PM               203 .gitattributes, 11/28/2020  12:35 PM             1,460 .gitignore, 11/28/2020  12:35 PM                30 .Rbuildignore, 11/28/2020  04:36 PM             6,555 .Rprofile, 11/28/2020  12:35 PM    <DIR>          amto, 11/28/2020  12:35 PM               278 book.bib, 01/08/2021  05:30 PM    <DIR>          bookdown, 11/28/2020  12:35 PM    <DIR>          development, 11/28/2020  12:35 PM    <DIR>          dynamic, 11/28/2020  04:01 PM    <DIR>          factor, 11/28/2020  12:35 PM    <DIR>          function, 11/28/2020  12:35 PM    <DIR>          generate, 11/28/2020  12:35 PM    <DIR>          getdata, 11/28/2020  12:35 PM             2,951 gitsetup.md, 11/28/2020  12:35 PM               321 hdga.html, 11/28/2020  12:35 PM    <DIR>          htmlpdfr, 11/28/2020  12:35 PM             2,928 index.Rmd, 11/28/2020  12:35 PM             1,086 LICENSE, 11/28/2020  12:35 PM    <DIR>          linreg, 01/08/2021  07:50 AM    <DIR>          math, 11/28/2020  12:35 PM    <DIR>          optimization, 11/28/2020  12:35 PM            11,018 packages.bib, 11/28/2020  12:35 PM    <DIR>          panel, 01/08/2021  05:30 PM           320,857 Panel Data and Optimization with R.Rmd, 11/30/2020  10:50 PM            72,066 Panel-Data-and-Optimization-with-R.log, 01/08/2021  05:30 PM           320,857 Panel-Data-and-Optimization-with-R.Rmd, 11/30/2020  10:49 PM    <DIR>          Panel-Data-and-Optimization-with-R_files, 11/28/2020  12:35 PM               480 preamble.tex, 11/28/2020  12:35 PM               583 preamble_book.tex, 11/28/2020  12:35 PM               416 R4Econ.Rproj, 01/08/2021  05:28 PM            43,337 README.md, 01/08/2021  05:28 PM            40,390 README_appendix.md, 11/28/2020  12:35 PM               762 README_end.md, 11/28/2020  12:35 PM            30,249 README_OLD.md, 11/28/2020  12:35 PM             3,221 README_pre.md, 01/08/2021  05:28 PM            39,348 README_toc.md, 11/28/2020  12:35 PM    <DIR>          regnonlin, 11/28/2020  12:35 PM               595 style.css, 11/28/2020  12:35 PM    <DIR>          summarize, 11/28/2020  12:35 PM    <DIR>          support, 11/28/2020  12:35 PM    <DIR>          tabgraph, 11/28/2020  12:35 PM               136 title.Rmd, 11/28/2020  12:35 PM             2,570 toc.css, 01/08/2021  05:22 PM             3,409 _bookdown.yml, 01/08/2021  05:30 PM    <DIR>          _bookdown_files, 11/28/2020  12:35 PM               151 _config.yml, 11/28/2020  12:35 PM    <DIR>          _data, 11/28/2020  12:35 PM    <DIR>          _file, 11/28/2020  12:35 PM    <DIR>          _img, 11/28/2020  12:35 PM    <DIR>          _log, 11/28/2020  12:35 PM             1,437 _output.yml, 11/28/2020  12:35 PM                97 _output_kniti_html.yaml, 11/28/2020  12:35 PM               166 _output_kniti_pdf.yaml,               30 File(s)        907,957 bytes,               25 Dir(s)  476,319,150,080 bytes free"
+## [1] " Volume in drive G is New Volume,  Volume Serial Number is 009D-37E9, ,  Directory of G:\\repos\\R4Econ, , 01/10/2021  11:27 PM    <DIR>          ., 01/10/2021  11:27 PM    <DIR>          .., 11/28/2020  12:35 PM               203 .gitattributes, 11/28/2020  12:35 PM             1,460 .gitignore, 11/28/2020  12:35 PM                30 .Rbuildignore, 11/28/2020  04:36 PM             6,555 .Rprofile, 11/28/2020  12:35 PM    <DIR>          amto, 11/28/2020  12:35 PM               278 book.bib, 01/10/2021  11:27 PM    <DIR>          bookdown, 11/28/2020  12:35 PM    <DIR>          development, 11/28/2020  12:35 PM    <DIR>          dynamic, 11/28/2020  04:01 PM    <DIR>          factor, 11/28/2020  12:35 PM    <DIR>          function, 11/28/2020  12:35 PM    <DIR>          generate, 11/28/2020  12:35 PM    <DIR>          getdata, 11/28/2020  12:35 PM             2,951 gitsetup.md, 11/28/2020  12:35 PM               321 hdga.html, 11/28/2020  12:35 PM    <DIR>          htmlpdfr, 11/28/2020  12:35 PM             2,928 index.Rmd, 11/28/2020  12:35 PM             1,086 LICENSE, 11/28/2020  12:35 PM    <DIR>          linreg, 01/08/2021  07:50 AM    <DIR>          math, 11/28/2020  12:35 PM    <DIR>          optimization, 11/28/2020  12:35 PM            11,018 packages.bib, 01/10/2021  06:10 PM    <DIR>          panel, 01/10/2021  11:27 PM           342,984 Panel Data and Optimization with R.Rmd, 01/08/2021  05:31 PM            73,034 Panel-Data-and-Optimization-with-R.log, 01/10/2021  11:27 PM           342,984 Panel-Data-and-Optimization-with-R.Rmd, 11/30/2020  10:49 PM    <DIR>          Panel-Data-and-Optimization-with-R_files, 11/28/2020  12:35 PM               480 preamble.tex, 11/28/2020  12:35 PM               583 preamble_book.tex, 11/28/2020  12:35 PM               416 R4Econ.Rproj, 01/10/2021  11:25 PM            46,058 README.md, 01/10/2021  11:25 PM            43,160 README_appendix.md, 11/28/2020  12:35 PM               762 README_end.md, 11/28/2020  12:35 PM            30,249 README_OLD.md, 11/28/2020  12:35 PM             3,221 README_pre.md, 01/10/2021  11:25 PM            42,069 README_toc.md, 11/28/2020  12:35 PM    <DIR>          regnonlin, 11/28/2020  12:35 PM               595 style.css, 11/28/2020  12:35 PM    <DIR>          summarize, 11/28/2020  12:35 PM    <DIR>          support, 11/28/2020  12:35 PM    <DIR>          tabgraph, 11/28/2020  12:35 PM               136 title.Rmd, 11/28/2020  12:35 PM             2,570 toc.css, 01/10/2021  11:16 PM             3,540 _bookdown.yml, 01/10/2021  11:27 PM    <DIR>          _bookdown_files, 11/28/2020  12:35 PM               151 _config.yml, 11/28/2020  12:35 PM    <DIR>          _data, 11/28/2020  12:35 PM    <DIR>          _file, 11/28/2020  12:35 PM    <DIR>          _img, 11/28/2020  12:35 PM    <DIR>          _log, 11/28/2020  12:35 PM             1,437 _output.yml, 11/28/2020  12:35 PM                97 _output_kniti_html.yaml, 11/28/2020  12:35 PM               166 _output_kniti_pdf.yaml,               30 File(s)        961,522 bytes,               25 Dir(s)  476,292,288,512 bytes free"
 \end{verbatim}
 
 \hypertarget{run-python-inside-a-conda-environment}{%
@@ -12927,7 +13776,7 @@ Activate conda env and run a line:
   \item
     Split, concatenate, subset, replace, substring strings
   \item
-    \textbf{r}: \emph{paste0() + sub() + gsub() + grepl() + sprintf() + tail() + strsplit() + basename() + dirname() + substring()}
+    \textbf{r}: \emph{paste0() + sub() + gsub() + grepl() + sprintf()}
   \end{itemize}
 \item
   \href{https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_mesh.html}{Meshgrid Matrices, Arrays and Scalars}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_mesh.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_mesh.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_mesh.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_mesh.html}{\textbf{html}}
@@ -13017,6 +13866,18 @@ Activate conda env and run a line:
   \end{itemize}
 \item
   \href{https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_string.html}{R Tibble Dataframe String Manipulations}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_string.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_string.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_string.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_string.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    There are multiple CEV files, each containing the same file structure but simulated
+  \item
+    with different parameters, gather a subset of columns from different files, and provide
+  \item
+    with correct attributes based on CSV file names.
+  \item
+    \textbf{r}: \emph{cbind(ls\_st, ls\_st) + as\_tibble(mt\_st)}
+  \end{itemize}
 \end{enumerate}
 
 \hypertarget{summarize-data-links}{%
@@ -13291,11 +14152,11 @@ Activate conda env and run a line:
   \end{itemize}
 \end{enumerate}
 
-\hypertarget{panel-links}{%
-\section{Panel links}\label{panel-links}}
+\hypertarget{panel-and-multi-dimensional-data-structures-links}{%
+\section{Panel and Multi-dimensional Data Structures links}\label{panel-and-multi-dimensional-data-structures-links}}
 
-\hypertarget{section-4.1-generate-and-joingenerate-and-join-links}{%
-\subsection{\texorpdfstring{\protect\hyperlink{generate-and-join}{Section 4.1 Generate and Join} links}{Section 4.1 Generate and Join links}}\label{section-4.1-generate-and-joingenerate-and-join-links}}
+\hypertarget{section-4.1-generate-gather-bind-and-joingenerate-gather-bind-and-join-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{generate-gather-bind-and-join}{Section 4.1 Generate, Gather, Bind and Join} links}{Section 4.1 Generate, Gather, Bind and Join links}}\label{section-4.1-generate-gather-bind-and-joingenerate-gather-bind-and-join-links}}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -13326,6 +14187,26 @@ Activate conda env and run a line:
   \item
     \textbf{dplyr}: \emph{filter() + rename(!!sym(vsta) := !!sym(vstb)) + mutate(var = rnom(n())) + left\_join(df, by=(c(`id'=`id', `vt'=`vt'))) + left\_join(df, by=setNames(c(`id', `vt'), c(`id', `vt'))) + bind\_rows()}
   \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_csv_gather.html}{R Gather Data Columns from Multiple CSV Files}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic//fs_csv_gather.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_csv_gather.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_csv_gather.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_csv_gather.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    There are multiple CEV files, each containing the same file structure but simulated
+  \item
+    with different parameters, gather a subset of columns from different files, and provide
+  \item
+    with correct attributes based on CSV file names.
+  \item
+    Separate numeric and string components of a string variable value apart.
+  \item
+    \textbf{r}: \emph{file() + writeLines() + readLines() + close() + gsub() + read.csv() + do.call(bind\_rows, ls\_df) + apply()}
+  \item
+    \textbf{tidyr}: \emph{separate()}
+  \item
+    \textbf{regex}: \emph{(?\textless={[}A-Za-z{]})(?={[}-0-9{]})}
+  \end{itemize}
 \end{enumerate}
 
 \hypertarget{section-4.2-wide-and-longwide-and-long-links}{%
@@ -13353,6 +14234,26 @@ Activate conda env and run a line:
     A matrix of ev given states, rows are states and cols are shocks. Convert to Long table with shock and state values and ev.
   \item
     \textbf{dplyr}: \emph{left\_join() + pivot\_longer(cols = starts\_with(`zi'), names\_to = c(`zi'), names\_pattern = paste0(``zi(.)''), values\_to = ``ev'')}
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{section-4.3-join-and-comparejoin-and-compare-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{join-and-compare}{Section 4.3 Join and Compare} links}{Section 4.3 Join and Compare links}}\label{section-4.3-join-and-comparejoin-and-compare-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/panel/join/htmlpdfr/fs_join_compare.html}{Find Closest Values Along Grids}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/join//fs_join_compare.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/join/htmlpdfr/fs_join_compare.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/panel/join/htmlpdfr/fs_join_compare.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/panel/join/htmlpdfr/fs_join_compare.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    There is an array (matrix) of values, find the index of the values closest to another value.
+  \item
+    \textbf{r}: \emph{do.call(bind\_rows, ls\_df)}
+  \item
+    \textbf{dplyr}: \emph{left\_join(tb, by=(c(`vr\_a'=`vr\_a', `vr\_b'=`vr\_b')))}
   \end{itemize}
 \end{enumerate}
 
@@ -13611,12 +14512,22 @@ Activate conda env and run a line:
 \hypertarget{code-and-development-links}{%
 \section{Code and Development links}\label{code-and-development-links}}
 
-\hypertarget{section-11.1-file-in-and-outfile-in-and-out-links}{%
-\subsection{\texorpdfstring{\protect\hyperlink{file-in-and-out}{Section 11.1 File in and Out} links}{Section 11.1 File in and Out links}}\label{section-11.1-file-in-and-outfile-in-and-out-links}}
+\hypertarget{section-11.1-files-in-and-outfiles-in-and-out-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{files-in-and-out}{Section 11.1 Files In and Out} links}{Section 11.1 Files In and Out links}}\label{section-11.1-files-in-and-outfiles-in-and-out-links}}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_path.html}{Decompose File Paths to Get Folder and Files Names}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/development/inout//fs_path.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_path.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_path.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_path.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Decompose file path and get file path folder names and file name.
+  \item
+    \textbf{r}: \emph{.Platform\$file.sep + tail() + strsplit() + basename() + dirname() + substring()}
+  \end{itemize}
 \item
   \href{https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_text_save.html}{Save Text to File, Read Text from File, Replace Text in File}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/development/inout//fs_text_save.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_text_save.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_text_save.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_text_save.html}{\textbf{html}}
 

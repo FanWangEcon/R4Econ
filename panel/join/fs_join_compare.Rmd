@@ -1,0 +1,154 @@
+---
+title: "Find Closest Values Along Grids"
+description: |
+  There is an array (matrix) of values, find the index of the values closest to another value.
+core:
+  - package: r
+    code: |
+      do.call(bind_rows, ls_df)
+  - package: dplyr
+    code: |
+      left_join(tb, by=(c('vr_a'='vr_a', 'vr_b'='vr_b')))
+date: 2021-01-10
+date_start: 2021-01-10
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+### Find Closest Neighbor on Grid
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+Using the [pivot_wider](https://tidyr.tidyverse.org/reference/pivot_wider.html) function in tidyr to reshape panel or other data structures
+
+#### Closest Neighbor on Grid
+
+There is a dataframe that provides $V(coh, a, cev)$ levels. There is another dataframe with $\hat{V}(coh, a)$, for each $coh, a$, find the $cev$ that such that the difference between $\hat{V}(coh, a)$ and $V(coh, a, cev)$ is minimized.
+
+$V$ and $\hat{V}$ information are stored in a dataframe in the [csv folder](https://github.com/FanWangEcon/R4Econ/tree/master/panel/join/_file/csv) in the current directory. In fact, we have one $V$ surface, but multiple $\hat{V}$ files, so we want to do the find closest neighbor exercise for each one of the several $\hat{V}$ files.
+
+The structure is as follows: (1) Load in the $V$ file, where $coh, a, cev$ are all variable attributes. (2) Merge with one $\hat{V}$ file. (3) Take the difference between the $V$ and $\hat{V}$ columns, and take the absolute value of the difference. (4) Group by $coh, a$, and sort to get the smallest absolute difference among the $cev$ possibilities, and slice out the row for the smallest. (5) Now We have $V(coh, a, cev^{\star}(coh, a))$. (6) Do this for each of the several $\hat{V}$ files. (7) Stack the results from 1 through 6 together, generate a column that identifies which simulation/exercise/counterfactual each of the $\hat{V}$ file comes from. (8) Visualize by plotting as subplot different $a$, $coh$ is x-axis, different $\hat{V}$ outcome are different lines, and $cev^{\star}\left(coh, a, \hat{V}\right)$ is the y-axis outcome.
+
+First, load the CEV file.
+
+```{r}
+# folder
+spt_root <- c('C:/Users/fan/R4Econ/panel/join/_file/csv')
+# cev surface file, the V file
+snm_cev_surface <- 'e_19E1NEp99r99_ITG_PE_cev_subsettest.csv'
+mt_cev_surface <- read.csv(file = file.path(spt_root, snm_cev_surface))
+tb_cev_surface <- as_tibble(mt_cev_surface) %>%
+  rename(EjVcev = EjV)
+```
+
+Second, loop over the V hat files, join V with V hat:
+
+```{r}
+ls_tb_cev_surfhat = vector(mode = "list", length = 4)
+for (it_simu_counter in c(1,2,3,4)) {
+
+    # conditionally change file names
+    if (it_simu_counter == 1) {
+        st_counter <- '19E1NEp99r99'
+    } else if (it_simu_counter == 2) {
+        st_counter <- '19E1NEp02r99'
+    } else if (it_simu_counter == 3) {
+        st_counter <- '19E1NEp02per02ger99'
+    } else if (it_simu_counter == 4) {
+        st_counter <- '19E1NEp02r02'
+    }
+    snm_v_hat <- paste0('e_', st_counter, '_ITG_PE_subsettest.csv')
+    
+    # Overall path to files
+    mt_v_hat <- read.csv(file = file.path(spt_root, snm_v_hat))
+    tb_v_hat <- as_tibble(mt_v_hat) %>%
+      select(prod_type_lvl, statesid, EjV)
+    
+    # Merge file using key 
+    tb_cev_surfhat <- tb_cev_surface %>%
+      left_join(tb_v_hat, by=(c('prod_type_lvl'='prod_type_lvl', 
+                                'statesid'='statesid'))) %>%
+      arrange(statesid, prod_type_lvl, cev_lvl) %>%
+      mutate(counter_policy = st_counter)
+    
+    # Store to list
+    ls_tb_cev_surfhat[[it_simu_counter]] <- tb_cev_surfhat
+}
+
+# Display
+kable(ls_tb_cev_surfhat[[1]][seq(1, 40, 5),]) %>% kable_styling_fc_wide()
+```
+
+Third, sort each file, and keep only the best match rows that minimize the absolute distance between *EjV* and *EjVcev*.
+
+```{r}
+ls_tb_cev_matched = vector(mode = "list", length = 4)
+for (it_simu_counter in c(1,2,3,4)) {
+
+    # Load merged file
+    tb_cev_surfhat <- ls_tb_cev_surfhat[[it_simu_counter]]
+
+    # Difference Column
+    tb_cev_surfhat <- tb_cev_surfhat %>% 
+      mutate(EjVcev_gap = abs(EjVcev - EjV))
+    
+    # Group by, Arrange and Slice, get lowest gap
+    tb_cev_matched <- tb_cev_surfhat %>% 
+      arrange(statesid, prod_type_lvl, EjVcev_gap) %>%
+      group_by(statesid, prod_type_lvl) %>%
+      slice_head(n=1)
+
+    # Store to list
+    ls_tb_cev_matched[[it_simu_counter]] <- tb_cev_matched
+}
+
+# Display
+kable(ls_tb_cev_matched[[2]][seq(1, 30, 1),]) %>% kable_styling_fc_wide()
+```
+
+Fourth, row_bind results together.
+
+```{r}
+# Single dataframe with all results
+tb_cev_matched_all_counter <- do.call(bind_rows, ls_tb_cev_matched)
+# check size
+print(dim(tb_cev_matched_all_counter))
+```
+
+Fifth, visualize results 
+
+```{r}
+# select four from the productivity types
+ar_prod_type_lvl_unique <- unique(tb_cev_matched_all_counter %>% pull(prod_type_lvl))
+ar_prod_type_lvl_selected <- ar_prod_type_lvl_unique[round(seq(1, length(ar_prod_type_lvl_unique), length.out=4))]
+# graph
+lineplot <- tb_cev_matched_all_counter %>%
+    filter(prod_type_lvl %in% ar_prod_type_lvl_selected) %>%
+    group_by(prod_type_st, cash_tt) %>%
+    ggplot(aes(x=cash_tt, y=cev_lvl,
+               colour=counter_policy, linetype=counter_policy, shape=counter_policy)) +
+        facet_wrap( ~ prod_type_st) +
+        geom_line() +
+        geom_point() +
+        labs(title = 'Visualizing the positions of matched values',
+             x = 'Resource Levels',
+             y = 'CEV',
+             caption = paste0('https://fanwangecon.github.io/',
+                              'R4Econ/panel/join/htmlpdfr/fs_join_compare.html')) 
+print(lineplot)
+```

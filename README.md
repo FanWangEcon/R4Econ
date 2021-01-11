@@ -168,7 +168,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ **purrr**: *pmap(func)*
 	+ **tidyr**: *unlist()*
 
-# 4  Panel
+# 4  Panel and Multi-dimensional Data Structures
 
 ## 4.1  Generate, Gather, Bind and Join
 
@@ -186,7 +186,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ with different parameters, gather a subset of columns from different files, and provide
 	+ with correct attributes based on CSV file names.
 	+ Separate numeric and string components of a string variable value apart.
-	+ **r**: *file() + writeLines() + readLines() + close() + gsub() + read.csv() + do.call(row_bind, ls_df) + apply()*
+	+ **r**: *file() + writeLines() + readLines() + close() + gsub() + read.csv() + do.call(bind_rows, ls_df) + apply()*
 	+ **tidyr**: *separate()*
 	+ **regex**: *(?<=[A-Za-z])(?=[-0-9])*
 
@@ -198,6 +198,13 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 2. [R Wide Data to Long Data Example (TIDYR Pivot Longer)](https://fanwangecon.github.io/R4Econ/panel/widelong/htmlpdfr/fs_pivotlonger.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong//fs_pivotlonger.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong/htmlpdfr/fs_pivotlonger.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong/htmlpdfr/fs_pivotlonger.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/panel/widelong/htmlpdfr/fs_pivotlonger.html)
 	+ A matrix of ev given states, rows are states and cols are shocks. Convert to Long table with shock and state values and ev.
 	+ **dplyr**: *left_join() + pivot_longer(cols = starts_with('zi'), names_to = c('zi'), names_pattern = paste0("zi(.)"), values_to = "ev")*
+
+## 4.3  Join and Compare
+
+1. [Find Closest Values Along Grids](https://fanwangecon.github.io/R4Econ/panel/join/htmlpdfr/fs_join_compare.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/panel/join//fs_join_compare.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/panel/join/htmlpdfr/fs_join_compare.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/panel/join/htmlpdfr/fs_join_compare.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/panel/join/htmlpdfr/fs_join_compare.html)
+	+ There is an array (matrix) of values, find the index of the values closest to another value.
+	+ **r**: *do.call(bind_rows, ls_df)*
+	+ **dplyr**: *left_join(tb, by=(c('vr_a'='vr_a', 'vr_b'='vr_b')))*
 
 # 5  Linear Regression
 

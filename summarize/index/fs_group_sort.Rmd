@@ -35,14 +35,24 @@ try(source("../../.Rprofile"))
 
 #### Get Highest Values from Groups
 
-There is a dataframe with a grouping variable. Get N rows that have the highest sorted value for another numeric variable. In the example below, group by *cyl* and get the cars with the highest *mpg* in each *cyl* group.
+There is a dataframe with a grouping variable. Get N rows that have the highest sorted value for another numeric variable. In the example below, group by *cyl* and get the cars with the lowest *mpg* in each *cyl* group.
+
+Show all values.
 
 ```{r}
-# use mtcars
+kable(mtcars %>% arrange(cyl, mpg)) %>% kable_styling_fc()
+```
+
+Three groups min mpg each group: 
+
+```{r}
+# use mtcars: slice_head gets the lowest sorted value
 df_groupby_top_mpg <- mtcars %>%
   arrange(cyl, mpg) %>%
   group_by(cyl) %>%
-  slice_head(n=1)
+  slice_head(n=1) %>%
+  select(cyl, mpg)
+
 # display
 kable(df_groupby_top_mpg) %>% kable_styling_fc()
 ```
