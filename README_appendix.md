@@ -156,7 +156,7 @@
 	+ **purrr**: *pmap(func)*
 	+ **tidyr**: *unlist()*
 
-## Panel and Multi-dimensional Data Structures links
+## Multi-dimensional Data Structures links
 
 ### [Section 4.1 Generate, Gather, Bind and Join][Generate, Gather, Bind and Join] links
 
@@ -211,7 +211,7 @@
 	+ Post multiple regressions, fraction of outcome variables' variances explained by multiple subsets of right hand side variables.
 	+ **dplyr**: *gather() + group_by(var) + mutate_at(vars, funs(mean = mean(.))) + rowSums(mat*mat) + mutate_if(is.numeric, funs(frac = (./value_var)))*
 
-## Nonlinear Regression links
+## Nonlinear and Other Regressions links
 
 ### [Section 6.1 Logit Regression][Logit Regression] links
 
@@ -270,7 +270,13 @@
 	+ Generate additional lines for plots successively, record successively, and plot all steps, or initial steps results.
 	+ **r**: *plot() + curve() + legend() + title() + axis() + par() + recordPlot()*
 
-### [Section 9.2 Write and Read Plots][Write and Read Plots] links
+### [Section 9.2 GGplot Line Related Plots][GGplot Line Related Plots] links
+
+1. [GGplot Multiple Categorical Variables With Continuous Variable](https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline//fs_ggline_mgrp_ncts.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.html)
+	+ One category is subplot, one category is line-color, one category is line-type.
+	+ **ggplot**: *ggplot() + facet_wrap() + geom_smooth() + geom_hline() + scale_colour_manual() + scale_shape_discrete() + scale_linetype_manual() + scale_x_continuous() + scale_y_continuous() + theme_bw() + theme()*
+
+### [Section 9.3 Write and Read Plots][Write and Read Plots] links
 
 1. [Base R Save Images At Different Sizes](https://fanwangecon.github.io/R4Econ/tabgraph/inout/htmlpdfr/fs_img_io.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/inout//fs_img_io.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/inout/htmlpdfr/fs_img_io.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/inout/htmlpdfr/fs_img_io.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/tabgraph/inout/htmlpdfr/fs_img_io.html)
 	+ Base R store image core, add legends/titles/labels/axis of different sizes to save figures of different sizes.

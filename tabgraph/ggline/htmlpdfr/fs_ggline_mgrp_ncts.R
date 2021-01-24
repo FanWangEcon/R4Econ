@@ -1,0 +1,132 @@
+## ----global_options, include = FALSE-----------------------------------------------------------------
+try(source("../../.Rprofile"))
+
+
+## ----------------------------------------------------------------------------------------------------
+# Libraries
+# library(tidyverse)
+
+# Load in CSV
+bl_save_img <- FALSE
+spt_csv_root <- c('C:/Users/fan/R4Econ/tabgraph/ggline/_file/')
+spt_img_root <- c('G:/repos/R4Econ/tabgraph/ggline/_file/')
+spn_cev_data <- paste0(spt_csv_root, 'cev_data.csv')
+spn_cev_graph <- paste0(spt_img_root, 'cev_graph.png')
+spn_cev_graph_eps <- paste0(spt_img_root, 'cev_graph.eps')
+df_cev_graph <- as_tibble(read.csv(spn_cev_data)) %>% select(-X)
+
+# Dataset subsetting ------
+
+# Line Patterns and Colors ------
+# ar_st_age_group_leg_labels <- c("\nGE\n\u03B3=0.42\n", "\nGE\n\u03B3=0.56\n",
+#                                 "\nPE\n\u03B3=0.42\n", "\nPE\n\u03B3=0.42\n")
+ar_st_age_group_leg_labels <- c(bquote("GE,"~gamma == .(0.42)),
+                                bquote("GE,"~gamma == .(0.56)),
+                                bquote("PE,"~gamma == .(0.42)),
+                                bquote("PE,"~gamma == .(0.56)))
+ar_st_colours <- c("#85ccff", "#026aa3", "#85ccff", "#026aa3")
+ar_st_linetypes <- c("solid", "solid", "longdash", "longdash")
+
+# Labels and Other Strings -------
+st_title <- ''
+st_x <- 'Wealth'
+st_y <- 'Welfare Gain (% CEV)'
+st_subtitle <- paste0('https://fanwangecon.github.io/',
+                      'R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.html')
+
+# ar_st_age_group_leg_labels <- c("C\u2013Optimal", "V\u2013Optimal")
+
+prod_type_recode <- c("Productivity Type\n(-1 sd)" = "8993",
+                      "Productivity Type\n(mean)" = "10189",
+                      "Productivity Type\n(+1 sd)" = "12244")
+
+x.labels <- c('0', '200k', '400k', '600k', '800k')
+x.breaks <- c(0,
+              5,
+              10,
+              15,
+              20)
+x.min <- 0
+x.max <- 20
+
+# y.labels <- c('-0.01',
+#               '\u2191\u2191\nWelfare\nGain\n\nCEV=0\n\nWelfare\nLoss\n\u2193\u2193',
+#               '+0.01', '+0.02', '+0.03', '+0.04','+0.05')
+y.labels <- c('-0.5 pp',
+              'CEV=0',
+              '+0.5 pp', '+1.0 pp', '+1.5 pp', '+2.0 pp','+2.5 pp')
+y.breaks <- c(-0.01, 0, 0.01, 0.02, 0.03, 0.04, 0.05)
+y.min <- -0.011
+y.max <- 0.051
+
+# data change -------
+df_cev_graph <- df_cev_graph %>%
+  filter(across(counter_policy, ~ grepl('70|42', .))) %>%
+  mutate(prod_type_lvl = as.factor(prod_type_lvl)) %>%
+  mutate(prod_type_lvl = fct_recode(prod_type_lvl, !!!prod_type_recode))
+
+# graph ------
+pl_cev <- df_cev_graph %>%
+  group_by(prod_type_st, cash_tt) %>%
+  ggplot(aes(x=cash_tt, y=cev_lvl,
+             colour=counter_policy, linetype=counter_policy, shape=counter_policy)) +
+  facet_wrap( ~ prod_type_lvl, nrow=1) +
+  geom_smooth(method="auto", se=FALSE, fullrange=FALSE, level=0.95)
+
+# labels
+pl_cev <- pl_cev +
+  labs(x = st_x,
+       y = st_y,
+       subtitle = st_subtitle)
+
+# set shapes and colors
+pl_cev <- pl_cev +
+  scale_colour_manual(values=ar_st_colours, labels=ar_st_age_group_leg_labels) +
+  scale_shape_discrete(labels=ar_st_age_group_leg_labels) +
+  scale_linetype_manual(values=ar_st_linetypes, labels=ar_st_age_group_leg_labels) +
+  scale_x_continuous(labels = x.labels, breaks = x.breaks,
+                     limits = c(x.min, x.max)) +
+  scale_y_continuous(labels = y.labels, breaks = y.breaks,
+                     limits = c(y.min, y.max))
+
+# Horizontal line
+pl_cev <- pl_cev +
+  geom_hline(yintercept=0, linetype='solid', colour="black", size =1)
+  # geom_hline(yintercept=0, linetype='dotted', colour="black", size=2)
+
+# theme
+pl_cev <- pl_cev +
+  theme_bw() +
+  theme(text = element_text(size = 10),
+       legend.title = element_blank(),
+       legend.position = c(0.16, 0.65),
+       legend.background = element_rect(fill = "white", colour = "black", linetype='solid'),
+       legend.key.width = unit(1.5, "cm"))
+
+
+# Save Image Outputs -----
+if (bl_save_img) {
+  png(spn_cev_graph,
+      width = 160,
+      height = 105, units='mm',
+      res = 150, pointsize=7)
+  ggsave(
+    spn_cev_graph_eps,
+    plot = last_plot(),
+    device = 'eps',
+    path = NULL,
+    scale = 1,
+    width = 160,
+    height =105,
+    units = c("mm"),
+    dpi = 150,
+    limitsize = TRUE
+  )
+
+}
+print(pl_cev)
+if (bl_save_img) {
+  dev.off()
+}
+
+
