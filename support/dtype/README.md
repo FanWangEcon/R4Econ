@@ -4,8 +4,9 @@
 
 ### Numeric Structures
 
-- *fl*: float
 - *it*: integer
+- *fl*: float
+- *cx*: complex
 - *ar*: single dimensional array
 - *mt*: two dimensional matrix
 - *ts*: three dimensional tensor

@@ -147,7 +147,7 @@
 
 \title{Data Structures, Estimation and Optimization with R}
 \author{Fan Wang}
-\date{2021-01-10}
+\date{2021-02-02}
 
 \begin{document}
 \maketitle
@@ -177,8 +177,8 @@ Please contact \href{https://fanwangecon.github.io/}{FanWangEcon} for issues or 
 \hypertarget{list}{%
 \section{List}\label{list}}
 
-\hypertarget{multiple-dimensional-list}{%
-\subsection{Multiple Dimensional List}\label{multiple-dimensional-list}}
+\hypertarget{lists}{%
+\subsection{Lists}\label{lists}}
 
 \begin{quote}
 Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R Code Examples} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository (\href{https://fanwangecon.github.io/Stat4Econ/bookdown}{bookdown site}).
@@ -201,6 +201,63 @@ Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon
 \item
   r named list to string
 \end{itemize}
+
+\hypertarget{iteratively-build-up-a-list-of-strings}{%
+\subsubsection{Iteratively Build Up a List of Strings}\label{iteratively-build-up-a-list-of-strings}}
+
+Build up a list of strings, where the strings share common components. Iteratre over lists to generate variations in elements of the string list.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# common string components}
+\NormalTok{st\_base\_name }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}snwx\_v\_planner\_docdense\textquotesingle{}}
+\NormalTok{st\_base\_middle }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}b1\_xi0\_manna\_88\textquotesingle{}}
+\CommentTok{\# numeric values to loop over}
+\NormalTok{ar\_st\_beta\_val }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}bt60\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}bt70\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}bt80\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}bt90\textquotesingle{}}\NormalTok{)}
+\NormalTok{ar\_st\_edu\_type }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}e1lm2\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}e2hm2\textquotesingle{}}\NormalTok{)}
+
+\CommentTok{\# initialize string list}
+\NormalTok{ls\_snm }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\AttributeTok{mode =} \StringTok{"list"}\NormalTok{, }\AttributeTok{length =} \FunctionTok{length}\NormalTok{(ar\_st\_beta\_val)}\SpecialCharTok{*}\FunctionTok{length}\NormalTok{(ar\_st\_edu\_type))}
+
+\CommentTok{\# generate list }
+\NormalTok{it\_ctr }\OtherTok{=} \DecValTok{0}
+\ControlFlowTok{for}\NormalTok{ (st\_beta\_val }\ControlFlowTok{in}\NormalTok{ ar\_st\_beta\_val) \{}
+  \ControlFlowTok{for}\NormalTok{ (st\_edu\_type }\ControlFlowTok{in}\NormalTok{ ar\_st\_edu\_type) \{}
+\NormalTok{    it\_ctr }\OtherTok{=}\NormalTok{ it\_ctr }\SpecialCharTok{+} \DecValTok{1}
+    \CommentTok{\# snm\_file\_name \textless{}{-} \textquotesingle{}snwx\_v\_planner\_docdense\_e2hm2\_b1\_xi0\_manna\_88\_bt90\textquotesingle{}}
+\NormalTok{    snm\_file\_name }\OtherTok{\textless{}{-}} \FunctionTok{paste}\NormalTok{(st\_base\_name, st\_edu\_type, st\_base\_middle, st\_beta\_val, }\AttributeTok{sep =}\StringTok{\textquotesingle{}\_\textquotesingle{}}\NormalTok{)}
+\NormalTok{    ls\_snm[it\_ctr] }\OtherTok{\textless{}{-}}\NormalTok{ snm\_file\_name}
+\NormalTok{  \}}
+\NormalTok{\}}
+
+\CommentTok{\# print}
+\ControlFlowTok{for}\NormalTok{ (snm }\ControlFlowTok{in}\NormalTok{ ls\_snm) \{}
+  \FunctionTok{print}\NormalTok{(snm)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "snwx_v_planner_docdense_e1lm2_b1_xi0_manna_88_bt60"
+## [1] "snwx_v_planner_docdense_e2hm2_b1_xi0_manna_88_bt60"
+## [1] "snwx_v_planner_docdense_e1lm2_b1_xi0_manna_88_bt70"
+## [1] "snwx_v_planner_docdense_e2hm2_b1_xi0_manna_88_bt70"
+## [1] "snwx_v_planner_docdense_e1lm2_b1_xi0_manna_88_bt80"
+## [1] "snwx_v_planner_docdense_e2hm2_b1_xi0_manna_88_bt80"
+## [1] "snwx_v_planner_docdense_e1lm2_b1_xi0_manna_88_bt90"
+## [1] "snwx_v_planner_docdense_e2hm2_b1_xi0_manna_88_bt90"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# if string in string}
+\FunctionTok{grepl}\NormalTok{(}\StringTok{\textquotesingle{}snwx\_v\_planner\textquotesingle{}}\NormalTok{, snm)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
 
 \hypertarget{named-list-of-matrixes}{%
 \subsubsection{Named List of Matrixes}\label{named-list-of-matrixes}}
@@ -764,6 +821,21 @@ Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon
 \hypertarget{array-slicing}{%
 \subsubsection{Array Slicing}\label{array-slicing}}
 
+\hypertarget{get-a-subset-of-array-elements-n-cuts-from-m-points}{%
+\paragraph{Get a Subset of Array Elements, N Cuts from M Points}\label{get-a-subset-of-array-elements-n-cuts-from-m-points}}
+
+There is an array with M elements, get N elements from the M elements.
+
+First cut including the starting and ending points.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{it\_M }\OtherTok{\textless{}{-}} \DecValTok{5}
+\NormalTok{it\_N }\OtherTok{\textless{}{-}} \DecValTok{4}
+\NormalTok{ar\_all\_elements }\OtherTok{=} \FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{10}\NormalTok{,}\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
 \hypertarget{remove-elements-of-array}{%
 \paragraph{Remove Elements of Array}\label{remove-elements-of-array}}
 
@@ -885,8 +957,68 @@ Select the first and the last element of an array. The extreme values.
 ## [1]  1 -1 NA 10 NA
 \end{verbatim}
 
-\hypertarget{notations}{%
-\subsubsection{Notations}\label{notations}}
+\hypertarget{complex-number}{%
+\subsubsection{Complex Number}\label{complex-number}}
+
+Handling numbers with real and imaginary components. Two separate issues, given an array of numbers that includes real as well as imaginary numbers, keep subset that only has real components. Additionally, for the same array, generate an equal length version of the array that includes the real components of all numbers.
+
+Define complex numbers.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Define a complex number}
+\NormalTok{cx\_number\_a }\OtherTok{\textless{}{-}} \DecValTok{0}\FloatTok{+0.0460246857561777}\NormalTok{i}
+\CommentTok{\# Define another complex number}
+\NormalTok{cx\_number\_b }\OtherTok{\textless{}{-}} \FunctionTok{complex}\NormalTok{(}\AttributeTok{real =} \FloatTok{0.02560982}\NormalTok{, }\AttributeTok{imaginary =} \FloatTok{0.0460246857561777}\NormalTok{)}
+\CommentTok{\# An array of numbers some of which are complex}
+\NormalTok{ar\_cx\_number }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.02560982+0.000000000}\NormalTok{i, }\FloatTok{0.00000000+0.044895305}\NormalTok{i, }
+                  \FloatTok{0.00000000+0.009153429}\NormalTok{i, }\FloatTok{0.05462045+0.000000000}\NormalTok{i, }
+                  \FloatTok{0.00000000+0.001198538}\NormalTok{i, }\FloatTok{0.00000000+0.019267050}\NormalTok{i)}
+\end{Highlighting}
+\end{Shaded}
+
+Extract real components from a complex array.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# equi{-}length real component}
+\NormalTok{ar\_fl\_number\_re }\OtherTok{\textless{}{-}} \FunctionTok{Re}\NormalTok{(ar\_cx\_number)}
+\FunctionTok{print}\NormalTok{(ar\_fl\_number\_re)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.02560982 0.00000000 0.00000000 0.05462045 0.00000000 0.00000000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# equi{-}length img component}
+\NormalTok{ar\_fl\_number\_im }\OtherTok{\textless{}{-}} \FunctionTok{Im}\NormalTok{(ar\_cx\_number)}
+\FunctionTok{print}\NormalTok{(ar\_fl\_number\_im)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.000000000 0.044895305 0.009153429 0.000000000 0.001198538 0.019267050
+\end{verbatim}
+
+Keep only real elements of array.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# subset of array that is real}
+\NormalTok{ar\_fl\_number\_re\_subset }\OtherTok{\textless{}{-}} \FunctionTok{Re}\NormalTok{(ar\_cx\_number[}\FunctionTok{Re}\NormalTok{(ar\_cx\_number)}\SpecialCharTok{!=}\DecValTok{0}\NormalTok{])}
+\FunctionTok{print}\NormalTok{(ar\_fl\_number\_re\_subset)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.02560982 0.05462045
+\end{verbatim}
+
+\hypertarget{number-formatting}{%
+\subsubsection{Number Formatting}\label{number-formatting}}
 
 \hypertarget{e-notation}{%
 \paragraph{e notation}\label{e-notation}}
@@ -1987,14 +2119,14 @@ Show what is in the table: 1, column and row names; 2, contents inside table.
 \end{Shaded}
 
 \begin{verbatim}
-##   [1] "1"   "2"   "3"   "4"   "5"   "6"   "7"   "8"   "9"   "10"  "11"  "12"  "13"  "14"  "15"  "16"  "17"  "18"  "19" 
-##  [20] "20"  "21"  "22"  "23"  "24"  "25"  "26"  "27"  "28"  "29"  "30"  "31"  "32"  "33"  "34"  "35"  "36"  "37"  "38" 
-##  [39] "39"  "40"  "41"  "42"  "43"  "44"  "45"  "46"  "47"  "48"  "49"  "50"  "51"  "52"  "53"  "54"  "55"  "56"  "57" 
-##  [58] "58"  "59"  "60"  "61"  "62"  "63"  "64"  "65"  "66"  "67"  "68"  "69"  "70"  "71"  "72"  "73"  "74"  "75"  "76" 
-##  [77] "77"  "78"  "79"  "80"  "81"  "82"  "83"  "84"  "85"  "86"  "87"  "88"  "89"  "90"  "91"  "92"  "93"  "94"  "95" 
-##  [96] "96"  "97"  "98"  "99"  "100" "101" "102" "103" "104" "105" "106" "107" "108" "109" "110" "111" "112" "113" "114"
-## [115] "115" "116" "117" "118" "119" "120" "121" "122" "123" "124" "125" "126" "127" "128" "129" "130" "131" "132" "133"
-## [134] "134" "135" "136" "137" "138" "139" "140" "141" "142" "143" "144" "145" "146" "147" "148" "149" "150"
+##   [1] "1"   "2"   "3"   "4"   "5"   "6"   "7"   "8"   "9"   "10"  "11"  "12"  "13"  "14"  "15"  "16"  "17"  "18"  "19"  "20" 
+##  [21] "21"  "22"  "23"  "24"  "25"  "26"  "27"  "28"  "29"  "30"  "31"  "32"  "33"  "34"  "35"  "36"  "37"  "38"  "39"  "40" 
+##  [41] "41"  "42"  "43"  "44"  "45"  "46"  "47"  "48"  "49"  "50"  "51"  "52"  "53"  "54"  "55"  "56"  "57"  "58"  "59"  "60" 
+##  [61] "61"  "62"  "63"  "64"  "65"  "66"  "67"  "68"  "69"  "70"  "71"  "72"  "73"  "74"  "75"  "76"  "77"  "78"  "79"  "80" 
+##  [81] "81"  "82"  "83"  "84"  "85"  "86"  "87"  "88"  "89"  "90"  "91"  "92"  "93"  "94"  "95"  "96"  "97"  "98"  "99"  "100"
+## [101] "101" "102" "103" "104" "105" "106" "107" "108" "109" "110" "111" "112" "113" "114" "115" "116" "117" "118" "119" "120"
+## [121] "121" "122" "123" "124" "125" "126" "127" "128" "129" "130" "131" "132" "133" "134" "135" "136" "137" "138" "139" "140"
+## [141] "141" "142" "143" "144" "145" "146" "147" "148" "149" "150"
 \end{verbatim}
 
 \begin{Shaded}
@@ -2224,7 +2356,7 @@ Now we generate scatter plot based on the combined factors
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-43-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-48-1} \end{center}
 
 \hypertarget{drawly-random-rows}{%
 \subsection{Drawly Random Rows}\label{drawly-random-rows}}
@@ -2495,7 +2627,7 @@ Now we generate scatter plot based on the combined factors
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-48-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-53-1} \end{center}
 
 \hypertarget{generate-na-values-if-variables-have-certain-value}{%
 \subsubsection{Generate NA values if Variables have Certain Value}\label{generate-na-values-if-variables-have-certain-value}}
@@ -2650,7 +2782,7 @@ Now we generate scatter plot based on the combined factors, but now with the NA 
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-50-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-55-1} \end{center}
 
 \hypertarget{approximate-values-comparison}{%
 \subsubsection{Approximate Values Comparison}\label{approximate-values-comparison}}
@@ -4195,13 +4327,12 @@ This is the tabular version of results
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] "S.country"      "indi.id"        "cal_m12_c1"     "cal_m12_c2"     "cal_m12t24_c0"  "cal_m12t24_c1" 
-##  [7] "cal_m3_c1"      "cal_m3_c2"      "cal_m3_c3"      "cal_m3_c4"      "cal_m3_c5"      "cal_m3_c6"     
-## [13] "cal_m3_c7"      "cal_m3_c8"      "cal_m6_c1"      "cal_m6_c2"      "cal_m6_c3"      "cal_m6_c4"     
-## [19] "cal_m8t24_c0"   "cal_m8t24_c1"   "prot_m12_c1"    "prot_m12_c2"    "prot_m12t24_c0" "prot_m12t24_c1"
-## [25] "prot_m3_c1"     "prot_m3_c2"     "prot_m3_c3"     "prot_m3_c4"     "prot_m3_c5"     "prot_m3_c6"    
-## [31] "prot_m3_c7"     "prot_m3_c8"     "prot_m6_c1"     "prot_m6_c2"     "prot_m6_c3"     "prot_m6_c4"    
-## [37] "prot_m8t24_c0"  "prot_m8t24_c1"
+##  [1] "S.country"      "indi.id"        "cal_m12_c1"     "cal_m12_c2"     "cal_m12t24_c0"  "cal_m12t24_c1"  "cal_m3_c1"     
+##  [8] "cal_m3_c2"      "cal_m3_c3"      "cal_m3_c4"      "cal_m3_c5"      "cal_m3_c6"      "cal_m3_c7"      "cal_m3_c8"     
+## [15] "cal_m6_c1"      "cal_m6_c2"      "cal_m6_c3"      "cal_m6_c4"      "cal_m8t24_c0"   "cal_m8t24_c1"   "prot_m12_c1"   
+## [22] "prot_m12_c2"    "prot_m12t24_c0" "prot_m12t24_c1" "prot_m3_c1"     "prot_m3_c2"     "prot_m3_c3"     "prot_m3_c4"    
+## [29] "prot_m3_c5"     "prot_m3_c6"     "prot_m3_c7"     "prot_m3_c8"     "prot_m6_c1"     "prot_m6_c2"     "prot_m6_c3"    
+## [36] "prot_m6_c4"     "prot_m8t24_c0"  "prot_m8t24_c1"
 \end{verbatim}
 
 \begin{Shaded}
@@ -4546,7 +4677,7 @@ First, we will generate a test score dataset, directly from string. Below we typ
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-96-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-101-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4558,7 +4689,7 @@ First, we will generate a test score dataset, directly from string. Below we typ
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-97-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-102-1} \end{center}
 
 \hypertarget{summarize-multiple-variables}{%
 \section{Summarize Multiple Variables}\label{summarize-multiple-variables}}
@@ -6691,8 +6822,8 @@ eval\_dplyr\_mutate & eval\_dplyr\_mutate\_hcode & eval\_dplyr\_mutate\_pmap & e
 \end{tabular}}
 \end{table}
 
-\hypertarget{panel-and-multi-dimensional-data-structures}{%
-\chapter{Panel and Multi-dimensional Data Structures}\label{panel-and-multi-dimensional-data-structures}}
+\hypertarget{multi-dimensional-data-structures}{%
+\chapter{Multi-dimensional Data Structures}\label{multi-dimensional-data-structures}}
 
 \hypertarget{generate-gather-bind-and-join}{%
 \section{Generate, Gather, Bind and Join}\label{generate-gather-bind-and-join}}
@@ -8215,7 +8346,7 @@ Fifth, visualize results
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-146-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-151-1} \end{center}
 
 \hypertarget{linear-regression}{%
 \chapter{Linear Regression}\label{linear-regression}}
@@ -9968,7 +10099,7 @@ hgt & 77.8 & 73.13353 & 70.97578 & 71.45823\\
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-192-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-197-1} \end{center}
 
 \hypertarget{additional-decomposition-testings}{%
 \subsubsection{Additional Decomposition Testings}\label{additional-decomposition-testings}}
@@ -10040,8 +10171,8 @@ wgt & 8807.87656 & 8807.87656 & 2.965693e+06 & 2949187.6357 & 0.9944345\\
 \end{tabular}
 \end{table}
 
-\hypertarget{nonlinear-regression}{%
-\chapter{Nonlinear Regression}\label{nonlinear-regression}}
+\hypertarget{nonlinear-and-other-regressions}{%
+\chapter{Nonlinear and Other Regressions}\label{nonlinear-and-other-regressions}}
 
 \hypertarget{logit-regression}{%
 \section{Logit Regression}\label{logit-regression}}
@@ -10344,21 +10475,21 @@ Given the x-variables included in the logit regression, how do they relate to A\
 ## [[1]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-196-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-201-1} \end{center}
 
 \begin{verbatim}
 ## 
 ## [[2]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-196-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-201-2} \end{center}
 
 \begin{verbatim}
 ## 
 ## [[3]]
 \end{verbatim}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-196-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-201-3} \end{center}
 
 \hypertarget{quantile-regression}{%
 \section{Quantile Regression}\label{quantile-regression}}
@@ -10370,10 +10501,12 @@ Given the x-variables included in the logit regression, how do they relate to A\
 Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R Code Examples} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository (\href{https://fanwangecon.github.io/Stat4Econ/bookdown}{bookdown site}).
 \end{quote}
 
-\hypertarget{estimate-mean-and-quantile-coefficients-using-mtcars-dataset}{%
-\subsubsection{Estimate Mean and Quantile Coefficients using mtcars dataset}\label{estimate-mean-and-quantile-coefficients-using-mtcars-dataset}}
+\hypertarget{estimate-mean-and-conditional-quantile-coefficients-using-mtcars-dataset}{%
+\subsubsection{Estimate Mean and Conditional Quantile Coefficients using mtcars dataset}\label{estimate-mean-and-conditional-quantile-coefficients-using-mtcars-dataset}}
 
-First, estimate the mean regression:
+Here, we conduct tests for using the \href{https://cran.r-project.org/web/packages/quantreg/index.html}{quantreg} package, using the built-in \href{https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/mtcars.html}{mtcars} dataset.
+
+First, estimate the mean (OLS) regression:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10406,7 +10539,7 @@ First, estimate the mean regression:
 ## F-statistic: 28.85 on 4 and 27 DF,  p-value: 2.13e-09
 \end{verbatim}
 
-Now estimate the quantile regressions at various quantiles, standard error obtained via bootstrap. Note that there is a gradient in the quantile hp coefficients as well as disp. disp sign reverses, also the coefficient on factor am is different by quantiles:
+Now estimate conditional quantile regressions (not that this remains linear) at various quantiles, standard error obtained via bootstrap. Note that there is a gradient in the quantile hp coefficients as well as disp. disp sign reverses, also the coefficient on factor am is different by quantiles:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10457,8 +10590,8 @@ Now estimate the quantile regressions at various quantiles, standard error obtai
 ## factor(am)1  7.91402  2.36999    3.33926  0.00239
 \end{verbatim}
 
-\hypertarget{test-quantile-coefficients-if-different}{%
-\subsubsection{Test Quantile Coefficients if Different}\label{test-quantile-coefficients-if-different}}
+\hypertarget{test-conditional-quantile-coefficients-if-different}{%
+\subsubsection{Test Conditional Quantile Coefficients if Different}\label{test-conditional-quantile-coefficients-if-different}}
 
 Use the rq.anova function frm the quantile regression packge to conduct WALD test. Remember WALD test says given unrestricted model's estimates, test where null is that the coefficients satisfy some linear restrictions.
 
@@ -10467,10 +10600,15 @@ To test, use the returned object from running rq with different numbers of quant
 Note that quantile tests are ``parallel line'' tests. Meaning that we should except to have different x-intercepts for each quantile, because they represents the levels of the conditional shocks distributions. However, if quantile coefficients for the slopes are all the same, then there are no quantile specific effects, mean effects would be sufficient.
 
 see:
-- \href{https://stackoverflow.com/questions/32743758/anova-rq-in-quantreg-package-in-r}{anova.rq() in quantreg package in R}
 
-\hypertarget{test-statistical-difference-between-0.25-and-0.50}{%
-\paragraph{Test Statistical Difference between 0.25 and 0.50}\label{test-statistical-difference-between-0.25-and-0.50}}
+\begin{itemize}
+\tightlist
+\item
+  \href{https://stackoverflow.com/questions/32743758/anova-rq-in-quantreg-package-in-r}{anova.rq() in quantreg package in R}
+\end{itemize}
+
+\hypertarget{test-statistical-difference-between-25th-and-50th-conditional-quantiles}{%
+\paragraph{Test Statistical Difference between 25th and 50th Conditional Quantiles}\label{test-statistical-difference-between-25th-and-50th-conditional-quantiles}}
 
 Given the quantile estimates above, the difference between 0.25 and 0.50 quantiles exists, but are they sufficiently large to be statistically different? What is the p-value? Reviewing the results below, they are not statistically different.
 
@@ -10516,8 +10654,8 @@ Second, joint = False:
 ## factor(am)1  1       63  1.0957 0.2992
 \end{verbatim}
 
-\hypertarget{test-statistical-difference-between-0.25-0.50-and-0.75}{%
-\paragraph{Test Statistical Difference between 0.25, 0.50 and 0.75}\label{test-statistical-difference-between-0.25-0.50-and-0.75}}
+\hypertarget{test-statistical-difference-between-25th-50th-and-75th-conditional-quantiles}{%
+\paragraph{Test Statistical Difference between 25th, 50th, and 75th Conditional Quantiles}\label{test-statistical-difference-between-25th-50th-and-75th-conditional-quantiles}}
 
 The 1st quartile and median do not seem to be statistically different, now include the 3rd quartile. As seen earlier, the quartiles jointly show a gradient. Now, we can see that idisp, hp and am are separately have statistically different
 
@@ -11185,7 +11323,7 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-211-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-216-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -11203,7 +11341,7 @@ Compare randomly drawn normal shock mean and known mean. How does simulated mean
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-211-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-216-2} \end{center}
 
 \hypertarget{integration-by-symmetric-uneven-rectangle}{%
 \subsubsection{Integration By Symmetric Uneven Rectangle}\label{integration-by-symmetric-uneven-rectangle}}
@@ -11262,7 +11400,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-212-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-217-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -11280,7 +11418,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-212-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-217-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -11298,7 +11436,7 @@ Resulting integration is rectangle based, but rectangle width differ. The rectan
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-212-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-217-3} \end{center}
 
 \hypertarget{integration-by-constant-width-rectangle-trapezoidal-rule}{%
 \subsubsection{Integration By Constant Width Rectangle (Trapezoidal rule)}\label{integration-by-constant-width-rectangle-trapezoidal-rule}}
@@ -11353,7 +11491,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-213-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-218-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -11371,7 +11509,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-213-2} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-218-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -11389,7 +11527,7 @@ This is implementing even width recentagle, even along x-axix. Rectangle width a
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-213-3} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-218-3} \end{center}
 
 \hypertarget{analytical-solutions}{%
 \section{Analytical Solutions}\label{analytical-solutions}}
@@ -11831,7 +11969,7 @@ How does Atkinson Inequality measure change with respect to a vector of random d
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-224-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-229-1} \end{center}
 
 Now with the one person has the wealth of all others in the vector times 10:
 
@@ -11855,7 +11993,7 @@ Now with the one person has the wealth of all others in the vector times 10:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-225-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-230-1} \end{center}
 
 The Uniform Results, since allocations are uniform, zero for all:
 
@@ -11879,7 +12017,7 @@ The Uniform Results, since allocations are uniform, zero for all:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-226-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-231-1} \end{center}
 
 \hypertarget{analyzing-equation-mechanics}{%
 \subsubsection{Analyzing Equation Mechanics}\label{analyzing-equation-mechanics}}
@@ -12068,7 +12206,480 @@ Note that many more A grid points are needed to fully plot out the leontief line
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-228-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-233-1} \end{center}
+
+\hypertarget{location-population-and-pollution}{%
+\subsection{Location, Population, and Pollution}\label{location-population-and-pollution}}
+
+\begin{quote}
+Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R Code Examples} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository (\href{https://fanwangecon.github.io/Stat4Econ/bookdown}{bookdown site}).
+\end{quote}
+
+\hypertarget{simulate-population-distribution-over-location-and-demographics}{%
+\subsubsection{Simulate Population Distribution over Location and Demographics}\label{simulate-population-distribution-over-location-and-demographics}}
+
+Use the binomial distribution to generate heterogenous demographic break-down by location. There are N demographic cells, and the binomial distribution provides the probability mass in each of the N cell. Different bernoulli ``win'' chance for each location. There is also probability distribution over population in each location.
+
+First, construct empty population share dataframe:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# 7 different age groups and 12 different locationso}
+\NormalTok{it\_N\_pop\_groups }\OtherTok{\textless{}{-}} \DecValTok{7}
+\NormalTok{it\_M\_location }\OtherTok{\textless{}{-}} \DecValTok{12}
+\CommentTok{\# Matrix of demographics by location}
+\NormalTok{mt\_pop\_data\_frac }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\AttributeTok{data=}\ConstantTok{NA}\NormalTok{, }\AttributeTok{nrow=}\NormalTok{it\_M\_location, }\AttributeTok{ncol=}\NormalTok{it\_N\_pop\_groups)  }
+\FunctionTok{colnames}\NormalTok{(mt\_pop\_data\_frac) }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}popgrp\textquotesingle{}}\NormalTok{, }\FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,it\_N\_pop\_groups))}
+\FunctionTok{rownames}\NormalTok{(mt\_pop\_data\_frac) }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}location\textquotesingle{}}\NormalTok{, }\FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,it\_M\_location))}
+\CommentTok{\# Display}
+\NormalTok{mt\_pop\_data\_frac }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{l|l|l|l|l|l|l|l}
+\hline
+  & popgrp1 & popgrp2 & popgrp3 & popgrp4 & popgrp5 & popgrp6 & popgrp7\\
+\hline
+\cellcolor{gray!6}{location1} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA}\\
+\hline
+location2 & NA & NA & NA & NA & NA & NA & NA\\
+\hline
+\cellcolor{gray!6}{location3} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA}\\
+\hline
+location4 & NA & NA & NA & NA & NA & NA & NA\\
+\hline
+\cellcolor{gray!6}{location5} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA}\\
+\hline
+location6 & NA & NA & NA & NA & NA & NA & NA\\
+\hline
+\cellcolor{gray!6}{location7} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA}\\
+\hline
+location8 & NA & NA & NA & NA & NA & NA & NA\\
+\hline
+\cellcolor{gray!6}{location9} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA}\\
+\hline
+location10 & NA & NA & NA & NA & NA & NA & NA\\
+\hline
+\cellcolor{gray!6}{location11} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA} & \cellcolor{gray!6}{NA}\\
+\hline
+location12 & NA & NA & NA & NA & NA & NA & NA\\
+\hline
+\end{tabular}
+\end{table}
+
+Second, generate conditional population distribution for each location, and then multiply by the share of population in each locality:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Share of population per location}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{ar\_p\_loc }\OtherTok{\textless{}{-}} \FunctionTok{dbinom}\NormalTok{(}\DecValTok{0}\SpecialCharTok{:}\NormalTok{(}\DecValTok{3}\SpecialCharTok{*}\NormalTok{it\_M\_location}\DecValTok{{-}1}\NormalTok{), }\DecValTok{3}\SpecialCharTok{*}\NormalTok{it\_M\_location}\DecValTok{{-}1}\NormalTok{, }\FloatTok{0.5}\NormalTok{)}
+\NormalTok{it\_start }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(ar\_p\_loc)}\SpecialCharTok{/}\DecValTok{2}\SpecialCharTok{{-}}\NormalTok{it\_M\_location}\SpecialCharTok{/}\DecValTok{2}
+\NormalTok{ar\_p\_loc }\OtherTok{\textless{}{-}}\NormalTok{ ar\_p\_loc[it\_start}\SpecialCharTok{:}\NormalTok{(it\_start}\SpecialCharTok{+}\NormalTok{it\_M\_location}\SpecialCharTok{+}\DecValTok{1}\NormalTok{)]}
+\NormalTok{ar\_p\_loc }\OtherTok{\textless{}{-}}\NormalTok{ ar\_p\_loc}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(ar\_p\_loc)}
+
+\CommentTok{\# Different bernoulli "win" probability for each location}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{234}\NormalTok{)}
+\CommentTok{\# ar\_fl\_unif\_prob \textless{}{-} sort(runif(it\_M\_location)*(0.25)+0.4)}
+\NormalTok{ar\_fl\_unif\_prob }\OtherTok{\textless{}{-}} \FunctionTok{sort}\NormalTok{(}\FunctionTok{runif}\NormalTok{(it\_M\_location))}
+
+\CommentTok{\# Generate population proportion by locality}
+\ControlFlowTok{for}\NormalTok{ (it\_loc }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{it\_M\_location ) \{}
+\NormalTok{  ar\_p\_pop\_condi\_loc }\OtherTok{\textless{}{-}} \FunctionTok{dbinom}\NormalTok{(}\DecValTok{0}\SpecialCharTok{:}\NormalTok{(it\_N\_pop\_groups}\DecValTok{{-}1}\NormalTok{), it\_N\_pop\_groups}\DecValTok{{-}1}\NormalTok{, ar\_fl\_unif\_prob[it\_loc])}
+\NormalTok{  mt\_pop\_data\_frac[it\_loc,] }\OtherTok{\textless{}{-}}\NormalTok{ ar\_p\_pop\_condi\_loc}\SpecialCharTok{*}\NormalTok{ar\_p\_loc[it\_loc]}
+\NormalTok{\}}
+
+\CommentTok{\# Sum of cells, should equal to 1}
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}pop frac sum = \textquotesingle{}}\NormalTok{, }\FunctionTok{sum}\NormalTok{(mt\_pop\_data\_frac)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "pop frac sum = 0.962953679726938"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Display}
+\FunctionTok{round}\NormalTok{(mt\_pop\_data\_frac}\SpecialCharTok{*}\DecValTok{100}\NormalTok{, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{kable}\NormalTok{(}\AttributeTok{caption=}\StringTok{\textquotesingle{}Share of population in each location and demographic cell\textquotesingle{}}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+
+\caption{\label{tab:unnamed-chunk-236}Share of population in each location and demographic cell}
+\centering
+\begin{tabular}[t]{l|r|r|r|r|r|r|r}
+\hline
+  & popgrp1 & popgrp2 & popgrp3 & popgrp4 & popgrp5 & popgrp6 & popgrp7\\
+\hline
+\cellcolor{gray!6}{location1} & \cellcolor{gray!6}{1.09} & \cellcolor{gray!6}{0.13} & \cellcolor{gray!6}{0.01} & \cellcolor{gray!6}{0.00} & \cellcolor{gray!6}{0.00} & \cellcolor{gray!6}{0.00} & \cellcolor{gray!6}{0.00}\\
+\hline
+location2 & 1.63 & 0.70 & 0.13 & 0.01 & 0.00 & 0.00 & 0.00\\
+\hline
+\cellcolor{gray!6}{location3} & \cellcolor{gray!6}{0.59} & \cellcolor{gray!6}{1.40} & \cellcolor{gray!6}{1.39} & \cellcolor{gray!6}{0.74} & \cellcolor{gray!6}{0.22} & \cellcolor{gray!6}{0.03} & \cellcolor{gray!6}{0.00}\\
+\hline
+location4 & 0.06 & 0.43 & 1.29 & 2.09 & 1.90 & 0.92 & 0.19\\
+\hline
+\cellcolor{gray!6}{location5} & \cellcolor{gray!6}{0.07} & \cellcolor{gray!6}{0.55} & \cellcolor{gray!6}{1.73} & \cellcolor{gray!6}{2.89} & \cellcolor{gray!6}{2.71} & \cellcolor{gray!6}{1.36} & \cellcolor{gray!6}{0.28}\\
+\hline
+location6 & 0.02 & 0.26 & 1.19 & 2.89 & 3.93 & 2.85 & 0.86\\
+\hline
+\cellcolor{gray!6}{location7} & \cellcolor{gray!6}{0.01} & \cellcolor{gray!6}{0.10} & \cellcolor{gray!6}{0.66} & \cellcolor{gray!6}{2.23} & \cellcolor{gray!6}{4.26} & \cellcolor{gray!6}{4.33} & \cellcolor{gray!6}{1.83}\\
+\hline
+location8 & 0.00 & 0.06 & 0.47 & 1.83 & 4.03 & 4.72 & 2.31\\
+\hline
+\cellcolor{gray!6}{location9} & \cellcolor{gray!6}{0.00} & \cellcolor{gray!6}{0.03} & \cellcolor{gray!6}{0.27} & \cellcolor{gray!6}{1.26} & \cellcolor{gray!6}{3.28} & \cellcolor{gray!6}{4.55} & \cellcolor{gray!6}{2.63}\\
+\hline
+location10 & 0.00 & 0.02 & 0.20 & 0.96 & 2.57 & 3.68 & 2.19\\
+\hline
+\cellcolor{gray!6}{location11} & \cellcolor{gray!6}{0.00} & \cellcolor{gray!6}{0.00} & \cellcolor{gray!6}{0.00} & \cellcolor{gray!6}{0.04} & \cellcolor{gray!6}{0.40} & \cellcolor{gray!6}{2.05} & \cellcolor{gray!6}{4.38}\\
+\hline
+location12 & 0.00 & 0.00 & 0.00 & 0.02 & 0.24 & 1.28 & 2.82\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{simulate-enviromental-exposure}{%
+\subsubsection{Simulate Enviromental Exposure}\label{simulate-enviromental-exposure}}
+
+Use log-normal distribution to describe average daily PM10 exposures distribution by locality:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fl\_meanlog }\OtherTok{\textless{}{-}} \FloatTok{3.4}
+\NormalTok{fl\_sdlog }\OtherTok{\textless{}{-}} \FloatTok{0.35}
+\FunctionTok{hist}\NormalTok{(}\FunctionTok{rlnorm}\NormalTok{(}\DecValTok{1000}\NormalTok{, }\AttributeTok{meanlog =}\NormalTok{ fl\_meanlog, }\AttributeTok{sdlog =}\NormalTok{ fl\_sdlog))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-237-1} \end{center}
+
+First, draw pollution measure for each locality:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# draw}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{ar\_pollution\_loc }\OtherTok{\textless{}{-}} \FunctionTok{rlnorm}\NormalTok{(it\_M\_location, }\AttributeTok{meanlog =}\NormalTok{ fl\_meanlog, }\AttributeTok{sdlog =}\NormalTok{ fl\_sdlog)}
+\CommentTok{\# pollution dataframe}
+\CommentTok{\# 5 by 3 matrix}
+
+\CommentTok{\# Column Names}
+\NormalTok{ar\_st\_varnames }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}location\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}avgdailypm10\textquotesingle{}}\NormalTok{)}
+
+\CommentTok{\# Combine to tibble, add name col1, col2, etc.}
+\NormalTok{tb\_loc\_pollution }\OtherTok{\textless{}{-}} \FunctionTok{as\_tibble}\NormalTok{(ar\_pollution\_loc) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rowid\_to\_column}\NormalTok{(}\AttributeTok{var =} \StringTok{"id"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rename\_all}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\FunctionTok{c}\NormalTok{(ar\_st\_varnames)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{location =} \FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}location\textquotesingle{}}\NormalTok{, location))}
+
+\CommentTok{\# Display}
+\FunctionTok{kable}\NormalTok{(tb\_loc\_pollution) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{l|r}
+\hline
+location & avgdailypm10\\
+\hline
+\cellcolor{gray!6}{location1} & \cellcolor{gray!6}{24.62676}\\
+\hline
+location2 & 27.64481\\
+\hline
+\cellcolor{gray!6}{location3} & \cellcolor{gray!6}{51.70466}\\
+\hline
+location4 & 30.71275\\
+\hline
+\cellcolor{gray!6}{location5} & \cellcolor{gray!6}{31.35114}\\
+\hline
+location6 & 54.61304\\
+\hline
+\cellcolor{gray!6}{location7} & \cellcolor{gray!6}{35.20967}\\
+\hline
+location8 & 19.24456\\
+\hline
+\cellcolor{gray!6}{location9} & \cellcolor{gray!6}{23.56121}\\
+\hline
+location10 & 25.63653\\
+\hline
+\cellcolor{gray!6}{location11} & \cellcolor{gray!6}{45.99021}\\
+\hline
+location12 & 33.98553\\
+\hline
+\end{tabular}
+\end{table}
+
+Second, reshape population data:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Reshape population data, so each observation is location/demo}
+\NormalTok{df\_pop\_data\_frac\_long }\OtherTok{\textless{}{-}} \FunctionTok{as\_tibble}\NormalTok{(mt\_pop\_data\_frac, }\AttributeTok{rownames=}\StringTok{\textquotesingle{}location\textquotesingle{}}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{cols =} \FunctionTok{starts\_with}\NormalTok{(}\StringTok{\textquotesingle{}popgrp\textquotesingle{}}\NormalTok{),}
+               \AttributeTok{names\_to =} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}popgrp\textquotesingle{}}\NormalTok{),}
+               \AttributeTok{names\_pattern =} \FunctionTok{paste0}\NormalTok{(}\StringTok{"popgrp(.*)"}\NormalTok{),}
+               \AttributeTok{values\_to =} \StringTok{"pop\_frac"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Third, join with pollution data:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Reshape population data, so each observation is location/demo}
+\NormalTok{df\_pop\_pollution\_long }\OtherTok{\textless{}{-}}\NormalTok{ df\_pop\_data\_frac\_long }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{left\_join}\NormalTok{(tb\_loc\_pollution, }\AttributeTok{by=}\StringTok{\textquotesingle{}location\textquotesingle{}}\NormalTok{)}
+
+\CommentTok{\# display}
+\NormalTok{df\_pop\_pollution\_long[}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{round}\NormalTok{(it\_N\_pop\_groups}\SpecialCharTok{*}\FloatTok{2.5}\NormalTok{),] }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{l|l|r|r}
+\hline
+location & popgrp & pop\_frac & avgdailypm10\\
+\hline
+\cellcolor{gray!6}{location1} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{0.0109366} & \cellcolor{gray!6}{24.62676}\\
+\hline
+location1 & 2 & 0.0013417 & 24.62676\\
+\hline
+\cellcolor{gray!6}{location1} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{0.0000686} & \cellcolor{gray!6}{24.62676}\\
+\hline
+location1 & 4 & 0.0000019 & 24.62676\\
+\hline
+\cellcolor{gray!6}{location1} & \cellcolor{gray!6}{5} & \cellcolor{gray!6}{0.0000000} & \cellcolor{gray!6}{24.62676}\\
+\hline
+location1 & 6 & 0.0000000 & 24.62676\\
+\hline
+\cellcolor{gray!6}{location1} & \cellcolor{gray!6}{7} & \cellcolor{gray!6}{0.0000000} & \cellcolor{gray!6}{24.62676}\\
+\hline
+location2 & 1 & 0.0163003 & 27.64481\\
+\hline
+\cellcolor{gray!6}{location2} & \cellcolor{gray!6}{2} & \cellcolor{gray!6}{0.0070132} & \cellcolor{gray!6}{27.64481}\\
+\hline
+location2 & 3 & 0.0012573 & 27.64481\\
+\hline
+\cellcolor{gray!6}{location2} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{0.0001202} & \cellcolor{gray!6}{27.64481}\\
+\hline
+location2 & 5 & 0.0000065 & 27.64481\\
+\hline
+\cellcolor{gray!6}{location2} & \cellcolor{gray!6}{6} & \cellcolor{gray!6}{0.0000002} & \cellcolor{gray!6}{27.64481}\\
+\hline
+location2 & 7 & 0.0000000 & 27.64481\\
+\hline
+\cellcolor{gray!6}{location3} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{0.0058760} & \cellcolor{gray!6}{51.70466}\\
+\hline
+location3 & 2 & 0.0140000 & 51.70466\\
+\hline
+\cellcolor{gray!6}{location3} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{0.0138984} & \cellcolor{gray!6}{51.70466}\\
+\hline
+location3 & 4 & 0.0073587 & 51.70466\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{compute-demographic-group-specific-exposure-distributions}{%
+\subsubsection{Compute Demographic Group Specific Exposure Distributions}\label{compute-demographic-group-specific-exposure-distributions}}
+
+What is the p10, median, p90 and mean pollution exposure for each demographic group?
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  group by population group
+\item
+  sort by pollution exposure within group
+\item
+  generate population group specific conditional population weights
+\item
+  generate population CDF for each population group (sorted by pollution)
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Follow four steps above}
+\NormalTok{df\_pop\_pollution\_by\_popgrp\_cdf }\OtherTok{\textless{}{-}}\NormalTok{ df\_pop\_pollution\_long }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(popgrp, avgdailypm10) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(popgrp) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{cdf\_pop\_condi\_popgrp\_sortpm10 =} \FunctionTok{cumsum}\NormalTok{(pop\_frac}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(pop\_frac)))}
+\CommentTok{\# display}
+\NormalTok{df\_pop\_pollution\_by\_popgrp\_cdf[}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{round}\NormalTok{(it\_N\_pop\_groups}\SpecialCharTok{*}\FloatTok{5.5}\NormalTok{),] }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{kable}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{l|l|r|r|r}
+\hline
+location & popgrp & pop\_frac & avgdailypm10 & cdf\_pop\_condi\_popgrp\_sortpm10\\
+\hline
+\cellcolor{gray!6}{location8} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{0.0000364} & \cellcolor{gray!6}{19.24456} & \cellcolor{gray!6}{0.0010453}\\
+\hline
+location9 & 1 & 0.0000151 & 23.56121 & 0.0014804\\
+\hline
+\cellcolor{gray!6}{location1} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{0.0109366} & \cellcolor{gray!6}{24.62676} & \cellcolor{gray!6}{0.3156484}\\
+\hline
+location10 & 1 & 0.0000104 & 25.63653 & 0.3159471\\
+\hline
+\cellcolor{gray!6}{location2} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{0.0163003} & \cellcolor{gray!6}{27.64481} & \cellcolor{gray!6}{0.7841942}\\
+\hline
+location4 & 1 & 0.0005879 & 30.71275 & 0.8010816\\
+\hline
+\cellcolor{gray!6}{location5} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{0.0007392} & \cellcolor{gray!6}{31.35114} & \cellcolor{gray!6}{0.8223166}\\
+\hline
+location12 & 1 & 0.0000000 & 33.98553 & 0.8223168\\
+\hline
+\cellcolor{gray!6}{location7} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{0.0000681} & \cellcolor{gray!6}{35.20967} & \cellcolor{gray!6}{0.8242718}\\
+\hline
+location11 & 1 & 0.0000000 & 45.99021 & 0.8242721\\
+\hline
+\cellcolor{gray!6}{location3} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{0.0058760} & \cellcolor{gray!6}{51.70466} & \cellcolor{gray!6}{0.9930669}\\
+\hline
+location6 & 1 & 0.0002413 & 54.61304 & 1.0000000\\
+\hline
+\cellcolor{gray!6}{location8} & \cellcolor{gray!6}{2} & \cellcolor{gray!6}{0.0006400} & \cellcolor{gray!6}{19.24456} & \cellcolor{gray!6}{0.0172871}\\
+\hline
+location9 & 2 & 0.0003150 & 23.56121 & 0.0257947\\
+\hline
+\cellcolor{gray!6}{location1} & \cellcolor{gray!6}{2} & \cellcolor{gray!6}{0.0013417} & \cellcolor{gray!6}{24.62676} & \cellcolor{gray!6}{0.0620374}\\
+\hline
+location10 & 2 & 0.0002235 & 25.63653 & 0.0680736\\
+\hline
+\cellcolor{gray!6}{location2} & \cellcolor{gray!6}{2} & \cellcolor{gray!6}{0.0070132} & \cellcolor{gray!6}{27.64481} & \cellcolor{gray!6}{0.2575157}\\
+\hline
+location4 & 2 & 0.0042712 & 30.71275 & 0.3728918\\
+\hline
+\cellcolor{gray!6}{location5} & \cellcolor{gray!6}{2} & \cellcolor{gray!6}{0.0055479} & \cellcolor{gray!6}{31.35114} & \cellcolor{gray!6}{0.5227547}\\
+\hline
+location12 & 2 & 0.0000004 & 33.98553 & 0.5227662\\
+\hline
+\cellcolor{gray!6}{location7} & \cellcolor{gray!6}{2} & \cellcolor{gray!6}{0.0010378} & \cellcolor{gray!6}{35.20967} & \cellcolor{gray!6}{0.5508009}\\
+\hline
+location11 & 2 & 0.0000008 & 45.99021 & 0.5508213\\
+\hline
+\cellcolor{gray!6}{location3} & \cellcolor{gray!6}{2} & \cellcolor{gray!6}{0.0140000} & \cellcolor{gray!6}{51.70466} & \cellcolor{gray!6}{0.9289930}\\
+\hline
+location6 & 2 & 0.0026287 & 54.61304 & 1.0000000\\
+\hline
+\cellcolor{gray!6}{location8} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{0.0046896} & \cellcolor{gray!6}{19.24456} & \cellcolor{gray!6}{0.0638166}\\
+\hline
+location9 & 3 & 0.0027290 & 23.56121 & 0.1009539\\
+\hline
+\cellcolor{gray!6}{location1} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{0.0000686} & \cellcolor{gray!6}{24.62676} & \cellcolor{gray!6}{0.1018872}\\
+\hline
+location10 & 3 & 0.0020006 & 25.63653 & 0.1291118\\
+\hline
+\cellcolor{gray!6}{location2} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{0.0012573} & \cellcolor{gray!6}{27.64481} & \cellcolor{gray!6}{0.1462207}\\
+\hline
+location4 & 3 & 0.0129304 & 30.71275 & 0.3221799\\
+\hline
+\cellcolor{gray!6}{location5} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{0.0173492} & \cellcolor{gray!6}{31.35114} & \cellcolor{gray!6}{0.5582709}\\
+\hline
+location12 & 3 & 0.0000141 & 33.98553 & 0.5584625\\
+\hline
+\cellcolor{gray!6}{location7} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{0.0065945} & \cellcolor{gray!6}{35.20967} & \cellcolor{gray!6}{0.6482016}\\
+\hline
+location11 & 3 & 0.0000242 & 45.99021 & 0.6485305\\
+\hline
+\cellcolor{gray!6}{location3} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{0.0138984} & \cellcolor{gray!6}{51.70466} & \cellcolor{gray!6}{0.8376617}\\
+\hline
+location6 & 3 & 0.0119295 & 54.61304 & 1.0000000\\
+\hline
+\cellcolor{gray!6}{location8} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{0.0183277} & \cellcolor{gray!6}{19.24456} & \cellcolor{gray!6}{0.1224562}\\
+\hline
+location9 & 4 & 0.0126118 & 23.56121 & 0.2067219\\
+\hline
+\end{tabular}
+\end{table}
+
+Measure quantiles of pollution exposures for different population groups:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Consider CDF larger than current quantile of interest.
+\item
+  Slice group-specific CDF that is higher and closest to quantile of interest.
+\item
+  Merge results for different quantiles together.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Generate pollution quantiles by population groups}
+\NormalTok{df\_pop\_pollution\_distribution }\OtherTok{\textless{}{-}}\NormalTok{ df\_pop\_pollution\_by\_popgrp\_cdf }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{pm10\_mean =} \FunctionTok{weighted.mean}\NormalTok{(avgdailypm10, pop\_frac)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(cdf\_pop\_condi\_popgrp\_sortpm10 }\SpecialCharTok{\textgreater{}=} \FloatTok{0.10}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{slice}\NormalTok{(}\DecValTok{1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{pm10\_p10 =}\NormalTok{ avgdailypm10) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(popgrp, pm10\_mean, pm10\_p10) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{left\_join}\NormalTok{(df\_pop\_pollution\_by\_popgrp\_cdf }\SpecialCharTok{\%\textgreater{}\%} 
+              \FunctionTok{filter}\NormalTok{(cdf\_pop\_condi\_popgrp\_sortpm10 }\SpecialCharTok{\textgreater{}=} \FloatTok{0.20}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+              \FunctionTok{slice}\NormalTok{(}\DecValTok{1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+              \FunctionTok{mutate}\NormalTok{(}\AttributeTok{pm10\_p20 =}\NormalTok{ avgdailypm10) }\SpecialCharTok{\%\textgreater{}\%}
+              \FunctionTok{select}\NormalTok{(popgrp, pm10\_p20), }
+            \AttributeTok{by=}\StringTok{\textquotesingle{}popgrp\textquotesingle{}}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{left\_join}\NormalTok{(df\_pop\_pollution\_by\_popgrp\_cdf }\SpecialCharTok{\%\textgreater{}\%} 
+              \FunctionTok{filter}\NormalTok{(cdf\_pop\_condi\_popgrp\_sortpm10 }\SpecialCharTok{\textgreater{}=} \FloatTok{0.50}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+              \FunctionTok{slice}\NormalTok{(}\DecValTok{1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+              \FunctionTok{mutate}\NormalTok{(}\AttributeTok{pm10\_p50 =}\NormalTok{ avgdailypm10) }\SpecialCharTok{\%\textgreater{}\%}
+              \FunctionTok{select}\NormalTok{(popgrp, pm10\_p50), }
+            \AttributeTok{by=}\StringTok{\textquotesingle{}popgrp\textquotesingle{}}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{left\_join}\NormalTok{(df\_pop\_pollution\_by\_popgrp\_cdf }\SpecialCharTok{\%\textgreater{}\%} 
+              \FunctionTok{filter}\NormalTok{(cdf\_pop\_condi\_popgrp\_sortpm10 }\SpecialCharTok{\textgreater{}=} \FloatTok{0.80}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+              \FunctionTok{slice}\NormalTok{(}\DecValTok{1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+              \FunctionTok{mutate}\NormalTok{(}\AttributeTok{pm10\_p80 =}\NormalTok{ avgdailypm10) }\SpecialCharTok{\%\textgreater{}\%}
+              \FunctionTok{select}\NormalTok{(popgrp, pm10\_p80), }
+            \AttributeTok{by=}\StringTok{\textquotesingle{}popgrp\textquotesingle{}}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{left\_join}\NormalTok{(df\_pop\_pollution\_by\_popgrp\_cdf }\SpecialCharTok{\%\textgreater{}\%} 
+              \FunctionTok{filter}\NormalTok{(cdf\_pop\_condi\_popgrp\_sortpm10 }\SpecialCharTok{\textgreater{}=} \FloatTok{0.90}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+              \FunctionTok{slice}\NormalTok{(}\DecValTok{1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+              \FunctionTok{mutate}\NormalTok{(}\AttributeTok{pm10\_p90 =}\NormalTok{ avgdailypm10) }\SpecialCharTok{\%\textgreater{}\%}
+              \FunctionTok{select}\NormalTok{(popgrp, pm10\_p90), }
+            \AttributeTok{by=}\StringTok{\textquotesingle{}popgrp\textquotesingle{}}\NormalTok{)}
+\CommentTok{\# display}
+\NormalTok{df\_pop\_pollution\_distribution }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{kable}\NormalTok{(}\AttributeTok{caption =} \StringTok{\textquotesingle{}PM10 Exposure Distribution by Population Groups\textquotesingle{}}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{kable\_styling\_fc}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[!h]
+
+\caption{\label{tab:unnamed-chunk-242}PM10 Exposure Distribution by Population Groups}
+\centering
+\begin{tabular}[t]{l|r|r|r|r|r|r}
+\hline
+popgrp & pm10\_mean & pm10\_p10 & pm10\_p20 & pm10\_p50 & pm10\_p80 & pm10\_p90\\
+\hline
+\cellcolor{gray!6}{1} & \cellcolor{gray!6}{31.07894} & \cellcolor{gray!6}{24.62676} & \cellcolor{gray!6}{24.62676} & \cellcolor{gray!6}{27.64481} & \cellcolor{gray!6}{30.71275} & \cellcolor{gray!6}{51.70466}\\
+\hline
+2 & 39.47897 & 27.64481 & 27.64481 & 31.35114 & 51.70466 & 51.70466\\
+\hline
+\cellcolor{gray!6}{3} & \cellcolor{gray!6}{37.92901} & \cellcolor{gray!6}{23.56121} & \cellcolor{gray!6}{30.71275} & \cellcolor{gray!6}{31.35114} & \cellcolor{gray!6}{51.70466} & \cellcolor{gray!6}{54.61304}\\
+\hline
+4 & 34.86470 & 19.24456 & 23.56121 & 31.35114 & 51.70466 & 54.61304\\
+\hline
+\cellcolor{gray!6}{5} & \cellcolor{gray!6}{32.56731} & \cellcolor{gray!6}{19.24456} & \cellcolor{gray!6}{23.56121} & \cellcolor{gray!6}{30.71275} & \cellcolor{gray!6}{35.20967} & \cellcolor{gray!6}{54.61304}\\
+\hline
+6 & 31.46626 & 19.24456 & 23.56121 & 25.63653 & 35.20967 & 54.61304\\
+\hline
+\cellcolor{gray!6}{7} & \cellcolor{gray!6}{33.50541} & \cellcolor{gray!6}{19.24456} & \cellcolor{gray!6}{23.56121} & \cellcolor{gray!6}{33.98553} & \cellcolor{gray!6}{45.99021} & \cellcolor{gray!6}{45.99021}\\
+\hline
+\end{tabular}
+\end{table}
 
 \hypertarget{tables-and-graphs}{%
 \chapter{Tables and Graphs}\label{tables-and-graphs}}
@@ -12251,7 +12862,7 @@ Jointly plot:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-230-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-244-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -12292,7 +12903,161 @@ We used recordplot() earlier. So now we can print just the first two constructed
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-231-1} \end{center}
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-245-1} \end{center}
+
+\hypertarget{ggplot-line-related-plots}{%
+\section{GGplot Line Related Plots}\label{ggplot-line-related-plots}}
+
+\hypertarget{continuous-outcome-with-multiple-categorical-variables}{%
+\subsection{Continuous Outcome with Multiple Categorical Variables}\label{continuous-outcome-with-multiple-categorical-variables}}
+
+\begin{quote}
+Go back to \href{http://fanwangecon.github.io/}{fan}'s \href{https://fanwangecon.github.io/REconTools/}{REconTools} Package, \href{https://fanwangecon.github.io/R4Econ/}{R Code Examples} Repository (\href{https://fanwangecon.github.io/R4Econ/bookdown}{bookdown site}), or \href{https://fanwangecon.github.io/Stat4Econ/}{Intro Stats with R} Repository (\href{https://fanwangecon.github.io/Stat4Econ/bookdown}{bookdown site}).
+\end{quote}
+
+\hypertarget{three-categories-one-is-subplot}{%
+\subsubsection{Three Categories, One is Subplot}\label{three-categories-one-is-subplot}}
+
+The outcome is CEV, generated for results with different productivity types (subplot), generated for PE vs GE (linetype), and at different parameter specifications (lower and higher gamma).
+
+The graphs rely on this csv file \href{https://github.com/FanWangEcon/R4Econ/tree/master/tabgraph/ggline/_file}{cev\_data.csv}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Libraries}
+\CommentTok{\# library(tidyverse)}
+
+\CommentTok{\# Load in CSV}
+\NormalTok{bl\_save\_img }\OtherTok{\textless{}{-}} \ConstantTok{FALSE}
+\NormalTok{spt\_csv\_root }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}C:/Users/fan/R4Econ/tabgraph/ggline/\_file/\textquotesingle{}}\NormalTok{)}
+\NormalTok{spt\_img\_root }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}G:/repos/R4Econ/tabgraph/ggline/\_file/\textquotesingle{}}\NormalTok{)}
+\NormalTok{spn\_cev\_data }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(spt\_csv\_root, }\StringTok{\textquotesingle{}cev\_data.csv\textquotesingle{}}\NormalTok{)}
+\NormalTok{spn\_cev\_graph }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(spt\_img\_root, }\StringTok{\textquotesingle{}cev\_graph.png\textquotesingle{}}\NormalTok{)}
+\NormalTok{spn\_cev\_graph\_eps }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(spt\_img\_root, }\StringTok{\textquotesingle{}cev\_graph.eps\textquotesingle{}}\NormalTok{)}
+\NormalTok{df\_cev\_graph }\OtherTok{\textless{}{-}} \FunctionTok{as\_tibble}\NormalTok{(}\FunctionTok{read.csv}\NormalTok{(spn\_cev\_data)) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{X)}
+
+\CommentTok{\# Dataset subsetting {-}{-}{-}{-}{-}{-}}
+
+\CommentTok{\# Line Patterns and Colors {-}{-}{-}{-}{-}{-}}
+\CommentTok{\# ar\_st\_age\_group\_leg\_labels \textless{}{-} c("\textbackslash{}nGE\textbackslash{}n\textbackslash{}u03B3=0.42\textbackslash{}n", "\textbackslash{}nGE\textbackslash{}n\textbackslash{}u03B3=0.56\textbackslash{}n",}
+\CommentTok{\#                                 "\textbackslash{}nPE\textbackslash{}n\textbackslash{}u03B3=0.42\textbackslash{}n", "\textbackslash{}nPE\textbackslash{}n\textbackslash{}u03B3=0.42\textbackslash{}n")}
+\NormalTok{ar\_st\_age\_group\_leg\_labels }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FunctionTok{bquote}\NormalTok{(}\StringTok{"GE,"}\SpecialCharTok{\textasciitilde{}}\NormalTok{gamma }\SpecialCharTok{==}\NormalTok{ .(}\FloatTok{0.42}\NormalTok{)),}
+                                \FunctionTok{bquote}\NormalTok{(}\StringTok{"GE,"}\SpecialCharTok{\textasciitilde{}}\NormalTok{gamma }\SpecialCharTok{==}\NormalTok{ .(}\FloatTok{0.56}\NormalTok{)),}
+                                \FunctionTok{bquote}\NormalTok{(}\StringTok{"PE,"}\SpecialCharTok{\textasciitilde{}}\NormalTok{gamma }\SpecialCharTok{==}\NormalTok{ .(}\FloatTok{0.42}\NormalTok{)),}
+                                \FunctionTok{bquote}\NormalTok{(}\StringTok{"PE,"}\SpecialCharTok{\textasciitilde{}}\NormalTok{gamma }\SpecialCharTok{==}\NormalTok{ .(}\FloatTok{0.56}\NormalTok{)))}
+\NormalTok{ar\_st\_colours }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"\#85ccff"}\NormalTok{, }\StringTok{"\#026aa3"}\NormalTok{, }\StringTok{"\#85ccff"}\NormalTok{, }\StringTok{"\#026aa3"}\NormalTok{)}
+\NormalTok{ar\_st\_linetypes }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"solid"}\NormalTok{, }\StringTok{"solid"}\NormalTok{, }\StringTok{"longdash"}\NormalTok{, }\StringTok{"longdash"}\NormalTok{)}
+
+\CommentTok{\# Labels and Other Strings {-}{-}{-}{-}{-}{-}{-}}
+\NormalTok{st\_title }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}\textquotesingle{}}
+\NormalTok{st\_x }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}Wealth\textquotesingle{}}
+\NormalTok{st\_y }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}Welfare Gain (\% CEV)\textquotesingle{}}
+\NormalTok{st\_subtitle }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}https://fanwangecon.github.io/\textquotesingle{}}\NormalTok{,}
+                      \StringTok{\textquotesingle{}R4Econ/tabgraph/ggline/htmlpdfr/fs\_ggline\_mgrp\_ncts.html\textquotesingle{}}\NormalTok{)}
+
+\CommentTok{\# ar\_st\_age\_group\_leg\_labels \textless{}{-} c("C\textbackslash{}u2013Optimal", "V\textbackslash{}u2013Optimal")}
+
+\NormalTok{prod\_type\_recode }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Productivity Type}\SpecialCharTok{\textbackslash{}n}\StringTok{({-}1 sd)"} \OtherTok{=} \StringTok{"8993"}\NormalTok{,}
+                      \StringTok{"Productivity Type}\SpecialCharTok{\textbackslash{}n}\StringTok{(mean)"} \OtherTok{=} \StringTok{"10189"}\NormalTok{,}
+                      \StringTok{"Productivity Type}\SpecialCharTok{\textbackslash{}n}\StringTok{(+1 sd)"} \OtherTok{=} \StringTok{"12244"}\NormalTok{)}
+
+\NormalTok{x.labels }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}0\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}200k\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}400k\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}600k\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}800k\textquotesingle{}}\NormalTok{)}
+\NormalTok{x.breaks }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}
+              \DecValTok{5}\NormalTok{,}
+              \DecValTok{10}\NormalTok{,}
+              \DecValTok{15}\NormalTok{,}
+              \DecValTok{20}\NormalTok{)}
+\NormalTok{x.min }\OtherTok{\textless{}{-}} \DecValTok{0}
+\NormalTok{x.max }\OtherTok{\textless{}{-}} \DecValTok{20}
+
+\CommentTok{\# y.labels \textless{}{-} c(\textquotesingle{}{-}0.01\textquotesingle{},}
+\CommentTok{\#               \textquotesingle{}\textbackslash{}u2191\textbackslash{}u2191\textbackslash{}nWelfare\textbackslash{}nGain\textbackslash{}n\textbackslash{}nCEV=0\textbackslash{}n\textbackslash{}nWelfare\textbackslash{}nLoss\textbackslash{}n\textbackslash{}u2193\textbackslash{}u2193\textquotesingle{},}
+\CommentTok{\#               \textquotesingle{}+0.01\textquotesingle{}, \textquotesingle{}+0.02\textquotesingle{}, \textquotesingle{}+0.03\textquotesingle{}, \textquotesingle{}+0.04\textquotesingle{},\textquotesingle{}+0.05\textquotesingle{})}
+\NormalTok{y.labels }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}{-}0.5 pp\textquotesingle{}}\NormalTok{,}
+              \StringTok{\textquotesingle{}CEV=0\textquotesingle{}}\NormalTok{,}
+              \StringTok{\textquotesingle{}+0.5 pp\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}+1.0 pp\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}+1.5 pp\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}+2.0 pp\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}+2.5 pp\textquotesingle{}}\NormalTok{)}
+\NormalTok{y.breaks }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.01}\NormalTok{, }\DecValTok{0}\NormalTok{, }\FloatTok{0.01}\NormalTok{, }\FloatTok{0.02}\NormalTok{, }\FloatTok{0.03}\NormalTok{, }\FloatTok{0.04}\NormalTok{, }\FloatTok{0.05}\NormalTok{)}
+\NormalTok{y.min }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{0.011}
+\NormalTok{y.max }\OtherTok{\textless{}{-}} \FloatTok{0.051}
+
+\CommentTok{\# data change {-}{-}{-}{-}{-}{-}{-}}
+\NormalTok{df\_cev\_graph }\OtherTok{\textless{}{-}}\NormalTok{ df\_cev\_graph }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}\FunctionTok{across}\NormalTok{(counter\_policy, }\SpecialCharTok{\textasciitilde{}} \FunctionTok{grepl}\NormalTok{(}\StringTok{\textquotesingle{}70|42\textquotesingle{}}\NormalTok{, .))) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{prod\_type\_lvl =} \FunctionTok{as.factor}\NormalTok{(prod\_type\_lvl)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{prod\_type\_lvl =} \FunctionTok{fct\_recode}\NormalTok{(prod\_type\_lvl, }\SpecialCharTok{!!!}\NormalTok{prod\_type\_recode))}
+
+\CommentTok{\# graph {-}{-}{-}{-}{-}{-}}
+\NormalTok{pl\_cev }\OtherTok{\textless{}{-}}\NormalTok{ df\_cev\_graph }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(prod\_type\_st, cash\_tt) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{cash\_tt, }\AttributeTok{y=}\NormalTok{cev\_lvl,}
+             \AttributeTok{colour=}\NormalTok{counter\_policy, }\AttributeTok{linetype=}\NormalTok{counter\_policy, }\AttributeTok{shape=}\NormalTok{counter\_policy)) }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{( }\SpecialCharTok{\textasciitilde{}}\NormalTok{ prod\_type\_lvl, }\AttributeTok{nrow=}\DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method=}\StringTok{"auto"}\NormalTok{, }\AttributeTok{se=}\ConstantTok{FALSE}\NormalTok{, }\AttributeTok{fullrange=}\ConstantTok{FALSE}\NormalTok{, }\AttributeTok{level=}\FloatTok{0.95}\NormalTok{)}
+
+\CommentTok{\# labels}
+\NormalTok{pl\_cev }\OtherTok{\textless{}{-}}\NormalTok{ pl\_cev }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =}\NormalTok{ st\_x,}
+       \AttributeTok{y =}\NormalTok{ st\_y,}
+       \AttributeTok{subtitle =}\NormalTok{ st\_subtitle)}
+
+\CommentTok{\# set shapes and colors}
+\NormalTok{pl\_cev }\OtherTok{\textless{}{-}}\NormalTok{ pl\_cev }\SpecialCharTok{+}
+  \FunctionTok{scale\_colour\_manual}\NormalTok{(}\AttributeTok{values=}\NormalTok{ar\_st\_colours, }\AttributeTok{labels=}\NormalTok{ar\_st\_age\_group\_leg\_labels) }\SpecialCharTok{+}
+  \FunctionTok{scale\_shape\_discrete}\NormalTok{(}\AttributeTok{labels=}\NormalTok{ar\_st\_age\_group\_leg\_labels) }\SpecialCharTok{+}
+  \FunctionTok{scale\_linetype\_manual}\NormalTok{(}\AttributeTok{values=}\NormalTok{ar\_st\_linetypes, }\AttributeTok{labels=}\NormalTok{ar\_st\_age\_group\_leg\_labels) }\SpecialCharTok{+}
+  \FunctionTok{scale\_x\_continuous}\NormalTok{(}\AttributeTok{labels =}\NormalTok{ x.labels, }\AttributeTok{breaks =}\NormalTok{ x.breaks,}
+                     \AttributeTok{limits =} \FunctionTok{c}\NormalTok{(x.min, x.max)) }\SpecialCharTok{+}
+  \FunctionTok{scale\_y\_continuous}\NormalTok{(}\AttributeTok{labels =}\NormalTok{ y.labels, }\AttributeTok{breaks =}\NormalTok{ y.breaks,}
+                     \AttributeTok{limits =} \FunctionTok{c}\NormalTok{(y.min, y.max))}
+
+\CommentTok{\# Horizontal line}
+\NormalTok{pl\_cev }\OtherTok{\textless{}{-}}\NormalTok{ pl\_cev }\SpecialCharTok{+}
+  \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept=}\DecValTok{0}\NormalTok{, }\AttributeTok{linetype=}\StringTok{\textquotesingle{}solid\textquotesingle{}}\NormalTok{, }\AttributeTok{colour=}\StringTok{"black"}\NormalTok{, }\AttributeTok{size =}\DecValTok{1}\NormalTok{)}
+  \CommentTok{\# geom\_hline(yintercept=0, linetype=\textquotesingle{}dotted\textquotesingle{}, colour="black", size=2)}
+
+\CommentTok{\# theme}
+\NormalTok{pl\_cev }\OtherTok{\textless{}{-}}\NormalTok{ pl\_cev }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{10}\NormalTok{),}
+       \AttributeTok{legend.title =} \FunctionTok{element\_blank}\NormalTok{(),}
+       \AttributeTok{legend.position =} \FunctionTok{c}\NormalTok{(}\FloatTok{0.16}\NormalTok{, }\FloatTok{0.65}\NormalTok{),}
+       \AttributeTok{legend.background =} \FunctionTok{element\_rect}\NormalTok{(}\AttributeTok{fill =} \StringTok{"white"}\NormalTok{, }\AttributeTok{colour =} \StringTok{"black"}\NormalTok{, }\AttributeTok{linetype=}\StringTok{\textquotesingle{}solid\textquotesingle{}}\NormalTok{),}
+       \AttributeTok{legend.key.width =} \FunctionTok{unit}\NormalTok{(}\FloatTok{1.5}\NormalTok{, }\StringTok{"cm"}\NormalTok{))}
+
+
+\CommentTok{\# Save Image Outputs {-}{-}{-}{-}{-}}
+\ControlFlowTok{if}\NormalTok{ (bl\_save\_img) \{}
+  \FunctionTok{png}\NormalTok{(spn\_cev\_graph,}
+      \AttributeTok{width =} \DecValTok{160}\NormalTok{,}
+      \AttributeTok{height =} \DecValTok{105}\NormalTok{, }\AttributeTok{units=}\StringTok{\textquotesingle{}mm\textquotesingle{}}\NormalTok{,}
+      \AttributeTok{res =} \DecValTok{150}\NormalTok{, }\AttributeTok{pointsize=}\DecValTok{7}\NormalTok{)}
+  \FunctionTok{ggsave}\NormalTok{(}
+\NormalTok{    spn\_cev\_graph\_eps,}
+    \AttributeTok{plot =} \FunctionTok{last\_plot}\NormalTok{(),}
+    \AttributeTok{device =} \StringTok{\textquotesingle{}eps\textquotesingle{}}\NormalTok{,}
+    \AttributeTok{path =} \ConstantTok{NULL}\NormalTok{,}
+    \AttributeTok{scale =} \DecValTok{1}\NormalTok{,}
+    \AttributeTok{width =} \DecValTok{160}\NormalTok{,}
+    \AttributeTok{height =}\DecValTok{105}\NormalTok{,}
+    \AttributeTok{units =} \FunctionTok{c}\NormalTok{(}\StringTok{"mm"}\NormalTok{),}
+    \AttributeTok{dpi =} \DecValTok{150}\NormalTok{,}
+    \AttributeTok{limitsize =} \ConstantTok{TRUE}
+\NormalTok{  )}
+
+\NormalTok{\}}
+\FunctionTok{print}\NormalTok{(pl\_cev)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{Panel-Data-and-Optimization-with-R_files/figure-latex/unnamed-chunk-247-1} \end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{ (bl\_save\_img) \{}
+  \FunctionTok{dev.off}\NormalTok{()}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
 
 \hypertarget{write-and-read-plots}{%
 \section{Write and Read Plots}\label{write-and-read-plots}}
@@ -13671,7 +14436,7 @@ Run basic shell commands in windows:
 \end{Shaded}
 
 \begin{verbatim}
-## [1] " Volume in drive G is New Volume,  Volume Serial Number is 009D-37E9, ,  Directory of G:\\repos\\R4Econ, , 01/10/2021  11:27 PM    <DIR>          ., 01/10/2021  11:27 PM    <DIR>          .., 11/28/2020  12:35 PM               203 .gitattributes, 11/28/2020  12:35 PM             1,460 .gitignore, 11/28/2020  12:35 PM                30 .Rbuildignore, 11/28/2020  04:36 PM             6,555 .Rprofile, 11/28/2020  12:35 PM    <DIR>          amto, 11/28/2020  12:35 PM               278 book.bib, 01/10/2021  11:27 PM    <DIR>          bookdown, 11/28/2020  12:35 PM    <DIR>          development, 11/28/2020  12:35 PM    <DIR>          dynamic, 11/28/2020  04:01 PM    <DIR>          factor, 11/28/2020  12:35 PM    <DIR>          function, 11/28/2020  12:35 PM    <DIR>          generate, 11/28/2020  12:35 PM    <DIR>          getdata, 11/28/2020  12:35 PM             2,951 gitsetup.md, 11/28/2020  12:35 PM               321 hdga.html, 11/28/2020  12:35 PM    <DIR>          htmlpdfr, 11/28/2020  12:35 PM             2,928 index.Rmd, 11/28/2020  12:35 PM             1,086 LICENSE, 11/28/2020  12:35 PM    <DIR>          linreg, 01/08/2021  07:50 AM    <DIR>          math, 11/28/2020  12:35 PM    <DIR>          optimization, 11/28/2020  12:35 PM            11,018 packages.bib, 01/10/2021  06:10 PM    <DIR>          panel, 01/10/2021  11:27 PM           342,984 Panel Data and Optimization with R.Rmd, 01/08/2021  05:31 PM            73,034 Panel-Data-and-Optimization-with-R.log, 01/10/2021  11:27 PM           342,984 Panel-Data-and-Optimization-with-R.Rmd, 11/30/2020  10:49 PM    <DIR>          Panel-Data-and-Optimization-with-R_files, 11/28/2020  12:35 PM               480 preamble.tex, 11/28/2020  12:35 PM               583 preamble_book.tex, 11/28/2020  12:35 PM               416 R4Econ.Rproj, 01/10/2021  11:25 PM            46,058 README.md, 01/10/2021  11:25 PM            43,160 README_appendix.md, 11/28/2020  12:35 PM               762 README_end.md, 11/28/2020  12:35 PM            30,249 README_OLD.md, 11/28/2020  12:35 PM             3,221 README_pre.md, 01/10/2021  11:25 PM            42,069 README_toc.md, 11/28/2020  12:35 PM    <DIR>          regnonlin, 11/28/2020  12:35 PM               595 style.css, 11/28/2020  12:35 PM    <DIR>          summarize, 11/28/2020  12:35 PM    <DIR>          support, 11/28/2020  12:35 PM    <DIR>          tabgraph, 11/28/2020  12:35 PM               136 title.Rmd, 11/28/2020  12:35 PM             2,570 toc.css, 01/10/2021  11:16 PM             3,540 _bookdown.yml, 01/10/2021  11:27 PM    <DIR>          _bookdown_files, 11/28/2020  12:35 PM               151 _config.yml, 11/28/2020  12:35 PM    <DIR>          _data, 11/28/2020  12:35 PM    <DIR>          _file, 11/28/2020  12:35 PM    <DIR>          _img, 11/28/2020  12:35 PM    <DIR>          _log, 11/28/2020  12:35 PM             1,437 _output.yml, 11/28/2020  12:35 PM                97 _output_kniti_html.yaml, 11/28/2020  12:35 PM               166 _output_kniti_pdf.yaml,               30 File(s)        961,522 bytes,               25 Dir(s)  476,292,288,512 bytes free"
+## [1] " Volume in drive G is New Volume,  Volume Serial Number is 009D-37E9, ,  Directory of G:\\repos\\R4Econ, , 02/02/2021  09:15 PM    <DIR>          ., 02/02/2021  09:15 PM    <DIR>          .., 11/28/2020  12:35 PM               203 .gitattributes, 11/28/2020  12:35 PM             1,460 .gitignore, 11/28/2020  12:35 PM                30 .Rbuildignore, 11/28/2020  04:36 PM             6,555 .Rprofile, 11/28/2020  12:35 PM    <DIR>          amto, 11/28/2020  12:35 PM               278 book.bib, 02/02/2021  09:15 PM    <DIR>          bookdown, 11/28/2020  12:35 PM    <DIR>          development, 11/28/2020  12:35 PM    <DIR>          dynamic, 11/28/2020  04:01 PM    <DIR>          factor, 11/28/2020  12:35 PM    <DIR>          function, 11/28/2020  12:35 PM    <DIR>          generate, 11/28/2020  12:35 PM    <DIR>          getdata, 11/28/2020  12:35 PM             2,951 gitsetup.md, 11/28/2020  12:35 PM               321 hdga.html, 11/28/2020  12:35 PM    <DIR>          htmlpdfr, 11/28/2020  12:35 PM             2,928 index.Rmd, 11/28/2020  12:35 PM             1,086 LICENSE, 11/28/2020  12:35 PM    <DIR>          linreg, 01/08/2021  07:50 AM    <DIR>          math, 11/28/2020  12:35 PM    <DIR>          optimization, 11/28/2020  12:35 PM            11,018 packages.bib, 01/10/2021  06:10 PM    <DIR>          panel, 02/02/2021  09:15 PM           361,011 Panel Data and Optimization with R.Rmd, 01/24/2021  11:55 AM            76,062 Panel-Data-and-Optimization-with-R.log, 02/02/2021  09:15 PM           361,011 Panel-Data-and-Optimization-with-R.Rmd, 11/30/2020  10:49 PM    <DIR>          Panel-Data-and-Optimization-with-R_files, 11/28/2020  12:35 PM               480 preamble.tex, 11/28/2020  12:35 PM               583 preamble_book.tex, 11/28/2020  12:35 PM               416 R4Econ.Rproj, 02/02/2021  09:13 PM            48,018 README.md, 02/02/2021  09:13 PM            45,163 README_appendix.md, 11/28/2020  12:35 PM               762 README_end.md, 11/28/2020  12:35 PM            30,249 README_OLD.md, 11/28/2020  12:35 PM             3,221 README_pre.md, 02/02/2021  09:13 PM            44,029 README_toc.md, 11/28/2020  12:35 PM    <DIR>          regnonlin, 11/28/2020  12:35 PM               595 style.css, 11/28/2020  12:35 PM    <DIR>          summarize, 11/28/2020  12:35 PM    <DIR>          support, 01/24/2021  11:16 AM    <DIR>          tabgraph, 11/28/2020  12:35 PM               136 title.Rmd, 11/28/2020  12:35 PM             2,570 toc.css, 02/02/2021  09:12 PM             3,660 _bookdown.yml, 02/02/2021  09:15 PM    <DIR>          _bookdown_files, 11/28/2020  12:35 PM               151 _config.yml, 11/28/2020  12:35 PM    <DIR>          _data, 11/28/2020  12:35 PM    <DIR>          _file, 11/28/2020  12:35 PM    <DIR>          _img, 11/28/2020  12:35 PM    <DIR>          _log, 11/28/2020  12:35 PM             1,437 _output.yml, 11/28/2020  12:35 PM                97 _output_kniti_html.yaml, 11/28/2020  12:35 PM               166 _output_kniti_pdf.yaml,               30 File(s)      1,006,647 bytes,               25 Dir(s)  442,111,225,856 bytes free"
 \end{verbatim}
 
 \hypertarget{run-python-inside-a-conda-environment}{%
@@ -13756,7 +14521,9 @@ Activate conda env and run a line:
   \item
     E notation.
   \item
-    \textbf{r}: \emph{rep() + head() + tail() + na\_if()}
+    Get N cuts from M points.
+  \item
+    \textbf{r}: \emph{rep() + head() + tail() + na\_if() + Re()}
   \end{itemize}
 \item
   \href{https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_generate.html}{Generate Special Arrays}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_generate.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_generate.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_generate.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_generate.html}{\textbf{html}}
@@ -14152,8 +14919,8 @@ Activate conda env and run a line:
   \end{itemize}
 \end{enumerate}
 
-\hypertarget{panel-and-multi-dimensional-data-structures-links}{%
-\section{Panel and Multi-dimensional Data Structures links}\label{panel-and-multi-dimensional-data-structures-links}}
+\hypertarget{multi-dimensional-data-structures-links}{%
+\section{Multi-dimensional Data Structures links}\label{multi-dimensional-data-structures-links}}
 
 \hypertarget{section-4.1-generate-gather-bind-and-joingenerate-gather-bind-and-join-links}{%
 \subsection{\texorpdfstring{\protect\hyperlink{generate-gather-bind-and-join}{Section 4.1 Generate, Gather, Bind and Join} links}{Section 4.1 Generate, Gather, Bind and Join links}}\label{section-4.1-generate-gather-bind-and-joingenerate-gather-bind-and-join-links}}
@@ -14306,8 +15073,8 @@ Activate conda env and run a line:
   \end{itemize}
 \end{enumerate}
 
-\hypertarget{nonlinear-regression-links}{%
-\section{Nonlinear Regression links}\label{nonlinear-regression-links}}
+\hypertarget{nonlinear-and-other-regressions-links}{%
+\section{Nonlinear and Other Regressions links}\label{nonlinear-and-other-regressions-links}}
 
 \hypertarget{section-6.1-logit-regressionlogit-regression-links}{%
 \subsection{\texorpdfstring{\protect\hyperlink{logit-regression}{Section 6.1 Logit Regression} links}{Section 6.1 Logit Regression links}}\label{section-6.1-logit-regressionlogit-regression-links}}
@@ -14439,6 +15206,24 @@ Activate conda env and run a line:
   \item
     \textbf{econ}: \emph{Atkinson (JET, 1970)}
   \end{itemize}
+\item
+  \href{https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html}{Inequality in Environmental Exposure Across Population Groups}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_pop_loc_pollution.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simulate population distribution by location and demographic groups.
+  \item
+    Simulate pollution exposures by location.
+  \item
+    Compute inequality in environmental exposure across population groups, given location-specific environmental data and location-specific population information.
+  \item
+    \textbf{r}: \emph{matrix()}
+  \item
+    \textbf{stats}: \emph{runif() + sum()}
+  \item
+    \textbf{dplyr}: \emph{arrange() + group\_by() + left\_join() + filter() + slice()}
+  \end{itemize}
 \end{enumerate}
 
 \hypertarget{tables-and-graphs-links}{%
@@ -14466,8 +15251,26 @@ Activate conda env and run a line:
   \end{itemize}
 \end{enumerate}
 
-\hypertarget{section-9.2-write-and-read-plotswrite-and-read-plots-links}{%
-\subsection{\texorpdfstring{\protect\hyperlink{write-and-read-plots}{Section 9.2 Write and Read Plots} links}{Section 9.2 Write and Read Plots links}}\label{section-9.2-write-and-read-plotswrite-and-read-plots-links}}
+\hypertarget{section-9.2-ggplot-line-related-plotsggplot-line-related-plots-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{ggplot-line-related-plots}{Section 9.2 GGplot Line Related Plots} links}{Section 9.2 GGplot Line Related Plots links}}\label{section-9.2-ggplot-line-related-plotsggplot-line-related-plots-links}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.html}{GGplot Multiple Categorical Variables With Continuous Variable}: \href{https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline//fs_ggline_mgrp_ncts.Rmd}{\textbf{rmd}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.R}{\textbf{r}} \textbar{} \href{https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.pdf}{\textbf{pdf}} \textbar{} \href{https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.html}{\textbf{html}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    One category is subplot, one category is line-color, one category is line-type.
+  \item
+    \textbf{ggplot}: \emph{ggplot() + facet\_wrap() + geom\_smooth() + geom\_hline() + scale\_colour\_manual() + scale\_shape\_discrete() + scale\_linetype\_manual() + scale\_x\_continuous() + scale\_y\_continuous() + theme\_bw() + theme()}
+  \end{itemize}
+\end{enumerate}
+
+\hypertarget{section-9.3-write-and-read-plotswrite-and-read-plots-links}{%
+\subsection{\texorpdfstring{\protect\hyperlink{write-and-read-plots}{Section 9.3 Write and Read Plots} links}{Section 9.3 Write and Read Plots links}}\label{section-9.3-write-and-read-plotswrite-and-read-plots-links}}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}

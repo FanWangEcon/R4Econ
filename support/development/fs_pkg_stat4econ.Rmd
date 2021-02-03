@@ -36,7 +36,7 @@ library(reticulate)
 Stat4Econ Rmd to PDF and HTML.
 
 ```{r}
-# file_path_root <- 'C:/Users/fan/Stat4Econ/support/development/fs_pkg_Stat4Econ'
+# file_path_root <- 'G:/repos/Stat4Econ/support/development/fs_pkg_Stat4Econ'
 # file_path_r <- paste0(file_path_root, '.R')
 # file_path_rmd <- paste0(file_path_root, '.Rmd')
 # knitr::purl(file_path_rmd, output=file_path_r, documentation = 1)
@@ -45,8 +45,8 @@ Stat4Econ Rmd to PDF and HTML.
 #### Local Outputs
 
 ```
-file://C:/Users/fan/Stat4Econ/bookdown/index.html
-file://C:/Users/fan/Stat4Econ/probability/
+file://G:/repos/Stat4Econ/bookdown/index.html
+file://G:/repos/Stat4Econ/probability/
 ```
 
 #### Testing Which Files Have Changed
@@ -57,8 +57,8 @@ Note: new files that should not get pdf and html should have *.rmd* rather than 
 
 ```{r}
 # run examples
-spt_root <- 'C:/Users/fan/Stat4Econ'
-spt_log <- 'C:/Users/fan/Stat4Econ/_log/rmdclean/'
+spt_root <- 'G:/repos/Stat4Econ'
+spt_log <- 'G:/repos/Stat4Econ/_log/rmdclean/'
 sink(paste0(spt_log, 'rmd_clean_test.log'))
 start_time <- Sys.time()
 setwd(spt_root)
@@ -66,7 +66,7 @@ setwd(spt_root)
 
 bl_test = TRUE
 bl_gen_if_git_old = FALSE
-ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/Stat4Econ/'),
+ff_sup_clean_rmd(ar_spt_root = c('G:/repos/Stat4Econ/'),
                  ar_spn_skip = c('support', 'index.Rmd', 'README',
                                  'main.Rmd', '_mod.Rmd', 'title.Rmd',
                                  'hypothesis', 'tidyverse.Rmd'),
@@ -90,15 +90,15 @@ Only generate pdf and html for files that have git changes or are new.
 
 
 ```{r}
-spt_root <- 'C:/Users/fan/Stat4Econ'
-spt_log <- 'C:/Users/fan/Stat4Econ/_log/rmdclean/'
+spt_root <- 'G:/repos/Stat4Econ'
+spt_log <- 'G:/repos/Stat4Econ/_log/rmdclean/'
 sink(paste0(spt_log, 'rmd_clean_actual.log'))
 start_time <- Sys.time()
 setwd(spt_root)
 
 bl_test = FALSE
 bl_gen_if_git_old = FALSE
-ff_sup_clean_rmd(ar_spt_root = c('C:/Users/fan/Stat4Econ/'),
+ff_sup_clean_rmd(ar_spt_root = c('G:/repos/Stat4Econ/'),
                  ar_spn_skip = c('support', 'index.Rmd', 'README',
                                  'main.Rmd', '_mod.Rmd', 'title.Rmd',
                                  'hypothesis', 'tidyverse.Rmd'),
@@ -127,7 +127,7 @@ import pyfan.util.rmd.bookdownparse as ft_bookdownparse
 
 # Path Roots
 sfc_prj = 'Stat4Econ'
-sph_prj = 'C:/Users/fan/Stat4Econ/'
+sph_prj = 'G:/repos/Stat4Econ/'
 spn_prj_bookdown_yml = '_bookdown.yml'
 
 # Read me preamble, and endnotes
@@ -161,7 +161,7 @@ with open(sph_prj + spn_prj_readme_ful, 'w') as outfile:
 Generate contenxt for bookdown appendix.
 
 ```{python}
-sph_prj = 'C:/Users/fan/Stat4Econ/'
+sph_prj = 'G:/repos/Stat4Econ/'
 spn_prj_readme_toc = 'README_toc.md'
 spn_prj_appendix = 'README_appendix.md'
 spn_in = open(sph_prj + spn_prj_readme_toc, "r")
@@ -226,8 +226,8 @@ spn_out.close()
 Render HTML:
 
 ```{r}
-spt_root <- 'C:/Users/fan/Stat4Econ'
-spt_log <- 'C:/Users/fan/Stat4Econ/_log/rmdclean/'
+spt_root <- 'G:/repos/Stat4Econ'
+spt_log <- 'G:/repos/Stat4Econ/_log/rmdclean/'
 
 sink(paste0(spt_log, 'render_bookdown_html.log'))
 start_time <- Sys.time()
@@ -244,8 +244,8 @@ sink()
 Render PDF:
 
 ```{r}
-spt_root <- 'C:/Users/fan/Stat4Econ'
-spt_log <- 'C:/Users/fan/Stat4Econ/_log/rmdclean/'
+spt_root <- 'G:/repos/Stat4Econ'
+spt_log <- 'G:/repos/Stat4Econ/_log/rmdclean/'
 
 sink(paste0(spt_log, 'render_bookdown_pdf.log'))
 start_time <- Sys.time()

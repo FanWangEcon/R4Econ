@@ -30,7 +30,7 @@ always_allow_html: true
 urlcolor: blue
 ---
 
-### Multiple Dimensional List
+### Lists
 
 ```{r global_options, include = FALSE}
 try(source("../../.Rprofile"))
@@ -47,6 +47,41 @@ try(source("../../.Rprofile"))
 - r row and colum names of list
 - list dimnames
 - r named list to string
+
+#### Iteratively Build Up a List of Strings
+
+Build up a list of strings, where the strings share common components. Iteratre over lists to generate variations in elements of the string list. 
+
+```{r}
+# common string components
+st_base_name <- 'snwx_v_planner_docdense'
+st_base_middle <- 'b1_xi0_manna_88'
+# numeric values to loop over
+ar_st_beta_val <- c('bt60', 'bt70', 'bt80', 'bt90')
+ar_st_edu_type <- c('e1lm2', 'e2hm2')
+
+# initialize string list
+ls_snm <- vector(mode = "list", length = length(ar_st_beta_val)*length(ar_st_edu_type))
+
+# generate list 
+it_ctr = 0
+for (st_beta_val in ar_st_beta_val) {
+  for (st_edu_type in ar_st_edu_type) {
+    it_ctr = it_ctr + 1
+    # snm_file_name <- 'snwx_v_planner_docdense_e2hm2_b1_xi0_manna_88_bt90'
+    snm_file_name <- paste(st_base_name, st_edu_type, st_base_middle, st_beta_val, sep ='_')
+    ls_snm[it_ctr] <- snm_file_name
+  }
+}
+
+# print
+for (snm in ls_snm) {
+  print(snm)
+}
+
+# if string in string
+grepl('snwx_v_planner', snm)
+```
 
 #### Named List of Matrixes
 

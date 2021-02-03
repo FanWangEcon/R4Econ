@@ -3,6 +3,7 @@ title: "Arrays Operations in R"
 description: |
   Basic array operations in R, rep, head, tail, na, etc.
   E notation.
+  Get N cuts from M points.
 core:
   - package: r
     code: |
@@ -10,7 +11,8 @@ core:
       head()
       tail()
       na_if()
-date: 2020-05-27
+      Re()
+date: 2021-02-02
 date_start: 2020-04-01
 output:
   pdf_document:
@@ -57,6 +59,18 @@ print(x)
 ```
 
 #### Array Slicing
+
+##### Get a Subset of Array Elements, N Cuts from M Points
+
+There is an array with M elements, get N elements from the M elements. 
+
+First cut including the starting and ending points. 
+
+```{r}
+it_M <- 5
+it_N <- 4
+ar_all_elements = seq(1,10,10)
+```
 
 ##### Remove Elements of Array
 
@@ -110,7 +124,43 @@ x <- c(1, -1, Inf, 10, -Inf)
 na_if(na_if(x, -Inf), Inf)
 ```
 
-#### Notations
+#### Complex Number
+
+Handling numbers with real and imaginary components. Two separate issues, given an array of numbers that includes real as well as imaginary numbers, keep subset that only has real components. Additionally, for the same array, generate an equal length version of the array that includes the real components of all numbers. 
+
+Define complex numbers.
+
+```{r}
+# Define a complex number
+cx_number_a <- 0+0.0460246857561777i
+# Define another complex number
+cx_number_b <- complex(real = 0.02560982, imaginary = 0.0460246857561777)
+# An array of numbers some of which are complex
+ar_cx_number <- c(0.02560982+0.000000000i, 0.00000000+0.044895305i, 
+                  0.00000000+0.009153429i, 0.05462045+0.000000000i, 
+                  0.00000000+0.001198538i, 0.00000000+0.019267050i)
+```
+
+Extract real components from a complex array.
+
+```{r}
+# equi-length real component
+ar_fl_number_re <- Re(ar_cx_number)
+print(ar_fl_number_re)
+# equi-length img component
+ar_fl_number_im <- Im(ar_cx_number)
+print(ar_fl_number_im)
+```
+
+Keep only real elements of array.
+
+```{r}
+# subset of array that is real
+ar_fl_number_re_subset <- Re(ar_cx_number[Re(ar_cx_number)!=0])
+print(ar_fl_number_re_subset)
+```
+
+#### Number Formatting
 
 ##### e notation
 

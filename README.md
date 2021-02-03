@@ -29,7 +29,8 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 1. [Arrays Operations in R](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_basics.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_basics.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_basics.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_basics.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_basics.html)
 	+ Basic array operations in R, rep, head, tail, na, etc.
 	+ E notation.
-	+ **r**: *rep() + head() + tail() + na_if()*
+	+ Get N cuts from M points.
+	+ **r**: *rep() + head() + tail() + na_if() + Re()*
 2. [Generate Special Arrays](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_generate.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_generate.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_generate.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_generate.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_generate.html)
 	+ Generate special arrays: log spaced array
 	+ **r**: *seq()*
@@ -271,6 +272,13 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ **tidyr**: *expand_grid()*
 	+ **ggplot2**: *geom_line() + facet_wrap()*
 	+ **econ**: *Atkinson (JET, 1970)*
+3. [Inequality in Environmental Exposure Across Population Groups](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_pop_loc_pollution.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html)
+	+ Simulate population distribution by location and demographic groups.
+	+ Simulate pollution exposures by location. 
+	+ Compute inequality in environmental exposure across population groups, given location-specific environmental data and location-specific population information. 
+	+ **r**: *matrix()*
+	+ **stats**: *runif() + sum()*
+	+ **dplyr**: *arrange() + group_by() + left_join() + filter() + slice()*
 
 # 9  Tables and Graphs
 
