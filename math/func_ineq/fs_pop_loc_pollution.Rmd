@@ -161,12 +161,83 @@ What is the p10, median, p90 and mean pollution exposure for each demographic gr
 df_pop_pollution_by_popgrp_cdf <- df_pop_pollution_long %>%
   arrange(popgrp, avgdailypm10) %>%
   group_by(popgrp) %>%
-  mutate(cdf_pop_condi_popgrp_sortpm10 = cumsum(pop_frac/sum(pop_frac)))
+  mutate(cdf_pop_condi_popgrp_sortpm10 = cumsum(pop_frac/sum(pop_frac)),
+         pmf_pop_condi_popgrp_sortpm10 = (pop_frac/sum(pop_frac)))
 # display
 df_pop_pollution_by_popgrp_cdf[1:round(it_N_pop_groups*5.5),] %>% 
   kable() %>% kable_styling_fc()
 ```
 
+#### Compute the Gini Index by Population Subgroup
+
+The Gini index from [fs_gini_disc](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_gini_disc.html).
+
+```{r}
+ffi_dist_gini_random_var_pos_test <- function(ar_x_sorted, ar_prob_of_x) {
+  fl_mean <- sum(ar_x_sorted*ar_prob_of_x);
+  ar_mean_cumsum <- cumsum(ar_x_sorted*ar_prob_of_x);
+  ar_height <- ar_mean_cumsum/fl_mean;
+  fl_area_drm <- sum(ar_prob_of_x*ar_height);
+  fl_area_below45 <- sum(ar_prob_of_x*(cumsum(ar_prob_of_x)/sum(ar_prob_of_x)))
+  fl_gini_index <- (fl_area_below45-fl_area_drm)/fl_area_below45
+  return(fl_gini_index)
+}
+```
+
+Compute Gini index for sub-group:
+
+```{r}
+# Compute GINI by group
+df_pop_pollu_gini <- df_pop_pollution_by_popgrp_cdf %>%
+  group_by(popgrp) %>%
+  do(popgrp_gini = ffi_dist_gini_random_var_pos_test(
+    .$avgdailypm10, .$pmf_pop_condi_popgrp_sortpm10)) %>%
+  unnest(c(popgrp_gini)) %>%
+  left_join(df_pop_pollution_by_popgrp_cdf %>% 
+              group_by(popgrp) %>% slice(1L) %>% 
+              select(popgrp)
+              , by="popgrp")
+# Display
+df_pop_pollu_gini %>% kable() %>% kable_styling_fc()
+```
+
+#### Visualize the Distributions
+
+Visualizing distributions. Visualize the CDF:
+
+```{r}
+# Visaulize Distributions, CDF for different population groups
+lineplot <- df_pop_pollution_by_popgrp_cdf %>%
+    select(popgrp, avgdailypm10, cdf_pop_condi_popgrp_sortpm10 ) %>%
+    ggplot(aes(x=avgdailypm10, y=cdf_pop_condi_popgrp_sortpm10, 
+               colour=popgrp)) +
+        geom_line() +
+        geom_point() +
+        labs(title = 'CDF of Pollution Distribution by Population Types',
+             x = 'Pollution Levels',
+             y = 'Cumulative Probability Mass',
+             caption = 'Testing Data') 
+print(lineplot)
+```
+
+Visualize the Probability Mass (real data should look much less chaotic than this):
+
+```{r}
+# Visaulize Distributions, CDF for different population groups
+lineplot_pmf <- df_pop_pollution_by_popgrp_cdf %>%
+    select(popgrp, avgdailypm10, pmf_pop_condi_popgrp_sortpm10 ) %>%
+    ggplot(aes(x=avgdailypm10, y=pmf_pop_condi_popgrp_sortpm10, 
+               colour=popgrp)) +
+        geom_line() +
+        geom_point() +
+        labs(title = 'Prob Mass Func of Pollution by Population Types',
+             x = 'Pollution Levels',
+             y = 'Probability Mass',
+             caption = 'Testing Data') 
+print(lineplot_pmf)
+```
+
+#### Various Quantiles 
 
 Measure quantiles of pollution exposures for different population groups:
 
@@ -182,6 +253,7 @@ df_pop_pollution_distribution <- df_pop_pollution_by_popgrp_cdf %>%
   slice(1) %>%
   mutate(pm10_p10 = avgdailypm10) %>%
   select(popgrp, pm10_mean, pm10_p10) %>%
+  left_join(df_pop_pollu_gini, by='popgrp') %>% 
   left_join(df_pop_pollution_by_popgrp_cdf %>% 
               filter(cdf_pop_condi_popgrp_sortpm10 >= 0.20) %>%
               slice(1) %>%
@@ -205,7 +277,8 @@ df_pop_pollution_distribution <- df_pop_pollution_by_popgrp_cdf %>%
               slice(1) %>%
               mutate(pm10_p90 = avgdailypm10) %>%
               select(popgrp, pm10_p90), 
-            by='popgrp')
+            by='popgrp') %>%
+  select(popgrp, pm10_mean, popgrp_gini, everything())
 # display
 df_pop_pollution_distribution %>% 
   kable(caption = 'PM10 Exposure Distribution by Population Groups') %>% 

@@ -1,15 +1,16 @@
 ---
-title: "R Compute Gini Coefficient for Discrete Samples"
-titleshort: "Gini for Discrete Samples"
+title: "R Compute Gini Coefficient for Discrete Samples or Discrete Random Variable"
+titleshort: "Gini for Discrete Samples or Discrete Random Variable"
 description: |
   Given sample of data points that are discrete, compute the approximate gini coefficient.
+  Given a discrete random variable, compute the GINI coefficient. 
 core:
   - package: r
     code: |
       sort()
       cumsum()
       sum()
-date: 2020-04-14
+date: 2021-03-18
 date_start: 2020-04-01
 output:
   pdf_document:
@@ -143,7 +144,7 @@ $$
  MostUnequalGINI\left(N\right) = 1 - \frac{2}{N+1} = \frac{N-1}{N+1}
 $$
 
-#### Implement GINI Formula
+##### Implement GINI Formula for Discrete Sample
 
 The **GINI** formula just derived is trivial to compute.
 
@@ -156,7 +157,7 @@ There are no package dependencies. Define the formula here:
 
 ```{r}
 # Formula, directly implement the GINI formula Following Step 4 above
-fv_dist_gini_vector_pos_test <- function(ar_pos) {
+ffi_dist_gini_vector_pos_test <- function(ar_pos) {
   # Check length and given warning
   it_n <- length(ar_pos)
   if (it_n <= 100)  warning('Data vector has n=',it_n,', max-inequality/max-gini=',(it_n-1)/(it_n + 1))
@@ -193,18 +194,100 @@ Now test the example arrays above using the function based no our formula:
 ```{r, eval=TRUE, echo=FALSE}
 # Hard-Code Small N Dist Tests
 cat('\nSmall N=1 Hard-Code\n')
-cat('ar_equal_n1:', fv_dist_gini_vector_pos_test(ar_equal_n1), '\n')
-cat('ar_ineql_n1:', fv_dist_gini_vector_pos_test(ar_ineql_n1), '\n')
+cat('ar_equal_n1:', ffi_dist_gini_vector_pos_test(ar_equal_n1), '\n')
+cat('ar_ineql_n1:', ffi_dist_gini_vector_pos_test(ar_ineql_n1), '\n')
 
 cat('\nSmall N=2 Hard-Code, converge to 1/3, see formula above\n')
-cat('ar_ineql_alittle_n2:', fv_dist_gini_vector_pos_test(ar_ineql_alittle_n2), '\n')
-cat('ar_ineql_somewht_n2:', fv_dist_gini_vector_pos_test(ar_ineql_somewht_n2), '\n')
-cat('ar_ineql_alotine_n2:', fv_dist_gini_vector_pos_test(ar_ineql_alotine_n2), '\n')
-cat('ar_ineql_veryvry_n2:', fv_dist_gini_vector_pos_test(ar_ineql_veryvry_n2), '\n')
+cat('ar_ineql_alittle_n2:', ffi_dist_gini_vector_pos_test(ar_ineql_alittle_n2), '\n')
+cat('ar_ineql_somewht_n2:', ffi_dist_gini_vector_pos_test(ar_ineql_somewht_n2), '\n')
+cat('ar_ineql_alotine_n2:', ffi_dist_gini_vector_pos_test(ar_ineql_alotine_n2), '\n')
+cat('ar_ineql_veryvry_n2:', ffi_dist_gini_vector_pos_test(ar_ineql_veryvry_n2), '\n')
 
 cat('\nSmall N=10 Hard-Code, convege to 9/11=0.8181, see formula above\n')
-cat('ar_equal_n10:', fv_dist_gini_vector_pos_test(ar_equal_n10), '\n')
-cat('ar_ineql_some_n10:', fv_dist_gini_vector_pos_test(ar_ineql_some_n10), '\n')
-cat('ar_ineql_very_n10:', fv_dist_gini_vector_pos_test(ar_ineql_very_n10), '\n')
-cat('ar_ineql_extr_n10:', fv_dist_gini_vector_pos_test(ar_ineql_extr_n10), '\n')
+cat('ar_equal_n10:', ffi_dist_gini_vector_pos_test(ar_equal_n10), '\n')
+cat('ar_ineql_some_n10:', ffi_dist_gini_vector_pos_test(ar_ineql_some_n10), '\n')
+cat('ar_ineql_very_n10:', ffi_dist_gini_vector_pos_test(ar_ineql_very_n10), '\n')
+cat('ar_ineql_extr_n10:', ffi_dist_gini_vector_pos_test(ar_ineql_extr_n10), '\n')
+```
+
+### Gini Formula for Discrete Random Varialbe
+
+For a discrete random variable, we are two arrays, an array of $x$ values, and an array of $f(x)$ probability mass at each $x$ value. Suppose the $x$ values are unique/non-repeating. This is also Implemented in [MEconTools](https://fanwangecon.github.io/MEconTools/) with the [ff_disc_rand_var_gini](https://github.com/FanWangEcon/MEconTools/blob/master/MEconTools/stats/ff_disc_rand_var_gini.m) function.
+
+Generate two arrays for $x$ and $f(x)$, we will use the [binomial distribution](https://fanwangecon.github.io/Stat4Econ/probability_discrete/htmlpdfr/binomial.html):
+
+```{r}
+ar_choice_unique_sorted <- seq(0, 100, by=1)
+ar_choice_prob <- dbinom(ar_choice_unique_sorted, 100, 0.01)
+```
+
+Generate mean and cumulative mean at each point: 
+
+```{r}
+# 1. to normalize, get mean (binomial so mean is p*N=50)
+fl_mean <- sum(ar_choice_unique_sorted*ar_choice_prob);
+# 2. get cumulative mean at each point
+ar_mean_cumsum <- cumsum(ar_choice_unique_sorted*ar_choice_prob);
+```
+
+Normalizing and area calculation, following the same principle as above:
+
+```{r}
+# 3. Share of wealth (income etc) accounted for up to this sorted type
+ar_height <- ar_mean_cumsum/fl_mean;
+# 4. The total area, is the each height times each width summed up
+fl_area_drm <- sum(ar_choice_prob*ar_height);
+```
+
+Finally GINI coefficient: 
+
+```{r}
+# 5. area below 45 degree line might not be 1/2, depends on discretness
+fl_area_below45 <- sum(ar_choice_prob*(cumsum(ar_choice_prob)/sum(ar_choice_prob)))
+
+# 6. Gini is the distance between
+fl_gini_index <- (fl_area_below45-fl_area_drm)/fl_area_below45
+print(paste0('fl_gini_index=', fl_gini_index))
+```
+
+#### Discrete Random Variable as Function
+
+Organizing the code above as a function, and testing results out with the [binomial distribution](https://fanwangecon.github.io/Stat4Econ/probability_discrete/htmlpdfr/binomial.html) as an example. 
+
+For the binomial distribution, if the probability of success is very close to zero, that means nearly all mass is at lose all or nearly losing all. There will be non-zero but very small mass at higher levels of wins. Hence this should mean extreme inequality. GINI index should be close to 1. Alternatively, GINI index should be close to 0 when we have near 100 percent chance of success, then all mass is at winning all, perfect equality.
+
+```{r}
+# Combining the code from above
+ffi_dist_gini_random_var_pos_test <- function(ar_x_sorted, ar_prob_of_x) {
+  # Check length and given warning
+  
+  # 1. to normalize, get mean (binomial so mean is p*N=50)
+  fl_mean <- sum(ar_x_sorted*ar_prob_of_x);
+  # 2. get cumulative mean at each point
+  ar_mean_cumsum <- cumsum(ar_x_sorted*ar_prob_of_x);
+  # 3. Share of wealth (income etc) accounted for up to this sorted type
+  ar_height <- ar_mean_cumsum/fl_mean;
+  # 4. The total area, is the each height times each width summed up
+  fl_area_drm <- sum(ar_prob_of_x*ar_height);
+  # 5. area below 45 degree line might not be 1/2, depends on discretness
+  fl_area_below45 <- sum(ar_prob_of_x*(cumsum(ar_prob_of_x)/sum(ar_prob_of_x)))
+  # 6. Gini is the distance between
+  fl_gini_index <- (fl_area_below45-fl_area_drm)/fl_area_below45
+  
+  return(fl_gini_index)
+}
+
+```
+
+Testing the function with the Binomial Distribution:
+
+```{r}
+for (fl_binom_success_prob in seq(0.0001,0.9999,length.out=10)) {
+  ar_x_sorted <- seq(0, 100, by=1)
+  ar_prob_of_x <- dbinom(ar_x_sorted, 100, fl_binom_success_prob)
+  fl_gini_index <- ffi_dist_gini_random_var_pos_test(ar_x_sorted, ar_prob_of_x)
+  st_print <- paste0('binom p(success)=', fl_binom_success_prob ,
+                   ', the fl_gini_index=', fl_gini_index)
+  print(st_print)
+}
 ```

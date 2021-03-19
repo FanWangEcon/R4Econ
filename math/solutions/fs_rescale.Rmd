@@ -1,0 +1,135 @@
+---
+title: "Quadratic and other Rescaling of Parameters with Fixed Min and Max"
+titleshort: "Quadratic and other Rescaling of Parameters with Fixed Min and Max"
+description: |
+  Given a < x < b, use f(x) to rescale x, such that f(a)=a, f(b)=b, but f(z)=0.5*z for some z between a and b. Solve using the quadratic function with three equations and three unknowns uniquely. 
+date: 2021-03-08
+date_start: 2021-03-08
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+### Rescale a Parameter with Fixed Min and Max
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+#### Using A Quadratic Function to Fit Three Points Uniquely
+
+Given e < x < f, use f(x) to rescale x, such that f(e)=e, f(f)=f, but f(z)=$\alpha \cdot z$ for one particular z between e and f, where 
+$\alpha$ > 1. And in this case, assume that $\alpha \cdot z < f$. We can fit these three points using the Quadratic function uniquely. In another word, there is a unique quadratic function that crosses these three points. Note the quadratic function is either concave or convex through the entire domain. 
+
+Suppose that $e=0$, $f=10$, $z=2$, and $\alpha=1.5$. Using a quadratic to fit:
+
+$$
+y(x) = a \cdot x^2 + b \cdot x + c
+$$
+We have three equations:
+$$
+0 = a \cdot 0 + b \cdot 0 + c\\
+2 \cdot 1.5 = a \cdot 2^2 + b \cdot 2 + c\\
+10 = a \cdot 10^2 + b \cdot 10 + c
+$$
+Given these, we have, $c = 0$, and subsequently, 2 equations and 2 unknowns:
+$$
+3 = a \cdot 4 + b \cdot 2\\
+10 = a \cdot 100 + b \cdot 10
+$$
+
+Hence:
+$$
+a = \frac{3-2b}{4}\\
+10 = \frac{3-2b}{4}\cdot 100 + b \cdot 10\\
+10 = 75 - 50b + 10b\\
+$$
+And finally:
+$$
+a = \frac{3-2*1.625}{4}=-0.0625\\
+b = \frac{65}{40}=1.625\\
+c = 0
+$$
+
+Generate the $a$, $b$ and $c$ points above for the quadratic function:
+```{r}
+# set values
+e <- 0
+f <- 10
+z <- 2
+alpha <- 1.5
+# apply formulas from above
+a <- -0.0625
+b <- 1.625
+c <- 0
+# grid of values beween a and b, 11 points covering z = 2
+ar_x <- seq(e, f, length.out = 11)
+# rescale
+ar_grid_quad <- a*ar_x^2 + b*ar_x + c
+# show values
+kable(print(as_tibble(cbind(ar_x, ar_grid_quad))), 
+      caption = paste0("Quadratic Fit of Three Equations and Three Unknowns\n",
+                       "Satisfies: f(0)=0, f(10)=10, f(2)=3")) %>% 
+  kable_styling_fc()
+```
+
+
+
+
+
+We have three equations:
+$$
+0 = a \cdot 0 + b \cdot 0 + c\\
+0.75 = a \cdot 0.5^2 + b \cdot 0.5 + c\\
+3.5 = a \cdot 3.5^2 + b \cdot 3.5 + c
+$$
+Given these, we have, $c = 0$, and subsequently, 2 equations and 2 unknowns:
+$$
+0.75 = a \cdot 0.25 + b \cdot 0.5\\
+3.5 = a \cdot 12.25 + b \cdot 3.5
+$$
+
+Hence:
+$$
+a = \frac{0.75-0.5b}{0.25}\\
+3.5 = \frac{0.75-0.5b}{0.25}\cdot 12.25 + b \cdot 3.5\\
+3.5 = 36.75 - 24.5b + 3.5b\\
+$$
+And finally:
+$$
+a = \frac{0.75-0.5*1.58333}{0.25}=-0.1666\\
+b = \frac{36.75-3.5}{24.5-3.5}=1.58333\\
+c = 0
+$$
+Generate the $a$, $b$ and $c$ points above for the quadratic function:
+
+```{r}
+# set values
+e <- 0
+f <- 3.5
+z <- 0.5
+alpha <- 1.5
+# apply formulas from above
+a <- -0.16666666
+b <- 1.583333333
+c <- 0
+# grid of values beween a and b, 11 points covering z = 2
+ar_x <- seq(e, f, length.out = 100000)
+# rescale
+ar_grid_quad <- a*ar_x^2 + b*ar_x + c
+# show values
+# cbind(ar_x, ar_grid_quad)
+ar_x[which.min(abs(ar_grid_quad - 0.75))]
+```

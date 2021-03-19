@@ -1,0 +1,194 @@
+---
+title: "Multinomial-Logit and CRRA"
+titleshort: "Multinomial-Logit and CRRA"
+description: |
+  Multinomial logit and CRRA
+core:
+  - package: r
+    code: |
+date: 2021-01-08
+date_start: 2020-01-08
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+### Multinomial Logit and CRRA
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+#### Multinomial Logit Expected Value
+
+The log-sum term. $U_{tj}$ denotes pecuniary related utility at time $t$ for choice alternative $j$.
+
+$$
+\log\left(
+  \exp\left(U_{11}\right)
+  +\exp\left(U_{12}\right) 
+\right)
++ 
+\log\left(
+  \exp\left(U_{21}\right)
+  +\exp\left(U_{22}\right) 
+\right)
+$$
+
+#### Two Regimes with Utility (Does not Work)
+
+With numerical values, utility under regime A. 
+
+```{r}
+UA11 = -0.5
+UA12 = -1
+UA21 = -0.6
+UA22 = -1.1
+fl_EV_A = log(exp(UA11) + exp(UA12)) + log(exp(UA21) + exp(UA22))
+print(fl_EV_A)
+```
+
+With numerical values, utility under regime B. 
+
+```{r}
+UB11 = -0.1
+UB12 = -0.65
+UB21 = -0.21
+UB22 = -0.2
+fl_EV_B = log(exp(UB11) + exp(UB12)) + log(exp(UB21) + exp(UB22))
+print(fl_EV_B)
+```
+
+How much must U under A increase by to match overall U under B? Note that the structure below does not make sense, but U is already negative, it can not be about how chaning Shares of U impact things.
+
+```{r}
+ar_increase = seq(0, 0.5, length.out=10)
+fl_EV_A = log(exp(UA11*(1+ar_increase)) + exp(UA12*(1+ar_increase))) + log(exp(UA21*(1+ar_increase)) + exp(UA22*(1+ar_increase)))
+print(fl_EV_A)
+```
+
+#### Two Regimes with Consumption
+
+Preference CRRA
+
+```{r}
+gamma = 1.3
+# Define utility Function
+ffi_crra <- function(fl_c){
+  fl_U = (fl_c^(1-gamma))/(1-gamma)
+  return(fl_U)
+}
+```
+
+```{r}
+fl_increment = 1.5
+CA11 = -0.5+fl_increment
+CA12 = -1+fl_increment
+CA21 = -0.6+fl_increment
+CA22 = -1.1+fl_increment
+fl_EV_A = log(exp(ffi_crra(CA11)) + exp(ffi_crra(CA12))) + log(exp(ffi_crra(CA21)) + exp(ffi_crra(CA22)))
+print(fl_EV_A)
+```
+
+With numerical values, utility under regime B. 
+
+```{r}
+fl_increment = 3
+CB11 = -0.1+fl_increment
+CB12 = -0.65+fl_increment
+CB21 = -0.21+fl_increment
+CB22 = -0.2+fl_increment
+fl_EV_B = log(exp(ffi_crra(CB11)) + exp(ffi_crra(CB12))) + log(exp(ffi_crra(CB21)) + exp(ffi_crra(CB22)))
+print(fl_EV_B)
+```
+
+How much must C under A increase by to match overall U under B? This structure works, negative or positive values for overall EV does not matter, work in either case. 
+
+```{r}
+ar_increase = seq(0, 3, length.out=10)
+# Method 1
+fl_EV_A_with_c_increments = 
+  log(exp(ffi_crra(CA11*(1+ar_increase))) + 
+        exp(ffi_crra(CA12*(1+ar_increase)))) + 
+  log(exp(ffi_crra(CA21*(1+ar_increase))) + 
+        exp(ffi_crra(CA22*(1+ar_increase))))
+print(fl_EV_A_with_c_increments)
+# Method 2
+fl_EV_A_with_c_increments_m2 = 
+  log(exp((1+ar_increase)^(1-gamma)*ffi_crra(CA11)) + 
+        exp((1+ar_increase)^(1-gamma)*ffi_crra(CA12))) + 
+  log(exp((1+ar_increase)^(1-gamma)*ffi_crra(CA21)) + 
+        exp((1+ar_increase)^(1-gamma)*ffi_crra(CA22)))
+print(fl_EV_A_with_c_increments_m2)
+# Method 3
+fl_EV_A_with_c_increments_m3 = 
+  log(exp((1+ar_increase)^(1-gamma))*exp(ffi_crra(CA11)) + 
+        exp((1+ar_increase)^(1-gamma))*exp(ffi_crra(CA12))) + 
+  log(exp((1+ar_increase)^(1-gamma))*exp(ffi_crra(CA21)) + 
+        exp((1+ar_increase)^(1-gamma))*exp(ffi_crra(CA22)))
+print(fl_EV_A_with_c_increments_m3)
+# Method 3
+fl_EV_A_with_c_increments_m3 = 
+  (1+ar_increase)^(1-gamma) + 
+  log(exp(ffi_crra(CA11)) + exp(ffi_crra(CA12))) + 
+  (1+ar_increase)^(1-gamma) + 
+  log(exp(ffi_crra(CA21)) + exp(ffi_crra(CA22)))
+print(fl_EV_A_with_c_increments_m3)
+```
+
+#### Analytically Show 
+
+What is analytically the CEV with CRRA + Mlogit?
+
+$$
+\log\left(
+  \exp\left(U\left(C_{11}\right)\right)
+  +\exp\left(U\left(C_{12}\right)\right)
+\right)
++ 
+\log\left(
+  \exp\left(U\left(C_{21}\right)\right)
+  +\exp\left(U\left(C_{22}\right)\right)
+\right)
+$$
+
+Given CRRA Utility
+
+$$
+U(C;\psi) = \frac{\left(c\cdot\left(1+\psi\right)\right)^{1-\gamma}}{1-\gamma}\\
+U(C;\psi) = \frac{\left(1+\psi\right)^{1-\gamma}\left(c\right)^{1-\gamma}}{1-\gamma} = 
+\left(1+\psi\right)^{1-\gamma}\cdot U(C)
+$$
+
+Plugging $\psi$ into the equation 
+
+$$
+\log\left(
+  \exp\left(\left(1+\psi\right)^{1-\gamma}\cdot U\left(C_{11}\right)\right)
+  +\exp\left(\left(1+\psi\right)^{1-\gamma}\cdot U\left(C_{12}\right)\right)
+\right)
++ 
+\log\left(
+  \exp\left(\left(1+\psi\right)^{1-\gamma}\cdot U\left(C_{21}\right)\right)
+  +\exp\left(\left(1+\psi\right)^{1-\gamma}\cdot U\left(C_{22}\right)\right)
+\right)
+$$
+This is as far as we can easily go, note:
+
+$$
+\exp(a\cdot b) \neq \exp(a)\cdot\exp(b)
+$$
+
+
