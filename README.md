@@ -32,10 +32,12 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ Get N cuts from M points.
 	+ **r**: *rep() + head() + tail() + na_if() + Re()*
 2. [Generate Special Arrays](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_generate.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_generate.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_generate.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_generate.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_generate.html)
-	+ Generate special arrays: log spaced array
+	+ Generate equi-distance array. 
+	+ Generate special log spaced array.
 	+ **r**: *seq()*
 3. [String Operations](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_string.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_string.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_string.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_string.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_string.html)
-	+ Split, concatenate, subset, replace, substring strings
+	+ Split, concatenate, subset, replace, substring strings.
+	+ Convert number to string without decimal and negative sign.
 	+ **r**: *paste0() + sub() + gsub() + grepl() + sprintf()*
 4. [Meshgrid Matrices, Arrays and Scalars](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_mesh.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_mesh.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_mesh.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_mesh.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_mesh.html)
 	+ Meshgrid Matrices, Arrays and Scalars to form all combination dataframe.
@@ -277,9 +279,17 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ **stats**: *runif() + sum()*
 	+ **dplyr**: *arrange() + group_by() + left_join() + filter() + slice()*
 
-# 9  Tables and Graphs
+# 9  Statistics
 
-## 9.1  R Base Plots
+## 9.1  Distributions
+
+1. [Integrate Normal Shocks](https://fanwangecon.github.io/R4Econ/statistics/integration/htmlpdfr/fs_integrate_normal.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/integration//fs_integrate_normal.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/integration/htmlpdfr/fs_integrate_normal.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/integration/htmlpdfr/fs_integrate_normal.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/statistics/integration/htmlpdfr/fs_integrate_normal.html)
+	+ Random Sampling (Monte Carlo) integrate shocks.
+	+ Trapezoidal rule (symmetric rectangles) integrate normal shock.
+
+# 10  Tables and Graphs
+
+## 10.1  R Base Plots
 
 1. [R Base Plot Line with Curves and Scatter](https://fanwangecon.github.io/R4Econ/tabgraph/baseplot/htmlpdfr/fs_base_curve.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/baseplot//fs_base_curve.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/baseplot/htmlpdfr/fs_base_curve.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/baseplot/htmlpdfr/fs_base_curve.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/tabgraph/baseplot/htmlpdfr/fs_base_curve.html)
 	+ Plot scatter points, line plot and functional curve graphs together.
@@ -287,21 +297,27 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ Generate additional lines for plots successively, record successively, and plot all steps, or initial steps results.
 	+ **r**: *plot() + curve() + legend() + title() + axis() + par() + recordPlot()*
 
-## 9.2  GGplot Line Related Plots
+## 10.2  GGplot Line Related Plots
 
-1. [GGplot Multiple Categorical Variables With Continuous Variable](https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline//fs_ggline_mgrp_ncts.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.html)
+1. [GGplot Line Plot Multiple Categorical Variables With Continuous Variable](https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline//fs_ggline_mgrp_ncts.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.html)
 	+ One category is subplot, one category is line-color, one category is line-type.
 	+ **ggplot**: *ggplot() + facet_wrap() + geom_smooth() + geom_hline() + scale_colour_manual() + scale_shape_discrete() + scale_linetype_manual() + scale_x_continuous() + scale_y_continuous() + theme_bw() + theme()*
 
-## 9.3  Write and Read Plots
+## 10.3  GGplot Scatter Related Plots
+
+1. [GGplot Scater Plot Three Continuous Variables and Multiple Categorical Variables](https://fanwangecon.github.io/R4Econ/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter//fs_ggscatter_3cts_mdisc.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.html)
+	+ Two continuous variables for the x-axis and the y-axis, another continuous variable for size of scatter, other categorical variables for scatter shape and size.
+	+ **ggplot**: *ggplot() + geom_jitter() + geom_smooth() + scale_colour_manual() + scale_shape_discrete() + scale_linetype_manual() + scale_x_continuous() + scale_y_continuous() + theme_bw() + theme()*
+
+## 10.4  Write and Read Plots
 
 1. [Base R Save Images At Different Sizes](https://fanwangecon.github.io/R4Econ/tabgraph/inout/htmlpdfr/fs_img_io.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/inout//fs_img_io.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/inout/htmlpdfr/fs_img_io.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/inout/htmlpdfr/fs_img_io.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/tabgraph/inout/htmlpdfr/fs_img_io.html)
 	+ Base R store image core, add legends/titles/labels/axis of different sizes to save figures of different sizes.
 	+ **r**: *png() + setEPS() + postscript() + dev.off()*
 
-# 10  Get Data
+# 11  Get Data
 
-## 10.1  Environmental Data
+## 11.1  Environmental Data
 
 1. [CDS ECMWF Global Enviornmental Data Download](https://fanwangecon.github.io/R4Econ/getdata/envir/htmlpdfr/fs_ecmwf.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/getdata/envir//fs_ecmwf.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/getdata/envir/htmlpdfr/fs_ecmwf.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/getdata/envir/htmlpdfr/fs_ecmwf.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/getdata/envir/htmlpdfr/fs_ecmwf.html)
 	+ Using Python API get get ECMWF ERA5 data.
@@ -309,9 +325,9 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ **r**: *file() + writeLines() + unzip() + list.files() + unlink()*
 	+ **r-reticulate**: *use_python() + Sys.setenv(RETICULATE_PYTHON = spth_conda_env)*
 
-# 11  Code and Development
+# 12  Code and Development
 
-## 11.1  Files In and Out
+## 12.1  Files In and Out
 
 1. [Decompose File Paths to Get Folder and Files Names](https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_path.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout//fs_path.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_path.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_path.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_path.html)
 	+ Decompose file path and get file path folder names and file name. 
@@ -325,13 +341,13 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ Modify markdown pounds hierarchy.
 	+ **r**: *file() + writeLines() + readLines() + close() + gsub()*
 
-## 11.2  Python with R
+## 12.2  Python with R
 
 1. [Python in R with Reticulate](https://fanwangecon.github.io/R4Econ/development/python/htmlpdfr/fs_python_reticulate.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/development/python//fs_python_reticulate.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/development/python/htmlpdfr/fs_python_reticulate.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/development/python/htmlpdfr/fs_python_reticulate.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/development/python/htmlpdfr/fs_python_reticulate.html)
 	+ Use Python in R with Reticulate
 	+ **reticulate**: *py_config() + use_condaenv() + py_run_string() + Sys.which('python')*
 
-## 11.3  Command Line
+## 12.3  Command Line
 
 1. [System and Shell Commands in R](https://fanwangecon.github.io/R4Econ/development/system/htmlpdfr/fs_system_shell.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/development/system//fs_system_shell.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/development/system/htmlpdfr/fs_system_shell.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/development/system/htmlpdfr/fs_system_shell.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/development/system/htmlpdfr/fs_system_shell.html)
 	+ Run system executable and shell commands.

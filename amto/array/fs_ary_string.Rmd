@@ -2,7 +2,8 @@
 title: "R String Arrays"
 titleshort: "String Operations"
 description: |
-  Split, concatenate, subset, replace, substring strings
+  Split, concatenate, subset, replace, substring strings.
+  Convert number to string without decimal and negative sign.
 core:
   - package: r
     code: |
@@ -35,6 +36,20 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_one`
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
+
+#### Positive or Negative Floating Number to String
+
+There is a number, that contains decimal and possibly negative sign and has some decimals, convert this to a string that is more easily used as a file or folder name. 
+
+```{r}
+ls_fl_rho <- c(1, -1, -1.5 -100, 0.5, 0.11111111, -199.22123)
+for (fl_rho in ls_fl_rho) {
+  st_rho <- paste0(round(fl_rho, 4))
+  st_rho <- gsub(x = st_rho,  pattern = "-", replacement = "n")
+  st_rho <- gsub(x = st_rho,  pattern = "\\.", replacement = "p")
+  print(paste0('st_rho=', st_rho))
+}
+```
 
 #### String Replace
 
@@ -72,7 +87,7 @@ print(paste0('st_clean_a1:', st_clean_a1))
 ```
 
 
-##### Search If and Which String Contains
+#### Search If and Which String Contains
 
 - r if string contains
 - r if string contains either or grepl

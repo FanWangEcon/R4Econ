@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 9 Statistics | Data Structures, Estimation and Optimization with R</title>
+  <meta name="description" content="<p>Run system executable and shell commands.
+Activate conda environment with shell script.</p>" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 9 Statistics | Data Structures, Estimation and Optimization with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="<p>Run system executable and shell commands.
+Activate conda environment with shell script.</p>" />
+  <meta name="github-repo" content="fanwangecon/R4Econ" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 9 Statistics | Data Structures, Estimation and Optimization with R" />
+  
+  <meta name="twitter:description" content="<p>Run system executable and shell commands.
+Activate conda environment with shell script.</p>" />
+  
+
+<meta name="author" content="Fan Wang" />
+
+
+<meta name="date" content="2021-03-23" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="mathematics.html"/>
+<link rel="next" href="tables-and-graphs.html"/>
+<script src="libs/header-attrs-2.5/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-92953468-5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-92953468-5');
+</script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Data Structures and Estimation with R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html"><i class="fa fa-check"></i><b>1</b> Array, Matrix, Dataframe</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#list"><i class="fa fa-check"></i><b>1.1</b> List</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#lists"><i class="fa fa-check"></i><b>1.1.1</b> Lists</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#array"><i class="fa fa-check"></i><b>1.2</b> Array</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#array-basics"><i class="fa fa-check"></i><b>1.2.1</b> Array Basics</a></li>
+<li class="chapter" data-level="1.2.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-arrays"><i class="fa fa-check"></i><b>1.2.2</b> Generate Arrays</a></li>
+<li class="chapter" data-level="1.2.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-arrays"><i class="fa fa-check"></i><b>1.2.3</b> String Arrays</a></li>
+<li class="chapter" data-level="1.2.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#mesh-matrices-arrays-and-scalars"><i class="fa fa-check"></i><b>1.2.4</b> Mesh Matrices, Arrays and Scalars</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#matrix"><i class="fa fa-check"></i><b>1.3</b> Matrix</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-matrixes"><i class="fa fa-check"></i><b>1.3.1</b> Generate Matrixes</a></li>
+<li class="chapter" data-level="1.3.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#linear-algebra"><i class="fa fa-check"></i><b>1.3.2</b> Linear Algebra</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#variables-in-dataframes"><i class="fa fa-check"></i><b>1.4</b> Variables in Dataframes</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-dataframe"><i class="fa fa-check"></i><b>1.4.1</b> Generate Dataframe</a></li>
+<li class="chapter" data-level="1.4.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#factor-label-and-combine"><i class="fa fa-check"></i><b>1.4.2</b> Factor Label and Combine</a></li>
+<li class="chapter" data-level="1.4.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#drawly-random-rows"><i class="fa fa-check"></i><b>1.4.3</b> Drawly Random Rows</a></li>
+<li class="chapter" data-level="1.4.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-variables-conditional-on-others"><i class="fa fa-check"></i><b>1.4.4</b> Generate Variables Conditional On Others</a></li>
+<li class="chapter" data-level="1.4.5" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-dataframes"><i class="fa fa-check"></i><b>1.4.5</b> String Dataframes</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="summarize-data.html"><a href="summarize-data.html"><i class="fa fa-check"></i><b>2</b> Summarize Data</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="summarize-data.html"><a href="summarize-data.html#counting-observation"><i class="fa fa-check"></i><b>2.1</b> Counting Observation</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="summarize-data.html"><a href="summarize-data.html#uncount"><i class="fa fa-check"></i><b>2.1.1</b> Uncount</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="summarize-data.html"><a href="summarize-data.html#sorting-indexing-slicing"><i class="fa fa-check"></i><b>2.2</b> Sorting, Indexing, Slicing</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="summarize-data.html"><a href="summarize-data.html#sorting"><i class="fa fa-check"></i><b>2.2.1</b> Sorting</a></li>
+<li class="chapter" data-level="2.2.2" data-path="summarize-data.html"><a href="summarize-data.html#group-sort-and-slice"><i class="fa fa-check"></i><b>2.2.2</b> Group, Sort and Slice</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="summarize-data.html"><a href="summarize-data.html#group-statistics"><i class="fa fa-check"></i><b>2.3</b> Group Statistics</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="summarize-data.html"><a href="summarize-data.html#cumulative-statistics-within-group"><i class="fa fa-check"></i><b>2.3.1</b> Cumulative Statistics within Group</a></li>
+<li class="chapter" data-level="2.3.2" data-path="summarize-data.html"><a href="summarize-data.html#groups-statistics"><i class="fa fa-check"></i><b>2.3.2</b> Groups Statistics</a></li>
+<li class="chapter" data-level="2.3.3" data-path="summarize-data.html"><a href="summarize-data.html#one-variable-group-summary"><i class="fa fa-check"></i><b>2.3.3</b> One Variable Group Summary</a></li>
+<li class="chapter" data-level="2.3.4" data-path="summarize-data.html"><a href="summarize-data.html#nested-within-group-stats"><i class="fa fa-check"></i><b>2.3.4</b> Nested within Group Stats</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="summarize-data.html"><a href="summarize-data.html#distributional-statistics"><i class="fa fa-check"></i><b>2.4</b> Distributional Statistics</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="summarize-data.html"><a href="summarize-data.html#histogram"><i class="fa fa-check"></i><b>2.4.1</b> Histogram</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="summarize-data.html"><a href="summarize-data.html#summarize-multiple-variables"><i class="fa fa-check"></i><b>2.5</b> Summarize Multiple Variables</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="summarize-data.html"><a href="summarize-data.html#generate-replace-variables"><i class="fa fa-check"></i><b>2.5.1</b> Generate Replace Variables</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>3</b> Functions</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="functions.html"><a href="functions.html#dataframe-mutate"><i class="fa fa-check"></i><b>3.1</b> Dataframe Mutate</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="functions.html"><a href="functions.html#row-input-functions"><i class="fa fa-check"></i><b>3.1.1</b> Row Input Functions</a></li>
+<li class="chapter" data-level="3.1.2" data-path="functions.html"><a href="functions.html#evaluate-choices-across-states"><i class="fa fa-check"></i><b>3.1.2</b> Evaluate Choices Across States</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="functions.html"><a href="functions.html#dataframe-do-anything"><i class="fa fa-check"></i><b>3.2</b> Dataframe Do Anything</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="functions.html"><a href="functions.html#mx1-by-n-to-mxq-by-n1"><i class="fa fa-check"></i><b>3.2.1</b> (Mx1 by N) to (MxQ by N+1)</a></li>
+<li class="chapter" data-level="3.2.2" data-path="functions.html"><a href="functions.html#mxp-by-n-to-mx1-by-1"><i class="fa fa-check"></i><b>3.2.2</b> (MxP by N) to (Mx1 by 1)</a></li>
+<li class="chapter" data-level="3.2.3" data-path="functions.html"><a href="functions.html#mxp-by-n-to-mxq-by-nz"><i class="fa fa-check"></i><b>3.2.3</b> (MxP by N) to (MxQ by N+Z)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="functions.html"><a href="functions.html#apply-and-pmap"><i class="fa fa-check"></i><b>3.3</b> Apply and pmap</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="functions.html"><a href="functions.html#apply-and-sapply"><i class="fa fa-check"></i><b>3.3.1</b> Apply and Sapply</a></li>
+<li class="chapter" data-level="3.3.2" data-path="functions.html"><a href="functions.html#mutate-evaluate-functions"><i class="fa fa-check"></i><b>3.3.2</b> Mutate Evaluate Functions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html"><i class="fa fa-check"></i><b>4</b> Multi-dimensional Data Structures</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#generate-gather-bind-and-join"><i class="fa fa-check"></i><b>4.1</b> Generate, Gather, Bind and Join</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#generate-panel-structure"><i class="fa fa-check"></i><b>4.1.1</b> Generate Panel Structure</a></li>
+<li class="chapter" data-level="4.1.2" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#join-datasets"><i class="fa fa-check"></i><b>4.1.2</b> Join Datasets</a></li>
+<li class="chapter" data-level="4.1.3" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#gather-files"><i class="fa fa-check"></i><b>4.1.3</b> Gather Files</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#wide-and-long"><i class="fa fa-check"></i><b>4.2</b> Wide and Long</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#long-to-wide"><i class="fa fa-check"></i><b>4.2.1</b> Long to Wide</a></li>
+<li class="chapter" data-level="4.2.2" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#wide-to-long"><i class="fa fa-check"></i><b>4.2.2</b> Wide to Long</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#join-and-compare"><i class="fa fa-check"></i><b>4.3</b> Join and Compare</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#find-closest-neighbor-on-grid"><i class="fa fa-check"></i><b>4.3.1</b> Find Closest Neighbor on Grid</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>5</b> Linear Regression</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="linear-regression.html"><a href="linear-regression.html#ols-and-iv"><i class="fa fa-check"></i><b>5.1</b> OLS and IV</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="linear-regression.html"><a href="linear-regression.html#ols-and-iv-regression"><i class="fa fa-check"></i><b>5.1.1</b> OLS and IV Regression</a></li>
+<li class="chapter" data-level="5.1.2" data-path="linear-regression.html"><a href="linear-regression.html#iv-loop-over-rhs"><i class="fa fa-check"></i><b>5.1.2</b> IV Loop over RHS</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="linear-regression.html"><a href="linear-regression.html#decomposition"><i class="fa fa-check"></i><b>5.2</b> Decomposition</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="linear-regression.html"><a href="linear-regression.html#decompose-rhs"><i class="fa fa-check"></i><b>5.2.1</b> Decompose RHS</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="nonlinear-and-other-regressions.html"><a href="nonlinear-and-other-regressions.html"><i class="fa fa-check"></i><b>6</b> Nonlinear and Other Regressions</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="nonlinear-and-other-regressions.html"><a href="nonlinear-and-other-regressions.html#logit-regression"><i class="fa fa-check"></i><b>6.1</b> Logit Regression</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="nonlinear-and-other-regressions.html"><a href="nonlinear-and-other-regressions.html#binary-logit"><i class="fa fa-check"></i><b>6.1.1</b> Binary Logit</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="nonlinear-and-other-regressions.html"><a href="nonlinear-and-other-regressions.html#quantile-regression"><i class="fa fa-check"></i><b>6.2</b> Quantile Regression</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="nonlinear-and-other-regressions.html"><a href="nonlinear-and-other-regressions.html#quantile-regression-basics"><i class="fa fa-check"></i><b>6.2.1</b> Quantile Regression Basics</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="optimization.html"><a href="optimization.html"><i class="fa fa-check"></i><b>7</b> Optimization</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="optimization.html"><a href="optimization.html#bisection"><i class="fa fa-check"></i><b>7.1</b> Bisection</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="optimization.html"><a href="optimization.html#bisection-1"><i class="fa fa-check"></i><b>7.1.1</b> Bisection</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="mathematics.html"><a href="mathematics.html"><i class="fa fa-check"></i><b>8</b> Mathematics</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="mathematics.html"><a href="mathematics.html#analytical-solutions"><i class="fa fa-check"></i><b>8.1</b> Analytical Solutions</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="mathematics.html"><a href="mathematics.html#rescale-a-parameter-with-fixed-min-and-max"><i class="fa fa-check"></i><b>8.1.1</b> Rescale a Parameter with Fixed Min and Max</a></li>
+<li class="chapter" data-level="8.1.2" data-path="mathematics.html"><a href="mathematics.html#linear-scalar-fx0-solutions"><i class="fa fa-check"></i><b>8.1.2</b> Linear Scalar f(x)=0 Solutions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="mathematics.html"><a href="mathematics.html#inequality-models"><i class="fa fa-check"></i><b>8.2</b> Inequality Models</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="mathematics.html"><a href="mathematics.html#gini-discrete-sample"><i class="fa fa-check"></i><b>8.2.1</b> Gini Discrete Sample</a></li>
+<li class="chapter" data-level="8.2.2" data-path="mathematics.html"><a href="mathematics.html#gini-formula-for-discrete-random-varialbe"><i class="fa fa-check"></i><b>8.2.2</b> Gini Formula for Discrete Random Varialbe</a></li>
+<li class="chapter" data-level="8.2.3" data-path="mathematics.html"><a href="mathematics.html#atkinson-inequality-index"><i class="fa fa-check"></i><b>8.2.3</b> Atkinson Inequality Index</a></li>
+<li class="chapter" data-level="8.2.4" data-path="mathematics.html"><a href="mathematics.html#location-population-and-pollution"><i class="fa fa-check"></i><b>8.2.4</b> Location, Population, and Pollution</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="statistics.html"><a href="statistics.html"><i class="fa fa-check"></i><b>9</b> Statistics</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="statistics.html"><a href="statistics.html#distributions"><i class="fa fa-check"></i><b>9.1</b> Distributions</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="statistics.html"><a href="statistics.html#integrate-over-normal-guassian-process-shock"><i class="fa fa-check"></i><b>9.1.1</b> Integrate Over Normal Guassian Process Shock</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html"><i class="fa fa-check"></i><b>10</b> Tables and Graphs</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#r-base-plots"><i class="fa fa-check"></i><b>10.1</b> R Base Plots</a>
+<ul>
+<li class="chapter" data-level="10.1.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#plot-curve-line-and-points"><i class="fa fa-check"></i><b>10.1.1</b> Plot Curve, Line and Points</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#ggplot-line-related-plots"><i class="fa fa-check"></i><b>10.2</b> GGplot Line Related Plots</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#ggplot-line-plot"><i class="fa fa-check"></i><b>10.2.1</b> ggplot Line Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#ggplot-scatter-related-plots"><i class="fa fa-check"></i><b>10.3</b> GGplot Scatter Related Plots</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#ggplot-scatter-plot"><i class="fa fa-check"></i><b>10.3.1</b> ggplot Scatter Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#write-and-read-plots"><i class="fa fa-check"></i><b>10.4</b> Write and Read Plots</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#import-and-export-images"><i class="fa fa-check"></i><b>10.4.1</b> Import and Export Images</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="get-data.html"><a href="get-data.html"><i class="fa fa-check"></i><b>11</b> Get Data</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="get-data.html"><a href="get-data.html#environmental-data"><i class="fa fa-check"></i><b>11.1</b> Environmental Data</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="get-data.html"><a href="get-data.html#ecmwf-era5-data"><i class="fa fa-check"></i><b>11.1.1</b> ECMWF ERA5 Data</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="code-and-development.html"><a href="code-and-development.html"><i class="fa fa-check"></i><b>12</b> Code and Development</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="code-and-development.html"><a href="code-and-development.html#files-in-and-out"><i class="fa fa-check"></i><b>12.1</b> Files In and Out</a>
+<ul>
+<li class="chapter" data-level="12.1.1" data-path="code-and-development.html"><a href="code-and-development.html#file-path"><i class="fa fa-check"></i><b>12.1.1</b> File Path</a></li>
+<li class="chapter" data-level="12.1.2" data-path="code-and-development.html"><a href="code-and-development.html#text-to-file"><i class="fa fa-check"></i><b>12.1.2</b> Text to File</a></li>
+<li class="chapter" data-level="12.1.3" data-path="code-and-development.html"><a href="code-and-development.html#rmd-to-html"><i class="fa fa-check"></i><b>12.1.3</b> Rmd to HTML</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="code-and-development.html"><a href="code-and-development.html#python-with-r"><i class="fa fa-check"></i><b>12.2</b> Python with R</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="code-and-development.html"><a href="code-and-development.html#reticulate-basics"><i class="fa fa-check"></i><b>12.2.1</b> Reticulate Basics</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="code-and-development.html"><a href="code-and-development.html#command-line"><i class="fa fa-check"></i><b>12.3</b> Command Line</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="code-and-development.html"><a href="code-and-development.html#shell-and-system-commands"><i class="fa fa-check"></i><b>12.3.1</b> Shell and System Commands</a></li>
+</ul></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="index-and-code-links.html"><a href="index-and-code-links.html"><i class="fa fa-check"></i><b>A</b> Index and Code Links</a>
+<ul>
+<li class="chapter" data-level="A.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#array-matrix-dataframe-links"><i class="fa fa-check"></i><b>A.1</b> Array, Matrix, Dataframe links</a>
+<ul>
+<li class="chapter" data-level="A.1.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.1-listlist-links"><i class="fa fa-check"></i><b>A.1.1</b> <span>Section 1.1 List</span> links</a></li>
+<li class="chapter" data-level="A.1.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.2-arrayarray-links"><i class="fa fa-check"></i><b>A.1.2</b> <span>Section 1.2 Array</span> links</a></li>
+<li class="chapter" data-level="A.1.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.3-matrixmatrix-links"><i class="fa fa-check"></i><b>A.1.3</b> <span>Section 1.3 Matrix</span> links</a></li>
+<li class="chapter" data-level="A.1.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.4-variables-in-dataframesvariables-in-dataframes-links"><i class="fa fa-check"></i><b>A.1.4</b> <span>Section 1.4 Variables in Dataframes</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#summarize-data-links"><i class="fa fa-check"></i><b>A.2</b> Summarize Data links</a>
+<ul>
+<li class="chapter" data-level="A.2.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.1-counting-observationcounting-observation-links"><i class="fa fa-check"></i><b>A.2.1</b> <span>Section 2.1 Counting Observation</span> links</a></li>
+<li class="chapter" data-level="A.2.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.2-sorting-indexing-slicingsorting-indexing-slicing-links"><i class="fa fa-check"></i><b>A.2.2</b> <span>Section 2.2 Sorting, Indexing, Slicing</span> links</a></li>
+<li class="chapter" data-level="A.2.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.3-group-statisticsgroup-statistics-links"><i class="fa fa-check"></i><b>A.2.3</b> <span>Section 2.3 Group Statistics</span> links</a></li>
+<li class="chapter" data-level="A.2.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.4-distributional-statisticsdistributional-statistics-links"><i class="fa fa-check"></i><b>A.2.4</b> <span>Section 2.4 Distributional Statistics</span> links</a></li>
+<li class="chapter" data-level="A.2.5" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.5-summarize-multiple-variablessummarize-multiple-variables-links"><i class="fa fa-check"></i><b>A.2.5</b> <span>Section 2.5 Summarize Multiple Variables</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#functions-links"><i class="fa fa-check"></i><b>A.3</b> Functions links</a>
+<ul>
+<li class="chapter" data-level="A.3.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.1-dataframe-mutatedataframe-mutate-links"><i class="fa fa-check"></i><b>A.3.1</b> <span>Section 3.1 Dataframe Mutate</span> links</a></li>
+<li class="chapter" data-level="A.3.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.2-dataframe-do-anythingdataframe-do-anything-links"><i class="fa fa-check"></i><b>A.3.2</b> <span>Section 3.2 Dataframe Do Anything</span> links</a></li>
+<li class="chapter" data-level="A.3.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.3-apply-and-pmapapply-and-pmap-links"><i class="fa fa-check"></i><b>A.3.3</b> <span>Section 3.3 Apply and pmap</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#multi-dimensional-data-structures-links"><i class="fa fa-check"></i><b>A.4</b> Multi-dimensional Data Structures links</a>
+<ul>
+<li class="chapter" data-level="A.4.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.1-generate-gather-bind-and-joingenerate-gather-bind-and-join-links"><i class="fa fa-check"></i><b>A.4.1</b> <span>Section 4.1 Generate, Gather, Bind and Join</span> links</a></li>
+<li class="chapter" data-level="A.4.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.2-wide-and-longwide-and-long-links"><i class="fa fa-check"></i><b>A.4.2</b> <span>Section 4.2 Wide and Long</span> links</a></li>
+<li class="chapter" data-level="A.4.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.3-join-and-comparejoin-and-compare-links"><i class="fa fa-check"></i><b>A.4.3</b> <span>Section 4.3 Join and Compare</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.5" data-path="index-and-code-links.html"><a href="index-and-code-links.html#linear-regression-links"><i class="fa fa-check"></i><b>A.5</b> Linear Regression links</a>
+<ul>
+<li class="chapter" data-level="A.5.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.1-ols-and-ivols-and-iv-links"><i class="fa fa-check"></i><b>A.5.1</b> <span>Section 5.1 OLS and IV</span> links</a></li>
+<li class="chapter" data-level="A.5.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.2-decompositiondecomposition-links"><i class="fa fa-check"></i><b>A.5.2</b> <span>Section 5.2 Decomposition</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.6" data-path="index-and-code-links.html"><a href="index-and-code-links.html#nonlinear-and-other-regressions-links"><i class="fa fa-check"></i><b>A.6</b> Nonlinear and Other Regressions links</a>
+<ul>
+<li class="chapter" data-level="A.6.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-6.1-logit-regressionlogit-regression-links"><i class="fa fa-check"></i><b>A.6.1</b> <span>Section 6.1 Logit Regression</span> links</a></li>
+<li class="chapter" data-level="A.6.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-6.2-quantile-regressionquantile-regression-links"><i class="fa fa-check"></i><b>A.6.2</b> <span>Section 6.2 Quantile Regression</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.7" data-path="index-and-code-links.html"><a href="index-and-code-links.html#optimization-links"><i class="fa fa-check"></i><b>A.7</b> Optimization links</a>
+<ul>
+<li class="chapter" data-level="A.7.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-7.1-bisectionbisection-links"><i class="fa fa-check"></i><b>A.7.1</b> <span>Section 7.1 Bisection</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.8" data-path="index-and-code-links.html"><a href="index-and-code-links.html#mathematics-links"><i class="fa fa-check"></i><b>A.8</b> Mathematics links</a>
+<ul>
+<li class="chapter" data-level="A.8.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.1-analytical-solutionsanalytical-solutions-links"><i class="fa fa-check"></i><b>A.8.1</b> <span>Section 8.1 Analytical Solutions</span> links</a></li>
+<li class="chapter" data-level="A.8.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.2-inequality-modelsinequality-models-links"><i class="fa fa-check"></i><b>A.8.2</b> <span>Section 8.2 Inequality Models</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.9" data-path="index-and-code-links.html"><a href="index-and-code-links.html#statistics-links"><i class="fa fa-check"></i><b>A.9</b> Statistics links</a>
+<ul>
+<li class="chapter" data-level="A.9.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.1-distributionsdistributions-links"><i class="fa fa-check"></i><b>A.9.1</b> <span>Section 9.1 Distributions</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.10" data-path="index-and-code-links.html"><a href="index-and-code-links.html#tables-and-graphs-links"><i class="fa fa-check"></i><b>A.10</b> Tables and Graphs links</a>
+<ul>
+<li class="chapter" data-level="A.10.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.1-r-base-plotsr-base-plots-links"><i class="fa fa-check"></i><b>A.10.1</b> <span>Section 10.1 R Base Plots</span> links</a></li>
+<li class="chapter" data-level="A.10.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.2-ggplot-line-related-plotsggplot-line-related-plots-links"><i class="fa fa-check"></i><b>A.10.2</b> <span>Section 10.2 GGplot Line Related Plots</span> links</a></li>
+<li class="chapter" data-level="A.10.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.3-ggplot-scatter-related-plotsggplot-scatter-related-plots-links"><i class="fa fa-check"></i><b>A.10.3</b> <span>Section 10.3 GGplot Scatter Related Plots</span> links</a></li>
+<li class="chapter" data-level="A.10.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.4-write-and-read-plotswrite-and-read-plots-links"><i class="fa fa-check"></i><b>A.10.4</b> <span>Section 10.4 Write and Read Plots</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.11" data-path="index-and-code-links.html"><a href="index-and-code-links.html#get-data-links"><i class="fa fa-check"></i><b>A.11</b> Get Data links</a>
+<ul>
+<li class="chapter" data-level="A.11.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-11.1-environmental-dataenvironmental-data-links"><i class="fa fa-check"></i><b>A.11.1</b> <span>Section 11.1 Environmental Data</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.12" data-path="index-and-code-links.html"><a href="index-and-code-links.html#code-and-development-links"><i class="fa fa-check"></i><b>A.12</b> Code and Development links</a>
+<ul>
+<li class="chapter" data-level="A.12.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.1-files-in-and-outfiles-in-and-out-links"><i class="fa fa-check"></i><b>A.12.1</b> <span>Section 12.1 Files In and Out</span> links</a></li>
+<li class="chapter" data-level="A.12.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.2-python-with-rpython-with-r-links"><i class="fa fa-check"></i><b>A.12.2</b> <span>Section 12.2 Python with R</span> links</a></li>
+<li class="chapter" data-level="A.12.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.3-command-linecommand-line-links"><i class="fa fa-check"></i><b>A.12.3</b> <span>Section 12.3 Command Line</span> links</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://fanwangecon.github.io/R4Econ/bookdown/index.html" target="blank">R4Econ Bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data Structures, Estimation and Optimization with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="statistics" class="section level1" number="9">
+<h1><span class="header-section-number">Chapter 9</span> Statistics</h1>
+
+<div id="distributions" class="section level2" number="9.1">
+<h2><span class="header-section-number">9.1</span> Distributions</h2>
+
+<div id="integrate-over-normal-guassian-process-shock" class="section level3" number="9.1.1">
+<h3><span class="header-section-number">9.1.1</span> Integrate Over Normal Guassian Process Shock</h3>
+<blockquote>
+<p>Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R Code Examples</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository (<a href="https://fanwangecon.github.io/Stat4Econ/bookdown">bookdown site</a>).</p>
+</blockquote>
+<p>Some Common parameters</p>
+<div class="sourceCode" id="cb496"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb496-1"><a href="statistics.html#cb496-1" aria-hidden="true" tabindex="-1"></a>fl_eps_mean <span class="ot">=</span> <span class="dv">10</span></span>
+<span id="cb496-2"><a href="statistics.html#cb496-2" aria-hidden="true" tabindex="-1"></a>fl_eps_sd <span class="ot">=</span> <span class="dv">50</span></span>
+<span id="cb496-3"><a href="statistics.html#cb496-3" aria-hidden="true" tabindex="-1"></a>fl_cdf_min <span class="ot">=</span> <span class="fl">0.000001</span></span>
+<span id="cb496-4"><a href="statistics.html#cb496-4" aria-hidden="true" tabindex="-1"></a>fl_cdf_max <span class="ot">=</span> <span class="fl">0.999999</span></span>
+<span id="cb496-5"><a href="statistics.html#cb496-5" aria-hidden="true" tabindex="-1"></a>ar_it_draws <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">1000</span>)</span></code></pre></div>
+<div id="randomly-sample-and-integrate-monte-carlo-integration" class="section level4" number="9.1.1.1">
+<h4><span class="header-section-number">9.1.1.1</span> Randomly Sample and Integrate (Monte Carlo Integration)</h4>
+<p>Compare randomly drawn normal shock mean and known mean. How does simulated mean change with draws. Actual integral equals to <span class="math inline">\(10\)</span>, as sample size increases, the sample mean approaches the integration results, but this is expensive, even with ten thousand draws, not very exact.</p>
+<div class="sourceCode" id="cb497"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb497-1"><a href="statistics.html#cb497-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate Draws</span></span>
+<span id="cb497-2"><a href="statistics.html#cb497-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb497-3"><a href="statistics.html#cb497-3" aria-hidden="true" tabindex="-1"></a>ar_fl_means <span class="ot">&lt;-</span></span>
+<span id="cb497-4"><a href="statistics.html#cb497-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sapply</span>(ar_it_draws, <span class="cf">function</span>(x)</span>
+<span id="cb497-5"><a href="statistics.html#cb497-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">mean</span>(<span class="fu">rnorm</span>(x[<span class="dv">1</span>], <span class="at">mean=</span>fl_eps_mean, <span class="at">sd=</span>fl_eps_sd))))</span>
+<span id="cb497-6"><a href="statistics.html#cb497-6" aria-hidden="true" tabindex="-1"></a>ar_fl_sd <span class="ot">&lt;-</span></span>
+<span id="cb497-7"><a href="statistics.html#cb497-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sapply</span>(ar_it_draws, <span class="cf">function</span>(x)</span>
+<span id="cb497-8"><a href="statistics.html#cb497-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">sd</span>(<span class="fu">rnorm</span>(x[<span class="dv">1</span>], <span class="at">mean=</span>fl_eps_mean, <span class="at">sd=</span>fl_eps_sd))))</span>
+<span id="cb497-9"><a href="statistics.html#cb497-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb497-10"><a href="statistics.html#cb497-10" aria-hidden="true" tabindex="-1"></a>mt_sample_means <span class="ot">&lt;-</span> <span class="fu">cbind</span>(ar_it_draws, ar_fl_means, ar_fl_sd)</span>
+<span id="cb497-11"><a href="statistics.html#cb497-11" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(mt_sample_means) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;draw_count&#39;</span>, <span class="st">&#39;mean&#39;</span>, <span class="st">&#39;sd&#39;</span>)</span>
+<span id="cb497-12"><a href="statistics.html#cb497-12" aria-hidden="true" tabindex="-1"></a>tb_sample_means <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(mt_sample_means)</span>
+<span id="cb497-13"><a href="statistics.html#cb497-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb497-14"><a href="statistics.html#cb497-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph</span></span>
+<span id="cb497-15"><a href="statistics.html#cb497-15" aria-hidden="true" tabindex="-1"></a><span class="co"># x-labels</span></span>
+<span id="cb497-16"><a href="statistics.html#cb497-16" aria-hidden="true" tabindex="-1"></a>x.labels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;n=1&#39;</span>, <span class="st">&#39;n=10&#39;</span>, <span class="st">&#39;n=100&#39;</span>, <span class="st">&#39;n=1000&#39;</span>)</span>
+<span id="cb497-17"><a href="statistics.html#cb497-17" aria-hidden="true" tabindex="-1"></a>x.breaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>)</span>
+<span id="cb497-18"><a href="statistics.html#cb497-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb497-19"><a href="statistics.html#cb497-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Shared Subtitle</span></span>
+<span id="cb497-20"><a href="statistics.html#cb497-20" aria-hidden="true" tabindex="-1"></a>st_subtitle <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&#39;https://fanwangecon.github.io/&#39;</span>,</span>
+<span id="cb497-21"><a href="statistics.html#cb497-21" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&#39;R4Econ/math/integration/htmlpdfr/fs_integrate_normal.html&#39;</span>)</span>
+<span id="cb497-22"><a href="statistics.html#cb497-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb497-23"><a href="statistics.html#cb497-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Shared Labels</span></span>
+<span id="cb497-24"><a href="statistics.html#cb497-24" aria-hidden="true" tabindex="-1"></a>slb_title_shr <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">&#39;as Sample Size Increases</span><span class="sc">\n</span><span class="st">&#39;</span>,</span>
+<span id="cb497-25"><a href="statistics.html#cb497-25" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&#39;True Mean=&#39;</span>, fl_eps_mean,<span class="st">&#39;, sd=&#39;</span>,fl_eps_sd)</span>
+<span id="cb497-26"><a href="statistics.html#cb497-26" aria-hidden="true" tabindex="-1"></a>slb_xtitle <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">&#39;Sample Size&#39;</span>)</span>
+<span id="cb497-27"><a href="statistics.html#cb497-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb497-28"><a href="statistics.html#cb497-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph Results--Draw</span></span>
+<span id="cb497-29"><a href="statistics.html#cb497-29" aria-hidden="true" tabindex="-1"></a>plt_mean <span class="ot">&lt;-</span> tb_sample_means <span class="sc">%&gt;%</span></span>
+<span id="cb497-30"><a href="statistics.html#cb497-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>draw_count, <span class="at">y=</span>mean)) <span class="sc">+</span></span>
+<span id="cb497-31"><a href="statistics.html#cb497-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size=</span><span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb497-32"><a href="statistics.html#cb497-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">&#39;Sample Mean &#39;</span>, slb_title_shr),</span>
+<span id="cb497-33"><a href="statistics.html#cb497-33" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> st_subtitle,</span>
+<span id="cb497-34"><a href="statistics.html#cb497-34" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> slb_xtitle,</span>
+<span id="cb497-35"><a href="statistics.html#cb497-35" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&#39;Sample Mean&#39;</span>,</span>
+<span id="cb497-36"><a href="statistics.html#cb497-36" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&#39;Mean of Sample Integrates to True Mean&#39;</span>) <span class="sc">+</span></span>
+<span id="cb497-37"><a href="statistics.html#cb497-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="at">labels =</span> x.labels, <span class="at">breaks =</span> x.breaks) <span class="sc">+</span></span>
+<span id="cb497-38"><a href="statistics.html#cb497-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb497-39"><a href="statistics.html#cb497-39" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(plt_mean)</span></code></pre></div>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-258-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb498"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb498-1"><a href="statistics.html#cb498-1" aria-hidden="true" tabindex="-1"></a>plt_sd <span class="ot">&lt;-</span> tb_sample_means <span class="sc">%&gt;%</span></span>
+<span id="cb498-2"><a href="statistics.html#cb498-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>draw_count, <span class="at">y=</span>sd)) <span class="sc">+</span></span>
+<span id="cb498-3"><a href="statistics.html#cb498-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size=</span><span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb498-4"><a href="statistics.html#cb498-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">&#39;Sample Standard Deviation &#39;</span>, slb_title_shr),</span>
+<span id="cb498-5"><a href="statistics.html#cb498-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> st_subtitle,</span>
+<span id="cb498-6"><a href="statistics.html#cb498-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> slb_xtitle,</span>
+<span id="cb498-7"><a href="statistics.html#cb498-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&#39;Sample Standard Deviation&#39;</span>,</span>
+<span id="cb498-8"><a href="statistics.html#cb498-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&#39;Standard Deviation of Sample Integrates to True SD&#39;</span>) <span class="sc">+</span></span>
+<span id="cb498-9"><a href="statistics.html#cb498-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="at">labels =</span> x.labels, <span class="at">breaks =</span> x.breaks) <span class="sc">+</span></span>
+<span id="cb498-10"><a href="statistics.html#cb498-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb498-11"><a href="statistics.html#cb498-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(plt_sd)</span></code></pre></div>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-258-2.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="integration-by-symmetric-uneven-rectangle" class="section level4" number="9.1.1.2">
+<h4><span class="header-section-number">9.1.1.2</span> Integration By Symmetric Uneven Rectangle</h4>
+<p>Draw on even grid from close to 0 to close to 1. Get the corresponding x points to these quantile levels. Distance between x points are not equi-distance but increasing and symmetric away from the mean. Under this approach, each rectangle aims to approximate the same area.</p>
+<p>Resulting integration is rectangle based, but rectangle width differ. The rectangles have wider width as they move away from the mean, and thinner width close to the mean. This is much more stable than the random draw method, but note that it converges somewhat slowly to true values as well.</p>
+<div class="sourceCode" id="cb499"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb499-1"><a href="statistics.html#cb499-1" aria-hidden="true" tabindex="-1"></a>mt_fl_means <span class="ot">&lt;-</span></span>
+<span id="cb499-2"><a href="statistics.html#cb499-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sapply</span>(ar_it_draws, <span class="cf">function</span>(x) {</span>
+<span id="cb499-3"><a href="statistics.html#cb499-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb499-4"><a href="statistics.html#cb499-4" aria-hidden="true" tabindex="-1"></a>    fl_prob_break <span class="ot">=</span> (fl_cdf_max <span class="sc">-</span> fl_cdf_min)<span class="sc">/</span>(x[<span class="dv">1</span>])</span>
+<span id="cb499-5"><a href="statistics.html#cb499-5" aria-hidden="true" tabindex="-1"></a>    ar_eps_bounds <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fu">seq</span>(fl_cdf_min, fl_cdf_max,</span>
+<span id="cb499-6"><a href="statistics.html#cb499-6" aria-hidden="true" tabindex="-1"></a>                               <span class="at">by=</span>(fl_cdf_max <span class="sc">-</span> fl_cdf_min)<span class="sc">/</span>(x[<span class="dv">1</span>])),</span>
+<span id="cb499-7"><a href="statistics.html#cb499-7" aria-hidden="true" tabindex="-1"></a>                           <span class="at">mean =</span> fl_eps_mean, <span class="at">sd =</span> fl_eps_sd)</span>
+<span id="cb499-8"><a href="statistics.html#cb499-8" aria-hidden="true" tabindex="-1"></a>    ar_eps_val <span class="ot">&lt;-</span> (<span class="fu">tail</span>(ar_eps_bounds, <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span> <span class="fu">head</span>(ar_eps_bounds, <span class="sc">-</span><span class="dv">1</span>))<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb499-9"><a href="statistics.html#cb499-9" aria-hidden="true" tabindex="-1"></a>    ar_eps_prb <span class="ot">&lt;-</span> <span class="fu">rep</span>(fl_prob_break<span class="sc">/</span>(fl_cdf_max <span class="sc">-</span> fl_cdf_min), x[<span class="dv">1</span>])</span>
+<span id="cb499-10"><a href="statistics.html#cb499-10" aria-hidden="true" tabindex="-1"></a>    ar_eps_fev <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(ar_eps_val,</span>
+<span id="cb499-11"><a href="statistics.html#cb499-11" aria-hidden="true" tabindex="-1"></a>                        <span class="at">mean =</span> fl_eps_mean, <span class="at">sd =</span> fl_eps_sd)</span>
+<span id="cb499-12"><a href="statistics.html#cb499-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb499-13"><a href="statistics.html#cb499-13" aria-hidden="true" tabindex="-1"></a>    fl_cdf_total_approx <span class="ot">&lt;-</span> <span class="fu">sum</span>(ar_eps_fev<span class="sc">*</span><span class="fu">diff</span>(ar_eps_bounds))</span>
+<span id="cb499-14"><a href="statistics.html#cb499-14" aria-hidden="true" tabindex="-1"></a>    fl_mean_approx <span class="ot">&lt;-</span> <span class="fu">sum</span>(ar_eps_val<span class="sc">*</span>(ar_eps_fev<span class="sc">*</span><span class="fu">diff</span>(ar_eps_bounds)))</span>
+<span id="cb499-15"><a href="statistics.html#cb499-15" aria-hidden="true" tabindex="-1"></a>    fl_sd_approx <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>((ar_eps_val<span class="sc">-</span>fl_mean_approx)<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>(ar_eps_fev<span class="sc">*</span><span class="fu">diff</span>(ar_eps_bounds))))</span>
+<span id="cb499-16"><a href="statistics.html#cb499-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb499-17"><a href="statistics.html#cb499-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">cdf=</span>fl_cdf_total_approx, <span class="at">mean=</span>fl_mean_approx, <span class="at">sd=</span>fl_sd_approx))</span>
+<span id="cb499-18"><a href="statistics.html#cb499-18" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb499-19"><a href="statistics.html#cb499-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb499-20"><a href="statistics.html#cb499-20" aria-hidden="true" tabindex="-1"></a>mt_sample_means <span class="ot">&lt;-</span> <span class="fu">cbind</span>(ar_it_draws, <span class="fu">as_tibble</span>(<span class="fu">t</span>(mt_fl_means)) <span class="sc">%&gt;%</span> <span class="fu">unnest</span>())</span>
+<span id="cb499-21"><a href="statistics.html#cb499-21" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(mt_sample_means) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;draw_count&#39;</span>, <span class="st">&#39;cdf&#39;</span>, <span class="st">&#39;mean&#39;</span>, <span class="st">&#39;sd&#39;</span>)</span>
+<span id="cb499-22"><a href="statistics.html#cb499-22" aria-hidden="true" tabindex="-1"></a>tb_sample_means <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(mt_sample_means)</span>
+<span id="cb499-23"><a href="statistics.html#cb499-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb499-24"><a href="statistics.html#cb499-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph</span></span>
+<span id="cb499-25"><a href="statistics.html#cb499-25" aria-hidden="true" tabindex="-1"></a><span class="co"># x-labels</span></span>
+<span id="cb499-26"><a href="statistics.html#cb499-26" aria-hidden="true" tabindex="-1"></a>x.labels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;n=1&#39;</span>, <span class="st">&#39;n=10&#39;</span>, <span class="st">&#39;n=100&#39;</span>, <span class="st">&#39;n=1000&#39;</span>)</span>
+<span id="cb499-27"><a href="statistics.html#cb499-27" aria-hidden="true" tabindex="-1"></a>x.breaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>)</span>
+<span id="cb499-28"><a href="statistics.html#cb499-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb499-29"><a href="statistics.html#cb499-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Shared Labels</span></span>
+<span id="cb499-30"><a href="statistics.html#cb499-30" aria-hidden="true" tabindex="-1"></a>slb_title_shr <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">&#39;as Uneven Rectangle Count Increases</span><span class="sc">\n</span><span class="st">&#39;</span>,</span>
+<span id="cb499-31"><a href="statistics.html#cb499-31" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&#39;True Mean=&#39;</span>, fl_eps_mean,<span class="st">&#39;, sd=&#39;</span>,fl_eps_sd)</span>
+<span id="cb499-32"><a href="statistics.html#cb499-32" aria-hidden="true" tabindex="-1"></a>slb_xtitle <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">&#39;Number of Quantile Bins for Uneven Rectangles Approximation&#39;</span>)</span>
+<span id="cb499-33"><a href="statistics.html#cb499-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb499-34"><a href="statistics.html#cb499-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph Results--Draw</span></span>
+<span id="cb499-35"><a href="statistics.html#cb499-35" aria-hidden="true" tabindex="-1"></a>plt_mean <span class="ot">&lt;-</span> tb_sample_means <span class="sc">%&gt;%</span></span>
+<span id="cb499-36"><a href="statistics.html#cb499-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>draw_count, <span class="at">y=</span>mean)) <span class="sc">+</span></span>
+<span id="cb499-37"><a href="statistics.html#cb499-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size=</span><span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb499-38"><a href="statistics.html#cb499-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">&#39;Average &#39;</span>, slb_title_shr),</span>
+<span id="cb499-39"><a href="statistics.html#cb499-39" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> st_subtitle,</span>
+<span id="cb499-40"><a href="statistics.html#cb499-40" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> slb_xtitle,</span>
+<span id="cb499-41"><a href="statistics.html#cb499-41" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&#39;Approximated Mean&#39;</span>,</span>
+<span id="cb499-42"><a href="statistics.html#cb499-42" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&#39;Integral Approximation as Uneven Rectangle Count Increases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb499-43"><a href="statistics.html#cb499-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="at">labels =</span> x.labels, <span class="at">breaks =</span> x.breaks) <span class="sc">+</span></span>
+<span id="cb499-44"><a href="statistics.html#cb499-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb499-45"><a href="statistics.html#cb499-45" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(plt_mean)</span></code></pre></div>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-259-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb500"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb500-1"><a href="statistics.html#cb500-1" aria-hidden="true" tabindex="-1"></a>plt_sd <span class="ot">&lt;-</span> tb_sample_means <span class="sc">%&gt;%</span></span>
+<span id="cb500-2"><a href="statistics.html#cb500-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>draw_count, <span class="at">y=</span>sd)) <span class="sc">+</span></span>
+<span id="cb500-3"><a href="statistics.html#cb500-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size=</span><span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb500-4"><a href="statistics.html#cb500-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">&#39;Standard Deviation &#39;</span>, slb_title_shr),</span>
+<span id="cb500-5"><a href="statistics.html#cb500-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> st_subtitle,</span>
+<span id="cb500-6"><a href="statistics.html#cb500-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> slb_xtitle,</span>
+<span id="cb500-7"><a href="statistics.html#cb500-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&#39;Approximated Standard Deviation&#39;</span>,</span>
+<span id="cb500-8"><a href="statistics.html#cb500-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&#39;Integral Approximation as Uneven Rectangle Count Increases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb500-9"><a href="statistics.html#cb500-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="at">labels =</span> x.labels, <span class="at">breaks =</span> x.breaks) <span class="sc">+</span></span>
+<span id="cb500-10"><a href="statistics.html#cb500-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb500-11"><a href="statistics.html#cb500-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(plt_sd)</span></code></pre></div>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-259-2.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb501"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb501-1"><a href="statistics.html#cb501-1" aria-hidden="true" tabindex="-1"></a>plt_cdf <span class="ot">&lt;-</span> tb_sample_means <span class="sc">%&gt;%</span></span>
+<span id="cb501-2"><a href="statistics.html#cb501-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>draw_count, <span class="at">y=</span>cdf)) <span class="sc">+</span></span>
+<span id="cb501-3"><a href="statistics.html#cb501-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size=</span><span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb501-4"><a href="statistics.html#cb501-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">&#39;Aggregate Probability &#39;</span>, slb_title_shr),</span>
+<span id="cb501-5"><a href="statistics.html#cb501-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> st_subtitle,</span>
+<span id="cb501-6"><a href="statistics.html#cb501-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> slb_xtitle,</span>
+<span id="cb501-7"><a href="statistics.html#cb501-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&#39;Sum of Uneven Rectangles&#39;</span>,</span>
+<span id="cb501-8"><a href="statistics.html#cb501-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&#39;Sum of Approx. Probability as Uneven Rectangle Count Increases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb501-9"><a href="statistics.html#cb501-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="at">labels =</span> x.labels, <span class="at">breaks =</span> x.breaks) <span class="sc">+</span></span>
+<span id="cb501-10"><a href="statistics.html#cb501-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb501-11"><a href="statistics.html#cb501-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(plt_cdf)</span></code></pre></div>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-259-3.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="integration-by-constant-width-rectangle-trapezoidal-rule" class="section level4" number="9.1.1.3">
+<h4><span class="header-section-number">9.1.1.3</span> Integration By Constant Width Rectangle (Trapezoidal rule)</h4>
+<p>This is implementing even width recentagle, even along x-axix. Rectangle width are the same, height is <span class="math inline">\(f(x)\)</span>. This is even width, but uneven area. Note that this method approximates the true answer much better and more quickly than the prior methods.</p>
+<div class="sourceCode" id="cb502"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb502-1"><a href="statistics.html#cb502-1" aria-hidden="true" tabindex="-1"></a>mt_fl_means <span class="ot">&lt;-</span></span>
+<span id="cb502-2"><a href="statistics.html#cb502-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sapply</span>(ar_it_draws, <span class="cf">function</span>(x) {</span>
+<span id="cb502-3"><a href="statistics.html#cb502-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb502-4"><a href="statistics.html#cb502-4" aria-hidden="true" tabindex="-1"></a>    fl_eps_min <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(fl_cdf_min, <span class="at">mean =</span> fl_eps_mean, <span class="at">sd =</span> fl_eps_sd)</span>
+<span id="cb502-5"><a href="statistics.html#cb502-5" aria-hidden="true" tabindex="-1"></a>    fl_eps_max <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(fl_cdf_max, <span class="at">mean =</span> fl_eps_mean, <span class="at">sd =</span> fl_eps_sd)</span>
+<span id="cb502-6"><a href="statistics.html#cb502-6" aria-hidden="true" tabindex="-1"></a>    fl_gap <span class="ot">&lt;-</span> (fl_eps_max<span class="sc">-</span>fl_eps_min)<span class="sc">/</span>(x[<span class="dv">1</span>])</span>
+<span id="cb502-7"><a href="statistics.html#cb502-7" aria-hidden="true" tabindex="-1"></a>    ar_eps_bounds <span class="ot">&lt;-</span> <span class="fu">seq</span>(fl_eps_min, fl_eps_max, <span class="at">by=</span>fl_gap)</span>
+<span id="cb502-8"><a href="statistics.html#cb502-8" aria-hidden="true" tabindex="-1"></a>    ar_eps_val <span class="ot">&lt;-</span> (<span class="fu">tail</span>(ar_eps_bounds, <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span> <span class="fu">head</span>(ar_eps_bounds, <span class="sc">-</span><span class="dv">1</span>))<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb502-9"><a href="statistics.html#cb502-9" aria-hidden="true" tabindex="-1"></a>    ar_eps_prb <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(ar_eps_val, <span class="at">mean =</span> fl_eps_mean, <span class="at">sd =</span> fl_eps_sd)<span class="sc">*</span>fl_gap</span>
+<span id="cb502-10"><a href="statistics.html#cb502-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb502-11"><a href="statistics.html#cb502-11" aria-hidden="true" tabindex="-1"></a>    fl_cdf_total_approx <span class="ot">&lt;-</span> <span class="fu">sum</span>(ar_eps_prb)</span>
+<span id="cb502-12"><a href="statistics.html#cb502-12" aria-hidden="true" tabindex="-1"></a>    fl_mean_approx <span class="ot">&lt;-</span> <span class="fu">sum</span>(ar_eps_val<span class="sc">*</span>ar_eps_prb)</span>
+<span id="cb502-13"><a href="statistics.html#cb502-13" aria-hidden="true" tabindex="-1"></a>    fl_sd_approx <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>((ar_eps_val<span class="sc">-</span>fl_mean_approx)<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>ar_eps_prb))</span>
+<span id="cb502-14"><a href="statistics.html#cb502-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb502-15"><a href="statistics.html#cb502-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">cdf=</span>fl_cdf_total_approx, <span class="at">mean=</span>fl_mean_approx, <span class="at">sd=</span>fl_sd_approx))</span>
+<span id="cb502-16"><a href="statistics.html#cb502-16" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb502-17"><a href="statistics.html#cb502-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb502-18"><a href="statistics.html#cb502-18" aria-hidden="true" tabindex="-1"></a>mt_sample_means <span class="ot">&lt;-</span> <span class="fu">cbind</span>(ar_it_draws, <span class="fu">as_tibble</span>(<span class="fu">t</span>(mt_fl_means)) <span class="sc">%&gt;%</span> <span class="fu">unnest</span>())</span>
+<span id="cb502-19"><a href="statistics.html#cb502-19" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(mt_sample_means) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;draw_count&#39;</span>, <span class="st">&#39;cdf&#39;</span>, <span class="st">&#39;mean&#39;</span>, <span class="st">&#39;sd&#39;</span>)</span>
+<span id="cb502-20"><a href="statistics.html#cb502-20" aria-hidden="true" tabindex="-1"></a>tb_sample_means <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(mt_sample_means)</span>
+<span id="cb502-21"><a href="statistics.html#cb502-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb502-22"><a href="statistics.html#cb502-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph</span></span>
+<span id="cb502-23"><a href="statistics.html#cb502-23" aria-hidden="true" tabindex="-1"></a><span class="co"># x-labels</span></span>
+<span id="cb502-24"><a href="statistics.html#cb502-24" aria-hidden="true" tabindex="-1"></a>x.labels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;n=1&#39;</span>, <span class="st">&#39;n=10&#39;</span>, <span class="st">&#39;n=100&#39;</span>, <span class="st">&#39;n=1000&#39;</span>)</span>
+<span id="cb502-25"><a href="statistics.html#cb502-25" aria-hidden="true" tabindex="-1"></a>x.breaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>)</span>
+<span id="cb502-26"><a href="statistics.html#cb502-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb502-27"><a href="statistics.html#cb502-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Shared Labels</span></span>
+<span id="cb502-28"><a href="statistics.html#cb502-28" aria-hidden="true" tabindex="-1"></a>slb_title_shr <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">&#39;as Even Rectangle Count Increases</span><span class="sc">\n</span><span class="st">&#39;</span>,</span>
+<span id="cb502-29"><a href="statistics.html#cb502-29" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&#39;True Mean=&#39;</span>, fl_eps_mean,<span class="st">&#39;, sd=&#39;</span>,fl_eps_sd)</span>
+<span id="cb502-30"><a href="statistics.html#cb502-30" aria-hidden="true" tabindex="-1"></a>slb_xtitle <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">&#39;Number Equi-distance Rectangles Bins&#39;</span>)</span>
+<span id="cb502-31"><a href="statistics.html#cb502-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb502-32"><a href="statistics.html#cb502-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph Results--Draw</span></span>
+<span id="cb502-33"><a href="statistics.html#cb502-33" aria-hidden="true" tabindex="-1"></a>plt_mean <span class="ot">&lt;-</span> tb_sample_means <span class="sc">%&gt;%</span></span>
+<span id="cb502-34"><a href="statistics.html#cb502-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>draw_count, <span class="at">y=</span>mean)) <span class="sc">+</span></span>
+<span id="cb502-35"><a href="statistics.html#cb502-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size=</span><span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb502-36"><a href="statistics.html#cb502-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">&#39;Average &#39;</span>, slb_title_shr),</span>
+<span id="cb502-37"><a href="statistics.html#cb502-37" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> st_subtitle,</span>
+<span id="cb502-38"><a href="statistics.html#cb502-38" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> slb_xtitle,</span>
+<span id="cb502-39"><a href="statistics.html#cb502-39" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&#39;Integrated Mean&#39;</span>,</span>
+<span id="cb502-40"><a href="statistics.html#cb502-40" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&#39;Integral Approximation as Even Rectangle width decreases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb502-41"><a href="statistics.html#cb502-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="at">labels =</span> x.labels, <span class="at">breaks =</span> x.breaks) <span class="sc">+</span></span>
+<span id="cb502-42"><a href="statistics.html#cb502-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb502-43"><a href="statistics.html#cb502-43" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(plt_mean)</span></code></pre></div>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-260-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb503"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb503-1"><a href="statistics.html#cb503-1" aria-hidden="true" tabindex="-1"></a>plt_sd <span class="ot">&lt;-</span> tb_sample_means <span class="sc">%&gt;%</span></span>
+<span id="cb503-2"><a href="statistics.html#cb503-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>draw_count, <span class="at">y=</span>sd)) <span class="sc">+</span></span>
+<span id="cb503-3"><a href="statistics.html#cb503-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size=</span><span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb503-4"><a href="statistics.html#cb503-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">&#39;Standard Deviation &#39;</span>, slb_title_shr),</span>
+<span id="cb503-5"><a href="statistics.html#cb503-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> st_subtitle,</span>
+<span id="cb503-6"><a href="statistics.html#cb503-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> slb_xtitle,</span>
+<span id="cb503-7"><a href="statistics.html#cb503-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&#39;Standard Deviation&#39;</span>,</span>
+<span id="cb503-8"><a href="statistics.html#cb503-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&#39;Integral Approximation as Even Rectangle width decreases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb503-9"><a href="statistics.html#cb503-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="at">labels =</span> x.labels, <span class="at">breaks =</span> x.breaks) <span class="sc">+</span></span>
+<span id="cb503-10"><a href="statistics.html#cb503-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb503-11"><a href="statistics.html#cb503-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(plt_sd)</span></code></pre></div>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-260-2.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb504"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb504-1"><a href="statistics.html#cb504-1" aria-hidden="true" tabindex="-1"></a>plt_cdf <span class="ot">&lt;-</span> tb_sample_means <span class="sc">%&gt;%</span></span>
+<span id="cb504-2"><a href="statistics.html#cb504-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>draw_count, <span class="at">y=</span>cdf)) <span class="sc">+</span></span>
+<span id="cb504-3"><a href="statistics.html#cb504-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size=</span><span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb504-4"><a href="statistics.html#cb504-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">&#39;Aggregate Probability &#39;</span>, slb_title_shr),</span>
+<span id="cb504-5"><a href="statistics.html#cb504-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> st_subtitle,</span>
+<span id="cb504-6"><a href="statistics.html#cb504-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> slb_xtitle,</span>
+<span id="cb504-7"><a href="statistics.html#cb504-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&#39;Sum of Equi-Dist Rectangles&#39;</span>,</span>
+<span id="cb504-8"><a href="statistics.html#cb504-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&#39;Sum of Approx. Probability as Equi-Dist Rectangle width decreases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb504-9"><a href="statistics.html#cb504-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans=</span><span class="st">&#39;log10&#39;</span>, <span class="at">labels =</span> x.labels, <span class="at">breaks =</span> x.breaks) <span class="sc">+</span></span>
+<span id="cb504-10"><a href="statistics.html#cb504-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb504-11"><a href="statistics.html#cb504-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(plt_cdf)</span></code></pre></div>
+<p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/unnamed-chunk-260-3.png" width="672" style="display: block; margin: auto;" /></p>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="mathematics.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="tables-and-graphs.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": [["Panel-Data-and-Optimization-with-R.pdf", "PDF"]],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

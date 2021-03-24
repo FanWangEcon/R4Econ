@@ -25,7 +25,7 @@ urlcolor: blue
 ### Process RMD Files
 
 ```{r global_options, include = FALSE}
-try(source("C:/Users/fan/Math4Econ/.Rprofile"))
+try(source("G:/repos/Math4Econ/.Rprofile"))
 library(reticulate)
 ```
 
@@ -36,7 +36,7 @@ library(reticulate)
 Math4Econ Rmd to PDF and HTML.
 
 ```{r}
-# file_path_root <- 'C:/Users/fan/Math4Econ/support/development/fs_pkg_Math4Econ'
+# file_path_root <- 'G:/repos/Math4Econ/support/development/fs_pkg_Math4Econ'
 # file_path_r <- paste0(file_path_root, '.R')
 # file_path_rmd <- paste0(file_path_root, '.Rmd')
 # knitr::purl(file_path_rmd, output=file_path_r, documentation = 1)
@@ -51,9 +51,9 @@ Math 4 Econ File Updating:
 #### Local Outputs
 
 ```
-file:///C:/Users/fan/Math4Econ/bookdown/index.html
-file:///C:/Users/fan/Math4Econ/
-file:///C:/Users/fan/Math4Econ/equilibrium/
+file:///G:/repos/Math4Econ/bookdown/index.html
+file:///G:/repos/Math4Econ/
+file:///G:/repos/Math4Econ/equilibrium/
 ```
 
 #### Testing Changes in MLX file
@@ -63,9 +63,10 @@ Check through *Math4Econ* and see which files have been added, and which files h
 Note: new files that should not get pdf and html should have *.rmd* rather than *.Rmd* as suffix.
 
 ```{r}
+bl_update_book = TRUE
 # run examples
-spt_root <- 'C:/Users/fan/Math4Econ'
-spt_log <- 'C:/Users/fan/Math4Econ/_log/rmdclean/'
+spt_root <- 'G:/repos/Math4Econ'
+spt_log <- 'G:/repos/Math4Econ/_log/rmdclean/'
 sink(paste0(spt_log, 'rmd_clean_test.log'))
 start_time <- Sys.time()
 setwd(spt_root)
@@ -73,18 +74,18 @@ setwd(spt_root)
 bl_test = TRUE
 bl_gen_if_git_old = FALSE
 
-ar_spt_root = c('C:/Users/fan/Math4Econ/calconevar/',
-                'C:/Users/fan/Math4Econ/explog/',
-                'C:/Users/fan/Math4Econ/derivative/',
-                'C:/Users/fan/Math4Econ/derivative_application/',
-                'C:/Users/fan/Math4Econ/matrix_basics/',
-                'C:/Users/fan/Math4Econ/matrix_system_of_equations/',
-                'C:/Users/fan/Math4Econ/matrix_application/',
-                'C:/Users/fan/Math4Econ/uncertainty/',
-                'C:/Users/fan/Math4Econ/opti_firm_constrained/',
-                'C:/Users/fan/Math4Econ/opti_hh_constrained_brsv/',
-                'C:/Users/fan/Math4Econ/opti_hh_constrained_brsv_inequality/',
-                'C:/Users/fan/Math4Econ/equilibrium/')
+ar_spt_root = c('G:/repos/Math4Econ/calconevar/',
+                'G:/repos/Math4Econ/explog/',
+                'G:/repos/Math4Econ/derivative/',
+                'G:/repos/Math4Econ/derivative_application/',
+                'G:/repos/Math4Econ/matrix_basics/',
+                'G:/repos/Math4Econ/matrix_system_of_equations/',
+                'G:/repos/Math4Econ/matrix_application/',
+                'G:/repos/Math4Econ/uncertainty/',
+                'G:/repos/Math4Econ/opti_firm_constrained/',
+                'G:/repos/Math4Econ/opti_hh_constrained_brsv/',
+                'G:/repos/Math4Econ/opti_hh_constrained_brsv_inequality/',
+                'G:/repos/Math4Econ/equilibrium/')
 ff_sup_clean_mlx(ar_spt_root = ar_spt_root,
                  ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
                                  '_mod.Rmd', 'title.Rmd'),
@@ -108,8 +109,8 @@ Note: new files that should not get pdf and html should have *.rmd* rather than 
 
 ```{r}
 # run examples
-spt_root <- 'C:/Users/fan/Math4Econ'
-spt_log <- 'C:/Users/fan/Math4Econ/_log/rmdclean/'
+spt_root <- 'G:/repos/Math4Econ'
+spt_log <- 'G:/repos/Math4Econ/_log/rmdclean/'
 sink(paste0(spt_log, 'rmd_clean_test.log'))
 start_time <- Sys.time()
 setwd(spt_root)
@@ -117,22 +118,22 @@ setwd(spt_root)
 bl_test = FALSE
 bl_gen_if_git_old = FALSE
 
-st_prj_root = 'C:/Users/fan/Math4Econ/'
-ar_spt_root = c('C:/Users/fan/Math4Econ/calconevar/',
-                'C:/Users/fan/Math4Econ/explog/',
-                'C:/Users/fan/Math4Econ/derivative/',
-                'C:/Users/fan/Math4Econ/derivative_application/',
-                'C:/Users/fan/Math4Econ/matrix_basics/',
-                'C:/Users/fan/Math4Econ/matrix_system_of_equations/',
-                'C:/Users/fan/Math4Econ/matrix_application/',
-                'C:/Users/fan/Math4Econ/uncertainty/',
-                'C:/Users/fan/Math4Econ/opti_firm_constrained/',
-                'C:/Users/fan/Math4Econ/opti_hh_constrained_brsv/',
-                'C:/Users/fan/Math4Econ/opti_hh_constrained_brsv_inequality/',
-                'C:/Users/fan/Math4Econ/equilibrium/')
+st_prj_root = 'G:/repos/Math4Econ/'
+ar_spt_root = c('G:/repos/Math4Econ/calconevar/',
+                'G:/repos/Math4Econ/explog/',
+                'G:/repos/Math4Econ/derivative/',
+                'G:/repos/Math4Econ/derivative_application/',
+                'G:/repos/Math4Econ/matrix_basics/',
+                'G:/repos/Math4Econ/matrix_system_of_equations/',
+                'G:/repos/Math4Econ/matrix_application/',
+                'G:/repos/Math4Econ/uncertainty/',
+                'G:/repos/Math4Econ/opti_firm_constrained/',
+                'G:/repos/Math4Econ/opti_hh_constrained_brsv/',
+                'G:/repos/Math4Econ/opti_hh_constrained_brsv_inequality/',
+                'G:/repos/Math4Econ/equilibrium/')
 ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
                '_mod.Rmd', 'title.Rmd')
-# ar_spt_root = c('C:/Users/fan/Math4Econ/calconevar/')
+# ar_spt_root = c('G:/repos/Math4Econ/calconevar/')
 # ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
 #                '_mod.Rmd', 'title.Rmd', 'func', 'interval', 'real', 'poly')
 ff_sup_clean_mlx(st_prj_root = st_prj_root,
@@ -156,8 +157,8 @@ sink()
 
 ```{r}
 # run examples
-spt_root <- 'C:/Users/fan/Math4Econ'
-spt_log <- 'C:/Users/fan/Math4Econ/_log/rmdclean/'
+spt_root <- 'G:/repos/Math4Econ'
+spt_log <- 'G:/repos/Math4Econ/_log/rmdclean/'
 sink(paste0(spt_log, 'rmd_clean_test.log'))
 start_time <- Sys.time()
 setwd(spt_root)
@@ -165,22 +166,22 @@ setwd(spt_root)
 bl_test = FALSE
 bl_gen_if_git_old = FALSE
 
-st_prj_root = 'C:/Users/fan/Math4Econ/'
-ar_spt_root = c('C:/Users/fan/Math4Econ/calconevar/',
-                'C:/Users/fan/Math4Econ/explog/',
-                'C:/Users/fan/Math4Econ/derivative/',
-                'C:/Users/fan/Math4Econ/derivative_application/',
-                'C:/Users/fan/Math4Econ/matrix_basics/',
-                'C:/Users/fan/Math4Econ/matrix_system_of_equations/',
-                'C:/Users/fan/Math4Econ/matrix_application/',
-                'C:/Users/fan/Math4Econ/uncertainty/',
-                'C:/Users/fan/Math4Econ/opti_firm_constrained/',
-                'C:/Users/fan/Math4Econ/opti_hh_constrained_brsv/',
-                'C:/Users/fan/Math4Econ/opti_hh_constrained_brsv_inequality/',
-                'C:/Users/fan/Math4Econ/equilibrium/')
+st_prj_root = 'G:/repos/Math4Econ/'
+ar_spt_root = c('G:/repos/Math4Econ/calconevar/',
+                'G:/repos/Math4Econ/explog/',
+                'G:/repos/Math4Econ/derivative/',
+                'G:/repos/Math4Econ/derivative_application/',
+                'G:/repos/Math4Econ/matrix_basics/',
+                'G:/repos/Math4Econ/matrix_system_of_equations/',
+                'G:/repos/Math4Econ/matrix_application/',
+                'G:/repos/Math4Econ/uncertainty/',
+                'G:/repos/Math4Econ/opti_firm_constrained/',
+                'G:/repos/Math4Econ/opti_hh_constrained_brsv/',
+                'G:/repos/Math4Econ/opti_hh_constrained_brsv_inequality/',
+                'G:/repos/Math4Econ/equilibrium/')
 ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
                '_mod.Rmd', 'title.Rmd')
-# ar_spt_root = c('C:/Users/fan/Math4Econ/calconevar/')
+# ar_spt_root = c('G:/repos/Math4Econ/calconevar/')
 # ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
 #                '_mod.Rmd', 'title.Rmd', 'func', 'interval', 'real', 'poly')
 ff_sup_clean_rmd(ar_spt_root = ar_spt_root,
@@ -208,7 +209,7 @@ sink()
 
 There is python file that parses rmd front matters and goes through rmd files in the bookdown yaml file to automatically generate README contents.
 
-- 'C:/Users/fan/Py4Econ/support/inout/bookdownparse.py'
+- 'G:/repos/Py4Econ/support/inout/bookdownparse.py'
 
 Generate TOC:
 
@@ -217,7 +218,7 @@ import pyfan.util.rmd.bookdownparse as ft_bookdownparse
 
 # Path Roots
 sfc_prj = 'Math4Econ'
-sph_prj = 'C:/Users/fan/Math4Econ/'
+sph_prj = 'G:/repos/Math4Econ/'
 spn_prj_bookdown_yml = '_bookdown.yml'
 
 # Read me preamble, and endnotes
@@ -243,7 +244,7 @@ Combine Front and End and TOC:
 import pyfan.util.rmd.bookdownparse as ft_bookdownparse
 
 # Path Roots
-sph_prj = 'C:/Users/fan/Math4Econ/'
+sph_prj = 'G:/repos/Math4Econ/'
 
 # Read me preamble, and endnotes
 spn_prj_readme_pre = 'README_pre.md'
@@ -267,7 +268,7 @@ with open(sph_prj + spn_prj_readme_ful, 'w') as outfile:
 Generate contenxt for bookdown appendix.
 
 ```{python}
-sph_prj = 'C:/Users/fan/Math4Econ/'
+sph_prj = 'G:/repos/Math4Econ/'
 spn_prj_readme_toc = 'README_toc.md'
 spn_prj_appendix = 'README_appendix.md'
 spn_in = open(sph_prj + spn_prj_readme_toc, "r")
@@ -334,35 +335,39 @@ spn_out.close()
 Render HTML:
 
 ```{r}
-spt_root <- 'C:/Users/fan/Math4Econ'
-spt_log <- 'C:/Users/fan/Math4Econ/_log/rmdclean/'
+spt_root <- 'G:/repos/Math4Econ'
+spt_log <- 'G:/repos/Math4Econ/_log/rmdclean/'
 
-sink(paste0(spt_log, 'render_bookdown_html.log'))
-start_time <- Sys.time()
-setwd(spt_root)
-
-# render html
-bookdown::render_book('index.Rmd', 'bookdown::gitbook')
-
-end_time <- Sys.time()
-print(paste0('bookdown::render_book, html, took:', end_time - start_time))
-sink()
+if (bl_update_book) {
+  sink(paste0(spt_log, 'render_bookdown_html.log'))
+  start_time <- Sys.time()
+  setwd(spt_root)
+  
+  # render html
+  bookdown::render_book('index.Rmd', 'bookdown::gitbook')
+  
+  end_time <- Sys.time()
+  print(paste0('bookdown::render_book, html, took:', end_time - start_time))
+  sink()
+}
 ```
 
 Render PDF:
 
 ```{r}
-spt_root <- 'C:/Users/fan/Math4Econ'
-spt_log <- 'C:/Users/fan/Math4Econ/_log/rmdclean/'
+spt_root <- 'G:/repos/Math4Econ'
+spt_log <- 'G:/repos/Math4Econ/_log/rmdclean/'
 
-sink(paste0(spt_log, 'render_bookdown_pdf.log'))
-start_time <- Sys.time()
-setwd(spt_root)
-
-bookdown::render_book('index.Rmd', 'bookdown::pdf_book')
-
-end_time <- Sys.time()
-print(paste0('bookdown::render_book, pdf, took:', end_time - start_time))
-sink()
+if (bl_update_book) {
+  sink(paste0(spt_log, 'render_bookdown_pdf.log'))
+  start_time <- Sys.time()
+  setwd(spt_root)
+  
+  bookdown::render_book('index.Rmd', 'bookdown::pdf_book')
+  
+  end_time <- Sys.time()
+  print(paste0('bookdown::render_book, pdf, took:', end_time - start_time))
+  sink()
+}
 
 ```
