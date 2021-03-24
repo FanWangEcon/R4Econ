@@ -1,0 +1,145 @@
+---
+title: "GGplot Scater Plot Three Continuous Variables and Multiple Categorical Variables"
+description: |
+  Two continuous variables for the x-axis and the y-axis, another continuous variable for size of scatter, other categorical variables for scatter shape and size.
+core:
+  - package: ggplot
+    code: |
+      ggplot()
+      geom_jitter()
+      geom_smooth()
+      scale_colour_manual()
+      scale_shape_discrete()
+      scale_linetype_manual()
+      scale_x_continuous()
+      scale_y_continuous()
+      theme_bw()
+      theme()
+date: 2021-03-23
+date_start: 2021-03-23
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+### ggplot Scatter Plot
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+#### Three Continuous Variables and Two Categorical Variables
+
+We will generate a graph that is very similar to the graph shown for [fs_tib_factors](https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_factors.html), with the addition that scatter color and shape will be for two separate variables, and with the addition that scatter size will be for an additional continuous variable.
+
+We have three continuous variables:
+
+1. y-axis: time for 1/4 Miles (QSEC)
+2. x-axis: horsepower
+3. scatter-size: miles per gallon (mpg)
+
+We have two categorical ariables:
+
+1. color: vs engine shape (vshaped or straight)
+2. shape: am shift type (auto or manual)
+
+First, Load in the mtcars dataset and convert to categorical variables to factor with labels.
+
+```{r}
+# First make sure these are factors
+tb_mtcars <- as_tibble(mtcars) %>%
+  mutate(vs = as_factor(vs), am = as_factor(am))
+# Second Label the Factors
+am_levels <- c(auto_shift = "0", manual_shift = "1")
+vs_levels <- c(vshaped_engine = "0", straight_engine = "1")
+tb_mtcars <- tb_mtcars %>%
+  mutate(vs = fct_recode(vs, !!!vs_levels),
+         am = fct_recode(am, !!!am_levels))
+```
+
+Second, generate the core graph, a scatterplot with a nonlinear trendline. Note that in the example below color and shpae only apply to the jitter scatter, but not the trendline graph.
+
+```{r}
+# Graphing
+plt_mtcars_scatter <-
+  ggplot(tb_mtcars, aes(x=hp, y=qsec)) +
+  geom_jitter(aes(size=mpg, colour=vs, shape=am), width = 0.15) +
+  geom_smooth(span = 0.50, se=FALSE) +
+  theme_bw()
+```
+
+Third, control Color and Shape Information. There will be two colors and two shapes. See all [shape listing](https://www.google.com/search?q=r+points+shapes&oq=r+point+shapes).
+
+```{r}
+# Color controls
+ar_st_colors <- c("#33cc33", "#F8766D")
+ar_st_colors_label <- c("v-shaped", "straight")
+fl_legend_color_symbol_size <- 5
+# Shape controls
+ar_it_shapes <- c(9, 15)
+ar_st_shapes_label <- c("auto", "manuel")
+fl_legend_shape_symbol_size <- 5
+```
+
+Fourth, control the size of the scatter, which will be the MPG variable.
+
+```{r}
+# Control scatter point size
+fl_min_size <- 3
+fl_max_size <- 6
+ar_size_range <- c(fl_min_size, fl_max_size)
+```
+
+Fifth, control graph strings.
+
+```{r}
+# Labeling
+st_title <- paste0('Distribution of HP and QSEC from mtcars')
+st_subtitle <- paste0('https://fanwangecon.github.io/',
+                      'R4Econ/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.html')
+st_caption <- paste0('mtcars dataset, ',
+                     'https://fanwangecon.github.io/R4Econ/')
+st_x_label <- 'HP = Horse Power'
+st_y_label <- 'QSEC = time for 1/4 Miles'
+```
+
+Sixth, combine graphical components.
+
+```{r}
+# Add titles and labels
+plt_mtcars_scatter <- plt_mtcars_scatter +
+  labs(title = st_title, subtitle = st_subtitle,
+       x = st_x_label, y = st_y_label, caption = st_caption)
+
+# Color, shape and size controls
+plt_mtcars_scatter <- plt_mtcars_scatter +
+  scale_colour_manual(values=ar_st_colors, labels=ar_st_colors_label) +
+  scale_shape_manual(values=ar_it_shapes, labels=ar_st_shapes_label) +
+  scale_size_continuous(range = ar_size_range)
+```
+
+Eighth, additional controls for the graph.
+
+```{r}
+# Control the order of legend display
+# Show color, show shape, then show size.
+plt_mtcars_scatter <- plt_mtcars_scatter + guides(
+  colour = guide_legend(order = 1, override.aes = list(size = fl_legend_color_symbol_size)),
+  shape = guide_legend(order = 2, override.aes = list(size = fl_legend_shape_symbol_size)),
+  size = guide_legend(order = 3))
+
+# show
+print(plt_mtcars_scatter)
+```
