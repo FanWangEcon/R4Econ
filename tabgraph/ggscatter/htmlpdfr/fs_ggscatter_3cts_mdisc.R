@@ -28,10 +28,12 @@ plt_mtcars_scatter <-
 ar_st_colors <- c("#33cc33", "#F8766D")
 ar_st_colors_label <- c("v-shaped", "straight")
 fl_legend_color_symbol_size <- 5
+st_leg_color_lab <- "Engine-Shape"
 # Shape controls
 ar_it_shapes <- c(9, 15)
 ar_st_shapes_label <- c("auto", "manuel")
 fl_legend_shape_symbol_size <- 5
+st_leg_shape_lab <- "Transmission"
 
 
 ## ---------------------------------------------------------------------------------------------------------------------------------------
@@ -39,6 +41,7 @@ fl_legend_shape_symbol_size <- 5
 fl_min_size <- 3
 fl_max_size <- 6
 ar_size_range <- c(fl_min_size, fl_max_size)
+st_leg_size_lab <- "MPG"
 
 
 ## ---------------------------------------------------------------------------------------------------------------------------------------
@@ -63,6 +66,14 @@ plt_mtcars_scatter <- plt_mtcars_scatter +
   scale_colour_manual(values=ar_st_colors, labels=ar_st_colors_label) +
   scale_shape_manual(values=ar_it_shapes, labels=ar_st_shapes_label) +
   scale_size_continuous(range = ar_size_range)
+
+
+## ---------------------------------------------------------------------------------------------------------------------------------------
+# replace the default labels for each legend segment
+plt_mtcars_scatter <- plt_mtcars_scatter + 
+  labs(colour = st_leg_color_lab, 
+       shape = st_leg_shape_lab,
+       size = st_leg_size_lab)
 
 
 ## ---------------------------------------------------------------------------------------------------------------------------------------
