@@ -2,13 +2,19 @@
 title: "R Generate Arrays"
 titleshort: "Generate Special Arrays"
 description: |
-  Generate equi-distance array. 
-  Generate special log spaced array.
+  Generate equi-distance, special log spaced array.
+  Generate probability mass function with non-unique and non-sorted value and probability arrays.
 core:
   - package: r
     code: |
       seq()
-date: 2021-03-23
+      sort()
+      runif()
+      ceiling()
+  - package: stats
+    code: |
+      aggregate()
+date: 2021-04-03
 date_start: 2020-04-01
 output:
   pdf_document:
@@ -86,4 +92,59 @@ ar.fl.log.rescaled <- exp(log(10)*seq(log10(fl.min.rescale),
 ar.fl.log <- ar.fl.log.rescaled + fl.log.lower - fl.min.rescale
 # Print
 ar.fl.log
+```
+
+#### Generate Arrays Based on Existing Arrays
+
+##### Probability Mass Array and Discrete Value Array
+
+There are two arrays, an array of values, and an array of probabilities. The probability array sums to 1. The array of values, however, might not be unique.
+
+First, generate some array of numbers not sorted and some proability mass for each non-sorted, non-unique element of the array. 
+```{r}
+set.seed(123)
+it_len <- 10
+ar_x <- ceiling(runif(it_len)*5+10)
+ar_prob <- dbinom(seq(0,it_len-1,length.out = it_len), it_len-1, prob=0.5)
+print(cbind(ar_x,ar_prob))
+print(paste0('sum(ar_prob)=',sum(ar_prob)))
+```
+
+Second, sorting index for ar_x, and resort ar_prob with the same index:
+
+```{r}
+ls_sorted_res <- sort(ar_x, decreasing = FALSE, index.return=TRUE)
+ar_idx_increasing_x <- ls_sorted_res$ix
+ar_x_sorted <- ls_sorted_res$x
+ar_prob_sorted <- ar_prob[ar_idx_increasing_x]
+print(cbind(ar_x_sorted,ar_prob_sorted))
+```
+
+Third, sum within group and generate unique, using the [aggregate](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/aggregate) function. Then we have a column of unique values and associated probabilities. 
+
+```{r}
+ar_x_unique <- unique(ar_x_sorted)
+mt_prob_unique <- aggregate(ar_prob_sorted, by=list(ar_x_sorted), FUN=sum)
+ar_x_unique_prob <- mt_prob_unique$x
+print(cbind(ar_x_unique, ar_x_unique_prob))
+```
+
+Finally, the several steps together.
+
+```{r}
+# data
+set.seed(123)
+it_len <- 30
+ar_x <- ceiling(runif(it_len)*20+10)
+ar_prob <- runif(it_len)
+ar_prob <- ar_prob/sum(ar_prob)
+# step 1, sort
+ls_sorted_res <- sort(ar_x, decreasing = FALSE, index.return=TRUE)
+# step 2, unique sorted
+ar_x_unique <- unique(ls_sorted_res$x)
+# step 3, mass for each unique
+mt_prob_unique <- aggregate(ar_prob[ls_sorted_res$ix], by=list(ls_sorted_res$x), FUN=sum)
+ar_x_unique_prob <- mt_prob_unique$x
+# results
+print(cbind(ar_x_unique, ar_x_unique_prob))
 ```

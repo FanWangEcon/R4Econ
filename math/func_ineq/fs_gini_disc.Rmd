@@ -291,3 +291,40 @@ for (fl_binom_success_prob in seq(0.0001,0.9999,length.out=10)) {
   print(st_print)
 }
 ```
+
+#### Compare Discrete Sample and Discrete Random Variable Functions for GINI
+
+[ff_dist_gini_random_var](https://fanwangecon.github.io/REconTools/reference/ff_dist_gini_random_var.html) provides the GINI implementation for a discrete random variable. The procedure is the same as prior, except now each element of the "x" array has element specific weights associated with it. The function can handle unsorted array with non-unique values. 
+
+Test and compare [ff_dist_gini_random_var](https://fanwangecon.github.io/REconTools/reference/ff_dist_gini_random_var.html) provides the GINI implementation for a discrete random variable and [ff_dist_gini_vector_pos](https://fanwangecon.github.io/REconTools/reference/ff_dist_gini_vector_pos.html).
+
+There is a vector of values from 1 to 100, in ascending order. What is the equal-weighted gini, the gini result when smaller numbers have higher weights, and when larger numbers have higher weights?
+
+First, generate the relevant values.
+
+```{r}
+# array
+ar_x <- seq(1, 100, length.out = 30)
+# prob array
+ar_prob_x_unif <- rep.int(1, length(ar_x))/sum(rep.int(1, length(ar_x)))
+# prob higher at lower values
+ar_prob_x_lowval_highwgt <- rev(cumsum(ar_prob_x_unif))/sum(cumsum(ar_prob_x_unif))
+# prob higher at lower values
+ar_prob_x_highval_highwgt <- (cumsum(ar_prob_x_unif))/sum(cumsum(ar_prob_x_unif))
+# show
+kable(cbind(ar_x, ar_prob_x_unif, ar_prob_x_lowval_highwgt, ar_prob_x_highval_highwgt)) %>%
+  kable_styling_fc()
+```
+
+Second, generate GINI values. What should happen? 
+
+1. The [ff_dist_gini_random_var](https://fanwangecon.github.io/REconTools/reference/ff_dist_gini_random_var.html) and  [ff_dist_gini_vector_pos](https://fanwangecon.github.io/REconTools/reference/ff_dist_gini_vector_pos.html) results should be the same when the uniform distribution is used. 
+2. GINI should be higher, more inequality, if there is higher weights on the lower values.
+3. GINI should be lower, more equality, if there is higher weight on the higher values. 
+
+```{r}
+ff_dist_gini_vector_pos(ar_x)
+ff_dist_gini_random_var(ar_x, ar_prob_x_unif)
+ff_dist_gini_random_var(ar_x, ar_prob_x_lowval_highwgt)
+ff_dist_gini_random_var(ar_x, ar_prob_x_highval_highwgt)
+```

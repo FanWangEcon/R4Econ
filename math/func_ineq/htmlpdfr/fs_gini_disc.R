@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE------------------------------------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Formula, directly implement the GINI formula Following Step 4 above
 ffi_dist_gini_vector_pos_test <- function(ar_pos) {
   # Check length and given warning
@@ -16,7 +16,7 @@ ffi_dist_gini_vector_pos_test <- function(ar_pos) {
 }
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Example Arrays of data
 ar_equal_n1 = c(1)
 ar_ineql_n1 = c(100)
@@ -34,7 +34,7 @@ ar_ineql_very_n10 = c(1,2^2,3^2,5^2,8^2,13^2,21^2,34^2,55^2,89^2)
 ar_ineql_extr_n10 = c(1,2^2,3^3,5^4,8^5,13^6,21^7,34^8,55^9,89^10)
 
 
-## ---- eval=TRUE, echo=FALSE---------------------------------------------------------------------------------------------------
+## ---- eval=TRUE, echo=FALSE---------------------------------------------------------------------------------------------------------------------------------------
 # Hard-Code Small N Dist Tests
 cat('\nSmall N=1 Hard-Code\n')
 cat('ar_equal_n1:', ffi_dist_gini_vector_pos_test(ar_equal_n1), '\n')
@@ -53,26 +53,26 @@ cat('ar_ineql_very_n10:', ffi_dist_gini_vector_pos_test(ar_ineql_very_n10), '\n'
 cat('ar_ineql_extr_n10:', ffi_dist_gini_vector_pos_test(ar_ineql_extr_n10), '\n')
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 ar_choice_unique_sorted <- seq(0, 100, by=1)
 ar_choice_prob <- dbinom(ar_choice_unique_sorted, 100, 0.01)
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 # 1. to normalize, get mean (binomial so mean is p*N=50)
 fl_mean <- sum(ar_choice_unique_sorted*ar_choice_prob);
 # 2. get cumulative mean at each point
 ar_mean_cumsum <- cumsum(ar_choice_unique_sorted*ar_choice_prob);
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 # 3. Share of wealth (income etc) accounted for up to this sorted type
 ar_height <- ar_mean_cumsum/fl_mean;
 # 4. The total area, is the each height times each width summed up
 fl_area_drm <- sum(ar_choice_prob*ar_height);
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 # 5. area below 45 degree line might not be 1/2, depends on discretness
 fl_area_below45 <- sum(ar_choice_prob*(cumsum(ar_choice_prob)/sum(ar_choice_prob)))
 
@@ -81,7 +81,7 @@ fl_gini_index <- (fl_area_below45-fl_area_drm)/fl_area_below45
 print(paste0('fl_gini_index=', fl_gini_index))
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Combining the code from above
 ffi_dist_gini_random_var_pos_test <- function(ar_x_sorted, ar_prob_of_x) {
   # Check length and given warning
@@ -104,7 +104,7 @@ ffi_dist_gini_random_var_pos_test <- function(ar_x_sorted, ar_prob_of_x) {
 
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 for (fl_binom_success_prob in seq(0.0001,0.9999,length.out=10)) {
   ar_x_sorted <- seq(0, 100, by=1)
   ar_prob_of_x <- dbinom(ar_x_sorted, 100, fl_binom_success_prob)
@@ -113,4 +113,25 @@ for (fl_binom_success_prob in seq(0.0001,0.9999,length.out=10)) {
                    ', the fl_gini_index=', fl_gini_index)
   print(st_print)
 }
+
+
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+# array
+ar_x <- seq(1, 100, length.out = 30)
+# prob array
+ar_prob_x_unif <- rep.int(1, length(ar_x))/sum(rep.int(1, length(ar_x)))
+# prob higher at lower values
+ar_prob_x_lowval_highwgt <- rev(cumsum(ar_prob_x_unif))/sum(cumsum(ar_prob_x_unif))
+# prob higher at lower values
+ar_prob_x_highval_highwgt <- (cumsum(ar_prob_x_unif))/sum(cumsum(ar_prob_x_unif))
+# show
+kable(cbind(ar_x, ar_prob_x_unif, ar_prob_x_lowval_highwgt, ar_prob_x_highval_highwgt)) %>%
+  kable_styling_fc()
+
+
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ff_dist_gini_vector_pos(ar_x)
+ff_dist_gini_random_var(ar_x, ar_prob_x_unif)
+ff_dist_gini_random_var(ar_x, ar_prob_x_lowval_highwgt)
+ff_dist_gini_random_var(ar_x, ar_prob_x_highval_highwgt)
 

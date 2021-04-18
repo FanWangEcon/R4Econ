@@ -324,6 +324,46 @@ ffi_lst2str(ls_2d_flat_named[['e5']])
 ffi_lst2str(ls_2d_flat_named[[5]])
 ```
 
-<!-- # Fill values
-ls_2d_fill <- ls_2d
-ls_2d_fill[1,1] -->
+#### Two-Dimensioanl Named List for Joint Probability Mass
+
+There are two discrete random variables, generate some random discrete probability mass, name the columns and rows, and then convert to matrix. 
+
+```{r}
+set.seed(123)
+
+# Generate prob list 
+it_Q <- 2
+it_M <- 2
+ls_2d <- vector(mode = "list", length = it_Q*it_M)
+dim(ls_2d) <- c(it_Q, it_M)
+# Random joint mass 
+ar_rand <- runif(it_Q*it_M)
+ar_rand <- ar_rand/sum(ar_rand)
+# Fill with values
+it_ctr <- 0
+for (it_Q_ctr in seq(1,it_Q)) {
+  for (it_M_ctr in seq(1,it_M)) {
+    # linear index
+    ls_2d[[it_M_ctr, it_Q_ctr]] <- ar_rand[(it_Q_ctr-1)*it_M+it_M_ctr]
+  }
+}
+# Replace row names, note rownames does not work
+dimnames(ls_2d)[[1]] <- paste0('E',seq(1,it_M))
+dimnames(ls_2d)[[2]] <- paste0('A',seq(1,it_Q))
+# rename 
+ls_prob_joint_E_A <- ls_2d
+mt_prob_joint_E_A <- matrix(unlist(ls_prob_joint_E_A), ncol=it_M, byrow=F)
+print('ls_prob_joint_E_A')
+print(ls_prob_joint_E_A)
+print(mt_prob_joint_E_A)
+```
+
+Create conditional probabilities: $F=P(A_1|E_1)$, $B=P(A_1|E_2)$, $C=P(E_1|A_1)$, $D=P(E_1|A_2)$
+
+```{r}
+fl_F <- mt_prob_joint_E_A[1,1]/sum(mt_prob_joint_E_A[1,])
+fl_B <- mt_prob_joint_E_A[2,1]/sum(mt_prob_joint_E_A[2,])
+fl_C <- mt_prob_joint_E_A[1,1]/sum(mt_prob_joint_E_A[,1])
+fl_D <- mt_prob_joint_E_A[1,2]/sum(mt_prob_joint_E_A[,2])
+print(paste0('fl_F=', fl_F, ',fl_B=',fl_B,',fl_C=',fl_C,',fl_D=',fl_D))
+```
