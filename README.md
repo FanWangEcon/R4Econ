@@ -258,8 +258,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ Given a < x < b, use f(x) to rescale x, such that f(a)=a, f(b)=b, but f(z)=0.5*z for some z between a and b. Solve using the quadratic function with three equations and three unknowns uniquely. 
 2. [Positive and Negative Exponents x is Below or Above 1](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_exponents.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_exponents.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_exponents.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_exponents.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_exponents.html)
 	+ Positive exponentials are strictly increasing. Negative exponentials are strictly decreasing. 
-	+ If 0 < a < b, 0 < a^(|c|) < b^(|c|), and a^(-|c|) > b^(-|c|) > 0.
-	+ A positive number below 1 to a negative exponents is above 1, and a positive number above 1 to a negative exponents is below 1.  
+	+ A positive number below 1 to a negative exponents is above 1, and a positive number above 1 to a negative exponents is below 1.
 3. [linear solve x with f(x) = 0](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_solu_x_lin.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_solu_x_lin.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_solu_x_lin.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_solu_x_lin.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_solu_x_lin.html)
 	+ Evaluate and solve statistically relevant problems with one equation and one unknown that permit analytical solutions.
 
