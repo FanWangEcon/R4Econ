@@ -1,8 +1,8 @@
 ---
-title: "Discrete Random Variable"
-titleshort: "Discrete Random Variable"
+title: "Obtaining Joint Distribution from Marginal with Rectilinear Restrictions"
+titleshort: "Obtaining Joint Distribution from Marginal with Rectilinear Restrictions"
 description: |
-  Solve for joint distributional mass given marginal distributional mass.
+  Solve for joint distributional mass given marginal distributional mass given rectilinear assumptions.
 core:
   - package: r
     code: |
@@ -10,21 +10,19 @@ core:
 date: 2020-06-26
 date_start: 2020-06-26
 output:
-  html_document:
-    toc: true
-    toc_depth: 5
-    pandoc_args: '../../_output_kniti_html.yaml'
-    includes:
-      in_header: "../../hdga.html"
   pdf_document:
     pandoc_args: '../../_output_kniti_pdf.yaml'
     includes:
       in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
 always_allow_html: true
 urlcolor: blue
 ---
 
-### Discrete Random Variable
+### Obtaining Joint Distribution from Marginal with Rectilinear Restrictions
 
 ```{r global_options, include = FALSE}
 try(source("../../.Rprofile"))
@@ -34,57 +32,54 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
 
-#### Joint from Marginal Probability Mass Functions
+Suppose we want to know the joint probability mass function $P(E,A)$ where $E$ and $A$ are both discrete. $E$ could be education groups, and $A$ could be age groups. But we only know $P(E)$ and $P(A)$, under what conditions can we obtain the joint distribution from the marginals?
 
-Suppose we want to know the joint unemployment probability mass function $P(E,A)$ where 
-$E$ and $A$ are both discrete. $E$ could be education groups, and $A$ could be age groups. But we only know $P(E)$ and $P(A)$, under what conditions can we obtain the joint distribution from the marginals?
-
-##### Unrestricted Joint 2 by 2 Distribution
+#### Unrestricted Joint 2 by 2 Distribution
 
 Suppose there are two unique states for $E$ and $A$. For example, suppose we know the unemployment probability for better or worse educated, and also for low and high age groups. We want to know the joint probability of been both better educated and lower age, better educated and higher age, worse educated and lower age, and worse educated and higher age. Then:
 
 $$
-\begin{eqnarray}
+\begin{aligned}
 P(E_1) = P(A_1,E_1) + P(A_2,E_1)\\
 P(E_2) = P(A_1,E_2) + P(A_2,E_2)\\
 P(A_1) = P(A_1,E_1) + P(A_1,E_2)\\
 P(A_2) = P(A_2,E_1) + P(A_2,E_2)
-\end{eqnarray}
+\end{aligned}
 $$
 
 We know $P(E_1)$, $P(E_2)$, $P(A_1)$ and $P(A_2)$, but not $P(A_i,E_i)$. Let $X,W,Y,Z$ be unknowns and $A,B,C,D$ are known. It might seem like that with four equations and four unknowns, we can find $X,W,Y,Z$. But because what we know are probabilities: the marginals along each dimension sums up to 1. Without restrictions, there are no unique solutions to this problem. but many possible solutions. For example, Suppose $P(E_1)=0.5$ and $P(A_1)=0.5$, rewrite the above problem as:
 
 $$
-\begin{eqnarray}
+\begin{aligned}
 0.5 = X + W\\
 0.5 = Y + Z\\
 0.5 = W + Y\\
 0.5 = X + Z\\
-\end{eqnarray}
+\end{aligned}
 $$
 
 Solutions include:
 
 - $X=0.2$, $W=0.3$, $Y=0.2$, $Z=0.3$
 - $X=0.4$, $W=0.1$, $Y=0.4$, $Z=0.1$
-- and infinitely many others ... 
+- and infinitely many others ...
 
-There are no unique solutions, because, when we write the linear system above in matrix form as shown below, the $A$ coefficient matrix is not full rank, but has a rank of 3. 
+There are no unique solutions, because, when we write the linear system above in matrix form as shown below, the $A$ coefficient matrix is not full rank, but has a rank of 3.
 
 $$
-\begin{eqnarray}
+\begin{aligned}
 \begin{bmatrix}
 1 & 1 & 0 & 0 \\
 0 & 0 & 1 & 1 \\
 1 & 0 & 1 & 0 \\
 0 & 1 & 0 & 1 \\
-\end{bmatrix}	
+\end{bmatrix}
 \cdot
 \begin{bmatrix}
 W \\
 X \\
 Y \\
-Z 
+Z
 \end{bmatrix}
 & =
 \begin{bmatrix}
@@ -94,7 +89,7 @@ C \\
 D \\
 \end{bmatrix}\\
 A \cdot \mathbb{X} & =  b
-\end{eqnarray}
+\end{aligned}
 $$
 We can see the rank of a matrix with the [qr](https://stat.ethz.ch/R-manual/R-devel/library/base/html/qr.html) function (QR decomposition):
 
@@ -108,134 +103,139 @@ mt_a = t(matrix(data=c(1, 1, 0, 0,
 print(qr(mt_a))
 ```
 
-##### Rectilinear Restriction on Joint 2 by 2 Distribution
+#### Rectilinear Restriction on Joint 2 by 2 Distribution
 
-So in the section above, it is demonstrated that it is not possible to uniquely identify the joint probability mass function from marginal probability mass functions. 
+So in the section above, it is demonstrated that it is not possible to uniquely identify the joint probability mass function from marginal probability mass functions.
 
-However, sometimes, we need to find some reasonable joint distribution, when we only observe marginal distributions. This joint distribution might be an input transition matrix in a model we simulate. If we just use one of the infinitely possible joint mass that match up with the marginals, then the model would have infinitely many simulation results depending on our arbitrary choice of joint mass. 
+However, sometimes, we need to find some reasonable joint distribution, when we only observe marginal distributions. This joint distribution might be an input transition matrix in a model we simulate. If we just use one of the infinitely possible joint mass that match up with the marginals, then the model would have infinitely many simulation results depending on our arbitrary choice of joint mass.
 
-Ideally, one should try to obtain data to estimate the underlying joint distribution, when this is not possible, we can impose additional non-parametric restrictions on the structures of the joint probability mass that would lead to unique joint mass from marginals. 
+Ideally, one should try to obtain data to estimate the underlying joint distribution, when this is not possible, we can impose additional non-parametric restrictions on the structures of the joint probability mass that would lead to unique joint mass from marginals.
 
 Specifically, I will assume the incremental changes across rows and across columns of the joint mass matrix are row or column specific, is this sufficient? (In Some Cases it Will Not be):
 
 $$
-\begin{eqnarray}
+\begin{aligned}
 \Delta^{E}_{12} = P(A_1,E_2) - P(A_1,E_1) = P(A_2,E_2) - P(A_2,E_1)\\
 \Delta^{A}_{12} = P(A_2,E_1) - P(A_1,E_1) = P(A_2,E_2) - P(A_1,E_2)\\
-\end{eqnarray}
+\end{aligned}
 $$
 The assumption is non-parametric. This is effectively an rectilinear assumption on the joint Cumulative Probability Mass Function.
 
 Given this assumption, now we have:
 $$
-\begin{eqnarray}
+\begin{aligned}
 P(E_2) - P(E_1) = P(A_1,E_2) + P(A_2,E_2) - P(A_1,E_1) - P(A_2,E_1)\\
 P(A_2) - P(A_1) = P(A_2,E_1) + P(A_2,E_2) - P(A_1,E_1) - P(A_1,E_2)\\
-\end{eqnarray}
+\end{aligned}
 $$
 
 Which become:
 $$
-\begin{eqnarray}
+\begin{aligned}
 P(E_2) - P(E_1) = 2\cdot\Delta^{E}_{12}\\
 P(A_2) - P(A_1) = 2\cdot\Delta^{A}_{12}
-\end{eqnarray}
+\end{aligned}
 $$
 Suppose $P(E_1)=0.5$ and $P(A_1)=0.5$:
 
-- $\phi=0$ 
+- $\phi=0$
 - $\rho=0$
 - hence: $P(A_1,E_1) = P(A_1,E_2) = P(A_2,E_1) = P(A_2,E_2) = 0.25$
 
 Suppose $P(E_1)=0.4$ and $P(A_1)=0.7$:
 
-- $\Delta^{E}_{12}=0.1$ 
+- $\Delta^{E}_{12}=0.1$
 - $\Delta^{A}_{12}=-0.20$
 
 Hence:
 
 $$
-\begin{eqnarray}
+\begin{aligned}
 0.4 = P(A_1,E_1) + P(A_2,E_1)
     = P(A_1,E_1) + P(A_1,E_1) + \Delta^{A}_{12}
     = 2\cdot P(A_1,E_1) - 0.20\\
-\end{eqnarray}
+\end{aligned}
 $$
 
 And:
 $$
-\begin{eqnarray}
+\begin{aligned}
 P(A_1,E_1) = \frac{0.60}{2}=0.30\\
 P(A_2,E_1) = 0.4-0.30=0.10\\
 P(A_1,E_2) = 0.7-0.30=0.40\\
 P(A_2,E_2) = 0.3-0.10=0.20\\
-\end{eqnarray}
+\end{aligned}
 $$
 
-These joint mass sum up to 1, satisfy the marginal mass requirements from the data, and are unique given the rectilinear assumption. 
+These joint mass sum up to 1, satisfy the marginal mass requirements from the data, and are unique given the rectilinear assumption.
 
-##### Rectilinear Restriction Diamond on Joint 2 by 2 Distribution
+#### Rectilinear Restriction Diamond on Joint 2 by 2 Distribution
 
 The rectilinear assumptions, however, do not necessarily lead to positive values for each element of the joint mass function. In this section, I discuss under what conditions the rectilinear restriction leads to positive mass at all points of the joint probability mass function.
 
-We can write these more formulaically:
+We can write these:
 
 $$
-P(A_1, E_1) 
-= 
+\begin{aligned}
+P(A_1, E_1)
+=
 \frac{1}{4}
 \left(
-  1 
+  1
   - \Delta^{E}_{12}\cdot 2
   - \Delta^{A}_{12}\cdot 2
 \right)\\
-P(A_2, E_1) 
+P(A_2, E_1)
 = P(A_1, E_1) + \Delta^{A}_{12}\\
-P(A_1, E_2) 
+P(A_1, E_2)
 = P(A_1, E_1) + \Delta^{E}_{12}\\
-P(A_2, E_2) 
+P(A_2, E_2)
 = P(A_1, E_1) + \Delta^{A}_{12} + \Delta^{E}_{12}\\
+\end{aligned}
 $$
 Plugging the Values for $P(A_1, E_1)$ in, we have:
 $$
-P(A_1, E_1) 
-= 
+\begin{aligned}
+P(A_1, E_1)
+=
 \frac{1}{4}
 \left(
-  1 
+  1
   - \Delta^{E}_{12}\cdot 2
   - \Delta^{A}_{12}\cdot 2
 \right)\\
-P(A_2, E_1) 
-= 
+P(A_2, E_1)
+=
 \frac{1}{4}
 \left(
-  1 
+  1
   - \Delta^{E}_{12}\cdot 2
   + \Delta^{A}_{12}\cdot 2
 \right)
 \\
-P(A_1, E_2) 
-= 
+P(A_1, E_2)
+=
 \frac{1}{4}
 \left(
-  1 
-  + \Delta^{E}_{12}\cdot 2    
+  1
+  + \Delta^{E}_{12}\cdot 2
   - \Delta^{A}_{12}\cdot 2
 \right)
 \\
-P(A_2, E_2) 
-= 
+P(A_2, E_2)
+=
 \frac{1}{4}
 \left(
-  1 
+  1
   + \Delta^{E}_{12}\cdot 2
   + \Delta^{A}_{12}\cdot 2
 \right)\\
+\end{aligned}
 $$
 When are these terms positive:
 
 $$
+\begin{aligned}
 P(A_1, E_1) \ge 0
 \text{ iff }
 \frac{1}{2} \ge \Delta^{E}_{12} + \Delta^{A}_{12}
@@ -252,9 +252,11 @@ P(A_2, E_2) \ge 0
 \text{ iff }
 \frac{1}{2} \ge - \Delta^{E}_{12} - \Delta^{A}_{12}
 \\
+\end{aligned}
 $$
 Rewriting the positivity conditions, we have:
 $$
+\begin{aligned}
 \Delta^{E}_{12} \le \frac{1}{2} - \Delta^{A}_{12}
 \\
 \Delta^{E}_{12} \le \frac{1}{2} + \Delta^{A}_{12}
@@ -263,6 +265,7 @@ $$
 \\
 \Delta^{E}_{12} \ge -\frac{1}{2} - \Delta^{A}_{12}
 \\
+\end{aligned}
 $$
 The four conditions above create a diamond, Following the rectilinear restriction, if the $\delta^E$ and $\delta^A$ values fall within the diamond region, then the mass for at all joint probability points will be positive. Basically the restriction is that when the jumps in mass are more extreme, rectilinear restriction will not return positive mass at all points. The requirement is that:
 $$
@@ -405,52 +408,57 @@ print(paste0('it_warning:',it_warning))
 print(paste0('it_neg:',it_neg))
 ```
 
-##### Restricted Joint 3 by 3 Distribution
+#### Restricted Joint 3 by 3 Distribution
 
 The idea can be applied to when there are three discrete random outcomes along each dimension. Find an unique 3 by 3 probability joint mass distribution from marginal distributions. Similar to the 2 by 2 case, only when marginal mass changes are within a change diamond will this method lead to positive mass at all points of the joint distribution.
 
 Given this assumption:
 
 $$
-\begin{eqnarray}
+\begin{aligned}
 \Delta^{E}_{12} = P(A_1,E_2) - P(A_1,E_1) = P(A_2,E_2) - P(A_2,E_1) = P(A_3,E_2) - P(A_3,E_1)\\
 \Delta^{E}_{23} = P(A_1,E_3) - P(A_1,E_2) = P(A_2,E_3) - P(A_2,E_2) = P(A_3,E_3) - P(A_3,E_2)\\
 \Delta^{A}_{12} = P(A_2,E_1) - P(A_1,E_1) = P(A_2,E_2) - P(A_1,E_2) = P(A_2,E_3) - P(A_1,E_3)\\
 \Delta^{A}_{23} = P(A_3,E_1) - P(A_2,E_1) = P(A_3,E_2) - P(A_2,E_2) = P(A_3,E_3) - P(A_2,E_3)\\
-\end{eqnarray}
+\end{aligned}
 $$
 
-Following the two by two example, the restriction above just means we can use the differences between the marginal distribution's discrete points to back out. 
+Following the two by two example, the restriction above just means we can use the differences between the marginal distribution's discrete points to back out.
 
 $$
+\begin{aligned}
 \Delta^{E}_{12} = \frac{P(A_2) - P(A_1)}{3}\\
 \Delta^{E}_{23} = \frac{P(A_3) - P(A_2)}{3}\\
 \Delta^{A}_{12} = \frac{P(E_2) - P(E_1)}{3}\\
 \Delta^{A}_{23} = \frac{P(E_3) - P(E_2)}{3}
+\end{aligned}
 $$
 
 Given these $\Delta$ values, we can solve for $(A_1, E_1)$:
 
 $$
+\begin{aligned}
 1 = 3 \cdot 3 \cdot P(A_1, E_1) + \Delta^{E}_{12}\cdot 3 \cdot (3-1) + \Delta^{E}_{23}\cdot 3 + \Delta^{A}_{12}\cdot 3 \cdot (3-1) + \Delta^{A}_{12}\cdot 3 \\
-P(A_1, E_1) = 
+P(A_1, E_1) =
 \frac{1}{9}
 \left(
-  1 
-  - \Delta^{E}_{12}\cdot 3 \cdot (3-1) 
-  - \Delta^{E}_{23}\cdot 3 
+  1
+  - \Delta^{E}_{12}\cdot 3 \cdot (3-1)
+  - \Delta^{E}_{23}\cdot 3
   - \Delta^{A}_{12}\cdot 3 \cdot (3-1)
   - \Delta^{A}_{12}\cdot 3
 \right)
+\end{aligned}
 $$
 In Matrix form:
 
 $$
-P(A_1, E_1) = 
+\begin{aligned}
+P(A_1, E_1) =
 \frac{1}{3\cdot 3}
 \left(
-1 - 
-\begin{eqnarray}
+1 -
+\begin{aligned}
 \begin{bmatrix}
 1 & 1 \\
 \end{bmatrix}
@@ -458,14 +466,15 @@ P(A_1, E_1) =
 \begin{bmatrix}
 \Delta^{E}_{12} & \Delta^{E}_{23} \\
 \Delta^{A}_{12} & \Delta^{A}_{23} \\
-\end{bmatrix}	
+\end{bmatrix}
 \cdot
 \begin{bmatrix}
 3\cdot\left(3-1\right) \\
-3 
+3
 \end{bmatrix}
-\end{eqnarray}
+\end{aligned}
 \right)
+\end{aligned}
 $$
 
 Following the 2 by 2 case, the condition needed for positive mass at all points is:
@@ -510,7 +519,7 @@ for (it_rand_seed in 1:1000) {
     # if (max(abs(diff(ar_E_marginal))) + max(abs(diff(ar_A_marginal))) > 2/3){
     it_warning = it_warning + 1
     # }
-    # warning('Outside of Diamond, Rectilinear Restriction Leads to Negative Values in Some Cells\n')    
+    # warning('Outside of Diamond, Rectilinear Restriction Leads to Negative Values in Some Cells\n')
   }
   # What is P(A1,E1), implemetning the formula above
   fl_P_A1_E1 = (1 - c(1,1) %*% rbind(ar_delta_E, ar_delta_A) %*% t(t(c(3*2, 3))))/(3*3)
@@ -524,7 +533,7 @@ for (it_rand_seed in 1:1000) {
       }
       if (it_col >= 2){
         fl_p_value = fl_p_value + sum(ar_delta_A[1:(it_col-1)])
-      }    
+      }
       mt_P_A_E[it_row, it_col] = fl_p_value
     }
   }
@@ -544,19 +553,19 @@ print(paste0('it_neg:',it_neg))
 print(paste0('it_concur:',it_concur))
 ```
 
-
-##### Restricted Joint 5 by 5 Distribution
+#### Restricted Joint 5 by 5 Distribution
 
 For a Five by Five Problem, we have:
 
 In Matrix form:
 
 $$
-P(A_1, E_1) = 
+\begin{aligned}
+P(A_1, E_1) =
 \frac{1}{5\cdot 5}
 \left(
-1 - 
-\begin{eqnarray}
+1 -
+\begin{aligned}
 \begin{bmatrix}
 1 & 1 \\
 \end{bmatrix}
@@ -564,7 +573,7 @@ P(A_1, E_1) =
 \begin{bmatrix}
 \Delta^{E}_{12} & \Delta^{E}_{23} & \Delta^{E}_{34} & \Delta^{E}_{45} \\
 \Delta^{A}_{45} & \Delta^{A}_{45} & \Delta^{A}_{45} & \Delta^{A}_{45} \\
-\end{bmatrix}	
+\end{bmatrix}
 \cdot
 \begin{bmatrix}
 5\cdot4 \\
@@ -572,8 +581,9 @@ P(A_1, E_1) =
 5\cdot2 \\
 5\cdot1 \\
 \end{bmatrix}
-\end{eqnarray}
+\end{aligned}
 \right)
+\end{aligned}
 $$
 
 ```{r}
@@ -603,7 +613,7 @@ for (it_row in 1:length(ar_E_marginal)){
     }
     if (it_col >= 2){
       fl_p_value = fl_p_value + sum(ar_delta_A[1:(it_col-1)])
-    }    
+    }
     mt_P_A_E[it_row, it_col] = fl_p_value
   }
 }

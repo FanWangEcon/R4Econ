@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE---------------------------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 # 7 different age groups and 12 different locationso
 it_N_pop_groups <- 7
 it_M_location <- 12
@@ -14,7 +14,7 @@ rownames(mt_pop_data_frac) <- paste0('location', seq(1,it_M_location))
 mt_pop_data_frac %>% kable() %>% kable_styling_fc()
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 # Share of population per location
 set.seed(123)
 ar_p_loc <- dbinom(0:(3*it_M_location-1), 3*it_M_location-1, 0.5)
@@ -42,13 +42,13 @@ round(mt_pop_data_frac*100, 2) %>%
   kable_styling_fc()
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 fl_meanlog <- 3.4
 fl_sdlog <- 0.35
 hist(rlnorm(1000, meanlog = fl_meanlog, sdlog = fl_sdlog))
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 # draw
 set.seed(123)
 ar_pollution_loc <- rlnorm(it_M_location, meanlog = fl_meanlog, sdlog = fl_sdlog)
@@ -68,7 +68,7 @@ tb_loc_pollution <- as_tibble(ar_pollution_loc) %>%
 kable(tb_loc_pollution) %>% kable_styling_fc()
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 # Reshape population data, so each observation is location/demo
 df_pop_data_frac_long <- as_tibble(mt_pop_data_frac, rownames='location') %>%
   pivot_longer(cols = starts_with('popgrp'),
@@ -77,7 +77,7 @@ df_pop_data_frac_long <- as_tibble(mt_pop_data_frac, rownames='location') %>%
                values_to = "pop_frac")
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 # Reshape population data, so each observation is location/demo
 df_pop_pollution_long <- df_pop_data_frac_long %>%
   left_join(tb_loc_pollution, by='location')
@@ -86,7 +86,7 @@ df_pop_pollution_long <- df_pop_data_frac_long %>%
 df_pop_pollution_long[1:round(it_N_pop_groups*2.5),] %>% kable() %>% kable_styling_fc()
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 # Follow four steps above
 df_pop_pollution_by_popgrp_cdf <- df_pop_pollution_long %>%
   arrange(popgrp, avgdailypm10) %>%
@@ -95,10 +95,10 @@ df_pop_pollution_by_popgrp_cdf <- df_pop_pollution_long %>%
          pmf_pop_condi_popgrp_sortpm10 = (pop_frac/sum(pop_frac)))
 # display
 df_pop_pollution_by_popgrp_cdf[1:round(it_N_pop_groups*5.5),] %>% 
-  kable() %>% kable_styling_fc()
+  kable() %>% kable_styling_fc_wide()
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 ffi_dist_gini_random_var_pos_test <- function(ar_x_sorted, ar_prob_of_x) {
   fl_mean <- sum(ar_x_sorted*ar_prob_of_x);
   ar_mean_cumsum <- cumsum(ar_x_sorted*ar_prob_of_x);
@@ -110,7 +110,7 @@ ffi_dist_gini_random_var_pos_test <- function(ar_x_sorted, ar_prob_of_x) {
 }
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 # Compute GINI by group
 df_pop_pollu_gini <- df_pop_pollution_by_popgrp_cdf %>%
   group_by(popgrp) %>%
@@ -125,7 +125,7 @@ df_pop_pollu_gini <- df_pop_pollution_by_popgrp_cdf %>%
 df_pop_pollu_gini %>% kable() %>% kable_styling_fc()
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 # Visaulize Distributions, CDF for different population groups
 lineplot <- df_pop_pollution_by_popgrp_cdf %>%
     select(popgrp, avgdailypm10, cdf_pop_condi_popgrp_sortpm10 ) %>%
@@ -140,7 +140,7 @@ lineplot <- df_pop_pollution_by_popgrp_cdf %>%
 print(lineplot)
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 # Visaulize Distributions, CDF for different population groups
 lineplot_pmf <- df_pop_pollution_by_popgrp_cdf %>%
     select(popgrp, avgdailypm10, pmf_pop_condi_popgrp_sortpm10 ) %>%
@@ -155,7 +155,7 @@ lineplot_pmf <- df_pop_pollution_by_popgrp_cdf %>%
 print(lineplot_pmf)
 
 
-## -----------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------------------------------------
 # Generate pollution quantiles by population groups
 df_pop_pollution_distribution <- df_pop_pollution_by_popgrp_cdf %>% 
   mutate(pm10_mean = weighted.mean(avgdailypm10, pop_frac)) %>%

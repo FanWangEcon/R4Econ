@@ -1,12 +1,13 @@
 ---
-title: "ggplot Scatter Points Facet Wrap Over Categories to Generate Subplots"
+title: "ggplot Multiple Scatter-Lines and Facet Wrap Over Categories"
 description: |
+  ggplot multiple lines with scatter as points and connecting lines.
   Facet wrap to generate subfigures for sub-categories.
   Generate separate plots from data saved separately.
 core:
   - package: r
     code: |
-      lapply
+      apply
   - package: ggplot
     code: |
       facet_wrap()
@@ -31,7 +32,7 @@ always_allow_html: true
 urlcolor: blue
 ---
 
-### ggplot Scatter Facet Wrap Sub-group Graphs
+### ggplot Multiple Scatter-Lines with Facet Wrap
 
 ```{r global_options, include = FALSE}
 try(source("../../.Rprofile"))
@@ -41,7 +42,7 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
 
-#### Facet Wrap Multiple Subplots
+#### Multiple Scatter-Lines with Facet Wrap
 
 Two subplots, for auto and manual transitions. The x-axis is horse-power, the y-axis shows QSEC. Different colors represent v-shaped and straight-engines.
 
@@ -152,6 +153,7 @@ plt_mtcars_scatter <- plt_mtcars_scatter +
 Seventh, replace default legends, and set figure font overall etc.
 
 ```{r}
+# has legend theme
 theme_custom <- theme(
   text = element_text(size = 11),
   axis.text.y = element_text(angle = 90),
@@ -160,6 +162,14 @@ theme_custom <- theme(
   legend.key.width = unit(5, "line"),
   legend.background =
     element_rect(fill = "transparent", colour = "black", linetype='solid'))
+# no legend theme (no y)
+theme_custom_blank <- theme(
+  text = element_text(size = 12),
+  legend.title = element_blank(),
+  legend.position = "none",
+  axis.title.y=element_blank(),
+  axis.text.y=element_blank(),
+  axis.ticks.y=element_blank())
 ```
 
 Eighth, graph out.
@@ -174,39 +184,58 @@ print(plt_mtcars_scatter)
 
 Given the facet-wrapped plot just generated, now save alternative plot versions, where each subplot is saved by itself. Will simply use the code from above, but call inside lapply over different am categories.
 
-```{r}
-ls_plots <- lapply(sort(unique(tb_mtcars$vs)), function(st_vs_cate) {
-  # 1. Graph main
-  plt_mtcars_scatter <-
-    ggplot(tb_mtcars %>% filter(vs == st_vs_cate),
-           aes(x=hp, y=qsec,
-               colour=am, shape=am, linetype=am)) +
-    geom_smooth(se = FALSE, lwd = 1.5) + # Lwd = line width
-    geom_point(size = 5, stroke = 2)
+Below generate a matrix with multiple data columns, then use apply over each row of the matrix and select different columns of values for each subplot generation.
 
-  # 2. Add titles and labels
-  plt_mtcars_scatter <- plt_mtcars_scatter +
-    labs(title = st_title, subtitle = st_subtitle,
-         x = st_x_label, y = st_y_label, caption = st_caption)
-
-  # 3. x and y ticks
-  plt_mtcars_scatter <- plt_mtcars_scatter +
-    scale_x_continuous(labels = ar_st_x_labels, breaks = ar_fl_x_breaks, limits = ar_fl_x_limits) +
-    scale_y_continuous(labels = ar_st_y_labels, breaks = ar_fl_y_breaks, limits = ar_fl_y_limits)
-
-  # 4. Color, shape and linetype controls
-  plt_mtcars_scatter <- plt_mtcars_scatter +
-    scale_colour_manual(values=ar_st_colors, labels=ar_st_colors_label) +
-    scale_shape_manual(values=ar_it_shapes, labels=ar_st_shapes_label) +
-    scale_linetype_manual(values=ar_st_linetypes, labels=ar_st_linetypes_label)
-
-  # 5. replace the default labels for each legend segment
-  plt_mtcars_scatter <- plt_mtcars_scatter + theme_custom
-})
-```
-
-Print the separate graphs.
+First generate with legend versions, then without legend versions. These are versions that would be used to more freely compose graph together.
 
 ```{r}
-print(ls_plots)
+for (it_subplot_as_own_vsr in c(1,2)) {
+
+  if (it_subplot_as_own_vsr == 1) {
+    theme_custom_use <- theme_custom
+    # st_file_suffix <- '_haslegend'
+    # it_width <- 100
+  } else if (it_subplot_as_own_vsr == 2) {
+    theme_custom_use <- theme_custom_blank
+    # st_file_suffix <- '_nolegend'
+    # it_width <- 88
+  }
+
+  # unique vs as matrix
+  # ar_uniques <-sort(unique(tb_mtcars$vs))
+  # mt_unique_vs <- matrix(data=ar_uniques, nrow=length(ar_uniques), ncol=1)
+  mt_unique_vs <- tb_mtcars %>% group_by(vs) %>%
+    summarize(mpg=mean(mpg)) %>% ungroup()
+  # apply over
+  ls_plots <- apply(mt_unique_vs, 1, function(ar_vs_cate_row) {
+    # 1. Graph main
+    plt_mtcars_scatter <-
+      ggplot(tb_mtcars %>% filter(vs == ar_vs_cate_row[1]),
+             aes(x=hp, y=qsec,
+                 colour=am, shape=am, linetype=am)) +
+      geom_smooth(se = FALSE, lwd = 1.5) + # Lwd = line width
+      geom_point(size = 5, stroke = 2)
+
+    # 2. Add titles and labels
+    plt_mtcars_scatter <- plt_mtcars_scatter +
+      labs(title = st_title, subtitle = st_subtitle,
+           x = st_x_label, y = st_y_label, caption = st_caption)
+
+    # 3. x and y ticks
+    plt_mtcars_scatter <- plt_mtcars_scatter +
+      scale_x_continuous(labels = ar_st_x_labels, breaks = ar_fl_x_breaks, limits = ar_fl_x_limits) +
+      scale_y_continuous(labels = ar_st_y_labels, breaks = ar_fl_y_breaks, limits = ar_fl_y_limits)
+
+    # 4. Color, shape and linetype controls
+    plt_mtcars_scatter <- plt_mtcars_scatter +
+      scale_colour_manual(values=ar_st_colors, labels=ar_st_colors_label) +
+      scale_shape_manual(values=ar_it_shapes, labels=ar_st_shapes_label) +
+      scale_linetype_manual(values=ar_st_linetypes, labels=ar_st_linetypes_label)
+
+    # 5. replace the default labels for each legend segment
+    plt_mtcars_scatter <- plt_mtcars_scatter + theme_custom_use
+  })
+  # show
+  print(ls_plots)
+}
 ```

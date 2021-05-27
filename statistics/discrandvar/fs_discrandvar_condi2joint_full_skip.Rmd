@@ -1,0 +1,1614 @@
+---
+title: "Obtaining Joint Distribution from Conditional with Rectilinear Restrictions"
+titleshort: "Obtaining Joint Distribution from Conditional with Rectilinear Restrictions"
+description: |
+  Solve for joint distributional mass given conditional distributional mass given rectilinear assumptions.
+core:
+  - package: r
+    code: |
+      qr()
+      solve()
+      matrix()
+date: 2021-03-28
+date_start: 2020-06-26
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+<!-- THIS IS THE SKIPPED FULL FILE TOO LONG for R4E Site -->
+
+### Obtaining Joint Distribution from Conditional with Rectilinear Restrictions
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+#### 2 by 2 Joint from Marginal Probability Mass Functions
+
+We know the $P(U|E)$, the probability of unemployment by educational types. I also know $P(U|A)$, the probability of unemployment by age groups. Additionally, I also know the $P(E,A)$, the mass of individuals at discrete $(E,A)$ combinations. What is the $P(U|E,A)$, the probability of unemployment by age and education groups?
+
+##### Generate Data Structure
+
+Generate the data structure. First, a function that generates random joint probabilities of mass at different points. This data-structure will work for 2 by 2, 3 by 3, or 4 by 4 problems.
+
+```{r}
+ffi_gen_rand_joint_mass <- function(it_seed = 123,
+                                    it_Q = 2, it_M = 2,
+                                    bl_verbose = FALSE) {
+
+  # set random seed
+  set.seed(it_seed)
+
+  # Generate prob list
+  ls_2d <- vector(mode = "list", length = it_Q*it_M)
+  dim(ls_2d) <- c(it_Q, it_M)
+
+  # Random joint mass
+  ar_rand <- runif(it_Q*it_M)
+  ar_rand <- ar_rand/sum(ar_rand)
+
+  # Fill with values
+  it_ctr <- 0
+  for (it_Q_ctr in seq(1,it_Q)) {
+    for (it_M_ctr in seq(1,it_M)) {
+      # linear index
+      ls_2d[[it_M_ctr, it_Q_ctr]] <- ar_rand[(it_Q_ctr-1)*it_M+it_M_ctr]
+    }
+  }
+
+  # Replace row names, note rownames does not work
+  dimnames(ls_2d)[[1]] <- paste0('E',seq(1,it_M))
+  dimnames(ls_2d)[[2]] <- paste0('A',seq(1,it_Q))
+
+  # rename
+  ls_prob_joint_E_A <- ls_2d
+  mt_prob_joint_E_A <- matrix(unlist(ls_prob_joint_E_A), ncol=it_M, byrow=F)
+
+  if (bl_verbose) {
+    print('ls_prob_joint_E_A')
+    print(ls_prob_joint_E_A)
+    print(mt_prob_joint_E_A)
+  }
+
+  # return
+  return(list(mt_prob_joint_E_A=mt_prob_joint_E_A,
+              ls_prob_joint_E_A=ls_prob_joint_E_A))
+}
+```
+
+Second, given joint mass at different points, generate conditional unemployment probabilities along each discrete variable's values that works for 2 by 2 case. We have two unique levels for E and for A separately, so these are four points where there is mass. Generate random mass at these points. Then generate given these four additional mass points: $F=P(A_1|E_1)$, $B=P(A_1|E_2)$, $C=P(E_1|A_1)$, $D=P(E_1|A_2)$. Use code from [fs_lst_basics](https://fanwangecon.github.io/R4Econ/amto/list/htmlpdfr/fs_lst_basics.html#16_Define_Two_Dimensional_Named_LIst).
+
+```{r}
+ffi_gen_condi_unemploy_prob_2by2 <- function(mt_prob_joint_E_A,
+                                        fl_alpha = 0.25, fl_beta = 0.05,
+                                        fl_gamma = 0.31, fl_delta = 0.50,
+                                        bl_verbose = FALSE) {
+
+  # From joint probability, generate conditional probabilities
+  fl_F <- mt_prob_joint_E_A[1,1]/sum(mt_prob_joint_E_A[1,])
+  fl_B <- mt_prob_joint_E_A[2,1]/sum(mt_prob_joint_E_A[2,])
+  fl_C <- mt_prob_joint_E_A[1,1]/sum(mt_prob_joint_E_A[,1])
+  fl_D <- mt_prob_joint_E_A[1,2]/sum(mt_prob_joint_E_A[,2])
+  if (bl_verbose) {
+    print(paste0('fl_F=', fl_F, ',fl_B=',fl_B,',fl_C=',fl_C,',fl_D=',fl_D))
+  }
+
+  # Also generate random W X Y Z
+  # ar_b <- runif(4)
+
+  # fl_Delta_A_true <- 0.05
+  # fl_Delta_E_true <- 0.11
+
+  # fl_alpha_true <- 0.25
+  # fl_beta_true <- fl_alpha_true + fl_Delta_A_true
+  # fl_gamma_true <- fl_alpha_true + fl_Delta_E_true
+  # fl_delta_true <- fl_alpha_true + fl_Delta_E_true + fl_Delta_A_true
+
+  # fl_beta_true <- 0.31
+  # fl_gamma_true <- 0.50
+  # fl_delta_true <- 0.16
+
+  fl_W <- fl_alpha*fl_F + fl_beta*(1-fl_F)
+  fl_X <- fl_gamma*fl_B + fl_delta*(1-fl_B)
+  fl_Y <- fl_alpha*fl_C + fl_gamma*(1-fl_C)
+  fl_Z <- fl_beta*fl_D + fl_delta*(1-fl_D)
+  fl_V <- mt_prob_joint_E_A[1,1]*fl_alpha_true +
+    mt_prob_joint_E_A[1,2]*fl_beta_true +
+    mt_prob_joint_E_A[2,1]*fl_gamma_true +
+    mt_prob_joint_E_A[2,2]*fl_delta_true
+  ar_b <- c(fl_W, fl_X, fl_Y, fl_Z)
+
+  if (bl_verbose) {
+    print(paste0('ar_b=',ar_b))
+    print(paste0('fl_V=',fl_V))
+  }
+
+  # return
+  return(list(F=fl_F, B=fl_B, C=fl_C, D=fl_D,
+    W=fl_W, X=fl_X, Y=fl_Y, Z=fl_Z, V=fl_V))
+}
+```
+
+
+##### Unrestricted Joint 2 by 2 Distribution
+
+Suppose there are two unique states for $E$ and $A$. For example, suppose we know the unemployment probability for better or worse educated, and also for low and high age groups. We also know the proportion of people who are in each one of the four cells (regardless of unemployment or not). We also know the aggregate proportion of people in the population that is unemployed.
+
+We want to know the joint probability of unemployment for the four types: both better educated and lower age, better educated and higher age, worse educated and lower age, and worse educated and higher age. Then:
+
+$$
+\begin{aligned}
+P(U|E_1) &= P(U|A_1, E_1) \cdot P(A_1|E_1) + P(U|A_2, E_1) \cdot P(A_2|E_1)\\
+P(U|E_2) &= P(U|A_1, E_2) \cdot P(A_1|E_2) + P(U|A_2, E_2) \cdot P(A_2|E_2)\\
+P(U|A_1) &= P(U|A_1, E_1) \cdot P(E_1|A_1) + P(U|A_1, E_2) \cdot P(E_2|A_1)\\
+P(U|A_2) &= P(U|A_2, E_1) \cdot P(E_1|A_2) + P(U|A_2, E_2) \cdot P(E_2|A_2)\\
+\end{aligned}
+$$
+
+And, we also have the extra equation:
+
+$$
+P(U) = P(U|A_1, E_1) \cdot P(E_1, A_1) + P(U|A_2, E_1) \cdot P(E_2, A_1) + P(U|A_1, E_2) \cdot P(E_1, A_2) + P(U|A_2, E_2) \cdot P(E_2, A_2)
+$$
+
+We know $P(A|E)$, and we know $P(U|E)$ as well as $P(U|A)$. Let Roman letter represent what we know, and greek letters represent what we do not know, then we have four equations and four unknowns in a linear system. We use the letter F because A and E are taken.
+
+$$
+\begin{aligned}
+W = \alpha F + \beta (1-F)\\
+X = \gamma B + \delta (1-B)\\
+Y = \alpha C + \gamma (1-C)\\
+Z = \beta D + \delta (1-D)\\
+\end{aligned}
+$$
+
+And we have also:
+
+$$
+V = \alpha P(E_1, A_1) + \beta P(E_2, A_1) + \gamma P(E_1, A_2) + \delta P(E_2, A_2)
+$$
+
+There are no unique solutions for the linear system. When we write the linear system above in matrix form as shown below, the $\Omega$ coefficient matrix is not full rank.
+
+$$
+\begin{aligned}
+\begin{bmatrix}
+F & (1-F) & 0 & 0 \\
+0 & 0 & B & (1-B) \\
+C & 0 & (1-C) & 0 \\
+0 & D & 0 & (1-D) \\
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+\alpha \\
+\beta \\
+\gamma \\
+\delta
+\end{bmatrix}
+& =
+\begin{bmatrix}
+W \\
+X \\
+Y \\
+Z \\
+\end{bmatrix}\\
+\Omega \cdot \mathbb{X} & =  b
+\end{aligned}
+$$
+
+Get data from the data generation functions created prior:
+
+```{r}
+# JOint mass of population at all cells
+ls_ffi_rand_joint_mass <- ffi_gen_rand_joint_mass(it_seed = 123, it_Q = 2, it_M = 2, bl_verbose = TRUE)
+mt_prob_joint_E_A <- ls_ffi_rand_joint_mass$mt_prob_joint_E_A
+# retlinear restrictions for conditional unemployment probabilities
+fl_Delta_A_true <- 0.05
+fl_Delta_E_true <- 0.11
+fl_alpha_true <- 0.25
+fl_beta_true <- fl_alpha_true + fl_Delta_A_true
+fl_gamma_true <- fl_alpha_true + fl_Delta_E_true
+fl_delta_true <- fl_alpha_true + fl_Delta_E_true + fl_Delta_A_true
+ls_FBCDWXYZV <- ffi_gen_condi_unemploy_prob_2by2(mt_prob_joint_E_A,
+  fl_alpha = fl_alpha_true, fl_beta = fl_beta_true,
+  fl_gamma = fl_gamma_true, fl_delta = fl_delta_true, bl_verbose=TRUE)
+fl_F <- ls_FBCDWXYZV$F
+fl_B <- ls_FBCDWXYZV$B
+fl_C <- ls_FBCDWXYZV$C
+fl_D <- ls_FBCDWXYZV$D
+fl_W <- ls_FBCDWXYZV$W
+fl_X <- ls_FBCDWXYZV$X
+fl_Y <- ls_FBCDWXYZV$Y
+fl_Z <- ls_FBCDWXYZV$Z
+fl_V <- ls_FBCDWXYZV$V
+```
+We can see the rank of a matrix with the [qr](https://stat.ethz.ch/R-manual/R-devel/library/base/html/qr.html) function (QR decomposition), regardless of the random seed chosen above, the $\Omega$ matrix is not full ranked.
+
+```{r}
+# does not matter if joint sum is used or the alternative
+bl_use_joint_sum <- FALSE
+if (bl_use_joint_sum) {
+  # Construct The coefficent Matrix
+  mt_OMEGA = t(
+    matrix(data=c(fl_F, 1-fl_F, 0, 0,
+                  0, 0, fl_B, 1-fl_B,
+                  fl_C, 0, 1-fl_C, 0,
+                  mt_prob_joint_E_A[1,1],  mt_prob_joint_E_A[1,2],
+                  mt_prob_joint_E_A[2,1],  mt_prob_joint_E_A[2,2]), nrow=4, ncol=4))
+} else {
+  # Construct The coefficent Matrix
+  mt_OMEGA = t(matrix(data=c(fl_F, 1-fl_F, 0, 0,
+                             0, 0, fl_B, 1-fl_B,
+                             fl_C, 0, 1-fl_C, 0,
+                             0, fl_D, 0, 1-fl_D), nrow=4, ncol=4))
+
+}
+# rank Check with the qr function:
+print(qr(mt_OMEGA))
+# rank Check with the qr function:
+```
+
+We cannot solve the linear equations using *solve* because this is NOT full rank.
+
+
+##### Rectilinear Restriction on Joint 2 by 2 Distribution
+
+So in the section above, it is demonstrated that it is not possible to uniquely identify the joint probability mass function from marginal probability mass functions.
+
+However, sometimes, we need to find some reasonable joint distribution, when we only observe marginal distributions. This joint distribution might be an input transition matrix in a model we simulate. If we just use one of the infinitely possible joint mass that match up with the marginals, then the model would have infinitely many simulation results depending on our arbitrary choice of joint mass.
+
+Ideally, one should try to obtain data to estimate the underlying joint distribution, when this is not possible, we can impose additional non-parametric restrictions on the structures of the joint probability mass that would lead to unique joint mass from marginals.
+
+Specifically, we will assume the incremental changes across rows and across columns of the joint mass matrix are row or column specific, is this sufficient? (In Some Cases it Will Not be):
+
+$$
+\begin{aligned}
+\Delta^{E}_{12} = P(A_1,E_2) - P(A_1,E_1) = \gamma - \alpha = P(A_2,E_2) - P(A_2,E_1) = \delta - \beta \\
+\Delta^{A}_{12} = P(A_2,E_1) - P(A_1,E_1) = \beta -  \alpha = P(A_2,E_2) - P(A_1,E_2) = \delta - \gamma \\
+\end{aligned}
+$$
+The assumption is non-parametric. This is effectively an rectilinear assumption on the joint Cumulative Probability Mass Function. The assumption means that if we know $\Delta^E_{12}$ and $\Delta^{A}_{12}$ and say $\alpha$, we have:
+
+$$
+\beta = \alpha + \Delta^A_{12}\\
+\gamma = \alpha + \Delta^E_{12}\\
+\delta = \gamma\left(\alpha, \Delta^E_{12}\right) + \Delta^A_{12}\\
+$$
+Alernatively, we can also say that if we know $\alpha$, $\beta$ and $\gamma$, then we know $\delta$:
+
+$$
+\Delta^A_{12} = \beta - \alpha\\
+\delta = \gamma + \Delta^A_{12} = \gamma + \beta - \alpha\\
+$$
+
+##### 2 by 2 Problem with Rectlinear Restrictions
+
+We have these three equations, where $\alpha$, $\Delta^A$ and $\Delta^E$ are not known:
+
+$$
+\begin{aligned}
+W &= \alpha F + \alpha(1-F) + \Delta^{A} (1-F)\\
+X &= \alpha B + \Delta^{E} B + \alpha (1-B) + \Delta^{A} (1-B) + \Delta^{E} (1-B)\\
+Y &= \alpha C + \alpha(1-C)+\Delta^{E}(1-C)
+\end{aligned}
+$$
+Rewriting a little bit, we have the following linear system:
+
+$$
+\begin{aligned}
+W &= \alpha + \Delta^{A} (1-F)\\
+X &= \alpha + \Delta^{A} (1-B) + \Delta^{E}\\
+Y &= \alpha + \Delta^{E}(1-C)\\
+V &=
+\alpha
++
+\Delta^A \left(
+P(E_2, A_1) + P(E_2, A_2)
+\right)
++
+\Delta^E \left(
+P(E_1, A_2) + P(E_2, A_2)
+\right)
+\end{aligned}
+$$
+Using the First three equations, we have:
+$$
+\begin{aligned}
+\begin{bmatrix}
+1 & (1-F) & 0 \\
+1 & (1-B) & 1 \\
+1 & 0 & (1-C) \\
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+\alpha \\
+\Delta^{A} \\
+\Delta^{E}
+\end{bmatrix}
+& =
+\begin{bmatrix}
+W \\
+X \\
+Y \\
+\end{bmatrix}\\
+\end{aligned}
+$$
+$$
+\widehat{\Omega} \cdot \widehat{\mathbb{X}} = \widehat{b}
+$$
+
+##### Solution Program for 2 by 2 Problem with Rectlinear Restrictions
+
+Using the same $F$, $B$ and $C$ values obtained from prior, we have now a full ranked 3 by 3 matrix:
+
+```{r}
+ffi_solve_2by2_rectilinear <- function(fl_F, fl_B, fl_C,
+                                       fl_W, fl_X, fl_Y,
+                                       bl_verbose=FALSE) {
+
+  # Construct The coefficent Matrix
+  mt_OMEGA_hat = t(matrix(
+    data=c(1, 1-fl_F, 0,
+           1, 1-fl_B, 1,
+           1, 0, 1-fl_C), nrow=3, ncol=3))
+
+  # rank Check with the qr function:
+  if (bl_verbose) {
+    print(qr(mt_OMEGA_hat))
+  }
+
+  # bhat
+  ar_b_hat <- c(fl_W, fl_X, fl_Y)
+
+  # solve
+  ar_solution <- solve(mt_OMEGA_hat, ar_b_hat)
+
+  # Get alpha and Delta from solution
+  fl_alpha <- ar_solution[1]
+  fl_Delta_A <- ar_solution[2]
+  fl_Delta_E <- ar_solution[3]
+  if (bl_verbose) {
+    print(paste0('fl_Delta_A=',fl_Delta_A))
+    print(paste0('fl_Delta_E=',fl_Delta_E))
+  }
+
+  # Get beta gamma , delta
+  fl_beta <- fl_alpha + fl_Delta_A
+  fl_gamma <- fl_alpha + fl_Delta_E
+  fl_delta <- fl_gamma + fl_Delta_A
+  if (bl_verbose) {
+    print(paste0('fl_alpha=',fl_alpha))
+    print(paste0('fl_beta=',fl_beta))
+    print(paste0('fl_gamma=',fl_gamma))
+    print(paste0('fl_delta=',fl_delta))
+    if (abs(ar_b[1] - (fl_alpha*fl_F + fl_beta*(1-fl_F))) < 1e-10) {
+      print('W matched')
+    }
+    if (abs(ar_b[2] - (fl_gamma*fl_B + fl_delta*(1-fl_B))) < 1e-10) {
+      print('X matched')
+    }
+    if (abs(ar_b[3] - (fl_alpha*fl_C + fl_gamma*(1-fl_C))) < 1e-10) {
+      print('Y matched')
+    }
+    if (abs(ar_b[4] - (fl_beta*fl_D + fl_delta*(1-fl_D))) < 1e-10) {
+      print('Z matched')
+    }
+    if (abs(fl_V - (mt_prob_joint_E_A[1,1]*fl_alpha +
+                    mt_prob_joint_E_A[1,2]*fl_beta +
+                    mt_prob_joint_E_A[2,1]*fl_gamma +
+                    mt_prob_joint_E_A[2,2]*fl_delta)) < 1e-10) {
+      print('V matched')
+    }
+  }
+
+  return(list(Delta_A=fl_Delta_A, Delta_E=fl_Delta_E,
+              alpha=fl_alpha, beta=fl_beta,
+              gamma=fl_gamma, delta=fl_delta))
+}
+```
+
+Now solve for $\widehat{\mathbb{X}}$ using *solve* given $\widehat{\Omega}$ and $\widehat{b}$. Solving different assumptions on underlying joint probabilities.
+
+##### Testing Program for 2 by 2 Problem with Rectlinear Restrictions
+
+Solving first when rectilinear assumption is valid:
+
+```{r}
+for (it_i in c(1,2,3)) {
+
+  # JOint mass of population at all cells
+  ls_ffi_rand_joint_mass <- ffi_gen_rand_joint_mass(
+    it_seed = 123, it_Q = 2, it_M = 2, bl_verbose = FALSE)
+  mt_prob_joint_E_A <- ls_ffi_rand_joint_mass$mt_prob_joint_E_A
+
+  # retlinear restrictions for conditional unemployment probabilities
+  fl_alpha_true <- 0.25
+  if (it_i == 1) {
+    fl_Delta_A_true <- 0.05
+    fl_Delta_E_true <- 0.11
+  } else if (it_i == 2) {
+    fl_Delta_A_true <- 0.21
+    fl_Delta_E_true <- 0.03
+  } else if (it_i == 3) {
+    fl_Delta_A_true <- -0.05
+    fl_Delta_E_true <- -0.11
+  }
+
+  fl_beta_true <- fl_alpha_true + fl_Delta_A_true
+  fl_gamma_true <- fl_alpha_true + fl_Delta_E_true
+  fl_delta_true <- fl_alpha_true + fl_Delta_E_true + fl_Delta_A_true
+  ls_FBCDWXYZV <- ffi_gen_condi_unemploy_prob_2by2(
+    mt_prob_joint_E_A,
+    fl_alpha = fl_alpha_true, fl_beta = fl_beta_true,
+    fl_gamma = fl_gamma_true, fl_delta = fl_delta_true, bl_verbose=FALSE)
+
+  # call solution function
+  fl_F <- ls_FBCDWXYZV$F
+  fl_B <- ls_FBCDWXYZV$B
+  fl_C <- ls_FBCDWXYZV$C
+  fl_D <- ls_FBCDWXYZV$D
+  fl_W <- ls_FBCDWXYZV$W
+  fl_X <- ls_FBCDWXYZV$X
+  fl_Y <- ls_FBCDWXYZV$Y
+  fl_Z <- ls_FBCDWXYZV$Z
+  fl_V <- ls_FBCDWXYZV$V
+  ls_solution <- ffi_solve_2by2_rectilinear(
+    fl_F, fl_B, fl_C,
+    fl_W, fl_X, fl_Y)
+
+  fl_alpha <- ls_solution$alpha
+  fl_beta <- ls_solution$beta
+  fl_gamma <- ls_solution$gamma
+  fl_delta <- ls_solution$delta
+
+  # check
+  print(paste0('it_i=', it_i))
+  print(paste0('fl_alpha=', fl_alpha, ', fl_alpha_true=', fl_alpha_true))
+  print(paste0('fl_beta=', fl_beta, ', fl_beta_true=', fl_beta_true))
+  print(paste0('fl_gamma=', fl_gamma, ', fl_gamma_true=', fl_gamma_true))
+  print(paste0('fl_delta=', fl_delta, ', fl_delta_true=', fl_delta_true))
+}
+```
+
+Solving when rectilinear assumption is NOT valid, results can be approximately correct. However, note that we do not have positive mass in all cases. See case three below, the alpha backed out is negative.
+
+```{r}
+for (it_i in c(1,2,3)) {
+
+  # JOint mass of population at all cells
+  ls_ffi_rand_joint_mass <- ffi_gen_rand_joint_mass(
+    it_seed = 123, it_Q = 2, it_M = 2, bl_verbose = FALSE)
+  mt_prob_joint_E_A <- ls_ffi_rand_joint_mass$mt_prob_joint_E_A
+
+  # retlinear restrictions for conditional unemployment probabilities
+  if (it_i == 1) {
+    fl_alpha_true <- 0.25
+    fl_Delta_A_true <- 0.05
+    fl_Delta_E_true <- 0.11
+    fl_Delta_AE_true <- 0.10
+  } else if (it_i == 2) {
+    fl_alpha_true <- 0.55
+    fl_Delta_A_true <- 0.21
+    fl_Delta_E_true <- 0.03
+    fl_Delta_AE_true <- 0.15
+  } else if (it_i == 3) {
+    fl_alpha_true <- 0.15
+    fl_Delta_A_true <- -0.05
+    fl_Delta_E_true <- -0.11
+    fl_Delta_AE_true <- 0.30
+  }
+
+  fl_beta_true <- fl_alpha_true + fl_Delta_A_true
+  fl_gamma_true <- fl_alpha_true + fl_Delta_E_true
+  fl_delta_true <- fl_alpha_true + fl_Delta_AE_true
+  ls_FBCDWXYZV <- ffi_gen_condi_unemploy_prob_2by2(
+    mt_prob_joint_E_A,
+    fl_alpha = fl_alpha_true, fl_beta = fl_beta_true,
+    fl_gamma = fl_gamma_true, fl_delta = fl_delta_true, bl_verbose=FALSE)
+
+  # call solution function
+  fl_F <- ls_FBCDWXYZV$F
+  fl_B <- ls_FBCDWXYZV$B
+  fl_C <- ls_FBCDWXYZV$C
+  fl_D <- ls_FBCDWXYZV$D
+  fl_W <- ls_FBCDWXYZV$W
+  fl_X <- ls_FBCDWXYZV$X
+  fl_Y <- ls_FBCDWXYZV$Y
+  fl_Z <- ls_FBCDWXYZV$Z
+  fl_V <- ls_FBCDWXYZV$V
+  ls_solution <- ffi_solve_2by2_rectilinear(
+    fl_F, fl_B, fl_C,
+    fl_W, fl_X, fl_Y)
+
+  fl_alpha <- ls_solution$alpha
+  fl_beta <- ls_solution$beta
+  fl_gamma <- ls_solution$gamma
+  fl_delta <- ls_solution$delta
+
+  # check
+  print(paste0('it_i=', it_i))
+  print(paste0('fl_alpha=', fl_alpha, ', fl_alpha_true=', fl_alpha_true))
+  print(paste0('fl_beta=', fl_beta, ', fl_beta_true=', fl_beta_true))
+  print(paste0('fl_gamma=', fl_gamma, ', fl_gamma_true=', fl_gamma_true))
+  print(paste0('fl_delta=', fl_delta, ', fl_delta_true=', fl_delta_true))
+}
+```
+
+#### 3 by 3 Joint from Marginal Probability Mass Functions with Rectilinear Assumptions
+
+##### The 3 by 3 Problem
+
+We append the 2 by 2 problem to a 3 by 3 problem.
+
+$$
+\begin{aligned}
+P(U|E_1) =
+P(U|A_1, E_1) \cdot P(A_1|E_1) +
+P(U|A_2, E_1) \cdot P(A_2|E_1) +
+P(U|A_3, E_1) \cdot P(A_3|E_1)
+\\
+P(U|E_2) =
+P(U|A_1, E_2) \cdot P(A_1|E_2) +
+P(U|A_2, E_2) \cdot P(A_2|E_2) +
+P(U|A_3, E_2) \cdot P(A_3|E_2)
+\\
+P(U|E_3) =
+P(U|A_1, E_3) \cdot P(A_1|E_3) +
+P(U|A_2, E_3) \cdot P(A_2|E_3) +
+P(U|A_3, E_3) \cdot P(A_3|E_3)
+\\
+P(U|A_1) =
+P(U|A_1, E_1) \cdot P(E_1|A_1) +
+P(U|A_1, E_2) \cdot P(E_2|A_1) +
+P(U|A_1, E_3) \cdot P(E_3|A_1)
+\\
+P(U|A_2) =
+P(U|A_2, E_1) \cdot P(E_1|A_2) +
+P(U|A_2, E_2) \cdot P(E_2|A_2) +
+P(U|A_2, E_3) \cdot P(E_3|A_2)
+\\
+P(U|A_3) =
+P(U|A_3, E_1) \cdot P(E_1|A_3) +
+P(U|A_3, E_2) \cdot P(E_2|A_3) +
+P(U|A_3, E_3) \cdot P(E_3|A_3)
+\\
+\end{aligned}
+$$
+Similar to before, let Roman letter represent what we know, and greek letters represent what we do not know. There are nine potential unknown conditional unemployment probabilities $\alpha_{ij}$.
+
+$$
+\begin{aligned}
+V_1 &= \alpha_{11} B_{11} + \alpha_{21} B_{21} + \alpha_{31} B_{31}
+\\
+V_2 &= \alpha_{12} B_{12} + \alpha_{22} B_{22} + \alpha_{32} B_{32}
+\\
+V_3 &= \alpha_{13} B_{13} + \alpha_{23} B_{23} + \alpha_{33} B_{33}
+\\
+W_1 &= \alpha_{11} C_{11} + \alpha_{12} C_{21} + \alpha_{13} C_{31}
+\\
+W_2 &= \alpha_{21} C_{12} + \alpha_{22} C_{22} + \alpha_{23} C_{32}
+\\
+W_3 &= \alpha_{31} C_{13} + \alpha_{32} C_{23} + \alpha_{33} C_{33}
+\end{aligned}
+$$
+
+##### 3 by 3 Problem with Rectlinear Restrictions
+
+With rectilinear assumptions, we have now rather than nine parameters, five parameters.
+
+$$
+\begin{aligned}
+V_1 &= \alpha B_{11} + (\alpha + \delta^{21}) B_{21} + (\alpha + \delta^{21} + \delta^{31}) B_{31}
+\\
+V_2 &= (\alpha + \delta^{12}) B_{12} + (\alpha + \delta^{12} + \delta^{21}) B_{22} + (\alpha + \delta^{12} + \delta^{21} + \delta^{31}) B_{32}
+\\
+V_3 &= (\alpha + \delta^{12} + \delta^{13}) B_{13} + (\alpha + \delta^{12} + \delta^{13} + \delta^{21}) B_{23} + (\alpha + \delta^{12} + \delta^{13} + \delta^{21} + \delta^{31}) B_{33}
+\\
+W_1 &= \alpha C_{11} + (\alpha + \delta^{12}) C_{21} + (\alpha + \delta^{12} + \delta^{13}) C_{31}
+\\
+W_2 &= (\alpha + \delta^{21}) C_{12} + (\alpha + \delta^{12} + \delta^{21}) C_{22} + (\alpha + \delta^{12} + \delta^{13} + \delta^{21}) C_{32}
+\\
+W_3 &= (\alpha + \delta^{21} + \delta^{31}) C_{13} + (\alpha + \delta^{12} + \delta^{21} + \delta^{31}) C_{23} + (\alpha + \delta^{12} + \delta^{13} + \delta^{21} + \delta^{31}) C_{33}
+\end{aligned}
+$$
+Write these in matrix form:
+
+$$
+\begin{aligned}
+\begin{bmatrix}
+(B_{11} + B_{21} + B_{31}) & (B_{21} + B_{31}) & (B_{31}) & 0 & 0 \\
+(B_{12} + B_{22} + B_{32}) & (B_{22} + B_{32}) & (B_{32}) & (B_{12} + B_{22} + B_{32}) & 0 \\
+(B_{13} + B_{23} + B_{33}) & (B_{23} + B_{33}) & (B_{33}) & (B_{13} + B_{23} + B_{33}) & (B_{13} + B_{23} + B_{33}) \\
+(C_{11} + C_{21} + C_{31}) & 0 & 0 & (C_{21} + C_{31}) & (C_{31}) \\
+(C_{12} + C_{22} + C_{33}) & (C_{12} + C_{22} + C_{32}) & 0 & (C_{22} + C_{32}) & (C_{32})\\
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+\alpha \\
+\delta^{21} \\
+\delta^{31} \\
+\delta^{12} \\
+\delta^{13}
+\end{bmatrix}
+& =
+\begin{bmatrix}
+V_1 \\
+V_2 \\
+V_3 \\
+W_1 \\
+W_2 \\
+\end{bmatrix}\\
+\end{aligned}
+$$
+$$
+\widehat{\Omega} \cdot \widehat{\mathbb{X}} = \widehat{b}
+$$
+
+Simplify slightly for where the probabilities sum to 1, which arrives at a matrix form that is similar to the matrix form arrived at for the 2 by 2 problem.
+
+$$
+\begin{aligned}
+\begin{bmatrix}
+1 & (B_{21} + B_{31}) & (B_{31}) & 0 & 0 \\
+1 & (B_{22} + B_{32}) & (B_{32}) & 1 & 0 \\
+1 & (B_{23} + B_{33}) & (B_{33}) & 1 & 1 \\
+1 & 0 & 0 & (C_{21} + C_{31}) & (C_{31}) \\
+1 & 1 & 0 & (C_{22} + C_{32}) & (C_{32})\\
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+\alpha \\
+\delta^{21} \\
+\delta^{31} \\
+\delta^{12} \\
+\delta^{13}
+\end{bmatrix}
+& =
+\begin{bmatrix}
+V_1 \\
+V_2 \\
+V_3 \\
+W_1 \\
+W_2 \\
+\end{bmatrix}\\\end{aligned}
+$$
+$$
+\widehat{\Omega} \cdot \widehat{\mathbb{X}} = \widehat{b}
+$$
+
+##### Data Program for 3 by 3 Problem with Rectlinear Restrictions
+
+```{r}
+ffi_gen_condi_unemploy_prob_3by3 <- function(mt_prob_joint_E_A, mt_alpha, bl_verbose = FALSE) {
+
+  # From joint probability, generate conditional probabilities
+  fl_B21 <- mt_prob_joint_E_A[1,2]/sum(mt_prob_joint_E_A[1,])
+  fl_B31 <- mt_prob_joint_E_A[1,3]/sum(mt_prob_joint_E_A[1,])
+
+  fl_B22 <- mt_prob_joint_E_A[2,2]/sum(mt_prob_joint_E_A[2,])
+  fl_B32 <- mt_prob_joint_E_A[2,3]/sum(mt_prob_joint_E_A[2,])
+
+  fl_B23 <- mt_prob_joint_E_A[3,2]/sum(mt_prob_joint_E_A[3,])
+  fl_B33 <- mt_prob_joint_E_A[3,3]/sum(mt_prob_joint_E_A[3,])
+
+  fl_C21 <- mt_prob_joint_E_A[2,1]/sum(mt_prob_joint_E_A[,1])
+  fl_C31 <- mt_prob_joint_E_A[3,1]/sum(mt_prob_joint_E_A[,1])
+
+  fl_C22 <- mt_prob_joint_E_A[2,2]/sum(mt_prob_joint_E_A[,2])
+  fl_C32 <- mt_prob_joint_E_A[3,2]/sum(mt_prob_joint_E_A[,2])
+
+  if (bl_verbose) {
+    print(paste0('fl_B21=', fl_B21, ',fl_B31=',fl_B31))
+    print(paste0('fl_B22=', fl_B22, ',fl_B22=',fl_B22))
+    print(paste0('fl_B23=', fl_B23, ',fl_B33=',fl_B33))
+    print(paste0('fl_C21=', fl_C21, ',fl_C31=',fl_C31))
+    print(paste0('fl_C22=', fl_C22, ',fl_C32=',fl_C32))
+  }
+
+  # Generate random W X Y
+  fl_V1 <- mt_alpha[1,1]*(1 - fl_B21 - fl_B31) + mt_alpha[2,1]*fl_B21 + mt_alpha[3,1]*fl_B31
+  fl_V2 <- mt_alpha[1,2]*(1 - fl_B22 - fl_B32) + mt_alpha[2,2]*fl_B22 + mt_alpha[3,2]*fl_B32
+  fl_V3 <- mt_alpha[1,3]*(1 - fl_B23 - fl_B33) + mt_alpha[2,3]*fl_B23 + mt_alpha[3,3]*fl_B33
+  fl_W1 <- mt_alpha[1,1]*(1 - fl_C21 - fl_C31) + mt_alpha[1,2]*fl_C21 + mt_alpha[1,3]*fl_C31
+  fl_W2 <- mt_alpha[2,1]*(1 - fl_C22 - fl_C32) + mt_alpha[2,2]*fl_C22 + mt_alpha[2,3]*fl_C32
+  ar_b <- c(fl_V1, fl_V2, fl_V3, fl_W1, fl_W2)
+
+  if (bl_verbose) {
+    print(paste0('ar_b=',ar_b))
+  }
+
+  # return
+  return(ar_b)
+}
+```
+
+##### Solution Program for 3 by 3 Problem with Rectlinear Restrictions
+
+```{r}
+ffi_solve_3by3_rectilinear <- function(mt_prob_joint_E_A, ar_b, bl_verbose=FALSE) {
+
+  # From joint probability, generate conditional probabilities
+  fl_B21 <- mt_prob_joint_E_A[1,2]/sum(mt_prob_joint_E_A[1,])
+  fl_B31 <- mt_prob_joint_E_A[1,3]/sum(mt_prob_joint_E_A[1,])
+
+  fl_B22 <- mt_prob_joint_E_A[2,2]/sum(mt_prob_joint_E_A[2,])
+  fl_B32 <- mt_prob_joint_E_A[2,3]/sum(mt_prob_joint_E_A[2,])
+
+  fl_B23 <- mt_prob_joint_E_A[3,2]/sum(mt_prob_joint_E_A[3,])
+  fl_B33 <- mt_prob_joint_E_A[3,3]/sum(mt_prob_joint_E_A[3,])
+
+  fl_C21 <- mt_prob_joint_E_A[2,1]/sum(mt_prob_joint_E_A[,1])
+  fl_C31 <- mt_prob_joint_E_A[3,1]/sum(mt_prob_joint_E_A[,1])
+
+  fl_C22 <- mt_prob_joint_E_A[2,2]/sum(mt_prob_joint_E_A[,2])
+  fl_C32 <- mt_prob_joint_E_A[3,2]/sum(mt_prob_joint_E_A[,2])
+
+  # Construct The coefficent Matrix
+  mt_OMEGA = t(matrix(
+    data=c(1, fl_B21+fl_B31, fl_B31, 0, 0,
+           1, fl_B22+fl_B32, fl_B32, 1, 0,
+           1, fl_B23+fl_B33, fl_B33, 1, 1,
+           1, 0, 0, fl_C21+fl_C31, fl_C31,
+           1, 1, 0, fl_C22+fl_C32, fl_C32), nrow=5, ncol=5))
+
+  # rank Check with the qr function:
+  if (bl_verbose) {
+    print(qr(mt_OMEGA_hat))
+  }
+
+  # solve
+  ar_solution <- solve(mt_OMEGA, ar_b)
+
+  # Get alpha and Delta from solution
+  fl_alpha <- ar_solution[1]
+  fl_Delta_21 <- ar_solution[2]
+  fl_Delta_31 <- ar_solution[3]
+  fl_Delta_12 <- ar_solution[4]
+  fl_Delta_13 <- ar_solution[5]
+  if (bl_verbose) {
+    print(paste0('fl_Delta_21=',fl_Delta_21))
+    print(paste0('fl_Delta_31=',fl_Delta_31))
+    print(paste0('fl_Delta_12=',fl_Delta_12))
+    print(paste0('fl_Delta_13=',fl_Delta_13))
+  }
+
+  # Get beta gamma , delta
+  mt_alpha = matrix(0, 3, 3)
+  for (it_row in c(1,2,3)) {
+    for (it_col in c(1,2,3)) {
+
+      fl_current_val <- fl_alpha
+
+      if (it_row == 2) {
+        fl_current_val <- fl_current_val + fl_Delta_21
+      }
+      if (it_row == 3) {
+        fl_current_val <- fl_current_val + fl_Delta_21 + fl_Delta_31
+      }
+      if (it_col == 2) {
+        fl_current_val <- fl_current_val + fl_Delta_12
+      }
+      if (it_col == 3) {
+        fl_current_val <- fl_current_val + fl_Delta_12 + fl_Delta_13
+      }
+
+      mt_alpha[it_row, it_col] <- fl_current_val
+    }
+  }
+
+
+  return(mt_alpha)
+}
+```
+
+##### Testing Program for 3 by 3 Problem with Rectlinear Restrictions
+
+Solving first when rectilinear assumption is valid:
+
+```{r}
+for (it_i in c(1,2,3)) {
+
+  # JOint mass of population at all cells
+  ls_ffi_rand_joint_mass <- ffi_gen_rand_joint_mass(
+    it_seed = 123, it_Q = 3, it_M = 3, bl_verbose = FALSE)
+  mt_prob_joint_E_A <- ls_ffi_rand_joint_mass$mt_prob_joint_E_A
+
+  # retlinear restrictions for conditional unemployment probabilities
+  if (it_i == 1) {
+    fl_alpha <- 0.1
+    fl_Delta_21 <- 0.05
+    fl_Delta_31 <- 0.07
+    fl_Delta_12 <- 0.09
+    fl_Delta_13 <- 0.03
+  } else if (it_i == 2) {
+    fl_alpha <- 0.20
+    fl_Delta_21 <- -0.05
+    fl_Delta_31 <- +0.07
+    fl_Delta_12 <- 0.09
+    fl_Delta_13 <- -0.03
+  } else if (it_i == 3) {
+    fl_alpha <- 0.15
+    fl_Delta_21 <- 0.11
+    fl_Delta_31 <- -0.01
+    fl_Delta_12 <- 0
+    fl_Delta_13 <- +0.1
+  }
+
+  mt_alpha_true = matrix(0, 3, 3)
+  for (it_row in c(1,2,3)) {
+    for (it_col in c(1,2,3)) {
+
+      fl_current_val <- fl_alpha
+
+      if (it_row == 2) {
+        fl_current_val <- fl_current_val + fl_Delta_21
+      }
+      if (it_row == 3) {
+        fl_current_val <- fl_current_val + fl_Delta_21 + fl_Delta_31
+      }
+      if (it_col == 2) {
+        fl_current_val <- fl_current_val + fl_Delta_12
+      }
+      if (it_col == 3) {
+        fl_current_val <- fl_current_val + fl_Delta_12 + fl_Delta_13
+      }
+
+      mt_alpha_true[it_row, it_col] <- fl_current_val
+    }
+  }
+
+  ar_b <- ffi_gen_condi_unemploy_prob_3by3(mt_prob_joint_E_A, mt_alpha_true, bl_verbose=FALSE)
+
+  # call solution function
+  mt_alpha_solu <- ffi_solve_3by3_rectilinear(mt_prob_joint_E_A, ar_b)
+
+  # check
+  print(paste0('it_i=', it_i))
+  print('mt_alpha_true')
+  print(mt_alpha_true)
+  print('mt_alpha_solu')
+  print(mt_alpha_solu)
+
+}
+```
+
+Solving first when rectilinear assumption is NOT VALID, same as above, except add randomness at each point. Note that the solution is approximately the same as the actual in the examples here.
+
+```{r}
+# set seed
+set.seed(123)
+# loop over alternatives
+for (it_i in c(1,2,3)) {
+
+  # JOint mass of population at all cells
+  ls_ffi_rand_joint_mass <- ffi_gen_rand_joint_mass(
+    it_seed = 123, it_Q = 3, it_M = 3, bl_verbose = FALSE)
+  mt_prob_joint_E_A <- ls_ffi_rand_joint_mass$mt_prob_joint_E_A
+
+  # retlinear restrictions for conditional unemployment probabilities
+  if (it_i == 1) {
+    fl_alpha <- 0.1
+    fl_Delta_21 <- 0.05
+    fl_Delta_31 <- 0.07
+    fl_Delta_12 <- 0.09
+    fl_Delta_13 <- 0.03
+  } else if (it_i == 2) {
+    fl_alpha <- 0.20
+    fl_Delta_21 <- -0.05
+    fl_Delta_31 <- +0.07
+    fl_Delta_12 <- 0.09
+    fl_Delta_13 <- -0.03
+  } else if (it_i == 3) {
+    fl_alpha <- 0.15
+    fl_Delta_21 <- 0.11
+    fl_Delta_31 <- -0.01
+    fl_Delta_12 <- 0
+    fl_Delta_13 <- +0.1
+  }
+
+  mt_alpha_true = matrix(0, 3, 3)
+  for (it_row in c(1,2,3)) {
+    for (it_col in c(1,2,3)) {
+
+      fl_current_val <- fl_alpha
+
+      if (it_row == 2) {
+        fl_current_val <- fl_current_val + fl_Delta_21 + runif(1)*0.2
+      }
+      if (it_row == 3) {
+        fl_current_val <- fl_current_val + fl_Delta_21 + fl_Delta_31 + runif(1)*0.2
+      }
+      if (it_col == 2) {
+        fl_current_val <- fl_current_val + fl_Delta_12 + runif(1)*0.2
+      }
+      if (it_col == 3) {
+        fl_current_val <- fl_current_val + fl_Delta_12 + fl_Delta_13 + runif(1)*0.2
+      }
+
+      mt_alpha_true[it_row, it_col] <- fl_current_val
+    }
+  }
+
+  ar_b <- ffi_gen_condi_unemploy_prob_3by3(mt_prob_joint_E_A, mt_alpha_true, bl_verbose=FALSE)
+
+  # call solution function
+  mt_alpha_solu <- ffi_solve_3by3_rectilinear(mt_prob_joint_E_A, ar_b)
+
+  # check
+  print(paste0('it_i=', it_i))
+  print('mt_alpha_true')
+  print(mt_alpha_true)
+  print('mt_alpha_solu')
+  print(mt_alpha_solu)
+
+}
+```
+
+#### 4 by 4 Joint from Marginal Probability Mass Functions with Rectilinear Assumptions
+
+##### Data Program for 4 by 4 Problem with Rectlinear Restrictions
+
+This mimics the *ffi_gen_condi_unemploy_prob_3by3* program from prior, but adds some additional terms.
+
+```{r}
+ffi_gen_condi_unemploy_prob_4by4 <- function(mt_prob_joint_E_A, mt_alpha, bl_verbose = FALSE) {
+
+  # From joint probability, generate conditional probabilities
+  fl_B21 <- mt_prob_joint_E_A[1,2]/sum(mt_prob_joint_E_A[1,])
+  fl_B31 <- mt_prob_joint_E_A[1,3]/sum(mt_prob_joint_E_A[1,])
+  fl_B41 <- mt_prob_joint_E_A[1,4]/sum(mt_prob_joint_E_A[1,])
+
+  fl_B22 <- mt_prob_joint_E_A[2,2]/sum(mt_prob_joint_E_A[2,])
+  fl_B32 <- mt_prob_joint_E_A[2,3]/sum(mt_prob_joint_E_A[2,])
+  fl_B42 <- mt_prob_joint_E_A[2,4]/sum(mt_prob_joint_E_A[2,])
+
+  fl_B23 <- mt_prob_joint_E_A[3,2]/sum(mt_prob_joint_E_A[3,])
+  fl_B33 <- mt_prob_joint_E_A[3,3]/sum(mt_prob_joint_E_A[3,])
+  fl_B43 <- mt_prob_joint_E_A[3,4]/sum(mt_prob_joint_E_A[3,])
+
+  fl_B24 <- mt_prob_joint_E_A[4,2]/sum(mt_prob_joint_E_A[4,])
+  fl_B34 <- mt_prob_joint_E_A[4,3]/sum(mt_prob_joint_E_A[4,])
+  fl_B44 <- mt_prob_joint_E_A[4,4]/sum(mt_prob_joint_E_A[4,])
+
+  fl_C21 <- mt_prob_joint_E_A[2,1]/sum(mt_prob_joint_E_A[,1])
+  fl_C31 <- mt_prob_joint_E_A[3,1]/sum(mt_prob_joint_E_A[,1])
+  fl_C41 <- mt_prob_joint_E_A[4,1]/sum(mt_prob_joint_E_A[,1])
+
+  fl_C22 <- mt_prob_joint_E_A[2,2]/sum(mt_prob_joint_E_A[,2])
+  fl_C32 <- mt_prob_joint_E_A[3,2]/sum(mt_prob_joint_E_A[,2])
+  fl_C42 <- mt_prob_joint_E_A[4,2]/sum(mt_prob_joint_E_A[,2])
+
+  fl_C23 <- mt_prob_joint_E_A[2,3]/sum(mt_prob_joint_E_A[,3])
+  fl_C33 <- mt_prob_joint_E_A[3,3]/sum(mt_prob_joint_E_A[,3])
+  fl_C43 <- mt_prob_joint_E_A[4,3]/sum(mt_prob_joint_E_A[,3])
+
+  if (bl_verbose) {
+    print(paste0('fl_B21=', fl_B21, ',fl_B31=',fl_B31))
+    print(paste0('fl_B22=', fl_B22, ',fl_B22=',fl_B22))
+    print(paste0('fl_B23=', fl_B23, ',fl_B33=',fl_B33))
+    print(paste0('fl_C21=', fl_C21, ',fl_C31=',fl_C31))
+    print(paste0('fl_C22=', fl_C22, ',fl_C32=',fl_C32))
+  }
+
+  # Generate random W X Y
+  fl_V1 <- mt_alpha[1,1]*(1 - fl_B21 - fl_B31 - fl_B41) + mt_alpha[2,1]*fl_B21 + mt_alpha[3,1]*fl_B31 + mt_alpha[4,1]*fl_B41
+  fl_V2 <- mt_alpha[1,2]*(1 - fl_B22 - fl_B32 - fl_B42) + mt_alpha[2,2]*fl_B22 + mt_alpha[3,2]*fl_B32 + mt_alpha[4,2]*fl_B42
+  fl_V3 <- mt_alpha[1,3]*(1 - fl_B23 - fl_B33 - fl_B43) + mt_alpha[2,3]*fl_B23 + mt_alpha[3,3]*fl_B33 + mt_alpha[4,3]*fl_B43
+  fl_V4 <- mt_alpha[1,4]*(1 - fl_B24 - fl_B34 - fl_B44) + mt_alpha[2,4]*fl_B24 + mt_alpha[3,4]*fl_B34 + mt_alpha[4,4]*fl_B44
+  fl_W1 <- mt_alpha[1,1]*(1 - fl_C21 - fl_C31 - fl_C41) + mt_alpha[1,2]*fl_C21 + mt_alpha[1,3]*fl_C31 + mt_alpha[1,4]*fl_C41
+  fl_W2 <- mt_alpha[2,1]*(1 - fl_C22 - fl_C32 - fl_C42) + mt_alpha[2,2]*fl_C22 + mt_alpha[2,3]*fl_C32 + mt_alpha[2,4]*fl_C42
+  fl_W3 <- mt_alpha[3,1]*(1 - fl_C23 - fl_C33 - fl_C43) + mt_alpha[3,2]*fl_C23 + mt_alpha[3,3]*fl_C33 + mt_alpha[3,4]*fl_C43
+  ar_b <- c(fl_V1, fl_V2, fl_V3, fl_V4, fl_W1, fl_W2, fl_W3)
+
+  if (bl_verbose) {
+    print(paste0('ar_b=',ar_b))
+  }
+
+  # return
+  return(ar_b)
+}
+```
+
+##### Solution Program for 4 by 4 Problem with Rectlinear Restrictions
+
+```{r}
+ffi_solve_4by4_rectilinear <- function(mt_prob_joint_E_A, ar_b, bl_verbose=FALSE) {
+
+  # From joint probability, generate conditional probabilities
+  fl_B21 <- mt_prob_joint_E_A[1,2]/sum(mt_prob_joint_E_A[1,])
+  fl_B31 <- mt_prob_joint_E_A[1,3]/sum(mt_prob_joint_E_A[1,])
+  fl_B41 <- mt_prob_joint_E_A[1,4]/sum(mt_prob_joint_E_A[1,])
+
+  fl_B22 <- mt_prob_joint_E_A[2,2]/sum(mt_prob_joint_E_A[2,])
+  fl_B32 <- mt_prob_joint_E_A[2,3]/sum(mt_prob_joint_E_A[2,])
+  fl_B42 <- mt_prob_joint_E_A[2,4]/sum(mt_prob_joint_E_A[2,])
+
+  fl_B23 <- mt_prob_joint_E_A[3,2]/sum(mt_prob_joint_E_A[3,])
+  fl_B33 <- mt_prob_joint_E_A[3,3]/sum(mt_prob_joint_E_A[3,])
+  fl_B43 <- mt_prob_joint_E_A[3,4]/sum(mt_prob_joint_E_A[3,])
+
+  fl_B24 <- mt_prob_joint_E_A[4,2]/sum(mt_prob_joint_E_A[4,])
+  fl_B34 <- mt_prob_joint_E_A[4,3]/sum(mt_prob_joint_E_A[4,])
+  fl_B44 <- mt_prob_joint_E_A[4,4]/sum(mt_prob_joint_E_A[4,])
+
+  fl_C21 <- mt_prob_joint_E_A[2,1]/sum(mt_prob_joint_E_A[,1])
+  fl_C31 <- mt_prob_joint_E_A[3,1]/sum(mt_prob_joint_E_A[,1])
+  fl_C41 <- mt_prob_joint_E_A[4,1]/sum(mt_prob_joint_E_A[,1])
+
+  fl_C22 <- mt_prob_joint_E_A[2,2]/sum(mt_prob_joint_E_A[,2])
+  fl_C32 <- mt_prob_joint_E_A[3,2]/sum(mt_prob_joint_E_A[,2])
+  fl_C42 <- mt_prob_joint_E_A[4,2]/sum(mt_prob_joint_E_A[,2])
+
+  fl_C23 <- mt_prob_joint_E_A[2,3]/sum(mt_prob_joint_E_A[,3])
+  fl_C33 <- mt_prob_joint_E_A[3,3]/sum(mt_prob_joint_E_A[,3])
+  fl_C43 <- mt_prob_joint_E_A[4,3]/sum(mt_prob_joint_E_A[,3])
+
+  # Construct The coefficent Matrix
+  mt_OMEGA = t(matrix(
+    data=c(1, fl_B21+fl_B31+fl_B41, fl_B31+fl_B41, fl_B41, 0, 0, 0,
+           1, fl_B22+fl_B32+fl_B42, fl_B32+fl_B42, fl_B42, 1, 0, 0,
+           1, fl_B23+fl_B33+fl_B43, fl_B33+fl_B43, fl_B43, 1, 1, 0,
+           1, fl_B24+fl_B34+fl_B44, fl_B34+fl_B44, fl_B44, 1, 1, 1,
+           1, 0, 0, 0, fl_C21+fl_C31+fl_C41, fl_C31+fl_C41, fl_C41,
+           1, 1, 0, 0, fl_C22+fl_C32+fl_C42, fl_C32+fl_C42, fl_C42,
+           1, 1, 1, 0, fl_C23+fl_C33+fl_C43, fl_C33+fl_C43, fl_C43), nrow=7, ncol=7))
+
+  # rank Check with the qr function:
+  if (bl_verbose) {
+    print(qr(mt_OMEGA))
+  }
+
+  # solve
+  ar_solution <- solve(mt_OMEGA, ar_b)
+
+  # Get alpha and Delta from solution
+  fl_alpha <- ar_solution[1]
+  fl_Delta_21 <- ar_solution[2]
+  fl_Delta_31 <- ar_solution[3]
+  fl_Delta_41 <- ar_solution[4]
+  fl_Delta_12 <- ar_solution[5]
+  fl_Delta_13 <- ar_solution[6]
+  fl_Delta_14 <- ar_solution[7]
+  if (bl_verbose) {
+    print(paste0('fl_Delta_21=',fl_Delta_21))
+    print(paste0('fl_Delta_31=',fl_Delta_31))
+    print(paste0('fl_Delta_31=',fl_Delta_31))
+    print(paste0('fl_Delta_12=',fl_Delta_12))
+    print(paste0('fl_Delta_13=',fl_Delta_13))
+  }
+
+  # Get beta gamma , delta
+  mt_alpha <- matrix(0, 4, 4)
+  for (it_row in c(1,2,3,4)) {
+    for (it_col in c(1,2,3,4)) {
+
+      fl_current_val <- fl_alpha
+
+      if (it_row == 2) {
+        fl_current_val <- fl_current_val + fl_Delta_21
+      }
+      if (it_row == 3) {
+        fl_current_val <- fl_current_val + fl_Delta_21 + fl_Delta_31
+      }
+      if (it_row == 4) {
+        fl_current_val <- fl_current_val + fl_Delta_21 + fl_Delta_31 + fl_Delta_41
+      }
+      if (it_col == 2) {
+        fl_current_val <- fl_current_val + fl_Delta_12
+      }
+      if (it_col == 3) {
+        fl_current_val <- fl_current_val + fl_Delta_12 + fl_Delta_13
+      }
+      if (it_col == 4) {
+        fl_current_val <- fl_current_val + fl_Delta_12 + fl_Delta_13 + fl_Delta_14
+      }
+      mt_alpha[it_row, it_col] <- fl_current_val
+    }
+  }
+
+  # Check
+  if (bl_verbose) {
+
+    fl_V1_predict <-
+      mt_alpha[1,1]*(1-fl_B21-fl_B31-fl_B41) +
+      mt_alpha[2,1]*fl_B21 +
+      mt_alpha[3,1]*fl_B31 +
+      mt_alpha[4,1]*fl_B41
+
+    fl_V2_predict <-
+      mt_alpha[1,2]*(1-fl_B22-fl_B32-fl_B42) +
+      mt_alpha[2,2]*fl_B22 +
+      mt_alpha[3,2]*fl_B32 +
+      mt_alpha[4,2]*fl_B42
+
+    fl_V3_predict <-
+      mt_alpha[1,3]*(1-fl_B23-fl_B33-fl_B43) +
+      mt_alpha[2,3]*fl_B23 +
+      mt_alpha[3,3]*fl_B33 +
+      mt_alpha[4,3]*fl_B43
+
+    fl_V4_predict <-
+      mt_alpha[1,4]*(1-fl_B24-fl_B34-fl_B44) +
+      mt_alpha[2,4]*fl_B24 +
+      mt_alpha[3,4]*fl_B34 +
+      mt_alpha[4,4]*fl_B44
+
+    fl_W1_predict <-
+      mt_alpha[1,1]*(1-fl_C21-fl_C31-fl_C41) +
+      mt_alpha[1,2]*fl_C21 +
+      mt_alpha[1,3]*fl_C31 +
+      mt_alpha[1,4]*fl_C41
+
+    fl_W2_predict <-
+      mt_alpha[2,1]*(1-fl_C22-fl_C32-fl_C42) +
+      mt_alpha[2,2]*fl_C22 +
+      mt_alpha[2,3]*fl_C32 +
+      mt_alpha[2,4]*fl_C42
+
+    fl_W3_predict <-
+      mt_alpha[3,1]*(1-fl_C23-fl_C33-fl_C43) +
+      mt_alpha[3,2]*fl_C23 +
+      mt_alpha[3,3]*fl_C33 +
+      mt_alpha[3,4]*fl_C43
+
+
+    if (abs(ar_b[1] - fl_V1_predict) < 1e-10) {
+      print(paste0('V1 matched, ar_b[1]=', ar_b[1], ', fl_V1_predict=', fl_V1_predict))
+    }
+    if (abs(ar_b[2] - fl_V2_predict) < 1e-10) {
+      print(paste0('V2 matched, ar_b[2]=', ar_b[2], ', fl_V2_predict=', fl_V2_predict))
+    }
+    if (abs(ar_b[3] - fl_V3_predict) < 1e-10) {
+      print(paste0('V3 matched, ar_b[3]=', ar_b[3], ', fl_V3_predict=', fl_V3_predict))
+    }
+    if (abs(ar_b[4] - fl_V4_predict) < 1e-10) {
+      print(paste0('V4 matched, ar_b[4]=', ar_b[4], ', fl_V4_predict=', fl_V4_predict))
+    }
+    if (abs(ar_b[5] - fl_W1_predict) < 1e-10) {
+      print(paste0('W1 matched, ar_b[5]=', ar_b[5], ', fl_W1_predict=', fl_W1_predict))
+    }
+    if (abs(ar_b[6] - fl_W2_predict) < 1e-10) {
+      print(paste0('W2 matched, ar_b[6]=', ar_b[6], ', fl_W2_predict=', fl_W2_predict))
+    }
+    if (abs(ar_b[7] - fl_W3_predict) < 1e-10) {
+      print(paste0('W3 matched, ar_b[7]=', ar_b[7], ', fl_W3_predict=', fl_W3_predict))
+    }
+  }
+
+  return(mt_alpha)
+}
+```
+
+##### Testing Program for 4 by 4 Problem with Rectlinear Restrictions
+
+Solving first when rectilinear assumption is valid:
+
+```{r}
+for (it_i in c(1,2,3)) {
+
+  # JOint mass of population at all cells
+  ls_ffi_rand_joint_mass <- ffi_gen_rand_joint_mass(
+    it_seed = 123, it_Q = 4, it_M = 4, bl_verbose = FALSE)
+  mt_prob_joint_E_A <- ls_ffi_rand_joint_mass$mt_prob_joint_E_A
+
+  # retlinear restrictions for conditional unemployment probabilities
+  if (it_i == 1) {
+    fl_alpha <- 0.1
+    fl_Delta_21 <- 0.05
+    fl_Delta_31 <- 0.07
+    fl_Delta_41 <- 0.08
+    fl_Delta_12 <- 0.09
+    fl_Delta_13 <- 0.03
+    fl_Delta_14 <- 0.01
+  } else if (it_i == 2) {
+    fl_alpha <- 0.20
+    fl_Delta_21 <- -0.05
+    fl_Delta_31 <- +0.07
+    fl_Delta_41 <- 0.08
+    fl_Delta_12 <- 0.09
+    fl_Delta_13 <- -0.03
+    fl_Delta_14 <- 0.01
+  } else if (it_i == 3) {
+    fl_alpha <- 0.15
+    fl_Delta_21 <- 0.11
+    fl_Delta_31 <- -0.01
+    fl_Delta_41 <- 0.08
+    fl_Delta_12 <- 0
+    fl_Delta_13 <- +0.1
+    fl_Delta_14 <- 0.01
+  }
+
+  mt_alpha_true = matrix(0, 4, 4)
+  for (it_row in c(1,2,3,4)) {
+    for (it_col in c(1,2,3,4)) {
+
+      fl_current_val <- fl_alpha
+
+      if (it_row == 2) {
+        fl_current_val <- fl_current_val + fl_Delta_21
+      }
+      if (it_row == 3) {
+        fl_current_val <- fl_current_val + fl_Delta_21 + fl_Delta_31
+      }
+      if (it_row == 4) {
+        fl_current_val <- fl_current_val + fl_Delta_21 + fl_Delta_31 + fl_Delta_41
+      }
+      if (it_col == 2) {
+        fl_current_val <- fl_current_val + fl_Delta_12
+      }
+      if (it_col == 3) {
+        fl_current_val <- fl_current_val + fl_Delta_12 + fl_Delta_13
+      }
+      if (it_col == 4) {
+        fl_current_val <- fl_current_val + fl_Delta_12 + fl_Delta_13 + fl_Delta_14
+      }
+      mt_alpha_true[it_row, it_col] <- fl_current_val
+    }
+  }
+
+  ar_b <- ffi_gen_condi_unemploy_prob_4by4(mt_prob_joint_E_A, mt_alpha_true, bl_verbose=FALSE)
+
+  # call solution function
+  mt_alpha_solu <- ffi_solve_4by4_rectilinear(mt_prob_joint_E_A, ar_b, bl_verbose=FALSE)
+
+  # check
+  print(paste0('it_i=', it_i))
+  print('mt_alpha_true')
+  print(mt_alpha_true)
+  print('mt_alpha_solu')
+  print(mt_alpha_solu)
+
+}
+```
+
+Solving when rectilinear assumption is NOT valid, but results are approximately correct:
+
+```{r}
+set.seed(123)
+for (it_i in c(1,2,3)) {
+
+  # JOint mass of population at all cells
+  ls_ffi_rand_joint_mass <- ffi_gen_rand_joint_mass(
+    it_seed = 123, it_Q = 4, it_M = 4, bl_verbose = FALSE)
+  mt_prob_joint_E_A <- ls_ffi_rand_joint_mass$mt_prob_joint_E_A
+
+  # retlinear restrictions for conditional unemployment probabilities
+  if (it_i == 1) {
+    fl_alpha <- 0.1
+    fl_Delta_21 <- 0.05
+    fl_Delta_31 <- 0.07
+    fl_Delta_41 <- 0.08
+    fl_Delta_12 <- 0.09
+    fl_Delta_13 <- 0.03
+    fl_Delta_14 <- 0.01
+  } else if (it_i == 2) {
+    fl_alpha <- 0.20
+    fl_Delta_21 <- -0.05
+    fl_Delta_31 <- +0.07
+    fl_Delta_41 <- 0.08
+    fl_Delta_12 <- 0.09
+    fl_Delta_13 <- -0.03
+    fl_Delta_14 <- 0.01
+  } else if (it_i == 3) {
+    fl_alpha <- 0.15
+    fl_Delta_21 <- 0.11
+    fl_Delta_31 <- -0.01
+    fl_Delta_41 <- 0.08
+    fl_Delta_12 <- 0
+    fl_Delta_13 <- +0.1
+    fl_Delta_14 <- 0.01
+  }
+
+  mt_alpha_true = matrix(0, 4, 4)
+  for (it_row in c(1,2,3,4)) {
+    for (it_col in c(1,2,3,4)) {
+
+      fl_current_val <- fl_alpha
+
+      if (it_row == 2) {
+        fl_current_val <- fl_current_val + fl_Delta_21 + runif(1)*0.2
+      }
+      if (it_row == 3) {
+        fl_current_val <- fl_current_val + fl_Delta_21 + fl_Delta_31 + runif(1)*0.2
+      }
+      if (it_row == 4) {
+        fl_current_val <- fl_current_val + fl_Delta_21 + fl_Delta_31 + fl_Delta_41 + runif(1)*0.2
+      }
+      if (it_col == 2) {
+        fl_current_val <- fl_current_val + fl_Delta_12 + runif(1)*0.2
+      }
+      if (it_col == 3) {
+        fl_current_val <- fl_current_val + fl_Delta_12 + fl_Delta_13 + runif(1)*0.2
+      }
+      if (it_col == 4) {
+        fl_current_val <- fl_current_val + fl_Delta_12 + fl_Delta_13 + fl_Delta_14 + runif(1)*0.2
+      }
+      mt_alpha_true[it_row, it_col] <- fl_current_val
+    }
+  }
+
+  ar_b <- ffi_gen_condi_unemploy_prob_4by4(mt_prob_joint_E_A, mt_alpha_true, bl_verbose=FALSE)
+
+  # call solution function
+  mt_alpha_solu <- ffi_solve_4by4_rectilinear(mt_prob_joint_E_A, ar_b, bl_verbose=FALSE)
+
+  # check
+  print(paste0('it_i=', it_i))
+  print('mt_alpha_true')
+  print(mt_alpha_true)
+  print('mt_alpha_solu')
+  print(mt_alpha_solu)
+
+}
+```
+
+#### 5 by 5 Joint from Marginal Probability Mass Functions with Rectilinear Assumptions
+
+##### Solution Program for 5 by 5 Problem with Rectlinear Restrictions
+
+```{r}
+ffi_solve_5by5_rectilinear <- function(mt_prob_joint_E_A, ar_b, bl_verbose=FALSE) {
+
+  # From joint probability, generate conditional probabilities
+  fl_B21 <- mt_prob_joint_E_A[1,2]/sum(mt_prob_joint_E_A[1,])
+  fl_B31 <- mt_prob_joint_E_A[1,3]/sum(mt_prob_joint_E_A[1,])
+  fl_B41 <- mt_prob_joint_E_A[1,4]/sum(mt_prob_joint_E_A[1,])
+  fl_B51 <- mt_prob_joint_E_A[1,5]/sum(mt_prob_joint_E_A[1,])
+
+  fl_B22 <- mt_prob_joint_E_A[2,2]/sum(mt_prob_joint_E_A[2,])
+  fl_B32 <- mt_prob_joint_E_A[2,3]/sum(mt_prob_joint_E_A[2,])
+  fl_B42 <- mt_prob_joint_E_A[2,4]/sum(mt_prob_joint_E_A[2,])
+  fl_B52 <- mt_prob_joint_E_A[2,5]/sum(mt_prob_joint_E_A[2,])
+
+  fl_B23 <- mt_prob_joint_E_A[3,2]/sum(mt_prob_joint_E_A[3,])
+  fl_B33 <- mt_prob_joint_E_A[3,3]/sum(mt_prob_joint_E_A[3,])
+  fl_B43 <- mt_prob_joint_E_A[3,4]/sum(mt_prob_joint_E_A[3,])
+  fl_B53 <- mt_prob_joint_E_A[3,5]/sum(mt_prob_joint_E_A[3,])
+
+  fl_B24 <- mt_prob_joint_E_A[4,2]/sum(mt_prob_joint_E_A[4,])
+  fl_B34 <- mt_prob_joint_E_A[4,3]/sum(mt_prob_joint_E_A[4,])
+  fl_B44 <- mt_prob_joint_E_A[4,4]/sum(mt_prob_joint_E_A[4,])
+  fl_B54 <- mt_prob_joint_E_A[4,5]/sum(mt_prob_joint_E_A[4,])
+
+  fl_B25 <- mt_prob_joint_E_A[5,2]/sum(mt_prob_joint_E_A[5,])
+  fl_B35 <- mt_prob_joint_E_A[5,3]/sum(mt_prob_joint_E_A[5,])
+  fl_B45 <- mt_prob_joint_E_A[5,4]/sum(mt_prob_joint_E_A[5,])
+  fl_B55 <- mt_prob_joint_E_A[5,5]/sum(mt_prob_joint_E_A[5,])
+
+  fl_C21 <- mt_prob_joint_E_A[2,1]/sum(mt_prob_joint_E_A[,1])
+  fl_C31 <- mt_prob_joint_E_A[3,1]/sum(mt_prob_joint_E_A[,1])
+  fl_C41 <- mt_prob_joint_E_A[4,1]/sum(mt_prob_joint_E_A[,1])
+  fl_C51 <- mt_prob_joint_E_A[5,1]/sum(mt_prob_joint_E_A[,1])
+
+  fl_C22 <- mt_prob_joint_E_A[2,2]/sum(mt_prob_joint_E_A[,2])
+  fl_C32 <- mt_prob_joint_E_A[3,2]/sum(mt_prob_joint_E_A[,2])
+  fl_C42 <- mt_prob_joint_E_A[4,2]/sum(mt_prob_joint_E_A[,2])
+  fl_C52 <- mt_prob_joint_E_A[5,2]/sum(mt_prob_joint_E_A[,2])
+
+  fl_C23 <- mt_prob_joint_E_A[2,3]/sum(mt_prob_joint_E_A[,3])
+  fl_C33 <- mt_prob_joint_E_A[3,3]/sum(mt_prob_joint_E_A[,3])
+  fl_C43 <- mt_prob_joint_E_A[4,3]/sum(mt_prob_joint_E_A[,3])
+  fl_C53 <- mt_prob_joint_E_A[5,3]/sum(mt_prob_joint_E_A[,3])
+
+  fl_C24 <- mt_prob_joint_E_A[2,4]/sum(mt_prob_joint_E_A[,4])
+  fl_C34 <- mt_prob_joint_E_A[3,4]/sum(mt_prob_joint_E_A[,4])
+  fl_C44 <- mt_prob_joint_E_A[4,4]/sum(mt_prob_joint_E_A[,4])
+  fl_C54 <- mt_prob_joint_E_A[5,4]/sum(mt_prob_joint_E_A[,4])
+
+  # Construct The coefficent Matrix
+  mt_OMEGA = t(matrix(
+    data=c(1, fl_B21+fl_B31+fl_B41+fl_B51, fl_B31+fl_B41+fl_B51, fl_B41+fl_B51, fl_B51, 0, 0, 0, 0,
+           1, fl_B22+fl_B32+fl_B42+fl_B52, fl_B32+fl_B42+fl_B52, fl_B42+fl_B52, fl_B52, 1, 0, 0, 0,
+           1, fl_B23+fl_B33+fl_B43+fl_B53, fl_B33+fl_B43+fl_B53, fl_B43+fl_B53, fl_B53, 1, 1, 0, 0,
+           1, fl_B24+fl_B34+fl_B44+fl_B54, fl_B34+fl_B44+fl_B54, fl_B44+fl_B54, fl_B54, 1, 1, 1, 0,
+           1, fl_B25+fl_B35+fl_B45+fl_B55, fl_B35+fl_B45+fl_B55, fl_B45+fl_B55, fl_B55, 1, 1, 1, 1,
+           1, 0, 0, 0, 0, fl_C21+fl_C31+fl_C41+fl_C51, fl_C31+fl_C41+fl_C51, fl_C41+fl_C51,fl_C51,
+           1, 1, 0, 0, 0, fl_C22+fl_C32+fl_C42+fl_C52, fl_C32+fl_C42+fl_C52, fl_C42+fl_C52,fl_C52,
+           1, 1, 1, 0, 0, fl_C23+fl_C33+fl_C43+fl_C53, fl_C33+fl_C43+fl_C53, fl_C43+fl_C53,fl_C53,
+           1, 1, 1, 1, 0, fl_C24+fl_C34+fl_C44+fl_C54, fl_C34+fl_C44+fl_C54, fl_C44+fl_C54,fl_C54), nrow=9, ncol=9))
+
+  # rank Check with the qr function:
+  if (bl_verbose) {
+    print(qr(mt_OMEGA))
+  }
+
+  # solve
+  ar_solution <- solve(mt_OMEGA, ar_b)
+
+  # Get alpha and Delta from solution
+  fl_alpha <- ar_solution[1]
+  fl_Delta_21 <- ar_solution[2]
+  fl_Delta_31 <- ar_solution[3]
+  fl_Delta_41 <- ar_solution[4]
+  fl_Delta_51 <- ar_solution[5]
+  fl_Delta_12 <- ar_solution[6]
+  fl_Delta_13 <- ar_solution[7]
+  fl_Delta_14 <- ar_solution[8]
+  fl_Delta_15 <- ar_solution[9]
+  if (bl_verbose) {
+    print(paste0('fl_Delta_21=',fl_Delta_21))
+    print(paste0('fl_Delta_31=',fl_Delta_31))
+    print(paste0('fl_Delta_41=',fl_Delta_41))
+    print(paste0('fl_Delta_51=',fl_Delta_51))
+    print(paste0('fl_Delta_12=',fl_Delta_12))
+    print(paste0('fl_Delta_13=',fl_Delta_13))
+    print(paste0('fl_Delta_14=',fl_Delta_14))
+    print(paste0('fl_Delta_15=',fl_Delta_15))
+  }
+
+  # Get beta gamma , delta
+  mt_alpha <- matrix(0, 5, 5)
+  for (it_row in c(1,2,3,4,5)) {
+    for (it_col in c(1,2,3,4,5)) {
+
+      fl_current_val <- fl_alpha
+
+      if (it_col == 2) {
+        fl_current_val <- fl_current_val + fl_Delta_21
+      }
+      if (it_col == 3) {
+        fl_current_val <- fl_current_val + fl_Delta_21 + fl_Delta_31
+      }
+      if (it_col == 4) {
+        fl_current_val <- fl_current_val + fl_Delta_21 + fl_Delta_31 + fl_Delta_41
+      }
+      if (it_col == 5) {
+        fl_current_val <- fl_current_val + fl_Delta_21 + fl_Delta_31 + fl_Delta_41 + fl_Delta_51
+      }
+      if (it_row == 2) {
+        fl_current_val <- fl_current_val + fl_Delta_12
+      }
+      if (it_row == 3) {
+        fl_current_val <- fl_current_val + fl_Delta_12 + fl_Delta_13
+      }
+      if (it_row == 4) {
+        fl_current_val <- fl_current_val + fl_Delta_12 + fl_Delta_13 + fl_Delta_14
+      }
+      if (it_row == 5) {
+        fl_current_val <- fl_current_val + fl_Delta_12 + fl_Delta_13 + fl_Delta_14 + fl_Delta_15
+      }
+      mt_alpha[it_row, it_col] <- fl_current_val
+    }
+  }
+
+  # Check
+  if (bl_verbose) {
+
+    fl_V1_predict <-
+      mt_alpha[1,1]*(1-fl_B21-fl_B31-fl_B41-fl_B51) +
+      mt_alpha[1,2]*fl_B21 +
+      mt_alpha[1,3]*fl_B31 +
+      mt_alpha[1,4]*fl_B41 +
+      mt_alpha[1,5]*fl_B51
+
+    if (abs(ar_b[1] - fl_V1_predict) < 1e-10) {
+      print(paste0('V1 matched, ar_b[1]=', ar_b[1], ', fl_V1_predict=', fl_V1_predict))
+    } else {
+      print(paste0('V1 not matched, ar_b[1]=', ar_b[1], ', fl_V1_predict=', fl_V1_predict))
+    }
+
+  }
+
+  return(mt_alpha)
+}
+```
+
+##### Empirical Application for 5 by 5 Problem with Rectlinear Restrictions
+
+We use here the model simulated joint distribution between Age groups and Income quintiles from the steady state, from the paper [PrjOptiSNW](https://fanwangecon.github.io/PrjOptiSNW). The age groups are: 18 to 30, 31 to 40, 41 to 50, 51 to 60 and 61 to 65. The approximate income quintile thresholds are: 32511.36, 52830.96, 78956.16, and 126562.08 USD. The income quintiles are approximate.
+
+We no longer need to use the *ffi_gen_rand_joint_mass* function to generate joint probability mass, and can use the simulated distribution from the model. We also no longer to use the *ffi_gen_condi_unemploy_prob* program to generate unemployment rates along A and E states, these will be given. Rows are the age groups, and columns are the income quintiles.
+
+First, given conditional unemployment probabilities by age groups $P(U|AgeGroup)$ and income quintiles $P(U| IncomeQuintile)$, derive the unemployment probability at each age and income quintile group: $P(U|AgeGroup, IncomeQuintile)$.
+
+```{r}
+# income quintile breakpoints
+# c(0.56, 0.91, 1.36, 2.18)*58056
+
+# Joint mass of population at all cells, the structure should be something like:
+#    A1        A2
+# E1 0.3317248 0.2781696
+# E2 0.2547247 0.1353809
+# E are the rows, and A are the columns.
+
+# FOLDER: PrjNygaardSorensenWang\Results202103\capi_rh1\20210225_trumpchk_a65zh266zs5_b1_xi0_manna_168\csv\b1_a64_14ca14ck_18t64
+# FILE: df_alloc_kids_without_optimalg47_14ca14ck_jnt_mass_age_y
+
+mt_prob_joint_E_A_SNW = t(
+  matrix(data=c(0.087434942, 0.090352218, 0.054542011, 0.064624081, 0.036837972,
+                0.032485397, 0.048908354, 0.039658482, 0.056131835, 0.049458605,
+                0.02363717,	 0.038039343, 0.034007456, 0.052541854, 0.053216885,
+                0.019944476, 0.031910392, 0.029019768, 0.045954264, 0.048937333,
+                0.007405479, 0.011514824, 0.010242083, 0.016136496, 0.01705828), nrow=5, ncol=5))
+
+for (it_period in c(1,2)) {
+
+  if (it_period == 1) {
+    # Data inputs, April 2020 results
+    # pi_j=[0.22;0.175;0.16;0.165;0.22]; % Probability of unemployment in 2020 by age groups from Cajner et al. (2020, NBER)
+    # pi_w=[0.360;0.22;0.17;0.14;0.09]; % Probability of unemployment in 2020 by wage quintiles from Cajner et al. (2020, NBER)
+    ar_E_marginal <- c(0.22, 0.175, 0.16, 0.165, 0.22)
+    ar_A_marginal <- c(0.36, 0.22, 0.17, 0.14, 0.09)
+  } else {
+    # June 2020 numbers
+    ar_E_marginal <- c(0.105,0.10,0.08,0.10,0.17)
+    ar_A_marginal <- c(0.19,0.11,0.085,0.07,0.03)
+  }
+  ar_b <- c(ar_E_marginal, ar_A_marginal[1:4])
+
+  # call solution function
+  mt_alpha_solu <- ffi_solve_5by5_rectilinear(mt_prob_joint_E_A_SNW, ar_b, bl_verbose=FALSE)
+
+  # aggregate unemployment probability
+  fl_aggregate_U_prob <- sum(mt_alpha_solu*mt_prob_joint_E_A_SNW)
+
+  # check
+  print(paste0('it_period=', it_period))
+  print('mt_alpha_solu')
+  print(mt_alpha_solu)
+  print('fl_aggregate_U_prob')
+  print(fl_aggregate_U_prob)
+
+}
+```
+
+Second, adjust the conditional unemployment probabilities by age groups $P(U|AgeGroup)$ and income quintiles $P(U|IncomeQuintile)$ by some common fraction, derive the unemployment probability at each age and income quintile group: $P(U|AgeGroup, IncomeQuintile)$, and corresponding aggregate unemployment probability.
+
+```{r}
+# Using the June 2021 Numbers
+ar_E_marginal <- c(0.105,0.10,0.08,0.10,0.17)
+ar_A_marginal <- c(0.19,0.11,0.085,0.07,0.03)
+ar_b <- c(ar_E_marginal, ar_A_marginal[1:4])
+
+# Proportional adjustments testing
+for (fl_adj in seq(0.55, 0.65, length.out = 11)) {
+
+  # adjustment proportional
+  ar_b_adjust <- ar_b*fl_adj
+
+  # call solution function
+  mt_alpha_solu <- ffi_solve_5by5_rectilinear(mt_prob_joint_E_A_SNW, ar_b_adjust)
+
+  # aggregate unemployment probability
+  fl_aggregate_U_prob <- sum(mt_alpha_solu*mt_prob_joint_E_A_SNW)
+
+  # check
+  # print('mt_alpha_solu')
+  # mt_alpha_solu
+  print(paste0('fl_adj=', fl_adj, ', fl_aggregate_U_prob=', fl_aggregate_U_prob))
+}
+```
+
+Third the proportion adjustment that leads to 6.3 aggregate unemployment.
+
+```{r}
+# adjustment proportional
+ar_E_marginal <- c(0.105,0.10,0.08,0.10,0.17)
+ar_E_marginal <- ar_E_marginal*0.617
+print(paste(ar_E_marginal))
+
+ar_A_marginal <- c(0.19,0.11,0.085,0.07,0.03)
+ar_A_marginal <- ar_A_marginal*0.617
+print(paste(ar_A_marginal))
+
+ar_b_unemploy_6p2 <- c(ar_E_marginal, ar_A_marginal[1:4])
+
+# call solution function
+mt_alpha_solu <- ffi_solve_5by5_rectilinear(mt_prob_joint_E_A_SNW, ar_b_unemploy_6p2)
+print(mt_alpha_solu)
+fl_aggregate_U_prob <- sum(mt_alpha_solu*mt_prob_joint_E_A_SNW)
+print(fl_aggregate_U_prob)
+```

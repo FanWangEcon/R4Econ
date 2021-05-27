@@ -1,0 +1,190 @@
+---
+title: "Positive and Negative Exponents when x is Below or Above 1"
+titleshort: "Positive and Negative Exponents x is Below or Above 1"
+description: |
+  Positive exponentials are strictly increasing. Negative exponentials are strictly decreasing. 
+  If 0 < a < b, 0 < a^(|c|) < b^(|c|), and a^(-|c|) > b^(-|c|) > 0.
+  A positive number below 1 to a negative exponents is above 1, and a positive number above 1 to a negative exponents is below 1.  
+date: 2021-05-23
+date_start: 2021-05-23
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+### Positive and Negative Exponents
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+#### Positive Exponents
+
+Define exponents to consider and x-values to consider.
+
+```{r}
+# positive value exponents
+ar_exponents_posv <- c(0.05, 0.5, 1, 1.5)
+# positive and negative values of the base
+ar_baseval_pos <- seq(1e-10, 1.5, length.out=1000)
+# base to power
+mt_x2a_val <- matrix(data=NA, nrow=length(ar_exponents_posv), ncol=length(ar_baseval_pos))
+# Generate values
+it_row_ctr <- 0
+for (fl_exponents_posv in ar_exponents_posv) {
+  it_row_ctr <- it_row_ctr + 1
+  mt_x2a_val[it_row_ctr,] <- ar_baseval_pos^fl_exponents_posv
+}
+```
+
+Note that the smaller exponents functions are higher when $x<1$, but lower when $x>1$.
+$$\text{if } b > a > 0 \text{, then, } \left(x^a - x^b\right) > 0 \text{, for all } 1 > x >0$$
+$$\text{if } b > a > 0 \text{, then, } \left(x^a - x^b\right) < 0 \text{, for all } x > 1$$
+Note we also have: $\lim_{a\rightarrow 0} x^a = 1$ and $\lim_{a\rightarrow 1} x^a = x$ bounds. When $a>1$, function becomes convex.
+
+```{r}
+# x and bounds
+ar_xlim = c(min(ar_baseval_pos), max(ar_baseval_pos))
+ar_ylim = c(0, 1.5)
+# function line
+st_line_1_y_legend <- paste0('x^', ar_exponents_posv[1])
+st_line_2_y_legend <- paste0('x^', ar_exponents_posv[2])
+st_line_3_y_legend <- paste0('x^', ar_exponents_posv[3])
+st_line_4_y_legend <- paste0('x^', ar_exponents_posv[4])
+# Color and line
+st_point_1_pch <- 10
+st_point_1_cex <- 2
+ar_colors <- c('blue', 'red', 'black', 'orange')
+ar_ltys <- c('solid', 'dashed', 'dotted', 'dotdash')
+# Graph and combine
+for (it_graph in c(1,2,3,4)) {
+  if (it_graph != 1) {
+    par(new=T)
+  }
+  ar_y_current <- mt_x2a_val[it_graph, ]
+  plot(ar_baseval_pos, ar_y_current, type="l",
+       col = ar_colors[it_graph], lty = ar_ltys[it_graph],
+       pch = 10, cex = 2, xlim = ar_xlim, ylim = ar_ylim, panel.first = grid(),
+       ylab = '', xlab = '', yaxt='n', xaxt='n', ann=FALSE)
+  plot_line <- recordPlot()
+}
+# CEX sizing Contorl Titling and Legend Sizes
+fl_ces_fig_reg = 1
+fl_ces_fig_small = 0.75
+# R Legend
+st_title <- paste0('Positive Exponential Graphing')
+st_subtitle <- paste0('https://fanwangecon.github.io/',
+                      'R4Econ/math/solutions/htmlpdfr/fs_inequality.html')
+st_x_label <- 'x'
+st_y_label <- 'x^exponent'
+title(main = st_title, sub = st_subtitle, xlab = st_x_label, ylab = st_y_label,
+      cex.lab=fl_ces_fig_reg,
+      cex.main=fl_ces_fig_reg,
+      cex.sub=fl_ces_fig_small)
+axis(1, cex.axis=fl_ces_fig_reg)
+axis(2, cex.axis=fl_ces_fig_reg)
+grid()
+# Legend sizing CEX
+legend("bottomright",
+       inset=c(0,0),
+       xpd=TRUE,
+       c(st_line_1_y_legend, st_line_2_y_legend, st_line_3_y_legend, st_line_4_y_legend),
+       col = c(ar_colors[1], ar_colors[2], ar_colors[3], ar_colors[4]),
+       cex = fl_ces_fig_small,
+       lty = c(ar_ltys[1], ar_ltys[2], ar_ltys[3], ar_ltys[4]),
+       title = 'Legends',
+       y.intersp=2)
+```
+
+#### Negative Exponents
+
+Similar to above, but now with negative exonents.
+
+```{r}
+# positive value exponents
+ar_exponents_posv <- -c(0.05, 0.5, 1, 1.5)
+# positive and negative values of the base
+ar_baseval_pos <- seq(1e-10, 1.5, length.out=1000)
+# base to power
+mt_x2a_val <- matrix(data=NA, nrow=length(ar_exponents_posv), ncol=length(ar_baseval_pos))
+# Generate values
+it_row_ctr <- 0
+for (fl_exponents_posv in ar_exponents_posv) {
+  it_row_ctr <- it_row_ctr + 1
+  mt_x2a_val[it_row_ctr,] <- ar_baseval_pos^fl_exponents_posv
+}
+```
+
+For positive exponents, when $x<1$, $x^a<1$, when $x>1$, $x^a>1$. For negative exponents, when $x<1$, $x^a>1$, and when $x>1$, $x^a<1$. Large positive exponents generate small values when $x<1$, and large negative exponents generate very large values when $x<1$.
+
+```{r}
+# x and bounds
+ar_xlim = c(min(ar_baseval_pos), max(ar_baseval_pos))
+ar_ylim = c(0, 3)
+# function line
+st_line_1_y_legend <- paste0('x^', ar_exponents_posv[1])
+st_line_2_y_legend <- paste0('x^', ar_exponents_posv[2])
+st_line_3_y_legend <- paste0('x^', ar_exponents_posv[3])
+st_line_4_y_legend <- paste0('x^', ar_exponents_posv[4])
+# Color and line
+st_point_1_pch <- 10
+st_point_1_cex <- 2
+ar_colors <- c('blue', 'red', 'black', 'orange')
+ar_ltys <- c('solid', 'dashed', 'dotted', 'dotdash')
+# Graph and combine
+for (it_graph in c(1,2,3,4)) {
+  if (it_graph != 1) {
+    par(new=T)
+  }
+  ar_y_current <- mt_x2a_val[it_graph, ]
+  plot(ar_baseval_pos, ar_y_current, type="l",
+       col = ar_colors[it_graph], lty = ar_ltys[it_graph],
+       pch = 10, cex = 2, xlim = ar_xlim, ylim = ar_ylim, panel.first = grid(),
+       ylab = '', xlab = '', yaxt='n', xaxt='n', ann=FALSE)
+  plot_line <- recordPlot()
+}
+# CEX sizing Contorl Titling and Legend Sizes
+fl_ces_fig_reg = 1
+fl_ces_fig_small = 0.75
+# R Legend
+st_title <- paste0('Negative Exponential Graphing')
+st_subtitle <- paste0('https://fanwangecon.github.io/',
+                      'R4Econ/math/solutions/htmlpdfr/fs_inequality.html')
+st_x_label <- 'x'
+st_y_label <- 'x^exponent'
+title(main = st_title, sub = st_subtitle, xlab = st_x_label, ylab = st_y_label,
+      cex.lab=fl_ces_fig_reg,
+      cex.main=fl_ces_fig_reg,
+      cex.sub=fl_ces_fig_small)
+axis(1, cex.axis=fl_ces_fig_reg)
+axis(2, cex.axis=fl_ces_fig_reg)
+grid()
+# Legend sizing CEX
+legend("topright",
+       inset=c(0,0),
+       xpd=TRUE,
+       c(st_line_1_y_legend, st_line_2_y_legend, st_line_3_y_legend, st_line_4_y_legend),
+       col = c(ar_colors[1], ar_colors[2], ar_colors[3], ar_colors[4]),
+       cex = fl_ces_fig_small,
+       lty = c(ar_ltys[1], ar_ltys[2], ar_ltys[3], ar_ltys[4]),
+       title = 'Legends',
+       y.intersp=2)
+```
+
+#### Inequality and Exponents
+
+Suppose we have the inequality $0 < a < b$, if we apply positive exponents to them, the direction of the inequality will stay the same: If $0 < a < b$, then $0 < a^{ \mid \alpha\mid} < b^{ \mid \alpha\mid}$ if $\alpha < 0$. Think about the graphs above, think of $a$ and $b$ as points along the x-axis, note that positive exponents are strictly increasing (although some concavely and some convexly) along the x-axis. Comparing $x^\alpha$ at $0<b<a$ anywhere along the x-axis has still has $b^\alpha<a^\alpha$. 
+
+In contrast, if $0 < a < b$, then $a^{- \mid \alpha\mid} > b^{- \mid \alpha\mid} > 0$ if $\alpha < 0$. Sign flips. Visually from above, the sign-flipping happens because negative exponential is strictly decreasing along $x>0$. 

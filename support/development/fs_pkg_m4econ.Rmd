@@ -58,7 +58,7 @@ Check through *M4Econ* and see which files have been added, and which files have
 Note: new files that should not get pdf and html should have *.rmd* rather than *.Rmd* as suffix.
 
 ```{r}
-bl_update_book = FALSE
+bl_update_book = TRUE
 
 # run examples
 spt_root <- 'G:/repos/M4Econ'
@@ -86,7 +86,9 @@ ar_spt_root = c('G:/repos/M4Econ/amto/array/',
                 'G:/repos/M4Econ/table/join/',
                 'G:/repos/M4Econ/panel/timeseries/',
                 'G:/repos/M4Econ/panel/crosssection/',
-                'G:/repos/M4Econ/simulation/normal/'
+                'G:/repos/M4Econ/simulation/normal/',
+                'G:/repos/M4Econ/estimation/linear/',
+                'G:/repos/M4Econ/estimation/nonlinear/'
                 )
 # ar_spt_root = c('G:/repos/M4Econ/panel/timeseries/')
 ff_sup_clean_mlx(ar_spt_root = ar_spt_root,
@@ -137,7 +139,9 @@ ar_spt_root = c('G:/repos/M4Econ/amto/array/',
                 'G:/repos/M4Econ/table/join/',
                 'G:/repos/M4Econ/panel/timeseries/',
                 'G:/repos/M4Econ/panel/crosssection/',
-                'G:/repos/M4Econ/simulation/normal/'
+                'G:/repos/M4Econ/simulation/normal/',
+                'G:/repos/M4Econ/estimation/linear/',
+                'G:/repos/M4Econ/estimation/nonlinear/'
                 )
 # ar_spt_root = c('G:/repos/M4Econ/amto/array/')
 ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
@@ -189,7 +193,9 @@ ar_spt_root = c('G:/repos/M4Econ/amto/array/',
                 'G:/repos/M4Econ/table/join/',
                 'G:/repos/M4Econ/panel/timeseries/',
                 'G:/repos/M4Econ/panel/crosssection/',
-                'G:/repos/M4Econ/simulation/normal/'
+                'G:/repos/M4Econ/simulation/normal/',
+                'G:/repos/M4Econ/estimation/linear/',
+                'G:/repos/M4Econ/estimation/nonlinear/'
                 )
 # ar_spt_root = c('G:/repos/M4Econ/panel/timeseries/')
 ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
@@ -244,7 +250,6 @@ ft_bookdownparse.fs_yml2readme(sfc_prj=sfc_prj, sph_prj=sph_prj,
                                ls_st_ignore=ls_st_ignore,
                                sph_pdf='htmlpdfm',
                                sph_html='htmlpdfm',
-                               
                                sph_r='htmlpdfm',
                                st_file_type='m')
 print('finished')

@@ -25,7 +25,7 @@ urlcolor: blue
 ### Process RMD Files
 
 ```{r global_options, include = FALSE}
-try(source("C:/Users/fan/R4Econ/.Rprofile"))
+try(source("G:/repos/R4Econ/.Rprofile"))
 library(reticulate)
 ```
 
@@ -45,10 +45,10 @@ PrjOptiSNW Rmd to PDF and HTML.
 #### Local Outputs
 
 ```
-file:///C:/Users/fan/PrjOptiSNW/bookdown/index.html
-file:///C:/Users/fan/PrjOptiSNW/PrjOptiSNW/doc/vfi/
-file:///C:/Users/fan/PrjOptiSNW/PrjOptiSNW/doc/sdist/
-file:///C:/Users/fan/PrjOptiSNW/PrjOptiSNW/doc/stats/htmlpdfm/
+file:///G:/repos/PrjOptiSNW/bookdown/index.html
+file:///G:/repos/PrjOptiSNW/PrjOptiSNW/doc/vfi/
+file:///G:/repos/PrjOptiSNW/PrjOptiSNW/doc/sdist/
+file:///G:/repos/PrjOptiSNW/PrjOptiSNW/doc/stats/htmlpdfm/
 ```
 
 #### Testing Changes in MLX file
@@ -61,16 +61,16 @@ Note: new files that should not get pdf and html should have *.rmd* rather than 
 bl_update_book = TRUE
 
 # run examples
-spt_root <- 'C:/Users/fan/PrjOptiSNW'
-spt_log <- 'C:/Users/fan/PrjOptiSNW/_log/rmdclean/'
+spt_root <- 'G:/repos/PrjOptiSNW'
+spt_log <- 'G:/repos/PrjOptiSNW/_log/rmdclean/'
 sink(paste0(spt_log, 'rmd_clean_test.log'))
 start_time <- Sys.time()
 setwd(spt_root)
 
 bl_test = TRUE
-bl_gen_if_git_old = FALSE
+bl_gen_if_git_old = TRUE
 
-ar_spt_root = c('C:/Users/fan/PrjOptiSNW/PrjOptiSNW/doc/')
+ar_spt_root = c('G:/repos/PrjOptiSNW/PrjOptiSNW/doc/')
 ff_sup_clean_mlx(ar_spt_root = ar_spt_root,
                  ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
                                  '_mod.Rmd', 'title.Rmd', 'GettingStarted'),
@@ -93,18 +93,18 @@ Note: new files that should not get pdf and html should have *.rmd* rather than 
 
 ```{r}
 # run examples
-spt_root <- 'C:/Users/fan/PrjOptiSNW'
-spt_log <- 'C:/Users/fan/PrjOptiSNW/_log/rmdclean/'
+spt_root <- 'G:/repos/PrjOptiSNW'
+spt_log <- 'G:/repos/PrjOptiSNW/_log/rmdclean/'
 sink(paste0(spt_log, 'rmd_clean_test.log'))
 start_time <- Sys.time()
 setwd(spt_root)
 
 bl_test = FALSE
-bl_gen_if_git_old = FALSE
+bl_gen_if_git_old = TRUE
 
-st_prj_root = 'C:/Users/fan/PrjOptiSNW/'
+st_prj_root = 'G:/repos/PrjOptiSNW/'
 
-ar_spt_root = c('C:/Users/fan/PrjOptiSNW/PrjOptiSNW/doc/')
+ar_spt_root = c('G:/repos/PrjOptiSNW/PrjOptiSNW/doc/')
 ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
                '_mod.Rmd', 'title.Rmd', 'GettingStarted')
 ff_sup_clean_mlx(st_prj_root = st_prj_root,
@@ -128,17 +128,17 @@ sink()
 
 ```{r}
 # run examples
-spt_root <- 'C:/Users/fan/PrjOptiSNW'
-spt_log <- 'C:/Users/fan/PrjOptiSNW/_log/rmdclean/'
+spt_root <- 'G:/repos/PrjOptiSNW'
+spt_log <- 'G:/repos/PrjOptiSNW/_log/rmdclean/'
 sink(paste0(spt_log, 'rmd_clean_test.log'))
 start_time <- Sys.time()
 setwd(spt_root)
 
 bl_test = FALSE
-bl_gen_if_git_old = FALSE
+bl_gen_if_git_old = TRUE
 
-st_prj_root = 'C:/Users/fan/PrjOptiSNW/'
-ar_spt_root = c('C:/Users/fan/PrjOptiSNW/PrjOptiSNW/doc/')
+st_prj_root = 'G:/repos/PrjOptiSNW/'
+ar_spt_root = c('G:/repos/PrjOptiSNW/PrjOptiSNW/doc/')
 ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
                '_mod.Rmd', 'title.Rmd', 'GettingStarted')
 ff_sup_clean_rmd(ar_spt_root = ar_spt_root,
@@ -166,7 +166,7 @@ sink()
 
 There is python file that parses rmd front matters and goes through rmd files in the bookdown yaml file to automatically generate README contents.
 
-- 'C:/Users/fan/Py4Econ/support/inout/bookdownparse.py'
+- 'G:/repos/Py4Econ/support/inout/bookdownparse.py'
 
 Generate TOC:
 
@@ -175,7 +175,7 @@ import pyfan.util.rmd.bookdownparse as ft_bookdownparse
 
 # Path Roots
 sfc_prj = 'PrjOptiSNW'
-sph_prj = 'C:/Users/fan/PrjOptiSNW/'
+sph_prj = 'G:/repos/PrjOptiSNW/'
 spn_prj_bookdown_yml = '_bookdown.yml'
 
 # Read me preamble, and endnotes
@@ -202,7 +202,7 @@ Combine Front and End and TOC:
 import pyfan.util.rmd.bookdownparse as ft_bookdownparse
 
 # Path Roots
-sph_prj = 'C:/Users/fan/PrjOptiSNW/'
+sph_prj = 'G:/repos/PrjOptiSNW/'
 
 # Read me preamble, and endnotes
 spn_prj_readme_pre = 'README_pre.md'
@@ -226,7 +226,7 @@ with open(sph_prj + spn_prj_readme_ful, 'w') as outfile:
 Generate contenxt for bookdown appendix.
 
 ```{python}
-sph_prj = 'C:/Users/fan/PrjOptiSNW/'
+sph_prj = 'G:/repos/PrjOptiSNW/'
 spn_prj_readme_toc = 'README_toc.md'
 spn_prj_appendix = 'README_appendix.md'
 spn_in = open(sph_prj + spn_prj_readme_toc, "r")
@@ -294,8 +294,8 @@ Render HTML:
 
 ```{r}
 if (bl_update_book) {
-  spt_root <- 'C:/Users/fan/PrjOptiSNW'
-  spt_log <- 'C:/Users/fan/PrjOptiSNW/_log/rmdclean/'
+  spt_root <- 'G:/repos/PrjOptiSNW'
+  spt_log <- 'G:/repos/PrjOptiSNW/_log/rmdclean/'
   
   sink(paste0(spt_log, 'render_bookdown_html.log'))
   start_time <- Sys.time()
@@ -314,8 +314,8 @@ Render PDF:
 
 ```{r}
 if (bl_update_book) {
-  spt_root <- 'C:/Users/fan/PrjOptiSNW'
-  spt_log <- 'C:/Users/fan/PrjOptiSNW/_log/rmdclean/'
+  spt_root <- 'G:/repos/PrjOptiSNW'
+  spt_log <- 'G:/repos/PrjOptiSNW/_log/rmdclean/'
   
   sink(paste0(spt_log, 'render_bookdown_pdf.log'))
   start_time <- Sys.time()
