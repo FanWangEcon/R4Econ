@@ -1,9 +1,9 @@
 ---
-title: "R Compute Gini Coefficient for Discrete Samples or Discrete Random Variable"
-titleshort: "Gini for Discrete Samples or Discrete Random Variable"
+title: "R Compute GINI Coefficient for Discrete Samples or Discrete Random Variable"
+titleshort: "GINI for Discrete Samples or Discrete Random Variable"
 description: |
-  Given sample of data points that are discrete, compute the approximate gini coefficient.
-  Given a discrete random variable, compute the GINI coefficient. 
+  Given sample of data points that are discrete, compute the approximate GINI coefficient.
+  Given a discrete random variable, compute the GINI coefficient.
 core:
   - package: r
     code: |
@@ -25,7 +25,7 @@ always_allow_html: true
 urlcolor: blue
 ---
 
-### Gini Discrete Sample
+### GINI Discrete Sample
 
 ```{r global_options, include = FALSE}
 try(source("../../.Rprofile"))
@@ -37,11 +37,11 @@ try(source("../../.Rprofile"))
 
 This works out how the [ff_dist_gini_vector_pos](https://fanwangecon.github.io/REconTools/reference/ff_dist_gini_vector_pos.html) function works from [Fan](https://fanwangecon.github.io/)'s *[REconTools](https://fanwangecon.github.io/REconTools/)* Package.
 
-#### Gini Formula for Discrete Sample
+#### GINI Formula for Discrete Sample
 
-There is an vector values (all positive). This could be height information for N individuals. It could also be income information for N individuals. Calculate the [GINI](https://en.wikipedia.org/wiki/Gini_coefficient) coefficient treating the given vector as population. This is not an estimation exercise where we want to estimate population gini based on a sample. The given array is the population. The population is discrete, and only has these N individuals in the length n vector.
+There is an vector values (all positive). This could be height information for N individuals. It could also be income information for N individuals. Calculate the [GINI](https://en.wikipedia.org/wiki/Gini_coefficient) coefficient treating the given vector as population. This is not an estimation exercise where we want to estimate population GINI based on a sample. The given array is the population. The population is discrete, and only has these N individuals in the length n vector.
 
-Note that when the sample size is small, there is a limit to inequality using the formula defined below given each $N$. So for small $N$, can not really compare inequality across arrays with different $N$, can only compare arrays with the same $N$.  
+Note that when the sample size is small, there is a limit to inequality using the formula defined below given each $N$. So for small $N$, can not really compare inequality across arrays with different $N$, can only compare arrays with the same $N$.
 
 The GINI formula used here is:
 $$
@@ -87,9 +87,9 @@ $$
   = \frac{1}{2}
 $$
 
-*Step 3 Arriving at Finite Vector Gini Formula*
+*Step 3 Arriving at Finite Vector GINI Formula*
 
-Given what we have from above, we obtain the gini formula, divide by total area below 45 degree line.
+Given what we have from above, we obtain the GINI formula, divide by total area below 45 degree line.
 
 $$
  GINI =
@@ -138,7 +138,7 @@ $$
  = 1
 $$
 
-Note that for small N, for example if $N=10$, even when one person holds all income, all others have 0 income, the formula will not produce gini is zero, but that gini is equal to $\frac{2}{11}\approx 0.1818$. If $N=2$, inequality is at most, $\frac{2}{3}\approx 0.667$.
+Note that for small N, for example if $N=10$, even when one person holds all income, all others have 0 income, the formula will not produce GINI is zero, but that GINI is equal to $\frac{2}{11}\approx 0.1818$. If $N=2$, inequality is at most, $\frac{2}{3}\approx 0.667$.
 
 $$
  MostUnequalGINI\left(N\right) = 1 - \frac{2}{N+1} = \frac{N-1}{N+1}
@@ -210,7 +210,7 @@ cat('ar_ineql_very_n10:', ffi_dist_gini_vector_pos_test(ar_ineql_very_n10), '\n'
 cat('ar_ineql_extr_n10:', ffi_dist_gini_vector_pos_test(ar_ineql_extr_n10), '\n')
 ```
 
-### Gini Formula for Discrete Random Varialbe
+### GINI Formula for Discrete Random Varialbe
 
 For a discrete random variable, we are two arrays, an array of $x$ values, and an array of $f(x)$ probability mass at each $x$ value. Suppose the $x$ values are unique/non-repeating. This is also Implemented in [MEconTools](https://fanwangecon.github.io/MEconTools/) with the [ff_disc_rand_var_gini](https://github.com/FanWangEcon/MEconTools/blob/master/MEconTools/stats/ff_disc_rand_var_gini.m) function.
 
@@ -221,7 +221,7 @@ ar_choice_unique_sorted <- seq(0, 100, by=1)
 ar_choice_prob <- dbinom(ar_choice_unique_sorted, 100, 0.01)
 ```
 
-Generate mean and cumulative mean at each point: 
+Generate mean and cumulative mean at each point:
 
 ```{r}
 # 1. to normalize, get mean (binomial so mean is p*N=50)
@@ -239,7 +239,7 @@ ar_height <- ar_mean_cumsum/fl_mean;
 fl_area_drm <- sum(ar_choice_prob*ar_height);
 ```
 
-Finally GINI coefficient: 
+Finally GINI coefficient:
 
 ```{r}
 # 5. area below 45 degree line might not be 1/2, depends on discretness
@@ -252,15 +252,16 @@ print(paste0('fl_gini_index=', fl_gini_index))
 
 #### Discrete Random Variable as Function
 
-Organizing the code above as a function, and testing results out with the [binomial distribution](https://fanwangecon.github.io/Stat4Econ/probability_discrete/htmlpdfr/binomial.html) as an example. 
+Organizing the code above as a function, and testing results out with the [binomial distribution](https://fanwangecon.github.io/Stat4Econ/probability_discrete/htmlpdfr/binomial.html) as an example.
 
 For the binomial distribution, if the probability of success is very close to zero, that means nearly all mass is at lose all or nearly losing all. There will be non-zero but very small mass at higher levels of wins. Hence this should mean extreme inequality. GINI index should be close to 1. Alternatively, GINI index should be close to 0 when we have near 100 percent chance of success, then all mass is at winning all, perfect equality.
 
 ```{r}
 # Combining the code from above
 ffi_dist_gini_random_var_pos_test <- function(ar_x_sorted, ar_prob_of_x) {
-  # Check length and given warning
-  
+  #' @param ar_x_sorted sorted array of values
+  #' @param ar_prob_of_x probability mass for each element along `ar_x_sorted`, sums to 1
+
   # 1. to normalize, get mean (binomial so mean is p*N=50)
   fl_mean <- sum(ar_x_sorted*ar_prob_of_x);
   # 2. get cumulative mean at each point
@@ -273,7 +274,7 @@ ffi_dist_gini_random_var_pos_test <- function(ar_x_sorted, ar_prob_of_x) {
   fl_area_below45 <- sum(ar_prob_of_x*(cumsum(ar_prob_of_x)/sum(ar_prob_of_x)))
   # 6. Gini is the distance between
   fl_gini_index <- (fl_area_below45-fl_area_drm)/fl_area_below45
-  
+
   return(fl_gini_index)
 }
 
@@ -294,7 +295,7 @@ for (fl_binom_success_prob in seq(0.0001,0.9999,length.out=10)) {
 
 #### Compare Discrete Sample and Discrete Random Variable Functions for GINI
 
-[ff_dist_gini_random_var](https://fanwangecon.github.io/REconTools/reference/ff_dist_gini_random_var.html) provides the GINI implementation for a discrete random variable. The procedure is the same as prior, except now each element of the "x" array has element specific weights associated with it. The function can handle unsorted array with non-unique values. 
+[ff_dist_gini_random_var](https://fanwangecon.github.io/REconTools/reference/ff_dist_gini_random_var.html) provides the GINI implementation for a discrete random variable. The procedure is the same as prior, except now each element of the "x" array has element specific weights associated with it. The function can handle unsorted array with non-unique values.
 
 Test and compare [ff_dist_gini_random_var](https://fanwangecon.github.io/REconTools/reference/ff_dist_gini_random_var.html) provides the GINI implementation for a discrete random variable and [ff_dist_gini_vector_pos](https://fanwangecon.github.io/REconTools/reference/ff_dist_gini_vector_pos.html).
 
@@ -316,11 +317,11 @@ kable(cbind(ar_x, ar_prob_x_unif, ar_prob_x_lowval_highwgt, ar_prob_x_highval_hi
   kable_styling_fc()
 ```
 
-Second, generate GINI values. What should happen? 
+Second, generate GINI values. What should happen?
 
-1. The [ff_dist_gini_random_var](https://fanwangecon.github.io/REconTools/reference/ff_dist_gini_random_var.html) and  [ff_dist_gini_vector_pos](https://fanwangecon.github.io/REconTools/reference/ff_dist_gini_vector_pos.html) results should be the same when the uniform distribution is used. 
+1. The [ff_dist_gini_random_var](https://fanwangecon.github.io/REconTools/reference/ff_dist_gini_random_var.html) and  [ff_dist_gini_vector_pos](https://fanwangecon.github.io/REconTools/reference/ff_dist_gini_vector_pos.html) results should be the same when the uniform distribution is used.
 2. GINI should be higher, more inequality, if there is higher weights on the lower values.
-3. GINI should be lower, more equality, if there is higher weight on the higher values. 
+3. GINI should be lower, more equality, if there is higher weight on the higher values.
 
 ```{r}
 ff_dist_gini_vector_pos(ar_x)

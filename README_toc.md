@@ -254,13 +254,14 @@
 
 ## 8.2  Inequality Models
 
-1. [Gini for Discrete Samples or Discrete Random Variable](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_gini_disc.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_gini_disc.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_gini_disc.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_gini_disc.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_gini_disc.html)
-	+ Given sample of data points that are discrete, compute the approximate gini coefficient.
-	+ Given a discrete random variable, compute the GINI coefficient. 
+1. [GINI for Discrete Samples or Discrete Random Variable](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_gini_disc.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_gini_disc.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_gini_disc.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_gini_disc.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_gini_disc.html)
+	+ Given sample of data points that are discrete, compute the approximate GINI coefficient.
+	+ Given a discrete random variable, compute the GINI coefficient.
 	+ **r**: *sort() + cumsum() + sum()*
-2. [CES and Atkinson Utility](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_atkinson_ces.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_atkinson_ces.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_atkinson_ces.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_atkinson_ces.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_atkinson_ces.html)
+2. [CES and Atkinson Inequality Index](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_atkinson_ces.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_atkinson_ces.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_atkinson_ces.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_atkinson_ces.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_atkinson_ces.html)
 	+ Analyze how changing individual outcomes shift utility given inequality preference parameters.
-	+ Draw Cobb-Douglas, Utilitarian and Leontief indifference curve
+	+ Discrete a continuous normal random variable with a binomial discrete random variable.
+	+ Draw Cobb-Douglas, Utilitarian and Leontief indifference curve.
 	+ **r**: *apply(mt, 1, funct(x){}) + do.call(rbind, ls_mt)*
 	+ **tidyr**: *expand_grid()*
 	+ **ggplot2**: *geom_line() + facet_wrap()*
@@ -283,10 +284,14 @@
 
 ## 9.2  Discrete Random Variable
 
-1. [Obtaining Joint Distribution from Marginal with Rectilinear Restrictions](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_discrandvar_marg2joint.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar//fs_discrandvar_marg2joint.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_discrandvar_marg2joint.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_discrandvar_marg2joint.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_discrandvar_marg2joint.html)
+1. [Binomial Approximation of Normal](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_disc_approx_cts.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar//fs_disc_approx_cts.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_disc_approx_cts.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_disc_approx_cts.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_disc_approx_cts.html)
+	+ Approximate a continuous normal random variable with a discrete binomial random variable.
+	+ **r**: *hist() + plot()*
+	+ **stats**: *dbinom() + rnorm()*
+2. [Obtaining Joint Distribution from Marginal with Rectilinear Restrictions](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_discrandvar_marg2joint.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar//fs_discrandvar_marg2joint.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_discrandvar_marg2joint.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_discrandvar_marg2joint.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_discrandvar_marg2joint.html)
 	+ Solve for joint distributional mass given marginal distributional mass given rectilinear assumptions.
 	+ **r**: *qr()*
-2. [Obtaining Joint Distribution from Conditional with Rectilinear Restrictions](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_discrandvar_condi2joint.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar//fs_discrandvar_condi2joint.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_discrandvar_condi2joint.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_discrandvar_condi2joint.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_discrandvar_condi2joint.html)
+3. [Obtaining Joint Distribution from Conditional with Rectilinear Restrictions](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_discrandvar_condi2joint.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar//fs_discrandvar_condi2joint.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_discrandvar_condi2joint.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_discrandvar_condi2joint.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_discrandvar_condi2joint.html)
 	+ Solve for joint distributional mass given conditional distributional mass given rectilinear assumptions.
 	+ **r**: *qr() + solve() + matrix()*
 

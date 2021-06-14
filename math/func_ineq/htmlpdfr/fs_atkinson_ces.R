@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE----------------------------------------------------------------------------------
+## ----global_options, include = FALSE-------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ---------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
 # Formula
 ffi_atkinson_ineq <- function(ar_data, fl_rho) {
   ar_data_demean <- ar_data/mean(ar_data)
@@ -12,73 +12,170 @@ ffi_atkinson_ineq <- function(ar_data, fl_rho) {
 }
 
 
-## ---------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
+# Formula
+ffi_atkinson_random_var_ineq <- function(ar_data, ar_prob_data, fl_rho) {
+  #' @param ar_data array sorted array values
+  #' @param ar_prob_data array probability mass for each element along `ar_data`, sums to 1
+  #' @param fl_rho float inequality aversion parameter fl_rho = 1 for planner
+  #' without inequality aversion. fl_rho = -infinity for fully inequality averse.
+
+  fl_mean <- sum(ar_data*ar_prob_data);
+  fl_atkinson <- 1 - (sum(ar_prob_data*(ar_data^{fl_rho}))^(1/fl_rho))/fl_mean
+  return(fl_atkinson)
+}
+
+
+## ------------------------------------------------------------------------------------------------------
 # Preference Vector
-ar_rho <- c(1, 1 - (10^(c(seq(-2.2,2.2, length.out=60)))))
+ar_rho <- 1 - (10^(c(seq(-2.0,2.0, length.out=30))))
 ar_rho <- unique(ar_rho)
 mt_rho <- matrix(ar_rho, nrow=length(ar_rho), ncol=1)
 
-# Random Data Vector (not equal outcomes)
-set.seed(123)
-ar_data_rand <- rnorm(15, mean=0,sd=1)
-ar_data_rand <- ar_data_rand - min(ar_data_rand) + 1
 
+## ------------------------------------------------------------------------------------------------------
+# Random normal Data Vector (not equal outcomes)
+set.seed(123)
+it_sample_N <- 30
+fl_rnorm_mean <- 100
+fl_rnorm_sd <- 6
+ar_data_rnorm <- rnorm(it_sample_N, mean=fl_rnorm_mean, sd=fl_rnorm_sd)
 # Uniform Data Vector (Equal)
-ar_data_unif <- rep(1, length(ar_data_rand))
+ar_data_unif <- rep(1, length(ar_data_rnorm))
 
 # One Rich (last person has income equal to the sum of all others*100)
-ar_data_onerich <- rep(0.1, length(ar_data_rand))
+ar_data_onerich <- rep(0.1, length(ar_data_rnorm))
 ar_data_onerich[length(ar_data_onerich)] = sum(head(ar_data_onerich,-1))*10
 
 
-## ---------------------------------------------------------------------------------------------------------------------
-# ATK = 0.1180513
-ffi_atkinson_ineq(ar_data_rand, -1)
+## ------------------------------------------------------------------------------------------------------
+# Use binomial to approximate normal
+fl_p_binom <- 1 - fl_rnorm_sd^2/fl_rnorm_mean
+fl_n_binom <- round(fl_rnorm_mean^2/(fl_rnorm_mean - fl_rnorm_sd^2))
+fl_binom_mean <- fl_n_binom*fl_p_binom
+fl_binom_sd <- sqrt(fl_n_binom*fl_p_binom*(1-fl_p_binom))
+# drv = discrete random variable
+ar_drv_rbinom_xval <- seq(1, fl_n_binom)
+ar_drv_rbinom_prob <- dbinom(ar_drv_rbinom_xval, size=fl_n_binom, prob=fl_p_binom)
+# ignore weight at x=0
+ar_drv_rbinom_prob <- ar_drv_rbinom_prob/sum(ar_drv_rbinom_prob)
+
+
+## ------------------------------------------------------------------------------------------------------
+# This should be the same as the unweighted version
+ar_drv_onerich_prob_unif <- rep(1/it_sample_N, it_sample_N)
+# This puts almost no weight on the last rich person
+# richlswgt = rich less weight
+ar_drv_onerich_prob_richlswgt <- ar_drv_onerich_prob_unif
+ar_drv_onerich_prob_richlswgt[it_sample_N] <- (1/it_sample_N)*0.1
+ar_drv_onerich_prob_richlswgt <- ar_drv_onerich_prob_richlswgt/sum(ar_drv_onerich_prob_richlswgt)
+# This puts more weight on the rich person
+# richmrwgt = rich more weight
+ar_drv_onerich_prob_richmrwgt <- ar_drv_onerich_prob_unif
+ar_drv_onerich_prob_richmrwgt[it_sample_N] <- (1/it_sample_N)*10
+ar_drv_onerich_prob_richmrwgt <- ar_drv_onerich_prob_richmrwgt/sum(ar_drv_onerich_prob_richmrwgt)
+
+
+## ------------------------------------------------------------------------------------------------------
+# ATK = 0.05372126
+ffi_atkinson_ineq(ar_data_rnorm, -1)
+# ATK = 0.03443246
+ffi_atkinson_random_var_ineq(ar_drv_rbinom_xval, ar_drv_rbinom_prob, -1)
+
+
+## ------------------------------------------------------------------------------------------------------
 # ATK = 0
 ffi_atkinson_ineq(ar_data_unif, -1)
-# ATK = 0.89
+
+
+## ------------------------------------------------------------------------------------------------------
+# ATK = 0.89, sample
 ffi_atkinson_ineq(ar_data_onerich, -1)
+# ATK = 0.89, drv, uniform weight
+ffi_atkinson_random_var_ineq(ar_data_onerich, ar_drv_onerich_prob_unif, -1)
+# ATK = 0.49, drv, less weight on rich
+ffi_atkinson_random_var_ineq(ar_data_onerich, ar_drv_onerich_prob_richlswgt, -1)
+# ATK = 0.97, drv, more weight on rich
+ffi_atkinson_random_var_ineq(ar_data_onerich, ar_drv_onerich_prob_richmrwgt, -1)
 
 
-## ---------------------------------------------------------------------------------------------------------------------
-ar_rho
+## ------------------------------------------------------------------------------------------------------
+ar_log_1_minus_rho <- log(1-ar_rho)
+st_x_label <- 'log(1-rho), rho is Planner\'s Inequality Aversion\nEfficiency (rho=0.99, left); log utility (rho = 0, middle); Equality (rho=-99, right)'
+st_y_label <- 'Index: 0 = Total Equality, 1 = Total Inequality'
 
 
-## ---------------------------------------------------------------------------------------------------------------------
-par(new=T)
-st_x_label <- 'Lambda, left Rawlsian, right (1) is Utilitarian'
-st_y_label <- 'Atkinson Inequality, 0 = perfect equal'
+## ------------------------------------------------------------------------------------------------------
 ar_ylim = c(0,1)
-ffi_atkinson_ineq(ar_data_rand, -1)
-ar_atkinson <- apply(mt_rho, 1, function(row){ffi_atkinson_ineq(ar_data_rand, row[1])})
-plot(ar_rho, ar_atkinson, ylim = ar_ylim)
-title(main = 'A vector of Random data', xlab = st_x_label, ylab = st_y_label)
+# First line
+par(new=FALSE)
+ar_atkinson_sample <- apply(mt_rho, 1, function(row){
+  ffi_atkinson_ineq(ar_data_rnorm, row[1])})
+plot(ar_log_1_minus_rho, ar_atkinson_sample,
+     ylim = ar_ylim, xlab = st_x_label, ylab = st_y_label,
+     type="l", col = 'red')
+# Second line
+par(new=T)
+ar_atkinson_drv <- apply(mt_rho, 1, function(row){
+  ffi_atkinson_random_var_ineq(ar_drv_rbinom_xval, ar_drv_rbinom_prob, row[1])})
+plot(ar_log_1_minus_rho, ar_atkinson_drv,
+     ylim = ar_ylim, xlab = '', ylab = '',
+     type="p", col = 'blue')
+# Title
+title(main = 'Atkinson Inequality and Random data',
+      sub = 'Red Line=sample, Blue Dots=discrete random variable')
 grid()
 
 
-## ---------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
+# First line
+par(new=FALSE)
+ar_atkinson <- apply(mt_rho, 1, function(row){ffi_atkinson_ineq(
+  ar_data_onerich, row[1])})
+plot(ar_log_1_minus_rho, ar_atkinson,
+     ylim = ar_ylim, xlab = st_x_label, ylab = st_y_label,
+     type="l", col = 'red')
+# Second line
 par(new=T)
-ffi_atkinson_ineq(ar_data_onerich, -1)
-ar_atkinson <- apply(mt_rho, 1, function(row){ffi_atkinson_ineq(ar_data_onerich, row[1])})
-plot(ar_rho, ar_atkinson, ylim = ar_ylim)
-title(main = '1 person has the (income of all others summed up)*10', xlab = st_x_label, ylab = st_y_label)
+ar_atkinson_drv <- apply(mt_rho, 1, function(row){ffi_atkinson_random_var_ineq(
+  ar_data_onerich, ar_drv_onerich_prob_unif, row[1])})
+plot(ar_log_1_minus_rho, ar_atkinson_drv,
+     ylim = ar_ylim, xlab = '', ylab = '',
+     type="p", col = 'blue')
+# Third line
+par(new=T)
+ar_atkinson_drv_richlswgt <- apply(mt_rho, 1, function(row){ffi_atkinson_random_var_ineq(
+  ar_data_onerich, ar_drv_onerich_prob_richlswgt, row[1])})
+plot(ar_log_1_minus_rho, ar_atkinson_drv_richlswgt,
+     ylim = ar_ylim, xlab = '', ylab = '',
+     type="p", col = 'black')
+# Fourth line
+par(new=T)
+ar_atkinson_drv_richmrwgt <- apply(mt_rho, 1, function(row){ffi_atkinson_random_var_ineq(
+  ar_data_onerich, ar_drv_onerich_prob_richmrwgt, row[1])})
+plot(ar_log_1_minus_rho, ar_atkinson_drv_richmrwgt,
+     ylim = ar_ylim, xlab = '', ylab = '',
+     type="p", col = 'darkorange')
+# Title
+title(main = 'One Person has Income of All Others Summed up Times 10',
+      sub  = 'Red=sample, Blue=drv, Oranges=more richest, Black=less richest')
 grid()
 
 
-## ---------------------------------------------------------------------------------------------------------------------
-par(new=T)
+## ------------------------------------------------------------------------------------------------------
+par(new=FALSE)
 ffi_atkinson_ineq(ar_data_unif, -1)
 ar_atkinson <- apply(mt_rho, 1, function(row){ffi_atkinson_ineq(ar_data_unif, row[1])})
-plot(ar_rho, ar_atkinson, ylim = ar_ylim)
-title(main = 'uniform distribution', xlab = st_x_label, ylab = st_y_label)
+plot(ar_log_1_minus_rho, ar_atkinson, ylim = ar_ylim, xlab = st_x_label, ylab = st_y_label)
+title(main = 'Atkinson Inequality and Uniform Distribution')
 grid()
 
 
-## ---------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
 # A as x-axis, need bounds on A
 fl_A_min = 0.01
 fl_A_max = 3
-it_A_grid = 10000
+it_A_grid = 50000
 
 # Define parameters
 # ar_lambda <- 1 - (10^(c(seq(-2,2, length.out=3))))
@@ -114,7 +211,7 @@ ls_df_indiff <- apply(tb_pref, 1, function(x){
 df_indiff <- do.call(rbind, ls_df_indiff) %>% drop_na()
 
 
-## ---------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
 # Labeling
 st_title <- paste0('Indifference Curves Aktinson Atkinson Utility (CES)')
 st_subtitle <- paste0('Each Panel Different beta=A\'s Weight lambda=inequality aversion\n',
