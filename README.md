@@ -240,6 +240,9 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ Estimate allowing for K and M specific intercepts, K and M specific coefficients, and homogeneous coefficients. 
 	+ Create input matrix data structures for logistic aggregate share estimation.
 	+ **stats**: *lm(y ~ . -1)*
+3. [Fit Prices Given Quantities Logistic Choice with Aggregate Data](https://fanwangecon.github.io/R4Econ/regnonlin/logit/htmlpdfr/fs_logit_aggregate_share_to_price.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/logit//fs_logit_aggregate_share_to_price.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/logit/htmlpdfr/fs_logit_aggregate_share_to_price.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/logit/htmlpdfr/fs_logit_aggregate_share_to_price.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/regnonlin/logit/htmlpdfr/fs_logit_aggregate_share_to_price.html)
+	+ A multinomial logistic choice problem generates choice probabilities across alternatives, find the prices that explain aggregate shares. 
+	+ **stats**: *lm(y ~ . -1)*
 
 ## 6.2  Quantile Regression
 
@@ -258,7 +261,14 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 # 8  Mathematics
 
-## 8.1  Basics
+## 8.1  Production Function
+
+1. [Nested Constant Elasticity of Substitution Production Function](https://fanwangecon.github.io/R4Econ/math/func_prod/htmlpdfr/fs_nested_CES.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod//fs_nested_CES.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod/htmlpdfr/fs_nested_CES.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod/htmlpdfr/fs_nested_CES.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/func_prod/htmlpdfr/fs_nested_CES.html)
+	+ A nested-CES production function with nest-specific elasticities.
+	+ Re-state the nested-CES problem as several sub-problems.
+	+ Marginal products and its relationship to prices in expenditure minimization.
+
+## 8.2  Basics
 
 1. [Positive and Negative Exponents x is Below or Above 1](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_exponents.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_exponents.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_exponents.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_exponents.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_exponents.html)
 	+ Positive exponentials are strictly increasing. Negative exponentials are strictly decreasing.
@@ -273,7 +283,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 4. [linear solve x with f(x) = 0](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_solu_x_lin.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_solu_x_lin.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_solu_x_lin.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_solu_x_lin.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_solu_x_lin.html)
 	+ Evaluate and solve statistically relevant problems with one equation and one unknown that permit analytical solutions.
 
-## 8.2  Inequality Models
+## 8.3  Inequality Models
 
 1. [GINI for Discrete Samples or Discrete Random Variable](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_gini_disc.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_gini_disc.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_gini_disc.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_gini_disc.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_gini_disc.html)
 	+ Given sample of data points that are discrete, compute the approximate GINI coefficient.

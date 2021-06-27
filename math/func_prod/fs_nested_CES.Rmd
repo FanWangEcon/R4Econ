@@ -1,0 +1,235 @@
+---
+title: "Nested Constant Elasticity of Substitution Production Function"
+titleshort: "Nested Constant Elasticity of Substitution Production Function"
+description: |
+  A nested-CES production function with nest-specific elasticities.
+  Re-state the nested-CES problem as several sub-problems.
+  Marginal products and its relationship to prices in expenditure minimization.
+date: 2021-06-26
+date_start: 2020-06-26
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+### Nested CES Production Function
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+#### Denesting the Nested CES Problem
+
+We have the following production function with four inputs $x_1$, $x_2$, $y_1$ and $y_2$. There are three $\rho$ parameters $\rho_x$, $\rho_y$ and $\rho_o$ that correspond to inner-nest and outter nest elasticity of substitution between inputs. 
+
+The firm's expenditure minimization problem has the following objective:
+
+$$
+\min_{x_1, x_2, y_1, y_2} \left(
+x_1 \cdot p_{x_1} + 
+x_2 \cdot p_{x_2} +
+y_1 \cdot p_{y_1} + 
+y_2 \cdot p_{y_2}
+\right)
+$$
+
+The production quantity constraint is, using a constant-returns doubly-nested production function:
+
+$$
+Y= Z \cdot 
+\left(
+\beta_{o_1}
+\left(
+    \left(
+    \beta_{x_1} x_1^{\rho_x} + \beta_{x_2} x_2^{\rho_x} 
+    \right)^\frac{1}{{\rho_x}}
+\right)
+^{\rho_{o}} + 
+\beta_{o_2} 
+\left(
+    \left(
+    \beta_{y_1} y_1^{\rho_y} + \beta_{y_2} y_2^{\rho_y} 
+    \right)^\frac{1}{{\rho_y}}
+\right)
+^{\rho_{o}} 
+\right)^\frac{1}{\rho_{o}}
+$$
+
+Note that we are assuming constant-returns to scale in a competitive setting, so firms do not make profits. We solve for expenditure minimization rather than profit maximization. 
+
+Rather than solving the problem above directly in an expenditure minimization, we can divide the problem above into three parts, the **X Problem**, the **Y Problem** and the **Z Problem**.
+
+##### Marginal Product of Labor 
+
+A key object to consider is the marginal product of input (labor or capital). Taking derivative of output $Y$ with respect to input $x_1$, we have:
+
+$$
+\frac{\partial Y}{\partial x_1}= 
+\left[
+\frac{1}{\rho_{o}}
+Z 
+\left(
+\beta_{o_1}
+\left(
+    \left(
+    \beta_{x_1} x_1^{\rho_x} + \beta_{x_2} x_2^{\rho_x} 
+    \right)^\frac{1}{{\rho_x}}
+\right)
+^{\rho_{o}} + 
+\beta_{o_2} 
+\left(
+    \left(
+    \beta_{y_1} y_1^{\rho_y} + \beta_{y_2} y_2^{\rho_y} 
+    \right)^\frac{1}{{\rho_y}}
+\right)
+^{\rho_{o}} 
+\right)^{\frac{1}{\rho_{o}} - 1}
+\right]
+\cdot 
+\left[
+\rho_{o}
+\beta_{o_1}
+\left(
+    \left(
+    \beta_{x_1} x_1^{\rho_x} + \beta_{x_2} x_2^{\rho_x} 
+    \right)^\frac{1}{{\rho_x}}
+\right)^{\rho_{o}-1}
+\right]
+\cdot 
+\left[
+  \frac{1}{{\rho_x}}
+  \left(
+    \beta_{x_1} x_1^{\rho_x} + \beta_{x_2} x_2^{\rho_x} 
+    \right)^{\frac{1}{{\rho_x}} - 1}
+\right]
+\cdot 
+\left[
+  \rho_x
+  \beta_{x_1} x_1^{\rho_x-1}
+\right]
+$$
+
+What is the relationship between the marginal product of labor and the wage? Let $\lambda$ be the lagrange multiplier for the overall problem:
+
+$$
+p_{x_1} = \lambda \cdot \left(\frac{\partial Y}{\partial x_1}\right)
+$$
+
+
+##### Three Denested Sub-problems, X, Y and O Problems
+
+**The X problem**:
+
+$$
+\min_{x_1, x_2}
+\left(
+x_1 \cdot p_{x_1} + 
+x_2 \cdot p_{x_2}
+\right)
+$$
+$$
+O_x = 
+\left(
+    \beta_{x_1} x_1^{\rho_x} + \beta_{x_2} x_2^{\rho_x} 
+\right)^\frac{1}{{\rho_x}}
+$$
+
+**The Y problem**:
+
+$$
+\min_{y_1, y_2}
+\left(
+y_1 \cdot p_{y_1} + 
+y_2 \cdot p_{y_2}
+\right)
+$$
+$$
+O_y = 
+\left(
+    \beta_{y_1} y_1^{\rho_y} + \beta_{y_2} y_2^{\rho_y} 
+\right)^\frac{1}{{\rho_y}}
+$$
+
+**The O problem**:
+
+$$
+\min_{o_1, o_2}
+\left(
+O_x \cdot p_{o_1} + 
+O_y \cdot p_{o_2}
+\right)
+$$
+$$
+Y = 
+Z\cdot\left(
+    \beta_{o_1} O_x^{\rho_o} + \beta_{o_2} O_y^{\rho_o} 
+\right)^\frac{1}{{\rho_o}}
+$$
+
+##### Marginal Product of Labor for De-nested Problem
+
+We can also take the derivative of the output requirement for the X problem with respect to $x_1$, we have:
+
+$$
+\frac{\partial O_x}{\partial x_1}= 
+\left[
+  \frac{1}{{\rho_x}}
+  \left(
+    \beta_{x_1} x_1^{\rho_x} + \beta_{x_2} x_2^{\rho_x} 
+    \right)^{\frac{1}{{\rho_x}} - 1}
+\right]
+\cdot 
+\left[
+  \rho_x
+  \beta_{x_1} x_1^{\rho_x-1}
+\right]
+$$
+
+Which simplifies a little bit to:
+$$
+\frac{\partial O_x}{\partial x_1}= 
+\left[
+  \left(
+    \beta_{x_1} x_1^{\rho_x} + \beta_{x_2} x_2^{\rho_x} 
+    \right)^{\frac{1}{{\rho_x}} - 1}
+\right]
+\cdot 
+\left[
+  \beta_{x_1} x_1^{\rho_x-1}
+\right]
+$$
+
+
+What is the relationship between the marginal product of labor and the wage for the problem in the subnest? Let $\lambda_x$ be the lagrange multiplier for the lagrange multiplier specific to the subnest:
+
+$$
+p_{x_1} = \lambda_x \cdot \left(\frac{\partial O_x}{\partial x_1}\right)
+$$
+
+This means that we have the following FOC from solving the expenditure minimization problem: 
+
+$$
+p_{x_1} = 
+\lambda_x \cdot
+\left[
+  \left(
+    \beta_{x_1} x_1^{\rho_x} + \beta_{x_2} x_2^{\rho_x} 
+    \right)^{\frac{1}{{\rho_x}} - 1}
+\right]
+\cdot 
+\left[
+  \beta_{x_1} x_1^{\rho_x-1}
+\right]
+$$

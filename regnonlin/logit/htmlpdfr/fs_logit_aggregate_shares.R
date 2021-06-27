@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE-----------------------------------------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE-------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
 # set seed
 set.seed(123)
 # T periods, and M occupations (+1 leisure)
@@ -45,7 +45,7 @@ kable(mt_prob_o, caption=st_caption) %>% kable_styling_fc()
 # mt_prob_o
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
 # A Matrix with share from 1:M columns
 mt_prob_rela_m2leisure <-
   matrix(data=mt_prob_o[1:it_T, 2:(it_M+1)], nrow=it_T, ncol=it_M)
@@ -62,7 +62,7 @@ st_caption <- 'Log of relative participation probabilities against leisure'
 kable(mt_prob_rela_m2leisure_log, caption=st_caption) %>% kable_styling_fc()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
 # Regression input matrix
 mt_prob_ols_input <- matrix(data=NA, nrow=it_T*it_M, ncol=it_M+1)
 colnames(mt_prob_ols_input) <- paste0('m', seq(1,dim(mt_prob_ols_input)[2]))
@@ -88,7 +88,7 @@ mt_prob_ols_input[, 1:it_M] <- mt_m_indicators
 mt_prob_ols_input[, it_M+1] <- matrix(data=mt_wages, nrow=it_T*it_M, ncol=1)
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
 # Construct data structure
 mt_all_inputs <- cbind(ar_prob_ols_output, mt_prob_ols_input)
 colnames(mt_all_inputs)[1] <- 'log_pm_over_po'
@@ -99,7 +99,7 @@ st_caption <- 'LHS=Log Probability Ratios (column 1); RHS=Indicators of occupati
 kable(tb_all_inputs, caption=st_caption) %>% kable_styling_fc()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
 # Regression
 fit_ols_agg_prob <- lm(log_pm_over_po ~ . -1, data = tb_all_inputs)
 summary(fit_ols_agg_prob)
@@ -122,7 +122,7 @@ st_caption <- 'Compare differences in probability predictions based on estimates
 kable(mt_prob_o_esti-mt_prob_o, caption=st_caption) %>% kable_styling_fc()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
 # set seed
 set.seed(123)
 # T periods, and M occupations (+1 leisure/home)
@@ -171,12 +171,12 @@ kable(mt_prob_o2, caption=st_caption) %>% kable_styling_fc()
 # mt_prob_o
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
 mt_prob_rela_m2leisure2 <- matrix(data=mt_prob_o2[1:it_T, 2:(it_M+1)], nrow=it_T, ncol=it_M)
 ar_prob_ols_output2 <- matrix(data=log(mt_prob_rela_m2leisure2/mt_prob_o2[1:it_T, 1]), nrow=it_T*it_M, ncol=1)
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
 # Regression input matrix
 mt_prob_ols_input2 <- matrix(data=NA, nrow=it_T*it_M, ncol=it_M+2+1)
 colnames(mt_prob_ols_input2) <- paste0('m', seq(1,dim(mt_prob_ols_input2)[2]))
@@ -204,7 +204,7 @@ mt_prob_ols_input2[, it_M+2] <- ar_hometech_mesh
 mt_prob_ols_input2[, it_M+3] <- matrix(data=mt_wages, nrow=it_T*it_M, ncol=1)
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
 # Construct data structure
 mt_all_inputs2 <- cbind(ar_prob_ols_output2, mt_prob_ols_input2)
 colnames(mt_all_inputs2)[1] <- 'log_pm_over_po'
@@ -217,7 +217,7 @@ st_caption <- 'LHS=Log Probability Ratios (column 1); RHS=Indicators of occupati
 kable(tb_all_inputs2, caption=st_caption) %>% kable_styling_fc()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
 # Regression
 fit_ols_agg_prob2 <- lm(log_pm_over_po ~ . -1, data = tb_all_inputs2)
 summary(fit_ols_agg_prob2)
@@ -249,7 +249,7 @@ st_caption <- 'Compare differences in probability predictions based on estimates
 kable(mt_prob_o2_esti-mt_prob_o2, caption=st_caption) %>% kable_styling_fc()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
 # set seed
 set.seed(123)
 # K skill levels, T periods, and M occupations (+1 leisure/home)
@@ -315,13 +315,13 @@ kable(mt_prob_o3_full, caption=st_caption) %>% kable_styling_fc()
 # mt_prob_o
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
 mt_prob_rela_m2leisure3 <- mt_prob_o3[, 2:(it_M+1)]/mt_prob_o3[, 1]
 # mt_log_prob_rela_m2leisure3 <- log(mt_prob_rela_m2leisure3/mt_prob_o3[, 1])
 # kable(log(mt_prob_rela_m2leisure3/mt_prob_o3[, 1]), caption=st_caption) %>% kable_styling_fc()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
 # Regression input matrix
 # it_K*it_M+it_K+1+1: 1. it_K*it_M for all indicators; 2. it_k for HOMETECH; 3. 1 for time; 4. 1 for wage
 mt_prob_ols_input3 <- matrix(data=NA, nrow=it_K*it_T*it_M, ncol=it_K*it_M+it_K+1+1)
@@ -412,7 +412,7 @@ mt_prob_ols_input3[, it_col_end+2] <- ar_wage_mesh_kmt
 # kable(mt_prob_ols_input3) %>% kable_styling_fc()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
 # Construct data structure
 mt_all_inputs3 <- cbind(ar_prob_ols_mesh_kmt, mt_prob_ols_input3)
 colnames(mt_all_inputs3)[1] <- 'log_pm_over_po'
@@ -424,7 +424,7 @@ st_caption <- 'LHS=Log Probability Ratios (column 1); RHS=Indicator, time-trends
 kable(tb_all_inputs3, caption=st_caption) %>% kable_styling_fc_wide()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------
 # Regression
 fit_ols_agg_prob3 <- lm(log_pm_over_po ~ . -1, data = tb_all_inputs3)
 summary(fit_ols_agg_prob3)

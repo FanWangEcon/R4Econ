@@ -38,11 +38,11 @@ try(source("../../.Rprofile"))
 
 #### Neart Point Along a Line Through Orgin to Another Point
 
-We first have $X_1$ an $Y_1$, given these, we are able to generate $R =\frac{X_2}{Y_2}$, a ratio. We want to iteratively update $X_1$ and $X_2$, but we only know the ratio. Think of $R$ as a line through the origin with $R$ as the slope.
+We first have $X_1$ an $Y_1$, given these, we are able to generate $R =\frac{Y_2}{X_2}$, a ratio. We want to iteratively update $X_1$ and $Y_1$, where $1$ subscript indicates the first iteration, but we only know the ratio. Think of $R$ as a line through the origin with $R$ as the slope.
 
 We generate $X_2$ and $Y_2$ by finding the point along the $R$ as slope origin line that is the closest to the $X_1$ and $Y_1$. At the resulting point, $R$ will be respected, and it will differ least in distance to the earlier iteration's $X_1$ and $Y_1$ points.
 
-1. The slope of the diagonal line is $-\frac{Y_2}{X_2}=-\frac{1}{R}$
+1. The slope of the diagonal line is $-\frac{X_2}{Y_2}=-\frac{1}{R}$
 2. The diagonal line must cross $X_1$ and $Y_1$, solve for this line's y-intercept
 3. Solve for the intersection of the diagonal line and the origin line with $R$ as slope
 
@@ -50,7 +50,7 @@ Implementing step (2):
 
 $$
 \begin{aligned}
-Y_1 &= I - \frac{Y_2}{X_2}\cdot X_1\\
+Y_1 &= I - \frac{1}{R}\cdot X_1\\
 I &= Y_1 + \frac{X_1}{R} \\
 I &=  \frac{Y_1\cdot R + X_1}{R}\\
 \end{aligned}
