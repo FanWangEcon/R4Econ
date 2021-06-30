@@ -4,7 +4,7 @@ titleshort: "Estimate Logistic Choice Model with Aggregate Shares"
 description: |
   Aggregate share logistic OLS with K worker types, T time periods and M occupations.
   Estimate logistic choice model with aggregate shares, allowing for occupation-specific wages and occupation-specific intercepts.
-  Estimate allowing for K and M specific intercepts, K and M specific coefficients, and homogeneous coefficients. 
+  Estimate allowing for K and M specific intercepts, K and M specific coefficients, and homogeneous coefficients.
   Create input matrix data structures for logistic aggregate share estimation.
 core:
   - package: stats
@@ -40,7 +40,7 @@ try(source("../../.Rprofile"))
 
 ##### Wage and Aggregate Share of Workers
 
-*Note*: See [Fit Prices Given Quantities Logistic Choice with Aggregate Data](https://fanwangecon.github.io/R4Econ/regnonlin/logit/htmlpdfr/fs_logit_aggregate_shares_to_price.html) for solving/estimating for wages given aggregate shares.
+*Note*: See [Fit Prices Given Quantities Logistic Choice with Aggregate Data](https://fanwangecon.github.io/R4Econ/regnonlin/logit/htmlpdfr/fs_logit_aggregate_share_to_price.html) for solving/estimating for wages given aggregate shares.
 
 Individual $i$ can choose among $M+1$ options, the $M$ options, are for example, alternative job possibilities. The $+1$ refers to a leisure category. The value associated with each one of the choice alternatives is:
 
@@ -217,20 +217,20 @@ kable(mt_prob_o_esti-mt_prob_o, caption=st_caption) %>% kable_styling_fc()
 
 #### Logistic Choices with Time-specific Observables
 
-In our example here, there are choice alternatives ($m$) and time periods ($t$). In terms of data inputs, in the prior example, we had on the Right 
+In our example here, there are choice alternatives ($m$) and time periods ($t$). In terms of data inputs, in the prior example, we had on the Right
 
-In the example in the prior section, the data structure included: 
+In the example in the prior section, the data structure included:
 
-1. $m$-specific variables: indicators 
+1. $m$-specific variables: indicators
 2. $m$- and $t$-specific variables: wages
 
 In the new data structure for this section, we have:
 
-1. $m$-specific variables: indicators 
+1. $m$-specific variables: indicators
 2. $m$- and $t$-specific variables: wages
-3. $t$-specific variables: characteristics that are homogeneous across groups, but varying over time. This will include both a trend variable capturing time patterns, as well as an observable that is different over time. 
+3. $t$-specific variables: characteristics that are homogeneous across groups, but varying over time. This will include both a trend variable capturing time patterns, as well as an observable that is different over time.
 
-Suppose there is some information that impacts individual's willingness to stay at home. Note that leisure is the same as work from home. For example, there could be technological improvements that makes home-production less time-consuming, and we might have a variable that captures the efficiency of home-technology. Captured by a time trend, there might also be changes in social attitudes, which could be harder to measure.  
+Suppose there is some information that impacts individual's willingness to stay at home. Note that leisure is the same as work from home. For example, there could be technological improvements that makes home-production less time-consuming, and we might have a variable that captures the efficiency of home-technology. Captured by a time trend, there might also be changes in social attitudes, which could be harder to measure.
 
 Suppose we still have:
 
@@ -250,15 +250,15 @@ $$
 V_{itm} - V_{it0} = \left(\alpha_m - \alpha_0\right) + \left(\beta\cdot\text{WAGE}_{tm} - \phi \cdot t - \theta\cdot\text{HOMETECH}_{t} \right) + \left(\epsilon_{itm}-\epsilon_{it0}\right)
 $$
 
-Note that: 
+Note that:
 
 - $\alpha_0$ is not identifiable.
 - If the HOMETECH or time variables are multiplied by negative one, the signs changes.
-- Since only the differences in value matter, the coefficients for these variables represent the net changes on alternative value difference due to changes in time-trend or the HOMETECH variable. 
+- Since only the differences in value matter, the coefficients for these variables represent the net changes on alternative value difference due to changes in time-trend or the HOMETECH variable.
 
 ##### Simulate Market Share
 
-We simulate market share data now, with information over several more periods, and the HOMETECH variable, along with the time trend. 
+We simulate market share data now, with information over several more periods, and the HOMETECH variable, along with the time trend.
 
 First, simulate the data.
 ```{r}
@@ -268,7 +268,7 @@ set.seed(123)
 it_T <- 5
 it_M <- 4
 # define alpha and beta parameters
-ar_alpha <- runif(it_M)*0.5 
+ar_alpha <- runif(it_M)*0.5
 fl_beta <- runif(1)*0.25
 # also negative time-trend from home category perspective, culturally increasingly accepting of work
 fl_phi <- -runif(1)*0.50
@@ -364,7 +364,7 @@ kable(tb_all_inputs2, caption=st_caption) %>% kable_styling_fc()
 
 ##### Estimate Wage Coefficients, HOMETECH Effects and Time Trend
 
-Similar to before, estimate with OLS. 
+Similar to before, estimate with OLS.
 
 ```{r}
 # Regression
@@ -400,7 +400,7 @@ kable(mt_prob_o2_esti-mt_prob_o2, caption=st_caption) %>% kable_styling_fc()
 
 #### Logistic Choices and Multiple Types of Workers
 
-In the prior two examples, we had the same type of worker, choosing among multiple occupations. There could be different types of workers, unskilled and skilled workers, both of whom can choose among the same set of job possibilities. If the two types of workers do not share any parameters in the occupation-choice problems, then we can estimate their problems separately. However, perhaps on the stay-at-home front, they share the same time trend, which captures overall cultural changes to work vs not-work. And perhaps the wage parameter is the same. On other fronts, they are different with different parameters as well as data inputs. 
+In the prior two examples, we had the same type of worker, choosing among multiple occupations. There could be different types of workers, unskilled and skilled workers, both of whom can choose among the same set of job possibilities. If the two types of workers do not share any parameters in the occupation-choice problems, then we can estimate their problems separately. However, perhaps on the stay-at-home front, they share the same time trend, which captures overall cultural changes to work vs not-work. And perhaps the wage parameter is the same. On other fronts, they are different with different parameters as well as data inputs.
 
 So we have:
 
@@ -410,14 +410,14 @@ $$
 
 In the new data structure for this section, we have:
 
-1. $k$- and $m$-specific variables: indicators 
+1. $k$- and $m$-specific variables: indicators
 2. $k$- and $m$- and $t$-specific variable: wages
 3. $t$-specific variable: dates
 4. $k$- and $t$-specific variable: hometech
 
 ##### Simulate Market Share
 
-In the simulation example, store all K types and T time periods as rows, and the M occupational types as columns. 
+In the simulation example, store all K types and T time periods as rows, and the M occupational types as columns.
 
 ```{r}
 # set seed
@@ -427,7 +427,7 @@ it_K <- 2
 it_T <- 3
 it_M <- 4
 # define alpha and beta parameters
-mt_alpha <- matrix(runif(it_K*it_M)*0.5, nrow=it_K, ncol=it_M) 
+mt_alpha <- matrix(runif(it_K*it_M)*0.5, nrow=it_K, ncol=it_M)
 colnames(mt_alpha) <- paste0('m', seq(1,dim(mt_alpha)[2]))
 rownames(mt_alpha) <- paste0('k', seq(1,dim(mt_alpha)[1]))
 fl_beta <- runif(1)*0.25
@@ -444,7 +444,7 @@ mt_hometech <- sapply(seq(1,it_K), function(i){sort(runif(it_T))})
 colnames(mt_hometech) <- paste0('k', seq(1,dim(mt_hometech)[2]))
 rownames(mt_hometech) <- paste0('t', seq(1,dim(mt_hometech)[1]))
 # Define a probability assignment function
-ffi_logit_prob3_alpha_beta <- function(it_K, it_T, it_M, 
+ffi_logit_prob3_alpha_beta <- function(it_K, it_T, it_M,
   mt_alpha, fl_beta, fl_phi, ar_theta, mt_hometech, mt_wages) {
 
   # Aggregate probabilities
@@ -476,7 +476,7 @@ ffi_logit_prob3_alpha_beta <- function(it_K, it_T, it_M,
 
 }
 # Show probabilities
-mt_prob_o3_full <- ffi_logit_prob3_alpha_beta(it_K, it_T, it_M, 
+mt_prob_o3_full <- ffi_logit_prob3_alpha_beta(it_K, it_T, it_M,
   mt_alpha, fl_beta, fl_phi, ar_theta, mt_hometech, mt_wages)
 # Selected only probability columns
 mt_prob_o3 <- mt_prob_o3_full[, 3:dim(mt_prob_o3_full)[2]]
@@ -495,11 +495,11 @@ mt_prob_rela_m2leisure3 <- mt_prob_o3[, 2:(it_M+1)]/mt_prob_o3[, 1]
 # kable(log(mt_prob_rela_m2leisure3/mt_prob_o3[, 1]), caption=st_caption) %>% kable_styling_fc()
 ```
 
-Third, construct the estimation input matrices as before. There are $K \times M$ indicator vectors, a time variable, a HOMETECH variable, and 1 wage vector for data inputs. The indicator vectors are specific interecept for each type of worker (skilled or not) and for each occupation. Note: 
+Third, construct the estimation input matrices as before. There are $K \times M$ indicator vectors, a time variable, a HOMETECH variable, and 1 wage vector for data inputs. The indicator vectors are specific interecept for each type of worker (skilled or not) and for each occupation. Note:
 
-1. $k$ and $m$ specific indicators 
+1. $k$ and $m$ specific indicators
 2. $k$ specific hometech coefficients
-3. common time coefficient 
+3. common time coefficient
 4. common coefficient for wage
 
 ```{r}
@@ -510,11 +510,11 @@ colnames(mt_prob_ols_input3) <- paste0('m', seq(1,dim(mt_prob_ols_input3)[2]))
 rownames(mt_prob_ols_input3) <- paste0('rowkxMxT', seq(1,dim(mt_prob_ols_input3)[1]))
 
 # LHS variable meshed store
-ar_prob_ols_mesh_kmt <- matrix(data=NA, nrow=it_K*it_T*it_M, ncol=1) 
+ar_prob_ols_mesh_kmt <- matrix(data=NA, nrow=it_K*it_T*it_M, ncol=1)
 # RHS variables meshed store
 mt_indi_mesh_kmt <- matrix(data=NA, nrow=it_K*it_T*it_M, ncol=it_K*it_M)
-ar_time_mesh_kmt <- matrix(data=NA, nrow=it_K*it_T*it_M, ncol=1) 
-ar_wage_mesh_kmt <- matrix(data=NA, nrow=it_K*it_T*it_M, ncol=1) 
+ar_time_mesh_kmt <- matrix(data=NA, nrow=it_K*it_T*it_M, ncol=1)
+ar_wage_mesh_kmt <- matrix(data=NA, nrow=it_K*it_T*it_M, ncol=1)
 mt_hometech_mesh_kmt <- matrix(data=NA, nrow=it_K*it_T*it_M, ncol=it_K)
 
 # Loop over columns
@@ -527,25 +527,25 @@ for (it_r_k in seq(1, it_K)) {
     # Update name of indicator column
     colnames(mt_prob_ols_input3)[it_kxm_ctr] <- paste0('i_k', it_r_k, 'm', it_r_m)
     # Start and end row for the indictor function mt_indi_mesh_kmt
-    it_indi_str_row <- (it_kxm_ctr-1)*it_T 
+    it_indi_str_row <- (it_kxm_ctr-1)*it_T
     it_indi_end_row <- (it_kxm_ctr+0)*it_T
 
     # Update names of the hometech column
     colnames(mt_prob_ols_input3)[it_K*it_M + it_r_k] <- paste0('hometech_k', it_r_k)
     # Start and end row for the indictor function mt_hometech_mesh_kmt
-    it_hometech_str_row <- (it_r_k-1)*it_M*it_T 
+    it_hometech_str_row <- (it_r_k-1)*it_M*it_T
     it_hometech_end_row <- (it_r_k+0)*it_M*it_T
 
     # Loop over rows
     it_rowKxT <- 0
-    it_rowKxTxM <- 0    
-    for (it_k in seq(1, it_K)) {      
+    it_rowKxTxM <- 0
+    for (it_k in seq(1, it_K)) {
       for (it_m in seq(1, it_M)) {
         for (it_t in seq(1, it_T)) {
 
           # KxT group counter
           it_rowKxT <- it_T*(it_k-1) + it_t
-          
+
           # Row counter
           it_rowKxTxM <- it_rowKxTxM + 1
 
@@ -562,7 +562,7 @@ for (it_r_k in seq(1, it_K)) {
               mt_hometech_mesh_kmt[it_rowKxTxM, it_r_k] <- mt_hometech[it_t, it_k]
             } else {
               mt_hometech_mesh_kmt[it_rowKxTxM, it_r_k] <- 0
-            }        
+            }
           }
 
           # Only need to do once, homogeneous across K, M and T
@@ -576,7 +576,7 @@ for (it_r_k in seq(1, it_K)) {
           }
         }
       }
-    }      
+    }
   }
 }
 # Indicators are the earlier columns
@@ -620,7 +620,7 @@ ls_coefficients_true <- vector(mode = "list", length = 0)
 ar_coefficients3 <- fit_ols_agg_prob3$coefficients
 it_col_end <- 0
 for (it_coef_grp in c(1,2,3,4)) {
-  it_col_str <- it_col_end + 1  
+  it_col_str <- it_col_end + 1
   if (it_coef_grp == 1) {
     it_grp_coef_cnt <- (it_K*it_M)
     st_coef_name <- 'indi_km'
@@ -659,11 +659,11 @@ print(ls_coefficients_esti)
 print(ls_coefficients_true)
 
 # Simulate given estimated parameters using earlier function
-mt_prob_o3_full_esti <- ffi_logit_prob3_alpha_beta(it_K, it_T, it_M, 
+mt_prob_o3_full_esti <- ffi_logit_prob3_alpha_beta(it_K, it_T, it_M,
   ls_coefficients_esti[['indi_km']],
-  ls_coefficients_esti[['wage']], 
-  ls_coefficients_esti[['time']], 
-  ls_coefficients_esti[['hometech_k']], 
+  ls_coefficients_esti[['wage']],
+  ls_coefficients_esti[['time']],
+  ls_coefficients_esti[['hometech_k']],
   mt_hometech, mt_wages)
 # Results
 st_caption <- 'Predicted probabilities based on estimates'

@@ -129,7 +129,7 @@ set.seed(123)
 it_T <- 5
 it_M <- 4
 # define alpha and beta parameters
-ar_alpha <- runif(it_M)*0.5 
+ar_alpha <- runif(it_M)*0.5
 fl_beta <- runif(1)*0.25
 # also negative time-trend from home category perspective, culturally increasingly accepting of work
 fl_phi <- -runif(1)*0.50
@@ -257,7 +257,7 @@ it_K <- 2
 it_T <- 3
 it_M <- 4
 # define alpha and beta parameters
-mt_alpha <- matrix(runif(it_K*it_M)*0.5, nrow=it_K, ncol=it_M) 
+mt_alpha <- matrix(runif(it_K*it_M)*0.5, nrow=it_K, ncol=it_M)
 colnames(mt_alpha) <- paste0('m', seq(1,dim(mt_alpha)[2]))
 rownames(mt_alpha) <- paste0('k', seq(1,dim(mt_alpha)[1]))
 fl_beta <- runif(1)*0.25
@@ -274,7 +274,7 @@ mt_hometech <- sapply(seq(1,it_K), function(i){sort(runif(it_T))})
 colnames(mt_hometech) <- paste0('k', seq(1,dim(mt_hometech)[2]))
 rownames(mt_hometech) <- paste0('t', seq(1,dim(mt_hometech)[1]))
 # Define a probability assignment function
-ffi_logit_prob3_alpha_beta <- function(it_K, it_T, it_M, 
+ffi_logit_prob3_alpha_beta <- function(it_K, it_T, it_M,
   mt_alpha, fl_beta, fl_phi, ar_theta, mt_hometech, mt_wages) {
 
   # Aggregate probabilities
@@ -306,7 +306,7 @@ ffi_logit_prob3_alpha_beta <- function(it_K, it_T, it_M,
 
 }
 # Show probabilities
-mt_prob_o3_full <- ffi_logit_prob3_alpha_beta(it_K, it_T, it_M, 
+mt_prob_o3_full <- ffi_logit_prob3_alpha_beta(it_K, it_T, it_M,
   mt_alpha, fl_beta, fl_phi, ar_theta, mt_hometech, mt_wages)
 # Selected only probability columns
 mt_prob_o3 <- mt_prob_o3_full[, 3:dim(mt_prob_o3_full)[2]]
@@ -329,11 +329,11 @@ colnames(mt_prob_ols_input3) <- paste0('m', seq(1,dim(mt_prob_ols_input3)[2]))
 rownames(mt_prob_ols_input3) <- paste0('rowkxMxT', seq(1,dim(mt_prob_ols_input3)[1]))
 
 # LHS variable meshed store
-ar_prob_ols_mesh_kmt <- matrix(data=NA, nrow=it_K*it_T*it_M, ncol=1) 
+ar_prob_ols_mesh_kmt <- matrix(data=NA, nrow=it_K*it_T*it_M, ncol=1)
 # RHS variables meshed store
 mt_indi_mesh_kmt <- matrix(data=NA, nrow=it_K*it_T*it_M, ncol=it_K*it_M)
-ar_time_mesh_kmt <- matrix(data=NA, nrow=it_K*it_T*it_M, ncol=1) 
-ar_wage_mesh_kmt <- matrix(data=NA, nrow=it_K*it_T*it_M, ncol=1) 
+ar_time_mesh_kmt <- matrix(data=NA, nrow=it_K*it_T*it_M, ncol=1)
+ar_wage_mesh_kmt <- matrix(data=NA, nrow=it_K*it_T*it_M, ncol=1)
 mt_hometech_mesh_kmt <- matrix(data=NA, nrow=it_K*it_T*it_M, ncol=it_K)
 
 # Loop over columns
@@ -346,25 +346,25 @@ for (it_r_k in seq(1, it_K)) {
     # Update name of indicator column
     colnames(mt_prob_ols_input3)[it_kxm_ctr] <- paste0('i_k', it_r_k, 'm', it_r_m)
     # Start and end row for the indictor function mt_indi_mesh_kmt
-    it_indi_str_row <- (it_kxm_ctr-1)*it_T 
+    it_indi_str_row <- (it_kxm_ctr-1)*it_T
     it_indi_end_row <- (it_kxm_ctr+0)*it_T
 
     # Update names of the hometech column
     colnames(mt_prob_ols_input3)[it_K*it_M + it_r_k] <- paste0('hometech_k', it_r_k)
     # Start and end row for the indictor function mt_hometech_mesh_kmt
-    it_hometech_str_row <- (it_r_k-1)*it_M*it_T 
+    it_hometech_str_row <- (it_r_k-1)*it_M*it_T
     it_hometech_end_row <- (it_r_k+0)*it_M*it_T
 
     # Loop over rows
     it_rowKxT <- 0
-    it_rowKxTxM <- 0    
-    for (it_k in seq(1, it_K)) {      
+    it_rowKxTxM <- 0
+    for (it_k in seq(1, it_K)) {
       for (it_m in seq(1, it_M)) {
         for (it_t in seq(1, it_T)) {
 
           # KxT group counter
           it_rowKxT <- it_T*(it_k-1) + it_t
-          
+
           # Row counter
           it_rowKxTxM <- it_rowKxTxM + 1
 
@@ -381,7 +381,7 @@ for (it_r_k in seq(1, it_K)) {
               mt_hometech_mesh_kmt[it_rowKxTxM, it_r_k] <- mt_hometech[it_t, it_k]
             } else {
               mt_hometech_mesh_kmt[it_rowKxTxM, it_r_k] <- 0
-            }        
+            }
           }
 
           # Only need to do once, homogeneous across K, M and T
@@ -395,7 +395,7 @@ for (it_r_k in seq(1, it_K)) {
           }
         }
       }
-    }      
+    }
   }
 }
 # Indicators are the earlier columns
@@ -434,7 +434,7 @@ ls_coefficients_true <- vector(mode = "list", length = 0)
 ar_coefficients3 <- fit_ols_agg_prob3$coefficients
 it_col_end <- 0
 for (it_coef_grp in c(1,2,3,4)) {
-  it_col_str <- it_col_end + 1  
+  it_col_str <- it_col_end + 1
   if (it_coef_grp == 1) {
     it_grp_coef_cnt <- (it_K*it_M)
     st_coef_name <- 'indi_km'
@@ -473,11 +473,11 @@ print(ls_coefficients_esti)
 print(ls_coefficients_true)
 
 # Simulate given estimated parameters using earlier function
-mt_prob_o3_full_esti <- ffi_logit_prob3_alpha_beta(it_K, it_T, it_M, 
+mt_prob_o3_full_esti <- ffi_logit_prob3_alpha_beta(it_K, it_T, it_M,
   ls_coefficients_esti[['indi_km']],
-  ls_coefficients_esti[['wage']], 
-  ls_coefficients_esti[['time']], 
-  ls_coefficients_esti[['hometech_k']], 
+  ls_coefficients_esti[['wage']],
+  ls_coefficients_esti[['time']],
+  ls_coefficients_esti[['hometech_k']],
   mt_hometech, mt_wages)
 # Results
 st_caption <- 'Predicted probabilities based on estimates'

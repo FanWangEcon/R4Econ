@@ -221,7 +221,7 @@
 2. [Estimate Logistic Choice Model with Aggregate Shares](https://fanwangecon.github.io/R4Econ/regnonlin/logit/htmlpdfr/fs_logit_aggregate_shares.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/logit//fs_logit_aggregate_shares.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/logit/htmlpdfr/fs_logit_aggregate_shares.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/logit/htmlpdfr/fs_logit_aggregate_shares.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/regnonlin/logit/htmlpdfr/fs_logit_aggregate_shares.html)
 	+ Aggregate share logistic OLS with K worker types, T time periods and M occupations.
 	+ Estimate logistic choice model with aggregate shares, allowing for occupation-specific wages and occupation-specific intercepts.
-	+ Estimate allowing for K and M specific intercepts, K and M specific coefficients, and homogeneous coefficients. 
+	+ Estimate allowing for K and M specific intercepts, K and M specific coefficients, and homogeneous coefficients.
 	+ Create input matrix data structures for logistic aggregate share estimation.
 	+ **stats**: *lm(y ~ . -1)*
 3. [Fit Prices Given Quantities Logistic Choice with Aggregate Data](https://fanwangecon.github.io/R4Econ/regnonlin/logit/htmlpdfr/fs_logit_aggregate_share_to_price.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/logit//fs_logit_aggregate_share_to_price.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/logit/htmlpdfr/fs_logit_aggregate_share_to_price.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/logit/htmlpdfr/fs_logit_aggregate_share_to_price.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/regnonlin/logit/htmlpdfr/fs_logit_aggregate_share_to_price.html)
@@ -254,7 +254,9 @@
 
 ## 8.2  Basics
 
-1. [Positive and Negative Exponents x is Below or Above 1](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_exponents.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_exponents.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_exponents.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_exponents.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_exponents.html)
+1. [Rescaling Bounded Parameter to be Unbounded and Positive and Negative Exponents with Different Bases](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_exponents.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_exponents.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_exponents.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_exponents.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_exponents.html)
+	+ Log of alternative bases, bases that are not e, 10 or 2. 
+	+ A parameter is constrained between 1 and negative infinity, use exponentials of different bases to scale the bounded parameter to an unbounded parameter.    
 	+ Positive exponentials are strictly increasing. Negative exponentials are strictly decreasing.
 	+ A positive number below 1 to a negative exponents is above 1, and a positive number above 1 to a negative exponents is below 1.
 	+ **graphics**: *plot(x, y) + title() + legend()*

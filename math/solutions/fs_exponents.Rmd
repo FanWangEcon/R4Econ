@@ -1,7 +1,9 @@
 ---
-title: "Positive and Negative Exponents when x is Below or Above 1"
-titleshort: "Positive and Negative Exponents x is Below or Above 1"
+title: "Rescaling Bounded Parameter to be Unbounded and Positive and Negative Exponents with Different Bases"
+titleshort: "Rescaling Bounded Parameter to be Unbounded and Positive and Negative Exponents with Different Bases"
 description: |
+  Log of alternative bases, bases that are not e, 10 or 2. 
+  A parameter is constrained between 1 and negative infinity, use exponentials of different bases to scale the bounded parameter to an unbounded parameter.    
   Positive exponentials are strictly increasing. Negative exponentials are strictly decreasing.
   A positive number below 1 to a negative exponents is above 1, and a positive number above 1 to a negative exponents is below 1.
 core:
@@ -10,7 +12,7 @@ core:
       plot(x, y)
       title()
       legend()
-date: 2021-05-23
+date: 2021-06-29
 date_start: 2021-05-23
 output:
   pdf_document:
@@ -25,7 +27,7 @@ always_allow_html: true
 urlcolor: blue
 ---
 
-### Positive and Negative Exponents
+### Log with Different Bases and Exponents
 
 ```{r global_options, include = FALSE}
 try(source("../../.Rprofile"))
@@ -35,6 +37,77 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
 
+#### Log of Bases that Are not 10, 2 and e
+
+What is $y$ below, with arbitrary base $x$? It is $y=\frac{\log\left(z\right)}{\log\left(x\right)}$, because:
+$$
+\begin{aligned}
+x^y &= z\\
+x^{\frac{\log\left(z\right)}{\log\left(x\right)}}&=z\\
+\log\left(x^{\frac{\log\left(z\right)}{\log\left(x\right)}}\right)&=\log\left(z\right)\\
+\frac{\log\left(z\right)}{\log\left(x\right)}\log\left(x\right)&=\log\left(z\right)\\
+\frac{\log\left(z\right)}{\log\left(x\right)}&=\frac{\log\left(z\right)}{\log\left(x\right)}\\
+\end{aligned}
+$$
+
+Given these, we can compute the exponents, $y$, for non-standard bases, $x$, given the value for $z$.
+
+```{r}
+# base 1.1
+x <- 1.1
+y <- 5.5
+z <- x^y
+# given z and knowing x, and what is y?
+y_solved <- log(z) / log(x)
+# dispaly
+print(paste0("y_solved=", y_solved, ", y=", y))
+```
+
+#### Rescale Bounded Model Parameters to Unconstrained with Exponentiation
+
+We have a parameter to be estimated, the parameter's values can range between positive 1 and negative infinity. We want to use an estimator that us unconstrained. Use exponentiation to rescale the parameter so that is become unconstrained, use different bases so that the speed at which the parameter value approaches its bounds can be controlled. 
+
+While $y$ is not bounded, $f(y;x)$ is bounded:
+$$
+\begin{aligned}
+&f(y; x) = 1 - x^{y}\\
+&\text{where } x >1 \text{ and }  -\infty < y < \infty\\
+&\text{then, } 1 > f(y; x) > -\infty
+\end{aligned}
+$$
+
+With $x>1$, as $y$ increases $f(y;x)$ decreases:
+$$
+\frac{d f(y; x)}{dy} = - x^{y}\log(x) < 0 \text{ when } x > 1
+$$
+
+$x$ controls the speed at which $f(y)$ approaches its bounds. In the simulation below, we try a number of different bases, at higher bases (2, e=2.71, 10), as $y$ value changes $f(y)$ shifts too quickly to the bounds. But a base value of $x=1.03$ or $x=1.04$ would work well in an unbounded estimation routine that still generates parameters within bounds, which is below 1 in the case here. 
+
+```{r}
+# Vector of unbounded values, high and low
+ar_y_vals <- sort(rnorm(20, 0, 20))
+# Different base values
+ar_bases <- c(1.01, 1.02, 1.03, 1.04, 1.1, 2, 2.71, 10)
+# Transform back to f(y) scale with different bases
+mt_f_of_y_vary_x <- matrix(NA,
+  nrow = length(ar_y_vals),
+  ncol = 1 + length(ar_bases)
+)
+ar_st_varnames <- c("yvalidx", "y_vals", paste0("base", ar_bases))
+mt_f_of_y_vary_x[, 1] <- ar_y_vals
+for (it_base in seq(1, length(ar_bases))) {
+  fl_base <- ar_bases[it_base]
+  ar_f_y <- 1 - fl_base^ar_y_vals
+  mt_f_of_y_vary_x[, 1 + it_base] <- ar_f_y
+}
+# To tibble
+tb_f_of_y_vary_x <- as_tibble(mt_f_of_y_vary_x) %>%
+  rowid_to_column(var = "id") %>%
+  rename_all(~ c(ar_st_varnames))
+# Print
+kable(tb_f_of_y_vary_x) %>% kable_styling_fc_wide()
+```
+
 #### Positive Exponents
 
 Define exponents to consider and x-values to consider.
@@ -43,14 +116,14 @@ Define exponents to consider and x-values to consider.
 # positive value exponents
 ar_exponents_posv <- c(0.05, 0.5, 1, 1.5)
 # positive and negative values of the base
-ar_baseval_pos <- seq(1e-10, 1.5, length.out=1000)
+ar_baseval_pos <- seq(1e-10, 1.5, length.out = 1000)
 # base to power
-mt_x2a_val <- matrix(data=NA, nrow=length(ar_exponents_posv), ncol=length(ar_baseval_pos))
+mt_x2a_val <- matrix(data = NA, nrow = length(ar_exponents_posv), ncol = length(ar_baseval_pos))
 # Generate values
 it_row_ctr <- 0
 for (fl_exponents_posv in ar_exponents_posv) {
   it_row_ctr <- it_row_ctr + 1
-  mt_x2a_val[it_row_ctr,] <- ar_baseval_pos^fl_exponents_posv
+  mt_x2a_val[it_row_ctr, ] <- ar_baseval_pos^fl_exponents_posv
 }
 ```
 
@@ -61,56 +134,63 @@ Note we also have: $\lim_{a\rightarrow 0} x^a = 1$ and $\lim_{a\rightarrow 1} x^
 
 ```{r}
 # x and bounds
-ar_xlim = c(min(ar_baseval_pos), max(ar_baseval_pos))
-ar_ylim = c(0, 1.5)
+ar_xlim <- c(min(ar_baseval_pos), max(ar_baseval_pos))
+ar_ylim <- c(0, 1.5)
 # function line
-st_line_1_y_legend <- paste0('x^', ar_exponents_posv[1])
-st_line_2_y_legend <- paste0('x^', ar_exponents_posv[2])
-st_line_3_y_legend <- paste0('x^', ar_exponents_posv[3])
-st_line_4_y_legend <- paste0('x^', ar_exponents_posv[4])
+st_line_1_y_legend <- paste0("x^", ar_exponents_posv[1])
+st_line_2_y_legend <- paste0("x^", ar_exponents_posv[2])
+st_line_3_y_legend <- paste0("x^", ar_exponents_posv[3])
+st_line_4_y_legend <- paste0("x^", ar_exponents_posv[4])
 # Color and line
 st_point_1_pch <- 10
 st_point_1_cex <- 2
-ar_colors <- c('blue', 'red', 'black', 'orange')
-ar_ltys <- c('solid', 'dashed', 'dotted', 'dotdash')
+ar_colors <- c("blue", "red", "black", "orange")
+ar_ltys <- c("solid", "dashed", "dotted", "dotdash")
 # Graph and combine
-for (it_graph in c(1,2,3,4)) {
+for (it_graph in c(1, 2, 3, 4)) {
   if (it_graph != 1) {
-    par(new=T)
+    par(new = T)
   }
   ar_y_current <- mt_x2a_val[it_graph, ]
-  plot(ar_baseval_pos, ar_y_current, type="l",
-       col = ar_colors[it_graph], lty = ar_ltys[it_graph],
-       pch = 10, cex = 2, xlim = ar_xlim, ylim = ar_ylim, panel.first = grid(),
-       ylab = '', xlab = '', yaxt='n', xaxt='n', ann=FALSE)
+  plot(ar_baseval_pos, ar_y_current,
+    type = "l",
+    col = ar_colors[it_graph], lty = ar_ltys[it_graph],
+    pch = 10, cex = 2, xlim = ar_xlim, ylim = ar_ylim, panel.first = grid(),
+    ylab = "", xlab = "", yaxt = "n", xaxt = "n", ann = FALSE
+  )
   plot_line <- recordPlot()
 }
 # CEX sizing Contorl Titling and Legend Sizes
-fl_ces_fig_reg = 1
-fl_ces_fig_small = 0.75
+fl_ces_fig_reg <- 1
+fl_ces_fig_small <- 0.75
 # R Legend
-st_title <- paste0('Positive Exponential Graphing')
-st_subtitle <- paste0('https://fanwangecon.github.io/',
-                      'R4Econ/math/solutions/htmlpdfr/fs_inequality.html')
-st_x_label <- 'x'
-st_y_label <- 'x^exponent'
-title(main = st_title, sub = st_subtitle, xlab = st_x_label, ylab = st_y_label,
-      cex.lab=fl_ces_fig_reg,
-      cex.main=fl_ces_fig_reg,
-      cex.sub=fl_ces_fig_small)
-axis(1, cex.axis=fl_ces_fig_reg)
-axis(2, cex.axis=fl_ces_fig_reg)
+st_title <- paste0("Positive Exponential Graphing")
+st_subtitle <- paste0(
+  "https://fanwangecon.github.io/",
+  "R4Econ/math/solutions/htmlpdfr/fs_inequality.html"
+)
+st_x_label <- "x"
+st_y_label <- "x^exponent"
+title(
+  main = st_title, sub = st_subtitle, xlab = st_x_label, ylab = st_y_label,
+  cex.lab = fl_ces_fig_reg,
+  cex.main = fl_ces_fig_reg,
+  cex.sub = fl_ces_fig_small
+)
+axis(1, cex.axis = fl_ces_fig_reg)
+axis(2, cex.axis = fl_ces_fig_reg)
 grid()
 # Legend sizing CEX
 legend("bottomright",
-       inset=c(0,0),
-       xpd=TRUE,
-       c(st_line_1_y_legend, st_line_2_y_legend, st_line_3_y_legend, st_line_4_y_legend),
-       col = c(ar_colors[1], ar_colors[2], ar_colors[3], ar_colors[4]),
-       cex = fl_ces_fig_small,
-       lty = c(ar_ltys[1], ar_ltys[2], ar_ltys[3], ar_ltys[4]),
-       title = 'Legends',
-       y.intersp=2)
+  inset = c(0, 0),
+  xpd = TRUE,
+  c(st_line_1_y_legend, st_line_2_y_legend, st_line_3_y_legend, st_line_4_y_legend),
+  col = c(ar_colors[1], ar_colors[2], ar_colors[3], ar_colors[4]),
+  cex = fl_ces_fig_small,
+  lty = c(ar_ltys[1], ar_ltys[2], ar_ltys[3], ar_ltys[4]),
+  title = "Legends",
+  y.intersp = 2
+)
 ```
 
 #### Negative Exponents
@@ -121,14 +201,14 @@ Similar to above, but now with negative exonents.
 # positive value exponents
 ar_exponents_posv <- -c(0.05, 0.5, 1, 1.5)
 # positive and negative values of the base
-ar_baseval_pos <- seq(1e-10, 1.5, length.out=1000)
+ar_baseval_pos <- seq(1e-10, 1.5, length.out = 1000)
 # base to power
-mt_x2a_val <- matrix(data=NA, nrow=length(ar_exponents_posv), ncol=length(ar_baseval_pos))
+mt_x2a_val <- matrix(data = NA, nrow = length(ar_exponents_posv), ncol = length(ar_baseval_pos))
 # Generate values
 it_row_ctr <- 0
 for (fl_exponents_posv in ar_exponents_posv) {
   it_row_ctr <- it_row_ctr + 1
-  mt_x2a_val[it_row_ctr,] <- ar_baseval_pos^fl_exponents_posv
+  mt_x2a_val[it_row_ctr, ] <- ar_baseval_pos^fl_exponents_posv
 }
 ```
 
@@ -136,56 +216,63 @@ For positive exponents, when $x<1$, $x^a<1$, when $x>1$, $x^a>1$. For negative e
 
 ```{r}
 # x and bounds
-ar_xlim = c(min(ar_baseval_pos), max(ar_baseval_pos))
-ar_ylim = c(0, 3)
+ar_xlim <- c(min(ar_baseval_pos), max(ar_baseval_pos))
+ar_ylim <- c(0, 3)
 # function line
-st_line_1_y_legend <- paste0('x^', ar_exponents_posv[1])
-st_line_2_y_legend <- paste0('x^', ar_exponents_posv[2])
-st_line_3_y_legend <- paste0('x^', ar_exponents_posv[3])
-st_line_4_y_legend <- paste0('x^', ar_exponents_posv[4])
+st_line_1_y_legend <- paste0("x^", ar_exponents_posv[1])
+st_line_2_y_legend <- paste0("x^", ar_exponents_posv[2])
+st_line_3_y_legend <- paste0("x^", ar_exponents_posv[3])
+st_line_4_y_legend <- paste0("x^", ar_exponents_posv[4])
 # Color and line
 st_point_1_pch <- 10
 st_point_1_cex <- 2
-ar_colors <- c('blue', 'red', 'black', 'orange')
-ar_ltys <- c('solid', 'dashed', 'dotted', 'dotdash')
+ar_colors <- c("blue", "red", "black", "orange")
+ar_ltys <- c("solid", "dashed", "dotted", "dotdash")
 # Graph and combine
-for (it_graph in c(1,2,3,4)) {
+for (it_graph in c(1, 2, 3, 4)) {
   if (it_graph != 1) {
-    par(new=T)
+    par(new = T)
   }
   ar_y_current <- mt_x2a_val[it_graph, ]
-  plot(ar_baseval_pos, ar_y_current, type="l",
-       col = ar_colors[it_graph], lty = ar_ltys[it_graph],
-       pch = 10, cex = 2, xlim = ar_xlim, ylim = ar_ylim, panel.first = grid(),
-       ylab = '', xlab = '', yaxt='n', xaxt='n', ann=FALSE)
+  plot(ar_baseval_pos, ar_y_current,
+    type = "l",
+    col = ar_colors[it_graph], lty = ar_ltys[it_graph],
+    pch = 10, cex = 2, xlim = ar_xlim, ylim = ar_ylim, panel.first = grid(),
+    ylab = "", xlab = "", yaxt = "n", xaxt = "n", ann = FALSE
+  )
   plot_line <- recordPlot()
 }
 # CEX sizing Contorl Titling and Legend Sizes
-fl_ces_fig_reg = 1
-fl_ces_fig_small = 0.75
+fl_ces_fig_reg <- 1
+fl_ces_fig_small <- 0.75
 # R Legend
-st_title <- paste0('Negative Exponential Graphing')
-st_subtitle <- paste0('https://fanwangecon.github.io/',
-                      'R4Econ/math/solutions/htmlpdfr/fs_inequality.html')
-st_x_label <- 'x'
-st_y_label <- 'x^exponent'
-title(main = st_title, sub = st_subtitle, xlab = st_x_label, ylab = st_y_label,
-      cex.lab=fl_ces_fig_reg,
-      cex.main=fl_ces_fig_reg,
-      cex.sub=fl_ces_fig_small)
-axis(1, cex.axis=fl_ces_fig_reg)
-axis(2, cex.axis=fl_ces_fig_reg)
+st_title <- paste0("Negative Exponential Graphing")
+st_subtitle <- paste0(
+  "https://fanwangecon.github.io/",
+  "R4Econ/math/solutions/htmlpdfr/fs_inequality.html"
+)
+st_x_label <- "x"
+st_y_label <- "x^exponent"
+title(
+  main = st_title, sub = st_subtitle, xlab = st_x_label, ylab = st_y_label,
+  cex.lab = fl_ces_fig_reg,
+  cex.main = fl_ces_fig_reg,
+  cex.sub = fl_ces_fig_small
+)
+axis(1, cex.axis = fl_ces_fig_reg)
+axis(2, cex.axis = fl_ces_fig_reg)
 grid()
 # Legend sizing CEX
 legend("topright",
-       inset=c(0,0),
-       xpd=TRUE,
-       c(st_line_1_y_legend, st_line_2_y_legend, st_line_3_y_legend, st_line_4_y_legend),
-       col = c(ar_colors[1], ar_colors[2], ar_colors[3], ar_colors[4]),
-       cex = fl_ces_fig_small,
-       lty = c(ar_ltys[1], ar_ltys[2], ar_ltys[3], ar_ltys[4]),
-       title = 'Legends',
-       y.intersp=2)
+  inset = c(0, 0),
+  xpd = TRUE,
+  c(st_line_1_y_legend, st_line_2_y_legend, st_line_3_y_legend, st_line_4_y_legend),
+  col = c(ar_colors[1], ar_colors[2], ar_colors[3], ar_colors[4]),
+  cex = fl_ces_fig_small,
+  lty = c(ar_ltys[1], ar_ltys[2], ar_ltys[3], ar_ltys[4]),
+  title = "Legends",
+  y.intersp = 2
+)
 ```
 
 #### Inequality and Exponents
