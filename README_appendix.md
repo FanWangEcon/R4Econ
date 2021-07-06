@@ -249,14 +249,7 @@
 
 ## Mathematics links
 
-### [Section 8.1 Production Function][Production Function] links
-
-1. [Nested Constant Elasticity of Substitution Production Function](https://fanwangecon.github.io/R4Econ/math/func_prod/htmlpdfr/fs_nested_CES.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod//fs_nested_CES.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod/htmlpdfr/fs_nested_CES.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod/htmlpdfr/fs_nested_CES.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/func_prod/htmlpdfr/fs_nested_CES.html)
-	+ A nested-CES production function with nest-specific elasticities.
-	+ Re-state the nested-CES problem as several sub-problems.
-	+ Marginal products and its relationship to prices in expenditure minimization.
-
-### [Section 8.2 Basics][Basics] links
+### [Section 8.1 Basics][Basics] links
 
 1. [Rescaling Bounded Parameter to be Unbounded and Positive and Negative Exponents with Different Bases](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_exponents.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_exponents.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_exponents.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_exponents.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_exponents.html)
 	+ Log of alternative bases, bases that are not e, 10 or 2. 
@@ -272,6 +265,13 @@
 	+ **graphics**: *par(mfrow = c(1, 1)) + curve(fc) + points(x, y) + abline(v=0, h=0)*
 4. [linear solve x with f(x) = 0](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_solu_x_lin.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_solu_x_lin.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_solu_x_lin.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_solu_x_lin.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_solu_x_lin.html)
 	+ Evaluate and solve statistically relevant problems with one equation and one unknown that permit analytical solutions.
+
+### [Section 8.2 Production Function][Production Function] links
+
+1. [Nested Constant Elasticity of Substitution Production Function](https://fanwangecon.github.io/R4Econ/math/func_prod/htmlpdfr/fs_nested_CES.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod//fs_nested_CES.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod/htmlpdfr/fs_nested_CES.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod/htmlpdfr/fs_nested_CES.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/func_prod/htmlpdfr/fs_nested_CES.html)
+	+ A nested-CES production function with nest-specific elasticities.
+	+ Re-state the nested-CES problem as several sub-problems.
+	+ Marginal products and its relationship to prices in expenditure minimization.
 
 ### [Section 8.3 Inequality Models][Inequality Models] links
 
@@ -297,13 +297,21 @@
 
 ## Statistics links
 
-### [Section 9.1 Distributions][Distributions] links
+### [Section 9.1 Random Draws][Random Draws] links
+
+1. [Randomly Perturb Some Parameter Value with Varying Magnitudes](https://fanwangecon.github.io/R4Econ/statistics/random/htmlpdfr/fs_perturb_parameter.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/random//fs_perturb_parameter.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/random/htmlpdfr/fs_perturb_parameter.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/random/htmlpdfr/fs_perturb_parameter.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/statistics/random/htmlpdfr/fs_perturb_parameter.html)
+	+ Given some existing parameter value, with an intensity value between 0 and 1, decide how to perturb the value.
+	+ **r**: *matrix*
+	+ **stats**: *qlnorm()*
+	+ **graphics**: *par() + hist() + abline()*
+
+### [Section 9.2 Distributions][Distributions] links
 
 1. [Integrate Normal Shocks](https://fanwangecon.github.io/R4Econ/statistics/integration/htmlpdfr/fs_integrate_normal.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/integration//fs_integrate_normal.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/integration/htmlpdfr/fs_integrate_normal.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/integration/htmlpdfr/fs_integrate_normal.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/statistics/integration/htmlpdfr/fs_integrate_normal.html)
 	+ Random Sampling (Monte Carlo) integrate shocks.
 	+ Trapezoidal rule (symmetric rectangles) integrate normal shock.
 
-### [Section 9.2 Discrete Random Variable][Discrete Random Variable] links
+### [Section 9.3 Discrete Random Variable][Discrete Random Variable] links
 
 1. [Binomial Approximation of Normal](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_disc_approx_cts.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar//fs_disc_approx_cts.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_disc_approx_cts.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_disc_approx_cts.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_disc_approx_cts.html)
 	+ Approximate a continuous normal random variable with a discrete binomial random variable.
