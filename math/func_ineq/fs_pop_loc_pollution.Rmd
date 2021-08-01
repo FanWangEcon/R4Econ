@@ -248,11 +248,15 @@ Measure quantiles of pollution exposures for different population groups:
 ```{r}
 # Generate pollution quantiles by population groups
 df_pop_pollution_distribution <- df_pop_pollution_by_popgrp_cdf %>% 
+  group_by(popgrp) %>%
   mutate(pm10_mean = weighted.mean(avgdailypm10, pop_frac)) %>%
+  mutate(pm10_sd_gap = pop_frac*(avgdailypm10 - pm10_mean)^2, 
+         pm10_sd = sqrt(weighted.mean(pm10_sd_gap, pop_frac))) %>%
+  select(-pm10_sd_gap) %>%
   filter(cdf_pop_condi_popgrp_sortpm10 >= 0.10) %>%
   slice(1) %>%
   mutate(pm10_p10 = avgdailypm10) %>%
-  select(popgrp, pm10_mean, pm10_p10) %>%
+  select(popgrp, pm10_mean, pm10_sd, pm10_p10) %>%
   left_join(df_pop_pollu_gini, by='popgrp') %>% 
   left_join(df_pop_pollution_by_popgrp_cdf %>% 
               filter(cdf_pop_condi_popgrp_sortpm10 >= 0.20) %>%
@@ -278,7 +282,7 @@ df_pop_pollution_distribution <- df_pop_pollution_by_popgrp_cdf %>%
               mutate(pm10_p90 = avgdailypm10) %>%
               select(popgrp, pm10_p90), 
             by='popgrp') %>%
-  select(popgrp, pm10_mean, popgrp_gini, everything())
+  select(popgrp, pm10_mean, pm10_sd, popgrp_gini, everything())
 # display
 df_pop_pollution_distribution %>% 
   kable(caption = 'PM10 Exposure Distribution by Population Groups') %>% 
