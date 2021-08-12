@@ -212,7 +212,14 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 # 5  Linear Regression
 
-## 5.1  OLS and IV
+## 5.1  Polynomial Fitting
+
+1. [Fit a Time Series with Polynomial and Analytical Expressions for Coefficients](https://fanwangecon.github.io/R4Econ/linreg/polynomial/htmlpdfr/fs_poly_fit.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/polynomial//fs_poly_fit.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/polynomial/htmlpdfr/fs_poly_fit.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/polynomial/htmlpdfr/fs_poly_fit.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/linreg/polynomial/htmlpdfr/fs_poly_fit.html)
+	+ Given a time series of data points from a polynomial data generating process, solve for the polynomial coefficients. 
+	+ Mth derivative of Mth order polynomial is time invariant, use functions of differences of differences of differences to identify polynomial coefficients analytically. 
+	+ **R**: *matrix multplication*
+
+## 5.2  OLS and IV
 
 1. [IV/OLS Regression](https://fanwangecon.github.io/R4Econ/linreg/ivreg/htmlpdfr/fs_lin_ivregrow.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg//fs_lin_ivregrow.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/htmlpdfr/fs_lin_ivregrow.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/htmlpdfr/fs_lin_ivregrow.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/linreg/ivreg/htmlpdfr/fs_lin_ivregrow.html)
 	+ R Instrumental Variables and Ordinary Least Square Regression store all Coefficients and Diagnostics as Dataframe Row.
@@ -221,7 +228,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ There are M outcome variables and N alternative explanatory variables. Regress all M outcome variables on N endogenous/independent right hand side variables one by one, with controls and/or IVs, collect coefficients.
 	+ **dplyr**: *bind_rows(lapply(listx, function(x)(bind_rows(lapply(listy, regf.iv))) + starts_with() + ends_with() + reduce(full_join)*
 
-## 5.2  Decomposition
+## 5.3  Decomposition
 
 1. [Regression Decomposition](https://fanwangecon.github.io/R4Econ/linreg/decompose/htmlpdfr/fs_lin_decompose.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose//fs_lin_decompose.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose/htmlpdfr/fs_lin_decompose.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose/htmlpdfr/fs_lin_decompose.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/linreg/decompose/htmlpdfr/fs_lin_decompose.html)
 	+ Post multiple regressions, fraction of outcome variables' variances explained by multiple subsets of right hand side variables.
