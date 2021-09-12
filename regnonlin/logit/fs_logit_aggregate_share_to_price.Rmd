@@ -111,6 +111,10 @@ $$
 
 Above, we have a system of equations, with three unknown parameters. Regressing the left-hand-side aggregate share vectors against the matrix of right-hand values composed of $A$ and $P$ values generates $\theta$ values, which then map one to one to the wages. 
 
+An important issue to note is that the "backing-out" procedure does not work with any arbitrary probabilities. Note that $\exp\left(\beta \cdot w_m \right) > 0$. The estimated unknown $\theta_m$ will indeed be positive if the probabilities for example sum up to less than 1, however if the probabilities on the left hand side sum to greater than 1, then $\theta_m < 0$ is possible, which leads to no solutions. 
+
+Additionally, note that while the procedure here is correct, we can also obtain the wages that can explaine observed probabilities simply by using the [log-odds ratio equations](https://fanwangecon.github.io/R4Econ/regnonlin/logit/htmlpdfr/fs_logit_aggregate_shares.html#111_Wage_and_Aggregate_Share_of_Workers). Doing that requires first computing the appropriate log-odds, which requires positive probabilities on the outside option category.
+
 #### Simulate Market Share
 
 In this section, we now simulate the above model, with $M=3$ and data over three periods, and estimate $\alpha$ and $\beta$ via OLS. Note that $m=0$ is leisure. This is identical what is what the [simulate market share](https://fanwangecon.github.io/R4Econ/regnonlin/logit/htmlpdfr/fs_logit_aggregate_shares.html#112_Simulate_Market_Share) section from [Estimate Logistic Choice Model with Aggregate Shares](https://fanwangecon.github.io/R4Econ/regnonlin/logit/htmlpdfr/fs_logit_aggregate_shares.html#11_Logistic_Choices,_Wages_and_Market_Shares).

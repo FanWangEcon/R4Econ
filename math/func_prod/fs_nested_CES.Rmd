@@ -30,7 +30,7 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
 
-#### Denesting the Nested CES Problem
+#### The Nested CES Problem
 
 We have the following production function with four inputs $x_1$, $x_2$, $y_1$ and $y_2$. There are three $\rho$ parameters $\rho_x$, $\rho_y$ and $\rho_o$ that correspond to inner-nest and outter nest elasticity of substitution between inputs. 
 
@@ -68,8 +68,6 @@ Y= Z \cdot
 $$
 
 Note that we are assuming constant-returns to scale in a competitive setting, so firms do not make profits. We solve for expenditure minimization rather than profit maximization. 
-
-Rather than solving the problem above directly in an expenditure minimization, we can divide the problem above into three parts, the **X Problem**, the **Y Problem** and the **Z Problem**.
 
 ##### Marginal Product of Labor 
 
@@ -121,11 +119,16 @@ Z
 \right]
 $$
 
+
 What is the relationship between the marginal product of labor and the wage? Let $\lambda$ be the lagrange multiplier for the overall problem:
 
 $$
 p_{x_1} = \lambda \cdot \left(\frac{\partial Y}{\partial x_1}\right)
 $$
+
+#### Denesting the Nested CES Problem
+
+Rather than solving the problem above directly in an expenditure minimization, we can divide the problem above into three parts, the **X Problem**, the **Y Problem** and the **Z Problem**.
 
 
 ##### Three Denested Sub-problems, X, Y and O Problems
@@ -232,4 +235,286 @@ p_{x_1} =
 \left[
   \beta_{x_1} x_1^{\rho_x-1}
 \right]
+$$
+
+#### Solving the Nested-CES Problem
+
+Conceptually, we can solve the nested-ces problem in two stages. First, given aggregate prices, solve for optimal aggregate inputs. Second, given the aggregate inputs, which are output requirements for inner nests, solve for optimal choices within nests. 
+
+There are two functions of interest, one function provides A
+
+
+
+#### Identification 
+
+##### Relative Marginal Product
+
+Note that $\frac{1}{\rho} - 1 = \frac{1}{\rho} - \frac{\rho}{\rho} = \frac{1-\rho}{\rho}$, and $x^{\frac{1-\rho}{\rho}} = \left(x^{\frac{1}{\rho}}\right)^{1-\rho}$.
+
+Relative marginal product within the same sub-nest:
+
+$$
+\frac{p_{x_1}}{p_{x_2}}
+=\frac{
+  \frac{\partial Y}{\partial x_1}
+}
+{
+  \frac{\partial Y}{\partial x_2}
+}
+=\frac{
+  \rho_x
+  \beta_{x_1} x_1^{\rho_x-1}
+}
+{
+  \rho_x
+  \beta_{x_2} x_2^{\rho_x-1}
+}
+=\frac{\beta_{x_1}}{\beta_{x_2}}\cdot
+\left(\frac{x_1}{x_2}\right)^{\rho_x-1}
+$$
+
+Relative marginal product across subnests:
+
+$$
+\begin{aligned}
+\frac{
+  \frac{\partial Y}{\partial x_1}
+}
+{
+  \frac{\partial Y}{\partial y_1}
+}
+&=\frac{p_{x_1}}{p_{y_1}}
+\\
+\frac{
+  \frac{\partial Y}{\partial x_1}
+}
+{
+  \frac{\partial Y}{\partial y_1}
+}
+&=\frac{
+\left[
+\rho_{o}
+\beta_{o_1}
+\left(
+    \left(
+    \beta_{x_1} x_1^{\rho_x} + \beta_{x_2} x_2^{\rho_x} 
+    \right)^\frac{1}{{\rho_x}}
+\right)^{\rho_{o}-1}
+\right]
+\cdot 
+\left[
+  \frac{1}{{\rho_x}}
+  \left(
+    \beta_{x_1} x_1^{\rho_x} + \beta_{x_2} x_2^{\rho_x} 
+    \right)^{\frac{1}{{\rho_x}} - 1}
+\right]
+\cdot 
+\left[
+  \rho_x
+  \beta_{x_1} x_1^{\rho_x-1}
+\right]
+}
+{
+\left[
+\rho_{o}
+\beta_{o_2}
+\left(
+    \left(
+    \beta_{y_1} y_1^{\rho_y} + \beta_{y_2} y_2^{\rho_y} 
+    \right)^\frac{1}{{\rho_y}}
+\right)^{\rho_{o}-1}
+\right]
+\cdot 
+\left[
+  \frac{1}{{\rho_y}}
+  \left(
+    \beta_{y_1} y_1^{\rho_y} + \beta_{y_2} y_2^{\rho_y} 
+    \right)^{\frac{1}{{\rho_y}} - 1}
+\right]
+\cdot 
+\left[
+  \rho_y
+  \beta_{y_1} y_1^{\rho_y-1}
+\right]
+}\\
+&=\frac{
+\left[
+    \left(
+    \beta_{x_1} x_1^{\rho_x} + \beta_{x_2} x_2^{\rho_x} 
+    \right)^{\frac{\rho_{o}-\rho_x}{{\rho_x}}}
+\right]
+}
+{
+\left[
+    \left(
+    \beta_{y_1} y_1^{\rho_y} + \beta_{y_2} y_2^{\rho_y} 
+    \right)^\frac{\rho_{o}-\rho_y}{{\rho_y}}
+\right]
+}
+\cdot
+\left[
+\frac{\beta_{o_1}\beta_{x_1}}{\beta_{o_2}\beta_{y_1}}  
+\right]
+\cdot
+\frac{
+\left[
+   x_1^{\rho_x-1}
+\right]
+}
+{
+\left[
+   y_1^{\rho_y-1}
+\right]
+}
+\\
+\end{aligned}
+$$
+
+Note that in the equation above, the first term is the same across for the relative MPL across all within subnest terms. 
+
+There are four derivative ratios. First:
+$$
+\begin{aligned}
+\frac{p_{x_1}}{p_{y_1}}&=\frac{\left[
+    \left(
+    \beta_{x_1} x_1^{\rho_x} + \beta_{x_2} x_2^{\rho_x} 
+    \right)^{\frac{\rho_{o}-\rho_x}{{\rho_x}}}
+\right]}
+{\left[
+    \left(
+    \beta_{y_1} y_1^{\rho_y} + \beta_{y_2} y_2^{\rho_y} 
+    \right)^\frac{\rho_{o}-\rho_y}{{\rho_y}}
+\right]}
+\cdot
+\left[\frac{\beta_{o_1}\beta_{x_1}}{\beta_{o_2}\beta_{y_1}}\right]
+\cdot
+\frac{\left[x_1^{\rho_x-1}\right]}
+{\left[y_1^{\rho_y-1}\right]}
+\\
+\end{aligned}
+$$
+Second:
+$$
+\begin{aligned}
+\frac{p_{x_1}}{p_{y_2}}&=\frac{\left[
+    \left(
+    \beta_{x_1} x_1^{\rho_x} + \beta_{x_2} x_2^{\rho_x} 
+    \right)^{\frac{\rho_{o}-\rho_x}{{\rho_x}}}
+\right]}
+{\left[
+    \left(
+    \beta_{y_1} y_1^{\rho_y} + \beta_{y_2} y_2^{\rho_y} 
+    \right)^\frac{\rho_{o}-\rho_y}{{\rho_y}}
+\right]}
+\cdot
+\left[\frac{\beta_{o_1}\beta_{x_1}}{\beta_{o_2}\beta_{y_2}}\right]
+\cdot
+\frac{\left[x_1^{\rho_x-1}\right]}
+{\left[y_2^{\rho_y-1}\right]}
+\\
+\end{aligned}
+$$
+Third:
+$$
+\begin{aligned}
+\frac{p_{x_2}}{p_{y_1}}&=\frac{\left[
+    \left(
+    \beta_{x_1} x_1^{\rho_x} + \beta_{x_2} x_2^{\rho_x} 
+    \right)^{\frac{\rho_{o}-\rho_x}{{\rho_x}}}
+\right]}
+{\left[
+    \left(
+    \beta_{y_1} y_1^{\rho_y} + \beta_{y_2} y_2^{\rho_y} 
+    \right)^\frac{\rho_{o}-\rho_y}{{\rho_y}}
+\right]}
+\cdot
+\left[\frac{\beta_{o_1}\beta_{x_2}}{\beta_{o_2}\beta_{y_1}}\right]
+\cdot
+\frac{\left[x_2^{\rho_x-1}\right]}
+{\left[y_1^{\rho_y-1}\right]}
+\\
+\end{aligned}
+$$
+Fourth:
+$$
+\begin{aligned}
+\frac{p_{x_2}}{p_{y_2}}&=\frac{\left[
+    \left(
+    \beta_{x_1} x_1^{\rho_x} + \beta_{x_2} x_2^{\rho_x} 
+    \right)^{\frac{\rho_{o}-\rho_x}{{\rho_x}}}
+\right]}
+{\left[
+    \left(
+    \beta_{y_1} y_1^{\rho_y} + \beta_{y_2} y_2^{\rho_y} 
+    \right)^\frac{\rho_{o}-\rho_y}{{\rho_y}}
+\right]}
+\cdot
+\left[\frac{\beta_{o_1}\beta_{x_2}}{\beta_{o_2}\beta_{y_2}}\right]
+\cdot
+\frac{\left[x_2^{\rho_x-1}\right]}
+{\left[y_2^{\rho_y-1}\right]}
+\\
+\end{aligned}
+$$
+
+Note that we have overall seven unknowns, three share parameters, and three elasticity parameters, and a output and productivity ratio. It looks like we have six equations, but only perhaps 3? Three of the above can not be used. 
+
+##### Identification with Aggregate Data over two Periods
+
+
+We say: (1) given the level of nested structure you have, what is the number of restrictions you have to impose on share or elasticity in order to fully identify the model. 
+
+
+The identification of the three share and elasticity parameters can be achieved by using the following two equations over three periods.
+
+$$
+\begin{aligned}
+\log\left(\frac{p_{x_1}}{p_{x_2}}\right)
+&=\log\left(\frac{\beta_{x_1}}{\beta_{x_2}}\right)
++
+\left(\rho_x-1\right)\cdot
+\log\left(\frac{x_1}{x_2}\right)
+\\
+\log\left(\frac{p_{y_1}}{p_{y_2}}\right)
+&=\log\left(\frac{\beta_{y_1}}{\beta_{y_2}}\right)
++
+\left(\rho_y-1\right)\cdot
+\log\left(\frac{y_1}{y_2}\right)
+\\
+\log\left(\frac{p_{x_1}}{p_{y_1}}\right)
+&=
+\log\left(
+  \frac{\beta_{o_1}}{\beta_{o_2}}
+  \left[
+    \frac{
+      \beta_{x_1} \cdot x_1^{\rho_x-1} \cdot O_y^{\rho_y}
+    }{
+      \beta_{y_1} \cdot y_1^{\rho_y-1} \cdot O_x^{\rho_x}
+      }
+  \right]
+  \right)
++
+\rho_o
+\cdot
+\log\left[
+\frac{O_x}{O_y}  
+  \right]
+\end{aligned}
+$$
+Note that the contents in the square brackets are data given the results from the other equations. 
+
+The identification of the inner-nest elasticity and share parameters is based on inner-nest quantity and relative price relationships. The relative price across nests, and the relative aggregate quantity across nets, then pin down the elasticity and share parameters across nests. In another word, within nest information on relative prices and quantity contain no information on higher nest parameters, but higher nest parameters are a function of lower nest parameters. 
+
+Note that for the higher nest, the intercept term is fully flexibly determined by outter nest share parameters, however, the specific translation between outter nest intercept and share values is scaled by inner-nest estimates and aggregate outputs. 
+
+Where 
+$$
+\begin{aligned}
+  O_x &= \left(
+    \beta_{x_1} x_1^{\rho_x} + \beta_{x_2} x_2^{\rho_x} 
+    \right)^{\frac{1}{{\rho_x}}}\\
+  O_y &= \left(
+    \beta_{y_1} y_1^{\rho_y} + \beta_{y_2} y_2^{\rho_y} 
+    \right)^\frac{1}{{\rho_y}}
+\end{aligned}
 $$

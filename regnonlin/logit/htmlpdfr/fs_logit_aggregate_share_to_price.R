@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE-------------------------------------------------------------------
+## ----global_options, include = FALSE-----------------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------------------------
 # set seed
 set.seed(123)
 # T periods, and M occupations (+1 leisure)
@@ -19,7 +19,7 @@ st_caption <- "Wages across occupations"
 kable(mt_wages, caption = st_caption) %>% kable_styling_fc()
 
 
-## ------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------------------------
 # Define a probability assignment function
 ffi_logit_prob_alpha_beta_1t <- function(ar_alpha, fl_beta, mt_wages) {
   # Dimensions
@@ -41,7 +41,7 @@ st_caption <- "Participation probabilities across categories"
 kable(ar_prob_o, caption = st_caption) %>% kable_styling_fc()
 
 
-## ------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------------------------
 # A Matrix with share from 1:M columns
 mt_rhs_input <- matrix(data = NA, nrow = it_M, ncol = it_M)
 colnames(mt_rhs_input) <- paste0("mValNoWage", seq(1, it_M))
@@ -71,7 +71,7 @@ st_caption <- "RHS fit wages matrix"
 kable(mt_rhs_input, caption = st_caption) %>% kable_styling_fc()
 
 
-## ------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------------------------
 # Construct data structure, LHS and RHS, LHS first oclumn
 mt_all_inputs <- cbind(ar_prob_o[2:length(ar_prob_o)], mt_rhs_input)
 colnames(mt_all_inputs)[1] <- "prob_o"
@@ -81,7 +81,7 @@ st_caption <- "col1=prob in non-outside options; other columns, RHS matrix"
 kable(tb_all_inputs, caption=st_caption) %>% kable_styling_fc()
 
 
-## ------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------------------------
 # Regression
 fit_ols_agg_prob_to_wages <- lm(prob_o ~ . - 1, data = tb_all_inputs)
 summary(fit_ols_agg_prob_to_wages)
