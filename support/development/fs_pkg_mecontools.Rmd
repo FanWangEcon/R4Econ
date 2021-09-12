@@ -25,7 +25,7 @@ urlcolor: blue
 ### Process RMD Files
 
 ```{r global_options, include = FALSE}
-try(source("C:/Users/fan/R4Econ/.Rprofile"))
+try(source("G:/repos/R4Econ/.Rprofile"))
 library(reticulate)
 ```
 
@@ -36,7 +36,7 @@ library(reticulate)
 MEconTools Rmd to PDF and HTML.
 
 ```{r}
-# file_path_root <- 'C:/Users/fan/MEconTools/support/development/fs_pkg_MEconTools'
+# file_path_root <- 'G:/repos/MEconTools/support/development/fs_pkg_MEconTools'
 # file_path_r <- paste0(file_path_root, '.R')
 # file_path_rmd <- paste0(file_path_root, '.Rmd')
 # knitr::purl(file_path_rmd, output=file_path_r, documentation = 1)
@@ -45,10 +45,10 @@ MEconTools Rmd to PDF and HTML.
 #### Local Outputs
 
 ```
-file:///C:/Users/fan/MEconTools/bookdown/index.html
-file:///C:/Users/fan/MEconTools/MEconTools/doc/vfi/
-file:///C:/Users/fan/MEconTools/MEconTools/doc/graph/
-file:///C:/Users/fan/MEconTools/MEconTools/doc/stats/htmlpdfm/
+file:///G:/repos/MEconTools/bookdown/index.html
+file:///G:/repos/MEconTools/MEconTools/doc/vfi/
+file:///G:/repos/MEconTools/MEconTools/doc/graph/
+file:///G:/repos/MEconTools/MEconTools/doc/stats/htmlpdfm/
 ```
 
 #### Testing Changes in MLX file
@@ -58,9 +58,11 @@ Check through *MEconTools* and see which files have been added, and which files 
 Note: new files that should not get pdf and html should have *.rmd* rather than *.Rmd* as suffix.
 
 ```{r}
+bl_update_book = TRUE
+
 # run examples
-spt_root <- 'C:/Users/fan/MEconTools'
-spt_log <- 'C:/Users/fan/MEconTools/_log/rmdclean/'
+spt_root <- 'G:/repos/MEconTools'
+spt_log <- 'G:/repos/MEconTools/_log/rmdclean/'
 sink(paste0(spt_log, 'rmd_clean_test.log'))
 start_time <- Sys.time()
 setwd(spt_root)
@@ -68,10 +70,11 @@ setwd(spt_root)
 bl_test = TRUE
 bl_gen_if_git_old = FALSE
 
-ar_spt_root = c('C:/Users/fan/MEconTools/MEconTools/doc/')
+ar_spt_root = c('G:/repos/MEconTools/MEconTools/doc/')
 ff_sup_clean_mlx(ar_spt_root = ar_spt_root,
                  ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
-                                 '_mod.Rmd', 'title.Rmd', 'GettingStarted'),
+                                 '_mod.Rmd', 'title.Rmd', 'GettingStarted', 
+                                 '.html', '.Rmd'),
                  st_pattern='.mlx',
                  bl_gen_if_git_old = bl_gen_if_git_old,
                  bl_recursive = TRUE,
@@ -91,19 +94,20 @@ Note: new files that should not get pdf and html should have *.rmd* rather than 
 
 ```{r}
 # run examples
-spt_root <- 'C:/Users/fan/MEconTools'
-spt_log <- 'C:/Users/fan/MEconTools/_log/rmdclean/'
+spt_root <- 'G:/repos/MEconTools'
+spt_log <- 'G:/repos/MEconTools/_log/rmdclean/'
 sink(paste0(spt_log, 'rmd_clean_test.log'))
 start_time <- Sys.time()
 setwd(spt_root)
 
 bl_test = FALSE
-bl_gen_if_git_old = TRUE
+bl_gen_if_git_old = FALSE
 
-st_prj_root = 'C:/Users/fan/MEconTools/'
-ar_spt_root = c('C:/Users/fan/MEconTools/MEconTools/doc/')
+st_prj_root = 'G:/repos/MEconTools/'
+ar_spt_root = c('G:/repos/MEconTools/MEconTools/doc/')
 ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
-               '_mod.Rmd', 'title.Rmd', 'GettingStarted')
+               '_mod.Rmd', 'title.Rmd', 'GettingStarted', 
+               '.html', '.Rmd')
 ff_sup_clean_mlx(st_prj_root = st_prj_root,
                  ar_spt_root = ar_spt_root,
                  ar_spn_skip = ar_spn_skip,
@@ -125,19 +129,20 @@ sink()
 
 ```{r}
 # run examples
-spt_root <- 'C:/Users/fan/MEconTools'
-spt_log <- 'C:/Users/fan/MEconTools/_log/rmdclean/'
+spt_root <- 'G:/repos/MEconTools'
+spt_log <- 'G:/repos/MEconTools/_log/rmdclean/'
 sink(paste0(spt_log, 'rmd_clean_test.log'))
 start_time <- Sys.time()
 setwd(spt_root)
 
 bl_test = FALSE
-bl_gen_if_git_old = TRUE
+bl_gen_if_git_old = FALSE
 
-st_prj_root = 'C:/Users/fan/MEconTools/'
-ar_spt_root = c('C:/Users/fan/MEconTools/MEconTools/doc/')
+st_prj_root = 'G:/repos/MEconTools/'
+ar_spt_root = c('G:/repos/MEconTools/MEconTools/doc/')
 ar_spn_skip = c('support', 'index.Rmd', 'main.Rmd',
-               '_mod.Rmd', 'title.Rmd', 'GettingStarted')
+               '_mod.Rmd', 'title.Rmd', 'GettingStarted',
+               '.html', '.Rmd')
 ff_sup_clean_rmd(ar_spt_root = ar_spt_root,
                  ar_spn_skip = ar_spn_skip,
                  st_file_pattern='.Rmd',
@@ -163,7 +168,7 @@ sink()
 
 There is python file that parses rmd front matters and goes through rmd files in the bookdown yaml file to automatically generate README contents.
 
-- 'C:/Users/fan/Py4Econ/support/inout/bookdownparse.py'
+- 'G:/repos/Py4Econ/support/inout/bookdownparse.py'
 
 Generate TOC:
 
@@ -172,7 +177,7 @@ import pyfan.util.rmd.bookdownparse as ft_bookdownparse
 
 # Path Roots
 sfc_prj = 'MEconTools'
-sph_prj = 'C:/Users/fan/MEconTools/'
+sph_prj = 'G:/repos/MEconTools/'
 spn_prj_bookdown_yml = '_bookdown.yml'
 
 # Read me preamble, and endnotes
@@ -200,7 +205,7 @@ Combine Front and End and TOC:
 import pyfan.util.rmd.bookdownparse as ft_bookdownparse
 
 # Path Roots
-sph_prj = 'C:/Users/fan/MEconTools/'
+sph_prj = 'G:/repos/MEconTools/'
 
 # Read me preamble, and endnotes
 spn_prj_readme_pre = 'README_pre.md'
@@ -224,7 +229,7 @@ with open(sph_prj + spn_prj_readme_ful, 'w') as outfile:
 Generate contenxt for bookdown appendix.
 
 ```{python}
-sph_prj = 'C:/Users/fan/MEconTools/'
+sph_prj = 'G:/repos/MEconTools/'
 spn_prj_readme_toc = 'README_toc.md'
 spn_prj_appendix = 'README_appendix.md'
 spn_in = open(sph_prj + spn_prj_readme_toc, "r")
@@ -291,35 +296,38 @@ spn_out.close()
 Render HTML:
 
 ```{r}
-spt_root <- 'C:/Users/fan/MEconTools'
-spt_log <- 'C:/Users/fan/MEconTools/_log/rmdclean/'
-
-sink(paste0(spt_log, 'render_bookdown_html.log'))
-start_time <- Sys.time()
-setwd(spt_root)
-
-# render html
-bookdown::render_book('index.Rmd', 'bookdown::gitbook')
-
-end_time <- Sys.time()
-print(paste0('bookdown::render_book, html, took:', end_time - start_time))
-sink()
+if (bl_update_book) {
+  spt_root <- 'G:/repos/MEconTools'
+  spt_log <- 'G:/repos/MEconTools/_log/rmdclean/'
+  
+  sink(paste0(spt_log, 'render_bookdown_html.log'))
+  start_time <- Sys.time()
+  setwd(spt_root)
+  
+  # render html
+  bookdown::render_book('index.Rmd', 'bookdown::gitbook')
+  
+  end_time <- Sys.time()
+  print(paste0('bookdown::render_book, html, took:', end_time - start_time))
+  sink()
+}
 ```
 
 Render PDF:
 
 ```{r}
-spt_root <- 'C:/Users/fan/MEconTools'
-spt_log <- 'C:/Users/fan/MEconTools/_log/rmdclean/'
-
-sink(paste0(spt_log, 'render_bookdown_pdf.log'))
-start_time <- Sys.time()
-setwd(spt_root)
-
-bookdown::render_book('index.Rmd', 'bookdown::pdf_book')
-
-end_time <- Sys.time()
-print(paste0('bookdown::render_book, pdf, took:', end_time - start_time))
-sink()
-
+if (bl_update_book) {
+  spt_root <- 'G:/repos/MEconTools'
+  spt_log <- 'G:/repos/MEconTools/_log/rmdclean/'
+  
+  sink(paste0(spt_log, 'render_bookdown_pdf.log'))
+  start_time <- Sys.time()
+  setwd(spt_root)
+  
+  bookdown::render_book('index.Rmd', 'bookdown::pdf_book')
+  
+  end_time <- Sys.time()
+  print(paste0('bookdown::render_book, pdf, took:', end_time - start_time))
+  sink()
+}
 ```

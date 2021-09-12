@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Page not found | Data Structures, Estimation and Optimization with R</title>
+  <meta name="description" content="<p>Run system executable and shell commands.
+Activate conda environment with shell script.</p>" />
+  <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Page not found | Data Structures, Estimation and Optimization with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="<p>Run system executable and shell commands.
+Activate conda environment with shell script.</p>" />
+  <meta name="github-repo" content="fanwangecon/R4Econ" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Page not found | Data Structures, Estimation and Optimization with R" />
+  
+  <meta name="twitter:description" content="<p>Run system executable and shell commands.
+Activate conda environment with shell script.</p>" />
+  
+
+<meta name="author" content="Fan Wang" />
+
+
+<meta name="date" content="2021-09-12" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-92953468-5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-92953468-5');
+</script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Data Structures and Estimation with R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html"><i class="fa fa-check"></i><b>1</b> Array, Matrix, Dataframe</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#list"><i class="fa fa-check"></i><b>1.1</b> List</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#lists"><i class="fa fa-check"></i><b>1.1.1</b> Lists</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#array"><i class="fa fa-check"></i><b>1.2</b> Array</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#array-basics"><i class="fa fa-check"></i><b>1.2.1</b> Array Basics</a></li>
+<li class="chapter" data-level="1.2.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-arrays"><i class="fa fa-check"></i><b>1.2.2</b> Generate Arrays</a></li>
+<li class="chapter" data-level="1.2.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-arrays"><i class="fa fa-check"></i><b>1.2.3</b> String Arrays</a></li>
+<li class="chapter" data-level="1.2.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#mesh-matrices-arrays-and-scalars"><i class="fa fa-check"></i><b>1.2.4</b> Mesh Matrices, Arrays and Scalars</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#matrix"><i class="fa fa-check"></i><b>1.3</b> Matrix</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-matrixes"><i class="fa fa-check"></i><b>1.3.1</b> Generate Matrixes</a></li>
+<li class="chapter" data-level="1.3.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#linear-algebra"><i class="fa fa-check"></i><b>1.3.2</b> Linear Algebra</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#variables-in-dataframes"><i class="fa fa-check"></i><b>1.4</b> Variables in Dataframes</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-dataframe"><i class="fa fa-check"></i><b>1.4.1</b> Generate Dataframe</a></li>
+<li class="chapter" data-level="1.4.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#factor-label-and-combine"><i class="fa fa-check"></i><b>1.4.2</b> Factor Label and Combine</a></li>
+<li class="chapter" data-level="1.4.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#drawly-random-rows"><i class="fa fa-check"></i><b>1.4.3</b> Drawly Random Rows</a></li>
+<li class="chapter" data-level="1.4.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-variables-conditional-on-others"><i class="fa fa-check"></i><b>1.4.4</b> Generate Variables Conditional On Others</a></li>
+<li class="chapter" data-level="1.4.5" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-dataframes"><i class="fa fa-check"></i><b>1.4.5</b> String Dataframes</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="summarize-data.html"><a href="summarize-data.html"><i class="fa fa-check"></i><b>2</b> Summarize Data</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="summarize-data.html"><a href="summarize-data.html#counting-observation"><i class="fa fa-check"></i><b>2.1</b> Counting Observation</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="summarize-data.html"><a href="summarize-data.html#uncount"><i class="fa fa-check"></i><b>2.1.1</b> Uncount</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="summarize-data.html"><a href="summarize-data.html#sorting-indexing-slicing"><i class="fa fa-check"></i><b>2.2</b> Sorting, Indexing, Slicing</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="summarize-data.html"><a href="summarize-data.html#sorting"><i class="fa fa-check"></i><b>2.2.1</b> Sorting</a></li>
+<li class="chapter" data-level="2.2.2" data-path="summarize-data.html"><a href="summarize-data.html#group-sort-and-slice"><i class="fa fa-check"></i><b>2.2.2</b> Group, Sort and Slice</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="summarize-data.html"><a href="summarize-data.html#group-statistics"><i class="fa fa-check"></i><b>2.3</b> Group Statistics</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="summarize-data.html"><a href="summarize-data.html#cumulative-statistics-within-group"><i class="fa fa-check"></i><b>2.3.1</b> Cumulative Statistics within Group</a></li>
+<li class="chapter" data-level="2.3.2" data-path="summarize-data.html"><a href="summarize-data.html#groups-statistics"><i class="fa fa-check"></i><b>2.3.2</b> Groups Statistics</a></li>
+<li class="chapter" data-level="2.3.3" data-path="summarize-data.html"><a href="summarize-data.html#one-variable-group-summary"><i class="fa fa-check"></i><b>2.3.3</b> One Variable Group Summary</a></li>
+<li class="chapter" data-level="2.3.4" data-path="summarize-data.html"><a href="summarize-data.html#nested-within-group-stats"><i class="fa fa-check"></i><b>2.3.4</b> Nested within Group Stats</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="summarize-data.html"><a href="summarize-data.html#distributional-statistics"><i class="fa fa-check"></i><b>2.4</b> Distributional Statistics</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="summarize-data.html"><a href="summarize-data.html#histogram"><i class="fa fa-check"></i><b>2.4.1</b> Histogram</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="summarize-data.html"><a href="summarize-data.html#summarize-multiple-variables"><i class="fa fa-check"></i><b>2.5</b> Summarize Multiple Variables</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="summarize-data.html"><a href="summarize-data.html#generate-replace-variables"><i class="fa fa-check"></i><b>2.5.1</b> Generate Replace Variables</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>3</b> Functions</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="functions.html"><a href="functions.html#dataframe-mutate"><i class="fa fa-check"></i><b>3.1</b> Dataframe Mutate</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="functions.html"><a href="functions.html#row-input-functions"><i class="fa fa-check"></i><b>3.1.1</b> Row Input Functions</a></li>
+<li class="chapter" data-level="3.1.2" data-path="functions.html"><a href="functions.html#evaluate-choices-across-states"><i class="fa fa-check"></i><b>3.1.2</b> Evaluate Choices Across States</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="functions.html"><a href="functions.html#dataframe-do-anything"><i class="fa fa-check"></i><b>3.2</b> Dataframe Do Anything</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="functions.html"><a href="functions.html#mx1-by-n-to-mxq-by-n1"><i class="fa fa-check"></i><b>3.2.1</b> (Mx1 by N) to (MxQ by N+1)</a></li>
+<li class="chapter" data-level="3.2.2" data-path="functions.html"><a href="functions.html#mxp-by-n-to-mx1-by-1"><i class="fa fa-check"></i><b>3.2.2</b> (MxP by N) to (Mx1 by 1)</a></li>
+<li class="chapter" data-level="3.2.3" data-path="functions.html"><a href="functions.html#mxp-by-n-to-mxq-by-nz"><i class="fa fa-check"></i><b>3.2.3</b> (MxP by N) to (MxQ by N+Z)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="functions.html"><a href="functions.html#apply-and-pmap"><i class="fa fa-check"></i><b>3.3</b> Apply and pmap</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="functions.html"><a href="functions.html#apply-and-sapply"><i class="fa fa-check"></i><b>3.3.1</b> Apply and Sapply</a></li>
+<li class="chapter" data-level="3.3.2" data-path="functions.html"><a href="functions.html#mutate-evaluate-functions"><i class="fa fa-check"></i><b>3.3.2</b> Mutate Evaluate Functions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html"><i class="fa fa-check"></i><b>4</b> Multi-dimensional Data Structures</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#generate-gather-bind-and-join"><i class="fa fa-check"></i><b>4.1</b> Generate, Gather, Bind and Join</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#generate-panel-structure"><i class="fa fa-check"></i><b>4.1.1</b> Generate Panel Structure</a></li>
+<li class="chapter" data-level="4.1.2" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#join-datasets"><i class="fa fa-check"></i><b>4.1.2</b> Join Datasets</a></li>
+<li class="chapter" data-level="4.1.3" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#gather-files"><i class="fa fa-check"></i><b>4.1.3</b> Gather Files</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#wide-and-long"><i class="fa fa-check"></i><b>4.2</b> Wide and Long</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#long-to-wide"><i class="fa fa-check"></i><b>4.2.1</b> Long to Wide</a></li>
+<li class="chapter" data-level="4.2.2" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#wide-to-long"><i class="fa fa-check"></i><b>4.2.2</b> Wide to Long</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#join-and-compare"><i class="fa fa-check"></i><b>4.3</b> Join and Compare</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#find-closest-neighbor-on-grid"><i class="fa fa-check"></i><b>4.3.1</b> Find Closest Neighbor on Grid</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>5</b> Linear Regression</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="linear-regression.html"><a href="linear-regression.html#polynomial-fitting"><i class="fa fa-check"></i><b>5.1</b> Polynomial Fitting</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="linear-regression.html"><a href="linear-regression.html#polynomial-time-series"><i class="fa fa-check"></i><b>5.1.1</b> Polynomial Time Series</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="linear-regression.html"><a href="linear-regression.html#ols-and-iv"><i class="fa fa-check"></i><b>5.2</b> OLS and IV</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="linear-regression.html"><a href="linear-regression.html#ols-and-iv-regression"><i class="fa fa-check"></i><b>5.2.1</b> OLS and IV Regression</a></li>
+<li class="chapter" data-level="5.2.2" data-path="linear-regression.html"><a href="linear-regression.html#iv-loop-over-rhs"><i class="fa fa-check"></i><b>5.2.2</b> IV Loop over RHS</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="linear-regression.html"><a href="linear-regression.html#decomposition"><i class="fa fa-check"></i><b>5.3</b> Decomposition</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="linear-regression.html"><a href="linear-regression.html#decompose-rhs"><i class="fa fa-check"></i><b>5.3.1</b> Decompose RHS</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="nonlinear-and-other-regressions.html"><a href="nonlinear-and-other-regressions.html"><i class="fa fa-check"></i><b>6</b> Nonlinear and Other Regressions</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="nonlinear-and-other-regressions.html"><a href="nonlinear-and-other-regressions.html#logit-regression"><i class="fa fa-check"></i><b>6.1</b> Logit Regression</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="nonlinear-and-other-regressions.html"><a href="nonlinear-and-other-regressions.html#binary-logit"><i class="fa fa-check"></i><b>6.1.1</b> Binary Logit</a></li>
+<li class="chapter" data-level="6.1.2" data-path="nonlinear-and-other-regressions.html"><a href="nonlinear-and-other-regressions.html#logistic-choice-model-with-aggregate-shares"><i class="fa fa-check"></i><b>6.1.2</b> Logistic Choice Model with Aggregate Shares</a></li>
+<li class="chapter" data-level="6.1.3" data-path="nonlinear-and-other-regressions.html"><a href="nonlinear-and-other-regressions.html#prices-from-aggregate-shares-in-logistic-choice-model"><i class="fa fa-check"></i><b>6.1.3</b> Prices from Aggregate Shares in Logistic Choice Model</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="nonlinear-and-other-regressions.html"><a href="nonlinear-and-other-regressions.html#quantile-regression"><i class="fa fa-check"></i><b>6.2</b> Quantile Regression</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="nonlinear-and-other-regressions.html"><a href="nonlinear-and-other-regressions.html#quantile-regression-basics"><i class="fa fa-check"></i><b>6.2.1</b> Quantile Regression Basics</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="optimization.html"><a href="optimization.html"><i class="fa fa-check"></i><b>7</b> Optimization</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="optimization.html"><a href="optimization.html#bisection"><i class="fa fa-check"></i><b>7.1</b> Bisection</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="optimization.html"><a href="optimization.html#bisection-1"><i class="fa fa-check"></i><b>7.1.1</b> Bisection</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="mathematics.html"><a href="mathematics.html"><i class="fa fa-check"></i><b>8</b> Mathematics</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="mathematics.html"><a href="mathematics.html#basics"><i class="fa fa-check"></i><b>8.1</b> Basics</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="mathematics.html"><a href="mathematics.html#log-with-different-bases-and-exponents"><i class="fa fa-check"></i><b>8.1.1</b> Log with Different Bases and Exponents</a></li>
+<li class="chapter" data-level="8.1.2" data-path="mathematics.html"><a href="mathematics.html#rescale-a-parameter-with-fixed-min-and-max"><i class="fa fa-check"></i><b>8.1.2</b> Rescale a Parameter with Fixed Min and Max</a></li>
+<li class="chapter" data-level="8.1.3" data-path="mathematics.html"><a href="mathematics.html#find-nearest"><i class="fa fa-check"></i><b>8.1.3</b> Find Nearest</a></li>
+<li class="chapter" data-level="8.1.4" data-path="mathematics.html"><a href="mathematics.html#linear-scalar-fx0-solutions"><i class="fa fa-check"></i><b>8.1.4</b> Linear Scalar f(x)=0 Solutions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="mathematics.html"><a href="mathematics.html#production-function"><i class="fa fa-check"></i><b>8.2</b> Production Function</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="mathematics.html"><a href="mathematics.html#nested-ces-production-function"><i class="fa fa-check"></i><b>8.2.1</b> Nested CES Production Function</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="mathematics.html"><a href="mathematics.html#inequality-models"><i class="fa fa-check"></i><b>8.3</b> Inequality Models</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="mathematics.html"><a href="mathematics.html#gini-discrete-sample"><i class="fa fa-check"></i><b>8.3.1</b> GINI Discrete Sample</a></li>
+<li class="chapter" data-level="8.3.2" data-path="mathematics.html"><a href="mathematics.html#gini-formula-for-discrete-random-varialbe"><i class="fa fa-check"></i><b>8.3.2</b> GINI Formula for Discrete Random Varialbe</a></li>
+<li class="chapter" data-level="8.3.3" data-path="mathematics.html"><a href="mathematics.html#atkinson-inequality-index"><i class="fa fa-check"></i><b>8.3.3</b> Atkinson Inequality Index</a></li>
+<li class="chapter" data-level="8.3.4" data-path="mathematics.html"><a href="mathematics.html#location-population-and-pollution"><i class="fa fa-check"></i><b>8.3.4</b> Location, Population, and Pollution</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="statistics.html"><a href="statistics.html"><i class="fa fa-check"></i><b>9</b> Statistics</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="statistics.html"><a href="statistics.html#random-draws"><i class="fa fa-check"></i><b>9.1</b> Random Draws</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="statistics.html"><a href="statistics.html#randomly-perturbing-a-parameter"><i class="fa fa-check"></i><b>9.1.1</b> Randomly Perturbing a Parameter</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="statistics.html"><a href="statistics.html#distributions"><i class="fa fa-check"></i><b>9.2</b> Distributions</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="statistics.html"><a href="statistics.html#integrate-over-normal-guassian-process-shock"><i class="fa fa-check"></i><b>9.2.1</b> Integrate Over Normal Guassian Process Shock</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="statistics.html"><a href="statistics.html#discrete-random-variable"><i class="fa fa-check"></i><b>9.3</b> Discrete Random Variable</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="statistics.html"><a href="statistics.html#discrete-approximation-of-continuous-random-variables"><i class="fa fa-check"></i><b>9.3.1</b> Discrete Approximation of Continuous Random Variables</a></li>
+<li class="chapter" data-level="9.3.2" data-path="statistics.html"><a href="statistics.html#obtaining-joint-distribution-from-marginal-with-rectilinear-restrictions"><i class="fa fa-check"></i><b>9.3.2</b> Obtaining Joint Distribution from Marginal with Rectilinear Restrictions</a></li>
+<li class="chapter" data-level="9.3.3" data-path="statistics.html"><a href="statistics.html#obtaining-joint-distribution-from-conditional-with-rectilinear-restrictions"><i class="fa fa-check"></i><b>9.3.3</b> Obtaining Joint Distribution from Conditional with Rectilinear Restrictions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html"><i class="fa fa-check"></i><b>10</b> Tables and Graphs</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#r-base-plots"><i class="fa fa-check"></i><b>10.1</b> R Base Plots</a>
+<ul>
+<li class="chapter" data-level="10.1.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#plot-curve-line-and-points"><i class="fa fa-check"></i><b>10.1.1</b> Plot Curve, Line and Points</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#ggplot-line-related-plots"><i class="fa fa-check"></i><b>10.2</b> ggplot Line Related Plots</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#ggplot-line-plot"><i class="fa fa-check"></i><b>10.2.1</b> ggplot Line Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#ggplot-scatter-related-plots"><i class="fa fa-check"></i><b>10.3</b> ggplot Scatter Related Plots</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#ggplot-scatter-plot"><i class="fa fa-check"></i><b>10.3.1</b> ggplot Scatter Plot</a></li>
+<li class="chapter" data-level="10.3.2" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#ggplot-multiple-scatter-lines-with-facet-wrap"><i class="fa fa-check"></i><b>10.3.2</b> ggplot Multiple Scatter-Lines with Facet Wrap</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#write-and-read-plots"><i class="fa fa-check"></i><b>10.4</b> Write and Read Plots</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#import-and-export-images"><i class="fa fa-check"></i><b>10.4.1</b> Import and Export Images</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="get-data.html"><a href="get-data.html"><i class="fa fa-check"></i><b>11</b> Get Data</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="get-data.html"><a href="get-data.html#environmental-data"><i class="fa fa-check"></i><b>11.1</b> Environmental Data</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="get-data.html"><a href="get-data.html#ecmwf-era5-data"><i class="fa fa-check"></i><b>11.1.1</b> ECMWF ERA5 Data</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="code-and-development.html"><a href="code-and-development.html"><i class="fa fa-check"></i><b>12</b> Code and Development</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="code-and-development.html"><a href="code-and-development.html#files-in-and-out"><i class="fa fa-check"></i><b>12.1</b> Files In and Out</a>
+<ul>
+<li class="chapter" data-level="12.1.1" data-path="code-and-development.html"><a href="code-and-development.html#file-path"><i class="fa fa-check"></i><b>12.1.1</b> File Path</a></li>
+<li class="chapter" data-level="12.1.2" data-path="code-and-development.html"><a href="code-and-development.html#text-to-file"><i class="fa fa-check"></i><b>12.1.2</b> Text to File</a></li>
+<li class="chapter" data-level="12.1.3" data-path="code-and-development.html"><a href="code-and-development.html#rmd-to-html"><i class="fa fa-check"></i><b>12.1.3</b> Rmd to HTML</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="code-and-development.html"><a href="code-and-development.html#python-with-r"><i class="fa fa-check"></i><b>12.2</b> Python with R</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="code-and-development.html"><a href="code-and-development.html#reticulate-basics"><i class="fa fa-check"></i><b>12.2.1</b> Reticulate Basics</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="code-and-development.html"><a href="code-and-development.html#command-line"><i class="fa fa-check"></i><b>12.3</b> Command Line</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="code-and-development.html"><a href="code-and-development.html#shell-and-system-commands"><i class="fa fa-check"></i><b>12.3.1</b> Shell and System Commands</a></li>
+</ul></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="index-and-code-links.html"><a href="index-and-code-links.html"><i class="fa fa-check"></i><b>A</b> Index and Code Links</a>
+<ul>
+<li class="chapter" data-level="A.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#array-matrix-dataframe-links"><i class="fa fa-check"></i><b>A.1</b> Array, Matrix, Dataframe links</a>
+<ul>
+<li class="chapter" data-level="A.1.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.1-listlist-links"><i class="fa fa-check"></i><b>A.1.1</b> <span>Section 1.1 List</span> links</a></li>
+<li class="chapter" data-level="A.1.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.2-arrayarray-links"><i class="fa fa-check"></i><b>A.1.2</b> <span>Section 1.2 Array</span> links</a></li>
+<li class="chapter" data-level="A.1.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.3-matrixmatrix-links"><i class="fa fa-check"></i><b>A.1.3</b> <span>Section 1.3 Matrix</span> links</a></li>
+<li class="chapter" data-level="A.1.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.4-variables-in-dataframesvariables-in-dataframes-links"><i class="fa fa-check"></i><b>A.1.4</b> <span>Section 1.4 Variables in Dataframes</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#summarize-data-links"><i class="fa fa-check"></i><b>A.2</b> Summarize Data links</a>
+<ul>
+<li class="chapter" data-level="A.2.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.1-counting-observationcounting-observation-links"><i class="fa fa-check"></i><b>A.2.1</b> <span>Section 2.1 Counting Observation</span> links</a></li>
+<li class="chapter" data-level="A.2.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.2-sorting-indexing-slicingsorting-indexing-slicing-links"><i class="fa fa-check"></i><b>A.2.2</b> <span>Section 2.2 Sorting, Indexing, Slicing</span> links</a></li>
+<li class="chapter" data-level="A.2.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.3-group-statisticsgroup-statistics-links"><i class="fa fa-check"></i><b>A.2.3</b> <span>Section 2.3 Group Statistics</span> links</a></li>
+<li class="chapter" data-level="A.2.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.4-distributional-statisticsdistributional-statistics-links"><i class="fa fa-check"></i><b>A.2.4</b> <span>Section 2.4 Distributional Statistics</span> links</a></li>
+<li class="chapter" data-level="A.2.5" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.5-summarize-multiple-variablessummarize-multiple-variables-links"><i class="fa fa-check"></i><b>A.2.5</b> <span>Section 2.5 Summarize Multiple Variables</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#functions-links"><i class="fa fa-check"></i><b>A.3</b> Functions links</a>
+<ul>
+<li class="chapter" data-level="A.3.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.1-dataframe-mutatedataframe-mutate-links"><i class="fa fa-check"></i><b>A.3.1</b> <span>Section 3.1 Dataframe Mutate</span> links</a></li>
+<li class="chapter" data-level="A.3.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.2-dataframe-do-anythingdataframe-do-anything-links"><i class="fa fa-check"></i><b>A.3.2</b> <span>Section 3.2 Dataframe Do Anything</span> links</a></li>
+<li class="chapter" data-level="A.3.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.3-apply-and-pmapapply-and-pmap-links"><i class="fa fa-check"></i><b>A.3.3</b> <span>Section 3.3 Apply and pmap</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#multi-dimensional-data-structures-links"><i class="fa fa-check"></i><b>A.4</b> Multi-dimensional Data Structures links</a>
+<ul>
+<li class="chapter" data-level="A.4.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.1-generate-gather-bind-and-joingenerate-gather-bind-and-join-links"><i class="fa fa-check"></i><b>A.4.1</b> <span>Section 4.1 Generate, Gather, Bind and Join</span> links</a></li>
+<li class="chapter" data-level="A.4.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.2-wide-and-longwide-and-long-links"><i class="fa fa-check"></i><b>A.4.2</b> <span>Section 4.2 Wide and Long</span> links</a></li>
+<li class="chapter" data-level="A.4.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.3-join-and-comparejoin-and-compare-links"><i class="fa fa-check"></i><b>A.4.3</b> <span>Section 4.3 Join and Compare</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.5" data-path="index-and-code-links.html"><a href="index-and-code-links.html#linear-regression-links"><i class="fa fa-check"></i><b>A.5</b> Linear Regression links</a>
+<ul>
+<li class="chapter" data-level="A.5.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.1-polynomial-fittingpolynomial-fitting-links"><i class="fa fa-check"></i><b>A.5.1</b> <span>Section 5.1 Polynomial Fitting</span> links</a></li>
+<li class="chapter" data-level="A.5.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.2-ols-and-ivols-and-iv-links"><i class="fa fa-check"></i><b>A.5.2</b> <span>Section 5.2 OLS and IV</span> links</a></li>
+<li class="chapter" data-level="A.5.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.3-decompositiondecomposition-links"><i class="fa fa-check"></i><b>A.5.3</b> <span>Section 5.3 Decomposition</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.6" data-path="index-and-code-links.html"><a href="index-and-code-links.html#nonlinear-and-other-regressions-links"><i class="fa fa-check"></i><b>A.6</b> Nonlinear and Other Regressions links</a>
+<ul>
+<li class="chapter" data-level="A.6.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-6.1-logit-regressionlogit-regression-links"><i class="fa fa-check"></i><b>A.6.1</b> <span>Section 6.1 Logit Regression</span> links</a></li>
+<li class="chapter" data-level="A.6.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-6.2-quantile-regressionquantile-regression-links"><i class="fa fa-check"></i><b>A.6.2</b> <span>Section 6.2 Quantile Regression</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.7" data-path="index-and-code-links.html"><a href="index-and-code-links.html#optimization-links"><i class="fa fa-check"></i><b>A.7</b> Optimization links</a>
+<ul>
+<li class="chapter" data-level="A.7.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-7.1-bisectionbisection-links"><i class="fa fa-check"></i><b>A.7.1</b> <span>Section 7.1 Bisection</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.8" data-path="index-and-code-links.html"><a href="index-and-code-links.html#mathematics-links"><i class="fa fa-check"></i><b>A.8</b> Mathematics links</a>
+<ul>
+<li class="chapter" data-level="A.8.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.1-basicsbasics-links"><i class="fa fa-check"></i><b>A.8.1</b> <span>Section 8.1 Basics</span> links</a></li>
+<li class="chapter" data-level="A.8.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.2-production-functionproduction-function-links"><i class="fa fa-check"></i><b>A.8.2</b> <span>Section 8.2 Production Function</span> links</a></li>
+<li class="chapter" data-level="A.8.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.3-inequality-modelsinequality-models-links"><i class="fa fa-check"></i><b>A.8.3</b> <span>Section 8.3 Inequality Models</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.9" data-path="index-and-code-links.html"><a href="index-and-code-links.html#statistics-links"><i class="fa fa-check"></i><b>A.9</b> Statistics links</a>
+<ul>
+<li class="chapter" data-level="A.9.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.1-random-drawsrandom-draws-links"><i class="fa fa-check"></i><b>A.9.1</b> <span>Section 9.1 Random Draws</span> links</a></li>
+<li class="chapter" data-level="A.9.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.2-distributionsdistributions-links"><i class="fa fa-check"></i><b>A.9.2</b> <span>Section 9.2 Distributions</span> links</a></li>
+<li class="chapter" data-level="A.9.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.3-discrete-random-variablediscrete-random-variable-links"><i class="fa fa-check"></i><b>A.9.3</b> <span>Section 9.3 Discrete Random Variable</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.10" data-path="index-and-code-links.html"><a href="index-and-code-links.html#tables-and-graphs-links"><i class="fa fa-check"></i><b>A.10</b> Tables and Graphs links</a>
+<ul>
+<li class="chapter" data-level="A.10.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.1-r-base-plotsr-base-plots-links"><i class="fa fa-check"></i><b>A.10.1</b> <span>Section 10.1 R Base Plots</span> links</a></li>
+<li class="chapter" data-level="A.10.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.2-ggplot-line-related-plotsggplot-line-related-plots-links"><i class="fa fa-check"></i><b>A.10.2</b> <span>Section 10.2 ggplot Line Related Plots</span> links</a></li>
+<li class="chapter" data-level="A.10.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.3-ggplot-scatter-related-plotsggplot-scatter-related-plots-links"><i class="fa fa-check"></i><b>A.10.3</b> <span>Section 10.3 ggplot Scatter Related Plots</span> links</a></li>
+<li class="chapter" data-level="A.10.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.4-write-and-read-plotswrite-and-read-plots-links"><i class="fa fa-check"></i><b>A.10.4</b> <span>Section 10.4 Write and Read Plots</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.11" data-path="index-and-code-links.html"><a href="index-and-code-links.html#get-data-links"><i class="fa fa-check"></i><b>A.11</b> Get Data links</a>
+<ul>
+<li class="chapter" data-level="A.11.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-11.1-environmental-dataenvironmental-data-links"><i class="fa fa-check"></i><b>A.11.1</b> <span>Section 11.1 Environmental Data</span> links</a></li>
+</ul></li>
+<li class="chapter" data-level="A.12" data-path="index-and-code-links.html"><a href="index-and-code-links.html#code-and-development-links"><i class="fa fa-check"></i><b>A.12</b> Code and Development links</a>
+<ul>
+<li class="chapter" data-level="A.12.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.1-files-in-and-outfiles-in-and-out-links"><i class="fa fa-check"></i><b>A.12.1</b> <span>Section 12.1 Files In and Out</span> links</a></li>
+<li class="chapter" data-level="A.12.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.2-python-with-rpython-with-r-links"><i class="fa fa-check"></i><b>A.12.2</b> <span>Section 12.2 Python with R</span> links</a></li>
+<li class="chapter" data-level="A.12.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.3-command-linecommand-line-links"><i class="fa fa-check"></i><b>A.12.3</b> <span>Section 12.3 Command Line</span> links</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://fanwangecon.github.io/R4Econ/bookdown/index.html" target="blank">R4Econ Bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data Structures, Estimation and Optimization with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="page-not-found" class="section level1">
+<h1>Page not found</h1>
+<p>The page you requested cannot be found (perhaps it was moved or renamed).</p>
+<p>You may want to try searching to find the page's new location, or use
+the table of contents to find the page you are looking for.</p>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": [["Panel-Data-and-Optimization-with-R.pdf", "PDF"]],
+"search": {
+"engine": "lunr",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

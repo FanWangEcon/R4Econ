@@ -345,7 +345,10 @@
 
 1. [ggplot Line Plot Multiple Categorical Variables With Continuous Variable](https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline//fs_ggline_mgrp_ncts.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.html)
 	+ One category is subplot, one category is line-color, one category is line-type.
-	+ **ggplot**: *ggplot() + facet_wrap() + geom_smooth() + geom_hline() + scale_colour_manual() + scale_shape_discrete() + scale_linetype_manual() + scale_x_continuous() + scale_y_continuous() + theme_bw() + theme()*
+	+ One category is subplot, one category is differentiated by line-color, line-type and scatter-shapes.
+	+ One category are separate plots, two categories are subplots rows and columns, one category is differentiated by line-color, line-type and scatter-shapes.
+	+ **ggplot**: *ggplot() + facet_wrap() + facet_grid() + geom_line()  + geom_point()       + geom_smooth() + geom_hline() + scale_colour_manual() + scale_shape_manual() + scale_shape_discrete() + scale_linetype_manual() + scale_x_continuous() + scale_y_continuous() + theme_bw() + theme() + guides() + theme() + ggsave()*
+	+ **dplyr**: *filter(vara %in% c(1, 2) & varb == "val") + mutate_if() + !any(is.na(suppressWarnings(as.numeric(na.omit(x))))) & is.character(x)   *
 
 ### [Section 10.3 ggplot Scatter Related Plots][ggplot Scatter Related Plots] links
 
