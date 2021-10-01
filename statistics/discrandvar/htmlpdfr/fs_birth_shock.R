@@ -97,7 +97,8 @@ ffi_concept_distribution_year <- function(it_max_weeks = 52,
                                           it_peak_wk_2nd = 40,
                                           fl_binom_1st_wgt = 0.150,
                                           fl_binom_2nd_wgt = 0.075,
-                                          it_runif_seed = 123) {
+                                          it_runif_seed = 123, 
+                                          df_dist_conception_exo = NULL) {
   # # Peak (local) months and weights
   # it_max_weeks <- 52
   # it_peak_wk_1st <- 15
@@ -107,32 +108,39 @@ ffi_concept_distribution_year <- function(it_max_weeks = 52,
   # fl_binom_1st_wgt <- 0.25
   # fl_binom_2nd_wgt <- 0.10
 
-  # Discrete random variables
-  ar_fl_binom_1st <- dbinom(
-    0:(it_max_weeks - 1), (it_max_weeks - 1),
-    (it_peak_wk_1st - 1) / (it_max_weeks - 1)
-  )
-  ar_fl_binom_2nd <- dbinom(
-    0:(it_max_weeks - 1), (it_max_weeks - 1),
-    (it_peak_wk_2nd - 1) / (it_max_weeks - 1)
-  )
-  set.seed(it_runif_seed)
-  ar_random_base <- runif(it_max_weeks, min = 0.5, max = 1)
-  ar_random_base <- ar_random_base / sum(ar_random_base)
+  if (is.null(df_dist_conception_exo)) {
 
-  # Mix two binomials and a uniform
-  ar_fl_p_concept_week <- ar_fl_binom_1st * fl_binom_1st_wgt +
-    ar_fl_binom_2nd * fl_binom_2nd_wgt +
-    ar_random_base * (1 - fl_binom_1st_wgt - fl_binom_2nd_wgt)
+    # Discrete random variables
+    ar_fl_binom_1st <- dbinom(
+      0:(it_max_weeks - 1), (it_max_weeks - 1),
+      (it_peak_wk_1st - 1) / (it_max_weeks - 1)
+    )
+    ar_fl_binom_2nd <- dbinom(
+      0:(it_max_weeks - 1), (it_max_weeks - 1),
+      (it_peak_wk_2nd - 1) / (it_max_weeks - 1)
+    )
+    set.seed(it_runif_seed)
+    ar_random_base <- runif(it_max_weeks, min = 0.5, max = 1)
+    ar_random_base <- ar_random_base / sum(ar_random_base)
 
-  # Dataframe
-  df_dist_conception <- tibble(conception_calendar_week = 1:it_max_weeks,
-                               conception_prob = ar_fl_p_concept_week)
+    # Mix two binomials and a uniform
+    ar_fl_p_concept_week <- ar_fl_binom_1st * fl_binom_1st_wgt +
+      ar_fl_binom_2nd * fl_binom_2nd_wgt +
+      ar_random_base * (1 - fl_binom_1st_wgt - fl_binom_2nd_wgt)
+
+    # Dataframe
+    df_dist_conception <- tibble(conception_calendar_week = 1:it_max_weeks,
+                                conception_prob = ar_fl_p_concept_week)
+
+  } else {
+    df_dist_conception <- df_dist_conception_exo
+
+  } 
 
   # Line plot
   # Title
   st_title <- paste0(
-      "Distribution of conception month of birth\n",
+      "Distribution of conception week of birth\n",
       "over weeks of one specific year, seed=", it_runif_seed
     )
 
@@ -357,7 +365,8 @@ ffi_pop_concept_birth_simu <- function(
   fl_binom_1st_wgt = 0.15,
   fl_binom_2nd_wgt = 0.05,
   fl_mu_gabirth_days_365 = 276,
-  fl_sd_gabirth_days_365 = 14
+  fl_sd_gabirth_days_365 = 14,
+  df_dist_conception_exo = NULL
 ) {
 
   # # 1. Define parameters
@@ -395,7 +404,8 @@ ffi_pop_concept_birth_simu <- function(
     it_max_weeks = it_weeks_in_year,
     it_peak_wk_1st = it_peak_wk_1st, it_peak_wk_2nd = it_peak_wk_2nd,
     fl_binom_1st_wgt = fl_binom_1st_wgt, fl_binom_2nd_wgt = fl_binom_2nd_wgt,
-    it_runif_seed = it_rng_seed*210)
+    it_runif_seed = it_rng_seed*210, 
+    df_dist_conception_exo = df_dist_conception_exo)
   df_dist_conception_week <- ls_concept_fc$df_dist_conception
   # 2.b.1 Randomly (uniformly) drawing the day of birth
   set.seed(it_rng_seed*221)
@@ -501,11 +511,11 @@ ffi_pop_concept_birth_simu <- function(
 # Define some dates
 it_days_in_week <- 7
 it_weeks_in_month <- 4
-it_months_in_year <- 12
+it_months_in_year <- 13
 it_years <- 3
 # Simulate
 ls_concept_birth <- ffi_pop_concept_birth_simu(
-  it_pop_n = 5000,
+  it_pop_n = 10000,
   it_days_in_week = it_days_in_week,
   it_weeks_in_month = it_weeks_in_month,
   it_months_in_year = it_months_in_year,
@@ -529,7 +539,7 @@ print(ls_concept_birth$plt_concept_birth)
 ## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Simulate
 ls_concept_birth <- ffi_pop_concept_birth_simu(
-  it_pop_n = 5000,
+  it_pop_n = 10000,
   it_days_in_week = it_days_in_week,
   it_weeks_in_month = it_weeks_in_month,
   it_months_in_year = it_months_in_year,
@@ -545,6 +555,122 @@ ls_concept_birth <- ffi_pop_concept_birth_simu(
 )
 # Get dataframe and print distribution
 df_birth_data_CFeb_cor0 <- ls_concept_birth$df_birth_data
+print(ls_concept_birth$ls_concept_fc$plt_concept_week_of_year)
+print(ls_concept_birth$ls_gsbirth_fc$plt_dist_gabirth)
+print(ls_concept_birth$plt_concept_birth)
+
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Simulate
+ls_concept_birth <- ffi_pop_concept_birth_simu(
+  it_pop_n = 10000,
+  it_days_in_week = it_days_in_week,
+  it_weeks_in_month = it_weeks_in_month,
+  it_months_in_year = it_months_in_year,
+  it_years = it_years,
+  it_rng_seed = 999,
+  fl_pre_term_ratio = 0.84,
+  fl_peak_concept_frac_of_year_1st = 0.2,
+  fl_peak_concept_frac_of_year_2nd = 0.8,
+  fl_binom_1st_wgt = 0.0,
+  fl_binom_2nd_wgt = 0.95,
+  fl_mu_gabirth_days_365 = 276,
+  fl_sd_gabirth_days_365 = 14
+)
+# Get dataframe and print distribution
+df_birth_data_COct_cor0 <- ls_concept_birth$df_birth_data
+print(ls_concept_birth$ls_concept_fc$plt_concept_week_of_year)
+print(ls_concept_birth$ls_gsbirth_fc$plt_dist_gabirth)
+print(ls_concept_birth$plt_concept_birth)
+
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+st_dist_conception_lbhwz_actual <- "conception_calendar_week, conception_prob
+	1,  0.0237 	
+	2,  0.0221 	
+	3,  0.0217 	
+	4,  0.0202 	
+	5,  0.0226 	
+	6,  0.0232 	
+	7,  0.0223 	
+	8,  0.0214 	
+	9,  0.0161 	
+	10, 0.0183 	
+	11, 0.0213 	
+	12, 0.0191 	
+	13, 0.0191 	
+	14, 0.0201 	
+	15, 0.0196 	
+	16, 0.0200 	
+	17, 0.0184 	
+	18, 0.0184 	
+	19, 0.0173 	
+	20, 0.0186 	
+	21, 0.0204 	
+	22, 0.0219 	
+	23, 0.0180 	
+	24, 0.0181 	
+	25, 0.0171 	
+	26, 0.0160 	
+	27, 0.0167 	
+	28, 0.0172 	
+	29, 0.0165 	
+	30, 0.0160 	
+	31, 0.0182 	
+	32, 0.0180 	
+	33, 0.0184 	
+	34, 0.0160 	
+	35, 0.0187 	
+	36, 0.0170 	
+	37, 0.0187 	
+	38, 0.0180 	
+	39, 0.0190 	
+	40, 0.0180 	
+	41, 0.0186 	
+	42, 0.0198 	
+	43, 0.0172 	
+	44, 0.0195 	
+	45, 0.0203 	
+	46, 0.0197 	
+	47, 0.0184 	
+	48, 0.0180 	
+	49, 0.0215 	
+	50, 0.0195 	
+	51, 0.0222 	
+	52, 0.0242"
+# Raw probability data to table
+df_dist_conception_lbhwz_actual = read.csv(text=st_dist_conception_lbhwz_actual, header=TRUE)
+ar_st_varnames <- c('conception_calendar_week',
+                    'conception_prob')
+tb_dist_conception_lbhwz_actual <- as_tibble(df_dist_conception_lbhwz_actual) %>% 
+  rename_all(~c(ar_st_varnames)) %>%
+  mutate(conception_prob = conception_prob/sum(conception_prob))
+
+# Summarize
+summary(tb_dist_conception_lbhwz_actual)
+
+# Check Probability sums to 1
+sum(tb_dist_conception_lbhwz_actual$conception_prob)
+
+# Simulate
+ls_concept_birth <- ffi_pop_concept_birth_simu(
+  it_pop_n = 10000,
+  it_days_in_week = it_days_in_week,
+  it_weeks_in_month = it_weeks_in_month,
+  it_months_in_year = it_months_in_year,
+  it_years = it_years,
+  it_rng_seed = 999,
+  fl_pre_term_ratio = 0.84,
+  fl_peak_concept_frac_of_year_1st = 0.2,
+  fl_peak_concept_frac_of_year_2nd = 0.9,
+  fl_binom_1st_wgt = 0.95,
+  fl_binom_2nd_wgt = 0.00,
+  fl_mu_gabirth_days_365 = 276,
+  fl_sd_gabirth_days_365 = 14, 
+  df_dist_conception_exo = tb_dist_conception_lbhwz_actual
+)
+# Get dataframe and print distribution
+df_birth_data_Clbhwz_cor0 <- ls_concept_birth$df_birth_data
 print(ls_concept_birth$ls_concept_fc$plt_concept_week_of_year)
 print(ls_concept_birth$ls_gsbirth_fc$plt_dist_gabirth)
 print(ls_concept_birth$plt_concept_birth)
@@ -626,126 +752,164 @@ ffi_birth_extreme_exposure <- function(df_birth_data, df_fahrenheit){
 ## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Scenario (A)
 tb_birth_cold_rand_cor0 <- ffi_birth_extreme_exposure(df_birth_data_rand_cor0, df_fahrenheit)
-# Scenario (B)
+# Scenario (B.1)
 tb_birth_cold_CFeb_cor0 <- ffi_birth_extreme_exposure(df_birth_data_CFeb_cor0, df_fahrenheit)
+# Scenario (B.2)
+tb_birth_cold_COct_cor0 <- ffi_birth_extreme_exposure(df_birth_data_COct_cor0, df_fahrenheit)
+# Scenario (B.3)
+tb_birth_cold_Clbhwz_cor0 <- ffi_birth_extreme_exposure(df_birth_data_Clbhwz_cor0, df_fahrenheit)
 
 
 ## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# summarize
-str_stats_group <- 'allperc'
-ar_perc <- c(0.05, 0.25, 0.5, 0.75, 0.95)
+# Create a function.
+ffi_cold_days_preterm_analyze <- function(
+  tb_birth_cold, 
+  st_title = paste0('Scenario (A), Extreme cold DAYS Distribution\n',
+                    'Uniform Conception\n',
+                    'Conception and Birth uncorrelated')){
+  # summarize
+  str_stats_group <- 'allperc'
+  ar_perc <- c(0.05, 0.25, 0.5, 0.75, 0.95)
 
-# For tb_birth_cold_rand_cor0
-ls_summ_by_group <- REconTools::ff_summ_bygroup(
-  tb_birth_cold_rand_cor0, c('preterm'),
-  'days_extreme_cold', str_stats_group, ar_perc)
-df_table_grp_stats_rand_cor0 <- ls_summ_by_group$df_table_grp_stats
-print(df_table_grp_stats_rand_cor0)
-# Visualize
-plt_rand_cor0_level <- tb_birth_cold_rand_cor0 %>%
-  mutate(preterm = factor(preterm)) %>%
-  group_by(preterm) %>% mutate(days_extreme_cold_mean = mean(days_extreme_cold)) %>% ungroup() %>%
-  ggplot(aes(x=days_extreme_cold, color=preterm)) +
-  geom_density() +
-  geom_vline(aes(xintercept=days_extreme_cold_mean, color=preterm), linetype="dashed") +
-  labs(
-    title = paste0('Scenario (A), Extreme cold DAYS Distribution\n',
-                   'Uniform Conception\n',
-                   'Conception and Birth uncorrelated'),
-    x = 'Days exposed to extreme cold',
-    y = 'Density'
-    ) +
-  scale_x_continuous(n.breaks = 10) +
-  scale_y_continuous(n.breaks = 10) +
-  theme(
-    axis.text.x = element_text(angle = 45, vjust = 0.1, hjust = 0.1)
-  )
-print(plt_rand_cor0_level)
+  # For tb_birth_cold
+  ls_summ_by_group <- REconTools::ff_summ_bygroup(
+    tb_birth_cold, c('preterm'),
+    'days_extreme_cold', str_stats_group, ar_perc)
+  df_table_grp_stats_rand_cor0 <- ls_summ_by_group$df_table_grp_stats
+  print(df_table_grp_stats_rand_cor0)
 
-# For tb_birth_cold_CFeb_cor0
-ls_summ_by_group <- REconTools::ff_summ_bygroup(
-  tb_birth_cold_CFeb_cor0, c('preterm'),
-  'days_extreme_cold', str_stats_group, ar_perc)
-df_table_grp_stats_CFeb_cor0 <- ls_summ_by_group$df_table_grp_stats
-print(df_table_grp_stats_CFeb_cor0)
-# Visualize
-plt_CFeb_cor0_level <- tb_birth_cold_CFeb_cor0 %>%
-  mutate(preterm = factor(preterm)) %>%
-  group_by(preterm) %>% mutate(days_extreme_cold_mean = mean(days_extreme_cold)) %>% ungroup() %>%
-  ggplot(aes(x=days_extreme_cold, color=preterm)) +
-  geom_density() +
-  geom_vline(aes(xintercept=days_extreme_cold_mean, color=preterm), linetype="dashed") +
-  labs(
-    title = paste0('Scenario (B), Extreme cold DAYS Distribution (dashed line means)\n',
-                   'Conception Concentrated around Feb.\n',
-                   'Conception and Birth uncorrelated'),
-    x = 'Days exposed to extreme cold',
-    y = 'Density'
-    ) +
-  scale_x_continuous(n.breaks = 10) +
-  scale_y_continuous(n.breaks = 10) +
-  theme(
-    axis.text.x = element_text(angle = 45, vjust = 0.1, hjust = 0.1)
-  )
-print(plt_CFeb_cor0_level)
+  # Visualize
+  plt_rand_cor0_level <- tb_birth_cold %>%
+    mutate(preterm = factor(preterm)) %>%
+    group_by(preterm) %>% mutate(days_extreme_cold_mean = mean(days_extreme_cold)) %>% ungroup() %>%
+    ggplot(aes(x=days_extreme_cold, color=preterm)) +
+    geom_density() +
+    geom_vline(aes(xintercept=days_extreme_cold_mean, color=preterm), linetype="dashed") +
+    labs(
+      title = st_title,
+      x = 'Days exposed to extreme cold',
+      y = 'Density'
+      ) +
+    scale_x_continuous(n.breaks = 10) +
+    scale_y_continuous(n.breaks = 10) +
+    theme(
+      axis.text.x = element_text(angle = 45, vjust = 0.1, hjust = 0.1)
+    )
+  
+  return(list(
+    df_temp_preterm_stats = df_table_grp_stats_rand_cor0,
+    plt_temp_preterm = plt_rand_cor0_level))
+}
 
 
 ## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# summarize
-str_stats_group <- 'allperc'
-ar_perc <- c(0.05, 0.25, 0.5, 0.75, 0.95)
+ffi_cold_percent_days_preterm_analyze <- function(
+  tb_birth_cold, 
+  st_title = paste0('Scenario (A), Extreme cold PERCENT of DAYS Distribution\n',
+                    'Uniform Conception\n',
+                    'Conception and Birth uncorrelated')){
+  # summarize
+  str_stats_group <- 'allperc'
+  ar_perc <- c(0.05, 0.25, 0.5, 0.75, 0.95)
 
+  # For tb_birth_cold_rand_cor0
+  ls_summ_by_group <- REconTools::ff_summ_bygroup(
+    tb_birth_cold, c('preterm'),
+    'days_extreme_cold_percent', str_stats_group, ar_perc)
+  df_table_grp_stats_rand_cor0 <- ls_summ_by_group$df_table_grp_stats
+  
+  # Visualize
+  plt_rand_cor0_level <- tb_birth_cold %>%
+    mutate(preterm = factor(preterm)) %>%
+    group_by(preterm) %>% mutate(days_extreme_cold_percent_mean = mean(days_extreme_cold_percent)) %>% ungroup() %>%
+    ggplot(aes(x=days_extreme_cold_percent, color=preterm)) +
+    geom_density() +
+    geom_vline(aes(xintercept=days_extreme_cold_percent_mean, color=preterm), linetype="dashed") +
+    labs(
+      title = st_title,
+      x = 'Percent of gestational days exposed to extreme cold',
+      y = 'Density'
+      ) +
+    scale_x_continuous(n.breaks = 10) +
+    scale_y_continuous(n.breaks = 10) +
+    theme(
+      axis.text.x = element_text(angle = 45, vjust = 0.1, hjust = 0.1)
+    )
+
+  return(list(
+    df_temp_preterm_stats = df_table_grp_stats_rand_cor0,
+    plt_temp_preterm = plt_rand_cor0_level))
+}
+
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # For tb_birth_cold_rand_cor0
-ls_summ_by_group <- REconTools::ff_summ_bygroup(
-  tb_birth_cold_rand_cor0, c('preterm'),
-  'days_extreme_cold_percent', str_stats_group, ar_perc)
-df_table_grp_stats_rand_cor0 <- ls_summ_by_group$df_table_grp_stats
-print(df_table_grp_stats_rand_cor0)
-# Visualize
-plt_rand_cor0_level <- tb_birth_cold_rand_cor0 %>%
-  mutate(preterm = factor(preterm)) %>%
-  group_by(preterm) %>% mutate(days_extreme_cold_percent_mean = mean(days_extreme_cold_percent)) %>% ungroup() %>%
-  ggplot(aes(x=days_extreme_cold_percent, color=preterm)) +
-  geom_density() +
-  geom_vline(aes(xintercept=days_extreme_cold_percent_mean, color=preterm), linetype="dashed") +
-  labs(
-    title = paste0('Scenario (A), Extreme cold DAYS percent of Gestation Distribution\n',
-                   'Uniform Conception\n',
-                   'Conception and Birth uncorrelated'),
-    x = 'Days exposed to extreme cold',
-    y = 'Density'
-    ) +
-  scale_x_continuous(n.breaks = 10) +
-  scale_y_continuous(n.breaks = 10) +
-  theme(
-    axis.text.x = element_text(angle = 45, vjust = 0.1, hjust = 0.1)
-  )
-print(plt_rand_cor0_level)
+st_title = paste0('Scenario (A), Extreme cold DAYS Distribution (dashed lines are means)\n',
+                  'Uniform Conception\n',
+                  'Conception and Birth uncorrelated')
+ls_coldexp_preterm <- ffi_cold_days_preterm_analyze(tb_birth_cold_rand_cor0, st_title)
+print(ls_coldexp_preterm$plt_temp_preterm)
 
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # For tb_birth_cold_CFeb_cor0
-ls_summ_by_group <- REconTools::ff_summ_bygroup(
-  tb_birth_cold_CFeb_cor0, c('preterm'),
-  'days_extreme_cold_percent', str_stats_group, ar_perc)
-df_table_grp_stats_CFeb_cor0 <- ls_summ_by_group$df_table_grp_stats
-print(df_table_grp_stats_CFeb_cor0)
-# Visualize
-plt_CFeb_cor0_level <- tb_birth_cold_CFeb_cor0 %>%
-  mutate(preterm = factor(preterm)) %>%
-  group_by(preterm) %>% mutate(days_extreme_cold_percent_mean = mean(days_extreme_cold_percent)) %>% ungroup() %>%
-  ggplot(aes(x=days_extreme_cold_percent, color=preterm)) +
-  geom_density() +
-  geom_vline(aes(xintercept=days_extreme_cold_percent_mean, color=preterm), linetype="dashed") +
-  labs(
-    title = paste0('Scenario (B), Extreme cold DAYS percent of Gestation Distribution\n',
-                   'Conception Concentrated around Feb.\n',
-                   'Conception and Birth uncorrelated'),
-    x = 'Days exposed to extreme cold',
-    y = 'Density'
-    ) +
-  scale_x_continuous(n.breaks = 10) +
-  scale_y_continuous(n.breaks = 10) +
-  theme(
-    axis.text.x = element_text(angle = 45, vjust = 0.1, hjust = 0.1)
-  )
-print(plt_CFeb_cor0_level)
+st_title = paste0('Scenario (B.1), Extreme cold DAYS Distribution (dashed lines are means)\n',
+                  'Conception Concentrated around Feb\n',
+                  'Conception and Birth uncorrelated')
+ls_coldexp_preterm <- ffi_cold_days_preterm_analyze(tb_birth_cold_CFeb_cor0, st_title)
+print(ls_coldexp_preterm$plt_temp_preterm)
+
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# For tb_birth_cold_COct_cor0
+st_title = paste0('Scenario (B.2), Extreme cold DAYS Distribution (dashed lines are means)\n',
+                  'Conception Concentrated around Oct\n',
+                  'Conception and Birth uncorrelated')
+ls_coldexp_preterm <- ffi_cold_days_preterm_analyze(tb_birth_cold_COct_cor0, st_title)
+print(ls_coldexp_preterm$plt_temp_preterm)
+
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# For tb_birth_cold_Clbhwz_cor0
+st_title = paste0('Scenario (B.3), Extreme cold DAYS Distribution (dashed lines are means)\n',
+                  'Conception Concentrated around Oct\n',
+                  'Conception and Birth uncorrelated')
+ls_coldexp_preterm <- ffi_cold_days_preterm_analyze(tb_birth_cold_Clbhwz_cor0, st_title)
+print(ls_coldexp_preterm$plt_temp_preterm)
+
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# For tb_birth_cold_rand_cor0
+st_title = paste0('Scenario (A), Extreme cold PERCENT of DAYS Distribution (dashed = means)\n',
+                  'Uniform Conception\n',
+                  'Conception and Birth uncorrelated')
+ls_coldexp_preterm <- ffi_cold_percent_days_preterm_analyze(tb_birth_cold_rand_cor0, st_title)
+print(ls_coldexp_preterm$plt_temp_preterm)
+
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# For tb_birth_cold_CFeb_cor0
+st_title = paste0('Scenario (B.1), Extreme cold PERCENT of DAYS Distribution (dashed = means)\n',
+                  'Conception Concentrated around Feb\n',
+                  'Conception and Birth uncorrelated')
+ls_coldexp_preterm <- ffi_cold_percent_days_preterm_analyze(tb_birth_cold_CFeb_cor0, st_title)
+print(ls_coldexp_preterm$plt_temp_preterm)
+
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# For tb_birth_cold_COct_cor0
+st_title = paste0('Scenario (B.2), Extreme cold PERCENT of DAYS Distribution (dashed = means)\n',
+                  'Conception Concentrated around Oct\n',
+                  'Conception and Birth uncorrelated')
+ls_coldexp_preterm <- ffi_cold_percent_days_preterm_analyze(tb_birth_cold_COct_cor0, st_title)
+print(ls_coldexp_preterm$plt_temp_preterm)
+
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# For tb_birth_cold_Clbhwz_cor0
+st_title = paste0('Scenario (B.3), Extreme cold PERCENT of DAYS Distribution (dashed = means)\n',
+                  'Conception Concentrated around Oct\n',
+                  'Conception and Birth uncorrelated')
+ls_coldexp_preterm <- ffi_cold_percent_days_preterm_analyze(tb_birth_cold_Clbhwz_cor0, st_title)
+print(ls_coldexp_preterm$plt_temp_preterm)
 
