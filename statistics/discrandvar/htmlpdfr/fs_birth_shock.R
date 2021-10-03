@@ -97,7 +97,7 @@ ffi_concept_distribution_year <- function(it_max_weeks = 52,
                                           it_peak_wk_2nd = 40,
                                           fl_binom_1st_wgt = 0.150,
                                           fl_binom_2nd_wgt = 0.075,
-                                          it_runif_seed = 123, 
+                                          it_runif_seed = 123,
                                           df_dist_conception_exo = NULL) {
   # # Peak (local) months and weights
   # it_max_weeks <- 52
@@ -135,7 +135,7 @@ ffi_concept_distribution_year <- function(it_max_weeks = 52,
   } else {
     df_dist_conception <- df_dist_conception_exo
 
-  } 
+  }
 
   # Line plot
   # Title
@@ -404,7 +404,7 @@ ffi_pop_concept_birth_simu <- function(
     it_max_weeks = it_weeks_in_year,
     it_peak_wk_1st = it_peak_wk_1st, it_peak_wk_2nd = it_peak_wk_2nd,
     fl_binom_1st_wgt = fl_binom_1st_wgt, fl_binom_2nd_wgt = fl_binom_2nd_wgt,
-    it_runif_seed = it_rng_seed*210, 
+    it_runif_seed = it_rng_seed*210,
     df_dist_conception_exo = df_dist_conception_exo)
   df_dist_conception_week <- ls_concept_fc$df_dist_conception
   # 2.b.1 Randomly (uniformly) drawing the day of birth
@@ -586,63 +586,63 @@ print(ls_concept_birth$plt_concept_birth)
 
 ## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 st_dist_conception_lbhwz_actual <- "conception_calendar_week, conception_prob
-	1,  0.0237 	
-	2,  0.0221 	
-	3,  0.0217 	
-	4,  0.0202 	
-	5,  0.0226 	
-	6,  0.0232 	
-	7,  0.0223 	
-	8,  0.0214 	
-	9,  0.0161 	
-	10, 0.0183 	
-	11, 0.0213 	
-	12, 0.0191 	
-	13, 0.0191 	
-	14, 0.0201 	
-	15, 0.0196 	
-	16, 0.0200 	
-	17, 0.0184 	
-	18, 0.0184 	
-	19, 0.0173 	
-	20, 0.0186 	
-	21, 0.0204 	
-	22, 0.0219 	
-	23, 0.0180 	
-	24, 0.0181 	
-	25, 0.0171 	
-	26, 0.0160 	
-	27, 0.0167 	
-	28, 0.0172 	
-	29, 0.0165 	
-	30, 0.0160 	
-	31, 0.0182 	
-	32, 0.0180 	
-	33, 0.0184 	
-	34, 0.0160 	
-	35, 0.0187 	
-	36, 0.0170 	
-	37, 0.0187 	
-	38, 0.0180 	
-	39, 0.0190 	
-	40, 0.0180 	
-	41, 0.0186 	
-	42, 0.0198 	
-	43, 0.0172 	
-	44, 0.0195 	
-	45, 0.0203 	
-	46, 0.0197 	
-	47, 0.0184 	
-	48, 0.0180 	
-	49, 0.0215 	
-	50, 0.0195 	
-	51, 0.0222 	
+	1,  0.0237
+	2,  0.0221
+	3,  0.0217
+	4,  0.0202
+	5,  0.0226
+	6,  0.0232
+	7,  0.0223
+	8,  0.0214
+	9,  0.0161
+	10, 0.0183
+	11, 0.0213
+	12, 0.0191
+	13, 0.0191
+	14, 0.0201
+	15, 0.0196
+	16, 0.0200
+	17, 0.0184
+	18, 0.0184
+	19, 0.0173
+	20, 0.0186
+	21, 0.0204
+	22, 0.0219
+	23, 0.0180
+	24, 0.0181
+	25, 0.0171
+	26, 0.0160
+	27, 0.0167
+	28, 0.0172
+	29, 0.0165
+	30, 0.0160
+	31, 0.0182
+	32, 0.0180
+	33, 0.0184
+	34, 0.0160
+	35, 0.0187
+	36, 0.0170
+	37, 0.0187
+	38, 0.0180
+	39, 0.0190
+	40, 0.0180
+	41, 0.0186
+	42, 0.0198
+	43, 0.0172
+	44, 0.0195
+	45, 0.0203
+	46, 0.0197
+	47, 0.0184
+	48, 0.0180
+	49, 0.0215
+	50, 0.0195
+	51, 0.0222
 	52, 0.0242"
 # Raw probability data to table
 df_dist_conception_lbhwz_actual = read.csv(text=st_dist_conception_lbhwz_actual, header=TRUE)
 ar_st_varnames <- c('conception_calendar_week',
                     'conception_prob')
-tb_dist_conception_lbhwz_actual <- as_tibble(df_dist_conception_lbhwz_actual) %>% 
+tb_dist_conception_lbhwz_actual <- as_tibble(df_dist_conception_lbhwz_actual) %>%
   rename_all(~c(ar_st_varnames)) %>%
   mutate(conception_prob = conception_prob/sum(conception_prob))
 
@@ -666,7 +666,7 @@ ls_concept_birth <- ffi_pop_concept_birth_simu(
   fl_binom_1st_wgt = 0.95,
   fl_binom_2nd_wgt = 0.00,
   fl_mu_gabirth_days_365 = 276,
-  fl_sd_gabirth_days_365 = 14, 
+  fl_sd_gabirth_days_365 = 14,
   df_dist_conception_exo = tb_dist_conception_lbhwz_actual
 )
 # Get dataframe and print distribution
@@ -723,25 +723,30 @@ ffi_birth_extreme_exposure <- function(df_birth_data, df_fahrenheit){
       id <- row[1]
       it_date_conception <- row[2]
       it_date_birth <- row[3]
+      it_week_of_year_conception <- row[6]
       it_preterm <- row[11]
 
       it_extreme_cold_days <- ffi_extreme_cold_percent_gestation(
         df_fahrenheit, it_date_conception, it_date_birth)
 
-      mt_all_res <- cbind(id, it_date_conception, it_date_birth,
+      mt_all_res <- cbind(id, it_date_conception, it_week_of_year_conception,
+                          it_date_birth,
                           it_preterm, it_extreme_cold_days)
 
       return(mt_all_res)
     })
 
   # Column Names
-  ar_st_varnames <- c('id', 'survey_date_conception', 'survey_date_birth',
-          'preterm', 'days_extreme_cold')
+  ar_st_varnames <- c('id',
+                      'survey_date_conception', 'week_of_year_conception',
+                      'survey_date_birth',
+                      'preterm', 'days_extreme_cold')
 
   # Combine to tibble, add name col1, col2, etc.
   tb_birth_cold <- as_tibble(t(mt_birth_cold)) %>%
     rename_all(~c(ar_st_varnames)) %>%
-    mutate(days_extreme_cold_percent = days_extreme_cold/(survey_date_birth-survey_date_conception))
+    mutate(days_extreme_cold_percent = days_extreme_cold/(survey_date_birth-survey_date_conception)) %>%
+    mutate(month_of_year_conception = round(week_of_year_conception/it_weeks_in_month))
 
   # Show Results
   # kable(tb_birth_cold[1:20,]) %>% kable_styling_fc()
@@ -761,9 +766,37 @@ tb_birth_cold_Clbhwz_cor0 <- ffi_birth_extreme_exposure(df_birth_data_Clbhwz_cor
 
 
 ## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Scenarior (A) regression based on percent of days, with month of year conception fixed effects
+re_esti_cold_rand_cor0 <- lm(preterm ~ days_extreme_cold_percent + factor(month_of_year_conception),
+  data=tb_birth_cold_rand_cor0)
+summary(re_esti_cold_rand_cor0)
+
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Scenarior (B.1) regression based on percent of days, with month of year conception fixed effects
+re_esti_cold_CFeb_cor0 <- lm(preterm ~ days_extreme_cold_percent + factor(month_of_year_conception),
+  data=tb_birth_cold_CFeb_cor0)
+summary(re_esti_cold_CFeb_cor0)
+
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Scenarior (B.2) regression based on percent of days, with month of year conception fixed effects
+re_esti_cold_COct_cor0 <- lm(preterm ~ days_extreme_cold_percent + factor(month_of_year_conception),
+  data=tb_birth_cold_COct_cor0)
+summary(re_esti_cold_COct_cor0)
+
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Scenarior (B.3) regression based on percent of days, with month of year conception fixed effects
+re_esti_cold_Clbhwz_cor0 <- lm(preterm ~ days_extreme_cold_percent + factor(month_of_year_conception),
+  data=tb_birth_cold_Clbhwz_cor0)
+summary(re_esti_cold_Clbhwz_cor0)
+
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Create a function.
 ffi_cold_days_preterm_analyze <- function(
-  tb_birth_cold, 
+  tb_birth_cold,
   st_title = paste0('Scenario (A), Extreme cold DAYS Distribution\n',
                     'Uniform Conception\n',
                     'Conception and Birth uncorrelated')){
@@ -795,7 +828,7 @@ ffi_cold_days_preterm_analyze <- function(
     theme(
       axis.text.x = element_text(angle = 45, vjust = 0.1, hjust = 0.1)
     )
-  
+
   return(list(
     df_temp_preterm_stats = df_table_grp_stats_rand_cor0,
     plt_temp_preterm = plt_rand_cor0_level))
@@ -804,7 +837,7 @@ ffi_cold_days_preterm_analyze <- function(
 
 ## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ffi_cold_percent_days_preterm_analyze <- function(
-  tb_birth_cold, 
+  tb_birth_cold,
   st_title = paste0('Scenario (A), Extreme cold PERCENT of DAYS Distribution\n',
                     'Uniform Conception\n',
                     'Conception and Birth uncorrelated')){
@@ -817,7 +850,7 @@ ffi_cold_percent_days_preterm_analyze <- function(
     tb_birth_cold, c('preterm'),
     'days_extreme_cold_percent', str_stats_group, ar_perc)
   df_table_grp_stats_rand_cor0 <- ls_summ_by_group$df_table_grp_stats
-  
+
   # Visualize
   plt_rand_cor0_level <- tb_birth_cold %>%
     mutate(preterm = factor(preterm)) %>%
@@ -872,7 +905,7 @@ print(ls_coldexp_preterm$plt_temp_preterm)
 ## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # For tb_birth_cold_Clbhwz_cor0
 st_title = paste0('Scenario (B.3), Extreme cold DAYS Distribution (dashed lines are means)\n',
-                  'Conception Concentrated around Oct\n',
+                  'Conception Empirical Guangzhou Distribution\n',
                   'Conception and Birth uncorrelated')
 ls_coldexp_preterm <- ffi_cold_days_preterm_analyze(tb_birth_cold_Clbhwz_cor0, st_title)
 print(ls_coldexp_preterm$plt_temp_preterm)
@@ -908,7 +941,7 @@ print(ls_coldexp_preterm$plt_temp_preterm)
 ## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # For tb_birth_cold_Clbhwz_cor0
 st_title = paste0('Scenario (B.3), Extreme cold PERCENT of DAYS Distribution (dashed = means)\n',
-                  'Conception Concentrated around Oct\n',
+                  'Conception Empirical Guangzhou Distribution\n',
                   'Conception and Birth uncorrelated')
 ls_coldexp_preterm <- ffi_cold_percent_days_preterm_analyze(tb_birth_cold_Clbhwz_cor0, st_title)
 print(ls_coldexp_preterm$plt_temp_preterm)

@@ -341,7 +341,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ Simulate the distribution of conception time following a potentially bimodal distribution.
 	+ Compute which births are pre-term given a simulated dataset of conception and birth dates.
 	+ Simulate temperature over days across years using a sine wave combined with a first order markov process with normal shocks.
-	+ **stats**: *dbinom() + pbinom() + rnorm() + runif()*
+	+ **stats**: *dbinom() + pbinom() + rnorm() + runif() + lm(binary ~ continuous + factor(dates))*
 	+ **ggplot**: *geom_point() + geom_bar() + geom_line() + geom_density() + geom_vline()*
 3. [Obtaining Joint Distribution from Marginal with Rectilinear Restrictions](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_discrandvar_marg2joint.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar//fs_discrandvar_marg2joint.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_discrandvar_marg2joint.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_discrandvar_marg2joint.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_discrandvar_marg2joint.html)
 	+ Solve for joint distributional mass given marginal distributional mass given rectilinear assumptions.

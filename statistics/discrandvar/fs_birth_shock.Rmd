@@ -7,6 +7,7 @@ description: |
   Compute which births are pre-term given a simulated dataset of conception and birth dates.
   Simulate temperature over days across years using a sine wave combined with a first order markov process with normal shocks.
   Compute the number of days exposed to extreme temperature.
+  Regress binary preterm outcome on percentage of days exposed to extreme temperature, controlling for month of conception fixed effects.
   Visualize the relationship between pre-term birth and full-term birth and extreme temperature exposure under different distribution assumptions.
 core:
   - package: stats
@@ -15,6 +16,7 @@ core:
       pbinom()
       rnorm()
       runif()
+      lm(binary ~ continuous + factor(dates))
   - package: ggplot
     code: |
       geom_point()
@@ -167,7 +169,7 @@ ffi_concept_distribution_year <- function(it_max_weeks = 52,
                                           it_peak_wk_2nd = 40,
                                           fl_binom_1st_wgt = 0.150,
                                           fl_binom_2nd_wgt = 0.075,
-                                          it_runif_seed = 123, 
+                                          it_runif_seed = 123,
                                           df_dist_conception_exo = NULL) {
   # # Peak (local) months and weights
   # it_max_weeks <- 52
@@ -205,7 +207,7 @@ ffi_concept_distribution_year <- function(it_max_weeks = 52,
   } else {
     df_dist_conception <- df_dist_conception_exo
 
-  } 
+  }
 
   # Line plot
   # Title
@@ -473,7 +475,7 @@ Under **scenario (A)**, conception dates are uniformly distribution across the y
 Under **scenario (B)**, we can spuriously have pre-term experiencing less extreme-cold/heat when $P(C_i)$ is non-uniform/random, meaning $P(C_i) \neq \frac{1}{\text{CountTotalDatesOfConception}}$. This could go in several directions:
 
 1. Under **scenario (B.1)**, suppose all conception starts in Jan. and all extreme temp happen in Oct. Suppose pre-term means birth in Sep. rather than Nov.. If all extreme cold takes place in Oct. Then all pre-term births will not have experienced extreme cold. So the potential direction for spuriousness here is that pre-term will be correlated with less extreme temp. This is fixed by a conception month fixed effect.
-2. Under **scenario (B.2)**, suppose all conception starts in August. and all extreme temp happen in Oct. The number of extreme cold days will be the same under both pre-term and full-term birth groups, but the percentage of days exposed to extreme cold will be greater for the pre-term individuals, a spurious relationship again. 
+2. Under **scenario (B.2)**, suppose all conception starts in August. and all extreme temp happen in Oct. The number of extreme cold days will be the same under both pre-term and full-term birth groups, but the percentage of days exposed to extreme cold will be greater for the pre-term individuals, a spurious relationship again.
 3. Under **Scenario (B.3)**, we use the actual distribution of conception from Guangzhou China. Will the results be more similar to **scenarior (A)**, where conception was uniformly distribution? Or more similar to **scenario B.1** with a greater concentration of conception earlier in the year, or **scenario B.2** with a greater concentration of conception later in the year?
 
 Additionally, pre-term could experience more extreme-cold under **scenario (C.1)**, where extreme temperature has a causal impact on gestational-age, causally leading to more pre-term. This is the research hypothesis of interest.
@@ -493,13 +495,13 @@ Under the various scenarios, the relationship between the *number* of days and *
 - Under **Scenario (B.2)**:
   * the share of days exposed to extreme cold will be *the same* for pre-term and full-term births.
   * the number of days exposed to extreme cold is *more* for pre-term birth compared to full-term.
-- Under **Scenario (B.3)**:  
-  * Will this be like (A) or (B.1) or (B.3)? It turns out this is very similar to (A). 
+- Under **Scenario (B.3)**:
+  * Will this be like (A) or (B.1) or (B.3)? It turns out this is very similar to (A).
 - Under **Scenario (C.1) and (C.2)**:
   * the share of days exposed to extreme cold is *more* for pre-term birth compared to full-term.
   * the number of days exposed to extreme cold might generally be *less* although potentially *more* for pre-term and full-term births.
 
-The share/percentage of days exposed to exposure cold is the appropriate measure to use. As seen in the scenarios above, it does not generate "spurious relationships" due to shorter time spans of pre-term births. 
+The share/percentage of days exposed to exposure cold is the appropriate measure to use. As seen in the scenarios above, it does not generate "spurious relationships" due to shorter time spans of pre-term births.
 
 In the exercises below, we only simulate Scenarios (A) and (B) for now.
 
@@ -571,7 +573,7 @@ ffi_pop_concept_birth_simu <- function(
     it_max_weeks = it_weeks_in_year,
     it_peak_wk_1st = it_peak_wk_1st, it_peak_wk_2nd = it_peak_wk_2nd,
     fl_binom_1st_wgt = fl_binom_1st_wgt, fl_binom_2nd_wgt = fl_binom_2nd_wgt,
-    it_runif_seed = it_rng_seed*210, 
+    it_runif_seed = it_rng_seed*210,
     df_dist_conception_exo = df_dist_conception_exo)
   df_dist_conception_week <- ls_concept_fc$df_dist_conception
   # 2.b.1 Randomly (uniformly) drawing the day of birth
@@ -770,63 +772,63 @@ We generate a dataframe based on the actual conception distribution in Guangzhou
 
 ```{r}
 st_dist_conception_lbhwz_actual <- "conception_calendar_week, conception_prob
-	1,  0.0237 	
-	2,  0.0221 	
-	3,  0.0217 	
-	4,  0.0202 	
-	5,  0.0226 	
-	6,  0.0232 	
-	7,  0.0223 	
-	8,  0.0214 	
-	9,  0.0161 	
-	10, 0.0183 	
-	11, 0.0213 	
-	12, 0.0191 	
-	13, 0.0191 	
-	14, 0.0201 	
-	15, 0.0196 	
-	16, 0.0200 	
-	17, 0.0184 	
-	18, 0.0184 	
-	19, 0.0173 	
-	20, 0.0186 	
-	21, 0.0204 	
-	22, 0.0219 	
-	23, 0.0180 	
-	24, 0.0181 	
-	25, 0.0171 	
-	26, 0.0160 	
-	27, 0.0167 	
-	28, 0.0172 	
-	29, 0.0165 	
-	30, 0.0160 	
-	31, 0.0182 	
-	32, 0.0180 	
-	33, 0.0184 	
-	34, 0.0160 	
-	35, 0.0187 	
-	36, 0.0170 	
-	37, 0.0187 	
-	38, 0.0180 	
-	39, 0.0190 	
-	40, 0.0180 	
-	41, 0.0186 	
-	42, 0.0198 	
-	43, 0.0172 	
-	44, 0.0195 	
-	45, 0.0203 	
-	46, 0.0197 	
-	47, 0.0184 	
-	48, 0.0180 	
-	49, 0.0215 	
-	50, 0.0195 	
-	51, 0.0222 	
+	1,  0.0237
+	2,  0.0221
+	3,  0.0217
+	4,  0.0202
+	5,  0.0226
+	6,  0.0232
+	7,  0.0223
+	8,  0.0214
+	9,  0.0161
+	10, 0.0183
+	11, 0.0213
+	12, 0.0191
+	13, 0.0191
+	14, 0.0201
+	15, 0.0196
+	16, 0.0200
+	17, 0.0184
+	18, 0.0184
+	19, 0.0173
+	20, 0.0186
+	21, 0.0204
+	22, 0.0219
+	23, 0.0180
+	24, 0.0181
+	25, 0.0171
+	26, 0.0160
+	27, 0.0167
+	28, 0.0172
+	29, 0.0165
+	30, 0.0160
+	31, 0.0182
+	32, 0.0180
+	33, 0.0184
+	34, 0.0160
+	35, 0.0187
+	36, 0.0170
+	37, 0.0187
+	38, 0.0180
+	39, 0.0190
+	40, 0.0180
+	41, 0.0186
+	42, 0.0198
+	43, 0.0172
+	44, 0.0195
+	45, 0.0203
+	46, 0.0197
+	47, 0.0184
+	48, 0.0180
+	49, 0.0215
+	50, 0.0195
+	51, 0.0222
 	52, 0.0242"
 # Raw probability data to table
 df_dist_conception_lbhwz_actual = read.csv(text=st_dist_conception_lbhwz_actual, header=TRUE)
 ar_st_varnames <- c('conception_calendar_week',
                     'conception_prob')
-tb_dist_conception_lbhwz_actual <- as_tibble(df_dist_conception_lbhwz_actual) %>% 
+tb_dist_conception_lbhwz_actual <- as_tibble(df_dist_conception_lbhwz_actual) %>%
   rename_all(~c(ar_st_varnames)) %>%
   mutate(conception_prob = conception_prob/sum(conception_prob))
 
@@ -850,7 +852,7 @@ ls_concept_birth <- ffi_pop_concept_birth_simu(
   fl_binom_1st_wgt = 0.95,
   fl_binom_2nd_wgt = 0.00,
   fl_mu_gabirth_days_365 = 276,
-  fl_sd_gabirth_days_365 = 14, 
+  fl_sd_gabirth_days_365 = 14,
   df_dist_conception_exo = tb_dist_conception_lbhwz_actual
 )
 # Get dataframe and print distribution
@@ -917,25 +919,30 @@ ffi_birth_extreme_exposure <- function(df_birth_data, df_fahrenheit){
       id <- row[1]
       it_date_conception <- row[2]
       it_date_birth <- row[3]
+      it_week_of_year_conception <- row[6]
       it_preterm <- row[11]
 
       it_extreme_cold_days <- ffi_extreme_cold_percent_gestation(
         df_fahrenheit, it_date_conception, it_date_birth)
 
-      mt_all_res <- cbind(id, it_date_conception, it_date_birth,
+      mt_all_res <- cbind(id, it_date_conception, it_week_of_year_conception,
+                          it_date_birth,
                           it_preterm, it_extreme_cold_days)
 
       return(mt_all_res)
     })
 
   # Column Names
-  ar_st_varnames <- c('id', 'survey_date_conception', 'survey_date_birth',
-          'preterm', 'days_extreme_cold')
+  ar_st_varnames <- c('id',
+                      'survey_date_conception', 'week_of_year_conception',
+                      'survey_date_birth',
+                      'preterm', 'days_extreme_cold')
 
   # Combine to tibble, add name col1, col2, etc.
   tb_birth_cold <- as_tibble(t(mt_birth_cold)) %>%
     rename_all(~c(ar_st_varnames)) %>%
-    mutate(days_extreme_cold_percent = days_extreme_cold/(survey_date_birth-survey_date_conception))
+    mutate(days_extreme_cold_percent = days_extreme_cold/(survey_date_birth-survey_date_conception)) %>%
+    mutate(month_of_year_conception = round(week_of_year_conception/it_weeks_in_month))
 
   # Show Results
   # kable(tb_birth_cold[1:20,]) %>% kable_styling_fc()
@@ -956,18 +963,55 @@ tb_birth_cold_COct_cor0 <- ffi_birth_extreme_exposure(df_birth_data_COct_cor0, d
 tb_birth_cold_Clbhwz_cor0 <- ffi_birth_extreme_exposure(df_birth_data_Clbhwz_cor0, df_fahrenheit)
 ```
 
+##### Regression pre-term Births and Extreme Temperature Exposures
+
+In the four datasets that we have generated, each under a different set of conception date distribution assumptions, we have information on the binary prer-term outcome and extreme cold exposure for each individual. We now regress pre-term on extreme cold exposures.
+
+In the regression under **Scenarior (A)**, percent of extreme cold days is unrelated to pre-term.
+```{r}
+# Scenarior (A) regression based on percent of days, with month of year conception fixed effects
+re_esti_cold_rand_cor0 <- lm(preterm ~ days_extreme_cold_percent + factor(month_of_year_conception),
+  data=tb_birth_cold_rand_cor0)
+summary(re_esti_cold_rand_cor0)
+```
+
+In the regression under **Scenarior (B.1)**, even controlling for conception month fixed effects, those experiencing extreme cold are associated with full-term birth. Since the outcome is equal to 1 if preterm happens, the coefficient for extreme-code below is negative. More extreme cold seems to make pre-term less likely, this is a spurious relationship due the conception been concentrated around Feburary. (Spurious because gestational age at birth is i.i.d. draw for all individual birth.)
+```{r}
+# Scenarior (B.1) regression based on percent of days, with month of year conception fixed effects
+re_esti_cold_CFeb_cor0 <- lm(preterm ~ days_extreme_cold_percent + factor(month_of_year_conception),
+  data=tb_birth_cold_CFeb_cor0)
+summary(re_esti_cold_CFeb_cor0)
+```
+
+In the regression under **Scenarior (B.2)**, even controlling for conception month fixed effects, those experiencing extreme cold are associated with pre-term birth. Since the outcome is equal to 1 if preterm happens, the coefficient for extreme-code below is positive. More extreme cold seems to make pre-term more likely, this is a spurious relationship due the conception been concentrated around October. (Spurious because gestational age at birth is i.i.d. draw for all individual birth.)
+```{r}
+# Scenarior (B.2) regression based on percent of days, with month of year conception fixed effects
+re_esti_cold_COct_cor0 <- lm(preterm ~ days_extreme_cold_percent + factor(month_of_year_conception),
+  data=tb_birth_cold_COct_cor0)
+summary(re_esti_cold_COct_cor0)
+```
+
+In the regression under **Scenarior (B.3)**, we have a very weak negative and insignificant correlation between preterm and extreme-cold exposure in percentage of days. Given our empirical conception distribution, our result is more similar to **Scenarior A** and not close to **Scenarior B.1** and **Scenarior B.2**. This means that if indeed gestational age at birth are i.i.d. draws and have nothing to do with cold exposures, our empirical conception distribution will not generate a spurious correlation between extreme-cold exposure and pre-term birth (and lower birth-weight).
+
+```{r}
+# Scenarior (B.3) regression based on percent of days, with month of year conception fixed effects
+re_esti_cold_Clbhwz_cor0 <- lm(preterm ~ days_extreme_cold_percent + factor(month_of_year_conception),
+  data=tb_birth_cold_Clbhwz_cor0)
+summary(re_esti_cold_Clbhwz_cor0)
+```
+
 #### Visualize Pre-term, Full-term and Days of Extreme Temperature Exposures
 
 ##### Analysis and Visualization Functions
 
 Using the data generated prior, we generate distribution of days exposed to extreme cold temperature.
 
-First, create a function for generating statistics and visualization for the relationship between extreme cold days and pre-term or not. 
+First, create a function for generating statistics and visualization for the relationship between extreme cold days and pre-term or not.
 
 ```{r}
 # Create a function.
 ffi_cold_days_preterm_analyze <- function(
-  tb_birth_cold, 
+  tb_birth_cold,
   st_title = paste0('Scenario (A), Extreme cold DAYS Distribution\n',
                     'Uniform Conception\n',
                     'Conception and Birth uncorrelated')){
@@ -999,18 +1043,18 @@ ffi_cold_days_preterm_analyze <- function(
     theme(
       axis.text.x = element_text(angle = 45, vjust = 0.1, hjust = 0.1)
     )
-  
+
   return(list(
     df_temp_preterm_stats = df_table_grp_stats_rand_cor0,
     plt_temp_preterm = plt_rand_cor0_level))
 }
 ```
 
-Second, create a function for generating statistics and visualization for the relationship between extreme cold days and pre-term or not. 
+Second, create a function for generating statistics and visualization for the relationship between extreme cold percent of gestational days and pre-term or not.
 
 ```{r}
 ffi_cold_percent_days_preterm_analyze <- function(
-  tb_birth_cold, 
+  tb_birth_cold,
   st_title = paste0('Scenario (A), Extreme cold PERCENT of DAYS Distribution\n',
                     'Uniform Conception\n',
                     'Conception and Birth uncorrelated')){
@@ -1023,7 +1067,7 @@ ffi_cold_percent_days_preterm_analyze <- function(
     tb_birth_cold, c('preterm'),
     'days_extreme_cold_percent', str_stats_group, ar_perc)
   df_table_grp_stats_rand_cor0 <- ls_summ_by_group$df_table_grp_stats
-  
+
   # Visualize
   plt_rand_cor0_level <- tb_birth_cold %>%
     mutate(preterm = factor(preterm)) %>%
@@ -1050,7 +1094,7 @@ ffi_cold_percent_days_preterm_analyze <- function(
 
 ##### Scenario A, number of days and preterm
 
-Scenario A, number of days exposed to extreme cold distribution: 
+Scenario A, number of days exposed to extreme cold distribution:
 
 ```{r}
 # For tb_birth_cold_rand_cor0
@@ -1063,7 +1107,7 @@ print(ls_coldexp_preterm$plt_temp_preterm)
 
 ##### Scenario B.1, number of days and preterm
 
-Scenario B.1, number of days exposed to extreme cold distribution: 
+Scenario B.1, number of days exposed to extreme cold distribution:
 
 ```{r}
 # For tb_birth_cold_CFeb_cor0
@@ -1076,7 +1120,7 @@ print(ls_coldexp_preterm$plt_temp_preterm)
 
 ##### Scenario B.2, number of days and preterm
 
-Scenario B.2, number of days exposed to extreme cold distribution (average lines largely overlap): 
+Scenario B.2, number of days exposed to extreme cold distribution (average lines largely overlap):
 
 ```{r}
 # For tb_birth_cold_COct_cor0
@@ -1089,7 +1133,7 @@ print(ls_coldexp_preterm$plt_temp_preterm)
 
 ##### Scenario B.3, number of days and preterm
 
-Scenario B.3, number of days exposed to extreme cold distribution (average lines largely overlap), note this is the result based on the empirical conception distribution from Guangzhou: 
+Scenario B.3, number of days exposed to extreme cold distribution (average lines largely overlap), note this is the result based on the empirical conception distribution from Guangzhou:
 
 ```{r}
 # For tb_birth_cold_Clbhwz_cor0
@@ -1102,7 +1146,7 @@ print(ls_coldexp_preterm$plt_temp_preterm)
 
 ##### Scenario A, percent of days and preterm
 
-Scenario A, percent of days exposed to extreme cold distribution: 
+Scenario A, percent of days exposed to extreme cold distribution:
 
 ```{r}
 # For tb_birth_cold_rand_cor0
@@ -1115,7 +1159,7 @@ print(ls_coldexp_preterm$plt_temp_preterm)
 
 ##### Scenario B.1, percent of days and preterm
 
-Scenario B.1, percent of days exposed to extreme cold distribution: 
+Scenario B.1, percent of days exposed to extreme cold distribution:
 
 ```{r}
 # For tb_birth_cold_CFeb_cor0
@@ -1128,7 +1172,7 @@ print(ls_coldexp_preterm$plt_temp_preterm)
 
 ##### Scenario B.2, percent of days and preterm
 
-Fourth, Scenario B.2, percent of days exposed to extreme cold distribution: 
+Fourth, Scenario B.2, percent of days exposed to extreme cold distribution:
 
 ```{r}
 # For tb_birth_cold_COct_cor0
@@ -1141,7 +1185,7 @@ print(ls_coldexp_preterm$plt_temp_preterm)
 
 ##### Scenario B.3, percent of days and preterm
 
-Scenario B.3, percent of days exposed to extreme cold distribution (average lines largely overlap), note this is the result based on the empirical conception distribution from Guangzhou: 
+Scenario B.3, percent of days exposed to extreme cold distribution (average lines largely overlap), note this is the result based on the empirical conception distribution from Guangzhou:
 
 ```{r}
 # For tb_birth_cold_Clbhwz_cor0
