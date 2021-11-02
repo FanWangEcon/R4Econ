@@ -4,6 +4,7 @@ description: |
   Basic array operations in R, rep, head, tail, na, etc.
   E notation.
   Get N cuts from M points.
+  Convert numeric array to string array with positive and negative signs.
 core:
   - package: r
     code: |
@@ -12,7 +13,7 @@ core:
       tail()
       na_if()
       Re()
-date: 2021-02-02
+date: 2021-11-02
 date_start: 2020-04-01
 output:
   pdf_document:
@@ -170,3 +171,20 @@ print(ar_fl_number_re_subset)
     + this is approximately: 0.90480
 3. Case three: *9.048038e-01*
     + this is approximately: 0.90480
+
+#### String Conversions
+
+##### Add Positive and Negative Sign in Front of Values
+
+We have a sequence of integers, some positive and some negative. We convert this into a string array, and append positive sign in front of positive values. 
+
+```{r}
+# An array of integers
+ar_it_vals <- seq(-5, 5, by = 1)
+# Add positive sign in front of positive and zero elements
+st_it_vals <- paste0(ar_it_vals)
+st_it_vals[ar_it_vals>0] <- paste0("+", st_it_vals[ar_it_vals>0])
+st_it_vals[ar_it_vals==0] <- paste0("±", st_it_vals[ar_it_vals==0])
+# Display
+print(st_it_vals)
+```

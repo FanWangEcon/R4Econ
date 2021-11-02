@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE-------------------------------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE-----------------------------------------------------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ---- amto.tibble.fs_tib_na.find_replace, eval=TRUE----------------------------------------------------------------------------------------------------
+## ---- amto.tibble.fs_tib_na.find_replace, eval=TRUE--------------------------------------------------------------------------------------------------------------------------------
 # First make sure these are factors
 tb_mtcars <- as_tibble(mtcars) %>% 
   mutate(vs = as_factor(vs), am = as_factor(am))
@@ -18,10 +18,20 @@ tb_mtcars <- tb_mtcars %>%
 tb_mtcars_selected <- tb_mtcars %>%
   mutate(vs_am = fct_cross(vs, am, sep='_', keep_empty = FALSE)) %>%
   select(mpg, qsec, vs_am)
-print(tb_mtcars_selected)
+
+# relabel interaction variables
+am_vs_levels <- c("vshape (engine) and auto (shift)" = "vshaped_engine_auto_shift", 
+                  "vshape (engine) and manual (shift)" = "vshaped_engine_manual_shift", 
+                  "straight (engine) and auto (shift)" = "straight_engine_auto_shift", 
+                  "straight (engine) and manual (shift)" = "straight_engine_manual_shift")
+tb_mtcars_selected <- tb_mtcars_selected %>%
+  mutate(vs_am = fct_recode(vs_am, !!!am_vs_levels))
+
+# Show
+print(tb_mtcars_selected[1:10,])
 
 
-## ------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Labeling
 st_title <- paste0('Distribution of MPG and QSEC from mtcars')
 st_subtitle <- paste0('https://fanwangecon.github.io/',

@@ -30,6 +30,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ Basic array operations in R, rep, head, tail, na, etc.
 	+ E notation.
 	+ Get N cuts from M points.
+	+ Convert numeric array to string array with positive and negative signs.
 	+ **r**: *rep() + head() + tail() + na_if() + Re()*
 2. [Generate Special Arrays](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_generate.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_generate.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_generate.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_generate.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_generate.html)
 	+ Generate equi-distance, special log spaced array.
@@ -58,7 +59,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ rename numeric sequential columns with string prefix and suffix
 	+ **dplyr**: *as_tibble(mt) + rename_all(~c(ar_names)) + rename_at(vars(starts_with("xx")), funs(str_replace(., "yy", "yyyy")) + rename_at(vars(num_range('',ar_it)), funs(paste0(st,.))) + rowid_to_column() + colnames + rownames*
 2. [Label and Combine Factor Variables](https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_factors.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_factors.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_factors.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_factors.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_factors.html)
-	+ Convert numeric variables to factor variables, generate joint factors, and label factors.
+	+ Convert numeric variables to factor variables, generate interaction variables (joint factors), and label factors with descriptive words.
 	+ Graph MPG and 1/4 Miles Time (qsec) from the mtcars dataset over joint shift-type (am) and engine-type (vs) categories.
 	+ **forcats**: *as_factor() + fct_recode() + fct_cross()*
 3. [Randomly Draw Subsets of Rows from Matrix](https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_random_draws.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_random_draws.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_random_draws.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_random_draws.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_random_draws.html)
@@ -371,9 +372,13 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 ## 10.3  ggplot Scatter Related Plots
 
-1. [ggplot Scatter Plot Three Continuous Variables and Multiple Categorical Variables](https://fanwangecon.github.io/R4Econ/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter//fs_ggscatter_3cts_mdisc.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.html)
+1. [ggplot Scatter Plot Grouped or Unique Patterns and Colors](https://fanwangecon.github.io/R4Econ/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter//fs_ggscatter_3cts_mdisc.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.html)
+	+ Scatter Plot Three Continuous Variables and Multiple Categorical Variables
 	+ Two continuous variables for the x-axis and the y-axis, another continuous variable for size of scatter, other categorical variables for scatter shape and size.
-	+ **ggplot**: *ggplot() + geom_jitter() + geom_smooth() + scale_colour_manual() + scale_shape_discrete() + scale_linetype_manual() + scale_x_continuous() + scale_y_continuous() + theme_bw() + theme()*
+	+ Scatter plot with unique pattern and color for each scatter point. 
+	+ Y and X label axis with two layers of text in levels and deviation from some mid-point values. 
+	+ **tibble**: *rownames_to_column(mtcars, var = "car_name")  %>% as_tibble()  *
+	+ **ggplot**: *ggplot() + geom_jitter() + geom_smooth() + geom_point(size=1, stroke=1) + scale_colour_manual() + scale_shape_discrete() + scale_linetype_manual() + scale_x_continuous() + scale_y_continuous() + theme_bw() + theme()*
 2. [ggplot Multiple Scatter-Lines and Facet Wrap Over Categories](https://fanwangecon.github.io/R4Econ/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_facet_wrap.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter//fs_ggscatter_facet_wrap.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_facet_wrap.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_facet_wrap.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_facet_wrap.html)
 	+ ggplot multiple lines with scatter as points and connecting lines.
 	+ Facet wrap to generate subfigures for sub-categories.
