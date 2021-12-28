@@ -1,10 +1,10 @@
 ---
-title: "Inequality in Environmental Exposure Across Population Groups"
-titleshort: "Inequality in Environmental Exposure Across Population Groups"
+title: "Share of Environmental Exposure Burden Across Population Groups"
+titleshort: "Share of Environmental Exposure Burden Across Population Groups"
 description: |
   Simulate population distribution by location and demographic groups.
-  Simulate pollution exposures by location. 
-  Compute inequality in environmental exposure across population groups, given location-specific environmental data and location-specific population information. 
+  Simulate pollution exposures by location.
+  Compute share of pollution burden for a population group relative to the share of overall population accounted for by this population group.
 core:
   - package: r
     code: |
@@ -20,17 +20,17 @@ core:
       left_join()
       filter()
       slice()
-date: 2021-02-02
-date_start: 2021-02-02
+date: 2021-12-27
+date_start: 2021-12-27
 output:
-  pdf_document:
-    pandoc_args: '../../_output_kniti_pdf.yaml'
-    includes:
-      in_header: '../../preamble.tex'
   html_document:
     pandoc_args: '../../_output_kniti_html.yaml'
     includes:
       in_header: "../../hdga.html"
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
 always_allow_html: true
 urlcolor: blue
 ---
@@ -47,7 +47,7 @@ try(source("../../.Rprofile"))
 
 #### Simulate Population Distribution over Location and Demographics
 
-Use the binomial distribution to generate heterogenous demographic break-down by location. There are N demographic cells, and the binomial distribution provides the probability mass in each of the N cell. Different bernoulli "win" chance for each location. There is also probability distribution over population in each location.  
+Use the binomial distribution to generate heterogenous demographic break-down by location. There are N demographic cells, and the binomial distribution provides the probability mass in each of the N cell. Different bernoulli "win" chance for each location. There is also probability distribution over population in each location.
 
 First, construct empty population share dataframe:
 
@@ -56,7 +56,7 @@ First, construct empty population share dataframe:
 it_N_pop_groups <- 7
 it_M_location <- 12
 # Matrix of demographics by location
-mt_pop_data_frac <- matrix(data=NA, nrow=it_M_location, ncol=it_N_pop_groups)  
+mt_pop_data_frac <- matrix(data=NA, nrow=it_M_location, ncol=it_N_pop_groups)
 colnames(mt_pop_data_frac) <- paste0('popgrp', seq(1,it_N_pop_groups))
 rownames(mt_pop_data_frac) <- paste0('location', seq(1,it_M_location))
 # Display
@@ -88,12 +88,12 @@ for (it_loc in 1:it_M_location ) {
 print(paste0('pop frac sum = ', sum(mt_pop_data_frac)))
 
 # Display
-round(mt_pop_data_frac*100, 2) %>% 
-  kable(caption='Share of population in each location and demographic cell') %>% 
+round(mt_pop_data_frac*100, 2) %>%
+  kable(caption='Share of population in each location and demographic cell') %>%
   kable_styling_fc()
 ```
 
-#### Simulate Enviromental Exposure
+#### Simulate Environmental Exposure
 
 Use log-normal distribution to describe average daily PM10 exposures distribution by locality:
 
@@ -164,127 +164,160 @@ df_pop_pollution_by_popgrp_cdf <- df_pop_pollution_long %>%
   mutate(cdf_pop_condi_popgrp_sortpm10 = cumsum(pop_frac/sum(pop_frac)),
          pmf_pop_condi_popgrp_sortpm10 = (pop_frac/sum(pop_frac)))
 # display
-df_pop_pollution_by_popgrp_cdf[1:round(it_N_pop_groups*5.5),] %>% 
+df_pop_pollution_by_popgrp_cdf[1:round(it_N_pop_groups*5.5),] %>%
   kable() %>% kable_styling_fc_wide()
 ```
 
-#### Compute the Gini Index by Population Subgroup
+#### Various Relative Burden Statistics
 
-The Gini index from [fs_gini_disc](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_gini_disc.html).
+What to compute?
 
-```{r}
-ffi_dist_gini_random_var_pos_test <- function(ar_x_sorted, ar_prob_of_x) {
-  fl_mean <- sum(ar_x_sorted*ar_prob_of_x);
-  ar_mean_cumsum <- cumsum(ar_x_sorted*ar_prob_of_x);
-  ar_height <- ar_mean_cumsum/fl_mean;
-  fl_area_drm <- sum(ar_prob_of_x*ar_height);
-  fl_area_below45 <- sum(ar_prob_of_x*(cumsum(ar_prob_of_x)/sum(ar_prob_of_x)))
-  fl_gini_index <- (fl_area_below45-fl_area_drm)/fl_area_below45
-  return(fl_gini_index)
-}
-```
-
-Compute Gini index for sub-group:
-
-```{r}
-# Compute GINI by group
-df_pop_pollu_gini <- df_pop_pollution_by_popgrp_cdf %>%
-  group_by(popgrp) %>%
-  do(popgrp_gini = ffi_dist_gini_random_var_pos_test(
-    .$avgdailypm10, .$pmf_pop_condi_popgrp_sortpm10)) %>%
-  unnest(c(popgrp_gini)) %>%
-  left_join(df_pop_pollution_by_popgrp_cdf %>% 
-              group_by(popgrp) %>% slice(1L) %>% 
-              select(popgrp)
-              , by="popgrp")
-# Display
-df_pop_pollu_gini %>% kable() %>% kable_styling_fc()
-```
-
-#### Visualize the Distributions
-
-Visualizing distributions. Visualize the CDF:
-
-```{r}
-# Visaulize Distributions, CDF for different population groups
-lineplot <- df_pop_pollution_by_popgrp_cdf %>%
-    select(popgrp, avgdailypm10, cdf_pop_condi_popgrp_sortpm10 ) %>%
-    ggplot(aes(x=avgdailypm10, y=cdf_pop_condi_popgrp_sortpm10, 
-               colour=popgrp)) +
-        geom_line() +
-        geom_point() +
-        labs(title = 'CDF of Pollution Distribution by Population Types',
-             x = 'Pollution Levels',
-             y = 'Cumulative Probability Mass',
-             caption = 'Testing Data') 
-print(lineplot)
-```
-
-Visualize the Probability Mass (real data should look much less chaotic than this):
-
-```{r}
-# Visaulize Distributions, CDF for different population groups
-lineplot_pmf <- df_pop_pollution_by_popgrp_cdf %>%
-    select(popgrp, avgdailypm10, pmf_pop_condi_popgrp_sortpm10 ) %>%
-    ggplot(aes(x=avgdailypm10, y=pmf_pop_condi_popgrp_sortpm10, 
-               colour=popgrp)) +
-        geom_line() +
-        geom_point() +
-        labs(title = 'Prob Mass Func of Pollution by Population Types',
-             x = 'Pollution Levels',
-             y = 'Probability Mass',
-             caption = 'Testing Data') 
-print(lineplot_pmf)
-```
-
-#### Various Quantiles 
-
-Measure quantiles of pollution exposures for different population groups:
-
-1. Consider CDF larger than current quantile of interest.
-2. Slice group-specific CDF that is higher and closest to quantile of interest.
+1. Excess pollution burden: Share of pollution burden by population group and overall population share, this is simply the ratio of population group mean and the overall weighted mean.
+2. What is the fraction of the people in each population group with below and above overall average?
 3. Merge results for different quantiles together.
 
+##### Excess pollution burden
+
+We compute excess population burden: *pm10_grp_exc_burden*. 0.10 means 10 percent in excess, this means the pollution burden share is 10 percent in excess of the population share. -0.10 means 10 percent less than what population share is.
+
+Additionally, we compute the share of people within group below or above overall mean: *pm10_grp_shr_exc*. This shows the share of people having excess burden. This complements the first number. Because the 10 percent excess could be due to very high exposure to a very small number of people within a population group, or it could be that most people in the group are in "excess".
+
 ```{r}
-# Generate pollution quantiles by population groups
-df_pop_pollution_distribution <- df_pop_pollution_by_popgrp_cdf %>% 
+# Stats 1: excess pollution burden
+df_excess_pollution_burden <- df_pop_pollution_by_popgrp_cdf %>%
+  ungroup() %>%
+  mutate(pm10_overall_mean = weighted.mean(avgdailypm10, pop_frac)) %>%
   group_by(popgrp) %>%
-  mutate(pm10_mean = weighted.mean(avgdailypm10, pop_frac)) %>%
-  mutate(pm10_sd_gap = pop_frac*(avgdailypm10 - pm10_mean)^2, 
-         pm10_sd = sqrt(weighted.mean(pm10_sd_gap, pop_frac))) %>%
-  select(-pm10_sd_gap) %>%
-  filter(cdf_pop_condi_popgrp_sortpm10 >= 0.10) %>%
+  mutate(pm10_grp_mean = weighted.mean(avgdailypm10, pop_frac)) %>%
   slice(1) %>%
-  mutate(pm10_p10 = avgdailypm10) %>%
-  select(popgrp, pm10_mean, pm10_sd, pm10_p10) %>%
-  left_join(df_pop_pollu_gini, by='popgrp') %>% 
-  left_join(df_pop_pollution_by_popgrp_cdf %>% 
-              filter(cdf_pop_condi_popgrp_sortpm10 >= 0.20) %>%
-              slice(1) %>%
-              mutate(pm10_p20 = avgdailypm10) %>%
-              select(popgrp, pm10_p20), 
-            by='popgrp') %>%
-  left_join(df_pop_pollution_by_popgrp_cdf %>% 
-              filter(cdf_pop_condi_popgrp_sortpm10 >= 0.50) %>%
-              slice(1) %>%
-              mutate(pm10_p50 = avgdailypm10) %>%
-              select(popgrp, pm10_p50), 
-            by='popgrp') %>%
-  left_join(df_pop_pollution_by_popgrp_cdf %>% 
-              filter(cdf_pop_condi_popgrp_sortpm10 >= 0.80) %>%
-              slice(1) %>%
-              mutate(pm10_p80 = avgdailypm10) %>%
-              select(popgrp, pm10_p80), 
-            by='popgrp') %>%
-  left_join(df_pop_pollution_by_popgrp_cdf %>% 
-              filter(cdf_pop_condi_popgrp_sortpm10 >= 0.90) %>%
-              slice(1) %>%
-              mutate(pm10_p90 = avgdailypm10) %>%
-              select(popgrp, pm10_p90), 
-            by='popgrp') %>%
-  select(popgrp, pm10_mean, pm10_sd, popgrp_gini, everything())
+  mutate(pm10_grp_exc_burden = pm10_grp_mean/pm10_overall_mean - 1) %>%
+  select(popgrp, pm10_grp_mean, pm10_overall_mean, pm10_grp_exc_burden)
+fl_pm10_overall_mean <- mean(df_excess_pollution_burden %>% pull(pm10_overall_mean))
+
+# Stats 2: share of people within group below or above overall mean
+df_share_below_or_excess <- df_pop_pollution_by_popgrp_cdf %>%
+  arrange(popgrp, avgdailypm10) %>%
+  filter(avgdailypm10 < fl_pm10_overall_mean) %>%
+  slice_tail() %>%
+  mutate(pm10_grp_shr_exc = 1 - cdf_pop_condi_popgrp_sortpm10) %>%
+  select(popgrp, pm10_grp_shr_exc)
+# merge stats 2 with stats 1
+df_excess_pollution_burden <- df_excess_pollution_burden %>%
+  left_join(df_share_below_or_excess, by="popgrp")
+
 # display
-df_pop_pollution_distribution %>% 
-  kable(caption = 'PM10 Exposure Distribution by Population Groups') %>% 
+df_excess_pollution_burden %>%
+  kable(caption = 'PM10 Exposure Distribution by Population Groups') %>%
   kable_styling_fc()
+```
+
+##### Within Group Percentiles
+
+Compute within group percentiles for each population groups. Use the list of percentiles below to specify which percentiles should be computed.
+
+```{r}
+# Stats 3: percentiles and ratios
+ar_fl_percentiles <- c(0.1, 0.2, 0.8, 0.9)
+# Stats 3a: generate key within group percentiles
+# 1. 20th and 80th percentiles
+# 2. 10th and 90th percentiles
+# 3. 50th percentile
+# Generate pollution quantiles by population groups
+for (it_percentile_ctr in seq(1, length(ar_fl_percentiles))) {
+
+    # Current within group percentile to compute
+    fl_percentile <- ar_fl_percentiles[it_percentile_ctr]
+    svr_percentile <- paste0('pm10_p', round(fl_percentile*100))
+
+    # Frame with specific percentile
+    df_within_percentiles_cur <- df_pop_pollution_by_popgrp_cdf %>%
+      group_by(popgrp) %>%
+      filter(cdf_pop_condi_popgrp_sortpm10 >= fl_percentile) %>%
+      slice(1) %>%
+      mutate(!!sym(svr_percentile) := avgdailypm10) %>%
+      select(popgrp, one_of(svr_percentile))
+
+    # Merge percentile frames together
+    if (it_percentile_ctr > 1) {
+      df_within_percentiles <- df_within_percentiles %>%
+        left_join(df_within_percentiles_cur, by='popgrp')
+    } else {
+      df_within_percentiles <- df_within_percentiles_cur
+    }
+}
+
+# display
+df_within_percentiles %>%
+  kable(caption = 'PM10 Exposure Distribution by Population Groups') %>%
+  kable_styling_fc()
+
+```
+
+##### Percentiles As Excess Burden
+
+The 80th percentile for a population group, how is this exposed relative to the mean? We simply divide the within group pollution percentiles by the overall mean across all groups. All are properly weighted.
+
+This is relating within group percentiles to the overall mean. These can be interpreted as excess burdens at specific percentiles. Individuals at the 80th percentile of a particular population group, how does their pollution burden compare to their population share?
+
+```{r}
+# merge stats 3 with stats 1 and 2
+df_excess_pollution_burden <- df_excess_pollution_burden %>%
+  left_join(df_within_percentiles, by="popgrp")
+
+# Stats 3b: Percentiles to Relative Burdens
+# Convert percentiles to be relative of overall means
+for (it_percentile_ctr in seq(1, length(ar_fl_percentiles))) {
+
+    # Current within group percentile to compute
+    fl_percentile <- ar_fl_percentiles[it_percentile_ctr]
+    svr_percentile <- paste0('pm10_p', round(fl_percentile*100))
+    svr_perc_exc_burden <- paste0('pm10_grp_excbrd_p', round(fl_percentile*100))
+
+    # Percentiles to excess percentiles
+    df_excess_pollution_burden  <- df_excess_pollution_burden  %>%
+      mutate(!!sym(svr_perc_exc_burden) := !!sym(svr_percentile)/pm10_overall_mean)
+}
+
+# display
+df_excess_pollution_burden %>%
+  select(-pm10_overall_mean,
+         -starts_with('pm10_p')) %>%
+  kable(caption = 'PM10 Exposure Distribution by Population Groups') %>%
+  kable_styling_fc_wide()
+```
+
+##### Within Group Relative Exposure Ratios Across Percentiles
+
+We now compute within group relative ratios of interest. This is purely within group inequality.
+
+```{r}
+# lower and upper bound or relative within group ratios
+# can only use values appearing in the percentiles list prior
+ar_fl_ratio_upper <- c(0.8, 0.9)
+ar_fl_ratio_lower <- c(0.2, 0.1)
+# Stats 4c: Ratios
+# Generate P80 to P20 ratio, and P90 to P10 standard inequality ratios
+for (it_ratio_ctr in seq(1, length(ar_fl_ratio_upper))) {
+
+    # Upper and lower percentile bounds
+    fl_ratio_upper <- ar_fl_ratio_upper[it_ratio_ctr]
+    fl_ratio_lower <- ar_fl_ratio_lower[it_ratio_ctr]
+    svr_ratio_upper_perc <- paste0('pm10_p', round(fl_ratio_upper*100))
+    svr_ratio_lower_perc <- paste0('pm10_p', round(fl_ratio_lower*100))
+
+    # New relative within group ratio variable name
+    svr_ratio <- paste0('pm10_rat_p', round(fl_ratio_upper*100), '_dvd_p', round(fl_ratio_lower*100))
+
+    # Generate P80 to P20 ratio, etc.
+    df_excess_pollution_burden  <- df_excess_pollution_burden  %>%
+      mutate(!!sym(svr_ratio) := !!sym(svr_ratio_upper_perc)/!!sym(svr_ratio_lower_perc))
+}
+
+# display
+df_excess_pollution_burden %>%
+  select(-pm10_overall_mean,
+         -starts_with('pm10_grp_excbrd_p'),
+         -starts_with('pm10_p')) %>%
+  kable(caption = 'PM10 Exposure Distribution by Population Groups') %>%
+  kable_styling_fc_wide()
 ```
