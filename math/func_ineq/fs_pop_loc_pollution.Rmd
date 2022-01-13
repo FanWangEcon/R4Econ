@@ -45,6 +45,110 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
 
+#### Location, Population, and Environmental Exposures (Pollution)
+
+##### Local Public Exposures $Z_{l,y}$
+
+Environmental exposure, specifically PM 2.5, is a local public good (bad). Prior research has shown that due to the nature of particular matter formation in the air, while there is particular matter variation at the city level, there is not significant variation in particular matter pollution at the neighborhood level [He et al. (2019)](https://www.aeaweb.org/articles?id=10.1257/app.20170286) and [Liu et al. (2022)](https://fanwangecon.github.io/assets/FanWang_PollutionTempBirthweight.pdf). Additionally, there is a difference between ambient environmental exposures and the amount of particular matter inhaled by individual residents: the former is a common level shared by all residents, but the latter can differ depending on individuals' physical and socio-economic attributes. 
+
+There are $M$ different locations (cities/counties/townships), indexed from $l=1$ to $l=M$. In a particular time-period, we assume that the potential pollution exposure for all residents in the same location. Suppose additionally that we compute statistics at the interval of years $y$, and each year includes daily pollution measure for each day of the year $t$, indexed from $t=1$ to $t=T_y$, where $T_y$ is the total number of days in a year. 
+
+Let $\text{Z}_{l,y}$ be the total pollution exposure by a resident in location $l$. This is equal to the sum of pollution exposure during the course of a year: 
+
+$$
+Z_{l,y} = \sum_{t=1}^{T_y} Z_{l,y,t}
+$$
+
+##### Group Exposures $\mathcal{Z}_{i,y}$
+
+Let there be $N$ population groups, indexed from $i=1$ to $i=N$. The $N$ population groups reside in the $M$ locations. the share, let $P_{l,i}$ denote share of population belong to group $i$ that resides in location $l$:
+
+$$
+1 = 
+\sum_{l=1}^{M} 
+\sum_{i=1}^{N}
+P_{l,i}
+$$
+
+The share of population belong to population group $i$ is:
+$$
+P_i = 
+\sum_{l=1}^{M} 
+P_{l,i}
+$$
+
+$\mathcal{Z}_{i,y}$, which is the average pollution exposure facing an individual belonging to group $i$ in year $y$, is determined by how individuals from population group $i$ are distributed across the $M$ locations:
+
+$$
+\mathcal{Z}_{i,y} = 
+\sum_{l=1}^{M} 
+\left(
+  \frac{P_{l,i}}{P_i}
+  \times
+  Z_{l,y}
+\right)
+$$
+
+Additionally, $\mathcal{Z}_{y}$ is the average pollution exposure facing an individual, regardless of population group, in year $y$:
+
+$$
+\mathcal{Z}_{y} = 
+\sum_{i=1}^N
+\left(
+\sum_{l=1}^{M} 
+\left(
+  \frac{P_{l,i}}{P_i}
+  \times
+  Z_{l,y}
+\right)
+P_i
+\right)
+=
+\sum_{i=1}^N
+\left(
+\sum_{l=1}^{M} 
+\left(
+  P_{l,i}
+  \times
+  Z_{l,y}
+\right)
+\right)
+$$
+
+
+##### Excess Environmental Exposure Burden to Population
+
+We have $\mathcal{Z}_{i,y}$, the average pollution burden facing an individual in a particular population group. We also have $P_i$, the share of population belong to population group $i$. 
+
+How does the share of pollution burden facing a population group relate to the share of population this group has in the overall population? 
+
+We define $\mathcal{E}_{i,y}$ as the share of pollution burden for population group $i$ that is in excess of its population share as: 
+$$
+\mathcal{E}_{i,y} = 
+  \left(
+    \frac{\mathcal{Z}_{i,y} \times P_i
+    }{
+    \sum_{\widehat{i}}^{N}
+    \left(
+      \mathcal{Z}_{\widehat{i},y}
+      \times P_{\widehat{i}}
+    \right)
+    }
+  \right)
+  \times 
+  \frac{1}{P_i}
+  = \frac{
+    \mathcal{Z}_{i,y}
+    }{
+    \sum_{\widehat{i}}^{N}
+    \left(
+      \mathcal{Z}_{\widehat{i},y}
+      \times P_{\widehat{i}}
+    \right)
+    }
+$$
+
+
 #### Simulate Population Distribution over Location and Demographics
 
 Use the binomial distribution to generate heterogenous demographic break-down by location. There are N demographic cells, and the binomial distribution provides the probability mass in each of the N cell. Different bernoulli "win" chance for each location. There is also probability distribution over population in each location.
@@ -180,7 +284,7 @@ What to compute?
 
 We compute excess population burden: *pm10_grp_exc_burden*. 0.10 means 10 percent in excess, this means the pollution burden share is 10 percent in excess of the population share. -0.10 means 10 percent less than what population share is.
 
-Additionally, we compute the share of people within group below or above overall mean: *pm10_grp_shr_exc*. This shows the share of people having excess burden. This complements the first number. Because the 10 percent excess could be due to very high exposure to a very small number of people within a population group, or it could be that most people in the group are in "excess".
+Additionally, we compute the share of people within group above the overall mean: *pm10_grp_shr_exc*. This shows the share of people having excess burden. This complements the first number. Because the 10 percent excess could be due to very high exposure to a very small number of people within a population group, or it could be that most people in the group are in "excess".
 
 ```{r}
 # Stats 1: excess pollution burden
