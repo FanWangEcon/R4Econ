@@ -1,6 +1,7 @@
 ---
-title: "Arrays Operations in R"
+title: "Basic Arrays Operations in R"
 description: |
+  Generate N-dimensional array of NA values, label dimension elements.
   Basic array operations in R, rep, head, tail, na, etc.
   E notation.
   Get N cuts from M points.
@@ -8,12 +9,17 @@ description: |
 core:
   - package: r
     code: |
+      sum()
+      prod()
       rep()
+      array(NA, dim=c(3, 3))
+      array(NA, dim=c(3, 3, 3))
+      dimnames(mn)[[3]] = paste0('k=', 0:4)
       head()
       tail()
       na_if()
       Re()
-date: 2021-11-02
+date: 2021-12-22
 date_start: 2020-04-01
 output:
   pdf_document:
@@ -38,6 +44,17 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
 
+#### Sum and Product of Elements in Array
+
+Product of Elements in Array.
+
+```{r}
+ar_a <- c(1,2,3)
+ar_b <- c(1,2,3,4)
+prod(ar_a)
+prod(ar_b)
+```
+
 #### Multidimesional Arrays
 
 ##### Repeat one Number by the Size of an Array
@@ -48,15 +65,69 @@ ar_b <- c(1,2,3/1,2,3)
 rep(0, length(ar_a))
 ```
 
+
 ##### Generate 2 Dimensional Array
 
-```{r amto.array.fs_array_basics.multi.2d}
+First, we will generate an NaN matrix with 3 rows and 3 columnes.
+
+```{r}
+mt_x <- array(NA, dim=c(3, 3))
+dim(mt_x)
+print(mt_x)
+```
+
+Second, we will generate a matrix with 2 rows and four columns.
+
+```{r}
+mt_x <- array(c(1, 1.5, 0, 2, 0, 4, 0, 3), dim=c(2, 4))
+dim(mt_x)
+print(mt_x)
+```
+
+##### Generate 3 Dimensional Array
+
+First, we will create a three dimensional array with the same data as what was used to create the 2-dimensional array on top.
+
+```{r}
 # Multidimensional Array
 # 1 is r1c1t1, 1.5 in r2c1t1, 0 in r1c2t1, etc.
 # Three dimensions, row first, column second, and tensor third
 x <- array(c(1, 1.5, 0, 2, 0, 4, 0, 3), dim=c(2, 2, 2))
 dim(x)
 print(x)
+```
+
+Second, in the example below, we will generate a 3-dimensional array. The first dimension corresponds to different income levels, the second marital status, and the third the number of kids.We compute in the example below taxable income in 2008 given income levels given IRS rules. 
+
+```{r}
+# A, Income Array
+ar_income <- seq(0,200000,length.out=3)
+
+# B. Exemptions and Deductions
+fl_exemption <- 3500# exemption amount per household member
+mt_deduction <- matrix(data=NA, nrow=2, ncol=5)# Marital-status and number of children-specific deduction
+mt_deduction[1,1] <- 5450# Single filers
+mt_deduction[1,2:5] <- 8000# Single filer with children
+mt_deduction[2,] <- 10900# Married couples filing jointly
+
+# C. Taxable Income
+mn_taxable_income <- array(NA, dim=c(length(ar_income), 2, 5))
+for (y in 1:length(ar_income)){
+    for (m in 1:2){
+        for (k in 0:4){
+            mn_taxable_income[y,m,k+1] <- ar_income[y]-fl_exemption*m-fl_exemption*k-mt_deduction[m,k+1]
+        }
+    }
+}
+
+# D. Name dimensions
+dimnames(mn_taxable_income)[[1]] = paste0('income=', round(ar_income, 0))
+dimnames(mn_taxable_income)[[2]] = paste0('married=', 0:1)
+dimnames(mn_taxable_income)[[3]] = paste0('kids=', 0:4)
+
+# E. Print
+dim(mn_taxable_income)
+print(mn_taxable_income)
 ```
 
 #### Array Slicing

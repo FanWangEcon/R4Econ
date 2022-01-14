@@ -14,12 +14,12 @@
 
 ### [Section 1.2 Array][Array] links
 
-1. [Arrays Operations in R](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_basics.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_basics.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_basics.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_basics.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_basics.html)
+1. [Basic Arrays Operations in R](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_basics.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_basics.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_basics.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_basics.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_basics.html)
+	+ Generate N-dimensional array of NA values, label dimension elements.
 	+ Basic array operations in R, rep, head, tail, na, etc.
 	+ E notation.
 	+ Get N cuts from M points.
-	+ Convert numeric array to string array with positive and negative signs.
-	+ **r**: *rep() + head() + tail() + na_if() + Re()*
+	+ **r**: *sum() + prod() + rep() + array(NA, dim=c(3, 3)) + array(NA, dim=c(3, 3, 3)) + dimnames(mn)[[3]] = paste0('k=', 0:4) + head() + tail() + na_if() + Re()*
 2. [Generate Special Arrays](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_generate.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_generate.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_generate.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_generate.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_generate.html)
 	+ Generate equi-distance, special log spaced array.
 	+ Generate probability mass function with non-unique and non-sorted value and probability arrays.
@@ -295,13 +295,11 @@
 	+ **tidyr**: *expand_grid()*
 	+ **ggplot2**: *geom_line() + facet_wrap()*
 	+ **econ**: *Atkinson (JET, 1970)*
-3. [Inequality in Environmental Exposure Across Population Groups](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_pop_loc_pollution.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html)
-	+ Simulate population distribution by location and demographic groups.
-	+ Simulate pollution exposures by location. 
-	+ Compute inequality in environmental exposure across population groups, given location-specific environmental data and location-specific population information. 
-	+ **r**: *matrix()*
-	+ **stats**: *runif() + sum()*
-	+ **dplyr**: *arrange() + group_by() + left_join() + filter() + slice()*
+3. [Share of Environmental Exposure Burden Across Population Groups](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_pop_loc_pollution.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html)
+	+ Simulate pollution exposures by location.
+	+ Compute share of pollution burden for a population group relative to the share of overall population accounted for by this population group.
+	+ core:
+	+   matrix()
 
 ## Statistics links
 
@@ -365,7 +363,7 @@
 	+ Two continuous variables for the x-axis and the y-axis, another continuous variable for size of scatter, other categorical variables for scatter shape and size.
 	+ Scatter plot with unique pattern and color for each scatter point. 
 	+ Y and X label axis with two layers of text in levels and deviation from some mid-point values. 
-	+ **tibble**: *rownames_to_column(mtcars, var = "car_name")  %>% as_tibble()  *
+	+ **tibble**: *rownames_to_column()*
 	+ **ggplot**: *ggplot() + geom_jitter() + geom_smooth() + geom_point(size=1, stroke=1) + scale_colour_manual() + scale_shape_discrete() + scale_linetype_manual() + scale_x_continuous() + scale_y_continuous() + theme_bw() + theme()*
 2. [ggplot Multiple Scatter-Lines and Facet Wrap Over Categories](https://fanwangecon.github.io/R4Econ/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_facet_wrap.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter//fs_ggscatter_facet_wrap.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_facet_wrap.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_facet_wrap.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_facet_wrap.html)
 	+ ggplot multiple lines with scatter as points and connecting lines.
