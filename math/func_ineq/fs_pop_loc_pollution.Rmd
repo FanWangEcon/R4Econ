@@ -112,7 +112,6 @@ Z_{l,y}
 \right)
 $$
 
-
 ##### Excess Environmental Exposure Burden to Population
 
 We have $\mathcal{Z}_{i,y}$, the average pollution burden facing an individual in a particular population group. We also have $P_i$, the share of population belong to population group $i$.
@@ -146,6 +145,75 @@ $$
 $$
 
 Note that $\mathcal{E}_{i,y}$ is simply the ratio between the average pollution exposure for an individual in group $i$ in year $y$ and the overall average pollution exposure for an individual in year $y$, minus 1.
+
+##### Scenarios for Within Group Exposure Variations
+
+The prior sections discussed how to measure environmental exposure (pollution) variations across groups. For example, we might learn that $\mathcal{E}_{i=\text{white},y}=-0.60$ and $\mathcal{E}_{i=\text{black},y}=+0.60$: black population is a lot more exposed to pollution relative to their population than white people are, due to where they live. 
+
+The next question we want to ask is how much variation there is in environmental exposure within group. The interest in this is natural. Limited difference in across group variation could mask great inequality in environmental exposures within group, something relevant for the concept of environmental justice. Additionally, if variations within group are large, it is not clear that mean difference across group would properly capture the magnitude of environmental inequality that exists within a population. 
+
+Suppose there are two locations and two population groups, we have the following scenarios:
+
+1. Zero within group variation for both population groups:
+   + In the most extreme case, all people of one population group live in one location, and all people of another population group live in another location. 
+   + In this case, there would be zero within group variation in environmental exposure. 
+2. Positive within group variation, but identical within group variation for both population groups:
+   + Suppose the distribution of each of the population groups across locations could be identical (say 40 percent in location 1, 60 percent in location 2).
+   + As long as environmental exposure differs across the locations, there will be within group exposure variation.
+   + However, the within group variations will be the same for both population groups. 
+3. Different within group variations across population groups:
+   + The population distribution across location varies for the population groups. Group 1 might have 40 percent in location 1, group 2 might have 70 percent in location 1. 
+   + Same as case (2), as long as environmental exposure differs across the locations, there will be within group exposure variation.
+   + But now, additionally, the within group variations will be different across the population groups. In the most extreme case, one group---if they all reside in one location---might have no within group variation, however, another group---if they co-resides in multiple locations---will have positive within group variations. 
+
+These three scenarios above present contrasting worlds of environmental inequality which can only be captured by summarizing the magnitude of within-group exposure inequalities. 
+
+##### Within Group Exposure Distribution Percentiles 
+
+In our setting here, it is important to note that the within group environmental exposure is driven only by environmental exposure differences across locations. 
+
+First, we sort over the $M$ locations, and create an rank index, $R_{l,y}$, that ranks locations from the least to the most exposed (polluting, note that higher $Z_{l,y}$ is more polluting):
+
+$$
+R_{l,y} = \sum_{\tilde{l}=1}^M 
+\mathbf{1}\left\{ 
+  Z_{l,y} \ge \text{Z}_{\tilde{l},y}
+  \right\}
+$$
+
+The indicator 1 denotes the indicator function. Note that if $R_{l,y}=1$, that means location $l$ is the least polluting location. If $R_{\tilde{l},y}=M$, that means location $\tilde{l}$ is the most pollution location among the $M$ locations. 
+
+Second, $Q_{i,y}(\tau)$ is the quantile function for population group $i$ in year $y$ where $\tau\in[0,1)$ and $\tau=0.01$ is 1 percent. The population-group-specific quantile function $Q_{i,y}(\tau)$ is defined as: 
+
+$$
+Q_{i,y}(\tau) = 
+\max_{l\in\left\{1, \dots, M \right\}}
+\left(   
+    \text{Z}_{l,y}
+    \times
+    \mathbf{1}\left\{
+    \tau \ge
+    % \left(
+      \sum_{\tilde{l}=1}^{M}  
+      \frac{P_{i,\tilde{l}}}{P_i}
+      \times
+      \mathbf{1}\left\{
+        R_{\tilde{l},y} \le l
+        \right\}
+    % \right)
+    \right\}
+\right)
+$$
+
+Note that the $Q_{i,y}(\tau)$ differs for each $i$ because of the $i$-specific population distribution across location differs ($\frac{P_{i,\tilde{l}}}{P_i}$). But all quantile functions share the same rank index $R_{l,y}$ and location-specific pollution measures $\text{Z}_{l,y}$.
+
+Given $Q_{i,y}(\tau)$, we can construct the ratio of two quantiles. Of particular interest is the ratio of the 80th and the 20th quantile for each population group $i$:
+
+$$
+\mathcal{Q}^{80/20}_i = \frac{Q_{i,y}(\tau=0.8)}{Q_{i,y}(\tau=0.2)}
+$$
+
+Where we use $\mathcal{Q}^{80/20}_i$ to denote the P80 to P20 ratio for population group $i$. We can compare this statistics across population groups to see which group has larger within group environmental exposure variation. Given that we know the quantile function for each population group, we can easily construct any alternative statistics based on each population group's within group environmental exposure distribution.
 
 
 #### Simulate Population Distribution over Location and Demographics
