@@ -4,22 +4,20 @@ titleshort: "Share of Environmental Exposure Burden Across Population Groups"
 description: |
   Simulate pollution exposures by location.
   Compute share of pollution burden for a population group relative to the share of overall population accounted for by this population group.
-  core:
-    matrix()
-    runif()
-    sum()
-    arrange()
-    group_by()
-    left_join()
-    filter()
-    slice()
+core:
   - package: r
     code: |
-    - package: stats
+      matrix()
+  - package: stats
     code: |
-    - package: dplyr
+      runif()
+  - package: dplyr
     code: |
-    date: 2021-12-27
+      group_by()
+      left_join()
+      filter()
+      slice()
+date: 2022-02-14
 date_start: 2021-12-27
 output:
   html_document:
@@ -48,69 +46,75 @@ try(source("../../.Rprofile"))
 
 ##### Local Public Exposures $Z_{l,y}$
 
-Environmental exposure, specifically PM 2.5, is a local public good (bad). Prior research has shown that due to the nature of particular matter formation in the air, while there is particular matter variation at the city level, there is not significant variation in particular matter pollution at the neighborhood level [He et al. (2019)](https://www.aeaweb.org/articles?id=10.1257/app.20170286) and [Liu et al. (2022)](https://fanwangecon.github.io/assets/FanWang_PollutionTempBirthweight.pdf). Additionally, there is a difference between ambient environmental exposures and the amount of particular matter inhaled by individual residents: the former is a common level shared by all residents, but the latter can differ depending on individuals' physical and socio-economic attributes.
+Environmental exposure, specifically PM 2.5, is a local public good (bad). Prior research has shown that due to the nature of particular matter formation in the air, while there is particular matter variation at the city level, there are no significant variations in particular matter pollution at the neighborhood level [He et al. (2019)](http://www.doi.org/10.1257/app.20170286) and [Liu et al. (2022)](https://doi.org/10.1016/j.ssresearch.2021.102691). Additionally, there is a difference between ambient environmental exposures and the amount of particular matter inhaled by individual residents: the former is shared by all residents, but the latter can differ depending on individuals' physical and socio-economic attributes.
 
-There are $M$ different locations (cities/counties/townships), indexed from $l=1$ to $l=M$. In a particular time-period, we assume that the potential pollution exposure for all residents in the same location. Suppose additionally that we compute statistics at the interval of years $y$, and each year includes daily pollution measure for each day of the year $t$, indexed from $t=1$ to $t=T_y$, where $T_y$ is the total number of days in a year.
+There are $M$ different locations (cities/counties/townships), indexed from $l=1$ to $l=M$. In a particular time-period, we assume identical potential pollution exposure for all residents in the same location. Suppose additionally that we compute statistics at the interval of period $y$ (which we will call years), and each period includes sub-period (which we will call daily) pollution measure for each sub-period $t$, indexed from $t=1$ to $t=T_y$, where $T_y$ is the total number of sub-periods within a period.
 
-Let $\text{Z}_{l,y}$ be the total pollution exposure by a resident in location $l$. This is equal to the sum of pollution exposure during the course of a year:
+We assume now additionally that individuals stay in the same location during the course of period $y$ (year). Let $\text{Z}_{l,y}$ be the total (potential) pollution exposure by a resident in location $l$ during period $y$. This is equal to the sum of (potential) pollution exposure during the course of a period:
 
 $$
 Z_{l,y} = \sum_{t=1}^{T_y} Z_{l,y,t}
 $$
 
+Note that: 
+- "Same location during period" is assumed due to data limitation. If we know the residential location patterns of individuals during the course of period $y$, we can adjust the sum above so that location-specific pollution data is only added for the sub-period in which the individual reside at the location.
+- "Common exposure within location" can be an innocuous assumption depending on the precision of pollution monitoring stations. 
+
 ##### Group Exposures $\mathcal{Z}_{i,y}$
 
-Let there be $N$ population groups, indexed from $i=1$ to $i=N$. The $N$ population groups reside in the $M$ locations. the share, let $P_{l,i}$ denote share of population belong to group $i$ that resides in location $l$:
+Let there be $N$ population groups, indexed from $i=1$ to $i=N$. The $N$ population groups reside in the $M$ locations. Let $P_{l,i,y}$ denote share of overall population belonging to group $i$ that resides in location $l$ during period $y$:
 
 $$
 1 =
 \sum_{l=1}^{M}
 \sum_{i=1}^{N}
-P_{l,i}
+P_{l,i,y}
+\text{ for all } y
 $$
 
-The share of population belong to population group $i$ is:
+Note that population groups can be defined by any characteristics, including location attributes. When $M$ are demographic (gender, age, etc) groups, we can study the differences in pollution distribution across demographic groups. When $M$ are locations, we can study how pollution distributional burdens vary overall and vary with and across regions. 
+
+Suppose $M$ represents $M$ villages and $N$ is the number of counties which the villages belong to. Each village can only belong to one county, then $P_{l,i,y}$, where $l$ is the village indicator and $i$ is the county indicator, has the property that:
+
 $$
-P_i =
+\text{If } P_{l,i,y}>0 \text{, then } P_{l, \widehat{i},y}=0 \text{, for all } \widehat{i} \neq i
+$$
+
+This means that $l$ is not a sub-index for $i$. Think of $l$ as the row index, and $i$ as the column index. There are $M$ rows and $N$ columns.
+
+The share of overall population that belongs to location $l$ is:
+$$
+P_{l,y} =
+\sum_{i=1}^{N}
+P_{l,i,y}
+$$
+And the share of overall population that belongs to population group $i$ is:
+$$
+\mathcal{P}_{i,y} =
 \sum_{l=1}^{M}
-P_{l,i}
+P_{l,i,y}
 $$
 
 $\mathcal{Z}_{i,y}$, which is the average pollution exposure facing an individual belonging to group $i$ in year $y$, is determined by how individuals from population group $i$ are distributed across the $M$ locations:
-
 $$
 \mathcal{Z}_{i,y} =
 \sum_{l=1}^{M}
-\left(
-\frac{P_{l,i}}{P_i}
+\frac{P_{l,i,y}}{\mathcal{P}_{i,y}}
 \times
 Z_{l,y}
-\right)
 $$
-
-Additionally, $\mathcal{Z}_{y}$ is the average pollution exposure facing an individual, regardless of population group, in year $y$:
-
+Additionally, $Z_{y}$ is the average pollution exposure facing an individual, regardless of population group, in year $y$:
 $$
-\mathcal{Z}_{y} =
+Z_{y} =
 \sum_{i=1}^N
 \left(
-\sum_{l=1}^{M}
-\left(
-\frac{P_{l,i}}{P_i}
+\mathcal{P}_{i,y}
 \times
-Z_{l,y}
-\right)
-\times
-P_i
-\right)
-= \sum_{i=1}^N
-\sum_{l=1}^{M}
-\left(
-P_{l,i}
-\times
-Z_{l,y}
+\mathcal{Z}_{i,y}
 \right)
 $$
+
+Note that we use $Z_{l,y}$ and $P_{l,y}$ for location-specific information, and calligraphic $\mathcal{Z}_{i,y}$ and $\mathcal{P}_{i,y}$ for population-group-specific information.
 
 ##### Excess Environmental Exposure Burden to Population
 
@@ -123,97 +127,230 @@ $$
 \mathcal{E}_{i,y} =
 \left(
 \left(
-\frac{\mathcal{Z}_{i,y} \times P_i
+\frac{\mathcal{P}_{i,y} \times \mathcal{Z}_{i,y}
 }{
 \sum_{\widehat{i}}^{N}
 \left(
+\mathcal{P}_{\widehat{i},y}
+\times
 \mathcal{Z}_{\widehat{i},y}
-\times P_{\widehat{i}}
 \right)
 }
 \right)
 \times
-\frac{1}{P_i}
+\frac{1}{\mathcal{P}_{i,y}}
 \right)
 -1
 = \frac{
 \mathcal{Z}_{i,y}
 }{
-\mathcal{Z}_{y}
+Z_{y}
 }
 -1
 $$
 
 Note that $\mathcal{E}_{i,y}$ is simply the ratio between the average pollution exposure for an individual in group $i$ in year $y$ and the overall average pollution exposure for an individual in year $y$, minus 1.
 
-##### Scenarios for Within Group Exposure Variations
+##### Exposure Distribution Percentiles
 
-The prior sections discussed how to measure environmental exposure (pollution) variations across groups. For example, we might learn that $\mathcal{E}_{i=\text{white},y}=-0.60$ and $\mathcal{E}_{i=\text{black},y}=+0.60$: black population is a lot more exposed to pollution relative to their population than white people are, due to where they live. 
+We are interested in distributional statistics: how much (potential) pollution exposure inequality is there? This could be computed in three ways: 1. overall; 2. across groups; 3. within groups. Let $Q_{x}(\tau)$ be the quantile function for random variable $x$ where $\tau\in[0,1)$ and $\tau=0.01$ is 1 percent. We have separate quantile functions for each of the three cases:
 
-The next question we want to ask is how much variation there is in environmental exposure within group. The interest in this is natural. Limited difference in across group variation could mask great inequality in environmental exposures within group, something relevant for the concept of environmental justice. Additionally, if variations within group are large, it is not clear that mean difference across group would properly capture the magnitude of environmental inequality that exists within a population. 
-
-Suppose there are two locations and two population groups, we have the following scenarios:
-
-1. Zero within group variation for both population groups:
-   + In the most extreme case, all people of one population group live in one location, and all people of another population group live in another location. 
-   + In this case, there would be zero within group variation in environmental exposure. 
-2. Positive within group variation, but identical within group variation for both population groups:
-   + Suppose the distribution of each of the population groups across locations could be identical (say 40 percent in location 1, 60 percent in location 2).
-   + As long as environmental exposure differs across the locations, there will be within group exposure variation.
-   + However, the within group variations will be the same for both population groups. 
-3. Different within group variations across population groups:
-   + The population distribution across location varies for the population groups. Group 1 might have 40 percent in location 1, group 2 might have 70 percent in location 1. 
-   + Same as case (2), as long as environmental exposure differs across the locations, there will be within group exposure variation.
-   + But now, additionally, the within group variations will be different across the population groups. In the most extreme case, one group---if they all reside in one location---might have no within group variation, however, another group---if they co-resides in multiple locations---will have positive within group variations. 
-
-These three scenarios above present contrasting worlds of environmental inequality which can only be captured by summarizing the magnitude of within-group exposure inequalities. 
-
-##### Within Group Exposure Distribution Percentiles 
-
-In our setting here, it is important to note that the within group environmental exposure is driven only by environmental exposure differences across locations. 
-
-<!-- First, we sort over the $M$ locations, and create an rank index, $R_{l,y}$, that ranks locations from the least to the most exposed (polluting, note that higher $Z_{l,y}$ is more polluting):
-
+1. Overall inequality in pollution exposure across all population. Since all differences in pollution exposure comes from variations in pollution across the $M$ locations, this will be measuring inequality across all locations:
 $$
-R_{l,y} = \sum_{\tilde{l}=1}^M 
-\mathbf{1}\left\{ 
-  Z_{l,y} \ge \text{Z}_{\tilde{l},y}
-  \right\}
-$$ -->
-
-<!-- The indicator 1 denotes the indicator function. Note that if $R_{l,y}=1$, that means location $l$ is the least polluting location. If $R_{\tilde{l},y}=M$, that means location $\tilde{l}$ is the most pollution location among the $M$ locations.  -->
-
-$Q_{i,y}(\tau)$ is the quantile function for population group $i$ in year $y$ where $\tau\in[0,1)$ and $\tau=0.01$ is 1 percent. The population-group-specific quantile function $Q_{i,y}(\tau)$ is defined as: 
-
+\left\{
+  P_{l,y}=\left(\sum_{i=1}^{N} P_{l,i,y}\right), 
+  Z_{l,y}
+\right\}_{l=1}^{M}
+$$ 
 $$
-Q_{i,y}(\tau) = 
+Q_{Z_{y}}(\tau) =
 \max_{l\in\left\{1, \dots, M \right\}}
-\left(   
+\left(
     \text{Z}_{l,y}
     \times
     \mathbf{1}\left\{
     \tau \ge
-    % \left(
-      \sum_{\tilde{l}=1}^{M}  
-      \frac{P_{i,\tilde{l}}}{P_i}
+      \sum_{\tilde{l}=1}^{M} P_{\tilde{l},y}
       \times
       \mathbf{1}\left\{
         Z_{\tilde{l},y} \le Z_{l,y}
         \right\}
-    % \right)
     \right\}
 \right)
 $$
-
-Note that the $Q_{i,y}(\tau)$ differs for each $i$ because of the $i$-specific population distribution across location differs ($\frac{P_{i,\tilde{l}}}{P_i}$). But all quantile functions share the same rank index $R_{l,y}$ and location-specific pollution measures $\text{Z}_{l,y}$.
-
-Given $Q_{i,y}(\tau)$, we can construct the ratio of two quantiles. Of particular interest is the ratio of the 80th and the 20th quantile for each population group $i$:
-
+2. Distributional differences across groups:
 $$
-\mathcal{Q}^{80/20}_i = \frac{Q_{i,y}(\tau=0.8)}{Q_{i,y}(\tau=0.2)}
+\left\{
+  \mathcal{P}_{i,y}=\left(
+    \sum_{l=1}^{M}
+    P_{l,i,y}
+  \right), 
+  \mathcal{Z}_{i,y}=\left(
+    \sum_{l=1}^{M}
+    \frac{P_{l,i,y}}{\mathcal{P}_{i,y}}
+    \times
+    Z_{l,y}
+  \right)
+\right\}_{i=1}^{N}
+$$
+$$
+Q_{\mathcal{Z}_{y}}(\tau) =
+\max_{i\in\left\{1, \dots, N \right\}}
+\left(
+    \mathcal{Z}_{i,y}
+    \times
+    \mathbf{1}\left\{
+    \tau \ge
+      \sum_{\tilde{i}=1}^{N} \mathcal{P}_{\tilde{i},y}
+      \times
+      \mathbf{1}\left\{
+        \mathcal{Z}_{\tilde{i},y} \le \mathcal{Z}_{i,y}
+        \right\}
+    \right\}
+\right)
+$$
+3. Distributional differences within groups. Meaning that we can compute $N$ sets of distributional statistics based on $\left\{\frac{P_{l,i,y}}{\mathcal{P}_{i,y}}, Z_{l,y}\right\}_{l=1}^{M}$ from $i=1$ to $N$. We have:
+$$
+Q_{Z_{i,y}}(\tau) =
+\max_{l\in\left\{1, \dots, M \right\}}
+\left(
+    \text{Z}_{l,y}
+    \times
+    \mathbf{1}\left\{
+    \tau \ge
+      \sum_{\tilde{l}=1}^{M}
+      \frac{P_{\tilde{l}, i, y}}{\mathcal{P}_{i,y}}
+      \times
+      \mathbf{1}\left\{
+        Z_{\tilde{l},y} \le Z_{l,y}
+        \right\}
+    \right\}
+\right)
+, \forall i\in\left\{1,\dots,N\right\}
 $$
 
-Where we use $\mathcal{Q}^{80/20}_i$ to denote the P80 to P20 ratio for population group $i$. We can compare this statistics across population groups to see which group has larger within group environmental exposure variation. Given that we know the quantile function for each population group, we can easily construct any alternative statistics based on each population group's within group environmental exposure distribution.
+Note that the $Q_{_{i,y}}(\tau)$ differs for each $i$ because of the $i$-specific population distribution across location differs ($\frac{P_{\tilde{l},i,y}}{P_{i,y}}$). But all type 3 within group (and type 1 overall) quantile functions share the same pollution data $Z_{l,y}$. These quantile functions are step-functions. Each consecutive and rising step, in 2-d, has "run" and "rise". Type 1 and 3 statistics share the same "run" but different "rise". Type 2 statistics have differing runs and rises. 
+
+Given $Q_{x}(\tau)$, we can construct the ratio of two quantiles. Of particular interest is the ratio of the 80th and the 20th quantile:
+$$
+\mathcal{Q}^{80/20}_x = \frac{Q_{x}(\tau=0.8)}{Q_{x}(\tau=0.2)}
+$$
+Where we use $\mathcal{Q}^{80/20}_{x}$ to denote the P80 to P20 ratio for random variable $x$. We can compare this statistics across population groups to see which group has larger within group environmental exposure variation. We can also compare statistics from the overall distribution, the across group distribution, and the within group distributions. Note that Type (1) overall P80 to P20 ratio must be greater or equal to Type (2) across group P80 to P20 ratio:
+$$
+\mathcal{Q}^{80/20}_{Z_{y}} \ge \mathcal{Q}^{80/20}_{\mathcal{Z}_{y}}
+$$
+<!-- 1. Additionally, as long as $N$ population groups are not uniformly distributed across locations and pollution exposure are not uniform across locations, then there exists sub-groups $\widehat{i}$ and $\tilde{i}$ such that: 
+$$
+\exist\thinspace\thinspace
+\widehat{i}\in\left\{1,\dots, N\right\} \text{ and } \tilde{i}\in\left\{1,\dots, N\right\}
+\text{ s.t. }
+\mathcal{Q}^{80/20}_{Z_{\widehat{i},y}} >
+\mathcal{Q}^{80/20}_{Z_{y}} >
+\mathcal{Q}^{80/20}_{Z_{\tilde{i},y}}
+$$  -->
+
+
+##### Gini, Atkinson, and S.D. Functions
+
+In addition to percentile ratios, we can also compute GINI, Atkinson, and variance based statistics overall, across groups, and within groups. The percentile based results are potentially easier to interpret. They are in effect ratios of relative excess burdens. 
+
+For variations overall and within/across groups, note that the GINI and ATKINSON require positive values for inputs, so they can be used with $\mathcal{Z}_{i,y}$, but they can not be applied to the $\mathcal{E}_{i,y}$, which is positive or negative. For variations across groups, we compute these statistics given the distribution of $P_i$.
+
+First, we generate an internal function for GINI, given some sorted array $\mathbf{x}$:
+$$
+\text{GINI Index} =
+1 - \frac{2}{N+1}
+\cdot
+\left(\sum_{i=1}^N \sum_{j=1}^{i} 
+x_j 
+\right)
+\cdot
+\left(
+\sum_{i=1}^N x_i
+\right)^{-1}
+$$
+We use the Gini index which is documented in on the [fs_gini_disc](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_gini_disc.html) page.
+```{r}
+ffi_dist_gini_random_var_pos_test <- function(ar_data, ar_prob_data) {
+  #' @param ar_data array sorted array values low to high
+  #' @param ar_prob_data array probability mass for each element along `ar_data`, sums to 1
+
+  fl_mean <- sum(ar_data*ar_prob_data);
+  ar_mean_cumsum <- cumsum(ar_data*ar_prob_data);
+  ar_height <- ar_mean_cumsum/fl_mean;
+  fl_area_drm <- sum(ar_prob_data*ar_height);
+  fl_area_below45 <- sum(ar_prob_data*(cumsum(ar_prob_data)/sum(ar_prob_data)))
+  fl_gini_index <- (fl_area_below45-fl_area_drm)/fl_area_below45
+  return(fl_gini_index)
+}
+```
+
+Second, we create an internal function for Atkinson statistics, from [Atkinson (JET, 1970)](https://linkinghub.elsevier.com/retrieve/pii/0022053170900396). The formula is:
+$$
+\text{Atkinson Index} =
+A\left(
+\left\{Y_i\right\}_{i=1}^N,
+\lambda
+\right)
+= 1 -
+\left(
+\sum_{i=1}^N \frac{1}{N}
+\left(
+\frac{Y_i}{\sum_{j=1}^N \left( \frac{Y_j}{N} \right) }
+\right)^{\lambda}
+\right)^{\frac{1}{\lambda}}
+\in \left[0,1\right]
+$$
+Note that the Atkinson statistics differ by planner preference, and is arbitrary. We use the Atkinson index formula which is documented on the [fs_atkinson_ces](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_atkinson_ces.html) page.
+```{r}
+# Formula
+ffi_atkinson_random_var_ineq <- function(ar_data, ar_prob_data, fl_rho) {
+  #' @param ar_data array sorted array values
+  #' @param ar_prob_data array probability mass for each element along `ar_data`, sums to 1
+  #' @param fl_rho float inequality aversion parameter fl_rho = 1 for planner
+  #' without inequality aversion. fl_rho = -infinity for fully inequality averse.
+
+  fl_mean <- sum(ar_data*ar_prob_data);
+  fl_atkinson <- 1 - (sum(ar_prob_data*(ar_data^{fl_rho}))^(1/fl_rho))/fl_mean
+  return(fl_atkinson)
+}
+```
+
+Third, we also create an internal function for standard deviation for discrete random variable.
+```{r}
+# Formula
+ffi_std_drv <- function(ar_data, ar_prob_data) {
+  #' @param ar_data array array values
+  #' @param ar_prob_data array probability mass for each element along `ar_data`, sums to 1
+
+  fl_mean <- sum(ar_data*ar_prob_data)
+  fl_std <- sqrt(sum(ar_prob_data*(ar_data - fl_mean)^2))
+  return(fl_std)
+}
+```
+
+
+##### Scenarios for Within Group Exposure Variations
+
+The prior sections discussed how to measure environmental exposure (pollution) variations across groups. For example, we might learn that $\mathcal{E}_{i=\text{white},y}=-0.60$ and $\mathcal{E}_{i=\text{black},y}=+0.60$: black population is a lot more exposed to pollution relative to their population than white people are, due to where they live.
+
+The next question we want to ask is how much variation there is in environmental exposure within group. The interest in this is natural. Limited difference in across group variation could mask great inequality in environmental exposures within group, something relevant for the concept of environmental justice. Additionally, if variations within group are large, it is not clear that mean difference across group would properly capture the magnitude of environmental inequality that exists within a population.
+
+Suppose there are two locations and two population groups, we have the following scenarios:
+
+1. Zero within group variation for both population groups:
+   + In the most extreme case, all people of one population group live in one location, and all people of another population group live in another location.
+   + In this case, there would be zero within group variation in environmental exposure.
+2. Positive within group variation, but identical within group variation for both population groups:
+   + Suppose the distribution of each of the population groups across locations could be identical (say 40 percent in location 1, 60 percent in location 2).
+   + As long as environmental exposure differs across the locations, there will be within group exposure variation.
+   + However, the within group variations will be the same for both population groups.
+3. Different within group variations across population groups:
+   + The population distribution across location varies for the population groups. Group 1 might have 40 percent in location 1, group 2 might have 70 percent in location 1.
+   + Same as case (2), as long as environmental exposure differs across the locations, there will be within group exposure variation.
+   + But now, additionally, the within group variations will be different across the population groups. In the most extreme case, one group---if they all reside in one location---might have no within group variation, however, another group---if they co-resides in multiple locations---will have positive within group variations.
+
+These three scenarios above present contrasting worlds of environmental inequality which can only be captured by summarizing the magnitude of within-group exposure inequalities.
 
 
 #### Simulate Population Distribution over Location and Demographics
@@ -223,9 +360,18 @@ Use the binomial distribution to generate heterogenous demographic break-down by
 First, construct empty population share dataframe:
 
 ```{r}
+# Percentiles to be used for overall, across group, as well as within group calculations.
+# For later purposes, what are the percentiles of interest to compute
+ar_fl_percentiles <- c(0.1, 0.2, 0.8, 0.9)
+# For Percentile ratios of interest, specify lower and upper bounds
+ar_fl_ratio_upper <- c(0.8, 0.9)
+ar_fl_ratio_lower <- c(0.2, 0.1)
+
 # 7 different age groups and 12 different locationso
 it_N_pop_groups <- 100
 it_M_location <- 20
+# it_N_pop_groups <- 7
+# it_M_location <- 10
 # Matrix of demographics by location
 mt_pop_data_frac <- matrix(data=NA, nrow=it_M_location, ncol=it_N_pop_groups)
 colnames(mt_pop_data_frac) <- paste0('popgrp', seq(1,it_N_pop_groups))
@@ -235,6 +381,7 @@ rownames(mt_pop_data_frac) <- paste0('location', seq(1,it_M_location))
 it_popgrp_disp <- 7
 ar_it_popgrp_disp <- seq(1, it_N_pop_groups, length.out=it_popgrp_disp)
 ar_it_popgrp_disp <- round(ar_it_popgrp_disp)
+ar_it_popgrp_disp_withoverall <- c(ar_it_popgrp_disp, it_N_pop_groups+1, it_N_pop_groups+2)
 st_popgrp_disp <- paste0('(', it_popgrp_disp, ' of ', it_N_pop_groups, ' pop-groups shown)')
 it_loc_disp <- 10
 ar_it_loc_disp <- seq(1, it_M_location, length.out=it_loc_disp)
@@ -311,7 +458,7 @@ tb_loc_pollution <- as_tibble(ar_pollution_loc) %>%
 
 # Display
 st_caption = paste('PM10 Exposure across locations', st_loc_disp, sep=" ")
-tb_loc_pollution[ar_it_loc_disp,] %>% 
+tb_loc_pollution[ar_it_loc_disp,] %>%
   kable(caption = st_caption) %>% kable_styling_fc()
 ```
 
@@ -336,7 +483,7 @@ df_pop_pollution_long <- df_pop_data_frac_long %>%
 # display
 st_caption = paste('Population x Location Long Frame (15 rows shown)', sep=" ")
 df_pop_pollution_long[
-  round(seq(1, dim(df_pop_pollution_long)[1], length.out=15)),] %>% 
+  round(seq(1, dim(df_pop_pollution_long)[1], length.out=15)),] %>%
   kable(caption = st_caption) %>% kable_styling_fc()
 ```
 
@@ -366,11 +513,11 @@ df_pop_pollution_by_popgrp_cdf[
 
 #### Various Relative Burden Statistics
 
-What to compute?
+Compute:
 
 1. Excess pollution burden: Share of pollution burden by population group and overall population share, this is simply the ratio of population group mean and the overall weighted mean.
 2. What is the fraction of the people in each population group with below and above overall average?
-3. Merge results for different quantiles together.
+3. Overall percentiles, across group percentiles, and within group percentiles. Compute corresponding p80 to p20 ratios. 
 
 ##### Group-specific Means and Excess pollution burden
 
@@ -419,7 +566,6 @@ Compute within group percentiles for each population groups. Use the list of per
 
 ```{r}
 # Stats 3: percentiles and ratios
-ar_fl_percentiles <- c(0.1, 0.2, 0.8, 0.9)
 # Stats 3a: generate key within group percentiles
 # 1. 20th and 80th percentiles
 # 2. 10th and 90th percentiles
@@ -456,7 +602,118 @@ df_within_percentiles[ar_it_popgrp_disp,] %>%
   kable_styling_fc()
 ```
 
-##### Percentiles As Excess Burden
+##### Overall and Across Group Percentiles
+
+First, use the *df_pop_pollution_by_popgrp_cdf* dataframe, and get total population mass by location, and average polllution per location (raw data). Note that *avgdailypm10* is unifom within location. 
+
+```{r}
+df_location_mean <- df_pop_pollution_by_popgrp_cdf %>%
+  ungroup() %>%
+  group_by(location) %>%
+  mutate(
+    location_mass = sum(pop_frac), # The share of population for this group
+    pm10_mean = weighted.mean(avgdailypm10, pop_frac) # Pop-group mean, don't need this, common within group
+  ) %>%  
+  slice(1) %>%
+  ungroup() %>%
+  arrange(pm10_mean) %>%
+  mutate(cdf_sortpm10 = cumsum(location_mass)) %>%
+  select(location, location_mass, cdf_sortpm10, pm10_mean) %>%
+  mutate(popgrp = "overall")
+
+# display
+st_caption = paste('PM10 Exposure Distribution Overall', st_loc_disp, sep=" ")
+df_location_mean[ar_it_loc_disp,] %>%
+  kable(caption = st_caption) %>%
+  kable_styling_fc_wide()
+```
+
+Second, use the just created *df_excess_pollution_burden* dataframe, and get population by population groups and mean exposures. 
+
+```{r}
+df_popgrp_mean <- df_excess_pollution_burden %>%
+  ungroup() %>%
+  arrange(pm10_grp_mean) %>%
+  mutate(cdf_sortpm10 = cumsum(popgrp_mass)) %>%
+  select(popgrp, popgrp_mass, cdf_sortpm10, pm10_grp_mean) %>%
+  rename(pm10_mean = pm10_grp_mean) %>%
+  mutate(popgrp = "across-group")
+
+# display
+st_caption = paste('PM10 Exposure Across Groups', st_popgrp_disp, sep=" ")
+df_popgrp_mean[ar_it_popgrp_disp,] %>%
+  kable(caption = st_caption) %>%
+  kable_styling_fc_wide()
+```
+
+Third, use the same percentile calculation structure as earlier and compute overall and across group percentiles. 
+
+```{r}
+for (it_df in c(1,2)) {
+  for (it_percentile_ctr in seq(1, length(ar_fl_percentiles))) {
+
+    # Load in data-frames
+    if (it_df == 1) {
+      df_working_inputs <- df_location_mean
+    } else if (it_df == 2) {
+      df_working_inputs <- df_popgrp_mean
+    }
+
+    # Current within group percentile to compute
+    fl_percentile <- ar_fl_percentiles[it_percentile_ctr]
+    svr_percentile <- paste0('pm10_p', round(fl_percentile*100))
+
+    # Frame with specific percentile
+    df_within_percentiles_cur <- df_working_inputs %>%
+      filter(cdf_sortpm10 >= fl_percentile) %>%
+      slice(1) %>%
+      mutate(!!sym(svr_percentile) := pm10_mean) %>%
+      select(popgrp, one_of(svr_percentile))
+
+    # Merge percentile frames together
+    if (it_percentile_ctr > 1) {
+      df_percentiles <- df_percentiles %>%
+        left_join(df_within_percentiles_cur, by='popgrp')
+    } else {
+      df_percentiles <- df_within_percentiles_cur
+    }
+  }
+  
+  if (it_df == 1) {
+    df_location_mean_perc <- df_percentiles
+  } else if (it_df == 2) {
+    df_popgrp_mean_perc <- df_percentiles
+  }
+
+}
+
+# Stack results together
+
+# display
+st_caption = paste('Overall PM10 Distribution')
+df_location_mean_perc %>%
+  kable(caption = st_caption) %>%
+  kable_styling_fc()
+
+st_caption = paste('Across Population Group PM10 Distribution')
+df_popgrp_mean_perc %>%
+  kable(caption = st_caption) %>%
+  kable_styling_fc()  
+```
+
+##### Combine All Percentiles 
+
+Combine percentiles within, overall and across groups, together with excess burden results. 
+
+```{r}
+# Percentiles and excess burden data combined
+df_excburden_percentiles <- df_excess_pollution_burden %>%
+  left_join(df_within_percentiles, by="popgrp")
+# Overall and Across Group percentiles
+df_excburden_percentiles <- bind_rows(df_excburden_percentiles, df_location_mean_perc, df_popgrp_mean_perc)
+```
+
+<!-- ##### Percentiles As Excess Burden
 
 The 80th percentile for a population group, how is this exposed relative to the mean? We simply divide the within group pollution percentiles by the overall mean across all groups. All are properly weighted.
 
@@ -489,17 +746,16 @@ df_excess_pollution_burden[ar_it_popgrp_disp,] %>%
          -starts_with('pm10_p')) %>%
   kable(caption = st_caption) %>%
   kable_styling_fc_wide()
-```
+``` 
+-->
 
-##### Within Group Relative Exposure Ratios Across Percentiles
+##### P80 to P20 Relative Exposures
 
-We now compute within group relative ratios of interest. This is purely within group inequality.
+We now compute the relative percentile ratios of interest. Given that we have merged our dataframes, we include here within group, across group, and overall percentile ratio results. 
 
 ```{r}
 # lower and upper bound or relative within group ratios
 # can only use values appearing in the percentiles list prior
-ar_fl_ratio_upper <- c(0.8, 0.9)
-ar_fl_ratio_lower <- c(0.2, 0.1)
 # Stats 4c: Ratios
 # Generate P80 to P20 ratio, and P90 to P10 standard inequality ratios
 for (it_ratio_ctr in seq(1, length(ar_fl_ratio_upper))) {
@@ -514,14 +770,14 @@ for (it_ratio_ctr in seq(1, length(ar_fl_ratio_upper))) {
   svr_ratio <- paste0('pm10_rat_p', round(fl_ratio_upper*100), '_dvd_p', round(fl_ratio_lower*100))
 
   # Generate P80 to P20 ratio, etc.
-  df_excess_pollution_burden  <- df_excess_pollution_burden  %>%
+  df_excburden_percentiles  <- df_excburden_percentiles  %>%
     mutate(!!sym(svr_ratio) := !!sym(svr_ratio_upper_perc)/!!sym(svr_ratio_lower_perc))
 }
 
 # display
-st_caption = paste('PM10 Exposure within Population Group P80-P20 Inequality',
+st_caption = paste('PM10 Exposure within/across/overall Population Group P80-P20 Inequality',
   st_popgrp_disp, sep=" ")
-df_excess_pollution_burden[ar_it_popgrp_disp,] %>%
+df_excburden_percentiles[ar_it_popgrp_disp_withoverall,] %>%
   select(-pm10_overall_mean,
          -starts_with('pm10_grp_excbrd_p'),
          -starts_with('pm10_p')) %>%
@@ -529,7 +785,49 @@ df_excess_pollution_burden[ar_it_popgrp_disp,] %>%
   kable_styling_fc_wide()
 ```
 
-#### Summary Statistics for Inequality across Groups
+Visualize the distribution of within group relative percentiles 
+```{r}
+# Rounding excess burden s.d.
+df_scatter_main <- df_excburden_percentiles %>% 
+  filter(!popgrp %in% c("overall", "across-group")) 
+fl_pm10_rat_p80_dvd_p20_overall <- mean(df_excburden_percentiles %>%
+  filter(popgrp %in% c("overall")) %>% pull(pm10_rat_p80_dvd_p20))
+fl_pm10_rat_p80_dvd_p20_acrossgrp <- mean(df_excburden_percentiles %>%
+  filter(popgrp %in% c("across-group")) %>% pull(pm10_rat_p80_dvd_p20))
+st_title <- paste0("Relative Percentile Ratios and Excess Burdens")
+# title_line1 <- paste0("Histogram shows the distribution of Relative Ratios")
+
+# Generate a Data Sample by Drawing from the Distribution
+it_sample_draws <- 1e6
+# ar_it_draws <- sample(1:it_N_pop_groups, it_sample_draws, replace=TRUE, prob=ar_data_grp_shares)
+# ar_sample_draws <- ar_data_grp_exc_burden[ar_it_draws]
+# Draw histogram
+pl_excess_burden <- df_scatter_main %>%
+  ggplot(aes(x=pm10_grp_exc_burden, 
+             y=pm10_rat_p80_dvd_p20)) +
+  geom_jitter(aes(size=popgrp_mass, color=pm10_grp_mean), width = 0.15, size=2) +
+  geom_smooth(span = 0.50, se=TRUE) +
+  theme_bw() + 
+  geom_vline(aes(xintercept=0), color="black", linetype="dashed", size=2) +
+  geom_hline(aes(yintercept=fl_pm10_rat_p80_dvd_p20_overall, 
+                 linetype="Overall"), 
+             color="red", size=2) +
+  geom_hline(aes(yintercept=fl_pm10_rat_p80_dvd_p20_acrossgrp, 
+                 linetype="Across-groups"), 
+             color="green", size=2) +
+  labs(title = st_title,
+       # subtitle = paste0(title_line1),
+       x = 'Excess Pollution Burden  = (Pollution Share)/(Pop Share) - 1',
+       y = 'P80 to P20 Ratios',
+       caption = 'Based on simulated random data for testing.') + 
+  scale_linetype_manual(name = "", values = c(2, 2), 
+                        guide = guide_legend(override.aes = list(color = c("red", "green"))))
+  
+# Print
+print(pl_excess_burden)
+```
+
+#### Across Group Atkinson And Gini Statistics
 
 Whether we are looking at inequality within group, or inequality across groups, we can compute various aggregate inequality related statistics, including:
 
@@ -542,80 +840,6 @@ The literature has focused on Atkinson statistics computed over mean pollution e
 
 Earlier, we have already computed the P80 to P20 ratio for each population group.
 
-##### Gini, Atkinson, and S.D. Functions
-
-For variations across groups, note that the GINI and ATKINSON require positive values for inputs, so they can be used with $\mathcal{Z}_{i,y}$, but they can not be applied to the $\mathcal{E}_{i,y}$, which is positive or negative. For variations across groups, we compute these statistics given the distribution of $P_i$.
-
-First, we generate an internal function for GINI:
-$$
-\text{GINI Index} =
-1 - \frac{2}{N+1}
-\cdot
-\left(\sum_{i=1}^N \sum_{j=1}^{i} x_j\right)
-\cdot
-\left(
-\sum_{i=1}^N x_i
-\right)^{-1}
-$$
-We use the Gini index which is documented in on the [fs_gini_disc](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_gini_disc.html) page.
-```{r}
-ffi_dist_gini_random_var_pos_test <- function(ar_data, ar_prob_data) {
-  #' @param ar_data array sorted array values low to high
-  #' @param ar_prob_data array probability mass for each element along `ar_data`, sums to 1
-
-  fl_mean <- sum(ar_data*ar_prob_data);
-  ar_mean_cumsum <- cumsum(ar_data*ar_prob_data);
-  ar_height <- ar_mean_cumsum/fl_mean;
-  fl_area_drm <- sum(ar_prob_data*ar_height);
-  fl_area_below45 <- sum(ar_prob_data*(cumsum(ar_prob_data)/sum(ar_prob_data)))
-  fl_gini_index <- (fl_area_below45-fl_area_drm)/fl_area_below45
-  return(fl_gini_index)
-}
-```
-
-Second, we create an internal function for Atkinson statistics, from [Atkinson (JET, 1970)](https://linkinghub.elsevier.com/retrieve/pii/0022053170900396). The formula is:
-$$
-\text{Atkinson Index} =
-A\left(
-\left\{Y_i\right\}_{i=1}^N,
-\lambda
-\right)
-= 1 -
-\left(
-\sum_{i=1}^N \frac{1}{N}
-\left(
-\frac{Y_i}{\sum_{j=1}^N \left( \frac{Y_j}{N} \right) }
-\right)^{\lambda}
-\right)^{\frac{1}{\lambda}}
-\in \left[0,1\right]
-$$
-Note that the Atkinson statistics differ by planner preference, and is arbitrary. We use the Atkinson index formula which is documented on the [fs_atkinson_ces](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_atkinson_ces.html) page.
-```{r}
-# Formula
-ffi_atkinson_random_var_ineq <- function(ar_data, ar_prob_data, fl_rho) {
-  #' @param ar_data array sorted array values
-  #' @param ar_prob_data array probability mass for each element along `ar_data`, sums to 1
-  #' @param fl_rho float inequality aversion parameter fl_rho = 1 for planner
-  #' without inequality aversion. fl_rho = -infinity for fully inequality averse.
-
-  fl_mean <- sum(ar_data*ar_prob_data);
-  fl_atkinson <- 1 - (sum(ar_prob_data*(ar_data^{fl_rho}))^(1/fl_rho))/fl_mean
-  return(fl_atkinson)
-}
-```
-
-Third, we also create an internal function for standard deviation for discrete random variable.
-```{r}
-# Formula
-ffi_std_drv <- function(ar_data, ar_prob_data) {
-  #' @param ar_data array array values
-  #' @param ar_prob_data array probability mass for each element along `ar_data`, sums to 1
-
-  fl_mean <- sum(ar_data*ar_prob_data)
-  fl_std <- sqrt(sum(ar_prob_data*(ar_data - fl_mean)^2))
-  return(fl_std)
-}
-```
 
 ##### Inequality in Group Means
 
@@ -729,7 +953,7 @@ ar_sample_draws <- ar_data_grp_exc_burden[ar_it_draws]
 # Draw histogram
 pl_excess_burden <- as_tibble(ar_sample_draws) %>%
   ggplot(aes(x=value)) +
-  # geom_histogram(aes(y=..density..), 
+  # geom_histogram(aes(y=..density..),
   #                colour="darkblue", fill="lightblue")+
   geom_density(alpha=.2, fill="#FF6666") +
   geom_vline(aes(xintercept=0),

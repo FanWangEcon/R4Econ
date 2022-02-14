@@ -310,8 +310,9 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 3. [Share of Environmental Exposure Burden Across Population Groups](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_pop_loc_pollution.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html)
 	+ Simulate pollution exposures by location.
 	+ Compute share of pollution burden for a population group relative to the share of overall population accounted for by this population group.
-	+ core:
-	+   matrix()
+	+ **r**: *matrix()*
+	+ **stats**: *runif()*
+	+ **dplyr**: *group_by() + left_join() + filter() + slice()*
 
 # 9  Statistics
 
