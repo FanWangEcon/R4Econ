@@ -286,12 +286,16 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 4. [linear solve x with f(x) = 0](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_solu_x_lin.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_solu_x_lin.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_solu_x_lin.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_solu_x_lin.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_solu_x_lin.html)
 	+ Evaluate and solve statistically relevant problems with one equation and one unknown that permit analytical solutions.
 
-## 8.2  Production Function
+## 8.2  Production Functions
 
 1. [Nested Constant Elasticity of Substitution Production Function](https://fanwangecon.github.io/R4Econ/math/func_prod/htmlpdfr/fs_nested_CES.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod//fs_nested_CES.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod/htmlpdfr/fs_nested_CES.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod/htmlpdfr/fs_nested_CES.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/func_prod/htmlpdfr/fs_nested_CES.html)
 	+ A nested-CES production function with nest-specific elasticities.
 	+ Re-state the nested-CES problem as several sub-problems.
 	+ Marginal products and its relationship to prices in expenditure minimization.
+2. [Latent Dynamic Health Production Function](https://fanwangecon.github.io/R4Econ/math/func_prod/htmlpdfr/fs_latent_health.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod//fs_latent_health.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod/htmlpdfr/fs_latent_health.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod/htmlpdfr/fs_latent_health.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/func_prod/htmlpdfr/fs_latent_health.html)
+	+ A model of latent health given lagged latent health and health inputs.
+	+ Find individual-specific production function coefficient given self-rated discrete health status probabilities.
+	+ Persistence of latent health status given observed discrete current and lagged outcomes.
 
 ## 8.3  Inequality Models
 
@@ -406,8 +410,9 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 ## 12.1  Files In and Out
 
 1. [Decompose File Paths to Get Folder and Files Names](https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_path.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout//fs_path.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_path.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_path.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_path.html)
-	+ Decompose file path and get file path folder names and file name. 
-	+ **r**: *.Platform$file.sep + tail() + strsplit() + basename() + dirname() + substring()*
+	+ Decompose file path and get file path folder names and file name.
+	+ Check if file name exists.
+	+ **r**: *.Platform$file.sep + tail() + strsplit() + basename() + dirname() + substring() + dir.exists() + file.exists()*
 2. [Save Text to File, Read Text from File, Replace Text in File](https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_text_save.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout//fs_text_save.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_text_save.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_text_save.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_text_save.html)
 	+ Save data to file, read text from file, replace text in file.
 	+ **r**: *kable() + file() + writeLines() + readLines() + close() + gsub()*

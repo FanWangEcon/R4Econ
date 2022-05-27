@@ -84,8 +84,20 @@ if(!is.null(spt_file_current)) {
   sph_html='/htmlpdfr'
   sph_r='/htmlpdfr'
 
-  # spt_root <- 'C:/Users/fan/R4Econ/'
-  spt_root <- 'G:/repos/R4Econ/'
+  spt_root_computer_a <- 'C:/Users/fan/R4Econ/'
+  spt_root_computer_b <- 'G:/repos/R4Econ/'
+  if (dir.exists(spt_root_computer_a)) {
+    print(paste(spt_root_computer_a, 'exists'))
+    spt_root <- spt_root_computer_a
+  } else if (dir.exists(spt_root_computer_b)) {
+    print(paste(spt_root_computer_b, 'exists', spt_root_computer_a, 'does not exist'))
+    spt_root <- spt_root_computer_b
+  } else {
+    msg_error <- paste(spt_root_computer_b, spt_root_computer_a, 'both do does not exist')
+    stop(msg_error)
+  }
+
+
   spn_prj_rmd <- gsub(spt_root, "", spt_file_current)
   spt_rmd_path <- paste0('/',dirname(spn_prj_rmd))
 
