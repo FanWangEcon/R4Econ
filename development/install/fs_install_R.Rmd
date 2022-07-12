@@ -1,0 +1,306 @@
+---
+title: "R, RTools, Rstudio Installation and Update with VSCode"
+titleshort: "R, RTools, Rstudio Installation and Update with VSCode"
+description: |
+  Install and update R, RTools, and Rstudio.
+  Set-up R inside VSCode.
+core:
+  - package: installr
+    code: |
+      updateR()
+date: 2022-07-09
+date_start: 2022-07-09
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+### R Installation and Set-Up
+
+Install R new, or update an existing R installation.
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+
+#### Uninstall r
+
+Uninstall R, RStudio and RTools from Windows "Programs and Features" menu. After uninstaller finishes, check in the libPath folders to see if there are still stuff there, delete all, delete the folders.
+
+If R was installed in a virtual environment, delete the environment. Otherwise, use system's uninstaller. To check on this, from terminal/command-prompt for each virtual environment, type *R*, and *.libPaths()* to find paths. Do so inside conda main, outside of conda main, inside different environments, find all paths.
+
+Inside R:
+
+```{r}
+ls_spn_paths <- .libPaths()
+print(ls_spn_paths)
+# C:/Users/fan/Documents/R/win-library/3.6
+# C:/Program Files/R/R-3.6.1/library
+```
+
+Check which conda env is installed, if there is an env installed for R.
+
+```{bash, eval = FALSE}
+# Show All installed environments
+conda info --envs
+```
+
+For Linux and for unsintalling inside conda:
+
+```{bash, eval = FALSE}
+# Exit Conda
+conda deactivate
+# where is R installed outside of Conda
+which R
+# /usr/bin/R
+# To remove all
+sudo apt-get remove r-base
+sudo apt-get remove r-base-core
+
+# Inside Conda base
+conda activate
+# Conda r_env
+conda activate r_envr
+# Where is it installed?
+which R
+# /home/wangfanbsg75/anaconda3/bin/R
+conda uninstall r-base
+```
+
+#### Install R
+
+##### Install R for the First Time
+
+1. [download R](https://cloud.r-project.org/)
+    + for debian: [Johannes Ranke](https://cran.r-project.org/bin/linux/debian/). For Linux/Debian installation, crucial to update the *source.list* to include sources that have more recent versions of R. If not, will get very old R versions that is not compatible with many packages.
+    + add R to path for Windows. In Windows Path, add for example: *C:/Program Files/R/R-3.6.2/bin/x64/* and *C:/Rtools/bin*
+2. [Install Rtools](https://cran.r-project.org/bin/windows/Rtools/) for building R packages.
+2. [download R-studio](https://rstudio.com/products/rstudio/download/)
+3. Open R-studio and auto-detect R
+4. Install additional packages
+
+
+##### Linux R Install
+
+For linux/Debian, to Install latest R:
+
+```{bash, eval = FALSE}
+# Go to get latesdebian latest r sources.list
+cat /etc/apt/sources.list
+# Install this First (should already be installed)
+sudo apt install dirmngr
+
+# Debian R is maintained by Johannes Ranke, copied from https://cran.r-project.org/bin/linux/debian/:
+apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF'
+# Add to source.list, for debian stretch (9)
+# sudo su added for security issue as super-user
+sudo su -c "sudo echo 'deb http://cloud.r-project.org/bin/linux/debian stretch-cran35/' >> /etc/apt/sources.list"
+# if added wrong lines, delete 3rd line
+sudo sed '3d' /etc/apt/sources.list
+
+# Update and Install R, should say updated from cloud.r
+sudo apt-get update
+sudo apt-get install r-base r-base-dev
+
+# Also install these, otherwise r-packages do not install
+# libxml2 seems need for tidymodels
+sudo apt-get install libcurl4-openssl-dev
+sudo apt-get install libssl-dev
+sudo apt-get install libxml2-dev
+```
+
+##### Update R on Windows
+
+First, use the *updateR()* function from the *installr* package.
+
+1. On windows, install the *installr* package, and use *updateR()*
+2. At the end, will ask if want to move all old packages to new R directory
+
+New R will have new package directory, could keep all in old, should copy all to new, and not keep old. Can choose to copy all old packages to new folder, but still keep old packages in prior folder as they were
+
+```{r, eval = FALSE}
+# https://www.r-project.org/nosvn/pandoc/installr.html
+install.packages('installr')
+# update R from inside R (not Rstudio)
+require(installr)
+# this will open dialog boxes to take you through the steps.
+updateR()
+# Set Rstudio to the Latest R
+```
+
+Second, after updating, might go into "Apps and Features" on Windows to unstaill the previous R version.
+
+Third, update [RTools](https://cran.r-project.org/bin/windows/Rtools/). Uninstall RTools. Installation can be very large.
+
+Fourth, update RStudio. Upon opening RStudio, if prior installations of R have been uninstalled, RStudio will auto-detect as ask if the latest version of R should be used. Choose yes. Upon entering RStudio, if there are updates, might prompt to RStudio website to download and update.
+
+Fifth, follow the package installation directions below to update that.
+
+##### R Add to Path
+
+To be able to use R via command line, make sure Windows knows where the path to R.exe is.
+
+First, find where the installed R.exe path is. Open up the R installation, and then check path as below.
+
+```{r, eval = FALSE}
+ls_spn_paths <- .libPaths()
+print(ls_spn_paths)
+# "C:/Users/fan/AppData/Local/R/win-library/4.2"
+# "C:/Program Files/R/R-4.2.1/library"
+```
+
+Second, given the path found, the R.exe is at "C:/Program Files/R/R-4.2.1/bin". So now, in windows, System Properties -> Advanced -> Environment Variables -> System Variables -> Path -> Edit -> New -> Paste "C:/Program Files/R/R-4.2.1/bin"
+
+Third, now open up command-prompt/terminal/git-bash, enter R, this will take us into the R console via command-line.
+
+```{r, eval = FALSE}
+# To exit command line:
+q()
+```
+
+#### R Package Installations
+
+##### Update R Install Directory
+
+After installing R, change the path sequence so that packages install for all users.
+
+```{r, eval = FALSE}
+ls_spn_paths <- .libPaths()
+print(ls_spn_paths)
+# [1] "C:/Users/fan/AppData/Local/R/win-library/4.2" "C:/Program Files/R/R-4.2.1/library"
+ls_spn_paths <- c(ls_spn_paths[2], ls_spn_paths[1])
+.libPaths(ls_spn_paths)
+ls_spn_paths <- .libPaths()
+print(ls_spn_paths)
+# [1] "C:/Program Files/R/R-4.2.1/library"           "C:/Users/fan/AppData/Local/R/win-library/4.2"
+```
+
+##### Install vearious directory
+
+After updating R, sometimes, old packages are not copied over to new directory, so need to reinstall all packages.
+
+Having set the directories earlier so that packages do not install in user's personal folder, but the library folder where the R version is installed, we can find all installed packages in the *C:/Program Files/R/R-4.2.1/library* folder.
+
+```{r, eval = FALSE}
+# Install RTools First!
+# https://cran.r-project.org/bin/windows/Rtools/
+
+# Install system tools
+install.packages(c("backports"))
+
+# Install tidyverse
+install.packages(c("tidyverse", "tidymodels", "vroom"))
+
+# Install Packaging tools
+install.packages(c("devtools", "pkgdown", "roxygen2", "bookdown", "knitr", "kableExtra", "formatR", "revealjs"))
+
+# Install Statistics models
+install.packages(c("AER", "minpack.lm"))
+install.packages(c("quantreg"))
+
+# Install Tools to Work with Other Packages
+# matconv: converts matlab programs to R
+install.packages(c("reticulate", "JuliaCall", "matconv"))
+install.packages(c("matconv"))
+# for reticulate errors, install directly from: devtools::install_github("rstudio/reticulate")
+
+# Install Paralell Tools
+install.packages(c("parallel", "doParallel", "foreach"))
+
+# Install personal Packages
+devtools::install_github("fanwangecon/REconTools")
+devtools::install_github("fanwangecon/PrjOptiAlloc")
+
+# Stata in Rmd
+# devtools::install_github("Hemken/Statamarkdown")
+
+# VScode integration and also sublime r-ide
+install.packages("languageserver")
+```
+
+
+Temp Installs:
+
+```{r, eval = FALSE}
+# 2020-10-19
+# Temp install development version due to but
+# https://github.com/rstudio/reticulate/issues/831
+devtools::install_github("rstudio/reticulate")
+```
+
+
+#### R Tests
+
+Test the following file to see if we can execute a R file. Do it inside *r_env* and inside a *r* session.
+
+```{r, eval = FALSE}
+# # A simple file with summary statistics using tidyverse
+# source('C:/Users/fan/R4Econ/summarize/dist/htmlpdfr/fst_hist_onevar.R')
+# source('G:/repos/R4Econ/summarize/dist/htmlpdfr/fst_hist_onevar.R')
+# # Another simple file with summary statistics using tidyverse
+# source('C:/Users/fan/R4Econ/support/tibble/htmlpdfr/fs_tib_basics.R')
+# source('G:/repos/R4Econ/support/tibble/htmlpdfr/fs_tib_basics.R')
+# # A file involving estimation
+# source('C:/Users/fan/R4Econ/optimization/cesloglin/htmlpdfr/fst_ces_plan_linlog.R')
+#
+# C:/Users/fan/R4Econ/summarize/dist/fst_hist_onevar.Rmd
+# C:/Users/fan/R4Econ/support/tibble/fs_tib_basics.Rmd
+# C:/Users/fan/R4Econ/optimization/cesloglin/fst_ces_plan_linlog.Rmd
+```
+
+#### R with Radian
+
+R with Radian:
+
+- [Setup Visual Studio Code to run R on VSCode 2021](https://www.r-bloggers.com/2021/01/setup-visual-studio-code-to-run-r-on-vscode-2021/)
+- [Radian](https://github.com/randy3k/radian)
+
+#### Running R Inside VSCode
+
+Rstudio seems laggy sometimes, nice to be able to run R from VSCode, use VSCode as an alternative editor.
+
+- [Writing R in VSCode: A Fresh Start](https://renkun.me/2019/12/11/writing-r-in-vscode-a-fresh-start/)
+
+To Run .R scripts from inside VSCode. Here is the offical guide: [R in Visual Studio Code](https://code.visualstudio.com/docs/languages/r).
+
+1. Install R following prior steps.
+2. Make sure that the package languageserver is installed, check "require(languageserver)".
+3. Install [R Extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=REditorSupport.r)
+  + change setting for "r.rterm.windows" to "C:/Program Files/R/R-4.2.1/bin/R.exe"
+4. Click File -> Open Folder -> Select the folder where the ".R" file to run is located at, this way, the Terminal will be directred to the folder that is currently open, rather than home default for example. [By default, the terminal will open at the folder that is opened in the Explorer](https://stackoverflow.com/a/55668364)
+5. Run individual files in the folder just opened.
+
+##### RMD in VSCode
+
+Steps for RMD:
+
+1. VSCode already has default markdown editor
+2. Install Markdown Preview ehance, which generates a table of content bar on the side, and has math preview correclty
+3. In file, F1, and type markdown preview and open up preview
+
+##### RMD and MARKDOWN File Associations
+
+**Change File Extension Association**
+
+- Working with RMD file, sometimes want to preview as MD file to view equations, sometimes want to view as RMD file to edit the R code. See [How to make VS Code to treat other file extensions as certain language?](https://stackoverflow.com/a/51228725/8280804)
+- [change extension association](https://stackoverflow.com/a/51228725/8280804) between md and Rmd for Rmd files for example: "Ctrl + shift + p" and "change language mode" from one file association to another.
+- Additionally, if there is a standard association we want for RMD, for it to be markdown for example, can add to JSON settings for *file.associations*.
+
+```
+"files.associations": {
+     "*.Rmd": "markdown"
+}
+```
