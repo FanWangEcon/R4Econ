@@ -2,12 +2,12 @@
 title: "R Fit a Time Series with Polynomial and Analytical Expressions for Coefficients"
 titleshort: "Fit a Time Series with Polynomial and Analytical Expressions for Coefficients"
 description: |
-  Given a time series of data points from a polynomial data generating process, solve for the polynomial coefficients. 
-  Mth derivative of Mth order polynomial is time invariant, use functions of differences of differences of differences to identify polynomial coefficients analytically. 
+  Given a time series of data points from a polynomial data generating process, solve for the polynomial coefficients.
+  Mth derivative of Mth order polynomial is time invariant, use functions of differences of differences of differences to identify polynomial coefficients analytically.
 core:
   - package: R
     code: |
-      matrix multplication
+      matrix multiplication
 date: 2021-08-11
 date_start: 2021-08-11
 output:
@@ -36,7 +36,7 @@ try(source("../../.Rprofile"))
 
 #### Analytical Solution for Time-Series Polynomial Coefficients
 
-This file is developed in support of [Bhalotra, Fernandez, and Wang (2021)](https://fanwangecon.github.io/assets/BhalotraFernandezWangMexicoFLFP.pdf), where we use polynomials to model share parameter changes over time in the context of a nested-CES problem. 
+This file is developed in support of [Bhalotra, Fernandez, and Wang (2021)](https://fanwangecon.github.io/assets/BhalotraFernandezWangMexicoFLFP.pdf), where we use polynomials to model share parameter changes over time in the context of a nested-CES problem.
 
 ##### Mth Order Polynomial and its Derivative
 
@@ -50,27 +50,27 @@ Taking derivative of of $y$ with respect to $t$, we have:
 
 $$
 \begin{aligned}
-  \frac{d^{M-0}y}{dt^{M-0}} &= 
+  \frac{d^{M-0}y}{dt^{M-0}} &=
   a_{M-0} \cdot \frac{\left(M-0\right)!}{0!} \cdot t^{-0+0}
   \\
-  \frac{d^{M-1}y}{dt^{M-1}} &= 
+  \frac{d^{M-1}y}{dt^{M-1}} &=
   a_{M-0} \cdot \frac{\left(M-0\right)!}{1!} \cdot t^{-0+1}
   +
   a_{M-1} \cdot \frac{\left(M-1\right)!}{0!} \cdot t^{-1+1}
   \\
-  \frac{d^{M-2}y}{dt^{M-2}} &= 
+  \frac{d^{M-2}y}{dt^{M-2}} &=
   a_{M-0} \cdot \frac{\left(M-0\right)!}{2!} \cdot t^{-0+2}
   +
-  a_{M-1} \cdot \frac{\left(M-1\right)!}{1!} \cdot t^{-1+2}  
+  a_{M-1} \cdot \frac{\left(M-1\right)!}{1!} \cdot t^{-1+2}
   +
   a_{M-2} \cdot \frac{\left(M-2\right)!}{0!} \cdot t^{-2+2}
   \\
-  \frac{d^{M-3}y}{dt^{M-3}} &= 
+  \frac{d^{M-3}y}{dt^{M-3}} &=
   a_{M-0} \cdot \frac{\left(M-0\right)!}{3!} \cdot t^{-0+3}
   +
-  a_{M-1} \cdot \frac{\left(M-1\right)!}{2!} \cdot t^{-1+3}  
+  a_{M-1} \cdot \frac{\left(M-1\right)!}{2!} \cdot t^{-1+3}
   +
-  a_{M-2} \cdot \frac{\left(M-2\right)!}{1!} \cdot t^{-2+3}  
+  a_{M-2} \cdot \frac{\left(M-2\right)!}{1!} \cdot t^{-2+3}
   +
   a_{M-3} \cdot \frac{\left(M-3\right)!}{0!} \cdot t^{-3+3}
 \end{aligned}
@@ -80,11 +80,11 @@ Given the structure above, we have the following formulation for polynomial deri
 
 $$
 \begin{aligned}
-  \frac{d^{N}y(M)}{dt^{N}} &= 
-  \sum_{i=0}^{M-N} 
+  \frac{d^{N}y(M)}{dt^{N}} &=
+  \sum_{i=0}^{M-N}
   \left(
-    a_{M-i} \cdot 
-    \frac{\left(M-i\right)!}{\left(M-N-i\right)!} \cdot 
+    a_{M-i} \cdot
+    \frac{\left(M-i\right)!}{\left(M-N-i\right)!} \cdot
     t^{M-N-i}
   \right)
 \end{aligned}
@@ -95,11 +95,11 @@ Note that the $M^{th}$ derivative of a $M^{th}$ order polynomial is equal to $\l
 
 ##### Repeatedly Taking Differences of Differences
 
-Suppose the data generating process is a $M^{th}$ order polynomial, then differencing of time-series observables can be used to identify polynomial coefficients. 
+Suppose the data generating process is a $M^{th}$ order polynomial, then differencing of time-series observables can be used to identify polynomial coefficients.
 
 In the simplest case of a 1st order polynomial with $Y_t = a_0 + a_1 \cdot t$, given 2 periods of data, $t=0,t=1$, we have $a_1 = Y_2 - Y_1$, and $a_0 = Y_0$. The rate of change in $Y$ over $t$ captures coefficient $a_1$.
 
-For a second order polynomial, while the first derivative is time-varying, the second derivative, acceleration, is invariant over $t$. Similarly, for any $M^{th}$ order polynomial, the $M^{th}$ derivative is time-invariant. 
+For a second order polynomial, while the first derivative is time-varying, the second derivative, acceleration, is invariant over $t$. Similarly, for any $M^{th}$ order polynomial, the $M^{th}$ derivative is time-invariant.
 
 Because of this time-invariance of the $M^{th}$ derivative, the differencing idea can be used to identify $a_M$, the coefficient for the highest polynomial term for the $M^{th}$ order polynomial.
 
@@ -117,8 +117,8 @@ Note that the pattern has alternating signs, and the coefficients are binomial. 
 
 $$
 \begin{aligned}
-  \Delta^M &=  
-  \sum_{i=0}^{M} 
+  \Delta^M &=
+  \sum_{i=0}^{M}
   \left(\left(-1\right)^i\cdot\frac{M!}{\left(M-i\right)!i!}\right)
   \cdot y_{\left(M-i\right)}
   \\
@@ -129,8 +129,8 @@ When there are $T$ periods of data, and we are interested in the $T-1$ differenc
 
 $$
 \begin{aligned}
-  \Delta^M_{\tau}\left(\left\{y_t\right\}_{t=1}^{T}\right) &=  
-  \sum_{i=0}^{M} 
+  \Delta^M_{\tau}\left(\left\{y_t\right\}_{t=1}^{T}\right) &=
+  \sum_{i=0}^{M}
   \left(\left(-1\right)^i\cdot\frac{M!}{\left(M-i\right)!i!}\right)
   \cdot y_{\left(\tau + \left(M-i\right)\right)}
   \thinspace\thinspace\text{for}\thinspace\thinspace
@@ -141,14 +141,14 @@ $$
 
 ##### Solutions for Polynomial Coefficients with Differences of Differences
 
-Intuitively, for a $M^{th}$ order polynomial, the coefficient on the highest polynomial term is a function of the $(M-1)^{th}$ difference. Coefficients of lower polynomial terms, $m<M$, are function of the $(m-1)^{th}$ difference along with higher order polynomial coefficients already computed. 
+Intuitively, for a $M^{th}$ order polynomial, the coefficient on the highest polynomial term is a function of the $(M-1)^{th}$ difference. Coefficients of lower polynomial terms, $m<M$, are function of the $(m-1)^{th}$ difference along with higher order polynomial coefficients already computed.
 
 Formally, we have, for a $M^{th}$ order polynomial, a vector of $\left\{a_m\right\}_{m=0}^{M}$ $M+1$ polynomial coefficients. For formula for the coefficient for the largest polynomial is:
 
 $$
 \begin{aligned}
-  a_M &= 
-  \sum_{i=0}^{M} 
+  a_M &=
+  \sum_{i=0}^{M}
   \left(
     \left(-1\right)^i
     \left(
@@ -156,16 +156,16 @@ $$
       i!
       \right)^{-1}
   \right)
-  % \cdot 
-  y_{\left(M-i\right)}    
+  % \cdot
+  y_{\left(M-i\right)}
 \end{aligned}
 $$
 
 Given this, we have also, given $T$ periods of data from $t=1$ to $t=T$:
 $$
 \begin{aligned}
-  a_{M-1} &= 
-  \sum_{i=0}^{M-1} 
+  a_{M-1} &=
+  \sum_{i=0}^{M-1}
   \left(
     \left(-1\right)^i
     \left(
@@ -173,7 +173,7 @@ $$
       i!
       \right)^{-1}
   \right)
-  \cdot 
+  \cdot
   \left(
     y_{\left(\tau + \left(M-1-i\right)\right)}
     - a_M \cdot t^M
@@ -189,8 +189,8 @@ Using one formula, given $a_{m+1}$, we have:
 
 $$
 \begin{aligned}
-  a_{m} &= 
-  \sum_{i=0}^{m} 
+  a_{m} &=
+  \sum_{i=0}^{m}
   \left(
     \left(-1\right)^i
     \left(
@@ -198,13 +198,13 @@ $$
       i!
       \right)^{-1}
   \right)
-  \cdot 
+  \cdot
   \left(
     y_{\left(\tau + \left(m-i\right)\right)}
-    - 
+    -
     \sum_{j=0}^{M-m-1}
     a_{M-j} \cdot t^{M-j}
-  \right)   
+  \right)
   \thinspace\thinspace
   \text{for}
   \thinspace\thinspace
@@ -215,9 +215,9 @@ $$
 
 ##### Identifying Polynomial Coefficients with Differences for Third Order Polynomial
 
-To illustrate, we test the formulas with a 3rd order polynomial, and derive some 3rd-order specific formulas. 
+To illustrate, we test the formulas with a 3rd order polynomial, and derive some 3rd-order specific formulas.
 
-For data from a 3rd order polynomial data generating process, we can use the 3rd difference to identify the coefficient in front of $x^3$. With this, we can iteratively to lower polynomials and identify all relevant coefficients. 
+For data from a 3rd order polynomial data generating process, we can use the 3rd difference to identify the coefficient in front of $x^3$. With this, we can iteratively to lower polynomials and identify all relevant coefficients.
 
 Specifically, using equations from the two sections above, we have:
 
@@ -233,7 +233,7 @@ Combining the two equations we have, that $a_3$ is the 3rd difference divided by
 
 $$
 \begin{aligned}
-  3! \cdot a_3 &= y_3 - 3y_2 + 3y_1 - y_0\\ 
+  3! \cdot a_3 &= y_3 - 3y_2 + 3y_1 - y_0\\
    a_3 &= \frac{y_3 - 3y_2 + 3y_1 - y_0 }{3\cdot2}
 \end{aligned}
 $$
@@ -243,17 +243,17 @@ For the linear and cubic terms, we have:
 $$
 \begin{aligned}
   \frac{d^{2}y(M=3)}{dt^{2}} &= 3 \cdot a_2 + 6 \cdot a_3 \cdot t
-  \\ 
+  \\
   \frac{d^{1}y(M=3)}{dt^{1}} &= a_1 + 2 \cdot a_2 + 3 \cdot a_3 \cdot t^2
 \end{aligned}
 $$
 
-Note that the 3rd derivative of a 3rd order polynomial is a constant, but the 2nd derivative of a 3rd order polynomial is not. This means that to use the second difference to identify $a_2$ parameter, we first have to difference out from $y_t$ the impact of the 3rd polynomial term, which we can because we know $a_3$ now. 
+Note that the 3rd derivative of a 3rd order polynomial is a constant, but the 2nd derivative of a 3rd order polynomial is not. This means that to use the second difference to identify $a_2$ parameter, we first have to difference out from $y_t$ the impact of the 3rd polynomial term, which we can because we know $a_3$ now.
 
 Differencing out the 3rd term, we have now the 2nd derivative of a 2nd order polynomial:
 $$
 \begin{aligned}
-  \frac{d^{2}\left(y(M=3) - a_3\cdot t^3\right)}{dt^{2}} &= 
+  \frac{d^{2}\left(y(M=3) - a_3\cdot t^3\right)}{dt^{2}} &=
   \frac{d^{2}\left(\widehat{y}(M=2)\right)}{dt^{2}}
   \thinspace\thinspace,
   \\
@@ -265,12 +265,12 @@ So this means we have:
 
 $$
 \begin{aligned}
-  \frac{d^{2}\widehat{y}(3,2)}{dt^{2}} &=  
-  \left(1 \cdot y_2 - 2 \cdot y_1 + 1 \cdot y_0\right) - 
+  \frac{d^{2}\widehat{y}(3,2)}{dt^{2}} &=
+  \left(1 \cdot y_2 - 2 \cdot y_1 + 1 \cdot y_0\right) -
   a_3\cdot\left(1\cdot 2^3 - 2 \cdot 1^3 + 1 \cdot 0^3 \right)
   \\
-  &=  
-  \left(1 \cdot y_2 - 2 \cdot y_1 + 1 \cdot y_0\right) - 
+  &=
+  \left(1 \cdot y_2 - 2 \cdot y_1 + 1 \cdot y_0\right) -
   a_3\cdot \left(2^3 - 2\right)
   \\
   \frac{d^{2}\widehat{y}(3,2)}{dt^{2}} &= 2! \cdot a_2
@@ -281,16 +281,16 @@ Given the value for $a_3$, we have:
 
 $$
 \begin{aligned}
-  2! \cdot a_2 &=  
-  \left(1 \cdot y_2 - 2 \cdot y_1 + 1 \cdot y_0\right) - 
+  2! \cdot a_2 &=
+  \left(1 \cdot y_2 - 2 \cdot y_1 + 1 \cdot y_0\right) -
   a_3\cdot 6
   \\
-  2! \cdot a_2 &=  
-  \left(1 \cdot y_2 - 2 \cdot y_1 + 1 \cdot y_0\right) - 
+  2! \cdot a_2 &=
+  \left(1 \cdot y_2 - 2 \cdot y_1 + 1 \cdot y_0\right) -
   \frac{y_3 - 3y_2 + 3y_1 - y_0 }{3\cdot2} \cdot \left(2^3 - 2\right)
   \\
-  2! \cdot a_2 &=  
-  \left(y_2 - 2y_1 + y_0\right) - 
+  2! \cdot a_2 &=
+  \left(y_2 - 2y_1 + y_0\right) -
   \left(y_3 - 3y_2 + 3y_1 - y_0\right)
   \\
   2! \cdot a_2 &
@@ -305,12 +305,12 @@ Following the same strategy, we can also find $a_1$. Let $\widehat{y}\left(M,1\r
 
 $$
 \begin{aligned}
-  \frac{d^{2}\widehat{y}(3,1)}{dt^{2}} &=  
-  \left(y_1 - y_0\right) - 
-  a_3\cdot\left(1^3 - 0^3 \right) - 
+  \frac{d^{2}\widehat{y}(3,1)}{dt^{2}} &=
+  \left(y_1 - y_0\right) -
+  a_3\cdot\left(1^3 - 0^3 \right) -
   a_2\cdot\left(1^2 - 0^2 \right)
   \\
-  &=  
+  &=
   \left(y_1 - y_0\right) - a_3 - a_2
   \\
   \frac{d^{2}\widehat{y}(3,1)}{dt^{2}} &= 1! \cdot a_1
@@ -321,29 +321,29 @@ Hence:
 
 $$
 \begin{aligned}
-  a_1 &=  
-  \left(y_1 - y_0\right) - 
-  a_3\cdot\left(1^3 - 0^3 \right) - 
+  a_1 &=
+  \left(y_1 - y_0\right) -
+  a_3\cdot\left(1^3 - 0^3 \right) -
   a_2\cdot\left(1^2 - 0^2 \right)
   \\
-  &=  
+  &=
   \left(y_1 - y_0\right) - a_3 - a_2
   \\
-  &=  
-  \left(y_1 - y_0\right) - 
-  \frac{y_3 - 3y_2 + 3y_1 - y_0 }{3\cdot2} - 
+  &=
+  \left(y_1 - y_0\right) -
+  \frac{y_3 - 3y_2 + 3y_1 - y_0 }{3\cdot2} -
   \frac{- y_3 + 4y_2 - 5y_1 + 2y_0}{2}
   \\
-  &=  
-  \frac{6y_1 - 6y_0}{6} - 
-  \frac{y_3 - 3y_2 + 3y_1 - y_0 }{6} - 
+  &=
+  \frac{6y_1 - 6y_0}{6} -
+  \frac{y_3 - 3y_2 + 3y_1 - y_0 }{6} -
   \frac{-3y_3 + 12y_2 - 15y_1 + 6y_0}{6}
   \\
-  &=  
+  &=
   \frac{6y_1 - 6y_0 -y_3 + 3y_2 - 3y_1 + y_0 +3y_3 - 12y_2 + 15y_1 - 6y_0}{6}
   \\
-  &=  
-  \frac{2y_3 - 9y_2 + 18y_1 - 11y_0}{6}  
+  &=
+  \frac{2y_3 - 9y_2 + 18y_1 - 11y_0}{6}
 \end{aligned}
 $$
 
@@ -351,7 +351,7 @@ Finally, we know that $a_0 = y_0$. We have now analytical expressions for each o
 
 ##### Third Order Polynomial Simulation and Solving for Parameters
 
-Now we generated a time-series of values and solve back for the underlying polynomial coefficients. 
+Now we generated a time-series of values and solve back for the underlying polynomial coefficients.
 
 ```{r}
 # polynomial coefficients
@@ -408,10 +408,10 @@ st_cap = paste0('Solving for polynomial coefficients.')
 kable(tb_alpha, caption = st_cap) %>% kable_styling_fc()
 ```
 
-Note that given that the data is exact output from DGP, and we have the same number of data and parameters, parameters are exactly identified. However, this is only really true for the $a_3$ parameter, which requires all four periods of data. 
-- For $a_2$, it is over-identified, we can arrived at it, given $a_3$, either with difference of differences using data from $t=1,2,3$ or using data from $t=2,3,4$. 
+Note that given that the data is exact output from DGP, and we have the same number of data and parameters, parameters are exactly identified. However, this is only really true for the $a_3$ parameter, which requires all four periods of data.
+- For $a_2$, it is over-identified, we can arrived at it, given $a_3$, either with difference of differences using data from $t=1,2,3$ or using data from $t=2,3,4$.
 - For $a_1$, it is also over-identified, given $a_3$ and $a_2$. The difference of $t=1,2$, $t=2,3$ or $t=3,4$ can all identify $a_1$.
 
-Note also that the solution above can be found by running a linear regression as well. The point of doing the exercise here and showing analytically how layers of differences of differences identify each polynomial coefficient is to show what in the underlying variation of the data is identifying each of the polynomial term. 
+Note also that the solution above can be found by running a linear regression as well. The point of doing the exercise here and showing analytically how layers of differences of differences identify each polynomial coefficient is to show what in the underlying variation of the data is identifying each of the polynomial term.
 
 In effect, all identification is based on the fact that the $M^{th}$ order polynomial's $M^{th}$ derivative is a constant, it is invariant over $t$. This is the core assumption, or restriction of the otherwise highly flexible polynomial functional form. With this core invariance at the max degree derivative condition, all other parameters are obtained through the simple act of differencing.

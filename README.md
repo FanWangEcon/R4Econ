@@ -6,9 +6,9 @@ This is a work-in-progress [website](https://fanwangecon.github.io/R4Econ/) cons
 
 Materials gathered from various [projects](https://fanwangecon.github.io/research) in which R code is used. Files are from the [R4Econ](https://github.com/FanWangEcon/R4Econ) repository. This is not a R package, but a list of examples in PDF/HTML/Rmd formats. [REconTools](https://fanwangecon.github.io/REconTools/) is a package that can be installed with tools used in [projects](https://fanwangecon.github.io/research) involving R.
 
-Bullet points show which [base R](https://www.rdocumentation.org/packages/base/versions/3.5.2), [tidyverse](https://www.tidyverse.org/) or other functions/commands are used to achieve various objectives. An effort is made to use only [base R](https://www.rdocumentation.org/packages/base/versions/3.5.2) and [tidyverse](https://www.tidyverse.org/) packages whenever possible to reduce dependencies. The goal of this repository is to make it easier to find/re-use codes produced for various projects.
+Bullet points show which [base R](https://cran.r-project.org/), [tidyverse](https://www.tidyverse.org/) or other functions/commands are used to achieve various objectives. An effort is made to use only [base R](https://cran.r-project.org/) and [tidyverse](https://www.tidyverse.org/) packages whenever possible to reduce dependencies. The goal of this repository is to make it easier to find/re-use codes produced for various projects.
 
-From other repositories: For dynamic borrowing and savings problems, see [MEconTools](https://fanwangecon.github.io/MEconTools/) and [Dynamic Asset Repository](https://fanwangecon.github.io/CodeDynaAsset/); For code examples, see also [Matlab Example Code](https://fanwangecon.github.io/M4Econ/), [Stata Example Code](https://fanwangecon.github.io/Stata4Econ/), [Python Example Code](https://fanwangecon.github.io/pyfan/); For intro econ with Matlab, see [Intro Mathematics for Economists](https://fanwangecon.github.io/Math4Econ/), and for intro stat with R, see [Intro Statistics for Undergraduates](https://fanwangecon.github.io/Stat4Econ/). See [here](https://github.com/FanWangEcon) for all of [Fan](https://fanwangecon.github.io/)'s public repositories.
+from other repositories: for research support toolboxes, see [matlab toolbox](https://fanwangecon.github.io/mecontools/), [r toolbox](https://fanwangecon.github.io/recontools/), and [python toolbox](https://pyfan.readthedocs.io/en/latest/); for code examples, see [matlab examples](https://fanwangecon.github.io/m4econ/), [stata examples](https://fanwangecon.github.io/stata4econ/), [r examples](https://fanwangecon.github.io/r4econ/), [python examples](https://fanwangecon.github.io/py4econ/), and [latex examples](https://fanwangecon.github.io/tex4econ/); for packaging example, see [pkgtestr](http://fanwangecon.github.io/pkgtestr) for developing r packages; for teaching, see [intro mathematics for economists](https://fanwangecon.github.io/math4econ/), and [intro statistics for undergraduates](https://fanwangecon.github.io/stat4econ/). see [here](https://github.com/fanwangecon) for all of [fan](https://fanwangecon.github.io/)'s public repositories.
 
 Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or problems.
 
@@ -213,12 +213,16 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 # 5  Linear Regression
 
-## 5.1  Polynomial Fitting
+## 5.1  Linear and Polynomial Fitting
 
-1. [Fit a Time Series with Polynomial and Analytical Expressions for Coefficients](https://fanwangecon.github.io/R4Econ/linreg/polynomial/htmlpdfr/fs_poly_fit.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/polynomial//fs_poly_fit.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/polynomial/htmlpdfr/fs_poly_fit.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/polynomial/htmlpdfr/fs_poly_fit.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/linreg/polynomial/htmlpdfr/fs_poly_fit.html)
-	+ Given a time series of data points from a polynomial data generating process, solve for the polynomial coefficients. 
-	+ Mth derivative of Mth order polynomial is time invariant, use functions of differences of differences of differences to identify polynomial coefficients analytically. 
-	+ **R**: *matrix multplication*
+1. [Find Best Fit of Curves Through Points](https://fanwangecon.github.io/R4Econ/linreg/polynomial/htmlpdfr/fs_lm_poly_fit.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/polynomial//fs_lm_poly_fit.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/polynomial/htmlpdfr/fs_lm_poly_fit.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/polynomial/htmlpdfr/fs_lm_poly_fit.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/linreg/polynomial/htmlpdfr/fs_lm_poly_fit.html)
+	+ There are three x and y points, find the quadratic curve that fits through them exactly.
+	+ There are N sets of x and y points, find the Mth order polynomial fit by regressing y on poly(x, M).
+	+ **stats**: *lm(y ~ poly(x, 2), dataset=df) + summary.lm(rs) + predict(rs)*
+2. [Fit a Time Series with Polynomial and Analytical Expressions for Coefficients](https://fanwangecon.github.io/R4Econ/linreg/polynomial/htmlpdfr/fs_poly_fit.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/polynomial//fs_poly_fit.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/polynomial/htmlpdfr/fs_poly_fit.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/linreg/polynomial/htmlpdfr/fs_poly_fit.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/linreg/polynomial/htmlpdfr/fs_poly_fit.html)
+	+ Given a time series of data points from a polynomial data generating process, solve for the polynomial coefficients.
+	+ Mth derivative of Mth order polynomial is time invariant, use functions of differences of differences of differences to identify polynomial coefficients analytically.
+	+ **R**: *matrix multiplication*
 
 ## 5.2  OLS and IV
 
@@ -271,19 +275,23 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 ## 8.1  Basics
 
-1. [Rescaling Bounded Parameter to be Unbounded and Positive and Negative Exponents with Different Bases](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_exponents.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_exponents.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_exponents.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_exponents.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_exponents.html)
+1. [Analytical Formula Fit Curves Through Points](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_analytical_poly_fit.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_analytical_poly_fit.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_analytical_poly_fit.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_analytical_poly_fit.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_analytical_poly_fit.html)
+	+ There are three points, formula for the exact quadratic curve that fits through the points.
+	+ There are three points, formula for the linear best fit line through the points.
+	+ **stats**: *lm(y ~ x + I(x^2), dataset=df) + lm(y ~ poly(x, 2), dataset=df) + summary.lm(rs) + predict(rs)*
+2. [Quadratic and other Rescaling of Parameters with Fixed Min and Max](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_rescale.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_rescale.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_rescale.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_rescale.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_rescale.html)
+	+ Given a < x < b, use f(x) to rescale x, such that f(a)=a, f(b)=b, but f(z)=0.5*z for some z between a and b. Solve using the quadratic function with three equations and three unknowns uniquely. 
+3. [Rescaling Bounded Parameter to be Unbounded and Positive and Negative Exponents with Different Bases](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_exponents.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_exponents.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_exponents.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_exponents.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_exponents.html)
 	+ Log of alternative bases, bases that are not e, 10 or 2. 
 	+ A parameter is constrained between 1 and negative infinity, use exponentials of different bases to scale the bounded parameter to an unbounded parameter.    
 	+ Positive exponentials are strictly increasing. Negative exponentials are strictly decreasing.
 	+ A positive number below 1 to a negative exponents is above 1, and a positive number above 1 to a negative exponents is below 1.
 	+ **graphics**: *plot(x, y) + title() + legend()*
-2. [Quadratic and other Rescaling of Parameters with Fixed Min and Max](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_rescale.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_rescale.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_rescale.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_rescale.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_rescale.html)
-	+ Given a < x < b, use f(x) to rescale x, such that f(a)=a, f(b)=b, but f(z)=0.5*z for some z between a and b. Solve using the quadratic function with three equations and three unknowns uniquely. 
-3. [Find the Closest Point Along a Line to Another Point](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_point2line.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_point2line.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_point2line.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_point2line.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_point2line.html)
+4. [Find the Closest Point Along a Line to Another Point](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_point2line.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_point2line.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_point2line.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_point2line.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_point2line.html)
 	+ A line crosses through the origin, what is the closest point along this line to another point.
 	+ Graph several functions jointly with points and axis.
 	+ **graphics**: *par(mfrow = c(1, 1)) + curve(fc) + points(x, y) + abline(v=0, h=0)*
-4. [linear solve x with f(x) = 0](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_solu_x_lin.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_solu_x_lin.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_solu_x_lin.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_solu_x_lin.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_solu_x_lin.html)
+5. [linear solve x with f(x) = 0](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_solu_x_lin.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_solu_x_lin.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_solu_x_lin.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_solu_x_lin.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_solu_x_lin.html)
 	+ Evaluate and solve statistically relevant problems with one equation and one unknown that permit analytical solutions.
 
 ## 8.2  Production Functions
@@ -407,7 +415,14 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 
 # 12  Code and Development
 
-## 12.1  Files In and Out
+## 12.1  Installation
+
+1. [R, RTools, Rstudio Installation and Update with VSCode](https://fanwangecon.github.io/R4Econ/development/install/htmlpdfr/fs_install_R.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/development/install//fs_install_R.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/development/install/htmlpdfr/fs_install_R.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/development/install/htmlpdfr/fs_install_R.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/development/install/htmlpdfr/fs_install_R.html)
+	+ Install and update R, RTools, and Rstudio.
+	+ Set-up R inside VSCode.
+	+ **installr**: *updateR()*
+
+## 12.2  Files In and Out
 
 1. [Decompose File Paths to Get Folder and Files Names](https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_path.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout//fs_path.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_path.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_path.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_path.html)
 	+ Decompose file path and get file path folder names and file name.
@@ -422,13 +437,13 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ Modify markdown pounds hierarchy.
 	+ **r**: *file() + writeLines() + readLines() + close() + gsub()*
 
-## 12.2  Python with R
+## 12.3  Python with R
 
 1. [Python in R with Reticulate](https://fanwangecon.github.io/R4Econ/development/python/htmlpdfr/fs_python_reticulate.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/development/python//fs_python_reticulate.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/development/python/htmlpdfr/fs_python_reticulate.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/development/python/htmlpdfr/fs_python_reticulate.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/development/python/htmlpdfr/fs_python_reticulate.html)
 	+ Use Python in R with Reticulate
 	+ **reticulate**: *py_config() + use_condaenv() + py_run_string() + Sys.which('python')*
 
-## 12.3  Command Line
+## 12.4  Command Line
 
 1. [System and Shell Commands in R](https://fanwangecon.github.io/R4Econ/development/system/htmlpdfr/fs_system_shell.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/development/system//fs_system_shell.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/development/system/htmlpdfr/fs_system_shell.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/development/system/htmlpdfr/fs_system_shell.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/development/system/htmlpdfr/fs_system_shell.html)
 	+ Run system executable and shell commands.

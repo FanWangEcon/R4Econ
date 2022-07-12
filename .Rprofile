@@ -10,8 +10,23 @@ library(REconTools)
 # formatR needed for tidy.opts below
 library(formatR)
 
+# Path for wk_pyfan env
+spt_wkpyfan_computer_a <- 'G:/ProgramData/Anaconda3/'
+spt_wkpyfan_computer_b <- 'C:/ProgramData/Anaconda3/'
+if (dir.exists(spt_wkpyfan_computer_a)) {
+  print(paste(spt_wkpyfan_computer_a, 'exists'))
+  spt_wkpyfan_root <- spt_wkpyfan_computer_a
+} else if (dir.exists(spt_wkpyfan_computer_b)) {
+  print(paste(spt_wkpyfan_computer_b, 'exists', spt_wkpyfan_computer_a, 'does not exist'))
+  spt_wkpyfan_root <- spt_wkpyfan_computer_b
+} else {
+  msg_error <- paste(spt_wkpyfan_computer_b, spt_wkpyfan_computer_a, 'both do does not exist')
+  stop(msg_error)
+}
+
 # jointly use R and Python Together
-Sys.setenv(RETICULATE_PYTHON = "C:/ProgramData/Anaconda3/envs/wk_pyfan/python.exe")
+st_wk_pyfan_path <- paste0(spt_wkpyfan_root, "envs/wk_pyfan/python.exe")
+Sys.setenv(RETICULATE_PYTHON = st_wk_pyfan_path)
 library(reticulate)
 
 # RMD Options
@@ -21,7 +36,7 @@ options(bookdown.render.file_scope = FALSE)
 knitr::opts_chunk$set(fig.width=7, fig.height=4, fig.align="center")
 # knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60), tidy=TRUE)
 knitr::opts_chunk$set(warning=FALSE, message=FALSE, cache=FALSE)
-knitr::opts_chunk$set(engine.path = "C:/ProgramData/Anaconda3/envs/wk_pyfan/python.exe")
+knitr::opts_chunk$set(engine.path = st_wk_pyfan_path)
 
 # Output HTML or Latex
 if (knitr::is_latex_output()) {
@@ -84,8 +99,8 @@ if(!is.null(spt_file_current)) {
   sph_html='/htmlpdfr'
   sph_r='/htmlpdfr'
 
-  spt_root_computer_a <- 'C:/Users/fan/R4Econ/'
-  spt_root_computer_b <- 'G:/repos/R4Econ/'
+  spt_root_computer_a <- 'G:/repos/R4Econ/'
+  spt_root_computer_b <- 'C:/Users/fan/R4Econ/'
   if (dir.exists(spt_root_computer_a)) {
     print(paste(spt_root_computer_a, 'exists'))
     spt_root <- spt_root_computer_a
@@ -130,9 +145,9 @@ if(!is.null(spt_file_current)) {
   # Common Shared Text and Strings
   total_area <- (800 * 7) / 2
   if (st_file_wno_suffix == 'Panel-Data-and-Optimization-with-R') {
-    text_shared_preamble_one <- paste0("> Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R Code Examples](https://fanwangecon.github.io/R4Econ/) Repository ([bookdown site](https://fanwangecon.github.io/R4Econ/bookdown)), or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository ([bookdown site](https://fanwangecon.github.io/Stat4Econ/bookdown)).")
+    text_shared_preamble_one <- paste0("> Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) research support package, [R4Econ](https://fanwangecon.github.io/R4Econ/) examples page, [PkgTestR](https://fanwangecon.github.io/PkgTestR/) packaging guide, or [Stat4Econ](https://fanwangecon.github.io/Stat4Econ/) course page.")
   } else {
-    text_shared_preamble_one <- paste0(st_head_link, " Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) Package, [R Code Examples](https://fanwangecon.github.io/R4Econ/) Repository ([bookdown site](https://fanwangecon.github.io/R4Econ/bookdown)), or [Intro Stats with R](https://fanwangecon.github.io/Stat4Econ/) Repository ([bookdown site](https://fanwangecon.github.io/Stat4Econ/bookdown)).")
+    text_shared_preamble_one <- paste0(st_head_link, " Go back to [fan](http://fanwangecon.github.io/)'s [REconTools](https://fanwangecon.github.io/REconTools/) research support package, [R4Econ](https://fanwangecon.github.io/R4Econ/) examples page, [PkgTestR](https://fanwangecon.github.io/PkgTestR/) packaging guide, or [Stat4Econ](https://fanwangecon.github.io/Stat4Econ/) course page.")
   }
 }
 

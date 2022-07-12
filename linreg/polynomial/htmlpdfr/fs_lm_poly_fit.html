@@ -11,9 +11,9 @@
 
 <meta name="author" content="Fan Wang" />
 
-<meta name="date" content="2021-08-11" />
+<meta name="date" content="2022-07-12" />
 
-<title>R Fit a Time Series with Polynomial and Analytical Expressions for Coefficients</title>
+<title>Find Best Fit of Curves Through Points</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -2038,599 +2038,354 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">R Fit a Time Series with Polynomial and
-Analytical Expressions for Coefficients</h1>
+<h1 class="title toc-ignore">Find Best Fit of Curves Through Points</h1>
 <h4 class="author"><a href="https://fanwangecon.github.io/">Fan
 Wang</a></h4>
-<h4 class="date">2021-08-11</h4>
+<h4 class="date">2022-07-12</h4>
 
 </div>
 
 
-<div id="polynomial-time-series" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> Polynomial Time
-Series</h1>
+<div id="fit-curves-through-points" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Fit Curves Through
+Points</h1>
 <blockquote>
-<p>Go to the <a href="https://github.com/FanWangEcon//R4Econ/blob/master/linreg/polynomial//fs_poly_fit.Rmd"><strong>RMD</strong></a>,
-<a href="https://github.com/FanWangEcon//R4Econ/blob/master/linreg/polynomial//htmlpdfr/fs_poly_fit.R"><strong>R</strong></a>,
-<a href="https://github.com/FanWangEcon//R4Econ/blob/master/linreg/polynomial//htmlpdfr/fs_poly_fit.pdf"><strong>PDF</strong></a>,
-or <a href="https://fanwangecon.github.io//R4Econ/linreg/polynomial//htmlpdfr/fs_poly_fit.html"><strong>HTML</strong></a>
+<p>Go to the <a href="https://github.com/FanWangEcon//R4Econ/blob/master/linreg/polynomial//fs_lm_poly_fit.Rmd"><strong>RMD</strong></a>,
+<a href="https://github.com/FanWangEcon//R4Econ/blob/master/linreg/polynomial//htmlpdfr/fs_lm_poly_fit.R"><strong>R</strong></a>,
+<a href="https://github.com/FanWangEcon//R4Econ/blob/master/linreg/polynomial//htmlpdfr/fs_lm_poly_fit.pdf"><strong>PDF</strong></a>,
+or <a href="https://fanwangecon.github.io//R4Econ/linreg/polynomial//htmlpdfr/fs_lm_poly_fit.html"><strong>HTML</strong></a>
 version of this file. Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> research
 support package, <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> examples page,
 <a href="https://fanwangecon.github.io/PkgTestR/">PkgTestR</a> packaging
 guide, or <a href="https://fanwangecon.github.io/Stat4Econ/">Stat4Econ</a> course
 page.</p>
 </blockquote>
-<div id="analytical-solution-for-time-series-polynomial-coefficients" class="section level2" number="1.1">
-<h2><span class="header-section-number">1.1</span> Analytical Solution
-for Time-Series Polynomial Coefficients</h2>
-<p>This file is developed in support of <a href="https://fanwangecon.github.io/assets/BhalotraFernandezWangMexicoFLFP.pdf">Bhalotra,
-Fernandez, and Wang (2021)</a>, where we use polynomials to model share
-parameter changes over time in the context of a nested-CES problem.</p>
-<div id="mth-order-polynomial-and-its-derivative" class="section level3" number="1.1.1">
-<h3><span class="header-section-number">1.1.1</span> Mth Order
-Polynomial and its Derivative</h3>
-<p>We have a polynomial of Mth order:</p>
-<p><span class="math display">\[
-y\left(t\right) = a_0 + a_1 \cdot t + a_2 \cdot t^2 + ... + a_M \cdot
-t^M
-\]</span></p>
-<p>Taking derivative of of <span class="math inline">\(y\)</span> with
-respect to <span class="math inline">\(t\)</span>, we have:</p>
-<p><span class="math display">\[
-\begin{aligned}
-  \frac{d^{M-0}y}{dt^{M-0}} &amp;=
-  a_{M-0} \cdot \frac{\left(M-0\right)!}{0!} \cdot t^{-0+0}
-  \\
-  \frac{d^{M-1}y}{dt^{M-1}} &amp;=
-  a_{M-0} \cdot \frac{\left(M-0\right)!}{1!} \cdot t^{-0+1}
-  +
-  a_{M-1} \cdot \frac{\left(M-1\right)!}{0!} \cdot t^{-1+1}
-  \\
-  \frac{d^{M-2}y}{dt^{M-2}} &amp;=
-  a_{M-0} \cdot \frac{\left(M-0\right)!}{2!} \cdot t^{-0+2}
-  +
-  a_{M-1} \cdot \frac{\left(M-1\right)!}{1!} \cdot t^{-1+2}
-  +
-  a_{M-2} \cdot \frac{\left(M-2\right)!}{0!} \cdot t^{-2+2}
-  \\
-  \frac{d^{M-3}y}{dt^{M-3}} &amp;=
-  a_{M-0} \cdot \frac{\left(M-0\right)!}{3!} \cdot t^{-0+3}
-  +
-  a_{M-1} \cdot \frac{\left(M-1\right)!}{2!} \cdot t^{-1+3}
-  +
-  a_{M-2} \cdot \frac{\left(M-2\right)!}{1!} \cdot t^{-2+3}
-  +
-  a_{M-3} \cdot \frac{\left(M-3\right)!}{0!} \cdot t^{-3+3}
-\end{aligned}
-\]</span></p>
-<p>Given the structure above, we have the following formulation for
-polynomial derivative, where we have a polynomial of <span class="math inline">\(M^{th}\)</span> order and we are interested in the
-<span class="math inline">\(N^{th}\)</span> derivative:</p>
-<p><span class="math display">\[
-\begin{aligned}
-  \frac{d^{N}y(M)}{dt^{N}} &amp;=
-  \sum_{i=0}^{M-N}
-  \left(
-    a_{M-i} \cdot
-    \frac{\left(M-i\right)!}{\left(M-N-i\right)!} \cdot
-    t^{M-N-i}
-  \right)
-\end{aligned}
-\]</span></p>
-<p>Note that the <span class="math inline">\(M^{th}\)</span> derivative
-of a <span class="math inline">\(M^{th}\)</span> order polynomial is
-equal to <span class="math inline">\(\left(a_M \cdot
-M!\right)\)</span></p>
-</div>
-<div id="repeatedly-taking-differences-of-differences" class="section level3" number="1.1.2">
-<h3><span class="header-section-number">1.1.2</span> Repeatedly Taking
-Differences of Differences</h3>
-<p>Suppose the data generating process is a <span class="math inline">\(M^{th}\)</span> order polynomial, then
-differencing of time-series observables can be used to identify
-polynomial coefficients.</p>
-<p>In the simplest case of a 1st order polynomial with <span class="math inline">\(Y_t = a_0 + a_1 \cdot t\)</span>, given 2 periods
-of data, <span class="math inline">\(t=0,t=1\)</span>, we have <span class="math inline">\(a_1 = Y_2 - Y_1\)</span>, and <span class="math inline">\(a_0 = Y_0\)</span>. The rate of change in <span class="math inline">\(Y\)</span> over <span class="math inline">\(t\)</span> captures coefficient <span class="math inline">\(a_1\)</span>.</p>
-<p>For a second order polynomial, while the first derivative is
-time-varying, the second derivative, acceleration, is invariant over
-<span class="math inline">\(t\)</span>. Similarly, for any <span class="math inline">\(M^{th}\)</span> order polynomial, the <span class="math inline">\(M^{th}\)</span> derivative is time-invariant.</p>
-<p>Because of this time-invariance of the <span class="math inline">\(M^{th}\)</span> derivative, the differencing idea
-can be used to identify <span class="math inline">\(a_M\)</span>, the
-coefficient for the highest polynomial term for the <span class="math inline">\(M^{th}\)</span> order polynomial.</p>
-<p>Now we difference observable <span class="math inline">\(y_t\)</span>
-overtime. We difference the differences, difference the differences of
-the differences, and difference the differences of the differences of
-the differences, etc. It turns out that the difference is a summation
-over all observations <span class="math inline">\(\left\{y_t\right\}_{t=1}^{T}\)</span>, with the
-number of times each <span class="math inline">\(y_t\)</span> term
-appearing following <a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle">Pascal’s
-Triangle</a>.</p>
-<p>Specifically:</p>
-<ul>
-<li>1st difference is <span class="math inline">\(y_1 -
-y_0\)</span></li>
-<li>2nd difference is <span class="math inline">\((y_2-y_1) - (y_1-y_0)
-= y_2 - 2y_1 + y_0\)</span></li>
-<li>3rd difference is <span class="math inline">\(((y_3-y_2) -
-(y_2-y_1)) - ((y_2-y_1) - (y_1-y_0)) = y_3 - 3y_2 + 3y_1 -
-y_0\)</span></li>
-<li>4th difference is <span class="math inline">\((((y_4 - y_3) - (y_3 -
-y_2)) - ((y_3-y_2) - (y_2-y_1))) - (((y_3-y_2) - (y_2-y_1)) - ((y_2-y_1)
-- (y_1-y_0))) = y_4 - 4y_3 + 6y_2 - 4y_1 + y_0\)</span></li>
-<li>5th difference is <span class="math inline">\(((((y_5-y_4) -
-(y_4-y_3)) - ((y_4-y_3) - (y_3-y_2))) - (((y_4-y_3) - (y_3-y_2)) -
-((y_3-y_2) - (y_2-y_1)))) - ((((y_4-y_3) - (y_3-y_2)) - ((y_3-y_2) -
-(y_2-y_1))) - (((y_3-y_2) - (y_2-y_1)) - ((y_2-y_1) - (y_1-y_0)))) = y_5
-- 5y_4 + 10y_3 - 10y_2 + 5y_1 - y_0\)</span></li>
-</ul>
-<p>Note that the pattern has alternating signs, and the coefficients are
-binomial. We have the following formula:</p>
-<p><span class="math display">\[
-\begin{aligned}
-  \Delta^M &amp;=
-  \sum_{i=0}^{M}
-  \left(\left(-1\right)^i\cdot\frac{M!}{\left(M-i\right)!i!}\right)
-  \cdot y_{\left(M-i\right)}
-  \\
-\end{aligned}
-\]</span></p>
-<p>When there are <span class="math inline">\(T\)</span> periods of
-data, and we are interested in the <span class="math inline">\(T-1\)</span> difference, the differencing formula
-is unique. However, for less than <span class="math inline">\(T-1\)</span> difference, we can use alternative
-consecutive data segments. Specifically, given <span class="math inline">\(T\)</span> periods of data from <span class="math inline">\(t=1\)</span> to <span class="math inline">\(t=T\)</span>, we have the notation <span class="math inline">\(\Delta^M_{\tau}\)</span> where <span class="math inline">\(\tau\)</span> is the starting time. We have, for
-<span class="math inline">\(M \le T-1\)</span>:</p>
-<p><span class="math display">\[
-\begin{aligned}
-  \Delta^M_{\tau}\left(\left\{y_t\right\}_{t=1}^{T}\right) &amp;=
-  \sum_{i=0}^{M}
-  \left(\left(-1\right)^i\cdot\frac{M!}{\left(M-i\right)!i!}\right)
-  \cdot y_{\left(\tau + \left(M-i\right)\right)}
-  \thinspace\thinspace\text{for}\thinspace\thinspace
-  1 \le \tau \le T-M
-  \\
-\end{aligned}
-\]</span></p>
-</div>
-<div id="solutions-for-polynomial-coefficients-with-differences-of-differences" class="section level3" number="1.1.3">
-<h3><span class="header-section-number">1.1.3</span> Solutions for
-Polynomial Coefficients with Differences of Differences</h3>
-<p>Intuitively, for a <span class="math inline">\(M^{th}\)</span> order
-polynomial, the coefficient on the highest polynomial term is a function
-of the <span class="math inline">\((M-1)^{th}\)</span> difference.
-Coefficients of lower polynomial terms, <span class="math inline">\(m&lt;M\)</span>, are function of the <span class="math inline">\((m-1)^{th}\)</span> difference along with higher
-order polynomial coefficients already computed.</p>
-<p>Formally, we have, for a <span class="math inline">\(M^{th}\)</span>
-order polynomial, a vector of <span class="math inline">\(\left\{a_m\right\}_{m=0}^{M}\)</span> <span class="math inline">\(M+1\)</span> polynomial coefficients. For formula
-for the coefficient for the largest polynomial is:</p>
-<p><span class="math display">\[
-\begin{aligned}
-  a_M &amp;=
-  \sum_{i=0}^{M}
-  \left(
-    \left(-1\right)^i
-    \left(
-      \left(M-i\right)!
-      i!
-      \right)^{-1}
-  \right)
-  % \cdot
-  y_{\left(M-i\right)}
-\end{aligned}
-\]</span></p>
-<p>Given this, we have also, given <span class="math inline">\(T\)</span> periods of data from <span class="math inline">\(t=1\)</span> to <span class="math inline">\(t=T\)</span>: <span class="math display">\[
-\begin{aligned}
-  a_{M-1} &amp;=
-  \sum_{i=0}^{M-1}
-  \left(
-    \left(-1\right)^i
-    \left(
-      \left(M-1-i\right)!
-      i!
-      \right)^{-1}
-  \right)
-  \cdot
-  \left(
-    y_{\left(\tau + \left(M-1-i\right)\right)}
-    - a_M \cdot t^M
-  \right)
-  \thinspace\thinspace
-  \text{for}
-  \thinspace\thinspace
-  1 \le \tau \le T-M-1
-\end{aligned}
-\]</span></p>
-<p>Using one formula, given <span class="math inline">\(a_{m+1}\)</span>, we have:</p>
-<p><span class="math display">\[
-\begin{aligned}
-  a_{m} &amp;=
-  \sum_{i=0}^{m}
-  \left(
-    \left(-1\right)^i
-    \left(
-      \left(m-i\right)!
-      i!
-      \right)^{-1}
-  \right)
-  \cdot
-  \left(
-    y_{\left(\tau + \left(m-i\right)\right)}
-    -
-    \sum_{j=0}^{M-m-1}
-    a_{M-j} \cdot t^{M-j}
-  \right)
-  \thinspace\thinspace
-  \text{for}
-  \thinspace\thinspace
-  1 \le \tau \le T-m
-\end{aligned}
-\]</span></p>
-</div>
-<div id="identifying-polynomial-coefficients-with-differences-for-third-order-polynomial" class="section level3" number="1.1.4">
-<h3><span class="header-section-number">1.1.4</span> Identifying
-Polynomial Coefficients with Differences for Third Order Polynomial</h3>
-<p>To illustrate, we test the formulas with a 3rd order polynomial, and
-derive some 3rd-order specific formulas.</p>
-<p>For data from a 3rd order polynomial data generating process, we can
-use the 3rd difference to identify the coefficient in front of <span class="math inline">\(x^3\)</span>. With this, we can iteratively to
-lower polynomials and identify all relevant coefficients.</p>
-<p>Specifically, using equations from the two sections above, we
-have:</p>
-<p><span class="math display">\[
-\begin{aligned}
-  \frac{d^{3}y(3)}{dt^{3}} &amp;=  y_3 - 3y_2 + 3y_1 - y_0
-  \\
-  \frac{d^{3}y(3)}{dt^{3}} &amp;= 3! \cdot a_3
-\end{aligned}
-\]</span></p>
-<p>Combining the two equations we have, that <span class="math inline">\(a_3\)</span> is the 3rd difference divided by
-<span class="math inline">\(6\)</span>:</p>
-<p><span class="math display">\[
-\begin{aligned}
-  3! \cdot a_3 &amp;= y_3 - 3y_2 + 3y_1 - y_0\\
-   a_3 &amp;= \frac{y_3 - 3y_2 + 3y_1 - y_0 }{3\cdot2}
-\end{aligned}
-\]</span></p>
-<p>For the linear and cubic terms, we have:</p>
-<p><span class="math display">\[
-\begin{aligned}
-  \frac{d^{2}y(M=3)}{dt^{2}} &amp;= 3 \cdot a_2 + 6 \cdot a_3 \cdot t
-  \\
-  \frac{d^{1}y(M=3)}{dt^{1}} &amp;= a_1 + 2 \cdot a_2 + 3 \cdot a_3
-\cdot t^2
-\end{aligned}
-\]</span></p>
-<p>Note that the 3rd derivative of a 3rd order polynomial is a constant,
-but the 2nd derivative of a 3rd order polynomial is not. This means that
-to use the second difference to identify <span class="math inline">\(a_2\)</span> parameter, we first have to
-difference out from <span class="math inline">\(y_t\)</span> the impact
-of the 3rd polynomial term, which we can because we know <span class="math inline">\(a_3\)</span> now.</p>
-<p>Differencing out the 3rd term, we have now the 2nd derivative of a
-2nd order polynomial: <span class="math display">\[
-\begin{aligned}
-  \frac{d^{2}\left(y(M=3) - a_3\cdot t^3\right)}{dt^{2}} &amp;=
-  \frac{d^{2}\left(\widehat{y}(M=2)\right)}{dt^{2}}
-  \thinspace\thinspace,
-  \\
-\end{aligned}
-\]</span> where <span class="math inline">\(\widehat{y}\left(M,2\right)=y\left(M\right)-a_3\cdot
-t^3\)</span>.</p>
-<p>So this means we have:</p>
-<p><span class="math display">\[
-\begin{aligned}
-  \frac{d^{2}\widehat{y}(3,2)}{dt^{2}} &amp;=
-  \left(1 \cdot y_2 - 2 \cdot y_1 + 1 \cdot y_0\right) -
-  a_3\cdot\left(1\cdot 2^3 - 2 \cdot 1^3 + 1 \cdot 0^3 \right)
-  \\
-  &amp;=
-  \left(1 \cdot y_2 - 2 \cdot y_1 + 1 \cdot y_0\right) -
-  a_3\cdot \left(2^3 - 2\right)
-  \\
-  \frac{d^{2}\widehat{y}(3,2)}{dt^{2}} &amp;= 2! \cdot a_2
-\end{aligned}
-\]</span></p>
-<p>Given the value for <span class="math inline">\(a_3\)</span>, we
-have:</p>
-<p><span class="math display">\[
-\begin{aligned}
-  2! \cdot a_2 &amp;=
-  \left(1 \cdot y_2 - 2 \cdot y_1 + 1 \cdot y_0\right) -
-  a_3\cdot 6
-  \\
-  2! \cdot a_2 &amp;=
-  \left(1 \cdot y_2 - 2 \cdot y_1 + 1 \cdot y_0\right) -
-  \frac{y_3 - 3y_2 + 3y_1 - y_0 }{3\cdot2} \cdot \left(2^3 - 2\right)
-  \\
-  2! \cdot a_2 &amp;=
-  \left(y_2 - 2y_1 + y_0\right) -
-  \left(y_3 - 3y_2 + 3y_1 - y_0\right)
-  \\
-  2! \cdot a_2 &amp;
-  = - y_3 + 4y_2 - 5y_1 + 2y_0
-  \\
-  a_2 &amp;
-  = \frac{- y_3 + 4y_2 - 5y_1 + 2y_0}{2}
-\end{aligned}
-\]</span></p>
-<p>Following the same strategy, we can also find <span class="math inline">\(a_1\)</span>. Let <span class="math inline">\(\widehat{y}\left(M,1\right)=y\left(M\right)-a_3\cdot
-t^3-a_2\cdot t^2\)</span></p>
-<p><span class="math display">\[
-\begin{aligned}
-  \frac{d^{2}\widehat{y}(3,1)}{dt^{2}} &amp;=
-  \left(y_1 - y_0\right) -
-  a_3\cdot\left(1^3 - 0^3 \right) -
-  a_2\cdot\left(1^2 - 0^2 \right)
-  \\
-  &amp;=
-  \left(y_1 - y_0\right) - a_3 - a_2
-  \\
-  \frac{d^{2}\widehat{y}(3,1)}{dt^{2}} &amp;= 1! \cdot a_1
-\end{aligned}
-\]</span></p>
-<p>Hence:</p>
-<p><span class="math display">\[
-\begin{aligned}
-  a_1 &amp;=
-  \left(y_1 - y_0\right) -
-  a_3\cdot\left(1^3 - 0^3 \right) -
-  a_2\cdot\left(1^2 - 0^2 \right)
-  \\
-  &amp;=
-  \left(y_1 - y_0\right) - a_3 - a_2
-  \\
-  &amp;=
-  \left(y_1 - y_0\right) -
-  \frac{y_3 - 3y_2 + 3y_1 - y_0 }{3\cdot2} -
-  \frac{- y_3 + 4y_2 - 5y_1 + 2y_0}{2}
-  \\
-  &amp;=
-  \frac{6y_1 - 6y_0}{6} -
-  \frac{y_3 - 3y_2 + 3y_1 - y_0 }{6} -
-  \frac{-3y_3 + 12y_2 - 15y_1 + 6y_0}{6}
-  \\
-  &amp;=
-  \frac{6y_1 - 6y_0 -y_3 + 3y_2 - 3y_1 + y_0 +3y_3 - 12y_2 + 15y_1 -
-6y_0}{6}
-  \\
-  &amp;=
-  \frac{2y_3 - 9y_2 + 18y_1 - 11y_0}{6}
-\end{aligned}
-\]</span></p>
-<p>Finally, we know that <span class="math inline">\(a_0 = y_0\)</span>.
-We have now analytical expressions for each of the 4 polynomial
-coefficients for a 3rd order polynomial. Given data from the
-data-generating process, these would back out the underlying parameters
-of the data generating process using data from four periods at <span class="math inline">\(t=0,1,2,3\)</span>.</p>
-</div>
-<div id="third-order-polynomial-simulation-and-solving-for-parameters" class="section level3" number="1.1.5">
-<h3><span class="header-section-number">1.1.5</span> Third Order
-Polynomial Simulation and Solving for Parameters</h3>
-<p>Now we generated a time-series of values and solve back for the
-underlying polynomial coefficients.</p>
-<pre class="r"><code># polynomial coefficients
-set.seed(123)
-ar_coef_poly &lt;- rnorm(4)
-# time right hand side matrix
-ar_t &lt;- 0:3
-ar_power &lt;- 0:3
-mt_t_data &lt;- do.call(rbind, lapply(ar_power, function(power) {
-  ar_t^power
-}))
-# Final matrix, each row is an observation, or time.
-mt_t_data &lt;- t(mt_t_data)
-# General model prediction
-ar_y &lt;- mt_t_data %*% matrix(ar_coef_poly, ncol = 1, nrow = 4)
-# Prediction and Input time matrix
-mt_all_data &lt;- cbind(ar_y, mt_t_data)
-st_cap &lt;- paste0(
-  &quot;C1=Y, each row is time, t=0, incremental by 1, &quot;,
-  &quot;each column a polynomial term from 0th to higher.&quot;
-)
-kable(mt_all_data, caption = st_cap) %&gt;% kable_styling_fc()</code></pre>
+<div id="polynomial-fit-with-n-sets-of-points" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Polynomial Fit with N
+Sets of Points</h2>
+<p>There are three points defined by their x and y coordinates. We draw
+these points randomly, and we find a curve that fits through them. The
+fit is exact. If there are more than three sets of points, we will not
+be able to fit exactly. In the illustration before, first, we draw 3
+sets of x and y points, then we draw 4 and 5 sets, and we compare the
+prediction results.</p>
+<p>Note that we are not generating data from a particular set of
+quadratic (polynomial) parameters, we are just drawing random values.
+When we draw exactly three pairs of random x and y values, we can find
+some polynomial that provides an exact fit through the three points in
+2d space.</p>
+<p>We define the function here.</p>
+<pre class="r"><code>#&#39; Test polynomial fit to random draw x and y points
+#&#39;
+#&#39; @description Draw random sets of x and y points, fit a polynomial curve through
+#&#39; and compare predictions of y and actual y values.
+#&#39;
+#&#39; @param it_xy_pairs The number of x and y pair points
+#&#39; @param it_seed The random seed for drawing values
+#&#39; @param it_poly_fit An integer value of the order of polynomial
+#&#39; @param fl_mean The mean of the the random normal draw
+#&#39; @param fl_sd The standard deviation of the random normal draw
+#&#39; @returns
+#&#39; \itemize{
+#&#39;   \item rs_lm_poly - polynomial fit estimation results
+#&#39;   \item df_data_predict - N by 3 where N = \code{it_xy_pairs} and
+#&#39; columns are x, y, y-predict, and residual
+#&#39;   \item td_table_return - Display version of df_data_predict with title
+#&#39; }
+#&#39; @import stats, tibble, dplyr
+#&#39; @author Fan Wang, \url{http://fanwangecon.github.io}
+ffi_lm_quad_fit &lt;- function(it_xy_pairs = 3, it_seed = 123,
+                            it_poly_fit = 2, fl_mean = 1, fl_sd = 1,
+                            verbose = FALSE) {
+
+  # 1. Generate three pairs of random numbers
+  set.seed(it_seed)
+  mt_rnorm &lt;- matrix(
+    rnorm(it_xy_pairs * 2, mean = fl_mean, sd = fl_sd),
+    nrow = it_xy_pairs, ncol = 2
+  )
+  colnames(mt_rnorm) &lt;- c(&quot;x&quot;, &quot;y&quot;)
+  rownames(mt_rnorm) &lt;- paste0(&quot;p&quot;, seq(1, it_xy_pairs))
+  df_rnorm &lt;- as_tibble(mt_rnorm)
+
+  # 2. Quadratic fit using ORTHOGONAL POLYNOMIAL
+  # For predictions, lm(y ~ x + I(x^2)) and lm(y ~ poly(x, 2)) are the same,
+  # but they have different parameters because x is transformed by poly().
+  rs_lm_quad &lt;- stats::lm(y ~ poly(x, it_poly_fit), data = df_rnorm)
+  if (verbose) print(stats::summary.lm(rs_lm_quad))
+
+  # 3. Fit prediction
+  ar_y_predict &lt;- stats::predict(rs_lm_quad)
+  df_data_predict &lt;- cbind(df_rnorm, ar_y_predict) %&gt;%
+    mutate(res = ar_y_predict - y)
+  if (verbose) print(df_data_predict)
+
+  # 4. show values
+  st_poly_order &lt;- &quot;Quadratic&quot;
+  if (it_poly_fit != 2) {
+    st_poly_order &lt;- paste0(it_poly_fit, &quot;th order&quot;)
+  }
+  td_table_return &lt;- kable(df_data_predict,
+    caption = paste0(
+      st_poly_order, &quot; Fit of &quot;, it_xy_pairs, &quot; Sets of Random (X,Y) Points&quot;
+    )
+  ) %&gt;%
+    kable_styling_fc()
+
+  return(list(
+    rs_lm_quad = rs_lm_quad,
+    df_data_predict = df_data_predict,
+    td_table_return = td_table_return
+  ))
+}</code></pre>
+<p>In the first example below, we simulate 3 set of points and estimate
+quadratic exact fit.</p>
+<pre class="r"><code>ls_ffi_lm_quad_fit &lt;-
+  ffi_lm_quad_fit(
+    it_xy_pairs = 3, it_seed = 123,
+    it_poly_fit = 2, fl_mean = 1, fl_sd = 1
+  )
+ls_ffi_lm_quad_fit$td_table_return</code></pre>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-C1=Y, each row is time, t=0, incremental by 1, each column a polynomial
-term from 0th to higher.
-</caption>
-<tbody>
-<tr>
-<td style="text-align:right;">
--0.5604756
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.8385636
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5.7780698
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-8
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-14.6810933
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-9
-</td>
-<td style="text-align:right;">
-27
-</td>
-</tr>
-</tbody>
-</table>
-<p>Backing out coefficients using the formulas for 3rd order polynomial
-derived above, we have:</p>
-<pre class="r"><code># The constant term
-alpha_0 &lt;- ar_y[1]
-# The cubic term
-alpha_3 &lt;- as.numeric((t(ar_y) %*% c(-1, +3, -3, +1))/(3*2))
-# The quadratic term, difference cubic out, alpha_2_1t3 = alpha_2_2t4
-ar_y_hat &lt;- ar_y - alpha_3*ar_t^3
-alpha_2_1t3 &lt;- as.numeric((t(ar_y_hat[1:3]) %*% c(1, -2, +1))/(2))
-alpha_2_2t4 &lt;- as.numeric((t(ar_y_hat[2:4]) %*% c(1, -2, +1))/(2))
-alpha_2 &lt;- alpha_2_1t3
-# The linear term, difference cubic out and quadratic
-ar_y_hat &lt;- ar_y - alpha_3*ar_t^3 - alpha_2*ar_t^2
-alpha_1_1t2 &lt;- as.numeric((t(ar_y_hat[1:2]) %*% c(-1, +1))/(1))
-alpha_1_2t3 &lt;- as.numeric((t(ar_y_hat[2:3]) %*% c(-1, +1))/(1))
-alpha_1_3t4 &lt;- as.numeric((t(ar_y_hat[3:4]) %*% c(-1, +1))/(1))
-alpha_1 &lt;- alpha_1_1t2
-# Collect results
-ar_names &lt;- c(&quot;Constant&quot;, &quot;Linear&quot;, &quot;Quadratic&quot;, &quot;Cubic&quot;)
-ar_alpha_solved &lt;- c(alpha_0, alpha_1, alpha_2, alpha_3)
-mt_alpha &lt;- cbind(ar_names, ar_alpha_solved, ar_coef_poly)
-# Display
-ar_st_varnames &lt;- c(&#39;Coefficient Counter&#39;, &#39;Polynomial Terms&#39;, &#39;Solved Coefficient Given Y&#39;, &#39;Actual DGP Coefficient&#39;)
-tb_alpha &lt;- as_tibble(mt_alpha) %&gt;%
-  rowid_to_column(var = &quot;polynomial_term_coef&quot;) %&gt;%
-  rename_all(~c(ar_st_varnames))
-# Display
-st_cap = paste0(&#39;Solving for polynomial coefficients.&#39;)
-kable(tb_alpha, caption = st_cap) %&gt;% kable_styling_fc()</code></pre>
-<table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>
-Solving for polynomial coefficients.
+Quadratic Fit of 3 Sets of Random (X,Y) Points
 </caption>
 <thead>
 <tr>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-Coefficient Counter
+x
 </th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-Polynomial Terms
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+y
 </th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-Solved Coefficient Given Y
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+ar_y_predict
 </th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-Actual DGP Coefficient
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+res
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:right;">
-1
+0.4395244
 </td>
-<td style="text-align:left;">
-Constant
+<td style="text-align:right;">
+1.070508
 </td>
-<td style="text-align:left;">
--0.560475646552213
+<td style="text-align:right;">
+1.070508
 </td>
-<td style="text-align:left;">
--0.560475646552213
+<td style="text-align:right;">
+0
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
-2
+0.7698225
 </td>
-<td style="text-align:left;">
-Linear
+<td style="text-align:right;">
+1.129288
 </td>
-<td style="text-align:left;">
--0.230177489483281
+<td style="text-align:right;">
+1.129288
 </td>
-<td style="text-align:left;">
--0.23017748948328
+<td style="text-align:right;">
+0
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
-3
+2.5587083
 </td>
-<td style="text-align:left;">
-Quadratic
-</td>
-<td style="text-align:left;">
-1.55870831414913
-</td>
-<td style="text-align:left;">
-1.55870831414912
-</td>
-</tr>
-<tr>
 <td style="text-align:right;">
-4
+2.715065
 </td>
-<td style="text-align:left;">
-Cubic
+<td style="text-align:right;">
+2.715065
 </td>
-<td style="text-align:left;">
-0.0705083914245757
-</td>
-<td style="text-align:left;">
-0.070508391424576
+<td style="text-align:right;">
+0
 </td>
 </tr>
 </tbody>
 </table>
-<p>Note that given that the data is exact output from DGP, and we have
-the same number of data and parameters, parameters are exactly
-identified. However, this is only really true for the <span class="math inline">\(a_3\)</span> parameter, which requires all four
-periods of data. - For <span class="math inline">\(a_2\)</span>, it is
-over-identified, we can arrived at it, given <span class="math inline">\(a_3\)</span>, either with difference of
-differences using data from <span class="math inline">\(t=1,2,3\)</span>
-or using data from <span class="math inline">\(t=2,3,4\)</span>. - For
-<span class="math inline">\(a_1\)</span>, it is also over-identified,
-given <span class="math inline">\(a_3\)</span> and <span class="math inline">\(a_2\)</span>. The difference of <span class="math inline">\(t=1,2\)</span>, <span class="math inline">\(t=2,3\)</span> or <span class="math inline">\(t=3,4\)</span> can all identify <span class="math inline">\(a_1\)</span>.</p>
-<p>Note also that the solution above can be found by running a linear
-regression as well. The point of doing the exercise here and showing
-analytically how layers of differences of differences identify each
-polynomial coefficient is to show what in the underlying variation of
-the data is identifying each of the polynomial term.</p>
-<p>In effect, all identification is based on the fact that the <span class="math inline">\(M^{th}\)</span> order polynomial’s <span class="math inline">\(M^{th}\)</span> derivative is a constant, it is
-invariant over <span class="math inline">\(t\)</span>. This is the core
-assumption, or restriction of the otherwise highly flexible polynomial
-functional form. With this core invariance at the max degree derivative
-condition, all other parameters are obtained through the simple act of
-differencing.</p>
-</div>
+<p>In the second example below, we simulate 4 set of points and estimate
+a quadratic non-exact fit.</p>
+<pre class="r"><code>ls_ffi_lm_quad_fit &lt;-
+  ffi_lm_quad_fit(
+    it_xy_pairs = 4, it_seed = 345,
+    it_poly_fit = 2, fl_mean = 1, fl_sd = 1
+  )
+ls_ffi_lm_quad_fit$td_table_return</code></pre>
+<table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Quadratic Fit of 4 Sets of Random (X,Y) Points
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+x
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+y
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+ar_y_predict
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+res
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.2150918
+</td>
+<td style="text-align:right;">
+0.9324684
+</td>
+<td style="text-align:right;">
+0.9373687
+</td>
+<td style="text-align:right;">
+0.0049003
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.7204856
+</td>
+<td style="text-align:right;">
+0.3664796
+</td>
+<td style="text-align:right;">
+1.5207575
+</td>
+<td style="text-align:right;">
+1.1542779
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.8385421
+</td>
+<td style="text-align:right;">
+0.0722760
+</td>
+<td style="text-align:right;">
+-0.0080226
+</td>
+<td style="text-align:right;">
+-0.0802987
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.7094034
+</td>
+<td style="text-align:right;">
+2.7107710
+</td>
+<td style="text-align:right;">
+1.6318915
+</td>
+<td style="text-align:right;">
+-1.0788795
+</td>
+</tr>
+</tbody>
+</table>
+<p>In the third example below, we simulate the same 4 sets of points as
+in the prior example, but now use a cubic polynomial to fit the data
+exactly.</p>
+<pre class="r"><code>ls_ffi_lm_cubic_fit &lt;-
+  ffi_lm_quad_fit(
+    it_xy_pairs = 4, it_seed = 345,
+    it_poly_fit = 3, fl_mean = 1, fl_sd = 1
+  )
+ls_ffi_lm_cubic_fit$td_table_return</code></pre>
+<table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+3th order Fit of 4 Sets of Random (X,Y) Points
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+x
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+y
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+ar_y_predict
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+res
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.2150918
+</td>
+<td style="text-align:right;">
+0.9324684
+</td>
+<td style="text-align:right;">
+0.9324684
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.7204856
+</td>
+<td style="text-align:right;">
+0.3664796
+</td>
+<td style="text-align:right;">
+0.3664796
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.8385421
+</td>
+<td style="text-align:right;">
+0.0722760
+</td>
+<td style="text-align:right;">
+0.0722760
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.7094034
+</td>
+<td style="text-align:right;">
+2.7107710
+</td>
+<td style="text-align:right;">
+2.7107710
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
