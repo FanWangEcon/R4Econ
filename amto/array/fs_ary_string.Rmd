@@ -2,17 +2,19 @@
 title: "R String Arrays"
 titleshort: "String Operations"
 description: |
-  Split, concatenate, subset, replace, substring strings.
+  Split, concatenate, subset, replace, and substring strings.
   Convert number to string without decimal and negative sign.
+  Concatenate numeric and string arrays as a single string.
 core:
   - package: r
     code: |
       paste0()
+      paste0(round(runif(3),3), collapse=',')
       sub()
       gsub()
       grepl()
       sprintf()
-date: 2020-08-21
+date: 2022-07-13
 date_start: 2020-04-11
 output:
   pdf_document:
@@ -130,10 +132,23 @@ gsub(strsplit(st_cut_cate, ",")[[1]][2],  pattern = "]", replacement = "")
 
 #### String Concatenate
 
+Concatenate string array into a single string. 
+
 ```{r amto.array.fs_ary_string.concatenate}
 # Simple Collapse
 vars.group.by <- c('abc', 'efg')
 paste0(vars.group.by, collapse='|')
+```
+
+Concatenate a numeric array into a single string. 
+
+```{r amto.array.fs_ary_string.concatenate}
+# Simple Collapse
+set.seed(123)
+ar_fl_numbers <- runif(5)
+paste0('ar_fl_numbers = ', 
+       paste(round(ar_fl_numbers,3), collapse=', ')
+)
 ```
 
 #### String Add Leading Zero

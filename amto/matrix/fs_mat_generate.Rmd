@@ -3,6 +3,7 @@ title: "R Generate and Combine Fixed and Random Matrix"
 titleshort: "Matrix Basics"
 description: |
   Generate and combine NA, fixed and random matrixes. Name columns and rows.
+  Sort all rows and all columns of a matrix.
 core:
   - package: R
     code: |
@@ -13,7 +14,11 @@ core:
       matrix(NA_integer_)
       colnames()
       rownames()
-date: 2020-05-13
+      t(apply(mt, 1, sort))
+      apply(mt, 2, sort)
+      colMeans
+      rowMeans
+date: 2022-07-14
 date_start: 2020-04-01
 output:
   pdf_document:
@@ -66,7 +71,7 @@ mt_named
 
 - [Best way to allocate matrix in R, NULL vs NA?](https://stackoverflow.com/a/26724451/8280804)
 
-Allocate with NA or NA_real_ or NA_int_. Clarity in type definition is preferred. 
+Allocate with NA or NA_real_ or NA_int_. Clarity in type definition is preferred.
 
 ```{r}
 # An empty matrix with Logical NA
@@ -96,23 +101,67 @@ mt_runif <- matrix(runif(15,min=0,max=1), nrow=5, ncol=5)
 mt_rnorm_runif <- cbind(mt_rnorm, mt_runif)
 
 # Display
-kable(mt_rnorm_runif) %>% kable_styling_fc_wide()
+kable(round(mt_rnorm_runif, 3)) %>% kable_styling_fc()
 ```
+
+#### Sort Each Matrix Row or Column 
+
+Now we sort within each row or within each column of the random matrix.
+
+```{r}
+# Within row sort
+mt_rnorm_runif_row_sort <- t(apply(
+  mt_rnorm_runif, 1, sort
+))
+# Within column sort, note no transpose
+mt_rnorm_runif_col_sort <- apply(
+  mt_rnorm_runif, 2, sort
+)
+# Display
+kable(round(mt_rnorm_runif_row_sort, 3),
+      caption="Each row sort low to high") %>%
+  kable_styling_fc()
+kable(round(mt_rnorm_runif_col_sort, 3),
+      caption="Each column sort low to high") %>%
+  kable_styling_fc()
+```
+
+#### Compute Column and Row Statistics
+
+Compute column and row means, and also column and row sums
+
+```{r}
+print(paste0('colSums=',
+             paste(round(
+               colSums(mt_rnorm_runif),3), collapse=',')
+             ))
+print(paste0('colMeans=',
+             paste(round(
+               colMeans(mt_rnorm_runif),3), collapse=',')
+             ))
+print(paste0('rowSums=',
+             paste(round(
+               rowSums(mt_rnorm_runif),3), collapse=',')
+             ))
+print(paste0('rowMeans=',
+             paste(round(
+               rowMeans(mt_rnorm_runif),3), collapse=',')
+             ))
+```
+
 
 #### Add Column to Matrix with Common Scalar Value
 
-Given some matrix of information, add a column, where all rows of the column have the same numerical value. Use the matrix created prior. 
+Given some matrix of information, add a column, where all rows of the column have the same numerical value. Use the matrix created prior.
 - R add column to matrix
 - r append column to matrix constant value
 
 ```{r}
 fl_new_first_col_val <- 111
 fl_new_last_col_val <- 999
-mt_with_more_columns <- cbind(rep(fl_new_first_col_val, dim(mt_rnorm_runif)[1]), 
+mt_with_more_columns <- cbind(rep(fl_new_first_col_val, dim(mt_rnorm_runif)[1]),
                               mt_rnorm_runif,
                               rep(fl_new_last_col_val, dim(mt_rnorm_runif)[1]))
 # Display
 kable(mt_with_more_columns) %>% kable_styling_fc_wide()
 ```
-
-

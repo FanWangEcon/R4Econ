@@ -1,15 +1,17 @@
-## ----global_options, include = FALSE-------------------------------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ----support function multivar cumsum------------------------------------------------------------------------------------------------------------------
+## ----support function multivar cumsum-----------------------------------------------
 # Define
 it_N <- 3
 it_M <- 5
 svr_id <- 'date'
 
-# NA dataframe
-df_NA <- as_tibble(matrix(NA, nrow=it_N, ncol=it_M)) %>%
+# NA dataframe, note need to define as NA_real_
+# if define as NA, will not be able to replace with 99 column
+# would be logical rather than double.
+df_NA <- as_tibble(matrix(NA_real_, nrow=it_N, ncol=it_M)) %>%
   rowid_to_column(var = svr_id) %>%
   rename_at(vars(starts_with("V")),
             funs(str_replace(., "V", "var")))
@@ -20,11 +22,12 @@ kable(df_NA) %>%
 df_NA_replace <- df_NA %>%
   mutate_at(vars(one_of(c('var1', 'var2'))), list(~replace_na(., 0))) %>%
   mutate_at(vars(one_of(c('var3', 'var5'))), list(~replace_na(., 99)))
+
 kable(df_NA_replace) %>%
   kable_styling_fc()
 
 
-## ----support function multivar cumsum------------------------------------------------------------------------------------------------------------------
+## ----support function multivar cumsum-----------------------------------------------
 # Define
 it_N <- 3
 it_M <- 5
