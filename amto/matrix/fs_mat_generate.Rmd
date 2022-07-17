@@ -4,6 +4,7 @@ titleshort: "Matrix Basics"
 description: |
   Generate and combine NA, fixed and random matrixes. Name columns and rows.
   Sort all rows and all columns of a matrix.
+  Replace values outside min and max in matrix by NA values. 
 core:
   - package: R
     code: |
@@ -18,6 +19,7 @@ core:
       apply(mt, 2, sort)
       colMeans
       rowMeans
+      which()
 date: 2022-07-14
 date_start: 2020-04-01
 output:
@@ -104,7 +106,21 @@ mt_rnorm_runif <- cbind(mt_rnorm, mt_runif)
 kable(round(mt_rnorm_runif, 3)) %>% kable_styling_fc()
 ```
 
-#### Sort Each Matrix Row or Column 
+#### Replace a Subset of Matrix Values by NA_real_
+
+For values in matrix that fall below or above some thresholds, we will replace these values by NA_real_.
+
+```{r}
+fl_max_val <- 0.8
+fl_min_val <- 0.2
+mt_rnorm_runif_bd <- mt_rnorm_runif
+mt_rnorm_runif_bd[which(mt_rnorm_runif < fl_min_val)] <- NA_real_
+mt_rnorm_runif_bd[which(mt_rnorm_runif > fl_max_val)] <- NA_real_
+# Print
+print(mt_rnorm_runif_bd)
+```
+
+#### Sort Each Matrix Row or Column
 
 Now we sort within each row or within each column of the random matrix.
 

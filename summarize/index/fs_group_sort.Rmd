@@ -1,15 +1,19 @@
 ---
-title: "R DPLYR Group and sort, and Slice and Summarize"
-titleshort: "Group and sort, and Slice and Summarize"
+title: "R Within-group Ascending and Descending Sort, Selection, and Differencing"
+titleshort: "R Within-group Ascending and Descending Sort, Selection, and Differencing"
 description: |
-  Group a dataframe by a variable, sort within group by another variable, keep only highest rows.
+  Sort a dataframe by multiple variables, some in descending order.
+  Select observations with the highest M values from within N groups (top scoring students from each class).
 core:
   - package: dplyr
     code: |
-      arrange()
+      arrange(a, b, desc(c))
       group_by()
+      lag()
+      lead()
       slice_head(n=1)
-date: 2020-12-17
+date: 2022-07-15
+date_start: 2020-12-17
 output:
   pdf_document:
     pandoc_args: '../../_output_kniti_pdf.yaml'
@@ -33,26 +37,50 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
 
-#### Get Highest Values from Groups
+#### Sort in Ascending and Descending Orders
 
-There is a dataframe with a grouping variable. Get N rows that have the highest sorted value for another numeric variable. In the example below, group by *cyl* and get the cars with the lowest *mpg* in each *cyl* group.
-
-Show all values.
+We sort the mtcars dataset, sorting in *ascending* order by cyl, and in *descending* order by mpg. Using *arrange*, *desc(disp)* means sorting the disp variable in descending order. In the table shown below, *cyc* is increasing, and *disp* id decreasing within each *cyc* group.
 
 ```{r}
-kable(mtcars %>% arrange(cyl, mpg)) %>% kable_styling_fc()
+kable(mtcars %>%
+  arrange(cyl, desc(disp)) %>%
+    # Select and filter to reduce display clutter
+    select(cyl, disp, mpg)) %>%
+  kable_styling_fc()
 ```
 
-Three groups min mpg each group: 
+#### Get Highest Values from Groups
+
+There is a dataframe with a grouping variable with N unique values, for example N classes. Find the top three highest scoring students from each class. In the example below, group by *cyl* and get the cars with the highest and second highest *mpg* cars in each *cyl* group.
 
 ```{r}
 # use mtcars: slice_head gets the lowest sorted value
 df_groupby_top_mpg <- mtcars %>%
-  arrange(cyl, mpg) %>%
+  rownames_to_column(var = "car") %>%
+  arrange(cyl, desc(mpg)) %>%
   group_by(cyl) %>%
-  slice_head(n=1) %>%
-  select(cyl, mpg)
+  slice_head(n=3) %>%
+  select(car, cyl, mpg, disp, hp)
 
 # display
 kable(df_groupby_top_mpg) %>% kable_styling_fc()
+```
+
+#### Differences in Within-group Sorted Value
+
+We first take the largest N values in M groups, then we difference between the ranked top values in each group.
+
+We have N classes, and M students in each class. We first select the 3 students with the highest scores from each class, then we take the difference between 1st and 2nd, and the difference between the 2nd and the 3rd students.
+
+Note that when are using descending sort, so *lead* means the next value in descending sequencing, and *lag* means the last value which was higher in descending order.
+
+```{r}
+# We use what we just created in the last block.
+df_groupby_top_mpg_diff <- df_groupby_top_mpg %>%
+  group_by(cyl) %>%
+  mutate(mpg_diff_higher_minus_lower = mpg - lead(mpg)) %>%
+  mutate(mpg_diff_lower_minus_higher = mpg - lag(mpg))
+
+# display
+kable(df_groupby_top_mpg_diff)  %>% kable_styling_fc()
 ```
