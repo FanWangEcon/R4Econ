@@ -1,8 +1,9 @@
 ---
-title: "R Do Anything Function over Dataframe Subset and Stack Output Scalars, (MxP by N) to (Mx1 by 1)"
-titleshort: "Dataframe Subset to Scalar (MxP by N) to (Mx1 by 1)"
+title: "Simulate country-specific wage draws and compute country wage GINIs: Dataframe (Mx1 by N) to (MxQ by N+1) to (Mx1 by N)"
+titleshort: "Simulate country-specific wage draws and compute country wage GINIs: Dataframe (Mx1 by N) to (MxQ by N+1) to (Mx1 by N"
 description: |
-  MxQ rows to Mx1 Rows. Group dataframe by categories, compute category specific output scalar or arrays based on within category variable information.
+  Define attributes for M groups across N variables, simulate up to Q observations for each of the M Groups, then compute M-specific statistics based on the sample of observations within each M.
+  Start with a matrix that is (Mx1 by N); Expand this to (MxQ by N+1), where, the additional column contains the MxQ specific variable; Compute statistics for each M based on the Q observations with M, and then present (Mx1 by N+1) dataframe.
 core:
   - package: dplyr
     code: |
@@ -10,7 +11,7 @@ core:
       do(inc = rnorm(.$N, mean=.$mn, sd=.$sd))
       unnest(c(inc))
       left_join(df, by="ID")
-date: 2020-05-27
+date: 2022-07-16
 date_start: 2020-04-01
 output:
   pdf_document:
@@ -35,62 +36,59 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
 
+#### Wages from Many Countries and Country-specific GINI
 
-There is a Panel with $M$ individuals and each individual has $Q$ records/rows. A function generate an individual specific outcome given the $Q$ individual specific inputs, along with shared parameters and arrays across the $M$ individuals.
+There is a Panel with $M$ individuals and each individual has $Q$ records/rows. A function generate an individual specific outcome given the $Q$ individual specific inputs, along with shared parameters/values stored as variables that contain common values for each of the $M$ individuals.
 
-For example, suppose we have a dataframe of individual wage information from different countries, each row is an individual from one country. We want to generate country specific gini based on the individual data for each country in the dataframe. But additionally, perhaps the gini formula requires not just individual income but some additional parameters or shared dataframes as inputs.
+For example, suppose we have a dataframe of individual wage information from different countries (the number of countries is $M$). Each row is an individual from one country, giving us $Q \cdot M$ observations of wages.
 
-Given the within $m$ income observations, we can compute gini statistics that are individual specific based on the observed distribution of incomes. For this, we will use the [ff_dist_gini_vector_pos.html](https://fanwangecon.github.io/REconTools/reference/ff_dist_gini_vector_pos.html) function from [REconTools](https://fanwangecon.github.io/REconTools/).
+We want to generate country specific gini based on the individual wage data for each country in the dataframe. Additionally, perhaps the gini formula requires not just individual wages but some additional parameters or shared dataframes as inputs. We will use the [ff_dist_gini_vector_pos.html](https://fanwangecon.github.io/REconTools/reference/ff_dist_gini_vector_pos.html) function from [REconTools](https://fanwangecon.github.io/REconTools/).
 
-To make this more interesting, we will generate large dataframe with more $M$ and more $Q$ each $m$.
+First, we simulate a dataframe with $M$ countries, and up to $Q$ people in each country. The countries share the same mean income, but have different standard deviations.
 
-#### Income Rows for Individuals in Many Groups
-
-There are up to ten thousand income observation per person. And there are ten people.
-
-```{r large df}
+```{r}
 # Parameter Setups
 it_M <- 10
-it_Q_max <- 10000
+it_Q_max <- 100
 fl_rnorm_mu <- 1
 ar_rnorm_sd <- seq(0.01, 0.2, length.out=it_M)
+set.seed('789')
 ar_it_q <- sample.int(it_Q_max, it_M, replace=TRUE)
 
 # N by Q varying parameters
-mt_data = cbind(ar_it_q, ar_rnorm_sd)
+mt_data <- cbind(ar_it_q, ar_rnorm_sd)
 tb_M <- as_tibble(mt_data) %>% rowid_to_column(var = "ID") %>%
-                rename(sd = ar_rnorm_sd, Q = ar_it_q) %>%
-                mutate(mean = fl_rnorm_mu)
+                rename(sd = ar_rnorm_sd,
+                       Q = ar_it_q) %>%
+                mutate(mean = fl_rnorm_mu) %>%
+                select(ID, Q,
+                       mean, sd)
+
+# Show table
+kable(tb_M, caption = paste0("M=", it_M,
+  " countries (ID is country ID), observation per country (Q)",
+  ", mean and s.d. of wages each country")) %>%
+  kable_styling_fc()
 ```
 
-#### Compute Group Specific Gini
-
-There is only one input for the gini function *ar_pos*.  Note that the gini are not very large even with large SD, because these are normal distributions. By Construction, most peple are in the middle. So with almost zero standard deviation, we have perfect equality, as standard deviation increases, inequality increases, but still pretty equal overall, there is no fat upper tail.
-
-Note that there are three ways of referring to variable names with dot, which are all shown below:
+Second, we now expand the dataframe so that each country has not just one row, but $Q_i$ of observations ($i$ is country), or randomly drawn income based on the country-specific income distribution. Note that there are three ways of referring to variable names with dot, which are all shown below:
 
 1. We can explicitly refer to names
 2. We can use the [dollar dot structure](https://stackoverflow.com/a/18228613/8280804) to use string variable names in do anything.
 3. We can use dot bracket, this is the only option that works with string variable names
 
-First: Generate individual group all incomes: 
-
 ```{r }
 # A. Normal Draw Expansion, Explicitly Name
 set.seed('123')
 tb_income_norm_dot_dollar <- tb_M %>% group_by(ID) %>%
-  do(income = rnorm(.$Q,
-                    mean=.$mean,
-                    sd=.$sd)) %>%
+  do(income = rnorm(.$Q, mean=.$mean, sd=.$sd)) %>%
   unnest(c(income)) %>%
   left_join(tb_M, by="ID")
 
 # Normal Draw Expansion again, dot dollar differently with string variable name
 set.seed('123')
 tb_income_norm_dollar_dot <- tb_M %>% group_by(ID) %>%
-  do(income = rnorm(`$`(., 'Q'),
-                    mean = `$`(., 'mean'),
-                    sd = `$`(., 'sd'))) %>%
+  do(income = rnorm(`$`(., 'Q'), mean = `$`(., 'mean'), sd = `$`(., 'sd'))) %>%
   unnest(c(income)) %>%
   left_join(tb_M, by="ID")
 
@@ -100,26 +98,39 @@ svr_mean <- 'mean'
 svr_sd <- 'sd'
 svr_Q <- 'Q'
 tb_income_norm_dot_bracket_db <- tb_M %>% group_by(ID) %>%
-  do(income = rnorm(.[[svr_Q]],
-                    mean = .[[svr_mean]],
-                    sd = .[[svr_sd]])) %>%
+  do(income = rnorm(.[[svr_Q]], mean = .[[svr_mean]], sd = .[[svr_sd]])) %>%
   unnest(c(income)) %>%
   left_join(tb_M, by="ID")
-
-# display
-print(dim(tb_income_norm_dot_bracket_db))
-kable(head(tb_income_norm_dot_bracket_db, 20)) %>% kable_styling_fc()
 ```
 
-Second, compute gini: 
+Third, we print the first set of rows of the dataframe, and also summarize income by country groups.
+
+```{r}
+# Show dataframe dimension
+print(dim(tb_income_norm_dot_bracket_db))
+# Show first 20 rows
+kable(head(tb_income_norm_dot_bracket_db, 20),
+  caption = "ID = country ID, wage draws"
+  ) %>% kable_styling_fc()
+# Display country-specific summaries
+REconTools::ff_summ_bygroup(tb_income_norm_dot_bracket_db, c("ID"), "income")$df_table_grp_stats
+```
+
+Fourth, there is only one input for the gini function *ar_pos*.  Note that the gini are not very large even with large SD, because these are normal distributions. By Construction, most peple are in the middle. So with almost zero standard deviation, we have perfect equality, as standard deviation increases, inequality increases, but still pretty equal overall, there is no fat upper tail.
 
 ```{r}
 # Gini by Group
 tb_gini_norm <- tb_income_norm_dot_bracket_db %>% group_by(ID) %>%
-  do(inc_gini_norm = ff_dist_gini_vector_pos(.$income)) %>%
+  do(inc_gini_norm = REconTools::ff_dist_gini_vector_pos(.$income)) %>%
   unnest(c(inc_gini_norm)) %>%
   left_join(tb_M, by="ID")
 
 # display
-kable(tb_gini_norm) %>% kable_styling_fc()
+kable(tb_gini_norm,
+  caption = paste0(
+    "Country-specific wage GINI based on income draws",
+    ", ID=country-ID, Q=sample-size-per-country",
+    ", mean=true-income-mean, sd=true-income-sd"
+  )) %>%
+  kable_styling_fc()
 ```

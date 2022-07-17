@@ -1,4 +1,4 @@
-## ----global_options, include = FALSE------------------------------------------------
+## ----global_options, include = FALSE-----------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
@@ -83,7 +83,7 @@ try(source("../../.Rprofile"))
 ## display(tb_test);
 
 
-## -----------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------
 # Inputs X and Y
 set.seed(123)
 # Draw Randomly
@@ -136,7 +136,7 @@ st_display <- paste0(
 print(st_display)
 
 
-## -----------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------
 # Estimation results
 df_rnorm <- as_tibble(mt_rnorm)
 # Linear and quadratic terms
@@ -148,7 +148,7 @@ rs_lm_quad_otho <- stats::lm(y ~ poly(x, 2), data = df_rnorm)
 print(stats::summary.lm(rs_lm_quad_otho))
 
 
-## -----------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------
 # Matrix of input values
 mt_vals_xs <- t(
   matrix(c(1, x1, x1**2, 1, x2, x2**2, 1, x3, x3**2),
@@ -172,6 +172,210 @@ kable(
     mutate(res = ar_pred_lm - y),
   caption = paste0(
     "Quadratic Fit of 3 Sets of Random (X,Y) Points"
+  )
+) %>% kable_styling_fc()
+
+
+## clc
+
+## clear
+
+## 
+
+## % Define inputs
+
+## syms T U V W R S
+
+## mt_sm_z = [T, U; V, W];
+
+## ar_sm_y = [R; S];
+
+## 
+
+## % Solve analytically
+
+## ar_sm_solu = linsolve(mt_sm_z, ar_sm_y)
+
+## 
+
+## % Randomly draw x and y values
+
+## rng(1234);
+
+## mt_rand = rand(3,2);
+
+## % Use below to check not-exact fit, gap actual and predict of y
+
+## mt_rand = [0.1915, 0.6221, 0.4377;
+
+##            0.7854, 0.7800, 0.2726]';
+
+## % Use below to check for exact fit 2nd 3rd points same
+
+## % mt_rand = [0.1915, 0.6221, 0.6221;
+
+## %  0.7854, 0.7800, 0.7800]';
+
+## [fl_x1, fl_x2, fl_x3] = deal(mt_rand(1,1), mt_rand(2,1), mt_rand(3,1));
+
+## [fl_y1, fl_y2, fl_y3] = deal(mt_rand(1,2), mt_rand(2,2), mt_rand(3,2));
+
+## [fl_x11, fl_x21, fl_x31] = deal(fl_x1, fl_x2, fl_x3);
+
+## [fl_x12, fl_x22, fl_x32] = deal(fl_x1^2, fl_x2^2, fl_x3^2);
+
+## 
+
+## % Define values of U V Q and S
+
+## fl_T = fl_x21 - fl_x11;
+
+## fl_U = fl_x22 - fl_x12;
+
+## fl_V = fl_x31 - fl_x21;
+
+## fl_W = fl_x32 - fl_x22;
+
+## fl_R = fl_y2 - fl_y1;
+
+## fl_S = fl_y3 - fl_y2;
+
+## 
+
+## % Numerically evaluate coefficients
+
+## ar_fl_solu = double(subs(ar_sm_solu, ...
+
+##   {T, U, V, W, R, S}, ...
+
+##   {fl_T, fl_U, fl_V, fl_W, fl_R, fl_S}));
+
+## disp(['ar_fl_solu=', num2str(ar_fl_solu')])
+
+## 
+
+## % Y difference predictions
+
+## mt_fl_z = [fl_T, fl_U;fl_V, fl_W];
+
+## ar_fl_y_diff_pred = mt_fl_z*ar_fl_solu;
+
+## ar_fl_x_diff_actual = [fl_T;fl_V];
+
+## ar_fl_x_sqr_diff_actual = [fl_U;fl_W];
+
+## ar_fl_y_diff_actual = [fl_R;fl_S];
+
+## 
+
+## % Compare results
+
+## tb_test = array2table( ...
+
+##   [ar_fl_x_diff_actual'; ar_fl_x_sqr_diff_actual'; ...
+
+##    ar_fl_y_diff_actual'; ar_fl_y_diff_pred']');
+
+## cl_col_names = ["x_diff_actual", "x_sqr_diff_actual", ...
+
+##                 "y_diff_actual", "y_diff_predict"];
+
+## cl_row_names = strcat('diff_obs_', string((1:2)));
+
+## tb_test.Properties.VariableNames = matlab.lang.makeValidName(cl_col_names);
+
+## tb_test.Properties.RowNames = matlab.lang.makeValidName(cl_row_names);
+
+## display(tb_test);
+
+
+## ----------------------------------------------------------------------------------------------------------------------------
+# Inputs X and Y
+set.seed(123)
+# Draw Randomly
+mt_rnorm <- matrix(rnorm(6, mean = 1, sd = 1), nrow = 3, ncol = 2)
+# # Three fixed and different set of points
+# mt_rnorm <- matrix(c(
+#   0.1915, 0.6221, 0.4377,
+#   0.7854, 0.7800, 0.2726
+# ), nrow = 3, ncol = 2)
+
+colnames(mt_rnorm) <- c("x", "y")
+x1 <- mt_rnorm[1, 1]
+x2 <- mt_rnorm[2, 1]
+x3 <- mt_rnorm[3, 1]
+y1 <- mt_rnorm[1, 2]
+y2 <- mt_rnorm[2, 2]
+y3 <- mt_rnorm[3, 2]
+
+# X quadratic
+x11 <- x1
+x12 <- x1**2
+x21 <- x2
+x22 <- x2**2
+x31 <- x3
+x32 <- x3**2
+
+# Define U and V, as well as Q and S
+fl_T <- x21 - x11;
+fl_U <- x22 - x12;
+fl_V <- x31 - x21;
+fl_W <- x32 - x22;
+fl_R <- y2 -  y1;
+fl_S <- y3 -  y2;
+
+# Shared denominator
+fl_denominator <- (fl_T*fl_W - fl_U*fl_V)
+
+# Solve for A and B coefficients (not exact fit)
+fl_B <- (fl_R * fl_W - fl_S * fl_U) / fl_denominator
+fl_C <- (fl_S * fl_T - fl_R * fl_V) / fl_denominator
+
+# Display
+st_display <- paste0(
+  "B(lin)=", round(fl_B, 3),
+  ", C(quad)=", round(fl_C, 3)
+)
+print(st_display)
+
+
+## ----------------------------------------------------------------------------------------------------------------------------
+# Estimation results
+df_rnorm <- as_tibble(mt_rnorm)
+# Linear and quadratic terms
+rs_lm_quad <- stats::lm(y ~ x + I(x^2), data = df_rnorm)
+print(stats::summary.lm(rs_lm_quad))
+# Using orthogonal polynomials
+# vs. rs_lm_quad: different parameters, but same predictions
+rs_lm_quad_otho <- stats::lm(y ~ poly(x, 2), data = df_rnorm)
+print(stats::summary.lm(rs_lm_quad_otho))
+
+
+## ----------------------------------------------------------------------------------------------------------------------------
+# Matrix of input values
+mt_vals_xs <- t(
+  matrix(c(x2 - x1, x2^2 - x1^2, x3 - x2, x3^2 - x2^2),
+    nrow = 2, ncol = 2
+  )
+)
+
+# Predictions from LM poly prediction
+ar_pred_lm <- mt_vals_xs %*% as.vector(rs_lm_quad$coefficients)[2:3]
+as_pred_lm_otho_lvl <- stats::predict(rs_lm_quad_otho)
+as_pred_lm_otho <- t(t(diff(as_pred_lm_otho_lvl)))
+
+# Predictions based on analytical solutions
+ar_pred_sym <- mt_vals_xs %*% c(fl_B, fl_C)
+
+# Combine results
+kable(
+  cbind(
+    as_tibble(apply(df_rnorm, 2, diff)), ar_pred_sym,
+    ar_pred_lm, as_pred_lm_otho
+  ) %>%
+    mutate(res = ar_pred_lm - y),
+  caption = paste0(
+    "Quadratic Fit, given 3 Sets of Random (X,Y) Points' Differences in Y"
   )
 ) %>% kable_styling_fc()
 
@@ -277,7 +481,7 @@ kable(
 ## display(tb_test);
 
 
-## -----------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------
 # Inputs X and Y
 set.seed(123)
 # Draw Randomly
@@ -331,7 +535,7 @@ st_display <- paste0(
 print(st_display)
 
 
-## -----------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------
 # Estimation results
 df_rnorm <- as_tibble(mt_rnorm)
 # Linear and quadratic terms
@@ -343,7 +547,7 @@ rs_lm_quad_otho <- stats::lm(y ~ poly(x, 1), data = df_rnorm)
 print(stats::summary.lm(rs_lm_quad_otho))
 
 
-## -----------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------
 # Matrix of input values
 mt_vals_xs <- t(
   matrix(c(1, x1, 1, x2, 1, x3),

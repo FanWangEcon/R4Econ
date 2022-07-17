@@ -2,8 +2,9 @@
 title: "Analytical Formula Fit Curves Through Points"
 titleshort: "Analytical Formula Fit Curves Through Points"
 description: |
-  There are three points, formula for the exact quadratic curve that fits through the points.
-  There are three points, formula for the linear best fit line through the points.
+  There are three pairs of points, formulas for the exact quadratic curve that fits through the points.
+  There are three pairs of points, we observe only differences in y values, formulas for the linear and quadratic parameters. 
+  There are three pairs of points, formulas for the linear best fit line through the points.
 core:
   - package: stats
     code: |
@@ -11,7 +12,7 @@ core:
       lm(y ~ poly(x, 2), dataset=df)
       summary.lm(rs)
       predict(rs)
-date: 2022-07-13
+date: 2022-07-16
 date_start: 2022-07-11
 output:
   pdf_document:
@@ -233,6 +234,228 @@ kable(
 ) %>% kable_styling_fc()
 ```
 
+#### Formulas for Quadratic Parameters and Differences 
+
+Similar to the prior example, we remain interested in quadratic parameters, however, we no longer observe three sets of $x$ and $y$ values, instead, we observe differences in the $y$ values. Specifically, we observe $\Delta y_2$ and $\Delta y_3$, not $y_3$, $y_2$, and $y_1$. We do still observe $x_1$, $x_2$, and $x_3$. We can no longer identify $A$, but we can still identify $B$ and $C$.
+
+$$
+\begin{aligned}
+y_2 - y_1 = \Delta y_2 &= B \cdot ( x_2 - x_1 ) + C \cdot ( x_2^2 - x_1^2) \\
+y_3 - y_2 = \Delta y_3 &= B \cdot ( x_3 - x_2 ) + C \cdot ( x_3^2 - x_2^2) \\
+\end{aligned}
+$$
+
+First, we rewrite the problem in [matrix form](https://fanwangecon.github.io/Math4Econ/matrix_system_of_equations/htmlpdfm/matrix_linear_system_2.html).
+
+$$
+\begin{aligned}
+\begin{bmatrix}
+\underbrace{ x_2 - x_1 }_{T} & \underbrace{ x_2^2 - x_1^2}_{U} \\
+\underbrace{ x_3 - x_2 }_{V} & \underbrace{ x_3^2 - x_2^2}_{W} \\
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+B \\
+C
+\end{bmatrix}
+& =
+\begin{bmatrix}
+\underbrace{y_2 - y_1}_{R} \\
+\underbrace{y_3 - y_2}_{S}
+\end{bmatrix}\\
+\end{aligned}
+$$
+
+Second, we solve the system of equations for the unknown vector $[B,C]$, via [elementary row operations](https://fanwangecon.github.io/Math4Econ/matrix_system_of_equations/htmlpdfm/matrix_row_echelon_form.html). The code below uses matlab to arrive at symbolic analytical solutions for for $[B,C]$. Derivations of the solutions are also shown here: [Reduced Row Echelon Form with 2 Equations and 2 Unknowns](https://fanwangecon.github.io/Math4Econ/matrix_system_of_equations/htmlpdfm/matrix_row_echelon_form.html#16_Reduced_Row_Echelon_Form_with_2_Equations_and_2_Unknowns).
+
+```{octave, eval = FALSE}
+clc
+clear
+
+% Define inputs
+syms T U V W R S
+mt_sm_z = [T, U; V, W];
+ar_sm_y = [R; S];
+
+% Solve analytically
+ar_sm_solu = linsolve(mt_sm_z, ar_sm_y)
+
+% Randomly draw x and y values
+rng(1234);
+mt_rand = rand(3,2);
+% Use below to check not-exact fit, gap actual and predict of y
+mt_rand = [0.1915, 0.6221, 0.4377;
+           0.7854, 0.7800, 0.2726]';
+% Use below to check for exact fit 2nd 3rd points same
+% mt_rand = [0.1915, 0.6221, 0.6221;
+%  0.7854, 0.7800, 0.7800]';
+[fl_x1, fl_x2, fl_x3] = deal(mt_rand(1,1), mt_rand(2,1), mt_rand(3,1));
+[fl_y1, fl_y2, fl_y3] = deal(mt_rand(1,2), mt_rand(2,2), mt_rand(3,2));
+[fl_x11, fl_x21, fl_x31] = deal(fl_x1, fl_x2, fl_x3);
+[fl_x12, fl_x22, fl_x32] = deal(fl_x1^2, fl_x2^2, fl_x3^2);
+
+% Define values of U V Q and S
+fl_T = fl_x21 - fl_x11;
+fl_U = fl_x22 - fl_x12;
+fl_V = fl_x31 - fl_x21;
+fl_W = fl_x32 - fl_x22;
+fl_R = fl_y2 - fl_y1;
+fl_S = fl_y3 - fl_y2;
+
+% Numerically evaluate coefficients
+ar_fl_solu = double(subs(ar_sm_solu, ...
+  {T, U, V, W, R, S}, ...
+  {fl_T, fl_U, fl_V, fl_W, fl_R, fl_S}));
+disp(['ar_fl_solu=', num2str(ar_fl_solu')])
+
+% Y difference predictions
+mt_fl_z = [fl_T, fl_U;fl_V, fl_W];
+ar_fl_y_diff_pred = mt_fl_z*ar_fl_solu;
+ar_fl_x_diff_actual = [fl_T;fl_V];
+ar_fl_x_sqr_diff_actual = [fl_U;fl_W];
+ar_fl_y_diff_actual = [fl_R;fl_S];
+
+% Compare results
+tb_test = array2table( ...
+  [ar_fl_x_diff_actual'; ar_fl_x_sqr_diff_actual'; ...
+   ar_fl_y_diff_actual'; ar_fl_y_diff_pred']');
+cl_col_names = ["x_diff_actual", "x_sqr_diff_actual", ...
+                "y_diff_actual", "y_diff_predict"];
+cl_row_names = strcat('diff_obs_', string((1:2)));
+tb_test.Properties.VariableNames = matlab.lang.makeValidName(cl_col_names);
+tb_test.Properties.RowNames = matlab.lang.makeValidName(cl_row_names);
+display(tb_test);
+```
+
+Third, the solutions for the intercept and quadratic terms based on differences in $y$ values and based on functions of the all $x$ values are as follows.
+
+$$
+\begin{aligned}
+B &= \frac{R W - S U}{ T W - U V}\\
+  &= \frac{
+\left( y_2 - y_1 \right)
+\cdot\left( x_3^2 - x_2^2 \right) -
+\left( y_3 - y_2 \right)
+\cdot\left( x_2^2 - x_1^2 \right)
+}{
+\left( x_2 - x_1 \right)
+\cdot\left( x_3^2 - x_2^2 \right) -
+\left( x_2^2 - x_1^2 \right)
+\cdot\left( x_3 - x_2 \right)
+}\\
+&\\
+C &= \frac{S T - R V}{ T W - U V}\\
+  &= \frac{
+\left( y_3 - y_2 \right)
+\cdot\left( x_2 - x_1 \right) -
+\left( y_2 - y_1 \right)
+\cdot\left( x_3 - x_2 \right)
+}{
+\left( x_2 - x_1 \right)
+\cdot\left( x_3^2 - x_2^2 \right) -
+\left( x_2^2 - x_1^2 \right)
+\cdot\left( x_3 - x_2 \right)
+}
+\end{aligned}
+$$
+
+Fourth, given three pairs randomly drawn x and y points, we use the formulas just derived to find the parameters for the best-fitting slope and quadratic parameters given observed y differences. 
+
+```{r}
+# Inputs X and Y
+set.seed(123)
+# Draw Randomly
+mt_rnorm <- matrix(rnorm(6, mean = 1, sd = 1), nrow = 3, ncol = 2)
+# # Three fixed and different set of points
+# mt_rnorm <- matrix(c(
+#   0.1915, 0.6221, 0.4377,
+#   0.7854, 0.7800, 0.2726
+# ), nrow = 3, ncol = 2)
+
+colnames(mt_rnorm) <- c("x", "y")
+x1 <- mt_rnorm[1, 1]
+x2 <- mt_rnorm[2, 1]
+x3 <- mt_rnorm[3, 1]
+y1 <- mt_rnorm[1, 2]
+y2 <- mt_rnorm[2, 2]
+y3 <- mt_rnorm[3, 2]
+
+# X quadratic
+x11 <- x1
+x12 <- x1**2
+x21 <- x2
+x22 <- x2**2
+x31 <- x3
+x32 <- x3**2
+
+# Define U and V, as well as Q and S
+fl_T <- x21 - x11;
+fl_U <- x22 - x12;
+fl_V <- x31 - x21;
+fl_W <- x32 - x22;
+fl_R <- y2 -  y1;
+fl_S <- y3 -  y2;
+
+# Shared denominator
+fl_denominator <- (fl_T*fl_W - fl_U*fl_V)
+
+# Solve for A and B coefficients (not exact fit)
+fl_B <- (fl_R * fl_W - fl_S * fl_U) / fl_denominator
+fl_C <- (fl_S * fl_T - fl_R * fl_V) / fl_denominator
+
+# Display
+st_display <- paste0(
+  "B(lin)=", round(fl_B, 3),
+  ", C(quad)=", round(fl_C, 3)
+)
+print(st_display)
+```
+
+Fifth, to check that the estimates are correct, we derive results from running linear estimation with the three points of data drawn, using all level information. As prior, we use both polynomial and orthogonal polynomials below. Note that we can not run this regression in practice because we do not observe levels, just differences. 
+
+```{r}
+# Estimation results
+df_rnorm <- as_tibble(mt_rnorm)
+# Linear and quadratic terms
+rs_lm_quad <- stats::lm(y ~ x + I(x^2), data = df_rnorm)
+print(stats::summary.lm(rs_lm_quad))
+# Using orthogonal polynomials
+# vs. rs_lm_quad: different parameters, but same predictions
+rs_lm_quad_otho <- stats::lm(y ~ poly(x, 2), data = df_rnorm)
+print(stats::summary.lm(rs_lm_quad_otho))
+```
+
+Sixth, now we compare between the predications based on analytical solutions using differences in $y$, and lm regression. The fit of differences in $y$ are exact.
+
+```{r}
+# Matrix of input values
+mt_vals_xs <- t(
+  matrix(c(x2 - x1, x2^2 - x1^2, x3 - x2, x3^2 - x2^2),
+    nrow = 2, ncol = 2
+  )
+)
+
+# Predictions from LM poly prediction
+ar_pred_lm <- mt_vals_xs %*% as.vector(rs_lm_quad$coefficients)[2:3]
+as_pred_lm_otho_lvl <- stats::predict(rs_lm_quad_otho)
+as_pred_lm_otho <- t(t(diff(as_pred_lm_otho_lvl)))
+
+# Predictions based on analytical solutions
+ar_pred_sym <- mt_vals_xs %*% c(fl_B, fl_C)
+
+# Combine results
+kable(
+  cbind(
+    as_tibble(apply(df_rnorm, 2, diff)), ar_pred_sym,
+    ar_pred_lm, as_pred_lm_otho
+  ) %>%
+    mutate(res = ar_pred_lm - y),
+  caption = paste0(
+    "Quadratic Fit, given 3 Sets of Random (X,Y) Points' Differences in Y"
+  )
+) %>% kable_styling_fc()
+```
+
 #### Formulas for Linear Fit with Three Points
 
 We have three points, what are the optimizing intercept and slope parameters? We solve the following problem to minimize the sum-squared error given linear fit with the three points. 
@@ -394,12 +617,8 @@ A &= \frac{Q V - S U}{- U^2 + 3 V}\\
 }{
 3\cdot \left(x_1^2 + x_2^2 + x_3^2\right) - 
 \left(x_1 + x_2 + x_3\right)^2
-}
-\end{aligned}
-$$
-
-$$
-\begin{aligned}
+}\\
+&\\
 B &= \frac{3 S - Q U}{- U^2 + 3 V}\\
   &= \frac{
 3 \left(x_1 y_1 + x_2 y_2 + x_3 y_3\right) - 
@@ -511,3 +730,4 @@ kable(
   )
 ) %>% kable_styling_fc()
 ```
+
