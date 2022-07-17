@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE-------------------------------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE-----------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------
 # Define
 it_N <- 3
 it_M <- 5
@@ -14,7 +14,8 @@ df_panel_attend_date <- as_tibble(matrix(it_M, nrow=it_N, ncol=1)) %>%
   rowid_to_column(var = svr_id) %>%
   uncount(V1) %>%
   group_by(!!sym(svr_id)) %>% mutate(date = row_number()) %>%
-  ungroup() %>% mutate(in_class = case_when(rnorm(n(),mean=0,sd=1) < 0 ~ 1, TRUE ~ 0)) %>%
+  ungroup() %>% 
+  mutate(in_class = case_when(rnorm(n(),mean=0,sd=1) < 0 ~ 1, TRUE ~ 0)) %>%
   filter(in_class == 1) %>% select(!!sym(svr_id), date) %>%
   rename(date_in_class = date)
 
@@ -23,7 +24,7 @@ kable(df_panel_attend_date) %>%
   kable_styling_fc()
 
 
-## ------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------
 # Define
 svr_id <- 'student_id'
 svr_date <- 'date_in_class'
@@ -34,12 +35,13 @@ df_panel_attend_date_addone <- df_panel_attend_date %>% mutate(attended = 1)
 kable(df_panel_attend_date_addone) %>%
   kable_styling_fc()
 
+
+## ----------------------------------------------------------------------------------------------------------------------------
 # Pivot Wide
 df_panel_attend_date_wider <- df_panel_attend_date_addone %>%
+  arrange(student_id) %>%
   pivot_wider(names_from = svr_id,
               values_from = attended)
-kable(df_panel_attend_date_wider) %>%
-  kable_styling_fc()
 
 # Sort and rename
 # rename see: https://fanwangecon.github.io/R4Econ/amto/tibble/fs_tib_basics.html
@@ -52,6 +54,22 @@ df_panel_attend_date_wider_sort <- df_panel_attend_date_wider %>%
 kable(df_panel_attend_date_wider_sort) %>%
   kable_styling_fc()
 
+
+## ----------------------------------------------------------------------------------------------------------------------------
+# Include name_prefix
+df_panel_attend_date_wider_sort <- df_panel_attend_date_addone %>%
+  arrange(student_id) %>%
+  pivot_wider(id_cols = c("date_in_class"),
+              names_from = svr_id,
+              names_prefix = "sid_",
+              values_from = attended) %>%
+  arrange(date_in_class)
+# Print
+kable(df_panel_attend_date_wider_sort) %>%
+  kable_styling_fc()
+
+
+## ----------------------------------------------------------------------------------------------------------------------------
 # replace NA and cumusum again
 # see: R4Econ/support/function/fs_func_multivar for renaming and replacing
 df_attend_cumu_by_day <- df_panel_attend_date_wider_sort %>%
@@ -62,7 +80,7 @@ kable(df_attend_cumu_by_day) %>%
   kable_styling_fc()
 
 
-## ------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------
 # Parameters
 df <- df_panel_attend_date
 svr_id_i <- 'student_id'
@@ -77,4 +95,33 @@ df_roster_wide_cumu_func <- ls_df_rosterwide$df_roster_wide_cumu
 # Print
 print(df_roster_wide_func)
 print(df_roster_wide_cumu_func)
+
+
+## ----------------------------------------------------------------------------------------------------------------------------
+# Create score column
+set.seed(123)
+df_panel_attend_score_date <- df_panel_attend_date_addone %>%
+  mutate(score = rnorm(dim(df_panel_attend_date_addone)[1], mean=70, sd=10)) %>%
+  mutate(score = round(score, 2),
+         other_var_1 = 1, other_var_2 = 2)
+
+# Print
+kable(df_panel_attend_score_date, caption="Attend and score info") %>%
+  kable_styling_fc()
+
+
+## ----------------------------------------------------------------------------------------------------------------------------
+# Convert to wide
+df_panel_attend_score_date_wide <- df_panel_attend_score_date %>%
+  arrange(student_id) %>%
+  pivot_wider(id_cols  = c("date_in_class"),
+              names_from = svr_id,
+              names_prefix = "sid",
+              names_sep = "_",
+              values_from = c(attended, score)) %>%
+  arrange(date_in_class)
+
+# Print
+kable(df_panel_attend_score_date_wide, caption="Attend and score wide") %>%
+  kable_styling_fc_wide()
 

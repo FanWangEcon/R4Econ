@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE------------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE-----------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## -----------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------
 # Generate A Matrix
 set.seed(123)
 ar_a <- c(1.1,5.1)
@@ -15,6 +15,14 @@ colnames(mt_ev) <- paste0('zi', seq(1:length(ar_z)))
 
 # to tibble
 tb_ev <- as_tibble(mt_ev) %>% rowid_to_column(var = "ai")
+
+# Print
+print(mt_ev)
+# Display
+kable(tb_ev, caption = "Wide table") %>% kable_styling_fc()
+
+
+## ----------------------------------------------------------------------------------------------------------------------------
 
 # longer
 tb_ev_long <- tb_ev %>%
@@ -37,6 +45,5 @@ tb_ev_long <- tb_ev_long %>%
   select(a,ai,z,zi,ev)
 
 # Display
-kable(tb_ev) %>% kable_styling_fc_wide()
-kable(tb_ev_long) %>% kable_styling_fc()
+kable(tb_ev_long, caption = "Long table") %>% kable_styling_fc()
 

@@ -1,13 +1,16 @@
 ---
-title: "R Wide Data to Long Data Example (TIDYR Pivot Longer)"
+title: "Convert Table from Wide to Long with dplyr"
+titleshort: "Convert Table from Wide to Long with dplyr"
 description: |
-  A matrix of ev given states, rows are states and cols are shocks. Convert to Long table with shock and state values and ev.
+  Given a matrix of values with row and column labels, create a table where the unit of observation are the row and column categories, and the values in the matrix is stored in a single variable.
 core:
+  - package: tidyr
+    code: |
+      pivot_longer(cols = starts_with('zi'), names_to = c('zi'), names_pattern = paste0("zi(.)"), values_to = "ev")
   - package: dplyr
     code: |
       left_join()
-      pivot_longer(cols = starts_with('zi'), names_to = c('zi'), names_pattern = paste0("zi(.)"), values_to = "ev")
-date: 2020-05-27
+date: 2022-07-16
 date_start: 2020-05-14
 output:
   pdf_document:
@@ -34,15 +37,20 @@ try(source("../../.Rprofile"))
 
 Using the [pivot_wider](https://tidyr.tidyverse.org/reference/pivot_wider.html) function in tidyr to reshape panel or other data structures
 
-#### Generated Matrix by States to Long Table
+#### Wide to Long Panel
 
-A matrix of ev given states, rows are states and cols are shocks. Convert to Long table with shock and state values and ev.
+We have a matrix of values, the values are *ev*. Each row corresponds to a different value of the *a* variable, each column represents a different value of the *z* variable. 
 
-Generated Matrix by States to Long Table where state values are stored as variables, with correct value labels for states:
+Based on this matrix, we create a table where each unit of observation is for a specific *a* and *z* variable combination. So the matrix is turned from wide to long. 
 
-1. Generate a matrix
-2. Convert matrix to tibble
-3. Tibble make longer, and store column and row id var names
+The resulting long table has 5 variables 
+
+1. *a*: values of the *a* variable, the original matrix row labels 
+2. *ai*: an index from 1, indicating the original matrix row index
+3. *z*: values of the *z* variable, the original matrix column lables
+4. *zi*: an index from 1, indicating hte original matrix column index
+
+First, we create the matrix. 
 
 ```{r}
 # Generate A Matrix
@@ -57,6 +65,16 @@ colnames(mt_ev) <- paste0('zi', seq(1:length(ar_z)))
 
 # to tibble
 tb_ev <- as_tibble(mt_ev) %>% rowid_to_column(var = "ai")
+
+# Print
+print(mt_ev)
+# Display
+kable(tb_ev, caption = "Wide table") %>% kable_styling_fc()
+```
+
+Second, we convert the table wide to long. 
+
+```{r}
 
 # longer
 tb_ev_long <- tb_ev %>%
@@ -79,6 +97,6 @@ tb_ev_long <- tb_ev_long %>%
   select(a,ai,z,zi,ev)
 
 # Display
-kable(tb_ev) %>% kable_styling_fc_wide()
-kable(tb_ev_long) %>% kable_styling_fc()
+kable(tb_ev_long, caption = "Long table") %>% kable_styling_fc()
 ```
+
