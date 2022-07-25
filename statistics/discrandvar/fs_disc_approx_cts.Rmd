@@ -12,7 +12,7 @@ core:
     code: |
       dbinom()
       rnorm()
-date: 2021-06-13
+date: 2022-07-23
 date_start: 2021-06-13
 output:
   pdf_document:
@@ -101,19 +101,23 @@ ffi_binom_approx_nomr <- function(fl_rnorm_mean, fl_rnorm_sd) {
 }
 ```
 
-Call the function to generate binomial parameters:
+Call the function to generate binomial parameters and generate the resulting binomial discrete random variable:
 ```{r}
 # with these parameters, does not work
-ls_binom_params <- ffi_binom_approx_nomr(fl_rnorm_mean = 10, fl_rnorm_sd = 3)
-# Call function with parameters, defined earlier, that work
+# ls_binom_params <- ffi_binom_approx_nomr(fl_rnorm_mean = 10, fl_rnorm_sd = 3)
+# Call function with parameters, defined earlier
 ls_binom_params <- ffi_binom_approx_nomr(fl_rnorm_mean, fl_rnorm_sd)
 fl_binom_mean <- ls_binom_params$fl_binom_mean
 fl_binom_sd <- ls_binom_params$fl_binom_sd
 fl_n_binom <- ls_binom_params$fl_n_binom
 fl_p_binom <- ls_binom_params$fl_p_binom
-# Mean and sd
-print(paste0("BINOMI mean=", ls_binom_params$fl_binom_mean))
-print(paste0("BINOMI mean=", ls_binom_params$fl_binom_sd))
+# Mean and sd, note that these are the same as values defined earlier
+print(paste0("BINOMI mean=", 
+             ls_binom_params$fl_binom_mean,
+             ", fl_rnorm_mean=", 
+             fl_rnorm_mean))
+print(paste0("BINOMI sd=", ls_binom_params$fl_binom_sd,
+             ", fl_binom_sd=", fl_binom_sd))
 # drv = discrete random variable
 ar_drv_rbinom_xval <- seq(1, fl_n_binom)
 ar_drv_rbinom_prob <- dbinom(ar_drv_rbinom_xval,

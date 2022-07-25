@@ -1,0 +1,293 @@
+---
+title: "Matrix and Household Size Transition Across Lifecycle"
+titleshort: "Matrix and Household Size Transition Across Lifecycle"
+description: |
+  Matrix and household size transition across the lifecycle.
+core:
+  - package: r
+    code: |
+      hist()
+      plot()
+date: 2022-07-25
+date_start: 2022-07-25
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+### Demographics and Transition Matrix
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+#### Initial Population, Kids Count Transition, and Fertility
+
+A household can have $k=0$, $k=1$, or $k=2$ kids. The household head has three possible age-groupings: $a=1$ (perhaps 18 to 30), $a=2$ (perhaps 31 to 50), and $a=3$ (perhaps 51 and after). 
+
+We have two $3 \times 3$ transition matrixes, $T_1$ and $T_2$. $T_1$ shows the transition probabilities of going from $k$ kids at age $a=1$ to $k'$ kids at $a=2$, each row of $T_1$ corresponds to $k$, and each column corresponds to $k'$, each cell represents $P(k'|k)$, and the probabilities for each row sums up to $1$. Similarly for $T_2$. For example, $T_1$ might be equal to the following matrix, which shows substantial persistence. 
+$$
+\begin{aligned}
+T_1 =
+\begin{bmatrix}
+t^{1}_{11} & t^{1}_{12} & t^{1}_{13} \\
+t^{1}_{21} & t^{1}_{22} & t^{1}_{23} \\
+t^{1}_{31} & t^{1}_{32} & t^{1}_{33} \\
+\end{bmatrix}
+& = 
+\begin{bmatrix}
+0.90 & 0.07 & 0.03 \\
+0.05 & 0.80 & 0.15 \\
+0.05 & 0.16 & 0.79 \\
+\end{bmatrix}
+\end{aligned}
+$$
+
+Additionally, not all individuals survive from across $a$ over time. $0<\delta_1<1$ and $0<\delta_2<1$ represent the probabilities that those in $a=1$ and $a=2$ survive into $a=2$ and $a=3$, respectively. 
+
+Finally, at the initial age, we have initial population share vector $K_1$, which is a $3 \times 1$ vector that sums up to $1$ and that indicates the share of households at the start of $a=1$ with 0, 1, and 2 kids. Subsequently, we have $K_2$ and also $K_2$. For example, $K_1$ might be equal to the following matrix, with more households having less children. 
+$$
+K_1 = 
+\begin{bmatrix}
+0.70 \\
+0.20 \\
+0.10\\
+\end{bmatrix}
+$$
+
+We want to know the number of children born (the fertility level) given this demographic structure above. 
+
+##### Arrival of Children Probabilities
+
+We interpret an increase in the number of kids in the household as a fertility event. This means, when the household transitions from 0 to 1 (2) kids, there is 1 (2) more children born. For the household with 2 children, no new children can be born for that period. But if the 2 children household transitions to a 1 child household, then a new child can be born to this household. When the number of children go down, we interpret this as children leaving a household. 
+
+Given this interpretation, we can create fertility matrixes $F_1$, $F_2$, and $F_3$, based on $T_1$, $T_2$, and $T_3$. For example, for $F_1$, we have:
+
+$$
+\begin{aligned}
+F_{11} =& 
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{bmatrix}
+\cdot
+T_1
+\cdot
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+\end{bmatrix} =
+\begin{bmatrix}
+t^{1}_{11} & t^{1}_{12} & t^{1}_{13} \\
+0 & 0 & 0 \\
+0 & 0 & 0\\
+\end{bmatrix}\\
+F_{12} =& 
+\begin{bmatrix}
+0 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 0 \\
+\end{bmatrix}
+\cdot
+T_1
+\cdot
+\begin{bmatrix}
+1 & 0 & 0 \\
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+\end{bmatrix} =
+\begin{bmatrix}
+0 & 0 & 0 \\
+t^{1}_{21} + t^{1}_{22} & t^{1}_{23} & 0 \\
+0 & 0 & 0\\
+\end{bmatrix}\\
+F_{13} =& 
+\begin{bmatrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 1 \\
+\end{bmatrix}
+\cdot
+T_1
+\cdot
+\begin{bmatrix}
+1 & 0 & 0 \\
+1 & 0 & 0 \\
+1 & 0 & 0 \\
+\end{bmatrix} =
+\begin{bmatrix}
+0 & 0 & 0 \\
+0 & 0 & 0\\
+t^{1}_{31} + t^{1}_{32} + t^{1}_{33} & 0 & 0 \\
+\end{bmatrix}\\
+F_1 =& F_{11} + F_{12} + F_{13}
+\end{aligned}
+$$
+
+The construction of this is similar for $F_2$ and $F_3$.
+
+##### Fertility Level
+
+Given the fertility matrixes, we can compute, at each $a$, the number of new kids born as a fraction of the households available at the start of $a=1$, where mass = 1. Specifically, the number of kids born during $a=1$, meaning "by the end of" $a=1$, is $f_1$:
+
+$$
+\begin{aligned}
+f_1 =& 
+\overbrace{
+K_1^{\prime}
+}^{
+  \substack{
+    1 \text{ by } 3\\    
+    }
+  }
+\cdot
+\underbrace{
+F_1 
+\cdot
+\begin{bmatrix}
+0 \\
+1 \\
+2
+\end{bmatrix}
+}_{
+  \substack{
+    3 \text{ by } 1\\
+    \text{Fertility}\\
+    \text{by current kids}
+    }
+  }
+\end{aligned}
+$$
+
+Proceeding to $a=2$, we have a similar formula for $f_2$, but have to make three adjustments: we use $F_2$ rather than $F_1$, we need to compute $K_2$ based on $K_1$ and $T_1$, and we need to account for $\delta_1$. 
+
+$$
+\begin{aligned}
+f_2 =& 
+\overbrace{
+\left(T_1 \cdot K_1\right)^{\prime}
+}^{
+  \substack{
+    1 \text{ by } 3\\
+    = K_2^{\prime}
+    }
+  }
+\cdot
+\underbrace{
+F_1 
+\cdot
+\begin{bmatrix}
+0 \\
+1 \\
+2
+\end{bmatrix}
+}_{
+  \substack{
+    3 \text{ by } 1\\
+    \text{Fertility}\\
+    \text{by current kids}
+    }
+  }
+\cdot 
+\delta_1  
+\end{aligned}
+$$
+
+Proceeding to $a=3$, following what we just did, we have a similar formula for $f_3$.
+
+$$
+\begin{aligned}
+f_3 =& 
+\overbrace{
+\left(T_2 \cdot T_1 \cdot K_1\right)^{\prime}
+}^{
+  \substack{
+    1 \text{ by } 3\\
+    = K_3^{\prime}
+    }
+  }
+\cdot
+\underbrace{
+F_1 
+\cdot
+\begin{bmatrix}
+0 \\
+1 \\
+2
+\end{bmatrix}
+}_{
+  \substack{
+    3 \text{ by } 1\\
+    \text{Fertility}\\
+    \text{by current kids}
+    }
+  }
+\cdot 
+\left(\delta_1  
+\cdot 
+\delta_2\right)
+\end{aligned}
+$$
+
+The total number of new kids born to our population by the end of $a=3$ is therefore:
+
+$$f_{\text{total}} = f_1 + f_2 + f_3$$
+
+If we are dealing with households that have a household head and a spouse, then the number of individuals born to each household member is 
+$$
+f_{\text{per-indi}} = \frac{f_{\text{total}}}{2}
+$$
+
+When we have different types of households, we compute $f_{\text{total}}\left(\text{EDU}, \text{MARITAL}\right)$, and compute the weighted average across households types to obtain the total national fertility level.
+
+##### Overall Formula
+
+Given what we have developed above, we have the following fertility formula. Let $N$ be the maximum number of kids
+
+$$
+\begin{aligned}
+f_{\text{total}} = 
+\sum_{a=a_{min}}^{a_{max}}
+\left(
+\Pi_{i=1}^{a-1}
+T_i
+\cdot 
+K_1
+\right)^{\prime}
+\cdot
+\left(
+  \sum_{j=1}^{N+1}
+  \Psi_j \cdot T_a \cdot \Omega_j
+\right)
+\begin{bmatrix}
+0 \\
+1 \\
+.. \\
+N-1 \\
+N
+\end{bmatrix}
+\cdot 
+\Pi_i^{a-1}
+\delta_i
+& =
+\begin{bmatrix}
+y_1 \\
+y_2 \\
+y_3
+\end{bmatrix}\\
+\end{aligned}
+$$

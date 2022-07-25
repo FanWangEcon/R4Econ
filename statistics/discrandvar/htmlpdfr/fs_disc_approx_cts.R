@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE-------------------------------------------------------------------
+## ----global_options, include = FALSE-----------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------
 # Random normal Data Vector (not equal outcomes)
 set.seed(123)
 it_sample_N <- 10000
@@ -16,7 +16,7 @@ title(main = "Continuous Normal Random Variable Draws")
 grid()
 
 
-## ------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------
 ffi_binom_approx_nomr <- function(fl_rnorm_mean, fl_rnorm_sd) {
   #' @param fl_rnorm_mean float normal mean
   #' @param fl_rnorm_sd float normal standard deviation
@@ -37,18 +37,22 @@ ffi_binom_approx_nomr <- function(fl_rnorm_mean, fl_rnorm_sd) {
 }
 
 
-## ------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------
 # with these parameters, does not work
-ls_binom_params <- ffi_binom_approx_nomr(fl_rnorm_mean = 10, fl_rnorm_sd = 3)
-# Call function with parameters, defined earlier, that work
+# ls_binom_params <- ffi_binom_approx_nomr(fl_rnorm_mean = 10, fl_rnorm_sd = 3)
+# Call function with parameters, defined earlier
 ls_binom_params <- ffi_binom_approx_nomr(fl_rnorm_mean, fl_rnorm_sd)
 fl_binom_mean <- ls_binom_params$fl_binom_mean
 fl_binom_sd <- ls_binom_params$fl_binom_sd
 fl_n_binom <- ls_binom_params$fl_n_binom
 fl_p_binom <- ls_binom_params$fl_p_binom
-# Mean and sd
-print(paste0("BINOMI mean=", ls_binom_params$fl_binom_mean))
-print(paste0("BINOMI mean=", ls_binom_params$fl_binom_sd))
+# Mean and sd, note that these are the same as values defined earlier
+print(paste0("BINOMI mean=", 
+             ls_binom_params$fl_binom_mean,
+             ", fl_rnorm_mean=", 
+             fl_rnorm_mean))
+print(paste0("BINOMI sd=", ls_binom_params$fl_binom_sd,
+             ", fl_binom_sd=", fl_binom_sd))
 # drv = discrete random variable
 ar_drv_rbinom_xval <- seq(1, fl_n_binom)
 ar_drv_rbinom_prob <- dbinom(ar_drv_rbinom_xval,
@@ -58,7 +62,7 @@ ar_drv_rbinom_prob <- dbinom(ar_drv_rbinom_xval,
 ar_drv_rbinom_prob <- ar_drv_rbinom_prob / sum(ar_drv_rbinom_prob)
 
 
-## ------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------------------------
 # graph
 par(new = FALSE)
 ar_ylim <- c(0, 1)
