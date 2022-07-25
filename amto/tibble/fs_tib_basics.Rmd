@@ -12,9 +12,14 @@ core:
       rename_at(vars(starts_with("xx")), funs(str_replace(., "yy", "yyyy"))
       rename_at(vars(num_range('',ar_it)), funs(paste0(st,.)))
       rowid_to_column()
+      row_number()
+      min_rank()
+      dense_rank()
+  - package: base
+    code: |
       colnames
       rownames
-date: 2020-05-27
+date: 2022-07-24
 date_start: 2020-04-01
 output:
   pdf_document:
@@ -152,7 +157,9 @@ colnames(tb_iris)
 summary(tb_iris)
 ```
 
-#### Tibble Sorting
+#### Sorting and Rank
+
+##### Sorting
 
 - dplyr arrange desc reverse
 - dplyr sort
@@ -167,6 +174,27 @@ tb_iris %>% select(Species, Sepal.Length, everything()) %>%
 tb_iris %>% select(Species, Sepal.Length, everything()) %>%
   arrange(desc(Species), desc(Sepal.Length)) %>% head(10) %>%
   kable() %>% kable_styling_fc()
+```
+
+##### Create a Ranking Variable
+
+We use dplyr's [ranking](https://dplyr.tidyverse.org/reference/ranking.html) functions to generate different types of ranking variables.
+
+The example below demonstrates the differences between the functions [row_number()](https://dplyr.tidyverse.org/reference/ranking.html), [min_rank()](https://dplyr.tidyverse.org/reference/ranking.html), and [dense_rank()](https://dplyr.tidyverse.org/reference/ranking.html).
+
+- *row_number*: Given 10 observations, generates index from 1 to 10, ties are given different ranks.
+- *min_rank*: Given 10 observations, generates rank where second-rank ties are both given "silver", and the 4th highest ranked variable not given medal.
+- *dense_rank*: Given 10 observations, generates rank where second-rank ties are both given "silver" (2nd rank), and the 4th highest ranked variable is given "bronze" (3rd rank), there are no gaps between ranks.
+
+Note that we have "desc(var_name)" in order to generate the variable based on descending sort of the the "var_name" variable. 
+
+```{r}
+tb_iris %>%
+  select(Species, Sepal.Length) %>% head(10) %>%
+  mutate(row_number = row_number(desc(Sepal.Length)),
+         min_rank = min_rank(desc(Sepal.Length)),
+         dense_rank = dense_rank(desc(Sepal.Length))) %>%
+  kable(caption = "Ranking variable") %>% kable_styling_fc()
 ```
 
 #### REconTools Summarize over Tible

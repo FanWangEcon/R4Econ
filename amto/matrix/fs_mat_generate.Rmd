@@ -4,7 +4,7 @@ titleshort: "Matrix Basics"
 description: |
   Generate and combine NA, fixed and random matrixes. Name columns and rows.
   Sort all rows and all columns of a matrix.
-  Replace values outside min and max in matrix by NA values. 
+  Replace values outside min and max in matrix by NA values.
 core:
   - package: R
     code: |
@@ -20,7 +20,7 @@ core:
       colMeans
       rowMeans
       which()
-date: 2022-07-14
+date: 2022-07-23
 date_start: 2020-04-01
 output:
   pdf_document:
@@ -88,7 +88,7 @@ str(mt_fl_na)
 str(mt_fl_na)
 ```
 
-#### Generate Random Matrixes
+#### Generate Matrixes with values
 
 Random draw from the normal distribution, random draw from the uniform distribution, and combine resulting matrixes.
 
@@ -104,6 +104,23 @@ mt_rnorm_runif <- cbind(mt_rnorm, mt_runif)
 
 # Display
 kable(round(mt_rnorm_runif, 3)) %>% kable_styling_fc()
+```
+
+Now we generate a matrix with sequential integers, and either fill matrix by columns or fill matrix by rows.
+
+```{r}
+# with byrow set to FALSE, will fill first col, then second col, etc..
+mt_index_colbycol <- matrix(seq(0, 15), nrow=4, ncol=4, byrow=FALSE)
+# Display
+kable(mt_index_colbycol,
+  caption= "with byrow=FALSE, the default, will fill col by col") %>%
+  kable_styling_fc()
+# with byrow set to TRUE, will fill row by row
+mt_index_rowbyrow <- matrix(seq(0, 15), nrow=4, ncol=4, byrow=TRUE)
+# Display
+kable(mt_index_rowbyrow,
+  caption= " with byrow=TRUE, will fill row by row") %>%
+  kable_styling_fc()
 ```
 
 #### Replace a Subset of Matrix Values by NA_real_

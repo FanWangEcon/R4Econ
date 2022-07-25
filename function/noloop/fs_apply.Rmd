@@ -4,13 +4,15 @@ titleshort: "Apply and Sapply function over arrays and rows"
 description: |
   Evaluate function f(x_i,y_i,c), where c is a constant and x and y vary over each row of a matrix, with index i indicating rows.
   Get same results using apply and sapply with defined and anonymous functions.
+  Convert list of list to table.
 core:
   - package: r
     code: |
       do.call()
+      as_tibble(do.call(rbind,ls))
       apply(mt, 1, func)
       sapply(ls_ar, func, ar1, ar2)
-date: 2020-05-18
+date: 2022-07-23
 date_start: 2020-04-10
 output:
   pdf_document:
@@ -139,8 +141,16 @@ ls_ar_draws_shares_lvls =
                       ar_levels=ar_levels))
         })
 
-# Show Results
+# Show Results as list
 print(ls_ar_draws_shares_lvls)
+```
+
+Above, our results is a list of lists. We can convert this to a table. If all results are scalar, would be regular table where each cell has a single scalar value.
+
+```{r}
+# Show results as table
+kable(as_tibble(do.call(rbind, ls_ar_draws_shares_lvls))) %>%
+  kable_styling_fc()
 ```
 
 We will try to do the same thing as above, but now the output will be a stacked dataframe. Note that within each element of the apply row by row loop, we are generating two variables *ar_share* and *ar_levels*. We will not generate a dataframe with multiple columns, storing *ar_share*, *ar_levels* as well as information on *min*, *max*, number of draws and rescale total sum.
@@ -204,7 +214,7 @@ ar_func_sapply = sapply(ls_ar_nN_by_nQ_A_alpha, ffi_linear_sapply,
                         ar_A=ar_nN_A, ar_alpha=ar_nN_alpha)
 ```
 
-##### Anonymous Function
+##### Anonymous Function, list of arrays as output
 
 - sapply anonymous function
 - r anoymous function multiple lines
@@ -238,6 +248,30 @@ print(ls_ar_draws_shares)
 # Sapply with anonymous function to check sums
 sapply(seq(it_N), function(x) {sum(ls_ar_draws[[x]])})
 sapply(seq(it_N), function(x) {sum(ls_ar_draws_shares[[x]])})
+```
+
+##### Anonymous Function, matrix as output
+
+Below, we provide another example with sapply, we generate probabilities for discrete random variables that follow the [binomial distribution](https://fanwangecon.github.io/Stat4Econ/probability_discrete/htmlpdfr/binomial.html). We do this for twice, with "chance of success" set at different values.
+
+The output in this case is a matrix, where each column stores the output from a different dbinom call.
+
+```{r}
+# First, generate the results without sapply
+ar_binomprob <- matrix(c(0.1, 0.9), nrow=2, ncol=1)
+# Second, generate the results with sapply
+# dbinom call: dbinom(x, size, prob, log = FALSE)
+# The function requires x, size, and prob.
+# we provide x and size, and each element of ar_binomprob
+# will be a different prob.
+mt_dbinom <- sapply(ar_binomprob, dbinom, x=seq(0,4), size=4)
+# Third compare results
+print(paste0('binomial p=', ar_binomprob[1]))
+print(dbinom(seq(0,4), 4, ar_binomprob[1]))
+print(mt_dbinom[,1])
+print(paste0('binomial p=', ar_binomprob[2]))
+print(dbinom(seq(0,4), 4, ar_binomprob[2]))
+print(mt_dbinom[,2])
 ```
 
 #### Compare Results

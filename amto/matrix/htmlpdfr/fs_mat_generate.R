@@ -48,6 +48,21 @@ kable(round(mt_rnorm_runif, 3)) %>% kable_styling_fc()
 
 
 ## ----------------------------------------------------------------------------------------------------------------------------
+# with byrow set to FALSE, will fill first col, then second col, etc..
+mt_index_colbycol <- matrix(seq(0, 15), nrow=4, ncol=4, byrow=FALSE)
+# Display
+kable(mt_index_colbycol,
+  caption= "with byrow=FALSE, the default, will fill col by col") %>%
+  kable_styling_fc()
+# with byrow set to TRUE, will fill row by row
+mt_index_rowbyrow <- matrix(seq(0, 15), nrow=4, ncol=4, byrow=TRUE)
+# Display
+kable(mt_index_rowbyrow,
+  caption= " with byrow=TRUE, will fill row by row") %>%
+  kable_styling_fc()
+
+
+## ----------------------------------------------------------------------------------------------------------------------------
 fl_max_val <- 0.8
 fl_min_val <- 0.2
 mt_rnorm_runif_bd <- mt_rnorm_runif
