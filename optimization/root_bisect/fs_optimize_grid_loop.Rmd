@@ -1,0 +1,133 @@
+---
+title: "Find the Maximizing or Minimizing Point Given Some Objective Function"
+titleshort: "Find the Maximizing or Minimizing Point Given Some Objective Function"
+description: |
+  Find the maximizing or minimizing point given some objective function.
+core:
+  - package: base
+    code: |
+      while
+      min
+      which.min
+      sapply
+date: 2022-07-24
+date_start: 2022-07-24
+output:
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+always_allow_html: true
+urlcolor: blue
+---
+
+### Find Maximum By Iterating Over Grids
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+#### Single Parameter Optimization
+
+We have a function $f(\mu)$, we know that $a\le \mu \le b$, and we want to find the value of $\mu$ that maximizes $f(\mu)$ within the bounds. The same idea here is used in various aspects of solving the dynamic equilibrium borrowing and savings problem in [Wang (2022)](https://linkinghub.elsevier.com/retrieve/pii/S1094202521000648) ([preprint pdf](https://arxiv.org/pdf/2204.12374.pdf)).
+
+First, we create a simple quadratic function. the minimum of the function is where $\mu = -2$
+
+```{r}
+# Define Function
+ffi_quad_func <- function(fl_mu) {
+  1 + (fl_mu + 2)^2
+}
+# Test Function
+print(paste0("ffi_quad_func(-3)=", ffi_quad_func(-3)))
+print(paste0("ffi_quad_func(-2)=", ffi_quad_func(-2)))
+print(paste0("ffi_quad_func(-1)=", ffi_quad_func(-1)))
+```
+
+Second, we develop the maximizer function given grid. 
+
+```{r}
+# Function
+ffi_find_min <- function(fl_min = -4, fl_max = 2, it_grid_len = 7) {
+
+  # Construct grid where to evaluate the function
+  ar_fl_mu <- seq(fl_min, fl_max, length.out = it_grid_len)
+
+  # Evaluate likelihood
+  ar_obj <- sapply(ar_fl_mu, ffi_quad_func)
+
+  # Find min grid
+  it_min_idx <- which.min(ar_obj)
+  fl_min_val <- ar_obj[it_min_idx]
+
+  # Find lower and upper bound
+  fl_min_new <- ar_fl_mu[max(it_min_idx - 1, 1)]
+  fl_max_new <- ar_fl_mu[min(it_min_idx + 1, it_grid_len)]
+
+  # return
+  return(list(
+    fl_min_val = fl_min_val,
+    fl_min_new = fl_min_new,
+    fl_max_new = fl_max_new
+  ))
+}
+# Test Function
+print("ffi_find_min(-3,-1,10)")
+print(ffi_find_min(-3, -1, 10))
+# Test function if lower bound is actual min
+print("ffi_find_min(-2,-1,10)")
+print(ffi_find_min(-2, -1, 10))
+# Test function if upper bound is actual min
+print("ffi_find_min(-3,-2,10)")
+print(ffi_find_min(-3, -2, 10))
+```
+
+Third, we iterately zoom-in to ever finer grid around the point in the last grid where the objective function had the lowest value.
+
+```{r}
+# Initialize min and max and tolerance criteria
+fl_min_cur <- -10
+fl_max_cur <- 10
+it_grid_len <- 10
+fl_tol <- 1e-5
+it_max_iter <- 5
+
+# Initialize initial gaps etc
+fl_gap <- 1e5
+fl_min_val_last <- 1e5
+it_iter <- 0
+
+# Iteratively loop over grid to find the maximum by zooming in
+while ((fl_gap > fl_tol) && it_iter <= it_max_iter) {
+
+  # Iterator counts up
+  it_iter <- it_iter + 1
+  print(paste0("it_iter=", it_iter))
+
+  # build array
+  ls_find_min <- ffi_find_min(
+    fl_min = fl_min_cur, fl_max = fl_max_cur, it_grid_len = it_grid_len
+  )
+
+  # Min objective value current
+  fl_min_val <- ls_find_min$fl_min_val
+  # Find new lower and upper bound
+  fl_min_cur <- ls_find_min$fl_min_new
+  fl_max_cur <- ls_find_min$fl_max_new
+  print(paste0("fl_min_cur=", fl_min_cur))
+  print(paste0("fl_max_cur=", fl_max_cur))
+
+  # Compare
+  fl_gap <- abs(fl_min_val - fl_min_val_last)
+  fl_min_val_last <- fl_min_val
+  print(paste0("fl_gap=", fl_gap))
+}
+```
