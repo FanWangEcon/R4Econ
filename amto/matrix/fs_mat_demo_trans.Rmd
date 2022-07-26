@@ -3,8 +3,9 @@ title: "Matrix and Household Size Transition Across Lifecycle"
 titleshort: "Matrix and Household Size Transition Across Lifecycle"
 description: |
   Matrix and household size transition across the lifecycle.
+  Transposing and multiplying matrixes.
   Standard basis matrix and shift matrix.
-date: 2022-07-25
+date: 2022-07-26
 date_start: 2022-07-25
 output:
   pdf_document:
@@ -295,7 +296,7 @@ f_0(N, K_1) +
 \left(
 \overbrace{
 \left(
-\Pi_{i=1}^{a}
+\prod_{i=1}^{a}
 T_i
 \cdot 
 K_1
@@ -332,7 +333,7 @@ N
     }
   }
 \cdot 
-\Pi_{i=1}^{a}
+\prod_{i=1}^{a}
 \delta_i
 \right)
 \end{aligned}
@@ -424,8 +425,8 @@ Fifth, we know that fertility is bounded above and below. The bounds on fertilit
 
 $$
 0 \le f_{\text{total}}(\lambda) \le 
-N + \sum_{a=1}^{a_{\max}} N \cdot \Pi_{i=1}^{a} \delta_i = 
-N \left( 1 + \sum_{a=1}^{a_{\max}} \Pi_{i=1}^{a} \delta_i \right)
+N + \sum_{a=1}^{a_{\max}} N \cdot \prod_{i=1}^{a} \delta_i = 
+N \left( 1 + \sum_{a=1}^{a_{\max}} \prod_{i=1}^{a} \delta_i \right)
 $$
 
 In another word, we have these limiting results:
@@ -433,6 +434,37 @@ In another word, we have these limiting results:
 $$
 \begin{aligned}
 \lim_{\lambda \rightarrow -\infty} f_{\text{total}}(\lambda) &= 0\\
-\lim_{\lambda \rightarrow \infty} f_{\text{total}}(\lambda) &= N \left( 1 + \sum_{a=1}^{a_{\max}} \Pi_{i=1}^{a} \delta_i \right)
+\lim_{\lambda \rightarrow \infty} f_{\text{total}}(\lambda) &= N \left( 1 + \sum_{a=1}^{a_{\max}} \prod_{i=1}^{a} \delta_i \right)
 \end{aligned}
 $$
+
+##### Life-expectancy Formula
+
+Related to fertility is the issue of life-expectancy, which is "the average number of years of life a person who has attained a given age can expect to live." In our situation here, life expectancy is determined by the life-cycle of $\left\{\delta_a\right\}_{a=1}^{a_{\max}}$ values, and the ages corresponding to each $a$. 
+
+Define $\text{AGE}_1$ as the age at the start and during $a=1$. Subsequently, define $\text{AGE}_a$ as the age at the start and during age $a$. We have a unit mass of individuals, with different shares surviving until different ages.
+
+During $a=1$, all survived from $a=0$, since $\delta_1=1$. However, only $\delta_2$ fraction survives into $a=2$. This means $1-\delta_2$ fraction of individuals pass away between $a=1$ and $a=2$, giving these individuals a terminal age of $a=1$. Of those that survived into $a=2$, only $\delta_3$ fraction last into $a=3$, this means $(\delta_2\cdot(1-\delta_3))$ fraction of individuals  pass away between $a=2$ and $a=3$, giving these individuals a terminal age of $a=2$. Of those that survived into $a=3$, only $\delta_4$ fraction last into $a=4$, this means $(\delta_2\cdot\delta_3\cdot(1-\delta_4))$ fraction of individuals pass away between $a=3$ and $a=4$, giving these individuals a terminal age of $a=3$. 
+
+The fraction of individuals passing away between $a$ and $a+1$, giving them a terminal age of $a$, is determined by the product of the fraction of individuals who survive until age $a$, multiplied by the fraction of individuals who pass away between age $a$ and $a+1$, conditional on surviving until age $a$.
+
+$$
+P(\text{terminal age is a}) = 
+\left(1-\delta_{a+1}\right)\prod_{i=1}^{a} \delta_a
+$$
+
+Let $\delta_{\left(a_{\max}+1\right)}=1$, the life expectancy for the individual with the $\left\{\delta_a\right\}_{a=1}^{a_{\max}}$ trajectory of mortality across the lifecycle, is:
+
+$$
+\begin{aligned}
+\text{life expectancy} &= 
+\sum_{a=1}^{a_{\max}} 
+P\left(\text{terminal age is a}\right) \cdot \text{AGE}_a\\
+& = 
+\sum_{a=1}^{a_{\max}} 
+\left(
+\left(1-\delta_{a+1}\right)\prod_{i=1}^{a} \delta_a
+\right) \cdot \text{AGE}_a\\  
+\end{aligned}
+$$
+
