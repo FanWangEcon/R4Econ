@@ -369,7 +369,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ **r**: *hist() + plot()*
 	+ **stats**: *dbinom() + rnorm()*
 2. [Estimate Parameters for Discrete Distributions](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_disc_fit.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar//fs_disc_fit.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_disc_fit.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_disc_fit.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_disc_fit.html)
-	+ Given a discrete random variable, estimate the parameters of a discrete probability function. 
+	+ Given a discrete random variable, estimate the parameters of a discrete probability function.
 	+ Given a discrete random variable, generated from discretizing a normal random variable, estimate binomial parameters that provide the best fit for the observe data.
 	+ **r**: *%*% + which.max*
 	+ **stats**: *dbinom()*

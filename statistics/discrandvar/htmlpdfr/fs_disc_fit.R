@@ -270,11 +270,12 @@ ffi_pbinom_lnlk_estijnt <-
                  ),
                  nrow = 2, ncol = 5, byrow = TRUE
              ),
+             it_m_max = 10,
              verbose = FALSE) {
 
         # Initialize min and max and tolerance criteria
         it_drm_set <- dim(mt_drm_prob)[1]
-        ar_it_m <- seq(1, 10)
+        ar_it_m <- seq(1, it_m_max)
 
         for (it_i in seq(1, it_drm_set)) {
             ls_estitheta_fixm_res <- sapply(
@@ -322,7 +323,10 @@ ffi_pbinom_lnlk_estijnt <-
         # Return
         return(tb_estitheta_fixm_res_stack)
     }
-# Test with full transition matrix
+
+
+## ----------------------------------------------------------------------------------------------------------------------------
+# Test with first two rows of transition matrix
 tb_rest_res <- ffi_pbinom_lnlk_estijnt(mt_drm_prob = mt_pi_kids_trans[1:2, ])
 kable(tb_rest_res %>% select(-ln_like_M_sum, -drm_jnt_rank),
     caption = paste(
@@ -335,17 +339,24 @@ kable(tb_rest_res %>% select(-ln_like_M_sum, -drm_jnt_rank),
         "where we maximize likelihood by adjusting both M and theta",
         "at the same time.",
         "M rows for each set of (drm-group).",
+        "drm = discrete random variable.",
         separator = " "
     )
 ) %>% kable_styling_fc()
+
+
+## ----------------------------------------------------------------------------------------------------------------------------
+# Test with all rows of transition matrix
+tb_rest_res <- ffi_pbinom_lnlk_estijnt(mt_drm_prob = mt_pi_kids_trans)
 kable(tb_rest_res %>% filter(drm_jnt_rank == 1),
     caption = paste(
         "Given 2 sets of discrete probabilities (drm-group=1 and =2),",
-        "pick the M (M)",
+        "pick the M",
         "where the overall likelihood (ln-like-M-sum) summed across",
         "likelihoods (ln-like) from the two sets of discrete probabilities",
         "is maximized (drm-jnt-rank == 1).",
         "Theta differs for each drm-group, but M is shared.",
+        "drm = discrete random variable.",
         separator = " "
     )
 ) %>% kable_styling_fc()
@@ -428,5 +439,5 @@ kable(tb_rest_res_opti_theta_hat,
         "p2 is lambda = +2.",
         separator = " "
     )
-) %>% kable_styling_fc()
+) %>% kable_styling_fc_wide()
 
