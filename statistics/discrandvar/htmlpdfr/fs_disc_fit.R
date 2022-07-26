@@ -46,13 +46,15 @@ print(round(mt_dbinom_approx, 3))
 
 ## ----------------------------------------------------------------------------------------------------------------------------
 #' Probability group aggregator
+#' @param it_n Integer such that it_n + 1 is the number of observed
+#' discrete outcomes.
+#' @param it_m Integer such that \eqn{(it_n + 1) * it_m - 1} is the
+#' number of trials for a binomial experiment.
 ffi_pbinom_group_theta_m <-
     function(fl_chance_success = 0.52,
-             it_number_of_trials = 4,
+             it_n = 4,
              it_m = 8) {
 
-        # it_n = (N+1)*M-1
-        it_n <- it_number_of_trials
         # nbrtrl = number of trials
         it_nbrtrl <- (it_n + 1) * it_m - 1
 
@@ -76,8 +78,8 @@ ffi_pbinom_group_theta_m <-
 # at the default value, the generated probabilities are similar to observed.
 ffi_pbinom_lnlk_theta_m <-
     function(ar_drm_prob = c(0.0014, 0.0571, 0.7931, 0.1462, 0.0022),
-             fl_chance_success = 0.52,
-             it_m = 8) {
+             fl_chance_success = 0.50,
+             it_m = 1) {
 
         # it_n = (N+1)*M-1
         it_n <- length(ar_drm_prob) - 1
@@ -85,7 +87,7 @@ ffi_pbinom_lnlk_theta_m <-
         # Call the grouping function
         ar_dbinom_grouped <- ffi_pbinom_group_theta_m(
             fl_chance_success = fl_chance_success,
-            it_number_of_trials = it_n,
+            it_n = it_n,
             it_m = it_m
         )
 
@@ -321,11 +323,38 @@ ffi_pbinom_lnlk_estijnt <-
         return(tb_estitheta_fixm_res_stack)
     }
 # Test with full transition matrix
-tb_rest_res <- ffi_pbinom_lnlk_estijnt(mt_drm_prob = mt_pi_kids_trans)
-tb_rest_res %>% filter(drm_jnt_rank == 1)
+tb_rest_res <- ffi_pbinom_lnlk_estijnt(mt_drm_prob = mt_pi_kids_trans[1:2, ])
+kable(tb_rest_res %>% select(-ln_like_M_sum, -drm_jnt_rank),
+    caption = paste(
+        "Given 2 sets of discrete probabilities (drm-group=1 and =2),",
+        "for each drm-group and for each M,",
+        "show the estimated theta (esti-theta) that maximizes likelihood,",
+        "as well as the maximum likelihood achieved (ln-like).",
+        "Show within drm-group likelihood desc rank (drm-group-rank);",
+        "There is a (drm-group-rank=1) for each (drm-group),",
+        "where we maximize likelihood by adjusting both M and theta",
+        "at the same time.",
+        "M rows for each set of (drm-group).",
+        separator = " "
+    )
+) %>% kable_styling_fc()
+kable(tb_rest_res %>% filter(drm_jnt_rank == 1),
+    caption = paste(
+        "Given 2 sets of discrete probabilities (drm-group=1 and =2),",
+        "pick the M (M)",
+        "where the overall likelihood (ln-like-M-sum) summed across",
+        "likelihoods (ln-like) from the two sets of discrete probabilities",
+        "is maximized (drm-jnt-rank == 1).",
+        "Theta differs for each drm-group, but M is shared.",
+        separator = " "
+    )
+) %>% kable_styling_fc()
 
 
 ## ----------------------------------------------------------------------------------------------------------------------------
+# Estimate for full data input matrix (all 5 rows)
+tb_rest_res <- ffi_pbinom_lnlk_estijnt(mt_drm_prob = mt_pi_kids_trans)
+
 # Compute predicted probabilities at maxmizing parameters
 mt_dbinom_grouped <-
     apply(
@@ -334,7 +363,7 @@ mt_dbinom_grouped <-
         function(row) {
             ffi_pbinom_group_theta_m(
                 fl_chance_success = row[["esti_theta"]],
-                it_number_of_trials = (dim(mt_pi_kids_trans)[1] - 1),
+                it_n = (dim(mt_pi_kids_trans)[1] - 1),
                 it_m = row[["M"]]
             )
         }
@@ -350,5 +379,54 @@ kable(round(mt_pi_kids_trans, 3),
 # Show data and prediction differences
 kable(round(mt_pi_kids_trans - t(mt_dbinom_grouped), 3),
     caption = "Data transitions probalities - predictions"
+) %>% kable_styling_fc()
+
+
+## ----------------------------------------------------------------------------------------------------------------------------
+# Construct the formula
+ffi_theta_lambda_0t1 <- function(theta, lambda) {
+    if (is.finite(exp(lambda))) {
+        theta * (exp(lambda) / (1 + theta * (exp(lambda) - 1)))
+    } else {
+        # If lambda is large, exp(lambda)=inf, ratio above becomes 1
+        1
+    }
+}
+
+
+## ----------------------------------------------------------------------------------------------------------------------------
+# Estimation results
+tb_rest_res_opti <- ffi_pbinom_lnlk_estijnt(mt_drm_prob = mt_pi_kids_trans) %>%
+    filter(drm_jnt_rank == 1) %>%
+    select(esti_theta, M, drm_group, ln_like, ln_like_M_sum)
+# Generate theta_hat columns
+tb_rest_res_opti_theta_hat <- tb_rest_res_opti %>%
+    mutate(
+        theta_hat_lambda_n2 = ffi_theta_lambda_0t1(
+            theta = esti_theta, lambda = -2
+        ),
+        theta_hat_lambda_n1 = ffi_theta_lambda_0t1(
+            theta = esti_theta, lambda = -1
+        ),
+        theta_hat_lambda_zr = ffi_theta_lambda_0t1(
+            theta = esti_theta, lambda = 0
+        ),
+        theta_hat_lambda_p1 = ffi_theta_lambda_0t1(
+            theta = esti_theta, lambda = +1
+        ),
+        theta_hat_lambda_p2 = ffi_theta_lambda_0t1(
+            theta = esti_theta, lambda = +2
+        )
+    ) %>%
+    select(drm_group, esti_theta, contains("theta_hat"))
+# Show data and prediction differences
+kable(tb_rest_res_opti_theta_hat,
+    caption = paste(
+        "Theta transform with different common lambda.",
+        "n2 is lambda = -2,",
+        "zr is lambda = 0 (theta-hat=theta),",
+        "p2 is lambda = +2.",
+        separator = " "
+    )
 ) %>% kable_styling_fc()
 

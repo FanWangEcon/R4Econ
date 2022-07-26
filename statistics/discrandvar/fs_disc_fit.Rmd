@@ -3,15 +3,18 @@ title: "Estimate Parameters for Discrete Distributions"
 titleshort: "Estimate Parameters for Discrete Distributions"
 description: |
   Given a discrete random variable, estimate the parameters of a discrete probability function. 
+  Given a discrete random variable, generated from discretizing a normal random variable, estimate binomial parameters that provide the best fit for the observe data.
 core:
   - package: r
     code: |
-      hist()
-      plot()
+      %*%
+      which.max
   - package: stats
     code: |
       dbinom()
-      rnorm()
+  - package: dplyr
+    code: |
+      min_rank()
 date: 2022-07-23
 date_start: 2021-06-13
 output:
@@ -37,21 +40,23 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
 
-#### Estimate Change of Success given Fixed Number of Trials
+#### Estimate Chance of Success given Fixed Number of Trials
 
-We observe $\left\{P(x_i)\right\}_{i=0}^{N}$, where $\sum_{i=0}^N x_i = 1$. Note this is observing probabilities not at $N$ outcomes but $N+1$ outcomes starting at $i=0$. What is the [binomial probability function](https://fanwangecon.github.io/Stat4Econ/probability_discrete/htmlpdfr/binomial.html) that would fit the observed data the best? 
+We observe $\left\{P(x_i)\right\}_{i=0}^{N}$, where $\sum_{i=0}^N P(x_i) = 1$. Note this is observing probabilities not at $N$ outcomes but $N+1$ outcomes starting at $i=0$. What is the [binomial probability function](https://fanwangecon.github.io/Stat4Econ/probability_discrete/htmlpdfr/binomial.html) that would fit the observed data the best? 
 
 There are two parameters of the binomial distribution, $N$, which is the "number of trials", and $\theta$, which is the probability of success for each trial. In this section, we treat $N$ as already observed, so we only need to pick the $\theta$ that provides the best fit between the binomial probabilities generated (given $p$), and the data. 
 
-So we fit with a likelihood based approach. First, the likelihood function is:
+For the household that currently has zero child, one interpretation of this fitting procedure is that there are for this household $N$ "trials"/chances of getting a child, and $\theta$ is the chance of new arrival during each trial. By using the binomial distribution, we are assuming that the chance of new child arrival from across trials is independent, and the chances of arrival is identical during each trail. The interpretation is less clear when are looking a household that already has more than zero children. Overall, the purpose here is to use a low-dimensional procedure to provide a good fit to the observed probabilities, and to be able to easily adjust the resulting parameters across observed discrete probabilities to change some aggregate outcome of interest (e.g., [fertility](https://fanwangecon.github.io/R4Econ/amto/matrix/htmlpdfr/fs_mat_demo_trans.html)).
+
+We fit with a likelihood based approach. First, the likelihood function is:
 
 $$
 \begin{aligned}
 \mathcal{L}(\theta) = 
     \Pi_{i=0}^N    
     \left(
-    \frac{N!}{\left(N-x_i\right)!x_i!}
-    \cdot \theta^{x_i} \cdot \left(1-\theta\right)^{N-x_i}
+    \frac{N!}{\left(N - i\right)! i!}
+    \cdot \theta^{ i} \cdot \left(1-\theta\right)^{N- i}
     \right)^{P(x_i)}
 \end{aligned}
 $$
@@ -65,15 +70,15 @@ $$
     P(x_i)
     \ln
     \left(
-    \frac{N!}{\left(N-x_i\right)!x_i!}
-    \cdot \theta^{x_i} \cdot \left(1-\theta\right)^{N-x_i}
+    \frac{N!}{\left(N- i\right)! i!}
+    \cdot \theta^{ i} \cdot \left(1-\theta\right)^{N- i}
     \right)\\
 &= 
 \sum_{i=0}^N
 \left(
-P(x_i)\ln\left(\frac{N!}{\left(N-x_i\right)!x_i!}\right) +
-P(x_i) x_i \ln\left(\theta\right) + 
-P(x_i)(N-x_i)\ln\left(1-\theta\right)
+P(x_i)\ln\left(\frac{N!}{\left(N-i\right)!i!}\right) +
+P(x_i) i \ln\left(\theta\right) + 
+P(x_i)(N-i)\ln\left(1-\theta\right)
 \right)
 \end{aligned}
 $$
@@ -88,9 +93,9 @@ d \theta
 } =
 \sum_{i=0}^N
 \left(
-    \frac{P(x_i)x_i}{\theta}
+    \frac{P(x_i) i}{\theta}
     - 
-    \frac{P(x_i)(N-x_i)}{1-\theta}
+    \frac{P(x_i)(N- i)}{1-\theta}
 \right)
 \end{aligned}
 $$
@@ -99,23 +104,23 @@ Fourth, we set the derivative above to be equal to zero.
 
 $$
 \begin{aligned}
-\frac{\sum_{i=0}^N P(x_i)x_i}{\theta} &=
-\frac{\sum_{i=0}^N P(x_i)(N-x_i)}{1-\theta}\\
-\sum_{i=0}^N P(x_i)x_i - \theta \cdot \sum_{i=0}^N P(x_i)x_i &=
-\theta \cdot \sum_{i=0}^N P(x_i)(N-x_i)\\
+\frac{\sum_{i=0}^N P(x_i) \cdot i}{\theta} &=
+\frac{\sum_{i=0}^N P(x_i)(N-i)}{1-\theta}\\
+\sum_{i=0}^N P(x_i) \cdot i - \theta \cdot \sum_{i=0}^N P(x_i) \cdot i &=
+\theta \cdot \sum_{i=0}^N P(x_i)(N- i)\\
 \theta &= \frac{
-\sum_{i=0}^N P(x_i)x_i
+\sum_{i=0}^N P(x_i) \cdot i
 }{
 \sum_{i=0}^N 
-\left(P(x_i)(N-x_i) + P(x_i)x_i\right)
+\left(P(x_i)(N- i) + P(x_i) \cdot i\right)
 }\\
 \theta &= \frac{
-\sum_{i=0}^N P(x_i)x_i
+\sum_{i=0}^N P(x_i) \cdot i
 }{
 N \cdot\sum_{i=0}^N P(x_i)
 }\\
 \theta &= \frac{
-\sum_{i=0}^N P(x_i)x_i
+\sum_{i=0}^N P(x_i) \cdot i
 }{
 N 
 }
@@ -127,13 +132,13 @@ Fifth, given the derivation above, we have found the maximizing parameter of the
 $$
 \arg\max_{\theta} \ln(\mathcal{L}(\theta)) 
 = \frac{
-\sum_{i=0}^N P(x_i)x_i
+\sum_{i=0}^N P(x_i) \cdot i
 }{
 N 
 }
 $$
 
-Suppose that the observe probability data is measured without error from a binomial distribution, in that case [$\sum_{i=0}^N P(x_i)x_i = \mu_{\text{binomial}} = N\cdot \theta$](https://fanwangecon.github.io/Stat4Econ/probability_discrete/htmlpdfr/binomial.html#2_binomial_experiment), which means the mean number of "wins" is the number of "trials" times the probability of winning each trial. 
+Suppose that the observe probability data is measured without error from a binomial distribution, in that case [$\sum_{i=0}^N P(x_i=i) \cdot i = \mu_{\text{binomial}} = N\cdot \theta$](https://fanwangecon.github.io/Stat4Econ/probability_discrete/htmlpdfr/binomial.html#2_binomial_experiment), which means the mean number of "wins" is the number of "trials" times the probability of winning each trial. 
 
 ##### Approximating Transition Probability
 
@@ -191,11 +196,11 @@ print(round(mt_dbinom_approx, 3))
 
 Evaluating the results, we see that the fit this provides a good fit for the first and fifth rows, but the fit for the three middle rows seem to be substantially worse. The observed transition mass is much more persistent than the fitted transition. 
 
-#### Estimate Change of Success and the Number of Trials
+#### Estimate Chance of Success and the Number of Trials
 
 In contrast to the prior section, in this section, we will allow for both the "Number of Trials" and the "Chance of Success" parameters to vary to provide a better fit between transition probabilities and the data. 
 
-Since the Binomial distribution is approximately normal, so in principle, we should be able to use the binomial to fit a discretized normal random variable. A problem with the prior section is that the "number of trials" is only 4, which is very small. At this level, the binomial/normal approximation does not work well.
+Since the Binomial distribution is approximately normal, so in principle, we should be able to use the binomial to fit a discretized normal random variables, which transition probabilities seem to generally approximate. A problem with the prior section is that the "number of trials" is only 4, which is very small. At this level, the binomial/normal approximation does not work well.
 
 We will adjust our likelihood based estimation objective function. We assume that the observed probabilities are aggregated based on underlying subgroups. Our new likelihood function is:
 
@@ -243,7 +248,7 @@ $$
 
 We do not, however, have analytical solutions for this optimization problem. We will solve for this problem numerically. 
 
-##### Numerical Best Fit 
+##### Optimal Theta Given M
 
 For the numerical procedure, given $M$, we will find the best fitting $\theta$, then we increment $M$, and we compare fit and best fitting $\theta$ across $M$. 
 
@@ -251,13 +256,15 @@ First, we construct the likelihood function that considers the sum of probabilit
 
 ```{r}
 #' Probability group aggregator
+#' @param it_n Integer such that it_n + 1 is the number of observed
+#' discrete outcomes.
+#' @param it_m Integer such that \eqn{(it_n + 1) * it_m - 1} is the
+#' number of trials for a binomial experiment.
 ffi_pbinom_group_theta_m <-
     function(fl_chance_success = 0.52,
-             it_number_of_trials = 4,
+             it_n = 4,
              it_m = 8) {
 
-        # it_n = (N+1)*M-1
-        it_n <- it_number_of_trials
         # nbrtrl = number of trials
         it_nbrtrl <- (it_n + 1) * it_m - 1
 
@@ -281,8 +288,8 @@ ffi_pbinom_group_theta_m <-
 # at the default value, the generated probabilities are similar to observed.
 ffi_pbinom_lnlk_theta_m <-
     function(ar_drm_prob = c(0.0014, 0.0571, 0.7931, 0.1462, 0.0022),
-             fl_chance_success = 0.52,
-             it_m = 8) {
+             fl_chance_success = 0.50,
+             it_m = 1) {
 
         # it_n = (N+1)*M-1
         it_n <- length(ar_drm_prob) - 1
@@ -290,7 +297,7 @@ ffi_pbinom_lnlk_theta_m <-
         # Call the grouping function
         ar_dbinom_grouped <- ffi_pbinom_group_theta_m(
             fl_chance_success = fl_chance_success,
-            it_number_of_trials = it_n,
+            it_n = it_n,
             it_m = it_m
         )
 
@@ -471,7 +478,11 @@ ffi_pbinom_lnlk_estitheta_fixm(ar_drm_prob = ar_drm_prob, it_m = 5)
 ffi_pbinom_lnlk_estitheta_fixm(ar_drm_prob = ar_drm_prob, it_m = 9)
 ```
 
-Sixth, we now proceed to find the optimum $M$ value, assuming that multiple probability vectors can have different $\theta$ but must share $M$. We find the optimizing $\theta$ that differs for each of the discrete probability vectors.
+##### Optimal M given Optimal Theta Conditional on M
+
+We now proceed to find the optimum $M$ value, assuming that multiple probability vectors can have different $\theta$ but must share $M$. 
+
+First, we find the optimizing $\theta$ that differs for each of the discrete probability vectors.
 
 ```{r}
 # Find likelihood maximizing theta, given M
@@ -536,13 +547,40 @@ ffi_pbinom_lnlk_estijnt <-
         return(tb_estitheta_fixm_res_stack)
     }
 # Test with full transition matrix
-tb_rest_res <- ffi_pbinom_lnlk_estijnt(mt_drm_prob = mt_pi_kids_trans)
-tb_rest_res %>% filter(drm_jnt_rank == 1)
+tb_rest_res <- ffi_pbinom_lnlk_estijnt(mt_drm_prob = mt_pi_kids_trans[1:2, ])
+kable(tb_rest_res %>% select(-ln_like_M_sum, -drm_jnt_rank),
+    caption = paste(
+        "Given 2 sets of discrete probabilities (drm-group=1 and =2),",
+        "for each drm-group and for each M,",
+        "show the estimated theta (esti-theta) that maximizes likelihood,",
+        "as well as the maximum likelihood achieved (ln-like).",
+        "Show within drm-group likelihood desc rank (drm-group-rank);",
+        "There is a (drm-group-rank=1) for each (drm-group),",
+        "where we maximize likelihood by adjusting both M and theta",
+        "at the same time.",
+        "M rows for each set of (drm-group).",
+        separator = " "
+    )
+) %>% kable_styling_fc()
+kable(tb_rest_res %>% filter(drm_jnt_rank == 1),
+    caption = paste(
+        "Given 2 sets of discrete probabilities (drm-group=1 and =2),",
+        "pick the M (M)",
+        "where the overall likelihood (ln-like-M-sum) summed across",
+        "likelihoods (ln-like) from the two sets of discrete probabilities",
+        "is maximized (drm-jnt-rank == 1).",
+        "Theta differs for each drm-group, but M is shared.",
+        separator = " "
+    )
+) %>% kable_styling_fc()
 ```
 
-Seventh, we evaluat the predicted probabilities given our optimizing parameters. 
+Second, we evaluate the predicted probabilities given our optimizing parameters. 
 
 ```{r}
+# Estimate for full data input matrix (all 5 rows)
+tb_rest_res <- ffi_pbinom_lnlk_estijnt(mt_drm_prob = mt_pi_kids_trans)
+
 # Compute predicted probabilities at maxmizing parameters
 mt_dbinom_grouped <-
     apply(
@@ -551,7 +589,7 @@ mt_dbinom_grouped <-
         function(row) {
             ffi_pbinom_group_theta_m(
                 fl_chance_success = row[["esti_theta"]],
-                it_number_of_trials = (dim(mt_pi_kids_trans)[1] - 1),
+                it_n = (dim(mt_pi_kids_trans)[1] - 1),
                 it_m = row[["M"]]
             )
         }
@@ -567,5 +605,74 @@ kable(round(mt_pi_kids_trans, 3),
 # Show data and prediction differences
 kable(round(mt_pi_kids_trans - t(mt_dbinom_grouped), 3),
     caption = "Data transitions probalities - predictions"
+) %>% kable_styling_fc()
+```
+
+##### Rescale Theta by Common Parameter
+
+Following our discussions here, [Rescale a Fraction Between 0 and 1](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_rescale.html#11_Rescale_a_Fraction_Between_(0)_and_(1)), we now proceed to test a procedure where we adjust a $\lambda$ parameter, which will each each of the estimated $\theta$ value. Specifially, we have: 
+
+$$
+\widehat{\theta}\left(\theta, \lambda\right)= 
+\theta \cdot 
+      \left(
+      \frac{
+        \exp\left(\lambda\right)
+      }{
+        1 + \theta\cdot\left(\exp\left(\lambda\right) - 1\right)
+      }
+      \right)
+$$
+
+First, we define the rescaling function, identical to the rescaling function from [Rescale a Fraction Between 0 and 1](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_rescale.html#11_Rescale_a_Fraction_Between_(0)_and_(1)).
+
+```{r}
+# Construct the formula
+ffi_theta_lambda_0t1 <- function(theta, lambda) {
+    if (is.finite(exp(lambda))) {
+        theta * (exp(lambda) / (1 + theta * (exp(lambda) - 1)))
+    } else {
+        # If lambda is large, exp(lambda)=inf, ratio above becomes 1
+        1
+    }
+}
+```
+
+Second, we create $\widehat{\theta}\left(\theta, \lambda\right)$, with different scaling $\lambda$ values, for the optimizing $\theta$ for each of the drm-groups.
+
+```{r}
+# Estimation results
+tb_rest_res_opti <- ffi_pbinom_lnlk_estijnt(mt_drm_prob = mt_pi_kids_trans) %>%
+    filter(drm_jnt_rank == 1) %>%
+    select(esti_theta, M, drm_group, ln_like, ln_like_M_sum)
+# Generate theta_hat columns
+tb_rest_res_opti_theta_hat <- tb_rest_res_opti %>%
+    mutate(
+        theta_hat_lambda_n2 = ffi_theta_lambda_0t1(
+            theta = esti_theta, lambda = -2
+        ),
+        theta_hat_lambda_n1 = ffi_theta_lambda_0t1(
+            theta = esti_theta, lambda = -1
+        ),
+        theta_hat_lambda_zr = ffi_theta_lambda_0t1(
+            theta = esti_theta, lambda = 0
+        ),
+        theta_hat_lambda_p1 = ffi_theta_lambda_0t1(
+            theta = esti_theta, lambda = +1
+        ),
+        theta_hat_lambda_p2 = ffi_theta_lambda_0t1(
+            theta = esti_theta, lambda = +2
+        )
+    ) %>%
+    select(drm_group, esti_theta, contains("theta_hat"))
+# Show data and prediction differences
+kable(tb_rest_res_opti_theta_hat,
+    caption = paste(
+        "Theta transform with different common lambda.",
+        "n2 is lambda = -2,",
+        "zr is lambda = 0 (theta-hat=theta),",
+        "p2 is lambda = +2.",
+        separator = " "
+    )
 ) %>% kable_styling_fc()
 ```

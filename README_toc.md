@@ -354,8 +354,10 @@
 	+ **stats**: *dbinom() + rnorm()*
 2. [Estimate Parameters for Discrete Distributions](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_disc_fit.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar//fs_disc_fit.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_disc_fit.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_disc_fit.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_disc_fit.html)
 	+ Given a discrete random variable, estimate the parameters of a discrete probability function. 
-	+ **r**: *hist() + plot()*
-	+ **stats**: *dbinom() + rnorm()*
+	+ Given a discrete random variable, generated from discretizing a normal random variable, estimate binomial parameters that provide the best fit for the observe data.
+	+ **r**: *%*% + which.max*
+	+ **stats**: *dbinom()*
+	+ **dplyr**: *min_rank()*
 3. [Gestation (Binomial), Conception (Mixture), and Temperature (Sine wave and AR(1))](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_birth_shock.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar//fs_birth_shock.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_birth_shock.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_birth_shock.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_birth_shock.html)
 	+ Simulate the distribution of gestational periods at birth following a binomial distribution.
 	+ Simulate the distribution of conception time following a potentially bimodal distribution.

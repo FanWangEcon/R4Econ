@@ -3,11 +3,7 @@ title: "Matrix and Household Size Transition Across Lifecycle"
 titleshort: "Matrix and Household Size Transition Across Lifecycle"
 description: |
   Matrix and household size transition across the lifecycle.
-core:
-  - package: r
-    code: |
-      hist()
-      plot()
+  Standard basis matrix and shift matrix.
 date: 2022-07-25
 date_start: 2022-07-25
 output:
@@ -37,7 +33,7 @@ try(source("../../.Rprofile"))
 
 A household can have $k=0$, $k=1$, or $k=2$ kids. The household head has three possible age-groupings: $a=1$ (perhaps 18 to 30), $a=2$ (perhaps 31 to 50), and $a=3$ (perhaps 51 and after). 
 
-We have two $3 \times 3$ transition matrixes, $T_1$ and $T_2$. $T_1$ shows the transition probabilities of going from $k$ kids at age $a=1$ to $k'$ kids at $a=2$, each row of $T_1$ corresponds to $k$, and each column corresponds to $k'$, each cell represents $P(k'|k)$, and the probabilities for each row sums up to $1$. Similarly for $T_2$. For example, $T_1$ might be equal to the following matrix, which shows substantial persistence. 
+We have two $3 \times 3$ transition matrixes, $T_1$ and $T_2$. $T_1$ shows the transition probabilities of going from $k$ kids at age $(a=1)$ to $k'$ kids at $(a=2)$, each row of $T_1$ corresponds to $k$, and each column corresponds to $k'$, each cell represents $P(k'|k)$, and the probabilities for each row sums up to $1$. Similarly for $T_2$. For example, $T_1$ might be equal to the following matrix, which shows substantial persistence. 
 $$
 \begin{aligned}
 T_1 =
@@ -55,9 +51,9 @@ t^{1}_{31} & t^{1}_{32} & t^{1}_{33} \\
 \end{aligned}
 $$
 
-Additionally, not all individuals survive from across $a$ over time. $0<\delta_1<1$ and $0<\delta_2<1$ represent the probabilities that those in $a=1$ and $a=2$ survive into $a=2$ and $a=3$, respectively. 
+Additionally, not all individuals survive from across $a$ over time. $0<\delta_2<1$ and $0<\delta_3<1$ represent the probabilities that those in $a=1$ and $a=2$ survive into $a=2$ and $a=3$, respectively. And $\delta_1 =1$.
 
-Finally, at the initial age, we have initial population share vector $K_1$, which is a $3 \times 1$ vector that sums up to $1$ and that indicates the share of households at the start of $a=1$ with 0, 1, and 2 kids. Subsequently, we have $K_2$ and also $K_2$. For example, $K_1$ might be equal to the following matrix, with more households having less children. 
+Finally, at the initial age, we have initial population share vector $K_1$, which is a $3 \times 1$ vector that sums up to $1$ and that indicates the share of households at the start of $(a=1)$ with 0, 1, and 2 kids. Subsequently, we have $K_2$ and also $K_3$ population vectors for the population shares across kids count groups at later ages. For example, $K_1$ might be equal to the following vector, with a larger share of households having less children. 
 $$
 K_1 = 
 \begin{bmatrix}
@@ -67,7 +63,8 @@ K_1 =
 \end{bmatrix}
 $$
 
-We want to know the number of children born (the fertility level) given this demographic structure above. 
+Given the $\left\{T_a\right\}_{a=a_{\min}}^{a_{\max}}$ matrixes and the $K_{a_{\min}}$ vector, we want to know the number of children born (the fertility level) given this demographic structure above. Think of the transition matrixes and the initial vector as a "reduced-form" way of capturing underlying demographic dynamics of a particular type of household belong to a particular cohort. A more complete model of demographics might consider age of each child explicitly and also changes in the structure of the household-head(s).
+
 
 ##### Arrival of Children Probabilities
 
@@ -138,11 +135,36 @@ F_1 =& F_{11} + F_{12} + F_{13}
 \end{aligned}
 $$
 
-The construction of this is similar for $F_2$ and $F_3$.
+In the $F_1$ matrix, the first column corresponds to the probability of not increasing the number of kids, the second column corresponds to the probability of increasing the number of kids by $1$, and the third column corresponds to the probability of increasing the number of kids by $2$.
+
+The construction of this is similar for $F_{a=2}$ and $F_{a=3}$. These fertility matrixes are a function of the the kids transition matrixes. We use them in the subsection below to computer fertility.
 
 ##### Fertility Level
 
-Given the fertility matrixes, we can compute, at each $a$, the number of new kids born as a fraction of the households available at the start of $a=1$, where mass = 1. Specifically, the number of kids born during $a=1$, meaning "by the end of" $a=1$, is $f_1$:
+Given the fertility matrixes, we can compute, at each $a$, the number of new kids born as a fraction of the households available at the start of $(a=1)$, where mass = 1. 
+
+We start with $a=0$, which will provide us with the initial condition prior to the start of the first period. The number of kids at $a=0$ is $f_0$, which is the [dot product](https://fanwangecon.github.io/Math4Econ/matrix_basics/htmlpdfm/matrix_algebra_rules.html) of the distribution of households with 0, 1, and 2 kids and the vector $[0,1,2]$.
+
+$$
+\begin{aligned}
+f_0 =& 
+\overbrace{
+K_1^{\prime}
+}^{
+  \substack{
+    1 \text{ by } 3\\    
+    }
+  }
+\cdot
+\begin{bmatrix}
+0 \\
+1 \\
+2
+\end{bmatrix}
+\end{aligned}
+$$
+
+The number of kids born during $a=1$, meaning "by the end of" $a=1$, is $f_1$:
 
 $$
 \begin{aligned}
@@ -173,7 +195,7 @@ F_1
 \end{aligned}
 $$
 
-Proceeding to $a=2$, we have a similar formula for $f_2$, but have to make three adjustments: we use $F_2$ rather than $F_1$, we need to compute $K_2$ based on $K_1$ and $T_1$, and we need to account for $\delta_1$. 
+Proceeding to $a=2$, we have a similar formula for $f_2$, but have to make three adjustments: we use $F_2$ rather than $F_1$, we need to compute $K_2$ based on $K_1$ and $T_1$, and we need to account for $\delta_2$. 
 
 $$
 \begin{aligned}
@@ -188,7 +210,7 @@ f_2 =&
   }
 \cdot
 \underbrace{
-F_1 
+F_2
 \cdot
 \begin{bmatrix}
 0 \\
@@ -203,7 +225,7 @@ F_1
     }
   }
 \cdot 
-\delta_1  
+\delta_2
 \end{aligned}
 $$
 
@@ -222,7 +244,7 @@ f_3 =&
   }
 \cdot
 \underbrace{
-F_1 
+F_3
 \cdot
 \begin{bmatrix}
 0 \\
@@ -237,38 +259,55 @@ F_1
     }
   }
 \cdot 
-\left(\delta_1  
+\left(\delta_2
 \cdot 
-\delta_2\right)
+\delta_3\right)
 \end{aligned}
 $$
 
-The total number of new kids born to our population by the end of $a=3$ is therefore:
+The sum of the number of kids at the beginning of the first period and total number of new kids born to our population by the end of $a=3$ is therefore:
 
-$$f_{\text{total}} = f_1 + f_2 + f_3$$
+$$f_{\text{total}} = f_0 + \underbrace{\left(f_1 + f_2 + f_3\right)}_{\text{New born}}$$
 
 If we are dealing with households that have a household head and a spouse, then the number of individuals born to each household member is 
+
 $$
 f_{\text{per-indi}} = \frac{f_{\text{total}}}{2}
 $$
 
 When we have different types of households, we compute $f_{\text{total}}\left(\text{EDU}, \text{MARITAL}\right)$, and compute the weighted average across households types to obtain the total national fertility level.
 
-##### Overall Formula
+$$
+f_{\text{total, all-groups}} = 
+\sum_{\text{EDU}}\sum_{\text{MARITAL}}
+P\left(\text{EDU}, \text{MARITAL}\right) \cdot f_{\text{total}}\left(\text{EDU}, \text{MARITAL}\right)
+$$
 
-Given what we have developed above, we have the following fertility formula. Let $N$ be the maximum number of kids
+##### Overall Fertility Formula
+
+Given what we have developed above, we have the following fertility formula. Let $N$ be the maximum number of kids and $a_{\max}$ be the maximum age group index, and remember $\delta_1=1$, we have:
 
 $$
 \begin{aligned}
 f_{\text{total}} = 
-\sum_{a=a_{min}}^{a_{max}}
+f_0(N, K_1) + 
+\sum_{a=1}^{a_{\max}}
 \left(
-\Pi_{i=1}^{a-1}
+\overbrace{
+\left(
+\Pi_{i=1}^{a}
 T_i
 \cdot 
 K_1
 \right)^{\prime}
+}^{
+  \substack{
+    1 \text{ by } (N+1)\\
+    = K_a^{\prime}
+    }
+}
 \cdot
+\underbrace{
 \left(
   \sum_{j=1}^{N+1}
   \Psi_j \cdot T_a \cdot \Omega_j
@@ -280,14 +319,121 @@ K_1
 N-1 \\
 N
 \end{bmatrix}
+}_{
+  \substack{
+    (N+1) \text{ by } 1\\
+    \text{Fertility}\\
+    \text{by current kids}
+    }
+  }
 \cdot 
-\Pi_i^{a-1}
+\Pi_{i=1}^{a}
 \delta_i
-& =
-\begin{bmatrix}
-y_1 \\
-y_2 \\
-y_3
-\end{bmatrix}\\
+\right)
+\end{aligned}
+$$
+
+The notations from the equation above follow what we have written. We introduce above also $\Psi_j$ and $\Omega_j$ which are helper matrixes of $0$s and $1$s to help compute the fertility matrixes from the kids transition matrixes. We saw examples of these matrixes in the 3 by 3 example earlier. More generally and specifically, these matrixes are:
+
+- $\Psi_j$ are [standard basis](https://en.wikipedia.org/wiki/Standard_basis) matrixes with $\psi^{j}_{jj}=1$ and $\psi^{j}_{j,j'}=0$ for all $j\neq j'$
+- $\Omega_j$ are $((N+1)+1-j)$ by $((N+1)+1-j)$ identity matrixes with $j-1$ zero columns appended to the right and with $j-1$ standard basis with leading $1$ appended to the top. In another word, it is a partially sequentially-[lower-shift matrixes](https://en.wikipedia.org/wiki/Shift_matrix).  
+
+Given the formulation above, we can write $f_{\text{total}}$ as an function of the transition matrixes, initial $K_1$ vector, and the mortality rates. Let's call this the $FERT$ function. 
+
+$$
+\begin{aligned}
+f_{\text{total}} = 
+\text{FERT}(
+  \left\{T_a\right\}_{a=1}^{a_{\max}},
+  K_{1}
+)
+\end{aligned}
+$$
+
+
+##### Overall Fertility and Binomial Chance of Success Rescaler
+
+Following the [binomial fitting procedure](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_disc_fit.html#12_Estimate_Change_of_Success_and_the_Number_of_Trials), the transition matrixes and initial $K_1$ vector can be fitted as functions of varying $\theta$ parameters as well as the shared $M$ parameter that define binomial distributions. In this section, we develop a way to rescale these $\theta$ parameters to increase and decreasing fertility. 
+
+First, let $\theta^{a}_{n}$ be the "chance of success" parameter for the nth row of the transition matrix $T_a$, and let $\theta_{K_1}$ be the "chance of success" parameter for $K_1$. We have, given shared $M$ (see [binomial fitting procedure](https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_disc_fit.html#12_Estimate_Change_of_Success_and_the_Number_of_Trials)) :
+
+$$
+\begin{aligned}
+f_{\text{total}} = 
+\text{FERT}\left(
+  \left\{ 
+    \left\{ 
+      \theta^{a}_{n}
+    \right\}_{n=0}^{N-1}
+  \right\}_{a=1}^{a_{\max}},
+  \theta_{K_1}, M
+\right)
+\cdot 
+\Pi_{i=1}^{a}
+\delta_i
+\end{aligned}
+$$
+
+Second, to adjust the overall fertility rate, we can adjust the $-\infty<\lambda<\infty$ parameter, which provides a common value to rescale all $\theta$ parameters by. Specifically, the adjustment follows this functional form:
+
+$$
+\widehat{\theta}\left(\theta, \lambda\right)= 
+\theta \cdot 
+      \left(
+      \frac{
+        \exp\left(\lambda\right)
+      }{
+        1 + \theta\left(\exp\left(\lambda\right) - 1\right)
+      }
+      \right) 
+$$
+
+Given this function form, when $\lambda=0$, we have $\widehat{\theta}\left(\theta, \lambda=0\right)=\theta$. Additionally, $0 \le \widehat{\theta}\left(\lambda\right) \le 1$, which allows $\widehat{\theta}$ to be used as the "chance of success" parameter as we freely vary $\lambda$. See more information about this scaling method and visualization in [Rescale a Fraction Between 0 and 1](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_rescale.html#11_Rescale_a_Fraction_Between_(0)_and_(1)).
+
+Third, the fertility formula, allowing for $\lambda$ adjustment becomes:
+$$
+\begin{aligned}
+f_{\text{total}}(\lambda) &= 
+\text{FERT}\left(
+  \left\{ 
+    \left\{ 
+      \widehat{\theta}\left(\theta^a_{n}, \lambda\right)
+    \right\}_{n=0}^{N-1}
+  \right\}_{a=1}^{a_{\max}},
+  \widehat{\theta}\left(\theta_{K_1}, \lambda\right)
+    , 
+  M
+\right)
+\cdot 
+\Pi_{i=1}^{a}
+\delta_i\\
+&= 
+\text{FERT}\left(\lambda\right)
+\cdot 
+\Pi_{i=1}^{a}
+\delta_i
+\end{aligned}
+$$
+
+Fourth, we know that fertility is strictly increasing in $\lambda$. 
+
+$$
+\frac{df_{\text{total}}(\lambda)}{d\lambda} > 0
+$$
+
+Fifth, we know that fertility is bounded above and below. The bounds on fertility are the extreme cases where all individuals either have 0 children, or where all individuals have the maximum number of children, in each period. 
+
+$$
+0 \le f_{\text{total}}(\lambda) \le 
+N + \sum_{a=1}^{a_{\max}} N \cdot \Pi_{i=1}^{a} \delta_i = 
+N \left( 1 + \sum_{a=1}^{a_{\max}} \Pi_{i=1}^{a} \delta_i \right)
+$$
+
+In another word, we have these limiting results. 
+
+$$
+\begin{aligned}
+\lim_{\lambda \rightarrow -\infty} f_{\text{total}}(\lambda) &= 0\\
+\lim_{\lambda \rightarrow \infty} f_{\text{total}}(\lambda) &= N \left( 1 + \sum_{a=1}^{a_{\max}} \Pi_{i=1}^{a} \delta_i \right)
 \end{aligned}
 $$
