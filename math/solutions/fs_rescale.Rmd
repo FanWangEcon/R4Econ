@@ -1,9 +1,21 @@
 ---
-title: "Quadratic and other Rescaling of Parameters with Fixed Min and Max"
-titleshort: "Quadratic and other Rescaling of Parameters with Fixed Min and Max"
+title: "Quadratic and Ratio Rescaling of Parameters with Fixed Min and Max"
+titleshort: "Quadratic and Ratio Rescaling of Parameters with Fixed Min and Max"
 description: |
-  Given a < x < b, use f(x) to rescale x, such that f(a)=a, f(b)=b, but f(z)=0.5*z for some z between a and b. Solve using the quadratic function with three equations and three unknowns uniquely. 
-date: 2021-03-08
+  For 0<theta<1, generate 0 < thetaHat(theta, lambda) < 1, where lambda is between positive and negative infinity, used to rescale theta.
+  Fit a quadratic function for three points, where the starting and ending points are along the 45 degree line.   
+core:
+  - package: r
+    code: |
+      sort(unique())
+      sapply(ar, func, param=val)
+  - package: ggplot2
+    code: |
+      geom_line()
+      geom_vline()
+      labs(title, subtitle, x, y, caption)
+      scale_y_continuous(breaks, limits)
+date: 2022-07-25
 date_start: 2021-03-08
 output:
   pdf_document:
@@ -28,12 +40,180 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
 
-#### Using A Quadratic Function to Fit Three Points Uniquely
+#### Rescale a Fraction Between $0$ and $1$
 
-Given e < x < f, use f(x) to rescale x, such that f(e)=e, f(f)=f, but f(z)=$\alpha \cdot z$ for one particular z between e and f, where 
-$\alpha$ > 1. And in this case, assume that $\alpha \cdot z < f$. We can fit these three points using the Quadratic function uniquely. In another word, there is a unique quadratic function that crosses these three points. Note the quadratic function is either concave or convex through the entire domain. 
+We have ratio $0<\theta<1$, we want to multiply $\theta$ to get closer to 0 or to 1, but to not exceed the bounds of $0$ and $1$. This is achieved by the following $\widehat{\theta}\left(\theta, \lambda\right)$ function, where we adjust $\lambda$ between negative and positive infinities to move $\theta$ closer to $0$ (as $\lambda\rightarrow-\infty$) or $\theta$ closer to $1$ (as $\lambda\rightarrow\infty$).
 
-Suppose that $e=0$, $f=10$, $z=2$, and $\alpha=1.5$. Using a quadratic to fit:
+$$
+\widehat{\theta}\left(\theta, \lambda\right)= 
+\theta \cdot 
+      \left(
+      \frac{
+        \exp\left(\lambda\right)
+      }{
+        1 + \theta\cdot\left(\exp\left(\lambda\right) - 1\right)
+      }
+      \right)
+$$
+
+Given this function form, when $\lambda=0$, we are back to $\theta$, and $0 \le \widehat{\theta}\left(\lambda\right) \le 1$, which allows $\widehat{\theta}$ to be used as the "chance of success" parameter as we freely vary $\lambda$.
+
+$$
+\begin{aligned}
+\widehat{\theta}\left(\theta, \lambda=0\right) &= 
+\theta \cdot \left(\frac{1}{1 + \theta\cdot(1-1)}\right) = \theta \\
+\lim_{\lambda \rightarrow -\infty} \widehat{\theta}\left(\theta, \lambda\right) &=
+\theta \cdot \left(\frac{0}{1 + \theta\cdot(0-1)}\right) = 0 \\
+\lim_{\lambda \rightarrow \infty} \widehat{\theta}\left(\theta, \lambda\right) &=
+\theta \cdot \left(\frac{\exp(\lambda)}{\theta \cdot \exp(\lambda)}\right) = 1 \\
+\end{aligned}
+$$
+
+To test this, first, we write out the rescaling function. 
+
+```{r}
+# Construct the formula
+ffi_theta_lambda_0t1 <- function(theta, lambda) {
+  if (is.finite(exp(lambda))) {
+    theta * (exp(lambda) / (1 + theta * (exp(lambda) - 1)))
+  } else {
+    # If lambda is large, exp(lambda)=inf, ratio above becomes 1
+    1
+  }
+}
+# Test the function
+print(ffi_theta_lambda_0t1(0.5, 1e1))
+print(ffi_theta_lambda_0t1(0.5, 1e2))
+print(ffi_theta_lambda_0t1(0.5, -1e3))
+```
+
+Second, given theta, we evaluate the function with differing lambda values. 
+
+```{r}
+# Create Function
+ffi_fixtheta_varylambda_0t1 <-
+  function(ar_lambda_pos =
+             1e1^(seq(-0.1, 1, length.out = 4)),
+           theta = 0.5) {
+
+    # Construct lambda vector
+    ar_lambda <- sort(unique((c(-ar_lambda_pos, 0, ar_lambda_pos))))
+    # sapply
+    ar_theta_hat <- sapply(ar_lambda, ffi_theta_lambda_0t1, theta = theta)
+    # Create table
+    ar_st_varnames <- c("theta_hat", "lambda")
+    tb_theta_hat_lambda <- as_tibble(
+      cbind(round(ar_theta_hat, 5), ar_lambda)
+    ) %>%
+      rename_all(~ c(ar_st_varnames)) %>%
+      mutate(theta = theta)
+    # return
+    return(tb_theta_hat_lambda)
+  }
+
+# Test function
+tb_theta_hat_lambda <- ffi_fixtheta_varylambda_0t1()
+# Print
+kable(tb_theta_hat_lambda,
+  caption = paste(
+    "Theta-hat rescaling",
+    ", given different lambda rescalers.",
+    separator = " "
+  )
+) %>% kable_styling_fc()
+```
+
+Third, we run the function we just created for two three different $\theta$ levels, and we stack the results together. 
+
+```{r}
+# Evaluate at differing thetas
+ar_lambda_pos <- 1e1^(seq(-0.1, 1, length.out = 2))
+tb_theta_hat_lambda_low <- ffi_fixtheta_varylambda_0t1(ar_lambda_pos, 0.1)
+tb_theta_hat_lambda_mid <- ffi_fixtheta_varylambda_0t1(ar_lambda_pos, 0.5)
+tb_theta_hat_lambda_hgh <- ffi_fixtheta_varylambda_0t1(ar_lambda_pos, 0.9)
+# Combine
+tb_theta_hat_lambda_combo <- bind_rows(
+  tb_theta_hat_lambda_low,
+  tb_theta_hat_lambda_mid,
+  tb_theta_hat_lambda_hgh
+)
+# Print
+kable(tb_theta_hat_lambda_combo,
+  caption = paste(
+    "Theta-hat rescaling",
+    ", with multiple theta values",
+    ", given different lambda rescalers.",
+    separator = " "
+  )
+) %>% kable_styling_fc()
+```
+
+Fourth, we visualize the results from above. We generate a denser x-grid for this purpose, and we evaluate at 9 different theta values from $\theta=0.01$ to $\theta=0.99$. We can see in the graph that all $0<\hat{\theta}<1$.
+
+```{r}
+# Generate a denser result
+ar_lambda_pos <- 1e1^(seq(-0.1, 1, length.out = 100))
+tb_theta_hat_lambda_combo <- bind_rows(
+  ffi_fixtheta_varylambda_0t1(ar_lambda_pos, 0.01),
+  ffi_fixtheta_varylambda_0t1(ar_lambda_pos, 0.10),
+  ffi_fixtheta_varylambda_0t1(ar_lambda_pos, 0.25),
+  ffi_fixtheta_varylambda_0t1(ar_lambda_pos, 0.50),
+  ffi_fixtheta_varylambda_0t1(ar_lambda_pos, 0.75),
+  ffi_fixtheta_varylambda_0t1(ar_lambda_pos, 0.90),
+  ffi_fixtheta_varylambda_0t1(ar_lambda_pos, 0.99)
+)
+# Labeling
+st_title <- paste0("Rescale a Fraction (theta), Constrained Between 0 and 1")
+st_subtitle <- paste0(
+  "Note that when LAMBDA = 0, THETA-HAT = theta."
+)
+st_caption <- paste0(
+  "https://fanwangecon.github.io/",
+  "R4Econ/math/solutions/htmlpdfr/fs_rescale.html"
+)
+st_x_label <- "Different rescaling LAMBDA values"
+st_y_label <- "Rescaled THETA-HAT values between 0 and 1"
+ar_y_breaks <- c(0.01, 0.10, 0.25, 0.50, 0.75, 0.90, 0.99)
+# Graph
+tb_theta_hat_lambda_combo %>%
+  mutate(theta = as.factor(theta)) %>%
+  ggplot(aes(
+    x = lambda, y = theta_hat,
+    color = theta, linetype = theta
+  )) +
+  geom_line(size = 2) +
+  geom_vline(
+    xintercept = 0,
+    linetype = "dashed", color = "black", size = 1
+  ) +
+  labs(
+    title = st_title,
+    subtitle = st_subtitle,
+    x = st_x_label,
+    y = st_y_label,
+    caption = st_caption
+  ) +
+  scale_y_continuous(
+    breaks = ar_y_breaks,
+    limits = c(0, 1)
+  ) +
+  theme(
+    panel.grid.major.y = element_line(
+      color = "black",
+      size = 0.5,
+      linetype = 1
+    ),
+    legend.key.width = unit(3, "line")
+  )
+```
+
+#### Fit Three Points with Ends Along 45 Degree Line
+
+Given e < x < f, use f(x) to rescale x, such that f(e)=e, f(f)=f, but f(z)=$\alpha \cdot z$ for one particular z between e and f, with $\alpha$ > 1. And in this case, assume that $\alpha \cdot z < f$. Note that this is case where we have three points, and the starting and the ending points are along the 45 degree line. 
+
+We can fit these three points using the Quadratic function exactly. In another word, there is a unique quadratic function that crosses these three points. Note the quadratic function is either concave or convex through the entire domain.
+
+First, as an example, suppose that $e=0$, $f=10$, $z=2$, and $\alpha=1.5$. Using a quadratic to fit:
 
 $$
 y(x) = a \cdot x^2 + b \cdot x + c
@@ -64,6 +244,7 @@ c = 0
 $$
 
 Generate the $a$, $b$ and $c$ points above for the quadratic function:
+
 ```{r}
 # set values
 e <- 0
@@ -77,19 +258,19 @@ c <- 0
 # grid of values beween a and b, 11 points covering z = 2
 ar_x <- seq(e, f, length.out = 11)
 # rescale
-ar_grid_quad <- a*ar_x^2 + b*ar_x + c
+ar_grid_quad <- a * ar_x^2 + b * ar_x + c
 # show values
-kable(print(as_tibble(cbind(ar_x, ar_grid_quad))), 
-      caption = paste0("Quadratic Fit of Three Equations and Three Unknowns\n",
-                       "Satisfies: f(0)=0, f(10)=10, f(2)=3")) %>% 
+kable(print(as_tibble(cbind(ar_x, ar_grid_quad))),
+  caption = paste0(
+    "Quadratic Fit of Three Equations and Three Unknowns\n",
+    "Satisfies: f(0)=0, f(10)=10, f(2)=3"
+  )
+) %>%
   kable_styling_fc()
 ```
 
+Second, as another example, suppose that $e=0$, $f=3.5$, $z=0.5$, and $\alpha=1.5$. Using a quadratic to fit these, we have three equations:
 
-
-
-
-We have three equations:
 $$
 0 = a \cdot 0 + b \cdot 0 + c\\
 0.75 = a \cdot 0.5^2 + b \cdot 0.5 + c\\
@@ -113,6 +294,7 @@ a = \frac{0.75-0.5*1.58333}{0.25}=-0.1666\\
 b = \frac{36.75-3.5}{24.5-3.5}=1.58333\\
 c = 0
 $$
+
 Generate the $a$, $b$ and $c$ points above for the quadratic function:
 
 ```{r}
@@ -128,8 +310,10 @@ c <- 0
 # grid of values beween a and b, 11 points covering z = 2
 ar_x <- seq(e, f, length.out = 100000)
 # rescale
-ar_grid_quad <- a*ar_x^2 + b*ar_x + c
+ar_grid_quad <- a * ar_x^2 + b * ar_x + c
 # show values
 # cbind(ar_x, ar_grid_quad)
 ar_x[which.min(abs(ar_grid_quad - 0.75))]
 ```
+
+The exercises above are special cases of the formula we derive on this page: [Formulas for Quadratic Parameters and Three Points](https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_analytical_poly_fit.html#11_Formulas_for_Quadratic_Parameters_and_Three_Points).
