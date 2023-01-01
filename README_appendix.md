@@ -334,6 +334,13 @@
 	+ **r**: *matrix()*
 	+ **stats**: *runif()*
 	+ **dplyr**: *group_by() + left_join() + filter() + slice()*
+4. [Environmental Exposures, Population across Locations and Time](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution_time.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_pop_loc_pollution_time.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution_time.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution_time.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution_time.html)
+	+ Discussions on environmental exposures along locational-paths and distribution of population across locations and socio-demographic groups.
+	+ Discussions on moments of within-person locational-path-specific distributions environmental exposures. 
+	+ Simulate environmental exposures across locations and time. 
+	+ Compute moments of within-person environmental exposures. 
+	+ **r**: *matrix() + sample()*
+	+ **stats**: *rlnorm()*
 
 ## Statistics links
 
