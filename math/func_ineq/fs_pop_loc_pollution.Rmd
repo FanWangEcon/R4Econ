@@ -1,9 +1,11 @@
 ---
-title: "Share of Environmental Exposure Burden Across Population Groups"
-titleshort: "Share of Environmental Exposure Burden Across Population Groups"
+title: "Within and Across Group Variations in Ambient Climate Exposures Across Socio-Demographic Groups"
+titleshort: "Within and Across Group Variations in Ambient Climate Exposures Across Socio-Demographic Groups"
 description: |
   Simulate pollution exposures by location.
   Compute share of pollution burden for a population group relative to the share of overall population accounted for by this population group.
+  Compute gini, atkinson, and coefficient variations over group means.
+  Compute within group variations and across group variations, using percentile ratios. 
 core:
   - package: r
     code: |
@@ -17,7 +19,7 @@ core:
       left_join()
       filter()
       slice()
-date: 2022-02-14
+date: 2023-01-01
 date_start: 2021-12-27
 output:
   html_document:
@@ -32,7 +34,7 @@ always_allow_html: true
 urlcolor: blue
 ---
 
-### Location, Population, and Pollution
+### Distribution of Ambient Climate Exposures Across and Within Socio-Demographic Groups
 
 ```{r global_options, include = FALSE}
 try(source("../../.Rprofile"))
@@ -316,16 +318,21 @@ ffi_atkinson_random_var_ineq <- function(ar_data, ar_prob_data, fl_rho) {
 }
 ```
 
-Third, we also create an internal function for standard deviation for discrete random variable.
+Third, we also create an internal function for standard deviation for discrete random variable. This function generates the standard deviation as well as the coefficient of variation. 
+
 ```{r}
 # Formula
-ffi_std_drv <- function(ar_data, ar_prob_data) {
+ffi_std_cov <- function(ar_data, ar_prob_data) {
   #' @param ar_data array array values
   #' @param ar_prob_data array probability mass for each element along `ar_data`, sums to 1
 
   fl_mean <- sum(ar_data*ar_prob_data)
   fl_std <- sqrt(sum(ar_prob_data*(ar_data - fl_mean)^2))
-  return(fl_std)
+  fl_coef_of_variation <- fl_std/fl_mean
+  
+  ls_fl_std_cov <- list("std"=fl_std, "cov"= fl_coef_of_variation, "mean" = fl_mean)
+
+  return(ls_fl_std_cov)
 }
 ```
 
@@ -856,12 +863,14 @@ ar_data_grp_exc_burden <- df_excess_pollution_burden_sorted %>% pull(pm10_grp_ex
 ar_data_grp_shares <- df_excess_pollution_burden_sorted %>% pull(popgrp_mass)
 ```
 
-Second, we compute the GINI and STD over group-specific means, with group-specific population shares.
+Second, we compute the GINI coefficient, standard deviation, and coefficient of variations over group-specific means, with group-specific population shares.
 ```{r}
 # compute gini over group means, and standard deviations
 fl_grp_means_gini <- ffi_dist_gini_random_var_pos_test(ar_data_grp_means, ar_data_grp_shares)
-# STD
-fl_grp_means_std <- ffi_std_drv(ar_data_grp_means, ar_data_grp_shares)
+# STD, and coefficient of variation
+ls_fl_grp_means_std_cov <- ffi_std_cov(ar_data_grp_means, ar_data_grp_shares)
+fl_grp_means_std <- ls_fl_grp_means_std_cov$std
+fl_grp_means_cov <- ls_fl_grp_means_std_cov$cov
 ```
 
 Third, compute an array of Atkinson index with differing inequality aversions.
@@ -873,11 +882,12 @@ tb_rho <- as_tibble(unique(ar_rho))
 ar_grp_means_atkinson <- apply(tb_rho, 1, function(row){
   ffi_atkinson_random_var_ineq(ar_data_grp_means, ar_data_grp_shares, row[1])})
 # atkinson results table
-ar_st_varnames <- c('id','rho','atkinson_index')
+ar_st_varnames <- c('rho_id','rho','atkinson_index')
 tb_atkinson <- as_tibble(cbind(ar_rho, ar_grp_means_atkinson)) %>%
   rowid_to_column(var = "id") %>%
   rename_all(~c(ar_st_varnames)) %>%
-  mutate(one_minus_rho = 1 - rho)
+  mutate(one_minus_rho = 1 - rho) %>%
+  select(rho_id, one_minus_rho, rho, atkinson_index)
 # Max Atkinson
 fl_atkinson_max <- max(tb_atkinson %>% pull(atkinson_index))
 # display
@@ -889,9 +899,44 @@ tb_atkinson[round(seq(1, length(ar_rho), length.out = it_rows_shown)),] %>%
   kable_styling_fc()
 ```
 
-Fourth, compute the standard deviation of excess burden. Note that excess burden is both positive and negative, so we can not compute GINI or Atkinson statistics from it.
+Fourth, we now create a row that shows three selected Atkinson, Gini, as well as the coefficient of variation. 
+
 ```{r}
-fl_grp_exc_burden_std <- ffi_std_drv(ar_data_grp_exc_burden, ar_data_grp_shares)
+# Selected five atkinson
+ar_it_rho_select <- round(seq(1, length(ar_rho), length.out=5))
+ar_atk_selected <- ar_grp_means_atkinson[ar_it_rho_select]
+ar_rho_selected <- round(ar_rho[ar_it_rho_select], 2)
+ar_st_rho_selected_colnames <- paste0("atk4rho=", ar_rho_selected)
+
+# all stats together
+mt_cov_gini_atk <- matrix(
+  c(fl_grp_means_cov, fl_grp_means_gini, ar_atk_selected), 
+    nrow=1, ncol=(2+length(ar_it_rho_select))) 
+
+# Display results as table
+ar_st_varnames <- c('cov', 'gini', ar_st_rho_selected_colnames)
+tb_cov_gini_atk <- as_tibble(mt_cov_gini_atk) %>%
+  rename_all(~c(ar_st_varnames))
+
+# display
+st_caption <- paste0("Coefficient of Variation (COV), Gini,",
+                     "and three selected Atkinson Measures",
+                     "computed given group means, with different weights",
+                     "(share of population) for each group.")
+tb_cov_gini_atk %>%
+  kable(caption = st_caption) %>%
+  kable_styling_fc_wide()
+```
+
+Fifth, we can compute the standard deviation of excess burden. Note that excess burden is both positive and negative, so we can not compute GINI or Atkinson statistics from it. Note that by construction the standard deviation of excess burden is the same as the coefficient of variation for the underlying raw means. 
+
+```{r}
+ls_fl_std_cov_grp_exc_burden <- ffi_std_cov(ar_data_grp_exc_burden, ar_data_grp_shares)
+fl_grp_exc_burden_std <- ls_fl_std_cov_grp_exc_burden$std
+st_disp <- paste("Coefficient of Variation (COV) of raw means =", fl_grp_means_cov, 
+                 "is always the same as the Standard deviation of excess burden =", 
+                 fl_grp_exc_burden_std)
+print(st_disp)                 
 ```
 
 ##### Visualize Inequality in Group Means (GINI and ATKINSON)

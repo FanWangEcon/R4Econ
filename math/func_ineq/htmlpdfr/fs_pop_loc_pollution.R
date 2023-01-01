@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE-------------------------------------------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 ffi_dist_gini_random_var_pos_test <- function(ar_data, ar_prob_data) {
   #' @param ar_data array sorted array values low to high
   #' @param ar_prob_data array probability mass for each element along `ar_data`, sums to 1
@@ -17,7 +17,7 @@ ffi_dist_gini_random_var_pos_test <- function(ar_data, ar_prob_data) {
 }
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 # Formula
 ffi_atkinson_random_var_ineq <- function(ar_data, ar_prob_data, fl_rho) {
   #' @param ar_data array sorted array values
@@ -31,19 +31,23 @@ ffi_atkinson_random_var_ineq <- function(ar_data, ar_prob_data, fl_rho) {
 }
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 # Formula
-ffi_std_drv <- function(ar_data, ar_prob_data) {
+ffi_std_cov <- function(ar_data, ar_prob_data) {
   #' @param ar_data array array values
   #' @param ar_prob_data array probability mass for each element along `ar_data`, sums to 1
 
   fl_mean <- sum(ar_data*ar_prob_data)
   fl_std <- sqrt(sum(ar_prob_data*(ar_data - fl_mean)^2))
-  return(fl_std)
+  fl_coef_of_variation <- fl_std/fl_mean
+  
+  ls_fl_std_cov <- list("std"=fl_std, "cov"= fl_coef_of_variation, "mean" = fl_mean)
+
+  return(ls_fl_std_cov)
 }
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 # Percentiles to be used for overall, across group, as well as within group calculations.
 # For later purposes, what are the percentiles of interest to compute
 ar_fl_percentiles <- c(0.1, 0.2, 0.8, 0.9)
@@ -80,7 +84,7 @@ mt_pop_data_frac[ar_it_loc_disp, ar_it_popgrp_disp] %>%
   kable_styling_fc()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 # Share of population per location
 set.seed(123)
 ar_p_loc <- dbinom(0:(3*it_M_location-1), 3*it_M_location-1, 0.5)
@@ -110,13 +114,13 @@ round((mt_pop_data_frac[ar_it_loc_disp, ar_it_popgrp_disp])*100, 3) %>%
   kable_styling_fc()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 fl_meanlog <- 3.4
 fl_sdlog <- 0.35
 hist(rlnorm(1000, meanlog = fl_meanlog, sdlog = fl_sdlog))
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 # draw
 set.seed(123)
 ar_pollution_loc <- rlnorm(it_M_location, meanlog = fl_meanlog, sdlog = fl_sdlog)
@@ -138,7 +142,7 @@ tb_loc_pollution[ar_it_loc_disp,] %>%
   kable(caption = st_caption) %>% kable_styling_fc()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 # Reshape population data, so each observation is location/demo
 df_pop_data_frac_long <- as_tibble(mt_pop_data_frac, rownames='location') %>%
   pivot_longer(cols = starts_with('popgrp'),
@@ -147,7 +151,7 @@ df_pop_data_frac_long <- as_tibble(mt_pop_data_frac, rownames='location') %>%
                values_to = "pop_frac")
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 # Reshape population data, so each observation is location/demo
 df_pop_pollution_long <- df_pop_data_frac_long %>%
   left_join(tb_loc_pollution, by='location')
@@ -159,7 +163,7 @@ df_pop_pollution_long[
   kable(caption = st_caption) %>% kable_styling_fc()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 # Follow four steps above
 df_pop_pollution_by_popgrp_cdf <- df_pop_pollution_long %>%
   arrange(popgrp, avgdailypm10) %>%
@@ -174,7 +178,7 @@ df_pop_pollution_by_popgrp_cdf[
   kable(caption = st_caption) %>% kable_styling_fc_wide()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 # Stats 1: excess pollution burden
 df_excess_pollution_burden <- df_pop_pollution_by_popgrp_cdf %>%
   ungroup() %>%
@@ -209,7 +213,7 @@ df_excess_pollution_burden[ar_it_popgrp_disp,] %>%
   kable_styling_fc_wide()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 # Stats 3: percentiles and ratios
 # Stats 3a: generate key within group percentiles
 # 1. 20th and 80th percentiles
@@ -247,7 +251,7 @@ df_within_percentiles[ar_it_popgrp_disp,] %>%
   kable_styling_fc()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 df_location_mean <- df_pop_pollution_by_popgrp_cdf %>%
   ungroup() %>%
   group_by(location) %>%
@@ -269,7 +273,7 @@ df_location_mean[ar_it_loc_disp,] %>%
   kable_styling_fc_wide()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 df_popgrp_mean <- df_excess_pollution_burden %>%
   ungroup() %>%
   arrange(pm10_grp_mean) %>%
@@ -285,7 +289,7 @@ df_popgrp_mean[ar_it_popgrp_disp,] %>%
   kable_styling_fc_wide()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 for (it_df in c(1,2)) {
   for (it_percentile_ctr in seq(1, length(ar_fl_percentiles))) {
 
@@ -338,7 +342,7 @@ df_popgrp_mean_perc %>%
   kable_styling_fc()  
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 # Percentiles and excess burden data combined
 df_excburden_percentiles <- df_excess_pollution_burden %>%
   left_join(df_within_percentiles, by="popgrp")
@@ -346,7 +350,7 @@ df_excburden_percentiles <- df_excess_pollution_burden %>%
 df_excburden_percentiles <- bind_rows(df_excburden_percentiles, df_location_mean_perc, df_popgrp_mean_perc)
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 # merge stats 3 with stats 1 and 2
 df_excess_pollution_burden <- df_excess_pollution_burden %>%
   left_join(df_within_percentiles, by="popgrp")
@@ -375,7 +379,7 @@ df_excess_pollution_burden[ar_it_popgrp_disp,] %>%
   kable_styling_fc_wide()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 # lower and upper bound or relative within group ratios
 # can only use values appearing in the percentiles list prior
 # Stats 4c: Ratios
@@ -407,7 +411,7 @@ df_excburden_percentiles[ar_it_popgrp_disp_withoverall,] %>%
   kable_styling_fc_wide()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 # Rounding excess burden s.d.
 df_scatter_main <- df_excburden_percentiles %>% 
   filter(!popgrp %in% c("overall", "across-group")) 
@@ -448,7 +452,7 @@ pl_excess_burden <- df_scatter_main %>%
 print(pl_excess_burden)
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 # 1. SORT FIRST!
 df_excess_pollution_burden_sorted <- df_excess_pollution_burden %>% arrange(pm10_grp_mean)
 # 2. Obtain the means across groups, and also excess burden across groups
@@ -458,14 +462,16 @@ ar_data_grp_exc_burden <- df_excess_pollution_burden_sorted %>% pull(pm10_grp_ex
 ar_data_grp_shares <- df_excess_pollution_burden_sorted %>% pull(popgrp_mass)
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 # compute gini over group means, and standard deviations
 fl_grp_means_gini <- ffi_dist_gini_random_var_pos_test(ar_data_grp_means, ar_data_grp_shares)
-# STD
-fl_grp_means_std <- ffi_std_drv(ar_data_grp_means, ar_data_grp_shares)
+# STD, and coefficient of variation
+ls_fl_grp_means_std_cov <- ffi_std_cov(ar_data_grp_means, ar_data_grp_shares)
+fl_grp_means_std <- ls_fl_grp_means_std_cov$std
+fl_grp_means_cov <- ls_fl_grp_means_std_cov$cov
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 # Log10 scaled Inequality Measures
 ar_rho <- 1 - (10^(c(seq(-2,2, length.out=30))))
 tb_rho <- as_tibble(unique(ar_rho))
@@ -473,11 +479,12 @@ tb_rho <- as_tibble(unique(ar_rho))
 ar_grp_means_atkinson <- apply(tb_rho, 1, function(row){
   ffi_atkinson_random_var_ineq(ar_data_grp_means, ar_data_grp_shares, row[1])})
 # atkinson results table
-ar_st_varnames <- c('id','rho','atkinson_index')
+ar_st_varnames <- c('rho_id','rho','atkinson_index')
 tb_atkinson <- as_tibble(cbind(ar_rho, ar_grp_means_atkinson)) %>%
   rowid_to_column(var = "id") %>%
   rename_all(~c(ar_st_varnames)) %>%
-  mutate(one_minus_rho = 1 - rho)
+  mutate(one_minus_rho = 1 - rho) %>%
+  select(rho_id, one_minus_rho, rho, atkinson_index)
 # Max Atkinson
 fl_atkinson_max <- max(tb_atkinson %>% pull(atkinson_index))
 # display
@@ -489,11 +496,43 @@ tb_atkinson[round(seq(1, length(ar_rho), length.out = it_rows_shown)),] %>%
   kable_styling_fc()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-fl_grp_exc_burden_std <- ffi_std_drv(ar_data_grp_exc_burden, ar_data_grp_shares)
+## ------------------------------------------------------------------------------------------------------------------------------------------------
+# Selected five atkinson
+ar_it_rho_select <- round(seq(1, length(ar_rho), length.out=5))
+ar_atk_selected <- ar_grp_means_atkinson[ar_it_rho_select]
+ar_rho_selected <- round(ar_rho[ar_it_rho_select], 2)
+ar_st_rho_selected_colnames <- paste0("atk4rho=", ar_rho_selected)
+
+# all stats together
+mt_cov_gini_atk <- matrix(
+  c(fl_grp_means_cov, fl_grp_means_gini, ar_atk_selected), 
+    nrow=1, ncol=(2+length(ar_it_rho_select))) 
+
+# Display results as table
+ar_st_varnames <- c('cov', 'gini', ar_st_rho_selected_colnames)
+tb_cov_gini_atk <- as_tibble(mt_cov_gini_atk) %>%
+  rename_all(~c(ar_st_varnames))
+
+# display
+st_caption <- paste0("Coefficient of Variation (COV), Gini,",
+                     "and three selected Atkinson Measures",
+                     "computed given group means, with different weights",
+                     "(share of population) for each group.")
+tb_cov_gini_atk %>%
+  kable(caption = st_caption) %>%
+  kable_styling_fc_wide()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
+ls_fl_std_cov_grp_exc_burden <- ffi_std_cov(ar_data_grp_exc_burden, ar_data_grp_shares)
+fl_grp_exc_burden_std <- ls_fl_std_cov_grp_exc_burden$std
+st_disp <- paste("Coefficient of Variation (COV) of raw means =", fl_grp_means_cov, 
+                 "is always the same as the Standard deviation of excess burden =", 
+                 fl_grp_exc_burden_std)
+print(st_disp)                 
+
+
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 # x-labels
 x.labels <- c('lambda=0.99', 'lambda=0.90', 'lambda=0', 'lambda=-10', 'lambda=-100')
 x.breaks <- c(0.01, 0.10, 1, 10, 100)
@@ -526,7 +565,7 @@ pl_gini_atkinson <- tb_atkinson %>%
 print(pl_gini_atkinson)
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------------------------------------
 # Rounding excess burden s.d.
 fl_grp_exc_burden_std_fmt <- round(fl_grp_exc_burden_std, 3)
 st_title <- paste0("Distribution of Excess Burden (Across Group Variation), s.d.=", fl_grp_exc_burden_std_fmt)

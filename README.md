@@ -340,9 +340,11 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ **tidyr**: *expand_grid()*
 	+ **ggplot2**: *geom_line() + facet_wrap()*
 	+ **econ**: *Atkinson (JET, 1970)*
-3. [Share of Environmental Exposure Burden Across Population Groups](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_pop_loc_pollution.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html)
+3. [Within and Across Group Variations in Ambient Climate Exposures Across Socio-Demographic Groups](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_pop_loc_pollution.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html)
 	+ Simulate pollution exposures by location.
 	+ Compute share of pollution burden for a population group relative to the share of overall population accounted for by this population group.
+	+ Compute gini, atkinson, and coefficient variations over group means.
+	+ Compute within group variations and across group variations, using percentile ratios. 
 	+ **r**: *matrix()*
 	+ **stats**: *runif()*
 	+ **dplyr**: *group_by() + left_join() + filter() + slice()*
