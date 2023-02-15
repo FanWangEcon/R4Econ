@@ -363,3 +363,54 @@ In the "PM10 Exposure across locations (10 of 20 locations shown)" table, we had
    - Our structure works when individuals do not move and $\mathbf{Z}_y = \mathbf{Z}^{\text{path}}_y = \mathbf{Z}^{\text{loc}}_y$, this means the prior data structure is accommodated
    - Our framework also works when survey panel data shows individuals moving within time period $y$. This is generalization, a weakening of the input data requirement for our analysis.
    - It turns out to accommodate movements, we do not need to modify any of the computations on page [Share of Environmental Exposure Burden Across Population Groups](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html), we just need to reinterpret the $M$ location-specific rows there for the input data matrixes as the $O$ locational-path-specific rows. The code there does not care about what interpretations the rows have.
+
+#### Within Individual Adjusted Mean 
+
+Previously we computed moments of the individual distribution. Given heterogeneity in the distribution, we could compute alternative means where exposures in months below some exposure threshold is set to 0. Note that this is not computing a conditional expectation. 
+
+We take the "PM10 exposure across locations and time" matrix we computed from prior as given. 
+
+```{r}
+# 1. number of quantiles of interest
+ar_thresholds <- seq(0, 90, by=10)
+ar_thresholds <- c(0, 15, 35, 50, 75)
+it_thresholds <- length(ar_thresholds)
+
+# 2. Generate matrix to be filled
+mt_S_mean_thres <- matrix(data=NA, nrow=it_M_location, ncol=it_thresholds)
+rownames(mt_S_mean_thres) <- paste0('m=', seq(1,it_M_location))
+colnames(mt_S_mean_thres) <- paste0('pm_indi_thr', ar_thresholds)
+
+# 3. Compute quantiles
+for (it_m in seq(1, it_M_location)){
+  ar_Z <- mt_Z_cone[it_m, ]
+  fl_mean <- mean(ar_Z)
+  ar_mean_thres <- c()
+  for (it_thres in seq(1, it_thresholds)){
+    ar_Z_thres <- ar_Z
+    ar_Z_thres[ar_Z < ar_thresholds[it_thres]] <- 0
+    fl_mean_thres <- mean(ar_Z_thres)
+    ar_mean_thres <- c(ar_mean_thres, fl_mean_thres)
+  }
+  # note we use type=1, this uses the nearest-rank method
+  mt_S_mean_thres[it_m,] <- ar_mean_thres 
+}
+```
+
+Now we display results. Similar to the moments based results, the table shown here corresponds to the "PM10 Exposure across locations (10 of 20 locations shown)" table from the [Simulate Environmental Exposure](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html#13_Simulate_Environmental_Exposure) section on the [Share of Environmental Exposure Burden Across Population Groups](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html) page.
+
+```{r}
+# Column Names
+ar_st_varnames <- c("locational_path", colnames(mt_S_mean_thres))
+
+# Combine to tibble, add name col1, col2, etc.
+tb_loc_indi_dist_thres <- as_tibble(mt_S_mean_thres) %>%
+  rowid_to_column(var = "id") %>%
+  rename_all(~c(ar_st_varnames)) %>%
+  mutate(locational_path = paste0("locational_path=", locational_path))
+
+# Display
+st_caption = "PM10 exposure individual < threshold to 0 means across locations/paths"
+tb_loc_indi_dist_thres[ar_it_loc_disp,] %>%
+  kable(caption = st_caption) %>% kable_styling_fc_wide()
+```
