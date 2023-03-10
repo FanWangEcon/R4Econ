@@ -1,11 +1,14 @@
 ---
-title: "R Example DPLYR Counting"
-titleshort: "Counting Basics"
+title: "R Example Counting, Tabulation, and Cross Tabulation"
+titleshort: "R Example Counting, Tabulation, and Cross Tabulation"
 description: |
-  uncount to generate panel skeleton from years in survey
+  Uncount to generate panel skeleton from years in survey
 core:
   - package: dplyr
     code: |
+      tally()
+      spread()
+      distinct()
       uncount(yr_n)
       group_by()
       mutate(yr = row_number() + start_yr)
@@ -23,7 +26,7 @@ always_allow_html: true
 urlcolor: blue
 ---
 
-### Uncount
+### Counting and Tabulations
 
 ```{r global_options, include = FALSE}
 try(source("../../.Rprofile"))
@@ -33,15 +36,53 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
 
-In some panel, there are $N$ individuals, each observed for $Y_i$ years. Given a dataset with two variables, the individual index, and the $Y_i$ variable, expand the dataframe so that there is a row for each individual index's each unique year in the survey.
+#### Tabulate Two Categorial Variables
 
-*Search*:
+First, we tabulate a dataset, and show categories as rows, and display frequencies. 
 
-- r duplicate row by variable
+```{r}
+# We use the mtcars dataset
+tb_tab_joint <- mtcars %>%
+    group_by(gear, am) %>%
+    tally()
+# Display
+tb_tab_joint %>%
+    kable(caption = "cross tabulation, stacked") %>%
+    kable_styling_fc()
+```
 
-*Links*:
+We can present this as cross tabs. 
+```{r}
+# We use the mtcars dataset
+tb_cross_tab <- mtcars %>%
+    group_by(gear, am) %>%
+    tally() %>%
+    spread(am, n)
+# Display
+tb_cross_tab %>%
+    kable(caption = "cross tabulation") %>%
+    kable_styling_fc()
+```
 
-- see: [Create duplicate rows based on a variable](https://stackoverflow.com/questions/52498169/r-create-duplicate-rows-based-on-a-variable-dplyr-preferred)
+#### Tabulate Once Each Distinct Subgroup
+
+We have two variables variables, am and mpg, the mpg values are not unique. We want to know how many unique mpg levels are there for each am group. We use the [dplyr::distinct](https://dplyr.tidyverse.org/reference/distinct.html) function to achieve this.
+
+```{r}
+tb_dist_tab <- mtcars %>%
+    # .keep_all to keep all variables
+    distinct(am, mpg, .keep_all = TRUE) %>%
+    group_by(am) %>%
+    tally()
+# Display
+tb_dist_tab %>%
+    kable(caption = "Tabulate distinct groups") %>%
+    kable_styling_fc()
+```
+ 
+#### Expanding to Panel
+
+There are $N$ individuals, each observed for $Y_i$ years. We start with a dataframe where individuals are the unit of observation, we expand this to a panel with a row for each of the years that the individual is in the survey for. 
 
 *Algorithm*:
 
@@ -50,30 +91,50 @@ In some panel, there are $N$ individuals, each observed for $Y_i$ years. Given a
 3. group and generate sorted index
 4. add indiviual specific stat year to index
 
+First, we construct the dataframe where each row is an individual.
+
 ```{r}
 # 1. Array of Years in the Survey
-ar_years_in_survey <- c(2,3,1,10,2,5)
-ar_start_yaer <- c(1,2,3,1,1,1)
-ar_end_year <- c(2,4,3,10,2,5)
+ar_years_in_survey <- c(2, 3, 1, 10, 2, 5)
+ar_start_yaer <- c(1, 2, 3, 1, 1, 1)
+ar_end_year <- c(2, 4, 3, 10, 2, 5)
 mt_combine <- cbind(ar_years_in_survey, ar_start_yaer, ar_end_year)
 
 # This is the individual attribute dataset, attributes that are invariant acrosss years
 tb_indi_attributes <- as_tibble(mt_combine) %>% rowid_to_column(var = "ID")
 
+# Display
+tb_indi_attributes %>%
+    head(10) %>%
+    kable() %>%
+    kable_styling_fc()
+```
+
+Second, we change the dataframe so that each unit of observation is an individual in an year. This means we will duplicate the information in the prior table, so if an individual appears for 4 years in the survey, we will now have four rows for this individual. We generate a new variable that is the calendar year. This is now a panel dataset. 
+
+```{r}
 # 2. Sort and generate variable equal to sorted index
 tb_indi_panel <- tb_indi_attributes %>% uncount(ar_years_in_survey)
 
 # 3. Panel now construct exactly which year in survey, note that all needed is sort index
 # Note sorting not needed, all rows identical now
 tb_indi_panel <- tb_indi_panel %>%
-                    group_by(ID) %>%
-                    mutate(yr_in_survey = row_number())
+    group_by(ID) %>%
+    mutate(yr_in_survey = row_number())
 
 tb_indi_panel <- tb_indi_panel %>%
-                    mutate(calendar_year = yr_in_survey + ar_start_yaer - 1)
+    mutate(calendar_year = yr_in_survey + ar_start_yaer - 1)
 
 # Show results Head 10
-tb_indi_panel %>% head(10) %>%
-  kable() %>%
-  kable_styling_fc()
+tb_indi_panel %>%
+    head(10) %>%
+    kable() %>%
+    kable_styling_fc()
 ```
+
+
+
+
+
+
+

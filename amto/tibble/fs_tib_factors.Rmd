@@ -1,16 +1,24 @@
 ---
-title: "R Dataframe Categorical Variables with forcats"
-titleshort: "Label and Combine Factor Variables"
+title: "Interact and Cut Variables to Generate Categorical Variables"
+titleshort: "Interact and Cut Variables to Generate Categorical Variables"
 description: |
+  Convert rowname to variable name.
+  Generate categorical variable from a continuous variable.
   Convert numeric variables to factor variables, generate interaction variables (joint factors), and label factors with descriptive words.
   Graph MPG and 1/4 Miles Time (qsec) from the mtcars dataset over joint shift-type (am) and engine-type (vs) categories.
 core:
+  - package: r
+    code: |
+      cut(breaks = ar, values = ar, right = FALSE)
+  - package: tibble
+    code: |
+      rownames_to_column()
   - package: forcats
     code: |
       as_factor()
       fct_recode()
       fct_cross()
-date: 2021-10-28
+date: 2023-03-09
 date_start: 2020-04-14
 output:
   html_document:
@@ -22,7 +30,7 @@ output:
 always_allow_html: true
 ---
 
-### Factor Label and Combine
+### Generate Categorical Variables
 
 ```{r global_options, include = FALSE}
 try(source("../../.Rprofile"))
@@ -31,6 +39,36 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_one`
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
+
+#### Cut Continuous Variable to Categorical Variable
+
+We have a continuous variable, we cut it with explicitly specified cuts to generate a categorical variable, and label it. We will use [base::cut()](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/cut). 
+
+```{r}
+# break points to specific
+fl_min_mpg <- min(mtcars$mpg)
+fl_max_mpg <- max(mtcars$mpg)
+ar_fl_cuts <- c(10, 20, 30, 40)
+# generate labels
+ar_st_cuts_lab <- c("10<=mpg<20", "20<=mpg<30", "30<=mpg<40")
+# generate new variable
+mtcars_cate <- mtcars %>% 
+  tibble::rownames_to_column(var = "cars") %>%
+  mutate(mpg_grp = base::cut(mpg,
+      breaks = ar_fl_cuts, 
+      labels = ar_st_cuts_lab,
+      # if right is FALSE, interval is closed on the left
+      right = FALSE
+    )
+  ) %>% select(cars, mpg_grp, mpg) %>% 
+  arrange(mpg) %>% group_by(mpg_grp) %>%
+  slice_head(n=3)
+# Display
+st_caption <- "Cuts a continuous var to a categorical var with labels"
+kable(mtcars_cate,
+    caption = st_caption
+) %>% kable_styling_fc()
+```
 
 #### Factor, Label, Cross and Graph
 

@@ -6,6 +6,7 @@ description: |
   E notation.
   Get N cuts from M points.
   Convert numeric array to string array with positive and negative signs.
+  Calculation over array.
 core:
   - package: r
     code: |
@@ -19,7 +20,10 @@ core:
       tail()
       na_if()
       Re()
-date: 2021-12-22
+  - package: purrr
+    code: |
+      reduce()
+date: 2023-03-08
 date_start: 2020-04-01
 output:
   pdf_document:
@@ -258,4 +262,37 @@ st_it_vals[ar_it_vals>0] <- paste0("+", st_it_vals[ar_it_vals>0])
 st_it_vals[ar_it_vals==0] <- paste0("±", st_it_vals[ar_it_vals==0])
 # Display
 print(st_it_vals)
+```
+
+#### Basic array calculations 
+
+First, we demonstrate how purrr::reduce() works with a simple summation example. We use the addition operator.
+
+```{r}
+# Using R pipe operator
+# 1 + 2 + 3 = 6
+fl_sum <- 1:3 |> purrr::reduce(`+`)
+print(fl_sum)
+```
+
+Second, what if there is an NA value? NA will be ignored, we will write a custom function. The custom function, to work with reduce, should be such that it is "a binary function that takes two values and returns a single value".
+
+```{r}
+# define sum function that ignores NA
+sum_ignore_na <- function(x,y) {
+  if (!is.na(x) && !is.na(y)) {
+    x + y
+  } else if (is.na(x)) {
+    y
+  } else if (is.na(y)) {
+    x
+  } else {
+    NA
+  }
+}
+
+# Using R pipe operator
+# 1 + 10 + 1 = 12
+fl_sum <- c(1, 10, NA, 1) |> purrr::reduce(sum_ignore_na)
+print(fl_sum)
 ```

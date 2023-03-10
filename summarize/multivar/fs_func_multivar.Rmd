@@ -1,15 +1,19 @@
 ---
-title: "R Example Apply the Same Function Over Multiple Variables"
-titleshort: "Apply the Same Function over Columns of Matrix"
+title: "Apply the Same Function over Columns and Row Groups"
+titleshort: "Apply the Same Function over Columns and Row Groups"
 description: |
+  Sum values within-row across multiple columns, ignoring NA. 
+  Sum values within-group across multiple rows for matched columns, ignoring NA.
   Replace NA values in selected columns by alternative values.
   Cumulative sum over multiple variables.
   Rename various various with common prefix and suffix appended.
 core:
   - package: r
     code: |
+      rowSums()
       cumsum()
       gsub()
+      mutate_at(vars(matches('A|B')), .funs = list(gs = ~sum(.)))
       mutate_at(vars(contains('V')), .funs = list(cumu = ~cumsum(.)))
       rename_at(vars(contains("V") ), list(~gsub("M", "", .)))
   - package: dplyr
@@ -18,7 +22,10 @@ core:
       mutate_at()
       rename_at(vars(starts_with("V")), funs(str_replace(., "V", "var")))
       mutate_at(vars(one_of(c('var1', 'var2'))), list(~replace_na(., 99)))
-date: 2022-07-12
+  - package: purrr
+    code: |
+      reduce()
+date: 2023-03-09
 date_start: 2020-04-01
 output:
   pdf_document:
@@ -43,6 +50,64 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
 
+#### Sum Across Columns
+
+We compute sum over several variables in the mtcars dataset. We will sum over several variables with shared prefix, after adding these prefix first. We introduce an NA value to make sure that we can sum ignoring NA
+
+We sum using three different methods below: (1) [purrr:reduce()](https://purrr.tidyverse.org/reference/reduce.html), (2) [base::rowSums()](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/colSums), (3) Manual sum. Note that the rowSums option is able to sum ignoring NA. 
+
+```{r}
+# we introduce NA value to first row
+mtcars[1,1] <- NA
+# Rename variables, and sum across
+mtcars_rowsum <- mtcars %>%
+    rename(stats_mpg = mpg, stats_cyl = cyl, stats_hp = hp) %>%
+    mutate(
+        cs_reduce = purrr::reduce(
+            dplyr::pick(contains("stats")),
+            `+`
+        ),
+        cs_rowsum = base::rowSums(
+            dplyr::pick(contains("stats")),
+            na.rm = TRUE
+        ),
+        cs_manual = stats_mpg + stats_cyl + stats_hp
+    ) %>%
+    select(matches("stats|cs"), gear)
+# Display
+st_caption <- "sum across columns"
+kable(mtcars_rowsum %>% slice_head(n = 5),
+    caption = st_caption
+) %>% kable_styling_fc_wide()
+```
+
+See [this](https://stackoverflow.com/a/72069394/8280804) discussion for column sum peed comparisons. 
+
+#### Sum Across Rows within Group
+
+Following from the prior section, we now sum across rows within group. 
+
+```{r}
+# we introduce NA value to first row
+# mtcars[1,1] <- NA
+# Rename variables, and sum across
+mtcars_grpsum <- mtcars_rowsum %>%  
+    arrange(gear) %>% group_by(gear) %>%
+    # srs = sum row sum
+    mutate_at(vars(matches("stats|cs")), 
+        .funs = list(gs = ~sum(., na.rm=TRUE))
+    ) %>% 
+    select(gear, matches("gs")) %>% 
+    slice_head(n=1)
+# Display
+st_caption <- "gs = group sum, cs = col sum over the columns with stats as prefix, sum across rows after col sum; gear = 4 difference for cs_rowsum_gs because it allowed for summing ignoring NA for values across columns"
+kable(mtcars_grpsum ,
+    caption = st_caption
+) %>% kable_styling_fc_wide()
+```
+
+
+Now, we sum across rows within group. 
 #### Replace NA for Multiple Variables
 
 Replace some variables NA by some values, and other variables' NAs by other values.
@@ -51,25 +116,27 @@ Replace some variables NA by some values, and other variables' NAs by other valu
 # Define
 it_N <- 3
 it_M <- 5
-svr_id <- 'date'
+svr_id <- "date"
 
 # NA dataframe, note need to define as NA_real_
 # if define as NA, will not be able to replace with 99 column
 # would be logical rather than double.
-df_NA <- as_tibble(matrix(NA_real_, nrow=it_N, ncol=it_M)) %>%
-  rowid_to_column(var = svr_id) %>%
-  rename_at(vars(starts_with("V")),
-            funs(str_replace(., "V", "var")))
+df_NA <- as_tibble(matrix(NA_real_, nrow = it_N, ncol = it_M)) %>%
+    rowid_to_column(var = svr_id) %>%
+    rename_at(
+        vars(starts_with("V")),
+        funs(str_replace(., "V", "var"))
+    )
 kable(df_NA) %>%
-  kable_styling_fc()
+    kable_styling_fc()
 
 # Replace NA
 df_NA_replace <- df_NA %>%
-  mutate_at(vars(one_of(c('var1', 'var2'))), list(~replace_na(., 0))) %>%
-  mutate_at(vars(one_of(c('var3', 'var5'))), list(~replace_na(., 99)))
+    mutate_at(vars(one_of(c("var1", "var2"))), list(~ replace_na(., 0))) %>%
+    mutate_at(vars(one_of(c("var3", "var5"))), list(~ replace_na(., 99)))
 
 kable(df_NA_replace) %>%
-  kable_styling_fc()
+    kable_styling_fc()
 ```
 
 #### Cumulative Sum Multiple Variables
@@ -80,28 +147,30 @@ Each row is a different date, each column is the profit a firms earns on a date,
 # Define
 it_N <- 3
 it_M <- 5
-svr_id <- 'date'
+svr_id <- "date"
 
 # random dataframe, daily profit of firms
 # dp_fx: daily profit firm ID something
 set.seed(123)
-df_daily_profit <- as_tibble(matrix(rnorm(it_N*it_M), nrow=it_N, ncol=it_M)) %>%
-  rowid_to_column(var = svr_id) %>%
-  rename_at(vars(starts_with("V")),
-            funs(str_replace(., "V", "dp_f")))
+df_daily_profit <- as_tibble(matrix(rnorm(it_N * it_M), nrow = it_N, ncol = it_M)) %>%
+    rowid_to_column(var = svr_id) %>%
+    rename_at(
+        vars(starts_with("V")),
+        funs(str_replace(., "V", "dp_f"))
+    )
 kable(df_daily_profit) %>%
-  kable_styling_fc()
+    kable_styling_fc()
 
 # cumulative sum with suffix
 df_cumu_profit_suffix <- df_daily_profit %>%
-  mutate_at(vars(contains('dp_f')), .funs = list(cumu = ~cumsum(.)))
+    mutate_at(vars(contains("dp_f")), .funs = list(cumu = ~ cumsum(.)))
 kable(df_cumu_profit_suffix) %>%
-  kable_styling_fc_wide()
+    kable_styling_fc_wide()
 
 # cumulative sum variables naming to prefix
 df_cumu_profit <- df_cumu_profit_suffix %>%
-  rename_at(vars(contains( "_cumu") ), list(~paste("cp_f", gsub("_cumu", "", .), sep = ""))) %>%
-  rename_at(vars(contains( "cp_f") ), list(~gsub("dp_f", "", .)))
+    rename_at(vars(contains("_cumu")), list(~ paste("cp_f", gsub("_cumu", "", .), sep = ""))) %>%
+    rename_at(vars(contains("cp_f")), list(~ gsub("dp_f", "", .)))
 kable(df_cumu_profit) %>%
-  kable_styling_fc_wide()
+    kable_styling_fc_wide()
 ```

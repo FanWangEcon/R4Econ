@@ -1,8 +1,34 @@
-## ----global_options, include = FALSE-----------------------------------------------------------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE---------------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ---- amto.tibble.fs_tib_na.find_replace, eval=TRUE--------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------
+# break points to specific
+fl_min_mpg <- min(mtcars$mpg)
+fl_max_mpg <- max(mtcars$mpg)
+ar_fl_cuts <- c(10, 20, 30, 40)
+# generate labels
+ar_st_cuts_lab <- c("10<=mpg<20", "20<=mpg<30", "30<=mpg<40")
+# generate new variable
+mtcars_cate <- mtcars %>% 
+  tibble::rownames_to_column(var = "cars") %>%
+  mutate(mpg_grp = base::cut(mpg,
+      breaks = ar_fl_cuts, 
+      labels = ar_st_cuts_lab,
+      # if right is FALSE, interval is closed on the left
+      right = FALSE
+    )
+  ) %>% select(cars, mpg_grp, mpg) %>% 
+  arrange(mpg) %>% group_by(mpg_grp) %>%
+  slice_head(n=3)
+# Display
+st_caption <- "Cuts a continuous var to a categorical var with labels"
+kable(mtcars_cate,
+    caption = st_caption
+) %>% kable_styling_fc()
+
+
+## ---- amto.tibble.fs_tib_na.find_replace, eval=TRUE------------------------------------------------------------
 # First make sure these are factors
 tb_mtcars <- as_tibble(mtcars) %>% 
   mutate(vs = as_factor(vs), am = as_factor(am))
@@ -31,7 +57,7 @@ tb_mtcars_selected <- tb_mtcars_selected %>%
 print(tb_mtcars_selected[1:10,])
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------
 # Labeling
 st_title <- paste0('Distribution of MPG and QSEC from mtcars')
 st_subtitle <- paste0('https://fanwangecon.github.io/',
