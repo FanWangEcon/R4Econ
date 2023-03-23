@@ -130,6 +130,16 @@ intToUtf8(rev(utf8ToInt(substring(intToUtf8(rev(utf8ToInt(strsplit(st_cut_cate, 
 gsub(strsplit(st_cut_cate, ",")[[1]][2],  pattern = "]", replacement = "")
 ```
 
+Make a part of a string bold. Go from "ABC EFG, OPQ, RST" to "**ABC EFG**, OPQ, RST". This could be for making the name of an author bold, and preserve affiliation information. 
+
+```{r}
+st_paper_author_ori <- "ABC EFG, OPQ, RST"
+ar_st_ori <- strsplit(st_paper_author_ori, ", ")[[1]]
+st_after_1stcomma <- paste0(ar_st_ori[2:length(ar_st_ori)], collapse= ", ")
+st_paper_author <- paste0('<b>', ar_st_ori[1], "</b>, ", st_after_1stcomma )
+print(st_paper_author)
+```            
+
 #### String Concatenate
 
 Concatenate string array into a single string. 

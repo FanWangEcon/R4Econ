@@ -1,0 +1,99 @@
+---
+title: "Cross-group Within-time and Cross-time Within-group Statistics"
+description: |
+  Compute relative values across countries at each time, and relative values within country across time. 
+core:
+  - package: dplyr
+    code: |
+      arrange(v1, v2) %>% group_by(v1) %>% mutate(stats := v3/first(v3))
+date: 2023-03-21
+date_start: 2023-03-21
+output:
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+always_allow_html: true
+urlcolor: blue
+---
+
+### Within Panel Cross-time and Cross-group Statistics
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+#### Comparing Three Countries over Time
+
+Given three time series for three "countries", we compute percentage change from initial year for each country, and compare relative values within each timer period versus one country. 
+
+First, we generate the core data inputs. We assume that the output here would be the data structure we face prior to generating the figures we are interested in. We use data from the attitude dataset, but re-interpret what the columns are. We work with data from three "countries" at the same time, which generalizes also to the two countries case. 
+
+```{r}
+# Load data, and treat index as "year"
+# pretend data to be country-data
+df_attitude <- as_tibble(attitude) %>%
+  rowid_to_column(var = "year") %>% 
+  select(year, rating, complaints, learning) %>% 
+  rename(stats_usa = rating, 
+         stats_canada = complaints, 
+         stats_uk = learning)
+
+# Wide to Long
+df_attitude <- df_attitude %>%
+  pivot_longer(cols = starts_with('stats_'),
+               names_to = c('country'),
+               names_pattern = paste0("stats_(.*)"),
+               values_to = "rating")
+
+# Print 
+kable(df_attitude[1:10,]) %>% kable_styling_fc()
+```
+
+Second, we generate additional data inputs. Specifically, we also generate ratios of values with respect to he "first" country, within each year. 
+
+```{r}
+# Sort and get list of countries
+ar_countries_sorted <- df_attitude %>% 
+  ungroup() %>% distinct(country) %>% arrange(country) %>% 
+  pull(country)
+st_ratio_var <- paste0('ratings_ratio_vs_country', ar_countries_sorted[1])
+
+# Generate ratio over the first location
+df_attitude <- df_attitude %>% 
+  arrange(year, country) %>% group_by(year) %>% 
+  mutate(!!sym(st_ratio_var) := rating/first(rating))
+  
+# Print 
+kable(df_attitude[1:10,]) %>% kable_styling_fc()
+```
+
+Third, we now generate ratios of values with respect to the first year, within each country. 
+
+```{r}
+# Sort and get list of countries
+ar_years_sorted <- df_attitude %>% 
+  ungroup() %>% distinct(year) %>% arrange(year) %>% 
+  pull(year)
+st_ratio_var <- paste0('ratings_ratio_vs_year', ar_years_sorted[1])
+
+# Generate ratio over the first location
+df_attitude <- df_attitude %>% 
+  arrange(country, year) %>% group_by(country) %>% 
+  mutate(!!sym(st_ratio_var) := rating/first(rating))
+  
+# Print
+# Within each country, we show the first 3 years 
+kable(df_attitude %>% 
+  group_by(country) %>% 
+  slice_min(order_by = year, n = 3)
+  ) %>% kable_styling_fc()
+```

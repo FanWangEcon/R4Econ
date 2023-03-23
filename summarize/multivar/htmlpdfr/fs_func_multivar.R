@@ -1,8 +1,22 @@
-## ----global_options, include = FALSE---------------------------------------------------------------------------
+## ----global_options, include = FALSE-----------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## --------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------
+# grouping by variables
+ar_st_groups <- c("gear", "carb")
+# use across to conduct operation over multiple variables
+mtcars_3var_times10 <- mtcars %>% 
+  group_by(across(one_of(ar_st_groups))) %>%
+  mutate(across(matches("mpg|cyl|disp"), ~ .x * 10)) %>%
+  select(gear, carb, mpg, cyl, disp) %>% head(n=5)
+# pring
+# Multiply several variables by 10
+kable(mtcars_3var_times10 %>% slice_head(n = 5)) %>% 
+    kable_styling_fc()
+
+
+## ----------------------------------------------------------------------------------------------------------
 # we introduce NA value to first row
 mtcars[1,1] <- NA
 # Rename variables, and sum across
@@ -21,13 +35,11 @@ mtcars_rowsum <- mtcars %>%
     ) %>%
     select(matches("stats|cs"), gear)
 # Display
-st_caption <- "sum across columns"
-kable(mtcars_rowsum %>% slice_head(n = 5),
-    caption = st_caption
-) %>% kable_styling_fc_wide()
+# caption: "sum across columns"
+kable(mtcars_rowsum %>% slice_head(n = 5)) %>% kable_styling_fc_wide()
 
 
-## --------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------
 # we introduce NA value to first row
 # mtcars[1,1] <- NA
 # Rename variables, and sum across
@@ -40,13 +52,14 @@ mtcars_grpsum <- mtcars_rowsum %>%
     select(gear, matches("gs")) %>% 
     slice_head(n=1)
 # Display
-st_caption <- "gs = group sum, cs = col sum over the columns with stats as prefix, sum across rows after col sum; gear = 4 difference for cs_rowsum_gs because it allowed for summing ignoring NA for values across columns"
-kable(mtcars_grpsum ,
-    caption = st_caption
-) %>% kable_styling_fc_wide()
+# caption: "gs = group sum, cs = col sum over the columns 
+# with stats as prefix, sum across rows after col sum; gear = 4 
+# difference for cs-rowsum-gs because it allowed for summing 
+# ignoring NA for values across columns"
+kable(mtcars_grpsum) %>% kable_styling_fc_wide()
 
 
-## ----support function multivar cumsum--------------------------------------------------------------------------
+## ----support function multivar cumsum----------------------------------------------------------------------
 # Define
 it_N <- 3
 it_M <- 5
@@ -73,7 +86,7 @@ kable(df_NA_replace) %>%
     kable_styling_fc()
 
 
-## ----support function multivar cumsum--------------------------------------------------------------------------
+## ----support function multivar cumsum----------------------------------------------------------------------
 # Define
 it_N <- 3
 it_M <- 5

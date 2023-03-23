@@ -1,15 +1,15 @@
-## ----global_options, include = FALSE-----------------------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE-----------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------
 # Libraries
 # library(tidyverse)
 
 # Load in CSV
 bl_save_img <- TRUE
-spt_csv_root <- c("G:/repos/R4Econ/tabgraph/ggline/_file/")
-spt_img_root <- c("G:/repos/R4Econ/tabgraph/ggline/_file/")
+spt_csv_root <- c("C:/Users/fan/R4Econ/tabgraph/ggline/_file/")
+spt_img_root <- c("C:/Users/fan/R4Econ/tabgraph/ggline/_file/")
 spn_cev_data <- paste0(spt_csv_root, "cev_data.csv")
 spn_cev_graph <- paste0(spt_img_root, "cev_graph.png")
 spn_cev_graph_eps <- paste0(spt_img_root, "cev_graph.eps")
@@ -155,10 +155,10 @@ if (bl_save_img) {
 
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------
 # Load in CSV
 bl_save_img <- TRUE
-spt_csv_root <- c("G:/repos/R4Econ/tabgraph/ggline/_file/")
+spt_csv_root <- c("C:/Users/fan/R4Econ/tabgraph/ggline/_file/")
 spt_img_root <- spt_csv_root
 spn_flfp_sklocc_data <- paste0(spt_csv_root, "flfp_data.csv")
 spn_flfp_sklocc_graph <- paste0(spt_img_root, "flfp_sam2fshr_graph.png")
@@ -323,7 +323,7 @@ if (bl_save_img) {
 }
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------
 # The graphing function with limited parameter options.
 ff_grhlfp_gepeedu_byocc <-
   function(bl_save_img = TRUE,
@@ -339,7 +339,7 @@ ff_grhlfp_gepeedu_byocc <-
            )) {
 
     # Load in CSV
-    spt_csv_root <- c("G:/repos/R4Econ/tabgraph/ggline/_file/")
+    spt_csv_root <- c("C:/Users/fan/R4Econ/tabgraph/ggline/_file/")
     spt_img_root <- spt_csv_root
     spn_flfp_sklocc_data <- paste0(spt_csv_root, "flfp_data.csv")
     spn_flfp_sklocc_graph <- paste0(
@@ -526,7 +526,7 @@ ff_grhlfp_gepeedu_byocc <-
   }
 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------
 it_width <- 100
 it_height <- 100
 st_subtitle <- paste0(

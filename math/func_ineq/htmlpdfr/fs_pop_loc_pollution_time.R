@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE-----------------------------------------------------------------------------
+## ----global_options, include = FALSE-----------------------------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ----------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------
 # Locations and Time periods
 it_M_location <- 10
 it_D_y <- 12
@@ -16,7 +16,7 @@ ar_it_time_disp <- seq(1, it_D_y, length.out=it_time_disp)
 ar_it_time_disp <- round(ar_it_time_disp)
 
 
-## ----------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------
 # Define parameters
 fl_mean_meanlog_acrossM <- 3.4
 fl_sd_meanlog_acrossM <- 0.5
@@ -40,7 +40,7 @@ print(paste(round(ar_sdlog_acrossM,2)))
 print(mt_it_peak)
 
 
-## ----------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------
 # 1. Generate matrix to be filled
 mt_Z_cone <- matrix(data=NA, nrow=it_M_location, ncol=it_D_y)
 rownames(mt_Z_cone) <- paste0('m=', seq(1,it_M_location))
@@ -85,7 +85,7 @@ tb_Z_cone[ar_it_loc_disp,c(1,ar_it_time_disp+1)] %>%
   kable(caption = st_caption) %>% kable_styling_fc_wide()
 
 
-## ----------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------
 # 1. number of quantiles of interest
 ar_quantiles <- c(0.2, 0.5, 0.8)
 it_quantiles <- length(ar_quantiles)
@@ -98,14 +98,14 @@ colnames(mt_S_moments) <- c('pm_indi_mean', paste0('pm_indi_q', round(ar_quantil
 # 3. Compute quantiles
 for (it_m in seq(1, it_M_location)){
   ar_Z <- mt_Z_cone[it_m, ]
-  fl_mean <- mean(ar_Z)
+  fl_mean <- mean(ar_Z, na.rm=TRUE)
   # note we use type=1, this uses the nearest-rank method
-  ar_quant_vals <- stats::quantile(ar_Z, probs=ar_quantiles, type=1)
+  ar_quant_vals <- stats::quantile(ar_Z, probs=ar_quantiles, na.rm = TRUE, type=1)
   mt_S_moments[it_m,] <- c(fl_mean, ar_quant_vals)
 }
 
 
-## ----------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------
 # Column Names
 ar_st_varnames <- c("locational_path", colnames(mt_S_moments))
 
@@ -121,7 +121,7 @@ tb_loc_indi_dist[ar_it_loc_disp,] %>%
   kable(caption = st_caption) %>% kable_styling_fc_wide()
 
 
-## ----------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------
 # 1. number of quantiles of interest
 ar_thresholds <- seq(0, 90, by=10)
 ar_thresholds <- c(0, 15, 35, 50, 75)
@@ -140,7 +140,7 @@ for (it_m in seq(1, it_M_location)){
   for (it_thres in seq(1, it_thresholds)){
     ar_Z_thres <- ar_Z
     ar_Z_thres[ar_Z < ar_thresholds[it_thres]] <- 0
-    fl_mean_thres <- mean(ar_Z_thres)
+    fl_mean_thres <- mean(ar_Z_thres, na.rm = T)
     ar_mean_thres <- c(ar_mean_thres, fl_mean_thres)
   }
   # note we use type=1, this uses the nearest-rank method
@@ -148,7 +148,7 @@ for (it_m in seq(1, it_M_location)){
 }
 
 
-## ----------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------------------------------
 # Column Names
 ar_st_varnames <- c("locational_path", colnames(mt_S_mean_thres))
 

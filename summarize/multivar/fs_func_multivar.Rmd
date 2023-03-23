@@ -13,19 +13,21 @@ core:
       rowSums()
       cumsum()
       gsub()
-      mutate_at(vars(matches('A|B')), .funs = list(gs = ~sum(.)))
-      mutate_at(vars(contains('V')), .funs = list(cumu = ~cumsum(.)))
-      rename_at(vars(contains("V") ), list(~gsub("M", "", .)))
+      mutate_at(vars(matches()), .funs = list(gs = ~sum(.)))
+      mutate_at(vars(contains()), .funs = list(cumu = ~cumsum(.)))
+      rename_at(vars(contains()), list(~gsub("M", "", .)))
   - package: dplyr
     code: |
+      group_by(across(one_of(ar_st_vars)))
+      mutate(across(matches(), func)
       rename_at()
       mutate_at()
-      rename_at(vars(starts_with("V")), funs(str_replace(., "V", "var")))
-      mutate_at(vars(one_of(c('var1', 'var2'))), list(~replace_na(., 99)))
+      rename_at(vars(starts_with()), funs(str_replace(., "v", "var")))
+      mutate_at(vars(one_of()), list(~replace_na(., 99)))
   - package: purrr
     code: |
       reduce()
-date: 2023-03-09
+date: 2023-03-20
 date_start: 2020-04-01
 output:
   pdf_document:
@@ -40,7 +42,7 @@ always_allow_html: true
 urlcolor: blue
 ---
 
-### Generate Replace Variables
+### Apply Function Over Multiple Columns and Rows
 
 ```{r global_options, include = FALSE}
 try(source("../../.Rprofile"))
@@ -49,6 +51,28 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_one`
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
+
+#### Convert Subset of Variables to Numeric 
+
+Multiply a subset of variables all by 10. We use dplyr's [across](https://dplyr.tidyverse.org/reference/across.html) function to achieve this. 
+
+Note that in the example below, we also use [across](https://dplyr.tidyverse.org/reference/across.html) with group by to include a string array of grouping by variables. 
+
+Note: "across() makes it easy to apply the same transformation to multiple columns, allowing you to use select() semantics inside in "data-masking" functions like summarise() and mutate()."
+
+```{r}
+# grouping by variables
+ar_st_groups <- c("gear", "carb")
+# use across to conduct operation over multiple variables
+mtcars_3var_times10 <- mtcars %>% 
+  group_by(across(one_of(ar_st_groups))) %>%
+  mutate(across(matches("mpg|cyl|disp"), ~ .x * 10)) %>%
+  select(gear, carb, mpg, cyl, disp) %>% head(n=5)
+# pring
+# Multiply several variables by 10
+kable(mtcars_3var_times10 %>% slice_head(n = 5)) %>% 
+    kable_styling_fc()
+```
 
 #### Sum Across Columns
 
@@ -75,10 +99,8 @@ mtcars_rowsum <- mtcars %>%
     ) %>%
     select(matches("stats|cs"), gear)
 # Display
-st_caption <- "sum across columns"
-kable(mtcars_rowsum %>% slice_head(n = 5),
-    caption = st_caption
-) %>% kable_styling_fc_wide()
+# caption: "sum across columns"
+kable(mtcars_rowsum %>% slice_head(n = 5)) %>% kable_styling_fc_wide()
 ```
 
 See [this](https://stackoverflow.com/a/72069394/8280804) discussion for column sum peed comparisons. 
@@ -100,14 +122,13 @@ mtcars_grpsum <- mtcars_rowsum %>%
     select(gear, matches("gs")) %>% 
     slice_head(n=1)
 # Display
-st_caption <- "gs = group sum, cs = col sum over the columns with stats as prefix, sum across rows after col sum; gear = 4 difference for cs_rowsum_gs because it allowed for summing ignoring NA for values across columns"
-kable(mtcars_grpsum ,
-    caption = st_caption
-) %>% kable_styling_fc_wide()
+# caption: "gs = group sum, cs = col sum over the columns 
+# with stats as prefix, sum across rows after col sum; gear = 4 
+# difference for cs-rowsum-gs because it allowed for summing 
+# ignoring NA for values across columns"
+kable(mtcars_grpsum) %>% kable_styling_fc_wide()
 ```
 
-
-Now, we sum across rows within group. 
 #### Replace NA for Multiple Variables
 
 Replace some variables NA by some values, and other variables' NAs by other values.

@@ -78,7 +78,7 @@
 	+ with correct attributes based on CSV file names.
 	+ **r**: *cbind(ls_st, ls_st) + as_tibble(mt_st)*
 
-## Summarize Data links
+## Organize, Summarize, and Change Data links
 
 ### [Section 2.1 Counting Observation][Counting Observation] links
 
@@ -131,8 +131,8 @@
 	+ Sum values within-group across multiple rows for matched columns, ignoring NA.
 	+ Replace NA values in selected columns by alternative values.
 	+ Cumulative sum over multiple variables.
-	+ **r**: *rowSums() + cumsum() + gsub() + mutate_at(vars(matches('A|B')), .funs = list(gs = ~sum(.))) + mutate_at(vars(contains('V')), .funs = list(cumu = ~cumsum(.))) + rename_at(vars(contains("V") ), list(~gsub("M", "", .)))*
-	+ **dplyr**: *rename_at() + mutate_at() + rename_at(vars(starts_with("V")), funs(str_replace(., "V", "var"))) + mutate_at(vars(one_of(c('var1', 'var2'))), list(~replace_na(., 99)))*
+	+ **r**: *rowSums() + cumsum() + gsub() + mutate_at(vars(matches()), .funs = list(gs = ~sum(.))) + mutate_at(vars(contains()), .funs = list(cumu = ~cumsum(.))) + rename_at(vars(contains()), list(~gsub("M", "", .)))*
+	+ **dplyr**: *group_by(across(one_of(ar_st_vars))) + mutate(across(matches(), func) + rename_at() + mutate_at() + rename_at(vars(starts_with()), funs(str_replace(., "v", "var"))) + mutate_at(vars(one_of()), list(~replace_na(., 99)))*
 	+ **purrr**: *reduce()*
 
 ## Functions links
@@ -214,12 +214,15 @@
 	+ **tidyr**: *pivot_longer(cols = starts_with('zi'), names_to = c('zi'), names_pattern = paste0("zi(.)"), values_to = "ev")*
 	+ **dplyr**: *left_join()*
 
-### [Section 4.3 Join and Compare][Join and Compare] links
+### [Section 4.3 Within Panel Comparisons and Statistics][Within Panel Comparisons and Statistics] links
 
 1. [Find Closest Values Along Grids](https://fanwangecon.github.io/R4Econ/panel/join/htmlpdfr/fs_join_compare.html): [**rmd**](https://github.com/fanwangecon/R4Econ/blob/master/panel/join//fs_join_compare.Rmd) \| [**r**](https://github.com/fanwangecon/R4Econ/blob/master/panel/join/htmlpdfr/fs_join_compare.R) \| [**pdf**](https://github.com/fanwangecon/R4Econ/blob/master/panel/join/htmlpdfr/fs_join_compare.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/panel/join/htmlpdfr/fs_join_compare.html)
 	+ There is an array (matrix) of values, find the index of the values closest to another value.
 	+ **r**: *do.call(bind_rows, ls_df)*
 	+ **dplyr**: *left_join(tb, by=(c('vr_a'='vr_a', 'vr_b'='vr_b')))*
+2. [Cross-group Within-time and Cross-time Within-group Statistics](https://fanwangecon.github.io/R4Econ/panel/join/htmlpdfr/fs_cross_time_group.html): [**rmd**](https://github.com/fanwangecon/R4Econ/blob/master/panel/join//fs_cross_time_group.Rmd) \| [**r**](https://github.com/fanwangecon/R4Econ/blob/master/panel/join/htmlpdfr/fs_cross_time_group.R) \| [**pdf**](https://github.com/fanwangecon/R4Econ/blob/master/panel/join/htmlpdfr/fs_cross_time_group.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/panel/join/htmlpdfr/fs_cross_time_group.html)
+	+ Compute relative values across countries at each time, and relative values within country across time. 
+	+ **dplyr**: *arrange(v1, v2) %>% group_by(v1) %>% mutate(stats := v3/first(v3))*
 
 ## Linear Regression links
 
@@ -406,7 +409,10 @@
 
 ### [Section 10.2 ggplot Line Related Plots][ggplot Line Related Plots] links
 
-1. [ggplot Line Plot Multiple Categorical Variables With Continuous Variable](https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.html): [**rmd**](https://github.com/fanwangecon/R4Econ/blob/master/tabgraph/ggline//fs_ggline_mgrp_ncts.Rmd) \| [**r**](https://github.com/fanwangecon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.R) \| [**pdf**](https://github.com/fanwangecon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.html)
+1. [ggplot2 Basic Line Plot for Multiple Time Series](https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_basic.html): [**rmd**](https://github.com/fanwangecon/R4Econ/blob/master/tabgraph/ggline//fs_ggline_basic.Rmd) \| [**r**](https://github.com/fanwangecon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_basic.R) \| [**pdf**](https://github.com/fanwangecon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_basic.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_basic.html)
+	+ Given three time series, present both in levels, in log levels, and as ratio
+	+ **ggplot**: *ggplot() + geom_line()*
+2. [ggplot Line Plot Multiple Categorical Variables With Continuous Variable](https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.html): [**rmd**](https://github.com/fanwangecon/R4Econ/blob/master/tabgraph/ggline//fs_ggline_mgrp_ncts.Rmd) \| [**r**](https://github.com/fanwangecon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.R) \| [**pdf**](https://github.com/fanwangecon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.html)
 	+ One category is subplot, one category is line-color, one category is line-type.
 	+ One category is subplot, one category is differentiated by line-color, line-type and scatter-shapes.
 	+ One category are separate plots, two categories are subplots rows and columns, one category is differentiated by line-color, line-type and scatter-shapes.
