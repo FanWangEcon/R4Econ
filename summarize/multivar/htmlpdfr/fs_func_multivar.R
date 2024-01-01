@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE-----------------------------------------------------------------------
+## ----global_options, include = FALSE--------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ----------------------------------------------------------------------------------------------------------
+## -------------------------------------------------------------------------------------
 # grouping by variables
 ar_st_groups <- c("gear", "carb")
 # use across to conduct operation over multiple variables
@@ -16,7 +16,42 @@ kable(mtcars_3var_times10 %>% slice_head(n = 5)) %>%
     kable_styling_fc()
 
 
-## ----------------------------------------------------------------------------------------------------------
+## -------------------------------------------------------------------------------------
+# Generate data, 12 months as columns, and 
+mt_data_rand <- matrix(rnorm(36, mean=0, sd=1), nrow=3, ncol=12)
+it_rows <- seq(1, dim(mt_data_rand)[1])
+it_cols <- seq(1, dim(mt_data_rand)[2])
+# convert to table, column as month with leading 0
+colnames(mt_data_rand) <- paste0('m', sprintf("%02d", it_cols))
+tb_data_full <- as_tibble(mt_data_rand, rownames = NA) %>% 
+    mutate(loc = paste0("loc", sprintf("%02d", row_number()))) %>%
+    select(loc, everything())
+# Display
+kable(tb_data_full) %>% kable_styling_fc_wide()  
+
+
+## -------------------------------------------------------------------------------------
+# Extract the data components from the tibble, tibble has row and column names
+tb_data_only <- tb_data_full %>% 
+    column_to_rownames(var = "loc") %>% 
+    select(contains("m"))
+# Compute row specific quantiles
+ar_quantiles_by_row <- apply(tb_data_only, 1, quantile, probs=0.75)
+# Display
+print(ar_quantiles_by_row)
+
+
+## -------------------------------------------------------------------------------------
+# One particular quantil from location
+tb_loc_quantile <- as_tibble(ar_quantiles_by_row) %>% 
+    mutate(loc = names(ar_quantiles_by_row)) %>%
+    rename(quantile = value) %>%
+    select(loc, everything())
+# Display
+kable(tb_loc_quantile) %>% kable_styling_fc()  
+
+
+## -------------------------------------------------------------------------------------
 # we introduce NA value to first row
 mtcars[1,1] <- NA
 # Rename variables, and sum across
@@ -39,7 +74,7 @@ mtcars_rowsum <- mtcars %>%
 kable(mtcars_rowsum %>% slice_head(n = 5)) %>% kable_styling_fc_wide()
 
 
-## ----------------------------------------------------------------------------------------------------------
+## -------------------------------------------------------------------------------------
 # we introduce NA value to first row
 # mtcars[1,1] <- NA
 # Rename variables, and sum across
@@ -59,7 +94,7 @@ mtcars_grpsum <- mtcars_rowsum %>%
 kable(mtcars_grpsum) %>% kable_styling_fc_wide()
 
 
-## ----support function multivar cumsum----------------------------------------------------------------------
+## ----support function multivar cumsum-------------------------------------------------
 # Define
 it_N <- 3
 it_M <- 5
@@ -86,7 +121,7 @@ kable(df_NA_replace) %>%
     kable_styling_fc()
 
 
-## ----support function multivar cumsum----------------------------------------------------------------------
+## ----support function multivar cumsum-------------------------------------------------
 # Define
 it_N <- 3
 it_M <- 5

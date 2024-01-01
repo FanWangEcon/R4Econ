@@ -2,6 +2,7 @@
 title: "Apply the Same Function over Columns and Row Groups"
 titleshort: "Apply the Same Function over Columns and Row Groups"
 description: |
+  Compute row-specific quantiles, based on values across columns within each row.
   Sum values within-row across multiple columns, ignoring NA. 
   Sum values within-group across multiple rows for matched columns, ignoring NA.
   Replace NA values in selected columns by alternative values.
@@ -52,7 +53,7 @@ try(source("../../.Rprofile"))
 `r text_shared_preamble_two`
 `r text_shared_preamble_thr`
 
-#### Convert Subset of Variables to Numeric 
+#### Convert Subset of Variables to Numeric
 
 Multiply a subset of variables all by 10. We use dplyr's [across](https://dplyr.tidyverse.org/reference/across.html) function to achieve this. 
 
@@ -74,7 +75,53 @@ kable(mtcars_3var_times10 %>% slice_head(n = 5)) %>%
     kable_styling_fc()
 ```
 
-#### Sum Across Columns
+#### Compute Row-specific Quantiles using Data Across Columns
+
+We want to compute quantiles for each location, based on monthly variations in columns.
+
+First, we generate a table with 12 columns (for months) and 3 rows (for locations). 
+
+```{r}
+# Generate data, 12 months as columns, and 
+mt_data_rand <- matrix(rnorm(36, mean=0, sd=1), nrow=3, ncol=12)
+it_rows <- seq(1, dim(mt_data_rand)[1])
+it_cols <- seq(1, dim(mt_data_rand)[2])
+# convert to table, column as month with leading 0
+colnames(mt_data_rand) <- paste0('m', sprintf("%02d", it_cols))
+tb_data_full <- as_tibble(mt_data_rand, rownames = NA) %>% 
+    mutate(loc = paste0("loc", sprintf("%02d", row_number()))) %>%
+    select(loc, everything())
+# Display
+kable(tb_data_full) %>% kable_styling_fc_wide()  
+```
+
+Second, using apply to compute quantiles, row by row 
+
+```{r}
+# Extract the data components from the tibble, tibble has row and column names
+tb_data_only <- tb_data_full %>% 
+    column_to_rownames(var = "loc") %>% 
+    select(contains("m"))
+# Compute row specific quantiles
+ar_quantiles_by_row <- apply(tb_data_only, 1, quantile, probs=0.75)
+# Display
+print(ar_quantiles_by_row)
+```
+
+Third, generate matrix of two columns, ID and quantile. 
+
+```{r}
+# One particular quantil from location
+tb_loc_quantile <- as_tibble(ar_quantiles_by_row) %>% 
+    mutate(loc = names(ar_quantiles_by_row)) %>%
+    rename(quantile = value) %>%
+    select(loc, everything())
+# Display
+kable(tb_loc_quantile) %>% kable_styling_fc()  
+```
+
+
+#### Compute Row-specific Sums using Data Across Columns
 
 We compute sum over several variables in the mtcars dataset. We will sum over several variables with shared prefix, after adding these prefix first. We introduce an NA value to make sure that we can sum ignoring NA
 
