@@ -62,7 +62,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ Transposing and multiplying matrixes.
 	+ Standard basis matrix and shift matrix.
 
-## 1.4  Regular Expression, Date, and Other Special Formats
+## 1.4  Regular Expression, Date, etc.
 
 1. [R String Regular Expression (Regex)](https://fanwangecon.github.io/R4Econ/amto/misc/htmlpdfr/fs_parse_regex.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/misc//fs_parse_regex.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/misc/htmlpdfr/fs_parse_regex.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/misc/htmlpdfr/fs_parse_regex.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/misc/htmlpdfr/fs_parse_regex.html)
 	+ Regular expression.
@@ -236,7 +236,7 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 2. [Convert Table from Wide to Long with dplyr](https://fanwangecon.github.io/R4Econ/panel/widelong/htmlpdfr/fs_pivotlonger.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong//fs_pivotlonger.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong/htmlpdfr/fs_pivotlonger.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong/htmlpdfr/fs_pivotlonger.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/panel/widelong/htmlpdfr/fs_pivotlonger.html)
 	+ Given a matrix of values with row and column labels, create a table where the unit of observation are the row and column categories, and the values in the matrix is stored in a single variable.
 	+ Reshape wide to long two sets of variables, two categorical variables added to wide table.
-	+ **tidyr**: *pivot_longer(cols = starts_with('zi'), names_to = c('zi'), names_pattern = paste0("zi(.)"), values_to = "ev") + pivot_longer(cols = matches('a|b'), names_to = c('va', 'vb'), names_pattern = paste0("(.)_(.)"), values_to = "ev")*
+	+ **tidyr**: *pivot_longer(cols = starts_with('zi'), names_to = c('zi'), names_pattern = paste0("zi(.)"), values_to = "ev") + pivot_longer(cols = matches('a line b'), names_to = c('va', 'vb'), names_pattern = paste0("(.)_(.)"), values_to = "ev")*
 	+ **dplyr**: *left_join()*
 
 ## 4.3  Within Panel Comparisons and Statistics
@@ -504,6 +504,14 @@ Please contact [FanWangEcon](https://fanwangecon.github.io/) for issues or probl
 	+ Run system executable and shell commands.
 	+ Activate conda environment with shell script.
 	+ **r**: *system() + shell()*
+
+## 12.5  Run Code in Parallel in R
+
+1. [Run Code in Parallel in R](https://fanwangecon.github.io/R4Econ/development/parallel/htmlpdfr/fs_parallel.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/development/parallel//fs_parallel.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/development/parallel/htmlpdfr/fs_parallel.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/development/parallel/htmlpdfr/fs_parallel.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/development/parallel/htmlpdfr/fs_parallel.html)
+	+ Running parallel code in R
+	+ **parallel**: *detectCores() + makeCluster()*
+	+ **doParallel**: *registerDoParallel()*
+	+ **foreach**: *dopar *
 
 ----
 Please contact [![](https://img.shields.io/github/followers/fanwangecon?label=FanWangEcon&style=social)](https://github.com/FanWangEcon) [![](https://img.shields.io/twitter/follow/fanwangecon?label=%20&style=social)](https://twitter.com/fanwangecon) for issues or problems.

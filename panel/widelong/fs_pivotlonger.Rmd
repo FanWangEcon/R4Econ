@@ -8,7 +8,7 @@ core:
   - package: tidyr
     code: |
       pivot_longer(cols = starts_with('zi'), names_to = c('zi'), names_pattern = paste0("zi(.)"), values_to = "ev")
-      pivot_longer(cols = matches('a|b'), names_to = c('va', 'vb'), names_pattern = paste0("(.)_(.)"), values_to = "ev")
+      pivot_longer(cols = matches('a line b'), names_to = c('va', 'vb'), names_pattern = paste0("(.)_(.)"), values_to = "ev")
   - package: dplyr
     code: |
       left_join()
