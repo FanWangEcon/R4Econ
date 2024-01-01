@@ -1,0 +1,393 @@
+---
+title: "Time Series with Shaded Regions, plot GDP with recessions"
+description: |
+  Plot several time series with multiple shaded windows.
+  Plot GDP with shaded recession window, and differentially shaded pre- and post-recession windows.
+core:
+  - package: r
+    code: |
+      sample
+      pmin
+      diff
+      which
+  - package: ggplot
+    code: |
+      ggplot()
+      geom_line()
+      geom_rect(aes(xmin, xmax, ymin, ymax))
+      theme_light()
+      scale_colour_manual()
+      scale_shape_discrete()
+      scale_linetype_manual()
+      scale_fill_manual()
+date: 2023-12-24
+date_start: 2023-12-24
+output:
+  html_document:
+    pandoc_args: '../../_output_kniti_html.yaml'
+    includes:
+      in_header: "../../hdga.html"
+  pdf_document:
+    pandoc_args: '../../_output_kniti_pdf.yaml'
+    includes:
+      in_header: '../../preamble.tex'
+always_allow_html: true
+urlcolor: blue
+---
+
+### Time-series Plots with Shaded Areas
+
+```{r global_options, include = FALSE}
+try(source("../../.Rprofile"))
+```
+
+`r text_shared_preamble_one`
+`r text_shared_preamble_two`
+`r text_shared_preamble_thr`
+
+#### Single Time-series with Single Type of Shade
+
+We will construct three country-specific fake GDP time-series (converted from the [attitude](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/attitude.html) dataset). Then we will randomly select a subset of months and shade these months. This will generate a "recession" plot, where recession periods are shaded. 
+
+One of the assumption will be that we have data at discrete intervals, and the shaded areas will take mid-points.
+
+First, we repeat the basic time-series data construction found in [R4Econ.fs_ggline_basic](https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_basic.html).
+
+```{r}
+# Load data, and treat index as "year", pretend data to be country-data
+df_gdp <- as_tibble(attitude) %>%
+    rowid_to_column(var = "year") %>%
+    select(year, rating, complaints, learning) %>%
+    rename(stats_usa = rating, stats_uk = learning) %>%
+    pivot_longer(
+        cols = starts_with("stats_"),
+        names_to = c("country"),
+        names_pattern = paste0("stats_(.*)"),
+        values_to = "gdp"
+    )
+
+# Print
+kable(df_gdp[1:10, ]) %>% kable_styling_fc()
+```
+
+Second, we select a subset of period to shade. We generate a random subset of non-overlapping consecutive numbers following what is outlined in [R4Econ.fs_ary_generate](https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_generate.html).
+
+```{r}
+# Number of random starting index
+it_start_idx <- min(df_gdp$year)
+it_end_idx <- max(df_gdp$year)
+it_startdraws_max <- 6
+it_duramax <- 2
+it_backward_win <- 0.3
+it_forward_win <- 0.3
+
+# Random seed
+set.seed(1234)
+# Draw random index between min and max
+ar_it_start_idx <- sort(sample(
+    seq(it_start_idx, it_end_idx),
+    it_startdraws_max,
+    replace = FALSE
+))
+# Draw random durations, replace = TRUE because can repeat
+ar_it_duration <- sample(it_duramax, it_startdraws_max, replace = TRUE)
+
+# Check space between starts
+ar_it_startgap <- diff(ar_it_start_idx)
+ar_it_dura_lenm1 <- ar_it_duration[1:(length(ar_it_duration) - 1)]
+# Adjust durations
+ar_it_dura_bd <- pmin(ar_it_startgap - 2, ar_it_dura_lenm1)
+ar_it_duration[1:(length(ar_it_duration) - 1)] <- ar_it_dura_bd
+
+# Drop consecutive starts
+ar_bl_dura_nonneg <- which(ar_it_duration >= 0)
+ar_it_start_idx <- ar_it_start_idx[ar_bl_dura_nonneg]
+ar_it_duration <- ar_it_duration[ar_bl_dura_nonneg]
+
+# Print
+print(glue::glue(
+    "random starts + duration: ",
+    "{ar_it_start_idx} + {ar_it_duration}"
+))
+```
+
+Third, convert integers to half-point mid-distance, unless exceed lower or upper bounds, and build start and end points. We also construct back and forward window around
+
+```{r}
+# Offset by half of an integer
+ar_fl_start_time <- ar_it_start_idx - 0.5
+ar_fl_end_time <- ar_it_start_idx + ar_it_duration + 0.5
+
+# Bound by min and max
+ar_fl_end_time <- pmin(ar_fl_end_time, it_end_idx)
+ar_fl_start_time <- pmax(ar_fl_start_time, it_start_idx)
+
+# Backward window
+ar_fl_end_time_win_backward <- ar_fl_start_time
+ar_fl_start_time_win_backward <- pmax(
+    ar_fl_start_time - it_backward_win, it_start_idx
+)
+
+# Forward window
+ar_fl_end_time_win_forward <- pmin(
+    ar_fl_end_time + it_forward_win, it_end_idx
+)
+ar_fl_start_time_win_forward <- ar_fl_end_time
+
+# Print
+print(glue::glue(
+    "random start-time vs end-time: ",
+    "{ar_fl_start_time} + {ar_fl_end_time}"
+))
+```
+
+Fourth, we construct a dataframe with variables as start and end of each non-overlapping recessions. We have a main window, and a lower and upper window bounds as well.
+
+```{r}
+# Variable names
+# w1 = backward, w2 = main, w3 = forward, use w1, w2, w3 to facilate legend fill sorting
+ar_st_varnames <- c(
+    "recess_id",
+    "year_start_w2", "year_end_w2",
+    "year_start_w1", "year_end_w1",
+    "year_start_w3", "year_end_w3"
+)
+
+# Recession index file
+df_recession <- as_tibble(cbind(
+    ar_fl_start_time, ar_fl_end_time,
+    ar_fl_start_time_win_backward, ar_fl_end_time_win_backward,
+    ar_fl_start_time_win_forward, ar_fl_end_time_win_forward
+)) %>%
+    rowid_to_column() %>%
+    rename_all(~ c(ar_st_varnames))
+
+# Reshape from Wide to Long
+df_recession <- df_recession %>%
+    pivot_longer(
+        cols = starts_with("year"),
+        names_to = c("time", "window"),
+        names_pattern = "year_(.*)_(.*)",
+        values_to = "year"
+    ) %>%
+    pivot_wider(
+        id_cols = c("recess_id", "window"),
+        names_from = time,
+        names_prefix = "year_",
+        values_from = year
+    )
+```
+
+Fifth, visualize time-series with shaded areas for "recessions". Note that we are considering here "recessions" that are not country-specific.
+
+```{r}
+# basic chart with two lines
+pl_lines_basic <- ggplot() +
+    geom_line(data = df_gdp, aes(
+        x = year, y = gdp,
+        color = country, linetype = country
+    ), size = 1) +
+    geom_rect(data = df_recession %>%
+        filter(window == "w2"), aes(
+        xmin = year_start, xmax = year_end,
+        ymin = -Inf, ymax = Inf
+    ), alpha = 0.6, fill = "gray") +
+    labs(
+        x = paste0("Years"),
+        y = paste0("Ratings"),
+        title = paste(
+            "Main Title for this Figure over Countries (Shaded Recessions)",
+            sep = " "
+        ),
+        subtitle = paste(
+            "Subtitle for ratings changes across",
+            "countries",
+            sep = " "
+        ),
+        caption = paste(
+            "Caption for our figure here ",
+            "This is the next line ",
+            "Another line",
+            sep = ""
+        )
+    ) +
+    theme_light() +
+    facet_wrap(~country, ncol = 1)
+
+# print figure
+print(pl_lines_basic)
+```
+
+Sixth, we generate a more customized visualization with customized: (1) colors and shapes for lines as well as for windows; (2) x- and y-axis limits, labels, and breaks; (3) customized legend position. 
+
+```{r}
+# Window color
+st_win_leg_title <- "Window"
+st_win_color <- "gray"
+st_win_label <- "Recession"
+# basic chart with two lines
+pl_lines <- ggplot() +
+    geom_line(data = df_gdp, aes(
+        x = year, y = gdp,
+        color = country, linetype = country
+    ), size = 1) +
+    geom_rect(data = df_recession %>%
+        filter(window == "w2"), aes(
+        xmin = year_start, xmax = year_end,
+        ymin = -Inf, ymax = Inf,
+        fill = st_win_color
+    ), alpha = 0.6) +
+    theme_light()
+
+# Titles
+st_x <- "Years"
+st_y <- "GDP"
+st_subtitle <- "GDP changes across countries (shaded recessions)"
+pl_lines <- pl_lines +
+    labs(
+        x = st_x,
+        y = st_y,
+        subtitle = st_subtitle
+    )
+
+# Figure improvements
+# set shapes and colors
+st_line_leg_title <- "Country"
+ar_st_labels <- c(
+    bquote("UK"),
+    bquote("USA")
+)
+
+ar_st_colours <- c("#026aa3", "red")
+ar_st_linetypes <- c("solid", "longdash")
+pl_lines <- pl_lines +
+    scale_colour_manual(values = ar_st_colours, labels = ar_st_labels) +
+    scale_shape_discrete(labels = ar_st_labels) +
+    scale_linetype_manual(values = ar_st_linetypes, labels = ar_st_labels) +
+    scale_fill_manual(values = c(st_win_color), labels = c(st_win_label)) +
+    labs(
+        fill = st_win_leg_title,
+        colour = st_line_leg_title, linetype = st_line_leg_title
+    ) +
+    theme(legend.key.width = unit(2.5, "line"))
+
+# Axis
+x_breaks <- seq(1, 30, length.out = 30)
+x_labels <- paste0("Year ", x_breaks + 1990)
+
+x_min <- 1
+x_max <- 30
+
+y_breaks <- seq(30, 90, length.out = 6)
+y_labels <- paste0("y=", y_breaks)
+y_min <- 30
+y_max <- 90
+
+pl_lines <- pl_lines +
+    scale_x_continuous(
+        labels = x_labels, breaks = x_breaks,
+        limits = c(x_min, x_max)
+    ) +
+    theme(axis.text.x = element_text(
+        # Adjust x-label angle
+        angle = 90,
+        # Adjust x-label distance to x-axis (up vs down)
+        hjust = 0.4,
+        # Adjust x-label left vs right wwith respect ot break point
+        vjust = 0.5
+    )) +
+    scale_y_continuous(
+        labels = y_labels, breaks = y_breaks,
+        limits = c(y_min, y_max)
+    )
+
+# print figure
+print(pl_lines)
+```
+
+Finally, we generate a figure with three fill colors for the three windows, main, backward, and forward windows. We reuse various parameters used in the prior block.
+
+```{r}
+# Window color
+st_win_leg_title <- "Window"
+# basic chart with two lines
+pl_lines <- ggplot() +
+    geom_line(data = df_gdp, aes(
+        x = year, y = gdp,
+        color = country, linetype = country
+    ), size = 1) +
+    geom_rect(data = df_recession, aes(
+        xmin = year_start, xmax = year_end,
+        ymin = -Inf, ymax = Inf,
+        fill = window
+    ), alpha = 0.4) +
+    theme_light()
+
+# Titles
+st_x <- "Years"
+st_y <- "GDP"
+st_subtitle <- "GDP changes across countries (shaded recessions, with pre and post)"
+pl_lines <- pl_lines +
+    labs(
+        x = st_x,
+        y = st_y,
+        subtitle = st_subtitle
+    )
+
+# Figure improvements
+# fill label and colors
+ar_st_win_color <- c("darkgreen", "black", "darkgreen")
+ar_st_win_label <- c("Backward", "Recession", "Forward")
+# set shapes and colors
+st_line_leg_title <- "Country"
+ar_st_labels <- c(
+    bquote("UK"),
+    bquote("USA")
+)
+
+ar_st_colours <- c("#026aa3", "red")
+ar_st_linetypes <- c("solid", "longdash")
+pl_lines <- pl_lines +
+    scale_colour_manual(values = ar_st_colours, labels = ar_st_labels) +
+    scale_shape_discrete(labels = ar_st_labels) +
+    scale_linetype_manual(values = ar_st_linetypes, labels = ar_st_labels) +
+    scale_fill_manual(values = c(ar_st_win_color), labels = c(ar_st_win_label)) +
+    labs(
+        fill = st_win_leg_title,
+        colour = st_line_leg_title, linetype = st_line_leg_title
+    ) +
+    theme(legend.key.width = unit(2.5, "line"))
+
+# Axis
+x_breaks <- seq(1, 30, length.out = 30)
+x_labels <- paste0("Year ", x_breaks + 1990)
+
+x_min <- 1
+x_max <- 30
+
+y_breaks <- seq(30, 90, length.out = 6)
+y_labels <- paste0("y=", y_breaks)
+y_min <- 30
+y_max <- 90
+
+pl_lines <- pl_lines +
+    scale_x_continuous(
+        labels = x_labels, breaks = x_breaks,
+        limits = c(x_min, x_max)
+    ) +
+    theme(axis.text.x = element_text(
+        # Adjust x-label angle
+        angle = 90,
+        # Adjust x-label distance to x-axis (up vs down)
+        hjust = 0.4,
+        # Adjust x-label left vs right wwith respect ot break point
+        vjust = 0.5
+    )) +
+    scale_y_continuous(
+        labels = y_labels, breaks = y_breaks,
+        limits = c(y_min, y_max)
+    )
+
+# print figure
+print(pl_lines)
+```
