@@ -86,7 +86,7 @@ df_panel_rand <- as_tibble(matrix(it_M, nrow=it_N, ncol=1)) %>%
   uncount(V1) %>%
   group_by(!!sym(svr_id)) %>% mutate(date = row_number()) %>%
   ungroup() %>% mutate(in_class = case_when(rnorm(n(),mean=0,sd=1) < 0 ~ 1, TRUE ~ 0)) %>%
-  filter(in_class == 1) %>% select(!!sym(svr_id), date) %>%
+  dplyr::filter(in_class == 1) %>% select(!!sym(svr_id), date) %>%
   rename(date_in_class = date)
 
 # Print

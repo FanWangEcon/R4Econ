@@ -5,6 +5,7 @@ description: |
   Split, concatenate, subset, replace, and substring strings.
   Convert number to string without decimal and negative sign.
   Concatenate numeric and string arrays as a single string.
+  Regular expression
 core:
   - package: r
     code: |
@@ -41,7 +42,7 @@ try(source("../../.Rprofile"))
 
 #### Positive or Negative Floating Number to String
 
-There is a number, that contains decimal and possibly negative sign and has some decimals, convert this to a string that is more easily used as a file or folder name. 
+There is a number, that contains decimal and possibly negative sign and has some decimals, convert this to a string that is more easily used as a file or folder name.
 
 ```{r}
 ls_fl_rho <- c(1, -1, -1.5 -100, 0.5, 0.11111111, -199.22123)
@@ -88,7 +89,6 @@ print(paste0('st_tex_text:', st_tex_text))
 print(paste0('st_clean_a1:', st_clean_a1))
 ```
 
-
 #### Search If and Which String Contains
 
 - r if string contains
@@ -130,7 +130,7 @@ intToUtf8(rev(utf8ToInt(substring(intToUtf8(rev(utf8ToInt(strsplit(st_cut_cate, 
 gsub(strsplit(st_cut_cate, ",")[[1]][2],  pattern = "]", replacement = "")
 ```
 
-Make a part of a string bold. Go from "ABC EFG, OPQ, RST" to "**ABC EFG**, OPQ, RST". This could be for making the name of an author bold, and preserve affiliation information. 
+Make a part of a string bold. Go from "ABC EFG, OPQ, RST" to "**ABC EFG**, OPQ, RST". This could be for making the name of an author bold, and preserve affiliation information.
 
 ```{r}
 st_paper_author_ori <- "ABC EFG, OPQ, RST"
@@ -138,11 +138,11 @@ ar_st_ori <- strsplit(st_paper_author_ori, ", ")[[1]]
 st_after_1stcomma <- paste0(ar_st_ori[2:length(ar_st_ori)], collapse= ", ")
 st_paper_author <- paste0('<b>', ar_st_ori[1], "</b>, ", st_after_1stcomma )
 print(st_paper_author)
-```            
+```
 
 #### String Concatenate
 
-Concatenate string array into a single string. 
+Concatenate string array into a single string.
 
 ```{r amto.array.fs_ary_string.concatenate}
 # Simple Collapse
@@ -150,7 +150,7 @@ vars.group.by <- c('abc', 'efg')
 paste0(vars.group.by, collapse='|')
 ```
 
-Concatenate a numeric array into a single string. 
+Concatenate a numeric array into a single string.
 
 ```{r amto.array.fs_ary_string.concatenate}
 # Simple Collapse

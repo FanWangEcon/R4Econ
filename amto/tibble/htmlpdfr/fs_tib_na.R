@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE---------------------------------------------------------------------------
+## ----global_options, include = FALSE--------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## --------------------------------------------------------------------------------------------------------------
+## -------------------------------------------------------------------------------------
 # Get mtcars
 df_mtcars <- mtcars
 
@@ -19,7 +19,7 @@ df_mtcars <- df_mtcars %>%
     )
 
 
-## --------------------------------------------------------------------------------------------------------------
+## -------------------------------------------------------------------------------------
 # Labeling
 st_title <- paste0("Use case_when To Generate ifelse Groupings")
 st_subtitle <- paste0(
@@ -54,14 +54,15 @@ plt_mtcars_casewhen_scatter <-
 print(plt_mtcars_casewhen_scatter)
 
 
-## --------------------------------------------------------------------------------------------------------------
+## -------------------------------------------------------------------------------------
 # Generate a categorical variable
 df_mtcars <- df_mtcars %>%
     mutate(gear_cate = case_when(
-        gear == 3 ~ "gear is 3 or 5",
-        gear == 4 ~ "gear is 4 or otherwise",
-        gear == 5 ~ "gear is 3 or 5",
-        TRUE ~ "gear is 4 or otherwise"
+        gear == 3 ~ "gear is 3",
+        gear == 4 ~ "gear is 4",
+        gear == 5 & hp <= 110 ~ "gear 5 hp les sequal 110",
+        gear == 5 & hp > 110 & hp <= 200 ~ "gear 5 hp 110 to 130",
+        TRUE ~ "otherwise"
     ))
 # Tabulate
 df_mtcars_gear_tb <- df_mtcars %>% 
@@ -74,7 +75,7 @@ df_mtcars_gear_tb %>% kable(caption = st_title) %>%
   kable_styling_fc()
 
 
-## --------------------------------------------------------------------------------------------------------------
+## -------------------------------------------------------------------------------------
 # Get mtcars
 df_mtcars <- mtcars
 
@@ -129,7 +130,7 @@ kable(head(df_mtcars %>% select(starts_with("mpg")), 13)) %>%
 # # df.reg.use.log$prot.imputed.log
 
 
-## --------------------------------------------------------------------------------------------------------------
+## -------------------------------------------------------------------------------------
 # Labeling
 st_title <- paste0(
     "Use na_if and is.na to Generate and Distinguish NA Values\n",
@@ -167,7 +168,7 @@ plt_mtcars_ifisna_scatter <-
 print(plt_mtcars_ifisna_scatter)
 
 
-## --------------------------------------------------------------------------------------------------------------
+## -------------------------------------------------------------------------------------
 # Set tolerance
 tol_lvl <- 1.5e-3
 sd_lower_than_tol <- tol_lvl / 10

@@ -1,8 +1,8 @@
-## ----global_options, include = FALSE-------------------------------------------------------------------------------------------------------------------
+## ----global_options, include = FALSE--------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ------------------------------------------------------------------------------------------------------------------------------------------------------
+## -------------------------------------------------------------------------------------
 # parameters, it_M < it_N
 it_N <- 10
 it_M <- 5
@@ -27,7 +27,7 @@ kable(df_rand_sub_a) %>% kable_styling_fc()
 kable(df_rand_sub_b) %>% kable_styling_fc()
 
 
-## ----rand draws panel random select--------------------------------------------------------------------------------------------------------------------
+## ----rand draws panel random select---------------------------------------------------
 # Define
 it_N <- 3
 it_M <- 10
@@ -40,7 +40,7 @@ df_panel_rand <- as_tibble(matrix(it_M, nrow=it_N, ncol=1)) %>%
   uncount(V1) %>%
   group_by(!!sym(svr_id)) %>% mutate(date = row_number()) %>%
   ungroup() %>% mutate(in_class = case_when(rnorm(n(),mean=0,sd=1) < 0 ~ 1, TRUE ~ 0)) %>%
-  filter(in_class == 1) %>% select(!!sym(svr_id), date) %>%
+  dplyr::filter(in_class == 1) %>% select(!!sym(svr_id), date) %>%
   rename(date_in_class = date)
 
 # Print
