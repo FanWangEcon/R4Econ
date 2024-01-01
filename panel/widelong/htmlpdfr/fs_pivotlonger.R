@@ -1,13 +1,14 @@
-## ----global_options, include = FALSE-----------------------------------------------------------------------------------------
+## ----global_options, include = FALSE--------------------------------------------------
 try(source("../../.Rprofile"))
 
 
-## ----------------------------------------------------------------------------------------------------------------------------
+## -------------------------------------------------------------------------------------
 # Generate A Matrix
 set.seed(123)
 ar_a <- c(1.1,5.1)
 ar_z <- seq(-2.5, 2.53, length.out=11)
-mt_ev = matrix(rnorm(ar_a*ar_z), nrow=length(ar_a), ncol=length(ar_z))
+mt_ev = matrix(rnorm(length(ar_a)*length(ar_z)), 
+  nrow=length(ar_a), ncol=length(ar_z))
 
 # Name Matrix
 rownames(mt_ev) <- paste0('ai', seq(1:length(ar_a)))
@@ -22,7 +23,7 @@ print(mt_ev)
 kable(tb_ev, caption = "Wide table") %>% kable_styling_fc()
 
 
-## ----------------------------------------------------------------------------------------------------------------------------
+## -------------------------------------------------------------------------------------
 
 # longer
 tb_ev_long <- tb_ev %>%
@@ -46,4 +47,37 @@ tb_ev_long <- tb_ev_long %>%
 
 # Display
 kable(tb_ev_long, caption = "Long table") %>% kable_styling_fc()
+
+
+## -------------------------------------------------------------------------------------
+# Generate A Matrix
+set.seed(123)
+ar_year <- c(1995, 1997, 1999)
+ar_vars <- c("wage_model", "quant_model", "wage_simu", "quant_simu")
+mt_equi = matrix(rnorm(length(ar_year)*length(ar_vars)), 
+  nrow=length(ar_year), ncol=length(ar_vars))
+
+# Name Matrix
+rownames(mt_equi) <- ar_year
+colnames(mt_equi) <- ar_vars
+
+# to tibble
+tb_equi <- as_tibble(mt_equi, rownames = "year")
+
+# Print
+print(mt_equi)
+# Display
+kable(tb_equi, caption = "Wide table") %>% kable_styling_fc()
+
+
+## -------------------------------------------------------------------------------------
+# longer
+tb_equi_long <- tb_equi %>%
+  pivot_longer(cols = matches('wage|quant'),
+               names_to = c('variable', 'source'),
+               names_pattern = paste0("(.*)_(.*)"),
+               values_to = "value") 
+
+# Display
+kable(tb_equi_long, caption = "Long table, Two Variables") %>% kable_styling_fc()
 

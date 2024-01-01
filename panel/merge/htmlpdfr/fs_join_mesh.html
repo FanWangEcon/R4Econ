@@ -11,9 +11,9 @@
 
 <meta name="author" content="Fan Wang" />
 
-<meta name="date" content="2023-07-18" />
+<meta name="date" content="2023-12-24" />
 
-<title>Convert Table from Wide to Long with dplyr</title>
+<title>Mesh join</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1671,7 +1671,7 @@ Sa:"user_id",Ya:"user_properties",Ni:"_user_region",Tg:"us_privacy_string",ja:"v
 1,Yh[Q.g.qc]=1,Yh[Q.g.Qc]=1,Yh[Q.g.da]=1,Yh[Q.g.ng]=1,Yh[Q.g.Uc]=1,Yh[Q.g.Ld]=1,Yh[Q.g.Md]=1,Yh[Q.g.Nd]=1,Yh[Q.g.zg]=1,Yh[Q.g.Kb]=1,Yh[Q.g.Cg]=1,Yh[Q.g.Rd]=1,Yh[Q.g.jf]=1,Yh[Q.g.Lb]=1,Yh[Q.g.xb]=1,Yh[Q.g.La]=1,Yh[Q.g.nf]=1,Yh[Q.g.Nb]=1,Yh[Q.g.Ra]=1,Yh[Q.g.Ob]=1,Yh[Q.g.Ud]=1,Yh[Q.g.ad]=1,Yh[Q.g.qf]=1,Yh[Q.g.bd]=1,Yh[Q.g.Pb]=1,Yh[Q.g.Qb]=1,Yh[Q.g.ie]=1,Yh[Q.g.Ya]=1,Yh[Q.g.pe]=1,Yh));Object.freeze([Q.g.Ba,Q.g.Ma,Q.g.yb,Q.g.Ka,Q.g.pf,Q.g.Sa,Q.g.hf,Q.g.ri]);
 var $h={},ai=Object.freeze(($h[Q.g.fi]=1,$h[Q.g.gi]=1,$h[Q.g.hi]=1,$h[Q.g.ii]=1,$h[Q.g.ji]=1,$h[Q.g.ki]=1,$h[Q.g.li]=1,$h[Q.g.mi]=1,$h[Q.g.ni]=1,$h[Q.g.zd]=1,$h)),bi={},ci=Object.freeze((bi[Q.g.ig]=1,bi[Q.g.jg]=1,bi[Q.g.hc]=1,bi[Q.g.ic]=1,bi[Q.g.kg]=1,bi[Q.g.Gb]=1,bi[Q.g.jc]=1,bi[Q.g.cb]=1,bi[Q.g.rb]=1,bi[Q.g.eb]=1,bi[Q.g.ra]=1,bi[Q.g.kc]=1,bi[Q.g.Fa]=1,bi[Q.g.lg]=1,bi)),di=Object.freeze([Q.g.ka,Q.g.fb,Q.g.qc,Q.g.Vc,Q.g.Qb]),ei=Object.freeze([].concat(di)),fi=Object.freeze([Q.g.Ja,Q.g.Md,Q.g.ad,Q.g.qf,
 Q.g.Hd]),gi=Object.freeze([].concat(fi)),hi={},ii=(hi[Q.g.K]="1",hi[Q.g.U]="2",hi[Q.g.O]="3",hi[Q.g.Ea]="4",hi),ji={},ki=Object.freeze((ji[Q.g.ka]=1,ji[Q.g.Ad]=1,ji[Q.g.Ga]=1,ji[Q.g.Ib]=1,ji[Q.g.af]=1,ji[Q.g.Bd]=1,ji[Q.g.Cd]=1,ji[Q.g.Dd]=1,ji[Q.g.ba]=1,ji[Q.g.Ed]=1,ji[Q.g.Pa]=1,ji[Q.g.Ha]=1,ji[Q.g.Wa]=1,ji[Q.g.Ja]=1,ji[Q.g.Xa]=1,ji[Q.g.Qa]=1,ji[Q.g.xa]=1,ji[Q.g.Fd]=1,ji[Q.g.da]=1,ji[Q.g.wi]=1,ji[Q.g.Jd]=1,ji[Q.g.Kd]=1,ji[Q.g.hf]=1,ji[Q.g.Nd]=1,ji[Q.g.Lb]=1,ji[Q.g.xb]=1,ji[Q.g.Ka]=1,ji[Q.g.Xc]=1,ji[Q.g.Ba]=
-1,ji[Q.g.Ma]=1,ji[Q.g.Ig]=1,ji[Q.g.Jg]=1,ji[Q.g.Kg]=1,ji[Q.g.Lg]=1,ji[Q.g.Nb]=1,ji[Q.g.Ra]=1,ji[Q.g.Ob]=1,ji[Q.g.Ud]=1,ji[Q.g.bd]=1,ji[Q.g.ya]=1,ji[Q.g.Pb]=1,ji[Q.g.Qb]=1,ji[Q.g.Bb]=1,ji[Q.g.Ca]=1,ji[Q.g.Sa]=1,ji[Q.g.ja]=1,ji)),li={},mi=Object.freeze((li[Q.g.lk]="s",li[Q.g.nk]="y",li[Q.g.kk]="p",li[Q.g.mk]="h",li[Q.g.ik]="a",li[Q.g.jk]="m",li));Object.freeze(Q.g);var ni={},oi=z.google_tag_manager=z.google_tag_manager||{},pi=Math.random();ni.Zg="3bt0";ni.oe=Number("0")||0;ni.ia="dataLayer";ni.gk="ChEIgL/ErAYQi7vv1by1546PARImAEnsStNeCMgj9n+hx/IPVg+oLDI5V6WW+wNfyc8a+DpjDzUnanQaAjUH";var qi={__cl:1,__ecl:1,__ehl:1,__evl:1,__fal:1,__fil:1,__fsl:1,__hl:1,__jel:1,__lcl:1,__sdl:1,__tl:1,__ytl:1},ri={__paused:1,__tg:1},si;for(si in qi)qi.hasOwnProperty(si)&&(ri[si]=1);var ti=Pa(""),ui,vi=!1;vi=!0;
+1,ji[Q.g.Ma]=1,ji[Q.g.Ig]=1,ji[Q.g.Jg]=1,ji[Q.g.Kg]=1,ji[Q.g.Lg]=1,ji[Q.g.Nb]=1,ji[Q.g.Ra]=1,ji[Q.g.Ob]=1,ji[Q.g.Ud]=1,ji[Q.g.bd]=1,ji[Q.g.ya]=1,ji[Q.g.Pb]=1,ji[Q.g.Qb]=1,ji[Q.g.Bb]=1,ji[Q.g.Ca]=1,ji[Q.g.Sa]=1,ji[Q.g.ja]=1,ji)),li={},mi=Object.freeze((li[Q.g.lk]="s",li[Q.g.nk]="y",li[Q.g.kk]="p",li[Q.g.mk]="h",li[Q.g.ik]="a",li[Q.g.jk]="m",li));Object.freeze(Q.g);var ni={},oi=z.google_tag_manager=z.google_tag_manager||{},pi=Math.random();ni.Zg="3bt0";ni.oe=Number("0")||0;ni.ia="dataLayer";ni.gk="ChEIgL/ErAYQi7vv1by1546PARImAEnsStMYTsj05nvV7GiVolMVdbmThZzdZrE9OZXBxPKIvb6E5TAaAmUN";var qi={__cl:1,__ecl:1,__ehl:1,__evl:1,__fal:1,__fil:1,__fsl:1,__hl:1,__jel:1,__lcl:1,__sdl:1,__tl:1,__ytl:1},ri={__paused:1,__tg:1},si;for(si in qi)qi.hasOwnProperty(si)&&(ri[si]=1);var ti=Pa(""),ui,vi=!1;vi=!0;
 ui=vi;var wi,xi=!1;wi=xi;var yi,zi=!1;yi=zi;var Ai,Bi=!1;Ai=Bi;ni.yd="www.googletagmanager.com";
 var Ci=""+ni.yd+(ui?"/gtag/js":"/gtm.js"),Di=null,Ei=null,Fi={},Gi={},Hi={},Ii=function(){var a=oi.sequence||1;oi.sequence=a+1;return a};ni.fk="";var Ji="";ni.Af=Ji;var Ki=new La,Li={},Mi={},Pi={name:ni.ia,set:function(a,b){B(ab(a,b),Li);Ni()},get:function(a){return Oi(a,2)},reset:function(){Ki=new La;Li={};Ni()}},Oi=function(a,b){return 2!=b?Ki.get(a):Qi(a)},Qi=function(a,b){var c=a.split(".");b=b||[];for(var d=Li,e=0;e<c.length;e++){if(null===d)return!1;if(void 0===d)break;d=d[c[e]];if(-1!==b.indexOf(d))return}return d},Ri=function(a,b){Mi.hasOwnProperty(a)||(Ki.set(a,b),B(ab(a,b),Li),Ni())},Si=function(){for(var a=["gtm.allowlist","gtm.blocklist","gtm.whitelist",
 "gtm.blacklist","tagTypeBlacklist"],b=0;b<a.length;b++){var c=a[b],d=Oi(c,1);if(Ia(d)||nb(d))d=B(d);Mi[c]=d}},Ni=function(a){l(Mi,function(b,c){Ki.set(b,c);B(ab(b),Li);B(ab(b,c),Li);a&&delete Mi[b]})},Ti=function(a,b){var c,d=1!==(void 0===b?2:b)?Qi(a):Ki.get(a);"array"===lb(d)||"object"===lb(d)?c=B(d):c=d;return c};var $i=function(a){var b=1,c,d,e;if(a)for(b=0,d=a.length-1;0<=d;d--)e=a.charCodeAt(d),b=(b<<6&268435455)+e+(e<<14),c=b&266338304,b=0!==c?b^c>>21:b;return b};var aj=[];function gj(a){switch(a){case 33:return 3;case 60:return 14;case 61:return 8;case 73:return 11;case 74:return 12;case 77:return 10;case 79:return 13;case 75:return 15}}function R(a){aj[a]=!0;var b=gj(a);b&&(Rf[b]=!0)}
@@ -2195,116 +2195,82 @@ font-size: 0.95em;
 
 
 
-<h1 class="title toc-ignore">Convert Table from Wide to Long with
-dplyr</h1>
+<h1 class="title toc-ignore">Mesh join</h1>
 <h4 class="author"><a href="https://fanwangecon.github.io/">Fan
 Wang</a></h4>
-<h4 class="date">2023-07-18</h4>
+<h4 class="date">2023-12-24</h4>
 
 </div>
 
 
-<div id="wide-to-long" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> Wide to Long</h1>
+<div id="mesh-join" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Mesh Join</h1>
 <blockquote>
-<p>Go to the <a href="https://github.com/FanWangEcon//R4Econ/blob/master/panel/widelong//fs_pivotlonger.Rmd"><strong>RMD</strong></a>,
-<a href="https://github.com/FanWangEcon//R4Econ/blob/master/panel/widelong//htmlpdfr/fs_pivotlonger.R"><strong>R</strong></a>,
-<a href="https://github.com/FanWangEcon//R4Econ/blob/master/panel/widelong//htmlpdfr/fs_pivotlonger.pdf"><strong>PDF</strong></a>,
-or <a href="https://fanwangecon.github.io//R4Econ/panel/widelong//htmlpdfr/fs_pivotlonger.html"><strong>HTML</strong></a>
+<p>Go to the <a href="https://github.com/FanWangEcon//R4Econ/blob/master/panel/merge//fs_join_mesh.Rmd"><strong>RMD</strong></a>,
+<a href="https://github.com/FanWangEcon//R4Econ/blob/master/panel/merge//htmlpdfr/fs_join_mesh.R"><strong>R</strong></a>,
+<a href="https://github.com/FanWangEcon//R4Econ/blob/master/panel/merge//htmlpdfr/fs_join_mesh.pdf"><strong>PDF</strong></a>,
+or <a href="https://fanwangecon.github.io//R4Econ/panel/merge//htmlpdfr/fs_join_mesh.html"><strong>HTML</strong></a>
 version of this file. Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> research
 support package, <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> examples page,
 <a href="https://fanwangecon.github.io/PkgTestR/">PkgTestR</a> packaging
 guide, or <a href="https://fanwangecon.github.io/Stat4Econ/">Stat4Econ</a> course
 page.</p>
 </blockquote>
-<p>Using the <a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a>
-function in tidyr to reshape panel or other data structures</p>
-<div id="wide-to-long-panel-single-variable" class="section level2" number="1.1">
-<h2><span class="header-section-number">1.1</span> Wide to long panel,
-single variable</h2>
-<p>We have a matrix of values, the values are <em>ev</em>. Each row
-corresponds to a different value of the <em>a</em> variable, each column
-represents a different value of the <em>z</em> variable.</p>
-<p>Based on this matrix, we create a table where each unit of
-observation is for a specific <em>a</em> and <em>z</em> variable
-combination. So the matrix is turned from wide to long.</p>
-<p>The resulting long table has 5 variables</p>
-<ol style="list-style-type: decimal">
-<li><em>a</em>: values of the <em>a</em> variable, the original matrix
-row labels</li>
-<li><em>ai</em>: an index from 1, indicating the original matrix row
-index</li>
-<li><em>z</em>: values of the <em>z</em> variable, the original matrix
-column lables</li>
-<li><em>zi</em>: an index from 1, indicating hte original matrix column
-index</li>
-</ol>
-<p>First, we create the matrix.</p>
-<pre class="r"><code># Generate A Matrix
-set.seed(123)
-ar_a &lt;- c(1.1,5.1)
-ar_z &lt;- seq(-2.5, 2.53, length.out=11)
-mt_ev = matrix(rnorm(length(ar_a)*length(ar_z)), 
-  nrow=length(ar_a), ncol=length(ar_z))
+<div id="expand-multiple-rows-with-the-same-expansion" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Expand Multiple Rows
+with the Same Expansion</h2>
+<p>File A is at <code>ID x Week x DayOfWeek</code> level, file B is at
+<code>ID x DayOfWeek x Product</code>. Product is the product ID bought,
+could also store other info on product as additional variables. We want
+to create a file that is at <code>ID x Week x DayOfweek x Product</code>
+level.</p>
+<p>The idea is that products bought made on Monday by household 1, for
+example are always the same, and file A records a “shopping-record”,
+which week, which day each household went shopping.</p>
+<p>We do not store in file A what was bought because a particular
+household always buys the same thing on the same day of the week. We
+store data in A and B separately to save space since all products by the
+same household on the same day of week is always identical.</p>
+<p>However, we need to join the two files together compute how many
+units of each product all households bought throughout some
+timeframe.</p>
+<p>Step 1, construct File A, by fully messing ID, Week and Day of Week.
+In the simulated file below, household 1 shopped 3 times, twice on 3rd
+day of week, once on 2nd day of week, across two weeks. Household 2
+shopped once, on the 3rd day of week.</p>
+<pre class="r"><code># Mesh
+ar_st_varnames &lt;- c(&#39;hh&#39;,&#39;week&#39;,&#39;dayofweek&#39;)
+ar_it_ids &lt;- c(1,2)
+ar_it_weeks &lt;- c(1,2)
+ar_it_daysofweek &lt;- c(1,2,3)
+df_idwkday_mesh &lt;- tidyr::expand_grid(
+  ar_it_ids, ar_it_weeks, ar_it_daysofweek) %&gt;%
+  rename_all(~c(ar_st_varnames))
 
-# Name Matrix
-rownames(mt_ev) &lt;- paste0(&#39;ai&#39;, seq(1:length(ar_a)))
-colnames(mt_ev) &lt;- paste0(&#39;zi&#39;, seq(1:length(ar_z)))
+# Randomly drop a subset of rows 
+# Different subset of ID and Week for each DayOfWeek. 
+it_M &lt;- 4
+set.seed(456)
+df_idwkday_mesh &lt;- df_idwkday_mesh[sample(dim(df_idwkday_mesh)[1], it_M, replace=FALSE),] %&gt;% 
+  arrange(!!!syms(ar_st_varnames))
 
-# to tibble
-tb_ev &lt;- as_tibble(mt_ev) %&gt;% rowid_to_column(var = &quot;ai&quot;)
-
-# Print
-print(mt_ev)</code></pre>
-<pre><code>##            zi1        zi2       zi3        zi4        zi5       zi6       zi7
-## ai1 -0.5604756 1.55870831 0.1292877  0.4609162 -0.6868529 1.2240818 0.4007715
-## ai2 -0.2301775 0.07050839 1.7150650 -1.2650612 -0.4456620 0.3598138 0.1106827
-##            zi8        zi9       zi10       zi11
-## ai1 -0.5558411  0.4978505  0.7013559 -1.0678237
-## ai2  1.7869131 -1.9666172 -0.4727914 -0.2179749</code></pre>
-<pre class="r"><code># Display
-kable(tb_ev, caption = &quot;Wide table&quot;) %&gt;% kable_styling_fc()</code></pre>
+# Display
+st_caption &lt;- &quot;File A (ID x Week x DayOfWeek)&quot;
+kable(df_idwkday_mesh, caption=st_caption) %&gt;% kable_styling_fc()</code></pre>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-Wide table
+File A (ID x Week x DayOfWeek)
 </caption>
 <thead>
 <tr>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-ai
+hh
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi1
+week
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi2
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi3
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi4
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi5
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi6
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi7
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi8
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi9
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi10
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi11
+dayofweek
 </th>
 </tr>
 </thead>
@@ -2314,37 +2280,32 @@ zi11
 1
 </td>
 <td style="text-align:right;">
--0.5604756
+1
 </td>
 <td style="text-align:right;">
-1.5587083
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
-0.1292877
+2
 </td>
 <td style="text-align:right;">
-0.4609162
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
--0.6868529
+2
 </td>
 <td style="text-align:right;">
-1.2240818
-</td>
-<td style="text-align:right;">
-0.4007715
-</td>
-<td style="text-align:right;">
--0.5558411
-</td>
-<td style="text-align:right;">
-0.4978505
-</td>
-<td style="text-align:right;">
-0.7013559
-</td>
-<td style="text-align:right;">
--1.0678237
+3
 </td>
 </tr>
 <tr>
@@ -2352,782 +2313,503 @@ zi11
 2
 </td>
 <td style="text-align:right;">
--0.2301775
+2
 </td>
 <td style="text-align:right;">
-0.0705084
-</td>
-<td style="text-align:right;">
-1.7150650
-</td>
-<td style="text-align:right;">
--1.2650612
-</td>
-<td style="text-align:right;">
--0.4456620
-</td>
-<td style="text-align:right;">
-0.3598138
-</td>
-<td style="text-align:right;">
-0.1106827
-</td>
-<td style="text-align:right;">
-1.7869131
-</td>
-<td style="text-align:right;">
--1.9666172
-</td>
-<td style="text-align:right;">
--0.4727914
-</td>
-<td style="text-align:right;">
--0.2179749
+3
 </td>
 </tr>
 </tbody>
 </table>
-<p>Second, we convert the table wide to long.</p>
-<pre class="r"><code># longer
-tb_ev_long &lt;- tb_ev %&gt;%
-  pivot_longer(cols = starts_with(&#39;zi&#39;),
-               names_to = c(&#39;zi&#39;),
-               names_pattern = paste0(&quot;zi(.*)&quot;),
-               values_to = &quot;ev&quot;) %&gt;%
-  mutate(zi = as.numeric(zi))
+<p>Step 2, construct File B. We have shopping list for the 1st household
+on shopping from 1st, 2nd, and 3rd days of a week. We have a shopping
+list for 2nd household only for shopping on the 1st and 2nd day.</p>
+<pre class="r"><code># Generate day of week specific product file
+ar_st_varnames &lt;- c(&#39;hh&#39;, &#39;dayofweek&#39;, &#39;product&#39;)
+ar_it_product &lt;- c(10,11,12,13,14)
+df_dayproduct_mesh &lt;- tidyr::expand_grid(
+  ar_it_ids, ar_it_daysofweek, ar_it_product) %&gt;%
+  rename_all(~c(ar_st_varnames))
 
-# Merge with a and z values
-tb_ev_long &lt;- tb_ev_long %&gt;%
-  left_join(as_tibble(ar_a) %&gt;%
-              rowid_to_column(var = &quot;ai&quot;) %&gt;%
-              rename(a = value)
-              , by = &#39;ai&#39;) %&gt;%
-  left_join(as_tibble(ar_z) %&gt;%
-              rowid_to_column(var = &quot;zi&quot;) %&gt;%
-              rename(z = value),
-            by = &#39;zi&#39;) %&gt;%
-  select(a,ai,z,zi,ev)
+# Make each day product list not identical
+it_M &lt;- 8
+set.seed(123)
+df_dayproduct_mesh &lt;- df_dayproduct_mesh[sample(dim(df_dayproduct_mesh)[1], it_M, replace=FALSE),] %&gt;% 
+  arrange(!!!syms(ar_st_varnames))
 
 # Display
-kable(tb_ev_long, caption = &quot;Long table&quot;) %&gt;% kable_styling_fc()</code></pre>
+st_caption &lt;- &quot;File B (ID x DayOfWeek x Product)&quot;
+kable(df_dayproduct_mesh, caption=st_caption) %&gt;% kable_styling_fc()</code></pre>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-Long table
+File B (ID x DayOfWeek x Product)
 </caption>
 <thead>
 <tr>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-a
+hh
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-ai
+dayofweek
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-z
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-zi
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-ev
+product
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:right;">
-1.1
+1
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
--2.500
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
--0.5604756
+12
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
-1.1
-</td>
-<td style="text-align:right;">
 1
-</td>
-<td style="text-align:right;">
--1.997
 </td>
 <td style="text-align:right;">
 2
 </td>
 <td style="text-align:right;">
-1.5587083
+14
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
-1.1
-</td>
-<td style="text-align:right;">
 1
-</td>
-<td style="text-align:right;">
--1.494
 </td>
 <td style="text-align:right;">
 3
 </td>
 <td style="text-align:right;">
-0.1292877
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
--0.991
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-0.4609162
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
--0.488
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
--0.6868529
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.015
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-1.2240818
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.518
-</td>
-<td style="text-align:right;">
-7
-</td>
-<td style="text-align:right;">
-0.4007715
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1.021
-</td>
-<td style="text-align:right;">
-8
-</td>
-<td style="text-align:right;">
--0.5558411
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1.524
-</td>
-<td style="text-align:right;">
-9
-</td>
-<td style="text-align:right;">
-0.4978505
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-1.1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2.027
-</td>
-<td style="text-align:right;">
 10
 </td>
-<td style="text-align:right;">
-0.7013559
-</td>
 </tr>
 <tr>
-<td style="text-align:right;">
-1.1
-</td>
 <td style="text-align:right;">
 1
-</td>
-<td style="text-align:right;">
-2.530
-</td>
-<td style="text-align:right;">
-11
-</td>
-<td style="text-align:right;">
--1.0678237
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
--2.500
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
--0.2301775
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
--1.997
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.0705084
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
--1.494
 </td>
 <td style="text-align:right;">
 3
 </td>
 <td style="text-align:right;">
-1.7150650
+13
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
-5.1
+1
 </td>
 <td style="text-align:right;">
-2
+3
 </td>
 <td style="text-align:right;">
--0.991
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
--1.2650612
+14
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
 2
 </td>
 <td style="text-align:right;">
--0.488
+1
 </td>
 <td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
--0.4456620
+12
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
 2
 </td>
 <td style="text-align:right;">
-0.015
+1
 </td>
 <td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-0.3598138
+13
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
 2
 </td>
 <td style="text-align:right;">
-0.518
-</td>
-<td style="text-align:right;">
-7
-</td>
-<td style="text-align:right;">
-0.1106827
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
 2
-</td>
-<td style="text-align:right;">
-1.021
-</td>
-<td style="text-align:right;">
-8
-</td>
-<td style="text-align:right;">
-1.7869131
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1.524
-</td>
-<td style="text-align:right;">
-9
-</td>
-<td style="text-align:right;">
--1.9666172
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2.027
-</td>
-<td style="text-align:right;">
-10
-</td>
-<td style="text-align:right;">
--0.4727914
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2.530
 </td>
 <td style="text-align:right;">
 11
 </td>
-<td style="text-align:right;">
--0.2179749
-</td>
 </tr>
 </tbody>
 </table>
-</div>
-<div id="wide-to-long-panel-multiple-variables" class="section level2" number="1.2">
-<h2><span class="header-section-number">1.2</span> Wide to long panel,
-multiple variables</h2>
-<p>We have a dataset where each row contains data from a different year.
-We have four variables, observed wage, simulated wage, observed labor
-quantities, and simulated labor quantities.</p>
-<p>We generate reshape this file to have four variables:</p>
-<ol style="list-style-type: decimal">
-<li>year</li>
-<li>categorical for wage or quantity</li>
-<li>categorical for observed or simulated</li>
-<li>a numerical column with wage and quantity values</li>
-</ol>
-<p>This is different then the situation prior, because we are need to
-convert to long two different numerical variables that will be in the
-same long variable, but differentiated by two categorical variables
-(rather than one).</p>
-<p>First, we create the matrix.</p>
-<pre class="r"><code># Generate A Matrix
-set.seed(123)
-ar_year &lt;- c(1995, 1997, 1999)
-ar_vars &lt;- c(&quot;wage_model&quot;, &quot;quant_model&quot;, &quot;wage_simu&quot;, &quot;quant_simu&quot;)
-mt_equi = matrix(rnorm(length(ar_year)*length(ar_vars)), 
-  nrow=length(ar_year), ncol=length(ar_vars))
-
-# Name Matrix
-rownames(mt_equi) &lt;- ar_year
-colnames(mt_equi) &lt;- ar_vars
-
-# to tibble
-tb_equi &lt;- as_tibble(mt_equi, rownames = &quot;year&quot;)
-
-# Print
-print(mt_equi)</code></pre>
-<pre><code>##      wage_model quant_model  wage_simu quant_simu
-## 1995 -0.5604756  0.07050839  0.4609162 -0.4456620
-## 1997 -0.2301775  0.12928774 -1.2650612  1.2240818
-## 1999  1.5587083  1.71506499 -0.6868529  0.3598138</code></pre>
-<pre class="r"><code># Display
-kable(tb_equi, caption = &quot;Wide table&quot;) %&gt;% kable_styling_fc()</code></pre>
+<p>Step 3. we combine files A and B together via <a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">dplyr::left_join</a>.</p>
+<p>Given the sample files we have constructed we have:</p>
+<ul>
+<li>multiple items in shopping list for household 1 on day 3</li>
+<li>no shopping list for household 2 on day 3</li>
+<li>shopping list available on days that do not appear on shopping days
+tracking list</li>
+</ul>
+<p>When we left_join, we do not include in combined file shopping list
+from days for households not in the tracking list. Note that from the
+output below, we achieved several things:</p>
+<ul>
+<li>the day 3 shopping list for household 1 is merged in twice, to
+household’s trips on day 3 in both week 1 and 2, rows expanded because 3
+items bought on each day</li>
+<li>the day 2 shopping list for household 1 is merged in once, there are
+no row-expansion, since there was one item bought on this shopping
+list</li>
+<li>the day 3 shopping list for household 2 is not merged in, since the
+shopping list does not exist, but the row remains.</li>
+</ul>
+<pre class="r"><code># left join
+df_left_join &lt;- df_idwkday_mesh %&gt;% 
+  left_join(df_dayproduct_mesh, 
+  by= c(&#39;hh&#39;=&#39;hh&#39;, &#39;dayofweek&#39;=&#39;dayofweek&#39;))
+# Display left-join
+st_caption &lt;- &quot;File C, left-join (ID x Week x DayOfweek x Product)&quot;
+kable(df_left_join, caption=st_caption) %&gt;% kable_styling_fc()</code></pre>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-Wide table
+File C, left-join (ID x Week x DayOfweek x Product)
 </caption>
 <thead>
 <tr>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-year
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+hh
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-wage_model
+week
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-quant_model
+dayofweek
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-wage_simu
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-quant_simu
+product
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
-1995
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
--0.5604756
+1
 </td>
 <td style="text-align:right;">
-0.0705084
+3
 </td>
 <td style="text-align:right;">
-0.4609162
-</td>
-<td style="text-align:right;">
--0.4456620
+10
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-1997
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
--0.2301775
+1
 </td>
 <td style="text-align:right;">
-0.1292877
+3
 </td>
 <td style="text-align:right;">
--1.2650612
-</td>
-<td style="text-align:right;">
-1.2240818
+13
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-1999
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
-1.5587083
+1
 </td>
 <td style="text-align:right;">
-1.7150650
+3
 </td>
 <td style="text-align:right;">
--0.6868529
+14
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
-0.3598138
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+14
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+13
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+14
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+NA
 </td>
 </tr>
 </tbody>
 </table>
-<p>Second, we convert the table wide to long. We select columns that
-includes either wage or quant, see tidyselect <a href="https://tidyselect.r-lib.org/reference/starts_with.html">Select
-variables that match a pattern</a> for additional verbs for how to
-select variables.</p>
-<pre class="r"><code># longer
-tb_equi_long &lt;- tb_equi %&gt;%
-  pivot_longer(cols = matches(&#39;wage|quant&#39;),
-               names_to = c(&#39;variable&#39;, &#39;source&#39;),
-               names_pattern = paste0(&quot;(.*)_(.*)&quot;),
-               values_to = &quot;value&quot;) 
-
-# Display
-kable(tb_equi_long, caption = &quot;Long table, Two Variables&quot;) %&gt;% kable_styling_fc()</code></pre>
+<p>Step 4, now, we also try <a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">dplyr::full_join</a>.
+Note that the full-join result is not what we want, it added shopping
+list by household to the file, but these shopping lists were
+un-realized, since the households did not shop in any week on those
+days. So our desired result is achieved by <a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">dplyr::left_join</a>.</p>
+<pre class="r"><code># full join
+df_full_join &lt;- df_idwkday_mesh %&gt;% 
+  full_join(df_dayproduct_mesh, 
+  by= c(&#39;hh&#39;=&#39;hh&#39;, &#39;dayofweek&#39;=&#39;dayofweek&#39;))
+# Display full-join
+st_caption &lt;- &quot;File C, full-join (ID x Week x DayOfweek x Product)&quot;
+kable(df_full_join, caption=st_caption) %&gt;% kable_styling_fc()</code></pre>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-Long table, Two Variables
+File C, full-join (ID x Week x DayOfweek x Product)
 </caption>
 <thead>
 <tr>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-year
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-variable
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-source
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+hh
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-value
+week
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+dayofweek
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+product
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
-1995
-</td>
-<td style="text-align:left;">
-wage
-</td>
-<td style="text-align:left;">
-model
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
--0.5604756
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+10
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-1995
-</td>
-<td style="text-align:left;">
-quant
-</td>
-<td style="text-align:left;">
-model
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
-0.0705084
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+13
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-1995
-</td>
-<td style="text-align:left;">
-wage
-</td>
-<td style="text-align:left;">
-simu
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
-0.4609162
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+14
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-1995
-</td>
-<td style="text-align:left;">
-quant
-</td>
-<td style="text-align:left;">
-simu
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
--0.4456620
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+14
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-1997
-</td>
-<td style="text-align:left;">
-wage
-</td>
-<td style="text-align:left;">
-model
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
--0.2301775
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+10
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-1997
-</td>
-<td style="text-align:left;">
-quant
-</td>
-<td style="text-align:left;">
-model
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
-0.1292877
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+13
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-1997
-</td>
-<td style="text-align:left;">
-wage
-</td>
-<td style="text-align:left;">
-simu
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
--1.2650612
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+14
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-1997
-</td>
-<td style="text-align:left;">
-quant
-</td>
-<td style="text-align:left;">
-simu
+<td style="text-align:right;">
+2
 </td>
 <td style="text-align:right;">
-1.2240818
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+NA
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-1999
-</td>
-<td style="text-align:left;">
-wage
-</td>
-<td style="text-align:left;">
-model
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
-1.5587083
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+12
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-1999
-</td>
-<td style="text-align:left;">
-quant
-</td>
-<td style="text-align:left;">
-model
+<td style="text-align:right;">
+2
 </td>
 <td style="text-align:right;">
-1.7150650
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+12
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-1999
-</td>
-<td style="text-align:left;">
-wage
-</td>
-<td style="text-align:left;">
-simu
+<td style="text-align:right;">
+2
 </td>
 <td style="text-align:right;">
--0.6868529
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+13
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-1999
-</td>
-<td style="text-align:left;">
-quant
-</td>
-<td style="text-align:left;">
-simu
+<td style="text-align:right;">
+2
 </td>
 <td style="text-align:right;">
-0.3598138
+NA
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+11
 </td>
 </tr>
 </tbody>
