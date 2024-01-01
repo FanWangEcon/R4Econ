@@ -4,13 +4,25 @@
 
 ### Numeric Structures
 
+**Single Data Element**
+
 - *it*: integer
 - *fl*: float
 - *cx*: complex
-- *ar*: single dimensional array
+- *nn*: NoneType (Python)
+
+**Multiple Data Elements**
+
+- *ls*: list (python)
+- *ar*: single dimensional array (reserved for NumPy in Python)
 - *mt*: two dimensional matrix
 - *ts*: three dimensional tensor
 - *mn*: any larger than two dimensional array
+
+**Dataframes Pandas**
+
+- *sr*: for pandas series 
+- *df*: for pandas dataframe 
 
 And a special name is
 
@@ -54,18 +66,57 @@ And a special name is
 
 - *suf*: suffix only
 
-## R Conventions
+### Language specific variable conveitons
+
+#### R Conventions
 
 - *tb*: a tibble
 - *df*: a dataframe
 
-## Matlab Conventions
+#### Matlab Conventions
 
 - *cl*: matlab cell
 	+ *cln*: cell matrix, meaning some n by m cells
 - *mp*: matlab container
 - *sa*: structure array
 
-## python conventions
+#### python conventions
 
 - *co*: class object
+
+## R Conventions
+
+### R Files naming conventions
+
+#### Vignette files 
+
+Vignette can be used to call functions to generate results, or be used to illustrate, demonstrate function usages. 
+
+- ffv: generic prefix for vignettes
+- _ge: files that generates new files, might be difficult ot distinguish _ge and _su
+- _su: files that documents key data facts/summary stats
+- _an: analysis vignettes
+- _fu: function building files, demonstrating step by step creation of function
+- words after: do not exceed two words separated by underscore, three underscore overall
+
+
+## Github Projects Naming Conventions
+
+Personal non-organizational 
+
+Research Projects:
+
+- First set of letters:
+  - starts with: Prj
+- Second set of letters:
+  - if country-data-oriented: Country short or full name, PrjThai, PrjChina, PrjUK, PrjMex
+  - if global-data-oriented: PrjComp, Comp for comparative. 
+- Third set of letters:
+  - Acronyms to keep things short and not too clear should be included under each project.
+  - Avoid using co-author acrynyms to avoid lack of ability to expand project team
+
+## Project Folder Naming Conventions
+
+## Title and heading conventions
+
+To make life easier, in general, for all section heading, use sentence case, so only need to capitalize the first letter. 
