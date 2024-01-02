@@ -8,7 +8,7 @@ core:
   - package: r
     code: |
       grepl()
-date: 20223-09-25
+date: 2024-01-01
 date_start: 2023-09-25
 output:
   pdf_document:
@@ -174,7 +174,7 @@ print(grepl("p[[:alnum:]]?_", ls_st_regex_joint))
 # [1] FALSE FALSE FALSE  TRUE  TRUE FALSE
 ```
 
-Third, we identify cases, where there the word contains substring starting with "p" and ending with "_", with any number of alpha-numeric characters in between. Note:
+Third, we identify cases, where there the word contains substring starting with "p" and ending with "_", with any number (including 0) of alpha-numeric characters in between. Note:
 
 1. In the first string, both "_" and "p" appear, but "p" appears after, so does not match
 2. Note in the second word, "p" and "_" appear multiple times
@@ -187,7 +187,7 @@ print(grepl("p[[:alnum:]]*_", ls_st_regex_joint))
 # [1] FALSE  TRUE FALSE  TRUE  TRUE  TRUE
 ```
 
-Fourth, we use alternative repetition quantifiers.
+Fourth, we use alternative repetition quantifiers, plus, rather than asterisks, which means we must have at least one alpha-numeric character in between "p" and the "_", in which case, the fifth word no longer satisfies the search condition.
 
 ```{r, eval=FALSE}
 # p and _ separated by at least 1 alpha numerics

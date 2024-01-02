@@ -49,7 +49,7 @@ install.packages(c("parallel", "doParallel", "foreach"))
 
 Second, we load the libraries, and check on the parallel processing capacities on the local machine.
 
-```{r}
+```{r, eval = FALSE}
 # Load libraries
 library(dplyr)
 library(readr)
@@ -62,11 +62,14 @@ library(doParallel)
 # Check number of cores
 it_n_cores_computer <- parallel::detectCores()
 glue::glue("Number of cores on computers:{it_n_cores_computer}")
+
+# OUTPUT
+## Number of cores on computers:20
 ```
 
 Third, we might want to use less than the total number of cores available. Specifying the number of cores to be used, we can initiate a local cluster. "PSOCK" below copies everything to each worker.
 
-```{r}
+```{r, eval = FALSE}
 # Start cluster
 ob_cluster <- parallel::makeCluster(
   it_n_cores_computer - 2, 
@@ -78,7 +81,7 @@ doParallel::registerDoParallel(cl = ob_cluster)
 
 Fourth, run first parallel task, concurrent base-10 exponentiation.
 
-```{r}
+```{r, eval=FALSE}
 # c(a,b,c,d) outputs together with combine
 ar_test_parallel <- foreach(
   it_power = seq(1, 10), .combine = 'c'
@@ -86,11 +89,23 @@ ar_test_parallel <- foreach(
   return(10^(it_power))
 }
 glue::glue("dopar outputs: {ar_test_parallel}")
+
+# Output
+## dopar outputs: 10
+## dopar outputs: 100
+## dopar outputs: 1000
+## dopar outputs: 10000
+## dopar outputs: 1e+05
+## dopar outputs: 1e+06
+## dopar outputs: 1e+07
+## dopar outputs: 1e+08
+## dopar outputs: 1e+09
+## dopar outputs: 1e+10
 ```
 
 Fifth, close cluster. When work is done, close the cluster.
 
-```{r}
+```{r, eval=FALSE}
 parallel::stopCluster(cl = ob_cluster)
 ```
 
@@ -102,7 +117,7 @@ First, we create a function. In this function, we generate a random matrix, the 
 
 Note, for each function used, such as `as_tibble` below, we should write it as `tibble::as_tibble`, to declare package and function jointly.
 
-```{r}
+```{r, eval=FALSE}
 ffi_rand2csv <- function(
     spt_path_out,
     it_nrow = 3,
@@ -130,7 +145,7 @@ ffi_rand2csv <- function(
 
 Second, we initialize the cluster.
 
-```{r}
+```{r, eval=FALSE}
 # Get the number of cores
 it_n_cores_computer <- parallel::detectCores()
 glue::glue("Number of cores on computers:{it_n_cores_computer}")
@@ -141,11 +156,14 @@ ob_cluster <- parallel::makeCluster(
   )
 # Register cluster
 doParallel::registerDoParallel(cl = ob_cluster)
+
+# OUTPUT
+## Number of cores on computers:20
 ```
 
 Third, we run the function in parallel.
 
-```{r}
+```{r, eval=FALSE}
 # Define shared Path
 
 spt_root <- "C:/Users/fan/"  
@@ -162,6 +180,16 @@ foreach(
     it_nrow = it_nrow,
     st_file_prefix = "ffi_para_test")
 }
+
+# Output
+## [[1]]
+## File saved successfully: C:/Users/fan//R4Econ/development/parallel/_file/ffi_para_test_nrow2.csv
+## 
+## [[2]]
+## File saved successfully: C:/Users/fan//R4Econ/development/parallel/_file/ffi_para_test_nrow3.csv
+## 
+## [[3]]
+## File saved successfully: C:/Users/fan//R4Econ/development/parallel/_file/ffi_para_test_nrow4.csv
 ```
 
 Fourth, adapting the parallel loop to other functions. Note that:

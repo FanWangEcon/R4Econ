@@ -137,7 +137,7 @@ print(ls_ar_it_recession)
 ## -------------------------------------------------------------------------------------
 # Combine arrays
 ar_it_recession_year <- (
-  sort(do.call(c, ls_ar_it_recession))
+  sort(do.call(base::c, ls_ar_it_recession))
 )
 # Print
 print(glue::glue(
