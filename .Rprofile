@@ -10,6 +10,11 @@ library(REconTools)
 # formatR needed for tidy.opts below
 library(formatR)
 
+# Conflict resolution.
+library(conflicted)
+conflict_prefer("filter", "dplyr", "stats")
+conflict_prefer("lag", "dplyr", "stats")
+
 # Path for wk_pyfan env
 spt_wkpyfan_computer_a <- 'G:/ProgramData/Anaconda3/'
 spt_wkpyfan_computer_b <- 'C:/ProgramData/Anaconda3/'

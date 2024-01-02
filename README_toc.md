@@ -41,10 +41,6 @@
 	+ Replace values outside min and max in matrix by NA values.
 	+ **R**: *rep() + rbind() + matrix(NA) + matrix(NA_real_) + matrix(NA_integer_) + colnames() + rownames() + t(apply(mt, 1, sort)) + apply(mt, 2, sort) + colMeans + rowMeans + which()*
 2. [Linear Algebra Operations](https://fanwangecon.github.io/R4Econ/amto/matrix/htmlpdfr/fs_mat_linear_algebra.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix//fs_mat_linear_algebra.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/htmlpdfr/fs_mat_linear_algebra.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/htmlpdfr/fs_mat_linear_algebra.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/matrix/htmlpdfr/fs_mat_linear_algebra.html)
-3. [Matrix and Household Size Transition Across Lifecycle](https://fanwangecon.github.io/R4Econ/amto/matrix/htmlpdfr/fs_mat_demo_trans.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix//fs_mat_demo_trans.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/htmlpdfr/fs_mat_demo_trans.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/htmlpdfr/fs_mat_demo_trans.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/amto/matrix/htmlpdfr/fs_mat_demo_trans.html)
-	+ Matrix and household size transition across the lifecycle.
-	+ Transposing and multiplying matrixes.
-	+ Standard basis matrix and shift matrix.
 
 ## 1.4  Regular Expression, Date, etc.
 
@@ -53,7 +49,7 @@
 	+ Find characters that that contain or not contain certain certain strings, numbers, and symbols.
 	+ **r**: *grepl()*
 
-# 2  Create, Organize, Summarize, and Change Dataframes
+# 2  Manipulate and Summarize Dataframes
 
 ## 2.1  Variables in Dataframes
 
@@ -354,21 +350,6 @@
 	+ **tidyr**: *expand_grid()*
 	+ **ggplot2**: *geom_line() + facet_wrap()*
 	+ **econ**: *Atkinson (JET, 1970)*
-3. [Within and Across Group Variations in Ambient Climate Exposures Across Socio-Demographic Groups](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_pop_loc_pollution.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html)
-	+ Simulate pollution exposures by location.
-	+ Compute share of pollution burden for a population group relative to the share of overall population accounted for by this population group.
-	+ Compute gini, atkinson, and coefficient variations over group means.
-	+ Compute within group variations and across group variations, using percentile ratios. 
-	+ **r**: *matrix()*
-	+ **stats**: *runif()*
-	+ **dplyr**: *group_by() + left_join() + filter() + slice()*
-4. [Environmental Exposures, Population across Locations and Time](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution_time.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_pop_loc_pollution_time.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution_time.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution_time.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution_time.html)
-	+ Discussions on environmental exposures along locational-paths and distribution of population across locations and socio-demographic groups.
-	+ Discussions on moments of within-person locational-path-specific distributions environmental exposures. 
-	+ Simulate environmental exposures across locations and time. 
-	+ Compute moments of within-person environmental exposures. 
-	+ **r**: *matrix() + sample()*
-	+ **stats**: *rlnorm()*
 
 # 9  Statistics
 
@@ -454,12 +435,18 @@
 
 # 12  Coding and Development
 
-## 12.1  Installation
+## 12.1  Installation and Packages
 
 1. [R, RTools, Rstudio Installation and Update with VSCode](https://fanwangecon.github.io/R4Econ/development/install/htmlpdfr/fs_install_R.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/development/install//fs_install_R.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/development/install/htmlpdfr/fs_install_R.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/development/install/htmlpdfr/fs_install_R.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/development/install/htmlpdfr/fs_install_R.html)
 	+ Install and update R, RTools, and Rstudio.
 	+ Set-up R inside VSCode.
 	+ **installr**: *updateR()*
+2. [Handling R Packages](https://fanwangecon.github.io/R4Econ/development/install/htmlpdfr/fs_packages_R.html): [**rmd**](https://github.com/FanWangEcon/R4Econ/blob/master/development/install//fs_packages_R.Rmd) \| [**r**](https://github.com/FanWangEcon/R4Econ/blob/master/development/install/htmlpdfr/fs_packages_R.R) \| [**pdf**](https://github.com/FanWangEcon/R4Econ/blob/master/development/install/htmlpdfr/fs_packages_R.pdf) \| [**html**](https://fanwangecon.github.io/R4Econ/development/install/htmlpdfr/fs_packages_R.html)
+	+ Resolve conflicts between two packages with identically named function.
+	+ **tidyverse**: *tidyverse_conflicts*
+	+ **dplyr**: *filter*
+	+ **stats**: *filter*
+	+ **conflicted**: *conflict_prefer()*
 
 ## 12.2  Files In and Out
 

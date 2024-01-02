@@ -5,39 +5,35 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>A Index and Code Links | Data Structures, Estimation and Optimization with R</title>
-  <meta name="description" content="<p>Run system executable and shell commands.
-Activate conda environment with shell script.</p>" />
-  <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
+  <meta name="description" content="Running parallel code in R" />
+  <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
 
   <meta property="og:title" content="A Index and Code Links | Data Structures, Estimation and Optimization with R" />
   <meta property="og:type" content="book" />
   
-  
-  <meta property="og:description" content="<p>Run system executable and shell commands.
-Activate conda environment with shell script.</p>" />
+  <meta property="og:description" content="Running parallel code in R" />
   <meta name="github-repo" content="fanwangecon/R4Econ" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="A Index and Code Links | Data Structures, Estimation and Optimization with R" />
   
-  <meta name="twitter:description" content="<p>Run system executable and shell commands.
-Activate conda environment with shell script.</p>" />
+  <meta name="twitter:description" content="Running parallel code in R" />
   
 
 <meta name="author" content="Fan Wang" />
 
 
-<meta name="date" content="2021-09-12" />
+<meta name="date" content="2024-01-01" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="code-and-development.html"/>
+<link rel="prev" href="coding-and-development.html"/>
 
-<script src="libs/header-attrs-2.10/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -53,9 +49,9 @@ Activate conda environment with shell script.</p>" />
 
 
 
-
-<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -70,7 +66,7 @@ Activate conda environment with shell script.</p>" />
 
 <style type="text/css">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -106,7 +102,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -119,7 +115,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -134,10 +130,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </style>
 
 <style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
 /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging div.csl-entry {
   margin-left:2em;
@@ -191,40 +192,44 @@ div.csl-indent {
 <li class="chapter" data-level="1.3.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-matrixes"><i class="fa fa-check"></i><b>1.3.1</b> Generate Matrixes</a></li>
 <li class="chapter" data-level="1.3.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#linear-algebra"><i class="fa fa-check"></i><b>1.3.2</b> Linear Algebra</a></li>
 </ul></li>
-<li class="chapter" data-level="1.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#variables-in-dataframes"><i class="fa fa-check"></i><b>1.4</b> Variables in Dataframes</a>
+<li class="chapter" data-level="1.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#regular-expression-date-etc."><i class="fa fa-check"></i><b>1.4</b> Regular Expression, Date, etc.</a>
 <ul>
-<li class="chapter" data-level="1.4.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-dataframe"><i class="fa fa-check"></i><b>1.4.1</b> Generate Dataframe</a></li>
-<li class="chapter" data-level="1.4.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#factor-label-and-combine"><i class="fa fa-check"></i><b>1.4.2</b> Factor Label and Combine</a></li>
-<li class="chapter" data-level="1.4.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#drawly-random-rows"><i class="fa fa-check"></i><b>1.4.3</b> Drawly Random Rows</a></li>
-<li class="chapter" data-level="1.4.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-variables-conditional-on-others"><i class="fa fa-check"></i><b>1.4.4</b> Generate Variables Conditional On Others</a></li>
-<li class="chapter" data-level="1.4.5" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-dataframes"><i class="fa fa-check"></i><b>1.4.5</b> String Dataframes</a></li>
+<li class="chapter" data-level="1.4.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-regular-expression"><i class="fa fa-check"></i><b>1.4.1</b> String Regular Expression</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="summarize-data.html"><a href="summarize-data.html"><i class="fa fa-check"></i><b>2</b> Summarize Data</a>
+<li class="chapter" data-level="2" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html"><i class="fa fa-check"></i><b>2</b> Manipulate and Summarize Dataframes</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="summarize-data.html"><a href="summarize-data.html#counting-observation"><i class="fa fa-check"></i><b>2.1</b> Counting Observation</a>
+<li class="chapter" data-level="2.1" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#variables-in-dataframes"><i class="fa fa-check"></i><b>2.1</b> Variables in Dataframes</a>
 <ul>
-<li class="chapter" data-level="2.1.1" data-path="summarize-data.html"><a href="summarize-data.html#uncount"><i class="fa fa-check"></i><b>2.1.1</b> Uncount</a></li>
+<li class="chapter" data-level="2.1.1" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#generate-dataframe"><i class="fa fa-check"></i><b>2.1.1</b> Generate Dataframe</a></li>
+<li class="chapter" data-level="2.1.2" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#generate-categorical-variables"><i class="fa fa-check"></i><b>2.1.2</b> Generate Categorical Variables</a></li>
+<li class="chapter" data-level="2.1.3" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#drawly-random-rows"><i class="fa fa-check"></i><b>2.1.3</b> Drawly Random Rows</a></li>
+<li class="chapter" data-level="2.1.4" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#generate-variables-conditional-on-others"><i class="fa fa-check"></i><b>2.1.4</b> Generate Variables Conditional On Others</a></li>
+<li class="chapter" data-level="2.1.5" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#string-dataframes"><i class="fa fa-check"></i><b>2.1.5</b> String Dataframes</a></li>
 </ul></li>
-<li class="chapter" data-level="2.2" data-path="summarize-data.html"><a href="summarize-data.html#sorting-indexing-slicing"><i class="fa fa-check"></i><b>2.2</b> Sorting, Indexing, Slicing</a>
+<li class="chapter" data-level="2.2" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#counting-observation"><i class="fa fa-check"></i><b>2.2</b> Counting Observation</a>
 <ul>
-<li class="chapter" data-level="2.2.1" data-path="summarize-data.html"><a href="summarize-data.html#sorting"><i class="fa fa-check"></i><b>2.2.1</b> Sorting</a></li>
-<li class="chapter" data-level="2.2.2" data-path="summarize-data.html"><a href="summarize-data.html#group-sort-and-slice"><i class="fa fa-check"></i><b>2.2.2</b> Group, Sort and Slice</a></li>
+<li class="chapter" data-level="2.2.1" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#counting-and-tabulations"><i class="fa fa-check"></i><b>2.2.1</b> Counting and Tabulations</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="summarize-data.html"><a href="summarize-data.html#group-statistics"><i class="fa fa-check"></i><b>2.3</b> Group Statistics</a>
+<li class="chapter" data-level="2.3" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#sorting-indexing-slicing"><i class="fa fa-check"></i><b>2.3</b> Sorting, Indexing, Slicing</a>
 <ul>
-<li class="chapter" data-level="2.3.1" data-path="summarize-data.html"><a href="summarize-data.html#cumulative-statistics-within-group"><i class="fa fa-check"></i><b>2.3.1</b> Cumulative Statistics within Group</a></li>
-<li class="chapter" data-level="2.3.2" data-path="summarize-data.html"><a href="summarize-data.html#groups-statistics"><i class="fa fa-check"></i><b>2.3.2</b> Groups Statistics</a></li>
-<li class="chapter" data-level="2.3.3" data-path="summarize-data.html"><a href="summarize-data.html#one-variable-group-summary"><i class="fa fa-check"></i><b>2.3.3</b> One Variable Group Summary</a></li>
-<li class="chapter" data-level="2.3.4" data-path="summarize-data.html"><a href="summarize-data.html#nested-within-group-stats"><i class="fa fa-check"></i><b>2.3.4</b> Nested within Group Stats</a></li>
+<li class="chapter" data-level="2.3.1" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#sorting-1"><i class="fa fa-check"></i><b>2.3.1</b> Sorting</a></li>
+<li class="chapter" data-level="2.3.2" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#group-sort-and-slice"><i class="fa fa-check"></i><b>2.3.2</b> Group, Sort and Slice</a></li>
 </ul></li>
-<li class="chapter" data-level="2.4" data-path="summarize-data.html"><a href="summarize-data.html#distributional-statistics"><i class="fa fa-check"></i><b>2.4</b> Distributional Statistics</a>
+<li class="chapter" data-level="2.4" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#advanced-group-aggregation"><i class="fa fa-check"></i><b>2.4</b> Advanced Group Aggregation</a>
 <ul>
-<li class="chapter" data-level="2.4.1" data-path="summarize-data.html"><a href="summarize-data.html#histogram"><i class="fa fa-check"></i><b>2.4.1</b> Histogram</a></li>
+<li class="chapter" data-level="2.4.1" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#cumulative-statistics-within-group"><i class="fa fa-check"></i><b>2.4.1</b> Cumulative Statistics within Group</a></li>
+<li class="chapter" data-level="2.4.2" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#groups-statistics"><i class="fa fa-check"></i><b>2.4.2</b> Groups Statistics</a></li>
+<li class="chapter" data-level="2.4.3" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#one-variable-group-summary"><i class="fa fa-check"></i><b>2.4.3</b> One Variable Group Summary</a></li>
+<li class="chapter" data-level="2.4.4" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#nested-within-group-stats"><i class="fa fa-check"></i><b>2.4.4</b> Nested within Group Stats</a></li>
 </ul></li>
-<li class="chapter" data-level="2.5" data-path="summarize-data.html"><a href="summarize-data.html#summarize-multiple-variables"><i class="fa fa-check"></i><b>2.5</b> Summarize Multiple Variables</a>
+<li class="chapter" data-level="2.5" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#distributional-statistics"><i class="fa fa-check"></i><b>2.5</b> Distributional Statistics</a>
 <ul>
-<li class="chapter" data-level="2.5.1" data-path="summarize-data.html"><a href="summarize-data.html#generate-replace-variables"><i class="fa fa-check"></i><b>2.5.1</b> Generate Replace Variables</a></li>
+<li class="chapter" data-level="2.5.1" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#histogram"><i class="fa fa-check"></i><b>2.5.1</b> Histogram</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#summarize-multiple-variables"><i class="fa fa-check"></i><b>2.6</b> Summarize Multiple Variables</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#apply-function-over-multiple-columns-and-rows"><i class="fa fa-check"></i><b>2.6.1</b> Apply Function Over Multiple Columns and Rows</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>3</b> Functions</a>
@@ -256,19 +261,25 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#wide-and-long"><i class="fa fa-check"></i><b>4.2</b> Wide and Long</a>
 <ul>
-<li class="chapter" data-level="4.2.1" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#long-to-wide"><i class="fa fa-check"></i><b>4.2.1</b> Long to Wide</a></li>
+<li class="chapter" data-level="4.2.1" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#long-table-to-wide-table"><i class="fa fa-check"></i><b>4.2.1</b> Long Table to Wide Table</a></li>
 <li class="chapter" data-level="4.2.2" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#wide-to-long"><i class="fa fa-check"></i><b>4.2.2</b> Wide to Long</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#join-and-compare"><i class="fa fa-check"></i><b>4.3</b> Join and Compare</a>
+<li class="chapter" data-level="4.3" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#within-panel-comparisons-and-statistics"><i class="fa fa-check"></i><b>4.3</b> Within Panel Comparisons and Statistics</a>
 <ul>
 <li class="chapter" data-level="4.3.1" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#find-closest-neighbor-on-grid"><i class="fa fa-check"></i><b>4.3.1</b> Find Closest Neighbor on Grid</a></li>
+<li class="chapter" data-level="4.3.2" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#within-panel-cross-time-and-cross-group-statistics"><i class="fa fa-check"></i><b>4.3.2</b> Within Panel Cross-time and Cross-group Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#join-and-merge-files-together-by-keys"><i class="fa fa-check"></i><b>4.4</b> Join and Merge Files Together by Keys</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#mesh-join"><i class="fa fa-check"></i><b>4.4.1</b> Mesh Join</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>5</b> Linear Regression</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="linear-regression.html"><a href="linear-regression.html#polynomial-fitting"><i class="fa fa-check"></i><b>5.1</b> Polynomial Fitting</a>
+<li class="chapter" data-level="5.1" data-path="linear-regression.html"><a href="linear-regression.html#linear-and-polynomial-fitting"><i class="fa fa-check"></i><b>5.1</b> Linear and Polynomial Fitting</a>
 <ul>
-<li class="chapter" data-level="5.1.1" data-path="linear-regression.html"><a href="linear-regression.html#polynomial-time-series"><i class="fa fa-check"></i><b>5.1.1</b> Polynomial Time Series</a></li>
+<li class="chapter" data-level="5.1.1" data-path="linear-regression.html"><a href="linear-regression.html#fit-curves-through-points"><i class="fa fa-check"></i><b>5.1.1</b> Fit Curves Through Points</a></li>
+<li class="chapter" data-level="5.1.2" data-path="linear-regression.html"><a href="linear-regression.html#polynomial-time-series"><i class="fa fa-check"></i><b>5.1.2</b> Polynomial Time Series</a></li>
 </ul></li>
 <li class="chapter" data-level="5.2" data-path="linear-regression.html"><a href="linear-regression.html#ols-and-iv"><i class="fa fa-check"></i><b>5.2</b> OLS and IV</a>
 <ul>
@@ -295,30 +306,32 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="7" data-path="optimization.html"><a href="optimization.html"><i class="fa fa-check"></i><b>7</b> Optimization</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="optimization.html"><a href="optimization.html#bisection"><i class="fa fa-check"></i><b>7.1</b> Bisection</a>
+<li class="chapter" data-level="7.1" data-path="optimization.html"><a href="optimization.html#grid-based-optimization"><i class="fa fa-check"></i><b>7.1</b> Grid Based Optimization</a>
 <ul>
-<li class="chapter" data-level="7.1.1" data-path="optimization.html"><a href="optimization.html#bisection-1"><i class="fa fa-check"></i><b>7.1.1</b> Bisection</a></li>
+<li class="chapter" data-level="7.1.1" data-path="optimization.html"><a href="optimization.html#find-maximum-by-iterating-over-grids"><i class="fa fa-check"></i><b>7.1.1</b> Find Maximum By Iterating Over Grids</a></li>
+<li class="chapter" data-level="7.1.2" data-path="optimization.html"><a href="optimization.html#bisection"><i class="fa fa-check"></i><b>7.1.2</b> Bisection</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="mathematics.html"><a href="mathematics.html"><i class="fa fa-check"></i><b>8</b> Mathematics</a>
 <ul>
 <li class="chapter" data-level="8.1" data-path="mathematics.html"><a href="mathematics.html#basics"><i class="fa fa-check"></i><b>8.1</b> Basics</a>
 <ul>
-<li class="chapter" data-level="8.1.1" data-path="mathematics.html"><a href="mathematics.html#log-with-different-bases-and-exponents"><i class="fa fa-check"></i><b>8.1.1</b> Log with Different Bases and Exponents</a></li>
+<li class="chapter" data-level="8.1.1" data-path="mathematics.html"><a href="mathematics.html#polynomial-formulas-for-points"><i class="fa fa-check"></i><b>8.1.1</b> Polynomial Formulas for Points</a></li>
 <li class="chapter" data-level="8.1.2" data-path="mathematics.html"><a href="mathematics.html#rescale-a-parameter-with-fixed-min-and-max"><i class="fa fa-check"></i><b>8.1.2</b> Rescale a Parameter with Fixed Min and Max</a></li>
-<li class="chapter" data-level="8.1.3" data-path="mathematics.html"><a href="mathematics.html#find-nearest"><i class="fa fa-check"></i><b>8.1.3</b> Find Nearest</a></li>
-<li class="chapter" data-level="8.1.4" data-path="mathematics.html"><a href="mathematics.html#linear-scalar-fx0-solutions"><i class="fa fa-check"></i><b>8.1.4</b> Linear Scalar f(x)=0 Solutions</a></li>
+<li class="chapter" data-level="8.1.3" data-path="mathematics.html"><a href="mathematics.html#log-with-different-bases-and-exponents"><i class="fa fa-check"></i><b>8.1.3</b> Log with Different Bases and Exponents</a></li>
+<li class="chapter" data-level="8.1.4" data-path="mathematics.html"><a href="mathematics.html#find-nearest"><i class="fa fa-check"></i><b>8.1.4</b> Find Nearest</a></li>
+<li class="chapter" data-level="8.1.5" data-path="mathematics.html"><a href="mathematics.html#linear-scalar-fx0-solutions"><i class="fa fa-check"></i><b>8.1.5</b> Linear Scalar f(x)=0 Solutions</a></li>
 </ul></li>
-<li class="chapter" data-level="8.2" data-path="mathematics.html"><a href="mathematics.html#production-function"><i class="fa fa-check"></i><b>8.2</b> Production Function</a>
+<li class="chapter" data-level="8.2" data-path="mathematics.html"><a href="mathematics.html#production-functions"><i class="fa fa-check"></i><b>8.2</b> Production Functions</a>
 <ul>
 <li class="chapter" data-level="8.2.1" data-path="mathematics.html"><a href="mathematics.html#nested-ces-production-function"><i class="fa fa-check"></i><b>8.2.1</b> Nested CES Production Function</a></li>
+<li class="chapter" data-level="8.2.2" data-path="mathematics.html"><a href="mathematics.html#latent-dynamic-health-production-function"><i class="fa fa-check"></i><b>8.2.2</b> Latent Dynamic Health Production Function</a></li>
 </ul></li>
 <li class="chapter" data-level="8.3" data-path="mathematics.html"><a href="mathematics.html#inequality-models"><i class="fa fa-check"></i><b>8.3</b> Inequality Models</a>
 <ul>
 <li class="chapter" data-level="8.3.1" data-path="mathematics.html"><a href="mathematics.html#gini-discrete-sample"><i class="fa fa-check"></i><b>8.3.1</b> GINI Discrete Sample</a></li>
 <li class="chapter" data-level="8.3.2" data-path="mathematics.html"><a href="mathematics.html#gini-formula-for-discrete-random-varialbe"><i class="fa fa-check"></i><b>8.3.2</b> GINI Formula for Discrete Random Varialbe</a></li>
 <li class="chapter" data-level="8.3.3" data-path="mathematics.html"><a href="mathematics.html#atkinson-inequality-index"><i class="fa fa-check"></i><b>8.3.3</b> Atkinson Inequality Index</a></li>
-<li class="chapter" data-level="8.3.4" data-path="mathematics.html"><a href="mathematics.html#location-population-and-pollution"><i class="fa fa-check"></i><b>8.3.4</b> Location, Population, and Pollution</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="statistics.html"><a href="statistics.html"><i class="fa fa-check"></i><b>9</b> Statistics</a>
@@ -334,8 +347,6 @@ div.csl-indent {
 <li class="chapter" data-level="9.3" data-path="statistics.html"><a href="statistics.html#discrete-random-variable"><i class="fa fa-check"></i><b>9.3</b> Discrete Random Variable</a>
 <ul>
 <li class="chapter" data-level="9.3.1" data-path="statistics.html"><a href="statistics.html#discrete-approximation-of-continuous-random-variables"><i class="fa fa-check"></i><b>9.3.1</b> Discrete Approximation of Continuous Random Variables</a></li>
-<li class="chapter" data-level="9.3.2" data-path="statistics.html"><a href="statistics.html#obtaining-joint-distribution-from-marginal-with-rectilinear-restrictions"><i class="fa fa-check"></i><b>9.3.2</b> Obtaining Joint Distribution from Marginal with Rectilinear Restrictions</a></li>
-<li class="chapter" data-level="9.3.3" data-path="statistics.html"><a href="statistics.html#obtaining-joint-distribution-from-conditional-with-rectilinear-restrictions"><i class="fa fa-check"></i><b>9.3.3</b> Obtaining Joint Distribution from Conditional with Rectilinear Restrictions</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html"><i class="fa fa-check"></i><b>10</b> Tables and Graphs</a>
@@ -346,7 +357,9 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="10.2" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#ggplot-line-related-plots"><i class="fa fa-check"></i><b>10.2</b> ggplot Line Related Plots</a>
 <ul>
-<li class="chapter" data-level="10.2.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#ggplot-line-plot"><i class="fa fa-check"></i><b>10.2.1</b> ggplot Line Plot</a></li>
+<li class="chapter" data-level="10.2.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#ggplot-line-plot-basics"><i class="fa fa-check"></i><b>10.2.1</b> ggplot Line Plot Basics</a></li>
+<li class="chapter" data-level="10.2.2" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#ggplot-line-advanced"><i class="fa fa-check"></i><b>10.2.2</b> ggplot Line Advanced</a></li>
+<li class="chapter" data-level="10.2.3" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#time-series-plots-with-shaded-areas"><i class="fa fa-check"></i><b>10.2.3</b> Time-series Plots with Shaded Areas</a></li>
 </ul></li>
 <li class="chapter" data-level="10.3" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#ggplot-scatter-related-plots"><i class="fa fa-check"></i><b>10.3</b> ggplot Scatter Related Plots</a>
 <ul>
@@ -365,21 +378,29 @@ div.csl-indent {
 <li class="chapter" data-level="11.1.1" data-path="get-data.html"><a href="get-data.html#ecmwf-era5-data"><i class="fa fa-check"></i><b>11.1.1</b> ECMWF ERA5 Data</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="code-and-development.html"><a href="code-and-development.html"><i class="fa fa-check"></i><b>12</b> Code and Development</a>
+<li class="chapter" data-level="12" data-path="coding-and-development.html"><a href="coding-and-development.html"><i class="fa fa-check"></i><b>12</b> Coding and Development</a>
 <ul>
-<li class="chapter" data-level="12.1" data-path="code-and-development.html"><a href="code-and-development.html#files-in-and-out"><i class="fa fa-check"></i><b>12.1</b> Files In and Out</a>
+<li class="chapter" data-level="12.1" data-path="coding-and-development.html"><a href="coding-and-development.html#installation-and-packages"><i class="fa fa-check"></i><b>12.1</b> Installation and Packages</a>
 <ul>
-<li class="chapter" data-level="12.1.1" data-path="code-and-development.html"><a href="code-and-development.html#file-path"><i class="fa fa-check"></i><b>12.1.1</b> File Path</a></li>
-<li class="chapter" data-level="12.1.2" data-path="code-and-development.html"><a href="code-and-development.html#text-to-file"><i class="fa fa-check"></i><b>12.1.2</b> Text to File</a></li>
-<li class="chapter" data-level="12.1.3" data-path="code-and-development.html"><a href="code-and-development.html#rmd-to-html"><i class="fa fa-check"></i><b>12.1.3</b> Rmd to HTML</a></li>
+<li class="chapter" data-level="12.1.1" data-path="coding-and-development.html"><a href="coding-and-development.html#r-installation-and-set-up"><i class="fa fa-check"></i><b>12.1.1</b> R Installation and Set-Up</a></li>
 </ul></li>
-<li class="chapter" data-level="12.2" data-path="code-and-development.html"><a href="code-and-development.html#python-with-r"><i class="fa fa-check"></i><b>12.2</b> Python with R</a>
+<li class="chapter" data-level="12.2" data-path="coding-and-development.html"><a href="coding-and-development.html#files-in-and-out"><i class="fa fa-check"></i><b>12.2</b> Files In and Out</a>
 <ul>
-<li class="chapter" data-level="12.2.1" data-path="code-and-development.html"><a href="code-and-development.html#reticulate-basics"><i class="fa fa-check"></i><b>12.2.1</b> Reticulate Basics</a></li>
+<li class="chapter" data-level="12.2.1" data-path="coding-and-development.html"><a href="coding-and-development.html#file-path"><i class="fa fa-check"></i><b>12.2.1</b> File Path</a></li>
+<li class="chapter" data-level="12.2.2" data-path="coding-and-development.html"><a href="coding-and-development.html#text-to-file"><i class="fa fa-check"></i><b>12.2.2</b> Text to File</a></li>
+<li class="chapter" data-level="12.2.3" data-path="coding-and-development.html"><a href="coding-and-development.html#rmd-to-html"><i class="fa fa-check"></i><b>12.2.3</b> Rmd to HTML</a></li>
 </ul></li>
-<li class="chapter" data-level="12.3" data-path="code-and-development.html"><a href="code-and-development.html#command-line"><i class="fa fa-check"></i><b>12.3</b> Command Line</a>
+<li class="chapter" data-level="12.3" data-path="coding-and-development.html"><a href="coding-and-development.html#python-with-r"><i class="fa fa-check"></i><b>12.3</b> Python with R</a>
 <ul>
-<li class="chapter" data-level="12.3.1" data-path="code-and-development.html"><a href="code-and-development.html#shell-and-system-commands"><i class="fa fa-check"></i><b>12.3.1</b> Shell and System Commands</a></li>
+<li class="chapter" data-level="12.3.1" data-path="coding-and-development.html"><a href="coding-and-development.html#reticulate-basics"><i class="fa fa-check"></i><b>12.3.1</b> Reticulate Basics</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="coding-and-development.html"><a href="coding-and-development.html#command-line"><i class="fa fa-check"></i><b>12.4</b> Command Line</a>
+<ul>
+<li class="chapter" data-level="12.4.1" data-path="coding-and-development.html"><a href="coding-and-development.html#shell-and-system-commands"><i class="fa fa-check"></i><b>12.4.1</b> Shell and System Commands</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="coding-and-development.html"><a href="coding-and-development.html#run-code-in-parallel-in-r"><i class="fa fa-check"></i><b>12.5</b> Run Code in Parallel in R</a>
+<ul>
+<li class="chapter" data-level="12.5.1" data-path="coding-and-development.html"><a href="coding-and-development.html#parallel-loop-in-r"><i class="fa fa-check"></i><b>12.5.1</b> Parallel Loop in R</a></li>
 </ul></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
@@ -387,74 +408,78 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="A.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#array-matrix-dataframe-links"><i class="fa fa-check"></i><b>A.1</b> Array, Matrix, Dataframe links</a>
 <ul>
-<li class="chapter" data-level="A.1.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.1-listlist-links"><i class="fa fa-check"></i><b>A.1.1</b> <span>Section 1.1 List</span> links</a></li>
-<li class="chapter" data-level="A.1.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.2-arrayarray-links"><i class="fa fa-check"></i><b>A.1.2</b> <span>Section 1.2 Array</span> links</a></li>
-<li class="chapter" data-level="A.1.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.3-matrixmatrix-links"><i class="fa fa-check"></i><b>A.1.3</b> <span>Section 1.3 Matrix</span> links</a></li>
-<li class="chapter" data-level="A.1.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.4-variables-in-dataframesvariables-in-dataframes-links"><i class="fa fa-check"></i><b>A.1.4</b> <span>Section 1.4 Variables in Dataframes</span> links</a></li>
+<li class="chapter" data-level="A.1.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.1-listlist-links"><i class="fa fa-check"></i><b>A.1.1</b> Section 1.1 List links</a></li>
+<li class="chapter" data-level="A.1.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.2-arrayarray-links"><i class="fa fa-check"></i><b>A.1.2</b> Section 1.2 Array links</a></li>
+<li class="chapter" data-level="A.1.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.3-matrixmatrix-links"><i class="fa fa-check"></i><b>A.1.3</b> Section 1.3 Matrix links</a></li>
+<li class="chapter" data-level="A.1.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.4-regular-expression-date-etc.regular-expression-date-etc.-links"><i class="fa fa-check"></i><b>A.1.4</b> Section 1.4 Regular Expression, Date, etc. links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#summarize-data-links"><i class="fa fa-check"></i><b>A.2</b> Summarize Data links</a>
+<li class="chapter" data-level="A.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#manipulate-and-summarize-dataframes-links"><i class="fa fa-check"></i><b>A.2</b> Manipulate and Summarize Dataframes links</a>
 <ul>
-<li class="chapter" data-level="A.2.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.1-counting-observationcounting-observation-links"><i class="fa fa-check"></i><b>A.2.1</b> <span>Section 2.1 Counting Observation</span> links</a></li>
-<li class="chapter" data-level="A.2.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.2-sorting-indexing-slicingsorting-indexing-slicing-links"><i class="fa fa-check"></i><b>A.2.2</b> <span>Section 2.2 Sorting, Indexing, Slicing</span> links</a></li>
-<li class="chapter" data-level="A.2.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.3-group-statisticsgroup-statistics-links"><i class="fa fa-check"></i><b>A.2.3</b> <span>Section 2.3 Group Statistics</span> links</a></li>
-<li class="chapter" data-level="A.2.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.4-distributional-statisticsdistributional-statistics-links"><i class="fa fa-check"></i><b>A.2.4</b> <span>Section 2.4 Distributional Statistics</span> links</a></li>
-<li class="chapter" data-level="A.2.5" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.5-summarize-multiple-variablessummarize-multiple-variables-links"><i class="fa fa-check"></i><b>A.2.5</b> <span>Section 2.5 Summarize Multiple Variables</span> links</a></li>
+<li class="chapter" data-level="A.2.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.1-variables-in-dataframesvariables-in-dataframes-links"><i class="fa fa-check"></i><b>A.2.1</b> Section 2.1 Variables in Dataframes links</a></li>
+<li class="chapter" data-level="A.2.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.2-counting-observationcounting-observation-links"><i class="fa fa-check"></i><b>A.2.2</b> Section 2.2 Counting Observation links</a></li>
+<li class="chapter" data-level="A.2.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.3-sorting-indexing-slicingsorting-indexing-slicing-links"><i class="fa fa-check"></i><b>A.2.3</b> Section 2.3 Sorting, Indexing, Slicing links</a></li>
+<li class="chapter" data-level="A.2.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.4-advanced-group-aggregationadvanced-group-aggregation-links"><i class="fa fa-check"></i><b>A.2.4</b> Section 2.4 Advanced Group Aggregation links</a></li>
+<li class="chapter" data-level="A.2.5" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.5-distributional-statisticsdistributional-statistics-links"><i class="fa fa-check"></i><b>A.2.5</b> Section 2.5 Distributional Statistics links</a></li>
+<li class="chapter" data-level="A.2.6" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.6-summarize-multiple-variablessummarize-multiple-variables-links"><i class="fa fa-check"></i><b>A.2.6</b> Section 2.6 Summarize Multiple Variables links</a></li>
 </ul></li>
 <li class="chapter" data-level="A.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#functions-links"><i class="fa fa-check"></i><b>A.3</b> Functions links</a>
 <ul>
-<li class="chapter" data-level="A.3.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.1-dataframe-mutatedataframe-mutate-links"><i class="fa fa-check"></i><b>A.3.1</b> <span>Section 3.1 Dataframe Mutate</span> links</a></li>
-<li class="chapter" data-level="A.3.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.2-dataframe-do-anythingdataframe-do-anything-links"><i class="fa fa-check"></i><b>A.3.2</b> <span>Section 3.2 Dataframe Do Anything</span> links</a></li>
-<li class="chapter" data-level="A.3.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.3-apply-and-pmapapply-and-pmap-links"><i class="fa fa-check"></i><b>A.3.3</b> <span>Section 3.3 Apply and pmap</span> links</a></li>
+<li class="chapter" data-level="A.3.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.1-dataframe-mutatedataframe-mutate-links"><i class="fa fa-check"></i><b>A.3.1</b> Section 3.1 Dataframe Mutate links</a></li>
+<li class="chapter" data-level="A.3.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.2-dataframe-do-anythingdataframe-do-anything-links"><i class="fa fa-check"></i><b>A.3.2</b> Section 3.2 Dataframe Do Anything links</a></li>
+<li class="chapter" data-level="A.3.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.3-apply-and-pmapapply-and-pmap-links"><i class="fa fa-check"></i><b>A.3.3</b> Section 3.3 Apply and pmap links</a></li>
 </ul></li>
 <li class="chapter" data-level="A.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#multi-dimensional-data-structures-links"><i class="fa fa-check"></i><b>A.4</b> Multi-dimensional Data Structures links</a>
 <ul>
-<li class="chapter" data-level="A.4.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.1-generate-gather-bind-and-joingenerate-gather-bind-and-join-links"><i class="fa fa-check"></i><b>A.4.1</b> <span>Section 4.1 Generate, Gather, Bind and Join</span> links</a></li>
-<li class="chapter" data-level="A.4.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.2-wide-and-longwide-and-long-links"><i class="fa fa-check"></i><b>A.4.2</b> <span>Section 4.2 Wide and Long</span> links</a></li>
-<li class="chapter" data-level="A.4.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.3-join-and-comparejoin-and-compare-links"><i class="fa fa-check"></i><b>A.4.3</b> <span>Section 4.3 Join and Compare</span> links</a></li>
+<li class="chapter" data-level="A.4.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.1-generate-gather-bind-and-joingenerate-gather-bind-and-join-links"><i class="fa fa-check"></i><b>A.4.1</b> Section 4.1 Generate, Gather, Bind and Join links</a></li>
+<li class="chapter" data-level="A.4.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.2-wide-and-longwide-and-long-links"><i class="fa fa-check"></i><b>A.4.2</b> Section 4.2 Wide and Long links</a></li>
+<li class="chapter" data-level="A.4.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.3-within-panel-comparisons-and-statisticswithin-panel-comparisons-and-statistics-links"><i class="fa fa-check"></i><b>A.4.3</b> Section 4.3 Within Panel Comparisons and Statistics links</a></li>
+<li class="chapter" data-level="A.4.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.4-join-and-merge-files-together-by-keysjoin-and-merge-files-together-by-keys-links"><i class="fa fa-check"></i><b>A.4.4</b> Section 4.4 Join and Merge Files Together by Keys links</a></li>
 </ul></li>
 <li class="chapter" data-level="A.5" data-path="index-and-code-links.html"><a href="index-and-code-links.html#linear-regression-links"><i class="fa fa-check"></i><b>A.5</b> Linear Regression links</a>
 <ul>
-<li class="chapter" data-level="A.5.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.1-polynomial-fittingpolynomial-fitting-links"><i class="fa fa-check"></i><b>A.5.1</b> <span>Section 5.1 Polynomial Fitting</span> links</a></li>
-<li class="chapter" data-level="A.5.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.2-ols-and-ivols-and-iv-links"><i class="fa fa-check"></i><b>A.5.2</b> <span>Section 5.2 OLS and IV</span> links</a></li>
-<li class="chapter" data-level="A.5.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.3-decompositiondecomposition-links"><i class="fa fa-check"></i><b>A.5.3</b> <span>Section 5.3 Decomposition</span> links</a></li>
+<li class="chapter" data-level="A.5.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.1-linear-and-polynomial-fittinglinear-and-polynomial-fitting-links"><i class="fa fa-check"></i><b>A.5.1</b> Section 5.1 Linear and Polynomial Fitting links</a></li>
+<li class="chapter" data-level="A.5.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.2-ols-and-ivols-and-iv-links"><i class="fa fa-check"></i><b>A.5.2</b> Section 5.2 OLS and IV links</a></li>
+<li class="chapter" data-level="A.5.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.3-decompositiondecomposition-links"><i class="fa fa-check"></i><b>A.5.3</b> Section 5.3 Decomposition links</a></li>
 </ul></li>
 <li class="chapter" data-level="A.6" data-path="index-and-code-links.html"><a href="index-and-code-links.html#nonlinear-and-other-regressions-links"><i class="fa fa-check"></i><b>A.6</b> Nonlinear and Other Regressions links</a>
 <ul>
-<li class="chapter" data-level="A.6.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-6.1-logit-regressionlogit-regression-links"><i class="fa fa-check"></i><b>A.6.1</b> <span>Section 6.1 Logit Regression</span> links</a></li>
-<li class="chapter" data-level="A.6.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-6.2-quantile-regressionquantile-regression-links"><i class="fa fa-check"></i><b>A.6.2</b> <span>Section 6.2 Quantile Regression</span> links</a></li>
+<li class="chapter" data-level="A.6.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-6.1-logit-regressionlogit-regression-links"><i class="fa fa-check"></i><b>A.6.1</b> Section 6.1 Logit Regression links</a></li>
+<li class="chapter" data-level="A.6.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-6.2-quantile-regressionquantile-regression-links"><i class="fa fa-check"></i><b>A.6.2</b> Section 6.2 Quantile Regression links</a></li>
 </ul></li>
 <li class="chapter" data-level="A.7" data-path="index-and-code-links.html"><a href="index-and-code-links.html#optimization-links"><i class="fa fa-check"></i><b>A.7</b> Optimization links</a>
 <ul>
-<li class="chapter" data-level="A.7.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-7.1-bisectionbisection-links"><i class="fa fa-check"></i><b>A.7.1</b> <span>Section 7.1 Bisection</span> links</a></li>
+<li class="chapter" data-level="A.7.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-7.1-grid-based-optimizationgrid-based-optimization-links"><i class="fa fa-check"></i><b>A.7.1</b> Section 7.1 Grid Based Optimization links</a></li>
 </ul></li>
 <li class="chapter" data-level="A.8" data-path="index-and-code-links.html"><a href="index-and-code-links.html#mathematics-links"><i class="fa fa-check"></i><b>A.8</b> Mathematics links</a>
 <ul>
-<li class="chapter" data-level="A.8.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.1-basicsbasics-links"><i class="fa fa-check"></i><b>A.8.1</b> <span>Section 8.1 Basics</span> links</a></li>
-<li class="chapter" data-level="A.8.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.2-production-functionproduction-function-links"><i class="fa fa-check"></i><b>A.8.2</b> <span>Section 8.2 Production Function</span> links</a></li>
-<li class="chapter" data-level="A.8.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.3-inequality-modelsinequality-models-links"><i class="fa fa-check"></i><b>A.8.3</b> <span>Section 8.3 Inequality Models</span> links</a></li>
+<li class="chapter" data-level="A.8.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.1-basicsbasics-links"><i class="fa fa-check"></i><b>A.8.1</b> Section 8.1 Basics links</a></li>
+<li class="chapter" data-level="A.8.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.2-production-functionsproduction-functions-links"><i class="fa fa-check"></i><b>A.8.2</b> Section 8.2 Production Functions links</a></li>
+<li class="chapter" data-level="A.8.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.3-inequality-modelsinequality-models-links"><i class="fa fa-check"></i><b>A.8.3</b> Section 8.3 Inequality Models links</a></li>
 </ul></li>
 <li class="chapter" data-level="A.9" data-path="index-and-code-links.html"><a href="index-and-code-links.html#statistics-links"><i class="fa fa-check"></i><b>A.9</b> Statistics links</a>
 <ul>
-<li class="chapter" data-level="A.9.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.1-random-drawsrandom-draws-links"><i class="fa fa-check"></i><b>A.9.1</b> <span>Section 9.1 Random Draws</span> links</a></li>
-<li class="chapter" data-level="A.9.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.2-distributionsdistributions-links"><i class="fa fa-check"></i><b>A.9.2</b> <span>Section 9.2 Distributions</span> links</a></li>
-<li class="chapter" data-level="A.9.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.3-discrete-random-variablediscrete-random-variable-links"><i class="fa fa-check"></i><b>A.9.3</b> <span>Section 9.3 Discrete Random Variable</span> links</a></li>
+<li class="chapter" data-level="A.9.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.1-random-drawsrandom-draws-links"><i class="fa fa-check"></i><b>A.9.1</b> Section 9.1 Random Draws links</a></li>
+<li class="chapter" data-level="A.9.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.2-distributionsdistributions-links"><i class="fa fa-check"></i><b>A.9.2</b> Section 9.2 Distributions links</a></li>
+<li class="chapter" data-level="A.9.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.3-discrete-random-variablediscrete-random-variable-links"><i class="fa fa-check"></i><b>A.9.3</b> Section 9.3 Discrete Random Variable links</a></li>
 </ul></li>
 <li class="chapter" data-level="A.10" data-path="index-and-code-links.html"><a href="index-and-code-links.html#tables-and-graphs-links"><i class="fa fa-check"></i><b>A.10</b> Tables and Graphs links</a>
 <ul>
-<li class="chapter" data-level="A.10.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.1-r-base-plotsr-base-plots-links"><i class="fa fa-check"></i><b>A.10.1</b> <span>Section 10.1 R Base Plots</span> links</a></li>
-<li class="chapter" data-level="A.10.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.2-ggplot-line-related-plotsggplot-line-related-plots-links"><i class="fa fa-check"></i><b>A.10.2</b> <span>Section 10.2 ggplot Line Related Plots</span> links</a></li>
-<li class="chapter" data-level="A.10.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.3-ggplot-scatter-related-plotsggplot-scatter-related-plots-links"><i class="fa fa-check"></i><b>A.10.3</b> <span>Section 10.3 ggplot Scatter Related Plots</span> links</a></li>
-<li class="chapter" data-level="A.10.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.4-write-and-read-plotswrite-and-read-plots-links"><i class="fa fa-check"></i><b>A.10.4</b> <span>Section 10.4 Write and Read Plots</span> links</a></li>
+<li class="chapter" data-level="A.10.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.1-r-base-plotsr-base-plots-links"><i class="fa fa-check"></i><b>A.10.1</b> Section 10.1 R Base Plots links</a></li>
+<li class="chapter" data-level="A.10.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.2-ggplot-line-related-plotsggplot-line-related-plots-links"><i class="fa fa-check"></i><b>A.10.2</b> Section 10.2 ggplot Line Related Plots links</a></li>
+<li class="chapter" data-level="A.10.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.3-ggplot-scatter-related-plotsggplot-scatter-related-plots-links"><i class="fa fa-check"></i><b>A.10.3</b> Section 10.3 ggplot Scatter Related Plots links</a></li>
+<li class="chapter" data-level="A.10.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.4-write-and-read-plotswrite-and-read-plots-links"><i class="fa fa-check"></i><b>A.10.4</b> Section 10.4 Write and Read Plots links</a></li>
 </ul></li>
 <li class="chapter" data-level="A.11" data-path="index-and-code-links.html"><a href="index-and-code-links.html#get-data-links"><i class="fa fa-check"></i><b>A.11</b> Get Data links</a>
 <ul>
-<li class="chapter" data-level="A.11.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-11.1-environmental-dataenvironmental-data-links"><i class="fa fa-check"></i><b>A.11.1</b> <span>Section 11.1 Environmental Data</span> links</a></li>
+<li class="chapter" data-level="A.11.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-11.1-environmental-dataenvironmental-data-links"><i class="fa fa-check"></i><b>A.11.1</b> Section 11.1 Environmental Data links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.12" data-path="index-and-code-links.html"><a href="index-and-code-links.html#code-and-development-links"><i class="fa fa-check"></i><b>A.12</b> Code and Development links</a>
+<li class="chapter" data-level="A.12" data-path="index-and-code-links.html"><a href="index-and-code-links.html#coding-and-development-links"><i class="fa fa-check"></i><b>A.12</b> Coding and Development links</a>
 <ul>
-<li class="chapter" data-level="A.12.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.1-files-in-and-outfiles-in-and-out-links"><i class="fa fa-check"></i><b>A.12.1</b> <span>Section 12.1 Files In and Out</span> links</a></li>
-<li class="chapter" data-level="A.12.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.2-python-with-rpython-with-r-links"><i class="fa fa-check"></i><b>A.12.2</b> <span>Section 12.2 Python with R</span> links</a></li>
-<li class="chapter" data-level="A.12.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.3-command-linecommand-line-links"><i class="fa fa-check"></i><b>A.12.3</b> <span>Section 12.3 Command Line</span> links</a></li>
+<li class="chapter" data-level="A.12.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.1-installation-and-packagesinstallation-and-packages-links"><i class="fa fa-check"></i><b>A.12.1</b> Section 12.1 Installation and Packages links</a></li>
+<li class="chapter" data-level="A.12.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.2-files-in-and-outfiles-in-and-out-links"><i class="fa fa-check"></i><b>A.12.2</b> Section 12.2 Files In and Out links</a></li>
+<li class="chapter" data-level="A.12.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.3-python-with-rpython-with-r-links"><i class="fa fa-check"></i><b>A.12.3</b> Section 12.3 Python with R links</a></li>
+<li class="chapter" data-level="A.12.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.4-command-linecommand-line-links"><i class="fa fa-check"></i><b>A.12.4</b> Section 12.4 Command Line links</a></li>
+<li class="chapter" data-level="A.12.5" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.5-run-code-in-parallel-in-rrun-code-in-parallel-in-r-links"><i class="fa fa-check"></i><b>A.12.5</b> Section 12.5 Run Code in Parallel in R links</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -477,44 +502,49 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="index-and-code-links" class="section level1" number="13">
-<h1><span class="header-section-number">A</span> Index and Code Links</h1>
-<div id="array-matrix-dataframe-links" class="section level2" number="13.1">
-<h2><span class="header-section-number">A.1</span> Array, Matrix, Dataframe links</h2>
-<div id="section-1.1-listlist-links" class="section level3" number="13.1.1">
-<h3><span class="header-section-number">A.1.1</span> <a href="array-matrix-dataframe.html#list">Section 1.1 List</a> links</h3>
+<div id="index-and-code-links" class="section level1 hasAnchor" number="13">
+<h1><span class="header-section-number">A</span> Index and Code Links<a href="index-and-code-links.html#index-and-code-links" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="array-matrix-dataframe-links" class="section level2 hasAnchor" number="13.1">
+<h2><span class="header-section-number">A.1</span> Array, Matrix, Dataframe links<a href="index-and-code-links.html#array-matrix-dataframe-links" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="section-1.1-listlist-links" class="section level3 hasAnchor" number="13.1.1">
+<h3><span class="header-section-number">A.1.1</span> <a href="array-matrix-dataframe.html#list">Section 1.1 List</a> links<a href="index-and-code-links.html#section-1.1-listlist-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/amto/list/htmlpdfr/fs_lst_basics.html">Multi-dimensional Named Lists</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/list//fs_lst_basics.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/list/htmlpdfr/fs_lst_basics.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/list/htmlpdfr/fs_lst_basics.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/list/htmlpdfr/fs_lst_basics.html"><strong>html</strong></a>
 <ul>
 <li>Initiate Empty List. Named one and two dimensional lists. List of Dataframes.</li>
 <li>Collapse named and unamed list to string and print input code.</li>
-<li><strong>r</strong>: <em>deparse(substitute()) + vector(mode = “list,” length = it_N) + names(list) &lt;- paste0(‘e,’seq()) + dimnames(ls2d)[[1]] &lt;- paste0(‘r,’seq()) + dimnames(ls2d)[[2]] &lt;- paste0(‘c,’seq())</em></li>
+<li><strong>r</strong>: <em>deparse(substitute()) + vector(mode = “list”, length = it_N) + names(list) &lt;- paste0(‘e’,seq()) + dimnames(ls2d)[[1]] &lt;- paste0(‘r’,seq()) + dimnames(ls2d)[[2]] &lt;- paste0(‘c’,seq())</em></li>
 <li><strong>tidyr</strong>: <em>unnest()</em></li>
 </ul></li>
 </ol>
 </div>
-<div id="section-1.2-arrayarray-links" class="section level3" number="13.1.2">
-<h3><span class="header-section-number">A.1.2</span> <a href="array-matrix-dataframe.html#array">Section 1.2 Array</a> links</h3>
+<div id="section-1.2-arrayarray-links" class="section level3 hasAnchor" number="13.1.2">
+<h3><span class="header-section-number">A.1.2</span> <a href="array-matrix-dataframe.html#array">Section 1.2 Array</a> links<a href="index-and-code-links.html#section-1.2-arrayarray-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
-<li><a href="https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_basics.html">Arrays Operations in R</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_basics.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_basics.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_basics.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_basics.html"><strong>html</strong></a>
+<li><a href="https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_basics.html">Basic Arrays Operations in R</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_basics.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_basics.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_basics.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_basics.html"><strong>html</strong></a>
 <ul>
+<li>Generate N-dimensional array of NA values, label dimension elements.</li>
 <li>Basic array operations in R, rep, head, tail, na, etc.</li>
 <li>E notation.</li>
 <li>Get N cuts from M points.</li>
-<li><strong>r</strong>: <em>rep() + head() + tail() + na_if() + Re()</em></li>
+<li><strong>r</strong>: <em>sum() + prod() + rep() + array(NA, dim=c(3, 3)) + array(NA, dim=c(3, 3, 3)) + dimnames(mn)[[3]] = paste0(‘k=’, 0:4) + head() + tail() + na_if() + Re()</em></li>
+<li><strong>purrr</strong>: <em>reduce()</em></li>
 </ul></li>
 <li><a href="https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_generate.html">Generate Special Arrays</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_generate.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_generate.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_generate.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_generate.html"><strong>html</strong></a>
 <ul>
 <li>Generate equi-distance, special log spaced array.</li>
 <li>Generate probability mass function with non-unique and non-sorted value and probability arrays.</li>
-<li><strong>r</strong>: <em>seq() + sort() + runif() + ceiling()</em></li>
+<li>Generate a set of integer sequences, with gaps in between, e.g., (1,2,3), (5), (10,11).</li>
+<li><strong>r</strong>: <em>seq() + sort() + runif() + ceiling() + sample() + apply() + do.call()</em></li>
 <li><strong>stats</strong>: <em>aggregate()</em></li>
 </ul></li>
 <li><a href="https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_string.html">String Operations</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_string.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_string.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_string.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_string.html"><strong>html</strong></a>
 <ul>
-<li>Split, concatenate, subset, replace, substring strings.</li>
+<li>Split, concatenate, subset, replace, and substring strings.</li>
 <li>Convert number to string without decimal and negative sign.</li>
-<li><strong>r</strong>: <em>paste0() + sub() + gsub() + grepl() + sprintf()</em></li>
+<li>Concatenate numeric and string arrays as a single string.</li>
+<li>Regular expression</li>
+<li><strong>r</strong>: <em>paste0() + paste0(round(runif(3),3), collapse=‘,’) + sub() + gsub() + grepl() + sprintf()</em></li>
 </ul></li>
 <li><a href="https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_mesh.html">Meshgrid Matrices, Arrays and Scalars</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/array//fs_ary_mesh.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_mesh.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/array/htmlpdfr/fs_ary_mesh.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/array/htmlpdfr/fs_ary_mesh.html"><strong>html</strong></a>
 <ul>
@@ -523,30 +553,54 @@ div.csl-indent {
 </ul></li>
 </ol>
 </div>
-<div id="section-1.3-matrixmatrix-links" class="section level3" number="13.1.3">
-<h3><span class="header-section-number">A.1.3</span> <a href="array-matrix-dataframe.html#matrix">Section 1.3 Matrix</a> links</h3>
+<div id="section-1.3-matrixmatrix-links" class="section level3 hasAnchor" number="13.1.3">
+<h3><span class="header-section-number">A.1.3</span> <a href="array-matrix-dataframe.html#matrix">Section 1.3 Matrix</a> links<a href="index-and-code-links.html#section-1.3-matrixmatrix-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/amto/matrix/htmlpdfr/fs_mat_generate.html">Matrix Basics</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix//fs_mat_generate.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/htmlpdfr/fs_mat_generate.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/htmlpdfr/fs_mat_generate.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/matrix/htmlpdfr/fs_mat_generate.html"><strong>html</strong></a>
 <ul>
 <li>Generate and combine NA, fixed and random matrixes. Name columns and rows.</li>
-<li><strong>R</strong>: <em>rep() + rbind() + matrix(NA) + matrix(NA_real_) + matrix(NA_integer_) + colnames() + rownames()</em></li>
+<li>Sort all rows and all columns of a matrix.</li>
+<li>Replace values outside min and max in matrix by NA values.</li>
+<li><strong>R</strong>: <em>rep() + rbind() + matrix(NA) + matrix(NA_real_) + matrix(NA_integer_) + colnames() + rownames() + t(apply(mt, 1, sort)) + apply(mt, 2, sort) + colMeans + rowMeans + which()</em></li>
 </ul></li>
 <li><a href="https://fanwangecon.github.io/R4Econ/amto/matrix/htmlpdfr/fs_mat_linear_algebra.html">Linear Algebra Operations</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix//fs_mat_linear_algebra.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/htmlpdfr/fs_mat_linear_algebra.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/matrix/htmlpdfr/fs_mat_linear_algebra.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/matrix/htmlpdfr/fs_mat_linear_algebra.html"><strong>html</strong></a></li>
 </ol>
 </div>
-<div id="section-1.4-variables-in-dataframesvariables-in-dataframes-links" class="section level3" number="13.1.4">
-<h3><span class="header-section-number">A.1.4</span> <a href="array-matrix-dataframe.html#variables-in-dataframes">Section 1.4 Variables in Dataframes</a> links</h3>
+<div id="section-1.4-regular-expression-date-etc.regular-expression-date-etc.-links" class="section level3 hasAnchor" number="13.1.4">
+<h3><span class="header-section-number">A.1.4</span> <a href="array-matrix-dataframe.html#regular-expression-date-etc.">Section 1.4 Regular Expression, Date, etc.</a> links<a href="index-and-code-links.html#section-1.4-regular-expression-date-etc.regular-expression-date-etc.-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
-<li><a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_basics.html">Tibble Basics</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_basics.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_basics.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_basics.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_basics.html"><strong>html</strong></a>
+<li><a href="https://fanwangecon.github.io/R4Econ/amto/misc/htmlpdfr/fs_parse_regex.html">R String Regular Expression (Regex)</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/misc//fs_parse_regex.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/misc/htmlpdfr/fs_parse_regex.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/misc/htmlpdfr/fs_parse_regex.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/misc/htmlpdfr/fs_parse_regex.html"><strong>html</strong></a>
 <ul>
-<li>generate tibbles, rename tibble variables, tibble row and column names</li>
-<li>rename numeric sequential columns with string prefix and suffix</li>
-<li><strong>dplyr</strong>: <em>as_tibble(mt) + rename_all(~c(ar_names)) + rename_at(vars(starts_with(“xx”)), funs(str_replace(., “yy,” “yyyy”)) + rename_at(vars(num_range(’’,ar_it)), funs(paste0(st,.))) + rowid_to_column() + colnames + rownames</em></li>
+<li>Regular expression.</li>
+<li>Find characters that that contain or not contain certain certain strings, numbers, and symbols.</li>
+<li><strong>r</strong>: <em>grepl()</em></li>
 </ul></li>
-<li><a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_factors.html">Label and Combine Factor Variables</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_factors.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_factors.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_factors.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_factors.html"><strong>html</strong></a>
+</ol>
+</div>
+</div>
+<div id="manipulate-and-summarize-dataframes-links" class="section level2 hasAnchor" number="13.2">
+<h2><span class="header-section-number">A.2</span> Manipulate and Summarize Dataframes links<a href="index-and-code-links.html#manipulate-and-summarize-dataframes-links" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="section-2.1-variables-in-dataframesvariables-in-dataframes-links" class="section level3 hasAnchor" number="13.2.1">
+<h3><span class="header-section-number">A.2.1</span> <a href="manipulate-and-summarize-dataframes.html#variables-in-dataframes">Section 2.1 Variables in Dataframes</a> links<a href="index-and-code-links.html#section-2.1-variables-in-dataframesvariables-in-dataframes-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li><a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_basics.html">Generate Tibble Dataframes from Matrix and List</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_basics.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_basics.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_basics.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_basics.html"><strong>html</strong></a>
 <ul>
-<li>Convert numeric variables to factor variables, generate joint factors, and label factors.</li>
+<li>Generate tibble data from two dimensional named lists, unlist for exporting.</li>
+<li>Generate tibble dataframe, rename tibble variables, generate tibble row and column names.</li>
+<li>Export tibble table to csv file with date and time stamp in file name.</li>
+<li>Rename numeric sequential columns with string prefix and suffix.</li>
+<li><strong>base</strong>: <em>Sys.time() + format() + sample(LETTERS, 5, replace = TRUE) + is.list</em></li>
+<li><strong>dplyr</strong>: <em>as_tibble(mt) + rename_all(~c(ar_names)) + rename_at(vars(starts_with(“xx”)), funs(str_replace(., “yy”, “yyyy”)) + rename_at(vars(num_range(’’,ar_it)), funs(paste0(st,.))) + rowid_to_column() + row_number() + min_rank() + dense_rank() + mutate_if()</em></li>
+<li><strong>base</strong>: <em>colnames + rownames</em></li>
+</ul></li>
+<li><a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_factors.html">Interact and Cut Variables to Generate Categorical Variables</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_factors.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_factors.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_factors.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_factors.html"><strong>html</strong></a>
+<ul>
+<li>Convert rowname to variable name.</li>
+<li>Generate categorical variable from a continuous variable.</li>
+<li>Convert numeric variables to factor variables, generate interaction variables (joint factors), and label factors with descriptive words.</li>
 <li>Graph MPG and 1/4 Miles Time (qsec) from the mtcars dataset over joint shift-type (am) and engine-type (vs) categories.</li>
+<li><strong>r</strong>: <em>cut(breaks = ar, values = ar, right = FALSE)</em></li>
+<li><strong>tibble</strong>: <em>rownames_to_column()</em></li>
 <li><strong>forcats</strong>: <em>as_factor() + fct_recode() + fct_cross()</em></li>
 </ul></li>
 <li><a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_random_draws.html">Randomly Draw Subsets of Rows from Matrix</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_random_draws.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_random_draws.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_random_draws.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_random_draws.html"><strong>html</strong></a>
@@ -555,9 +609,10 @@ div.csl-indent {
 <li><strong>r</strong>: <em>rnorm() + sample() + df[sample(dim(df)[1], it_M, replace=FALSE),]</em></li>
 <li><strong>dplyr</strong>: <em>case_when() + mutate(var = case_when(rnorm(n(),mean=0,sd=1) &lt; 0 ~ 1, TRUE ~ 0)) %&gt;% filter(var == 1)</em></li>
 </ul></li>
-<li><a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html">Generate Variables Conditional on Other Variables</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_na.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_na.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_na.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html"><strong>html</strong></a>
+<li><a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html">Generate Variables Conditional on Other Variables, Categorical from Continuous</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble//fs_tib_na.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_na.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/amto/tibble/htmlpdfr/fs_tib_na.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/amto/tibble/htmlpdfr/fs_tib_na.html"><strong>html</strong></a>
 <ul>
 <li>Use case_when to generate elseif conditional variables: NA, approximate difference, etc.</li>
+<li>Generate Categorical Variables from Continuous Variables.</li>
 <li><strong>dplyr</strong>: <em>case_when() + na_if() + mutate(var = na_if(case_when(rnorm(n())&lt; 0 ~ -99, TRUE ~ mpg), -99))</em></li>
 <li><strong>r</strong>: <em>e-notation + all.equal() + isTRUE(all.equal(a,b,tol)) + is.na() + NA_real_ + NA_character_ + NA_integer_</em></li>
 </ul></li>
@@ -570,21 +625,18 @@ div.csl-indent {
 </ul></li>
 </ol>
 </div>
-</div>
-<div id="summarize-data-links" class="section level2" number="13.2">
-<h2><span class="header-section-number">A.2</span> Summarize Data links</h2>
-<div id="section-2.1-counting-observationcounting-observation-links" class="section level3" number="13.2.1">
-<h3><span class="header-section-number">A.2.1</span> <a href="summarize-data.html#counting-observation">Section 2.1 Counting Observation</a> links</h3>
+<div id="section-2.2-counting-observationcounting-observation-links" class="section level3 hasAnchor" number="13.2.2">
+<h3><span class="header-section-number">A.2.2</span> <a href="manipulate-and-summarize-dataframes.html#counting-observation">Section 2.2 Counting Observation</a> links<a href="index-and-code-links.html#section-2.2-counting-observationcounting-observation-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
-<li><a href="https://fanwangecon.github.io/R4Econ/summarize/count/htmlpdfr/fs_count_basics.html">Counting Basics</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count//fs_count_basics.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/htmlpdfr/fs_count_basics.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/htmlpdfr/fs_count_basics.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/summarize/count/htmlpdfr/fs_count_basics.html"><strong>html</strong></a>
+<li><a href="https://fanwangecon.github.io/R4Econ/summarize/count/htmlpdfr/fs_count_basics.html">R Example Counting, Tabulation, and Cross Tabulation</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count//fs_count_basics.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/htmlpdfr/fs_count_basics.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/count/htmlpdfr/fs_count_basics.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/summarize/count/htmlpdfr/fs_count_basics.html"><strong>html</strong></a>
 <ul>
-<li>uncount to generate panel skeleton from years in survey</li>
-<li><strong>dplyr</strong>: <em>uncount(yr_n) + group_by() + mutate(yr = row_number() + start_yr)</em></li>
+<li>Uncount to generate panel skeleton from years in survey</li>
+<li><strong>dplyr</strong>: <em>tally() + spread() + distinct() + uncount(yr_n) + group_by() + mutate(yr = row_number() + start_yr)</em></li>
 </ul></li>
 </ol>
 </div>
-<div id="section-2.2-sorting-indexing-slicingsorting-indexing-slicing-links" class="section level3" number="13.2.2">
-<h3><span class="header-section-number">A.2.2</span> <a href="summarize-data.html#sorting-indexing-slicing">Section 2.2 Sorting, Indexing, Slicing</a> links</h3>
+<div id="section-2.3-sorting-indexing-slicingsorting-indexing-slicing-links" class="section level3 hasAnchor" number="13.2.3">
+<h3><span class="header-section-number">A.2.3</span> <a href="manipulate-and-summarize-dataframes.html#sorting-indexing-slicing">Section 2.3 Sorting, Indexing, Slicing</a> links<a href="index-and-code-links.html#section-2.3-sorting-indexing-slicingsorting-indexing-slicing-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/summarize/index/htmlpdfr/fs_index_populate.html">Sorted Index, Interval Index and Expand Value from One Row</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index//fs_index_populate.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index/htmlpdfr/fs_index_populate.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index/htmlpdfr/fs_index_populate.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/summarize/index/htmlpdfr/fs_index_populate.html"><strong>html</strong></a>
 <ul>
@@ -593,15 +645,16 @@ div.csl-indent {
 <li>Populate Values from one row to other rows</li>
 <li><strong>dplyr</strong>: <em>arrange() + row_number() + mutate(lowest = min(Sepal.Length)) + case_when(row_number()==x ~ Septal.Length) + mutate(Sepal.New = Sepal.Length[Sepal.Index == 1])</em></li>
 </ul></li>
-<li><a href="https://fanwangecon.github.io/R4Econ/summarize/index/htmlpdfr/fs_group_sort.html">Group and sort, and Slice and Summarize</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index//fs_group_sort.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index/htmlpdfr/fs_group_sort.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index/htmlpdfr/fs_group_sort.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/summarize/index/htmlpdfr/fs_group_sort.html"><strong>html</strong></a>
+<li><a href="https://fanwangecon.github.io/R4Econ/summarize/index/htmlpdfr/fs_group_sort.html">R Within-group Ascending and Descending Sort, Selection, and Differencing</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index//fs_group_sort.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index/htmlpdfr/fs_group_sort.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/index/htmlpdfr/fs_group_sort.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/summarize/index/htmlpdfr/fs_group_sort.html"><strong>html</strong></a>
 <ul>
-<li>Group a dataframe by a variable, sort within group by another variable, keep only highest rows.</li>
-<li><strong>dplyr</strong>: <em>arrange() + group_by() + slice_head(n=1)</em></li>
+<li>Sort a dataframe by multiple variables, some in descending order.</li>
+<li>Select observations with the highest M values from within N groups (top scoring students from each class).</li>
+<li><strong>dplyr</strong>: <em>arrange(a, b, desc(c)) + group_by() + lag() + lead() + slice_head(n=1)</em></li>
 </ul></li>
 </ol>
 </div>
-<div id="section-2.3-group-statisticsgroup-statistics-links" class="section level3" number="13.2.3">
-<h3><span class="header-section-number">A.2.3</span> <a href="summarize-data.html#group-statistics">Section 2.3 Group Statistics</a> links</h3>
+<div id="section-2.4-advanced-group-aggregationadvanced-group-aggregation-links" class="section level3 hasAnchor" number="13.2.4">
+<h3><span class="header-section-number">A.2.4</span> <a href="manipulate-and-summarize-dataframes.html#advanced-group-aggregation">Section 2.4 Advanced Group Aggregation</a> links<a href="index-and-code-links.html#section-2.4-advanced-group-aggregationadvanced-group-aggregation-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_cumall.html">Cummean Test, Cumulative Mean within Group</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate//fs_group_cumall.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_cumall.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_cumall.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_cumall.html"><strong>html</strong></a>
 <ul>
@@ -618,7 +671,7 @@ div.csl-indent {
 <li><a href="https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_summ_one.html">By Groups, One Variable All Statistics</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate//fs_group_summ_one.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_summ_one.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_summ_one.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_summ_one.html"><strong>html</strong></a>
 <ul>
 <li>Pick stats, overall, and by multiple groups, stats as matrix or wide row with name=(ctsvar + catevar + catelabel).</li>
-<li><strong>tidyr</strong>: <em>group_by() + summarize_at(, funs()) + rename(!!var := !!sym(var)) + mutate(!!var := paste0(var,‘str,’!syms(vars))) + gather() + unite() + spread(varcates, value)</em></li>
+<li><strong>tidyr</strong>: <em>group_by() + summarize_at(, funs()) + rename(!!var := !!sym(var)) + mutate(!!var := paste0(var,‘str’,!!!syms(vars))) + gather() + unite() + spread(varcates, value)</em></li>
 </ul></li>
 <li><a href="https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_summ_wide.html">By within Individual Groups Variables, Averages</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate//fs_group_summ_wide.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_summ_wide.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/aggregate/htmlpdfr/fs_group_summ_wide.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/summarize/aggregate/htmlpdfr/fs_group_summ_wide.html"><strong>html</strong></a>
 <ul>
@@ -628,8 +681,8 @@ div.csl-indent {
 </ul></li>
 </ol>
 </div>
-<div id="section-2.4-distributional-statisticsdistributional-statistics-links" class="section level3" number="13.2.4">
-<h3><span class="header-section-number">A.2.4</span> <a href="summarize-data.html#distributional-statistics">Section 2.4 Distributional Statistics</a> links</h3>
+<div id="section-2.5-distributional-statisticsdistributional-statistics-links" class="section level3 hasAnchor" number="13.2.5">
+<h3><span class="header-section-number">A.2.5</span> <a href="manipulate-and-summarize-dataframes.html#distributional-statistics">Section 2.5 Distributional Statistics</a> links<a href="index-and-code-links.html#section-2.5-distributional-statisticsdistributional-statistics-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/summarize/dist/htmlpdfr/fst_hist_onevar.html">Tibble Basics</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/dist//fst_hist_onevar.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/dist/htmlpdfr/fst_hist_onevar.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/dist/htmlpdfr/fst_hist_onevar.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/summarize/dist/htmlpdfr/fst_hist_onevar.html"><strong>html</strong></a>
 <ul>
@@ -640,24 +693,26 @@ div.csl-indent {
 </ul></li>
 </ol>
 </div>
-<div id="section-2.5-summarize-multiple-variablessummarize-multiple-variables-links" class="section level3" number="13.2.5">
-<h3><span class="header-section-number">A.2.5</span> <a href="summarize-data.html#summarize-multiple-variables">Section 2.5 Summarize Multiple Variables</a> links</h3>
+<div id="section-2.6-summarize-multiple-variablessummarize-multiple-variables-links" class="section level3 hasAnchor" number="13.2.6">
+<h3><span class="header-section-number">A.2.6</span> <a href="manipulate-and-summarize-dataframes.html#summarize-multiple-variables">Section 2.6 Summarize Multiple Variables</a> links<a href="index-and-code-links.html#section-2.6-summarize-multiple-variablessummarize-multiple-variables-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
-<li><a href="https://fanwangecon.github.io/R4Econ/summarize/multivar/htmlpdfr/fs_func_multivar.html">Apply the Same Function over Columns of Matrix</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/multivar//fs_func_multivar.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/multivar/htmlpdfr/fs_func_multivar.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/multivar/htmlpdfr/fs_func_multivar.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/summarize/multivar/htmlpdfr/fs_func_multivar.html"><strong>html</strong></a>
+<li><a href="https://fanwangecon.github.io/R4Econ/summarize/multivar/htmlpdfr/fs_func_multivar.html">Apply the Same Function over Columns and Row Groups</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/multivar//fs_func_multivar.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/multivar/htmlpdfr/fs_func_multivar.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/summarize/multivar/htmlpdfr/fs_func_multivar.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/summarize/multivar/htmlpdfr/fs_func_multivar.html"><strong>html</strong></a>
 <ul>
+<li>Compute row-specific quantiles, based on values across columns within each row.</li>
+<li>Sum values within-row across multiple columns, ignoring NA.</li>
+<li>Sum values within-group across multiple rows for matched columns, ignoring NA.</li>
 <li>Replace NA values in selected columns by alternative values.</li>
-<li>Cumulative sum over multiple variables.</li>
-<li>Rename various various with common prefix and suffix appended.</li>
-<li><strong>r</strong>: <em>cumsum() + gsub() + mutate_at(vars(contains(‘V’)), .funs = list(cumu = ~cumsum(.))) + rename_at(vars(contains(“V”) ), list(~gsub(“M,” "", .)))</em></li>
-<li><strong>dplyr</strong>: <em>rename_at() + mutate_at() + rename_at(vars(starts_with(“V”)), funs(str_replace(., “V,” “var”))) + mutate_at(vars(one_of(c(‘var1,’ ‘var2’))), list(~replace_na(., 99)))</em></li>
+<li><strong>r</strong>: <em>rowSums() + cumsum() + gsub() + mutate_at(vars(matches()), .funs = list(gs = ~sum(.))) + mutate_at(vars(contains()), .funs = list(cumu = ~cumsum(.))) + rename_at(vars(contains()), list(~gsub(“M”, ““, .)))</em></li>
+<li><strong>dplyr</strong>: <em>group_by(across(one_of(ar_st_vars))) + mutate(across(matches(), func) + rename_at() + mutate_at() + rename_at(vars(starts_with()), funs(str_replace(., “v”, “var”))) + mutate_at(vars(one_of()), list(~replace_na(., 99)))</em></li>
+<li><strong>purrr</strong>: <em>reduce()</em></li>
 </ul></li>
 </ol>
 </div>
 </div>
-<div id="functions-links" class="section level2" number="13.3">
-<h2><span class="header-section-number">A.3</span> Functions links</h2>
-<div id="section-3.1-dataframe-mutatedataframe-mutate-links" class="section level3" number="13.3.1">
-<h3><span class="header-section-number">A.3.1</span> <a href="functions.html#dataframe-mutate">Section 3.1 Dataframe Mutate</a> links</h3>
+<div id="functions-links" class="section level2 hasAnchor" number="13.3">
+<h2><span class="header-section-number">A.3</span> Functions links<a href="index-and-code-links.html#functions-links" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="section-3.1-dataframe-mutatedataframe-mutate-links" class="section level3 hasAnchor" number="13.3.1">
+<h3><span class="header-section-number">A.3.1</span> <a href="functions.html#dataframe-mutate">Section 3.1 Dataframe Mutate</a> links<a href="index-and-code-links.html#section-3.1-dataframe-mutatedataframe-mutate-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/function/mutatef/htmlpdfr/fs_funceval.html">Nonlinear Function of Scalars and Arrays over Rows</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/mutatef//fs_funceval.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/mutatef/htmlpdfr/fs_funceval.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/mutatef/htmlpdfr/fs_funceval.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/function/mutatef/htmlpdfr/fs_funceval.html"><strong>html</strong></a>
 <ul>
@@ -673,12 +728,12 @@ div.csl-indent {
 <li>Rename various various with common prefix and suffix appended.</li>
 <li><strong>r</strong>: <em>ffi &lt;- function(fl_A, ar_B)</em></li>
 <li><strong>tidyr</strong>: <em>expand_grid() + rowwise() + df %&gt;% rowwise() %&gt;% mutate(var = ffi(fl_A, ar_B))</em></li>
-<li><strong>ggplot2</strong>: <em>geom_line() + facet_wrap() + geom_hline() + facet_wrap(. ~ var_id, scales = ‘free’) + geom_hline(yintercept=0, linetype=“dashed,” color=“red,” size=1) +</em></li>
+<li><strong>ggplot2</strong>: <em>geom_line() + facet_wrap() + geom_hline() + facet_wrap(. ~ var_id, scales = ‘free’) + geom_hline(yintercept=0, linetype=“dashed”, color=“red”, size=1) +</em></li>
 </ul></li>
 </ol>
 </div>
-<div id="section-3.2-dataframe-do-anythingdataframe-do-anything-links" class="section level3" number="13.3.2">
-<h3><span class="header-section-number">A.3.2</span> <a href="functions.html#dataframe-do-anything">Section 3.2 Dataframe Do Anything</a> links</h3>
+<div id="section-3.2-dataframe-do-anythingdataframe-do-anything-links" class="section level3 hasAnchor" number="13.3.2">
+<h3><span class="header-section-number">A.3.2</span> <a href="functions.html#dataframe-do-anything">Section 3.2 Dataframe Do Anything</a> links<a href="index-and-code-links.html#section-3.2-dataframe-do-anythingdataframe-do-anything-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_expand.html">Dataframe Row to Array (Mx1 by N) to (MxQ by N+1)</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/dof//fs_funceval_expand.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_expand.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_expand.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_expand.html"><strong>html</strong></a>
 <ul>
@@ -686,9 +741,10 @@ div.csl-indent {
 <li>Given row-specific information, generate row-specific arrays that expand matrix.</li>
 <li><strong>dplyr</strong>: <em>do() + unnest() + left_join() + df %&gt;% group_by(ID) %&gt;% do(inc = rnorm(.<span class="math inline">\(Q, mean=.\)</span>mean, sd=.$sd)) %&gt;% unnest(c(inc))</em></li>
 </ul></li>
-<li><a href="https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_group.html">Dataframe Subset to Scalar (MxP by N) to (Mx1 by 1)</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/dof//fs_funceval_group.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_group.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_group.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_group.html"><strong>html</strong></a>
+<li><a href="https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_group.html">Simulate country-specific wage draws and compute country wage GINIs: Dataframe (Mx1 by N) to (MxQ by N+1) to (Mx1 by N</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/dof//fs_funceval_group.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_group.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_group.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_group.html"><strong>html</strong></a>
 <ul>
-<li>MxQ rows to Mx1 Rows. Group dataframe by categories, compute category specific output scalar or arrays based on within category variable information.</li>
+<li>Define attributes for M groups across N variables, simulate up to Q observations for each of the M Groups, then compute M-specific statistics based on the sample of observations within each M.</li>
+<li>Start with a matrix that is (Mx1 by N); Expand this to (MxQ by N+1), where, the additional column contains the MxQ specific variable; Compute statistics for each M based on the Q observations with M, and then present (Mx1 by N+1) dataframe.</li>
 <li><strong>dplyr</strong>: <em>group_by(ID) + do(inc = rnorm(.<span class="math inline">\(N, mean=.\)</span>mn, sd=.$sd)) + unnest(c(inc)) + left_join(df, by=“ID”)</em></li>
 </ul></li>
 <li><a href="https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_groupwider.html">Dataframe Subset to Dataframe (MxP by N) to (MxQ by N+Z-1)</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/dof//fs_funceval_groupwider.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_groupwider.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/dof/htmlpdfr/fs_funceval_groupwider.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_groupwider.html"><strong>html</strong></a>
@@ -698,14 +754,15 @@ div.csl-indent {
 </ul></li>
 </ol>
 </div>
-<div id="section-3.3-apply-and-pmapapply-and-pmap-links" class="section level3" number="13.3.3">
-<h3><span class="header-section-number">A.3.3</span> <a href="functions.html#apply-and-pmap">Section 3.3 Apply and pmap</a> links</h3>
+<div id="section-3.3-apply-and-pmapapply-and-pmap-links" class="section level3 hasAnchor" number="13.3.3">
+<h3><span class="header-section-number">A.3.3</span> <a href="functions.html#apply-and-pmap">Section 3.3 Apply and pmap</a> links<a href="index-and-code-links.html#section-3.3-apply-and-pmapapply-and-pmap-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/function/noloop/htmlpdfr/fs_apply.html">Apply and Sapply function over arrays and rows</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop//fs_apply.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop/htmlpdfr/fs_apply.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop/htmlpdfr/fs_apply.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/function/noloop/htmlpdfr/fs_apply.html"><strong>html</strong></a>
 <ul>
 <li>Evaluate function f(x_i,y_i,c), where c is a constant and x and y vary over each row of a matrix, with index i indicating rows.</li>
 <li>Get same results using apply and sapply with defined and anonymous functions.</li>
-<li><strong>r</strong>: <em>do.call() + apply(mt, 1, func) + sapply(ls_ar, func, ar1, ar2)</em></li>
+<li>Convert list of list to table.</li>
+<li><strong>r</strong>: <em>do.call() + as_tibble(do.call(rbind,ls)) + apply(mt, 1, func) + sapply(ls_ar, func, ar1, ar2)</em></li>
 </ul></li>
 <li><a href="https://fanwangecon.github.io/R4Econ/function/noloop/htmlpdfr/fs_applysapplymutate.html">Mutate rowwise, mutate pmap, and rowwise do unnest</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop//fs_applysapplymutate.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop/htmlpdfr/fs_applysapplymutate.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/function/noloop/htmlpdfr/fs_applysapplymutate.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/function/noloop/htmlpdfr/fs_applysapplymutate.html"><strong>html</strong></a>
 <ul>
@@ -718,10 +775,10 @@ div.csl-indent {
 </ol>
 </div>
 </div>
-<div id="multi-dimensional-data-structures-links" class="section level2" number="13.4">
-<h2><span class="header-section-number">A.4</span> Multi-dimensional Data Structures links</h2>
-<div id="section-4.1-generate-gather-bind-and-joingenerate-gather-bind-and-join-links" class="section level3" number="13.4.1">
-<h3><span class="header-section-number">A.4.1</span> <a href="multi-dimensional-data-structures.html#generate-gather-bind-and-join">Section 4.1 Generate, Gather, Bind and Join</a> links</h3>
+<div id="multi-dimensional-data-structures-links" class="section level2 hasAnchor" number="13.4">
+<h2><span class="header-section-number">A.4</span> Multi-dimensional Data Structures links<a href="index-and-code-links.html#multi-dimensional-data-structures-links" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="section-4.1-generate-gather-bind-and-joingenerate-gather-bind-and-join-links" class="section level3 hasAnchor" number="13.4.1">
+<h3><span class="header-section-number">A.4.1</span> <a href="multi-dimensional-data-structures.html#generate-gather-bind-and-join">Section 4.1 Generate, Gather, Bind and Join</a> links<a href="index-and-code-links.html#section-4.1-generate-gather-bind-and-joingenerate-gather-bind-and-join-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_genpanel.html">R dplyr Group by Index and Generate Panel Data Structure</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic//fs_genpanel.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_genpanel.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_genpanel.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_genpanel.html"><strong>html</strong></a>
 <ul>
@@ -735,7 +792,7 @@ div.csl-indent {
 <li><a href="https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_joining.html">R DPLYR Join Multiple Dataframes Together</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic//fs_joining.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_joining.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_joining.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_joining.html"><strong>html</strong></a>
 <ul>
 <li>Join dataframes together with one or multiple keys. Stack dataframes together.</li>
-<li><strong>dplyr</strong>: <em>filter() + rename(!!sym(vsta) := !!sym(vstb)) + mutate(var = rnom(n())) + left_join(df, by=(c(‘id’=‘id,’ ‘vt’=‘vt’))) + left_join(df, by=setNames(c(‘id,’ ‘vt’), c(‘id,’ ‘vt’))) + bind_rows()</em></li>
+<li><strong>dplyr</strong>: <em>filter() + rename(!!sym(vsta) := !!sym(vstb)) + mutate(var = rnom(n())) + left_join(df, by=(c(‘id’=‘id’, ‘vt’=‘vt’))) + left_join(df, by=setNames(c(‘id’, ‘vt’), c(‘id’, ‘vt’))) + bind_rows()</em></li>
 </ul></li>
 <li><a href="https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_csv_gather.html">R Gather Data Columns from Multiple CSV Files</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic//fs_csv_gather.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_csv_gather.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/basic/htmlpdfr/fs_csv_gather.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/panel/basic/htmlpdfr/fs_csv_gather.html"><strong>html</strong></a>
 <ul>
@@ -749,48 +806,73 @@ div.csl-indent {
 </ul></li>
 </ol>
 </div>
-<div id="section-4.2-wide-and-longwide-and-long-links" class="section level3" number="13.4.2">
-<h3><span class="header-section-number">A.4.2</span> <a href="multi-dimensional-data-structures.html#wide-and-long">Section 4.2 Wide and Long</a> links</h3>
+<div id="section-4.2-wide-and-longwide-and-long-links" class="section level3 hasAnchor" number="13.4.2">
+<h3><span class="header-section-number">A.4.2</span> <a href="multi-dimensional-data-structures.html#wide-and-long">Section 4.2 Wide and Long</a> links<a href="index-and-code-links.html#section-4.2-wide-and-longwide-and-long-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
-<li><a href="https://fanwangecon.github.io/R4Econ/panel/widelong/htmlpdfr/fs_pivotwider.html">TIDYR Pivot Wider and Pivot Longer Examples</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong//fs_pivotwider.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong/htmlpdfr/fs_pivotwider.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong/htmlpdfr/fs_pivotwider.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/panel/widelong/htmlpdfr/fs_pivotwider.html"><strong>html</strong></a>
+<li><a href="https://fanwangecon.github.io/R4Econ/panel/widelong/htmlpdfr/fs_pivotwider.html">Convert Table from Long to Wide with dplyr</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong//fs_pivotwider.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong/htmlpdfr/fs_pivotwider.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong/htmlpdfr/fs_pivotwider.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/panel/widelong/htmlpdfr/fs_pivotwider.html"><strong>html</strong></a>
 <ul>
-<li>Long roster to wide roster and cumulative sum attendance by date.</li>
+<li>Long attendance roster to wide roster and calculate cumulative attendance by each day for students.</li>
+<li>Convert long roster with attendance and test-scores to wide.</li>
+<li><strong>tidyr</strong>: *pivot_wider(id_cols = c(v1), names_from = v2, names_prefix = “id”, names_sep = “_“, values_from = c(v3, v4))*</li>
 <li><strong>dplyr</strong>: <em>mutate(var = case_when(rnorm(n()) &lt; 0 ~ 1, TRUE ~ 0)) + rename_at(vars(num_range(’‘, ar_it)), list(~paste0(st_prefix, . ,’’))) + mutate_at(vars(contains(str)), list(~replace_na(., 0))) + mutate_at(vars(contains(str)), list(~cumsum(.)))</em></li>
 </ul></li>
-<li><a href="https://fanwangecon.github.io/R4Econ/panel/widelong/htmlpdfr/fs_pivotlonger.html">R Wide Data to Long Data Example (TIDYR Pivot Longer)</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong//fs_pivotlonger.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong/htmlpdfr/fs_pivotlonger.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong/htmlpdfr/fs_pivotlonger.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/panel/widelong/htmlpdfr/fs_pivotlonger.html"><strong>html</strong></a>
+<li><a href="https://fanwangecon.github.io/R4Econ/panel/widelong/htmlpdfr/fs_pivotlonger.html">Convert Table from Wide to Long with dplyr</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong//fs_pivotlonger.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong/htmlpdfr/fs_pivotlonger.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/widelong/htmlpdfr/fs_pivotlonger.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/panel/widelong/htmlpdfr/fs_pivotlonger.html"><strong>html</strong></a>
 <ul>
-<li>A matrix of ev given states, rows are states and cols are shocks. Convert to Long table with shock and state values and ev.</li>
-<li><strong>dplyr</strong>: <em>left_join() + pivot_longer(cols = starts_with(‘zi’), names_to = c(‘zi’), names_pattern = paste0(“zi(.)”), values_to = “ev”)</em></li>
+<li>Given a matrix of values with row and column labels, create a table where the unit of observation are the row and column categories, and the values in the matrix is stored in a single variable.</li>
+<li>Reshape wide to long two sets of variables, two categorical variables added to wide table.</li>
+<li><strong>tidyr</strong>: *pivot_longer(cols = starts_with(‘zi’), names_to = c(‘zi’), names_pattern = paste0(“zi(.)”), values_to = “ev”) + pivot_longer(cols = matches(‘a line b’), names_to = c(‘va’, ‘vb’), names_pattern = paste0(“(.)_(.)“), values_to =”ev”)*</li>
+<li><strong>dplyr</strong>: <em>left_join()</em></li>
 </ul></li>
 </ol>
 </div>
-<div id="section-4.3-join-and-comparejoin-and-compare-links" class="section level3" number="13.4.3">
-<h3><span class="header-section-number">A.4.3</span> <a href="multi-dimensional-data-structures.html#join-and-compare">Section 4.3 Join and Compare</a> links</h3>
+<div id="section-4.3-within-panel-comparisons-and-statisticswithin-panel-comparisons-and-statistics-links" class="section level3 hasAnchor" number="13.4.3">
+<h3><span class="header-section-number">A.4.3</span> <a href="multi-dimensional-data-structures.html#within-panel-comparisons-and-statistics">Section 4.3 Within Panel Comparisons and Statistics</a> links<a href="index-and-code-links.html#section-4.3-within-panel-comparisons-and-statisticswithin-panel-comparisons-and-statistics-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/panel/join/htmlpdfr/fs_join_compare.html">Find Closest Values Along Grids</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/join//fs_join_compare.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/join/htmlpdfr/fs_join_compare.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/join/htmlpdfr/fs_join_compare.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/panel/join/htmlpdfr/fs_join_compare.html"><strong>html</strong></a>
 <ul>
 <li>There is an array (matrix) of values, find the index of the values closest to another value.</li>
 <li><strong>r</strong>: <em>do.call(bind_rows, ls_df)</em></li>
-<li><strong>dplyr</strong>: <em>left_join(tb, by=(c(‘vr_a’=‘vr_a,’ ‘vr_b’=‘vr_b’)))</em></li>
+<li><strong>dplyr</strong>: <em>left_join(tb, by=(c(‘vr_a’=‘vr_a’, ‘vr_b’=‘vr_b’)))</em></li>
+</ul></li>
+<li><a href="https://fanwangecon.github.io/R4Econ/panel/join/htmlpdfr/fs_cross_time_group.html">Cross-group Within-time and Cross-time Within-group Statistics</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/join//fs_cross_time_group.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/join/htmlpdfr/fs_cross_time_group.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/join/htmlpdfr/fs_cross_time_group.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/panel/join/htmlpdfr/fs_cross_time_group.html"><strong>html</strong></a>
+<ul>
+<li>Compute relative values across countries at each time, and relative values within country across time.</li>
+<li><strong>dplyr</strong>: <em>arrange(v1, v2) %&gt;% group_by(v1) %&gt;% mutate(stats := v3/first(v3))</em></li>
+</ul></li>
+</ol>
+</div>
+<div id="section-4.4-join-and-merge-files-together-by-keysjoin-and-merge-files-together-by-keys-links" class="section level3 hasAnchor" number="13.4.4">
+<h3><span class="header-section-number">A.4.4</span> <a href="multi-dimensional-data-structures.html#join-and-merge-files-together-by-keys">Section 4.4 Join and Merge Files Together by Keys</a> links<a href="index-and-code-links.html#section-4.4-join-and-merge-files-together-by-keysjoin-and-merge-files-together-by-keys-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li><a href="https://fanwangecon.github.io/R4Econ/panel/merge/htmlpdfr/fs_join_mesh.html">Mesh join</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/merge//fs_join_mesh.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/merge/htmlpdfr/fs_join_mesh.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/panel/merge/htmlpdfr/fs_join_mesh.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/panel/merge/htmlpdfr/fs_join_mesh.html"><strong>html</strong></a>
+<ul>
+<li>Full join, expand multiple-rows of data-frame with the same set of expansion rows and columns</li>
+<li><strong>dplyr</strong>: <em>full_join()</em></li>
 </ul></li>
 </ol>
 </div>
 </div>
-<div id="linear-regression-links" class="section level2" number="13.5">
-<h2><span class="header-section-number">A.5</span> Linear Regression links</h2>
-<div id="section-5.1-polynomial-fittingpolynomial-fitting-links" class="section level3" number="13.5.1">
-<h3><span class="header-section-number">A.5.1</span> <a href="linear-regression.html#polynomial-fitting">Section 5.1 Polynomial Fitting</a> links</h3>
+<div id="linear-regression-links" class="section level2 hasAnchor" number="13.5">
+<h2><span class="header-section-number">A.5</span> Linear Regression links<a href="index-and-code-links.html#linear-regression-links" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="section-5.1-linear-and-polynomial-fittinglinear-and-polynomial-fitting-links" class="section level3 hasAnchor" number="13.5.1">
+<h3><span class="header-section-number">A.5.1</span> <a href="linear-regression.html#linear-and-polynomial-fitting">Section 5.1 Linear and Polynomial Fitting</a> links<a href="index-and-code-links.html#section-5.1-linear-and-polynomial-fittinglinear-and-polynomial-fitting-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
+<li><a href="https://fanwangecon.github.io/R4Econ/linreg/polynomial/htmlpdfr/fs_lm_poly_fit.html">Find Best Fit of Curves Through Points</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/linreg/polynomial//fs_lm_poly_fit.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/linreg/polynomial/htmlpdfr/fs_lm_poly_fit.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/linreg/polynomial/htmlpdfr/fs_lm_poly_fit.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/linreg/polynomial/htmlpdfr/fs_lm_poly_fit.html"><strong>html</strong></a>
+<ul>
+<li>There are three x and y points, find the quadratic curve that fits through them exactly.</li>
+<li>There are N sets of x and y points, find the Mth order polynomial fit by regressing y on poly(x, M).</li>
+<li><strong>stats</strong>: <em>lm(y ~ poly(x, 2), dataset=df) + summary.lm(rs) + predict(rs)</em></li>
+</ul></li>
 <li><a href="https://fanwangecon.github.io/R4Econ/linreg/polynomial/htmlpdfr/fs_poly_fit.html">Fit a Time Series with Polynomial and Analytical Expressions for Coefficients</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/linreg/polynomial//fs_poly_fit.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/linreg/polynomial/htmlpdfr/fs_poly_fit.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/linreg/polynomial/htmlpdfr/fs_poly_fit.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/linreg/polynomial/htmlpdfr/fs_poly_fit.html"><strong>html</strong></a>
 <ul>
 <li>Given a time series of data points from a polynomial data generating process, solve for the polynomial coefficients.</li>
 <li>Mth derivative of Mth order polynomial is time invariant, use functions of differences of differences of differences to identify polynomial coefficients analytically.</li>
-<li><strong>R</strong>: <em>matrix multplication</em></li>
+<li><strong>R</strong>: <em>matrix multiplication</em></li>
 </ul></li>
 </ol>
 </div>
-<div id="section-5.2-ols-and-ivols-and-iv-links" class="section level3" number="13.5.2">
-<h3><span class="header-section-number">A.5.2</span> <a href="linear-regression.html#ols-and-iv">Section 5.2 OLS and IV</a> links</h3>
+<div id="section-5.2-ols-and-ivols-and-iv-links" class="section level3 hasAnchor" number="13.5.2">
+<h3><span class="header-section-number">A.5.2</span> <a href="linear-regression.html#ols-and-iv">Section 5.2 OLS and IV</a> links<a href="index-and-code-links.html#section-5.2-ols-and-ivols-and-iv-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/linreg/ivreg/htmlpdfr/fs_lin_ivregrow.html">IV/OLS Regression</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg//fs_lin_ivregrow.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/htmlpdfr/fs_lin_ivregrow.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/linreg/ivreg/htmlpdfr/fs_lin_ivregrow.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/linreg/ivreg/htmlpdfr/fs_lin_ivregrow.html"><strong>html</strong></a>
 <ul>
@@ -804,8 +886,8 @@ div.csl-indent {
 </ul></li>
 </ol>
 </div>
-<div id="section-5.3-decompositiondecomposition-links" class="section level3" number="13.5.3">
-<h3><span class="header-section-number">A.5.3</span> <a href="linear-regression.html#decomposition">Section 5.3 Decomposition</a> links</h3>
+<div id="section-5.3-decompositiondecomposition-links" class="section level3 hasAnchor" number="13.5.3">
+<h3><span class="header-section-number">A.5.3</span> <a href="linear-regression.html#decomposition">Section 5.3 Decomposition</a> links<a href="index-and-code-links.html#section-5.3-decompositiondecomposition-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/linreg/decompose/htmlpdfr/fs_lin_decompose.html">Regression Decomposition</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose//fs_lin_decompose.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose/htmlpdfr/fs_lin_decompose.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/linreg/decompose/htmlpdfr/fs_lin_decompose.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/linreg/decompose/htmlpdfr/fs_lin_decompose.html"><strong>html</strong></a>
 <ul>
@@ -815,10 +897,10 @@ div.csl-indent {
 </ol>
 </div>
 </div>
-<div id="nonlinear-and-other-regressions-links" class="section level2" number="13.6">
-<h2><span class="header-section-number">A.6</span> Nonlinear and Other Regressions links</h2>
-<div id="section-6.1-logit-regressionlogit-regression-links" class="section level3" number="13.6.1">
-<h3><span class="header-section-number">A.6.1</span> <a href="nonlinear-and-other-regressions.html#logit-regression">Section 6.1 Logit Regression</a> links</h3>
+<div id="nonlinear-and-other-regressions-links" class="section level2 hasAnchor" number="13.6">
+<h2><span class="header-section-number">A.6</span> Nonlinear and Other Regressions links<a href="index-and-code-links.html#nonlinear-and-other-regressions-links" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="section-6.1-logit-regressionlogit-regression-links" class="section level3 hasAnchor" number="13.6.1">
+<h3><span class="header-section-number">A.6.1</span> <a href="nonlinear-and-other-regressions.html#logit-regression">Section 6.1 Logit Regression</a> links<a href="index-and-code-links.html#section-6.1-logit-regressionlogit-regression-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/regnonlin/logit/htmlpdfr/fs_logit_births.html">Logit Regression</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/logit//fs_logit_births.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/logit/htmlpdfr/fs_logit_births.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/logit/htmlpdfr/fs_logit_births.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/regnonlin/logit/htmlpdfr/fs_logit_births.html"><strong>html</strong></a>
 <ul>
@@ -840,36 +922,56 @@ div.csl-indent {
 </ul></li>
 </ol>
 </div>
-<div id="section-6.2-quantile-regressionquantile-regression-links" class="section level3" number="13.6.2">
-<h3><span class="header-section-number">A.6.2</span> <a href="nonlinear-and-other-regressions.html#quantile-regression">Section 6.2 Quantile Regression</a> links</h3>
+<div id="section-6.2-quantile-regressionquantile-regression-links" class="section level3 hasAnchor" number="13.6.2">
+<h3><span class="header-section-number">A.6.2</span> <a href="nonlinear-and-other-regressions.html#quantile-regression">Section 6.2 Quantile Regression</a> links<a href="index-and-code-links.html#section-6.2-quantile-regressionquantile-regression-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/regnonlin/quantreg/htmlpdfr/fs_quantreg_intro.html">Quantile Regressions with Quantreg</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/quantreg//fs_quantreg_intro.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/quantreg/htmlpdfr/fs_quantreg_intro.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/regnonlin/quantreg/htmlpdfr/fs_quantreg_intro.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/regnonlin/quantreg/htmlpdfr/fs_quantreg_intro.html"><strong>html</strong></a>
 <ul>
 <li>Quantile regression with continuous outcomes. Estimates and tests quantile coefficients.</li>
-<li><strong>quantreg</strong>: <em>rq(mpg ~ disp + hp + factor(am), tau = c(0.25, 0.50, 0.75), data = mtcars) + anova(rq(), test = “Wald,” joint=TRUE) + anova(rq(), test = “Wald,” joint=FALSE)</em></li>
+<li><strong>quantreg</strong>: <em>rq(mpg ~ disp + hp + factor(am), tau = c(0.25, 0.50, 0.75), data = mtcars) + anova(rq(), test = “Wald”, joint=TRUE) + anova(rq(), test = “Wald”, joint=FALSE)</em></li>
 </ul></li>
 </ol>
 </div>
 </div>
-<div id="optimization-links" class="section level2" number="13.7">
-<h2><span class="header-section-number">A.7</span> Optimization links</h2>
-<div id="section-7.1-bisectionbisection-links" class="section level3" number="13.7.1">
-<h3><span class="header-section-number">A.7.1</span> <a href="optimization.html#bisection-1">Section 7.1 Bisection</a> links</h3>
+<div id="optimization-links" class="section level2 hasAnchor" number="13.7">
+<h2><span class="header-section-number">A.7</span> Optimization links<a href="index-and-code-links.html#optimization-links" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="section-7.1-grid-based-optimizationgrid-based-optimization-links" class="section level3 hasAnchor" number="13.7.1">
+<h3><span class="header-section-number">A.7.1</span> <a href="optimization.html#grid-based-optimization">Section 7.1 Grid Based Optimization</a> links<a href="index-and-code-links.html#section-7.1-grid-based-optimizationgrid-based-optimization-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
+<li><a href="https://fanwangecon.github.io/R4Econ/optimization/root_bisect/htmlpdfr/fs_optimize_grid_loop.html">Find the Maximizing or Minimizing Point Given Some Objective Function</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/optimization/root_bisect//fs_optimize_grid_loop.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/optimization/root_bisect/htmlpdfr/fs_optimize_grid_loop.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/optimization/root_bisect/htmlpdfr/fs_optimize_grid_loop.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/optimization/root_bisect/htmlpdfr/fs_optimize_grid_loop.html"><strong>html</strong></a>
+<ul>
+<li>Find the maximizing or minimizing point given some objective function.</li>
+<li><strong>base</strong>: <em>while + min + which.min + sapply</em></li>
+</ul></li>
 <li><a href="https://fanwangecon.github.io/R4Econ/optimization/root_bisect/htmlpdfr/fs_bisec_joint.html">Concurrent Bisection over Dataframe Rows</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/optimization/root_bisect//fs_bisec_joint.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/optimization/root_bisect/htmlpdfr/fs_bisec_joint.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/optimization/root_bisect/htmlpdfr/fs_bisec_joint.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/optimization/root_bisect/htmlpdfr/fs_bisec_joint.html"><strong>html</strong></a>
 <ul>
 <li>Post multiple regressions, fraction of outcome variables’ variances explained by multiple subsets of right hand side variables.</li>
-<li><strong>tidyr</strong>: *pivot_longer(cols = starts_with(‘abc’), names_to = c(‘a,’ ‘b’), names_pattern = paste0(‘prefix,’ "(.)_(.)"), values_to = val) + pivot_wider(names_from = !!sym(name), values_from = val) + mutate(!!sym(abc) := case_when(efg &lt; 0 ~ !!sym(opq), TRUE ~ iso))*</li>
+<li><strong>tidyr</strong>: *pivot_longer(cols = starts_with(‘abc’), names_to = c(‘a’, ‘b’), names_pattern = paste0(‘prefix’, “(.)_(.)“), values_to = val) + pivot_wider(names_from = !!sym(name), values_from = val) + mutate(!!sym(abc) := case_when(efg &lt; 0 ~ !!sym(opq), TRUE ~ iso))*</li>
 <li><strong>gglot2</strong>: <em>geom_line() + facet_wrap() + geom_hline()</em></li>
 </ul></li>
 </ol>
 </div>
 </div>
-<div id="mathematics-links" class="section level2" number="13.8">
-<h2><span class="header-section-number">A.8</span> Mathematics links</h2>
-<div id="section-8.1-basicsbasics-links" class="section level3" number="13.8.1">
-<h3><span class="header-section-number">A.8.1</span> <a href="mathematics.html#basics">Section 8.1 Basics</a> links</h3>
+<div id="mathematics-links" class="section level2 hasAnchor" number="13.8">
+<h2><span class="header-section-number">A.8</span> Mathematics links<a href="index-and-code-links.html#mathematics-links" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="section-8.1-basicsbasics-links" class="section level3 hasAnchor" number="13.8.1">
+<h3><span class="header-section-number">A.8.1</span> <a href="mathematics.html#basics">Section 8.1 Basics</a> links<a href="index-and-code-links.html#section-8.1-basicsbasics-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
+<li><a href="https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_analytical_poly_fit.html">Analytical Formula Fit Curves Through Points</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_analytical_poly_fit.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_analytical_poly_fit.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_analytical_poly_fit.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_analytical_poly_fit.html"><strong>html</strong></a>
+<ul>
+<li>There are three pairs of points, formulas for the exact quadratic curve that fits through the points.</li>
+<li>There are three pairs of points, we observe only differences in y values, formulas for the linear and quadratic parameters.</li>
+<li>There are three pairs of points, formulas for the linear best fit line through the points.</li>
+<li><strong>stats</strong>: <em>lm(y ~ x + I(x^2), dataset=df) + lm(y ~ poly(x, 2), dataset=df) + summary.lm(rs) + predict(rs)</em></li>
+</ul></li>
+<li><a href="https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_rescale.html">Quadratic and Ratio Rescaling of Parameters with Fixed Min and Max</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_rescale.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_rescale.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_rescale.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_rescale.html"><strong>html</strong></a>
+<ul>
+<li>For 0&lt;theta&lt;1, generate 0 &lt; thetaHat(theta, lambda) &lt; 1, where lambda is between positive and negative infinity, used to rescale theta.</li>
+<li>Fit a quadratic function for three points, where the starting and ending points are along the 45 degree line.<br />
+</li>
+<li><strong>r</strong>: <em>sort(unique()) + sapply(ar, func, param=val)</em></li>
+<li><strong>ggplot2</strong>: <em>geom_line() + geom_vline() + labs(title, subtitle, x, y, caption) + scale_y_continuous(breaks, limits)</em></li>
+</ul></li>
 <li><a href="https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_exponents.html">Rescaling Bounded Parameter to be Unbounded and Positive and Negative Exponents with Different Bases</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_exponents.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_exponents.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_exponents.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_exponents.html"><strong>html</strong></a>
 <ul>
 <li>Log of alternative bases, bases that are not e, 10 or 2.</li>
@@ -878,10 +980,6 @@ div.csl-indent {
 <li>Positive exponentials are strictly increasing. Negative exponentials are strictly decreasing.</li>
 <li>A positive number below 1 to a negative exponents is above 1, and a positive number above 1 to a negative exponents is below 1.</li>
 <li><strong>graphics</strong>: <em>plot(x, y) + title() + legend()</em></li>
-</ul></li>
-<li><a href="https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_rescale.html">Quadratic and other Rescaling of Parameters with Fixed Min and Max</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_rescale.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_rescale.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_rescale.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_rescale.html"><strong>html</strong></a>
-<ul>
-<li>Given a &lt; x &lt; b, use f(x) to rescale x, such that f(a)=a, f(b)=b, but f(z)=0.5*z for some z between a and b. Solve using the quadratic function with three equations and three unknowns uniquely.</li>
 </ul></li>
 <li><a href="https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_point2line.html">Find the Closest Point Along a Line to Another Point</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions//fs_point2line.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_point2line.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/solutions/htmlpdfr/fs_point2line.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/math/solutions/htmlpdfr/fs_point2line.html"><strong>html</strong></a>
 <ul>
@@ -895,8 +993,8 @@ div.csl-indent {
 </ul></li>
 </ol>
 </div>
-<div id="section-8.2-production-functionproduction-function-links" class="section level3" number="13.8.2">
-<h3><span class="header-section-number">A.8.2</span> <a href="mathematics.html#production-function">Section 8.2 Production Function</a> links</h3>
+<div id="section-8.2-production-functionsproduction-functions-links" class="section level3 hasAnchor" number="13.8.2">
+<h3><span class="header-section-number">A.8.2</span> <a href="mathematics.html#production-functions">Section 8.2 Production Functions</a> links<a href="index-and-code-links.html#section-8.2-production-functionsproduction-functions-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/math/func_prod/htmlpdfr/fs_nested_CES.html">Nested Constant Elasticity of Substitution Production Function</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod//fs_nested_CES.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod/htmlpdfr/fs_nested_CES.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod/htmlpdfr/fs_nested_CES.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/math/func_prod/htmlpdfr/fs_nested_CES.html"><strong>html</strong></a>
 <ul>
@@ -904,10 +1002,16 @@ div.csl-indent {
 <li>Re-state the nested-CES problem as several sub-problems.</li>
 <li>Marginal products and its relationship to prices in expenditure minimization.</li>
 </ul></li>
+<li><a href="https://fanwangecon.github.io/R4Econ/math/func_prod/htmlpdfr/fs_latent_health.html">Latent Dynamic Health Production Function</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod//fs_latent_health.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod/htmlpdfr/fs_latent_health.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/func_prod/htmlpdfr/fs_latent_health.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/math/func_prod/htmlpdfr/fs_latent_health.html"><strong>html</strong></a>
+<ul>
+<li>A model of latent health given lagged latent health and health inputs.</li>
+<li>Find individual-specific production function coefficient given self-rated discrete health status probabilities.</li>
+<li>Persistence of latent health status given observed discrete current and lagged outcomes.</li>
+</ul></li>
 </ol>
 </div>
-<div id="section-8.3-inequality-modelsinequality-models-links" class="section level3" number="13.8.3">
-<h3><span class="header-section-number">A.8.3</span> <a href="mathematics.html#inequality-models">Section 8.3 Inequality Models</a> links</h3>
+<div id="section-8.3-inequality-modelsinequality-models-links" class="section level3 hasAnchor" number="13.8.3">
+<h3><span class="header-section-number">A.8.3</span> <a href="mathematics.html#inequality-models">Section 8.3 Inequality Models</a> links<a href="index-and-code-links.html#section-8.3-inequality-modelsinequality-models-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_gini_disc.html">GINI for Discrete Samples or Discrete Random Variable</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_gini_disc.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_gini_disc.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_gini_disc.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_gini_disc.html"><strong>html</strong></a>
 <ul>
@@ -925,22 +1029,13 @@ div.csl-indent {
 <li><strong>ggplot2</strong>: <em>geom_line() + facet_wrap()</em></li>
 <li><strong>econ</strong>: <em>Atkinson (JET, 1970)</em></li>
 </ul></li>
-<li><a href="https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html">Inequality in Environmental Exposure Across Population Groups</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq//fs_pop_loc_pollution.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/math/func_ineq/htmlpdfr/fs_pop_loc_pollution.html"><strong>html</strong></a>
-<ul>
-<li>Simulate population distribution by location and demographic groups.</li>
-<li>Simulate pollution exposures by location.</li>
-<li>Compute inequality in environmental exposure across population groups, given location-specific environmental data and location-specific population information.</li>
-<li><strong>r</strong>: <em>matrix()</em></li>
-<li><strong>stats</strong>: <em>runif() + sum()</em></li>
-<li><strong>dplyr</strong>: <em>arrange() + group_by() + left_join() + filter() + slice()</em></li>
-</ul></li>
 </ol>
 </div>
 </div>
-<div id="statistics-links" class="section level2" number="13.9">
-<h2><span class="header-section-number">A.9</span> Statistics links</h2>
-<div id="section-9.1-random-drawsrandom-draws-links" class="section level3" number="13.9.1">
-<h3><span class="header-section-number">A.9.1</span> <a href="statistics.html#random-draws">Section 9.1 Random Draws</a> links</h3>
+<div id="statistics-links" class="section level2 hasAnchor" number="13.9">
+<h2><span class="header-section-number">A.9</span> Statistics links<a href="index-and-code-links.html#statistics-links" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="section-9.1-random-drawsrandom-draws-links" class="section level3 hasAnchor" number="13.9.1">
+<h3><span class="header-section-number">A.9.1</span> <a href="statistics.html#random-draws">Section 9.1 Random Draws</a> links<a href="index-and-code-links.html#section-9.1-random-drawsrandom-draws-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/statistics/random/htmlpdfr/fs_perturb_parameter.html">Randomly Perturb Some Parameter Value with Varying Magnitudes</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/statistics/random//fs_perturb_parameter.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/statistics/random/htmlpdfr/fs_perturb_parameter.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/statistics/random/htmlpdfr/fs_perturb_parameter.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/statistics/random/htmlpdfr/fs_perturb_parameter.html"><strong>html</strong></a>
 <ul>
@@ -951,8 +1046,8 @@ div.csl-indent {
 </ul></li>
 </ol>
 </div>
-<div id="section-9.2-distributionsdistributions-links" class="section level3" number="13.9.2">
-<h3><span class="header-section-number">A.9.2</span> <a href="statistics.html#distributions">Section 9.2 Distributions</a> links</h3>
+<div id="section-9.2-distributionsdistributions-links" class="section level3 hasAnchor" number="13.9.2">
+<h3><span class="header-section-number">A.9.2</span> <a href="statistics.html#distributions">Section 9.2 Distributions</a> links<a href="index-and-code-links.html#section-9.2-distributionsdistributions-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/statistics/integration/htmlpdfr/fs_integrate_normal.html">Integrate Normal Shocks</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/statistics/integration//fs_integrate_normal.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/statistics/integration/htmlpdfr/fs_integrate_normal.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/statistics/integration/htmlpdfr/fs_integrate_normal.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/statistics/integration/htmlpdfr/fs_integrate_normal.html"><strong>html</strong></a>
 <ul>
@@ -961,8 +1056,8 @@ div.csl-indent {
 </ul></li>
 </ol>
 </div>
-<div id="section-9.3-discrete-random-variablediscrete-random-variable-links" class="section level3" number="13.9.3">
-<h3><span class="header-section-number">A.9.3</span> <a href="statistics.html#discrete-random-variable">Section 9.3 Discrete Random Variable</a> links</h3>
+<div id="section-9.3-discrete-random-variablediscrete-random-variable-links" class="section level3 hasAnchor" number="13.9.3">
+<h3><span class="header-section-number">A.9.3</span> <a href="statistics.html#discrete-random-variable">Section 9.3 Discrete Random Variable</a> links<a href="index-and-code-links.html#section-9.3-discrete-random-variablediscrete-random-variable-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_disc_approx_cts.html">Binomial Approximation of Normal</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar//fs_disc_approx_cts.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_disc_approx_cts.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_disc_approx_cts.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_disc_approx_cts.html"><strong>html</strong></a>
 <ul>
@@ -970,23 +1065,13 @@ div.csl-indent {
 <li><strong>r</strong>: <em>hist() + plot()</em></li>
 <li><strong>stats</strong>: <em>dbinom() + rnorm()</em></li>
 </ul></li>
-<li><a href="https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_discrandvar_marg2joint.html">Obtaining Joint Distribution from Marginal with Rectilinear Restrictions</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar//fs_discrandvar_marg2joint.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_discrandvar_marg2joint.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_discrandvar_marg2joint.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_discrandvar_marg2joint.html"><strong>html</strong></a>
-<ul>
-<li>Solve for joint distributional mass given marginal distributional mass given rectilinear assumptions.</li>
-<li><strong>r</strong>: <em>qr()</em></li>
-</ul></li>
-<li><a href="https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_discrandvar_condi2joint.html">Obtaining Joint Distribution from Conditional with Rectilinear Restrictions</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar//fs_discrandvar_condi2joint.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_discrandvar_condi2joint.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/statistics/discrandvar/htmlpdfr/fs_discrandvar_condi2joint.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/statistics/discrandvar/htmlpdfr/fs_discrandvar_condi2joint.html"><strong>html</strong></a>
-<ul>
-<li>Solve for joint distributional mass given conditional distributional mass given rectilinear assumptions.</li>
-<li><strong>r</strong>: <em>qr() + solve() + matrix()</em></li>
-</ul></li>
 </ol>
 </div>
 </div>
-<div id="tables-and-graphs-links" class="section level2" number="13.10">
-<h2><span class="header-section-number">A.10</span> Tables and Graphs links</h2>
-<div id="section-10.1-r-base-plotsr-base-plots-links" class="section level3" number="13.10.1">
-<h3><span class="header-section-number">A.10.1</span> <a href="tables-and-graphs.html#r-base-plots">Section 10.1 R Base Plots</a> links</h3>
+<div id="tables-and-graphs-links" class="section level2 hasAnchor" number="13.10">
+<h2><span class="header-section-number">A.10</span> Tables and Graphs links<a href="index-and-code-links.html#tables-and-graphs-links" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="section-10.1-r-base-plotsr-base-plots-links" class="section level3 hasAnchor" number="13.10.1">
+<h3><span class="header-section-number">A.10.1</span> <a href="tables-and-graphs.html#r-base-plots">Section 10.1 R Base Plots</a> links<a href="index-and-code-links.html#section-10.1-r-base-plotsr-base-plots-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/tabgraph/baseplot/htmlpdfr/fs_base_curve.html">R Base Plot Line with Curves and Scatter</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/baseplot//fs_base_curve.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/baseplot/htmlpdfr/fs_base_curve.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/baseplot/htmlpdfr/fs_base_curve.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/tabgraph/baseplot/htmlpdfr/fs_base_curve.html"><strong>html</strong></a>
 <ul>
@@ -997,9 +1082,14 @@ div.csl-indent {
 </ul></li>
 </ol>
 </div>
-<div id="section-10.2-ggplot-line-related-plotsggplot-line-related-plots-links" class="section level3" number="13.10.2">
-<h3><span class="header-section-number">A.10.2</span> <a href="tables-and-graphs.html#ggplot-line-related-plots">Section 10.2 ggplot Line Related Plots</a> links</h3>
+<div id="section-10.2-ggplot-line-related-plotsggplot-line-related-plots-links" class="section level3 hasAnchor" number="13.10.2">
+<h3><span class="header-section-number">A.10.2</span> <a href="tables-and-graphs.html#ggplot-line-related-plots">Section 10.2 ggplot Line Related Plots</a> links<a href="index-and-code-links.html#section-10.2-ggplot-line-related-plotsggplot-line-related-plots-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
+<li><a href="https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_basic.html">ggplot2 Basic Line Plot for Multiple Time Series</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline//fs_ggline_basic.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_basic.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_basic.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_basic.html"><strong>html</strong></a>
+<ul>
+<li>Given three time series, present both in levels, in log levels, and as ratio</li>
+<li><strong>ggplot</strong>: <em>ggplot() + geom_line()</em></li>
+</ul></li>
 <li><a href="https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.html">ggplot Line Plot Multiple Categorical Variables With Continuous Variable</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline//fs_ggline_mgrp_ncts.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_mgrp_ncts.html"><strong>html</strong></a>
 <ul>
 <li>One category is subplot, one category is line-color, one category is line-type.</li>
@@ -1008,15 +1098,26 @@ div.csl-indent {
 <li><strong>ggplot</strong>: <em>ggplot() + facet_wrap() + facet_grid() + geom_line() + geom_point() + geom_smooth() + geom_hline() + scale_colour_manual() + scale_shape_manual() + scale_shape_discrete() + scale_linetype_manual() + scale_x_continuous() + scale_y_continuous() + theme_bw() + theme() + guides() + theme() + ggsave()</em></li>
 <li><strong>dplyr</strong>: <em>filter(vara %in% c(1, 2) &amp; varb == “val”) + mutate_if() + !any(is.na(suppressWarnings(as.numeric(na.omit(x))))) &amp; is.character(x) </em></li>
 </ul></li>
+<li><a href="https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_recession.html">Time Series with Shaded Regions, plot GDP with recessions</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline//fs_ggline_recession.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_recession.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggline/htmlpdfr/fs_ggline_recession.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/tabgraph/ggline/htmlpdfr/fs_ggline_recession.html"><strong>html</strong></a>
+<ul>
+<li>Plot several time series with multiple shaded windows.</li>
+<li>Plot GDP with shaded recession window, and differentially shaded pre- and post-recession windows.</li>
+<li><strong>r</strong>: <em>sample + pmin + diff + which</em></li>
+<li><strong>ggplot</strong>: <em>ggplot() + geom_line() + geom_rect(aes(xmin, xmax, ymin, ymax)) + theme_light() + scale_colour_manual() + scale_shape_discrete() + scale_linetype_manual() + scale_fill_manual()</em></li>
+</ul></li>
 </ol>
 </div>
-<div id="section-10.3-ggplot-scatter-related-plotsggplot-scatter-related-plots-links" class="section level3" number="13.10.3">
-<h3><span class="header-section-number">A.10.3</span> <a href="tables-and-graphs.html#ggplot-scatter-related-plots">Section 10.3 ggplot Scatter Related Plots</a> links</h3>
+<div id="section-10.3-ggplot-scatter-related-plotsggplot-scatter-related-plots-links" class="section level3 hasAnchor" number="13.10.3">
+<h3><span class="header-section-number">A.10.3</span> <a href="tables-and-graphs.html#ggplot-scatter-related-plots">Section 10.3 ggplot Scatter Related Plots</a> links<a href="index-and-code-links.html#section-10.3-ggplot-scatter-related-plotsggplot-scatter-related-plots-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
-<li><a href="https://fanwangecon.github.io/R4Econ/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.html">ggplot Scatter Plot Three Continuous Variables and Multiple Categorical Variables</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter//fs_ggscatter_3cts_mdisc.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.html"><strong>html</strong></a>
+<li><a href="https://fanwangecon.github.io/R4Econ/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.html">ggplot Scatter Plot Grouped or Unique Patterns and Colors</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter//fs_ggscatter_3cts_mdisc.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_3cts_mdisc.html"><strong>html</strong></a>
 <ul>
+<li>Scatter Plot Three Continuous Variables and Multiple Categorical Variables</li>
 <li>Two continuous variables for the x-axis and the y-axis, another continuous variable for size of scatter, other categorical variables for scatter shape and size.</li>
-<li><strong>ggplot</strong>: <em>ggplot() + geom_jitter() + geom_smooth() + scale_colour_manual() + scale_shape_discrete() + scale_linetype_manual() + scale_x_continuous() + scale_y_continuous() + theme_bw() + theme()</em></li>
+<li>Scatter plot with unique pattern and color for each scatter point.</li>
+<li>Y and X label axis with two layers of text in levels and deviation from some mid-point values.</li>
+<li><strong>tibble</strong>: <em>rownames_to_column()</em></li>
+<li><strong>ggplot</strong>: <em>ggplot() + geom_jitter() + geom_smooth() + geom_point(size=1, stroke=1) + scale_colour_manual() + scale_shape_discrete() + scale_linetype_manual() + scale_x_continuous() + scale_y_continuous() + theme_bw() + theme()</em></li>
 </ul></li>
 <li><a href="https://fanwangecon.github.io/R4Econ/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_facet_wrap.html">ggplot Multiple Scatter-Lines and Facet Wrap Over Categories</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter//fs_ggscatter_facet_wrap.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_facet_wrap.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_facet_wrap.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/tabgraph/ggscatter/htmlpdfr/fs_ggscatter_facet_wrap.html"><strong>html</strong></a>
 <ul>
@@ -1028,8 +1129,8 @@ div.csl-indent {
 </ul></li>
 </ol>
 </div>
-<div id="section-10.4-write-and-read-plotswrite-and-read-plots-links" class="section level3" number="13.10.4">
-<h3><span class="header-section-number">A.10.4</span> <a href="tables-and-graphs.html#write-and-read-plots">Section 10.4 Write and Read Plots</a> links</h3>
+<div id="section-10.4-write-and-read-plotswrite-and-read-plots-links" class="section level3 hasAnchor" number="13.10.4">
+<h3><span class="header-section-number">A.10.4</span> <a href="tables-and-graphs.html#write-and-read-plots">Section 10.4 Write and Read Plots</a> links<a href="index-and-code-links.html#section-10.4-write-and-read-plotswrite-and-read-plots-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/tabgraph/inout/htmlpdfr/fs_img_io.html">Base R Save Images At Different Sizes</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/inout//fs_img_io.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/inout/htmlpdfr/fs_img_io.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/tabgraph/inout/htmlpdfr/fs_img_io.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/tabgraph/inout/htmlpdfr/fs_img_io.html"><strong>html</strong></a>
 <ul>
@@ -1039,10 +1140,10 @@ div.csl-indent {
 </ol>
 </div>
 </div>
-<div id="get-data-links" class="section level2" number="13.11">
-<h2><span class="header-section-number">A.11</span> Get Data links</h2>
-<div id="section-11.1-environmental-dataenvironmental-data-links" class="section level3" number="13.11.1">
-<h3><span class="header-section-number">A.11.1</span> <a href="get-data.html#environmental-data">Section 11.1 Environmental Data</a> links</h3>
+<div id="get-data-links" class="section level2 hasAnchor" number="13.11">
+<h2><span class="header-section-number">A.11</span> Get Data links<a href="index-and-code-links.html#get-data-links" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="section-11.1-environmental-dataenvironmental-data-links" class="section level3 hasAnchor" number="13.11.1">
+<h3><span class="header-section-number">A.11.1</span> <a href="get-data.html#environmental-data">Section 11.1 Environmental Data</a> links<a href="index-and-code-links.html#section-11.1-environmental-dataenvironmental-data-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/getdata/envir/htmlpdfr/fs_ecmwf.html">CDS ECMWF Global Enviornmental Data Download</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/getdata/envir//fs_ecmwf.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/getdata/envir/htmlpdfr/fs_ecmwf.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/getdata/envir/htmlpdfr/fs_ecmwf.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/getdata/envir/htmlpdfr/fs_ecmwf.html"><strong>html</strong></a>
 <ul>
@@ -1054,15 +1155,35 @@ div.csl-indent {
 </ol>
 </div>
 </div>
-<div id="code-and-development-links" class="section level2" number="13.12">
-<h2><span class="header-section-number">A.12</span> Code and Development links</h2>
-<div id="section-12.1-files-in-and-outfiles-in-and-out-links" class="section level3" number="13.12.1">
-<h3><span class="header-section-number">A.12.1</span> <a href="code-and-development.html#files-in-and-out">Section 12.1 Files In and Out</a> links</h3>
+<div id="coding-and-development-links" class="section level2 hasAnchor" number="13.12">
+<h2><span class="header-section-number">A.12</span> Coding and Development links<a href="index-and-code-links.html#coding-and-development-links" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="section-12.1-installation-and-packagesinstallation-and-packages-links" class="section level3 hasAnchor" number="13.12.1">
+<h3><span class="header-section-number">A.12.1</span> <a href="coding-and-development.html#installation-and-packages">Section 12.1 Installation and Packages</a> links<a href="index-and-code-links.html#section-12.1-installation-and-packagesinstallation-and-packages-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li><a href="https://fanwangecon.github.io/R4Econ/development/install/htmlpdfr/fs_install_R.html">R, RTools, Rstudio Installation and Update with VSCode</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/install//fs_install_R.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/install/htmlpdfr/fs_install_R.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/install/htmlpdfr/fs_install_R.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/development/install/htmlpdfr/fs_install_R.html"><strong>html</strong></a>
+<ul>
+<li>Install and update R, RTools, and Rstudio.</li>
+<li>Set-up R inside VSCode.</li>
+<li><strong>installr</strong>: <em>updateR()</em></li>
+</ul></li>
+<li><a href="https://fanwangecon.github.io/R4Econ/development/install/htmlpdfr/fs_packages_R.html">Handling R Packages</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/install//fs_packages_R.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/install/htmlpdfr/fs_packages_R.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/install/htmlpdfr/fs_packages_R.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/development/install/htmlpdfr/fs_packages_R.html"><strong>html</strong></a>
+<ul>
+<li>Resolve conflicts between two packages with identically named function.</li>
+<li><strong>tidyverse</strong>: <em>tidyverse_conflicts</em></li>
+<li><strong>dplyr</strong>: <em>filter</em></li>
+<li><strong>stats</strong>: <em>filter</em></li>
+<li><strong>conflicted</strong>: <em>conflict_prefer()</em></li>
+</ul></li>
+</ol>
+</div>
+<div id="section-12.2-files-in-and-outfiles-in-and-out-links" class="section level3 hasAnchor" number="13.12.2">
+<h3><span class="header-section-number">A.12.2</span> <a href="coding-and-development.html#files-in-and-out">Section 12.2 Files In and Out</a> links<a href="index-and-code-links.html#section-12.2-files-in-and-outfiles-in-and-out-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_path.html">Decompose File Paths to Get Folder and Files Names</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/inout//fs_path.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_path.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_path.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_path.html"><strong>html</strong></a>
 <ul>
 <li>Decompose file path and get file path folder names and file name.</li>
-<li><strong>r</strong>: <em>.Platform$file.sep + tail() + strsplit() + basename() + dirname() + substring()</em></li>
+<li>Check if file name exists.</li>
+<li><strong>r</strong>: <em>.Platform$file.sep + tail() + strsplit() + basename() + dirname() + substring() + dir.exists() + file.exists()</em></li>
 </ul></li>
 <li><a href="https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_text_save.html">Save Text to File, Read Text from File, Replace Text in File</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/inout//fs_text_save.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_text_save.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/inout/htmlpdfr/fs_text_save.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/development/inout/htmlpdfr/fs_text_save.html"><strong>html</strong></a>
 <ul>
@@ -1078,8 +1199,8 @@ div.csl-indent {
 </ul></li>
 </ol>
 </div>
-<div id="section-12.2-python-with-rpython-with-r-links" class="section level3" number="13.12.2">
-<h3><span class="header-section-number">A.12.2</span> <a href="code-and-development.html#python-with-r">Section 12.2 Python with R</a> links</h3>
+<div id="section-12.3-python-with-rpython-with-r-links" class="section level3 hasAnchor" number="13.12.3">
+<h3><span class="header-section-number">A.12.3</span> <a href="coding-and-development.html#python-with-r">Section 12.3 Python with R</a> links<a href="index-and-code-links.html#section-12.3-python-with-rpython-with-r-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/development/python/htmlpdfr/fs_python_reticulate.html">Python in R with Reticulate</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/python//fs_python_reticulate.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/python/htmlpdfr/fs_python_reticulate.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/python/htmlpdfr/fs_python_reticulate.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/development/python/htmlpdfr/fs_python_reticulate.html"><strong>html</strong></a>
 <ul>
@@ -1088,8 +1209,8 @@ div.csl-indent {
 </ul></li>
 </ol>
 </div>
-<div id="section-12.3-command-linecommand-line-links" class="section level3" number="13.12.3">
-<h3><span class="header-section-number">A.12.3</span> <a href="code-and-development.html#command-line">Section 12.3 Command Line</a> links</h3>
+<div id="section-12.4-command-linecommand-line-links" class="section level3 hasAnchor" number="13.12.4">
+<h3><span class="header-section-number">A.12.4</span> <a href="coding-and-development.html#command-line">Section 12.4 Command Line</a> links<a href="index-and-code-links.html#section-12.4-command-linecommand-line-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://fanwangecon.github.io/R4Econ/development/system/htmlpdfr/fs_system_shell.html">System and Shell Commands in R</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/system//fs_system_shell.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/system/htmlpdfr/fs_system_shell.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/system/htmlpdfr/fs_system_shell.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/development/system/htmlpdfr/fs_system_shell.html"><strong>html</strong></a>
 <ul>
@@ -1098,9 +1219,21 @@ div.csl-indent {
 <li><strong>r</strong>: <em>system() + shell()</em></li>
 </ul></li>
 </ol>
+</div>
+<div id="section-12.5-run-code-in-parallel-in-rrun-code-in-parallel-in-r-links" class="section level3 hasAnchor" number="13.12.5">
+<h3><span class="header-section-number">A.12.5</span> <a href="coding-and-development.html#run-code-in-parallel-in-r">Section 12.5 Run Code in Parallel in R</a> links<a href="index-and-code-links.html#section-12.5-run-code-in-parallel-in-rrun-code-in-parallel-in-r-links" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li><a href="https://fanwangecon.github.io/R4Econ/development/parallel/htmlpdfr/fs_parallel.html">Run Code in Parallel in R</a>: <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/parallel//fs_parallel.Rmd"><strong>rmd</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/parallel/htmlpdfr/fs_parallel.R"><strong>r</strong></a> | <a href="https://github.com/FanWangEcon/R4Econ/blob/master/development/parallel/htmlpdfr/fs_parallel.pdf"><strong>pdf</strong></a> | <a href="https://fanwangecon.github.io/R4Econ/development/parallel/htmlpdfr/fs_parallel.html"><strong>html</strong></a>
+<ul>
+<li>Running parallel code in R</li>
+<li><strong>parallel</strong>: <em>detectCores() + makeCluster()</em></li>
+<li><strong>doParallel</strong>: <em>registerDoParallel()</em></li>
+<li><strong>foreach</strong>: <em>dopar </em></li>
+</ul></li>
+</ol>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div class="csl-entry">
 R Core Team. 2019. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
 </div>
@@ -1122,12 +1255,11 @@ Xie, Yihui. 2020. <em>Bookdown: Authoring Books and Technical Documents with r M
           </div>
         </div>
       </div>
-<a href="code-and-development.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="coding-and-development.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -1168,7 +1300,7 @@ gitbook.start({
 },
 "download": [["Panel-Data-and-Optimization-with-R.pdf", "PDF"]],
 "search": {
-"engine": "lunr",
+"engine": "fuse",
 "options": null
 },
 "toc": {
@@ -1184,7 +1316,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

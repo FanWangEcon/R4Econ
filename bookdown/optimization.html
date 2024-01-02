@@ -5,29 +5,25 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 7 Optimization | Data Structures, Estimation and Optimization with R</title>
-  <meta name="description" content="<p>Run system executable and shell commands.
-Activate conda environment with shell script.</p>" />
-  <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
+  <meta name="description" content="Running parallel code in R" />
+  <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 7 Optimization | Data Structures, Estimation and Optimization with R" />
   <meta property="og:type" content="book" />
   
-  
-  <meta property="og:description" content="<p>Run system executable and shell commands.
-Activate conda environment with shell script.</p>" />
+  <meta property="og:description" content="Running parallel code in R" />
   <meta name="github-repo" content="fanwangecon/R4Econ" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Chapter 7 Optimization | Data Structures, Estimation and Optimization with R" />
   
-  <meta name="twitter:description" content="<p>Run system executable and shell commands.
-Activate conda environment with shell script.</p>" />
+  <meta name="twitter:description" content="Running parallel code in R" />
   
 
 <meta name="author" content="Fan Wang" />
 
 
-<meta name="date" content="2021-09-12" />
+<meta name="date" content="2024-01-01" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -36,8 +32,8 @@ Activate conda environment with shell script.</p>" />
   
 <link rel="prev" href="nonlinear-and-other-regressions.html"/>
 <link rel="next" href="mathematics.html"/>
-<script src="libs/header-attrs-2.10/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -53,9 +49,9 @@ Activate conda environment with shell script.</p>" />
 
 
 
-
-<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -70,7 +66,7 @@ Activate conda environment with shell script.</p>" />
 
 <style type="text/css">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -106,7 +102,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -119,7 +115,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -134,10 +130,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </style>
 
 <style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
 /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging div.csl-entry {
   margin-left:2em;
@@ -191,40 +192,44 @@ div.csl-indent {
 <li class="chapter" data-level="1.3.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-matrixes"><i class="fa fa-check"></i><b>1.3.1</b> Generate Matrixes</a></li>
 <li class="chapter" data-level="1.3.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#linear-algebra"><i class="fa fa-check"></i><b>1.3.2</b> Linear Algebra</a></li>
 </ul></li>
-<li class="chapter" data-level="1.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#variables-in-dataframes"><i class="fa fa-check"></i><b>1.4</b> Variables in Dataframes</a>
+<li class="chapter" data-level="1.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#regular-expression-date-etc."><i class="fa fa-check"></i><b>1.4</b> Regular Expression, Date, etc.</a>
 <ul>
-<li class="chapter" data-level="1.4.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-dataframe"><i class="fa fa-check"></i><b>1.4.1</b> Generate Dataframe</a></li>
-<li class="chapter" data-level="1.4.2" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#factor-label-and-combine"><i class="fa fa-check"></i><b>1.4.2</b> Factor Label and Combine</a></li>
-<li class="chapter" data-level="1.4.3" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#drawly-random-rows"><i class="fa fa-check"></i><b>1.4.3</b> Drawly Random Rows</a></li>
-<li class="chapter" data-level="1.4.4" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#generate-variables-conditional-on-others"><i class="fa fa-check"></i><b>1.4.4</b> Generate Variables Conditional On Others</a></li>
-<li class="chapter" data-level="1.4.5" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-dataframes"><i class="fa fa-check"></i><b>1.4.5</b> String Dataframes</a></li>
+<li class="chapter" data-level="1.4.1" data-path="array-matrix-dataframe.html"><a href="array-matrix-dataframe.html#string-regular-expression"><i class="fa fa-check"></i><b>1.4.1</b> String Regular Expression</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="summarize-data.html"><a href="summarize-data.html"><i class="fa fa-check"></i><b>2</b> Summarize Data</a>
+<li class="chapter" data-level="2" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html"><i class="fa fa-check"></i><b>2</b> Manipulate and Summarize Dataframes</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="summarize-data.html"><a href="summarize-data.html#counting-observation"><i class="fa fa-check"></i><b>2.1</b> Counting Observation</a>
+<li class="chapter" data-level="2.1" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#variables-in-dataframes"><i class="fa fa-check"></i><b>2.1</b> Variables in Dataframes</a>
 <ul>
-<li class="chapter" data-level="2.1.1" data-path="summarize-data.html"><a href="summarize-data.html#uncount"><i class="fa fa-check"></i><b>2.1.1</b> Uncount</a></li>
+<li class="chapter" data-level="2.1.1" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#generate-dataframe"><i class="fa fa-check"></i><b>2.1.1</b> Generate Dataframe</a></li>
+<li class="chapter" data-level="2.1.2" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#generate-categorical-variables"><i class="fa fa-check"></i><b>2.1.2</b> Generate Categorical Variables</a></li>
+<li class="chapter" data-level="2.1.3" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#drawly-random-rows"><i class="fa fa-check"></i><b>2.1.3</b> Drawly Random Rows</a></li>
+<li class="chapter" data-level="2.1.4" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#generate-variables-conditional-on-others"><i class="fa fa-check"></i><b>2.1.4</b> Generate Variables Conditional On Others</a></li>
+<li class="chapter" data-level="2.1.5" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#string-dataframes"><i class="fa fa-check"></i><b>2.1.5</b> String Dataframes</a></li>
 </ul></li>
-<li class="chapter" data-level="2.2" data-path="summarize-data.html"><a href="summarize-data.html#sorting-indexing-slicing"><i class="fa fa-check"></i><b>2.2</b> Sorting, Indexing, Slicing</a>
+<li class="chapter" data-level="2.2" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#counting-observation"><i class="fa fa-check"></i><b>2.2</b> Counting Observation</a>
 <ul>
-<li class="chapter" data-level="2.2.1" data-path="summarize-data.html"><a href="summarize-data.html#sorting"><i class="fa fa-check"></i><b>2.2.1</b> Sorting</a></li>
-<li class="chapter" data-level="2.2.2" data-path="summarize-data.html"><a href="summarize-data.html#group-sort-and-slice"><i class="fa fa-check"></i><b>2.2.2</b> Group, Sort and Slice</a></li>
+<li class="chapter" data-level="2.2.1" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#counting-and-tabulations"><i class="fa fa-check"></i><b>2.2.1</b> Counting and Tabulations</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="summarize-data.html"><a href="summarize-data.html#group-statistics"><i class="fa fa-check"></i><b>2.3</b> Group Statistics</a>
+<li class="chapter" data-level="2.3" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#sorting-indexing-slicing"><i class="fa fa-check"></i><b>2.3</b> Sorting, Indexing, Slicing</a>
 <ul>
-<li class="chapter" data-level="2.3.1" data-path="summarize-data.html"><a href="summarize-data.html#cumulative-statistics-within-group"><i class="fa fa-check"></i><b>2.3.1</b> Cumulative Statistics within Group</a></li>
-<li class="chapter" data-level="2.3.2" data-path="summarize-data.html"><a href="summarize-data.html#groups-statistics"><i class="fa fa-check"></i><b>2.3.2</b> Groups Statistics</a></li>
-<li class="chapter" data-level="2.3.3" data-path="summarize-data.html"><a href="summarize-data.html#one-variable-group-summary"><i class="fa fa-check"></i><b>2.3.3</b> One Variable Group Summary</a></li>
-<li class="chapter" data-level="2.3.4" data-path="summarize-data.html"><a href="summarize-data.html#nested-within-group-stats"><i class="fa fa-check"></i><b>2.3.4</b> Nested within Group Stats</a></li>
+<li class="chapter" data-level="2.3.1" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#sorting-1"><i class="fa fa-check"></i><b>2.3.1</b> Sorting</a></li>
+<li class="chapter" data-level="2.3.2" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#group-sort-and-slice"><i class="fa fa-check"></i><b>2.3.2</b> Group, Sort and Slice</a></li>
 </ul></li>
-<li class="chapter" data-level="2.4" data-path="summarize-data.html"><a href="summarize-data.html#distributional-statistics"><i class="fa fa-check"></i><b>2.4</b> Distributional Statistics</a>
+<li class="chapter" data-level="2.4" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#advanced-group-aggregation"><i class="fa fa-check"></i><b>2.4</b> Advanced Group Aggregation</a>
 <ul>
-<li class="chapter" data-level="2.4.1" data-path="summarize-data.html"><a href="summarize-data.html#histogram"><i class="fa fa-check"></i><b>2.4.1</b> Histogram</a></li>
+<li class="chapter" data-level="2.4.1" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#cumulative-statistics-within-group"><i class="fa fa-check"></i><b>2.4.1</b> Cumulative Statistics within Group</a></li>
+<li class="chapter" data-level="2.4.2" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#groups-statistics"><i class="fa fa-check"></i><b>2.4.2</b> Groups Statistics</a></li>
+<li class="chapter" data-level="2.4.3" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#one-variable-group-summary"><i class="fa fa-check"></i><b>2.4.3</b> One Variable Group Summary</a></li>
+<li class="chapter" data-level="2.4.4" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#nested-within-group-stats"><i class="fa fa-check"></i><b>2.4.4</b> Nested within Group Stats</a></li>
 </ul></li>
-<li class="chapter" data-level="2.5" data-path="summarize-data.html"><a href="summarize-data.html#summarize-multiple-variables"><i class="fa fa-check"></i><b>2.5</b> Summarize Multiple Variables</a>
+<li class="chapter" data-level="2.5" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#distributional-statistics"><i class="fa fa-check"></i><b>2.5</b> Distributional Statistics</a>
 <ul>
-<li class="chapter" data-level="2.5.1" data-path="summarize-data.html"><a href="summarize-data.html#generate-replace-variables"><i class="fa fa-check"></i><b>2.5.1</b> Generate Replace Variables</a></li>
+<li class="chapter" data-level="2.5.1" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#histogram"><i class="fa fa-check"></i><b>2.5.1</b> Histogram</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#summarize-multiple-variables"><i class="fa fa-check"></i><b>2.6</b> Summarize Multiple Variables</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="manipulate-and-summarize-dataframes.html"><a href="manipulate-and-summarize-dataframes.html#apply-function-over-multiple-columns-and-rows"><i class="fa fa-check"></i><b>2.6.1</b> Apply Function Over Multiple Columns and Rows</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>3</b> Functions</a>
@@ -256,19 +261,25 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#wide-and-long"><i class="fa fa-check"></i><b>4.2</b> Wide and Long</a>
 <ul>
-<li class="chapter" data-level="4.2.1" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#long-to-wide"><i class="fa fa-check"></i><b>4.2.1</b> Long to Wide</a></li>
+<li class="chapter" data-level="4.2.1" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#long-table-to-wide-table"><i class="fa fa-check"></i><b>4.2.1</b> Long Table to Wide Table</a></li>
 <li class="chapter" data-level="4.2.2" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#wide-to-long"><i class="fa fa-check"></i><b>4.2.2</b> Wide to Long</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#join-and-compare"><i class="fa fa-check"></i><b>4.3</b> Join and Compare</a>
+<li class="chapter" data-level="4.3" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#within-panel-comparisons-and-statistics"><i class="fa fa-check"></i><b>4.3</b> Within Panel Comparisons and Statistics</a>
 <ul>
 <li class="chapter" data-level="4.3.1" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#find-closest-neighbor-on-grid"><i class="fa fa-check"></i><b>4.3.1</b> Find Closest Neighbor on Grid</a></li>
+<li class="chapter" data-level="4.3.2" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#within-panel-cross-time-and-cross-group-statistics"><i class="fa fa-check"></i><b>4.3.2</b> Within Panel Cross-time and Cross-group Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#join-and-merge-files-together-by-keys"><i class="fa fa-check"></i><b>4.4</b> Join and Merge Files Together by Keys</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="multi-dimensional-data-structures.html"><a href="multi-dimensional-data-structures.html#mesh-join"><i class="fa fa-check"></i><b>4.4.1</b> Mesh Join</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>5</b> Linear Regression</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="linear-regression.html"><a href="linear-regression.html#polynomial-fitting"><i class="fa fa-check"></i><b>5.1</b> Polynomial Fitting</a>
+<li class="chapter" data-level="5.1" data-path="linear-regression.html"><a href="linear-regression.html#linear-and-polynomial-fitting"><i class="fa fa-check"></i><b>5.1</b> Linear and Polynomial Fitting</a>
 <ul>
-<li class="chapter" data-level="5.1.1" data-path="linear-regression.html"><a href="linear-regression.html#polynomial-time-series"><i class="fa fa-check"></i><b>5.1.1</b> Polynomial Time Series</a></li>
+<li class="chapter" data-level="5.1.1" data-path="linear-regression.html"><a href="linear-regression.html#fit-curves-through-points"><i class="fa fa-check"></i><b>5.1.1</b> Fit Curves Through Points</a></li>
+<li class="chapter" data-level="5.1.2" data-path="linear-regression.html"><a href="linear-regression.html#polynomial-time-series"><i class="fa fa-check"></i><b>5.1.2</b> Polynomial Time Series</a></li>
 </ul></li>
 <li class="chapter" data-level="5.2" data-path="linear-regression.html"><a href="linear-regression.html#ols-and-iv"><i class="fa fa-check"></i><b>5.2</b> OLS and IV</a>
 <ul>
@@ -295,30 +306,32 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="7" data-path="optimization.html"><a href="optimization.html"><i class="fa fa-check"></i><b>7</b> Optimization</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="optimization.html"><a href="optimization.html#bisection"><i class="fa fa-check"></i><b>7.1</b> Bisection</a>
+<li class="chapter" data-level="7.1" data-path="optimization.html"><a href="optimization.html#grid-based-optimization"><i class="fa fa-check"></i><b>7.1</b> Grid Based Optimization</a>
 <ul>
-<li class="chapter" data-level="7.1.1" data-path="optimization.html"><a href="optimization.html#bisection-1"><i class="fa fa-check"></i><b>7.1.1</b> Bisection</a></li>
+<li class="chapter" data-level="7.1.1" data-path="optimization.html"><a href="optimization.html#find-maximum-by-iterating-over-grids"><i class="fa fa-check"></i><b>7.1.1</b> Find Maximum By Iterating Over Grids</a></li>
+<li class="chapter" data-level="7.1.2" data-path="optimization.html"><a href="optimization.html#bisection"><i class="fa fa-check"></i><b>7.1.2</b> Bisection</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="mathematics.html"><a href="mathematics.html"><i class="fa fa-check"></i><b>8</b> Mathematics</a>
 <ul>
 <li class="chapter" data-level="8.1" data-path="mathematics.html"><a href="mathematics.html#basics"><i class="fa fa-check"></i><b>8.1</b> Basics</a>
 <ul>
-<li class="chapter" data-level="8.1.1" data-path="mathematics.html"><a href="mathematics.html#log-with-different-bases-and-exponents"><i class="fa fa-check"></i><b>8.1.1</b> Log with Different Bases and Exponents</a></li>
+<li class="chapter" data-level="8.1.1" data-path="mathematics.html"><a href="mathematics.html#polynomial-formulas-for-points"><i class="fa fa-check"></i><b>8.1.1</b> Polynomial Formulas for Points</a></li>
 <li class="chapter" data-level="8.1.2" data-path="mathematics.html"><a href="mathematics.html#rescale-a-parameter-with-fixed-min-and-max"><i class="fa fa-check"></i><b>8.1.2</b> Rescale a Parameter with Fixed Min and Max</a></li>
-<li class="chapter" data-level="8.1.3" data-path="mathematics.html"><a href="mathematics.html#find-nearest"><i class="fa fa-check"></i><b>8.1.3</b> Find Nearest</a></li>
-<li class="chapter" data-level="8.1.4" data-path="mathematics.html"><a href="mathematics.html#linear-scalar-fx0-solutions"><i class="fa fa-check"></i><b>8.1.4</b> Linear Scalar f(x)=0 Solutions</a></li>
+<li class="chapter" data-level="8.1.3" data-path="mathematics.html"><a href="mathematics.html#log-with-different-bases-and-exponents"><i class="fa fa-check"></i><b>8.1.3</b> Log with Different Bases and Exponents</a></li>
+<li class="chapter" data-level="8.1.4" data-path="mathematics.html"><a href="mathematics.html#find-nearest"><i class="fa fa-check"></i><b>8.1.4</b> Find Nearest</a></li>
+<li class="chapter" data-level="8.1.5" data-path="mathematics.html"><a href="mathematics.html#linear-scalar-fx0-solutions"><i class="fa fa-check"></i><b>8.1.5</b> Linear Scalar f(x)=0 Solutions</a></li>
 </ul></li>
-<li class="chapter" data-level="8.2" data-path="mathematics.html"><a href="mathematics.html#production-function"><i class="fa fa-check"></i><b>8.2</b> Production Function</a>
+<li class="chapter" data-level="8.2" data-path="mathematics.html"><a href="mathematics.html#production-functions"><i class="fa fa-check"></i><b>8.2</b> Production Functions</a>
 <ul>
 <li class="chapter" data-level="8.2.1" data-path="mathematics.html"><a href="mathematics.html#nested-ces-production-function"><i class="fa fa-check"></i><b>8.2.1</b> Nested CES Production Function</a></li>
+<li class="chapter" data-level="8.2.2" data-path="mathematics.html"><a href="mathematics.html#latent-dynamic-health-production-function"><i class="fa fa-check"></i><b>8.2.2</b> Latent Dynamic Health Production Function</a></li>
 </ul></li>
 <li class="chapter" data-level="8.3" data-path="mathematics.html"><a href="mathematics.html#inequality-models"><i class="fa fa-check"></i><b>8.3</b> Inequality Models</a>
 <ul>
 <li class="chapter" data-level="8.3.1" data-path="mathematics.html"><a href="mathematics.html#gini-discrete-sample"><i class="fa fa-check"></i><b>8.3.1</b> GINI Discrete Sample</a></li>
 <li class="chapter" data-level="8.3.2" data-path="mathematics.html"><a href="mathematics.html#gini-formula-for-discrete-random-varialbe"><i class="fa fa-check"></i><b>8.3.2</b> GINI Formula for Discrete Random Varialbe</a></li>
 <li class="chapter" data-level="8.3.3" data-path="mathematics.html"><a href="mathematics.html#atkinson-inequality-index"><i class="fa fa-check"></i><b>8.3.3</b> Atkinson Inequality Index</a></li>
-<li class="chapter" data-level="8.3.4" data-path="mathematics.html"><a href="mathematics.html#location-population-and-pollution"><i class="fa fa-check"></i><b>8.3.4</b> Location, Population, and Pollution</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="statistics.html"><a href="statistics.html"><i class="fa fa-check"></i><b>9</b> Statistics</a>
@@ -334,8 +347,6 @@ div.csl-indent {
 <li class="chapter" data-level="9.3" data-path="statistics.html"><a href="statistics.html#discrete-random-variable"><i class="fa fa-check"></i><b>9.3</b> Discrete Random Variable</a>
 <ul>
 <li class="chapter" data-level="9.3.1" data-path="statistics.html"><a href="statistics.html#discrete-approximation-of-continuous-random-variables"><i class="fa fa-check"></i><b>9.3.1</b> Discrete Approximation of Continuous Random Variables</a></li>
-<li class="chapter" data-level="9.3.2" data-path="statistics.html"><a href="statistics.html#obtaining-joint-distribution-from-marginal-with-rectilinear-restrictions"><i class="fa fa-check"></i><b>9.3.2</b> Obtaining Joint Distribution from Marginal with Rectilinear Restrictions</a></li>
-<li class="chapter" data-level="9.3.3" data-path="statistics.html"><a href="statistics.html#obtaining-joint-distribution-from-conditional-with-rectilinear-restrictions"><i class="fa fa-check"></i><b>9.3.3</b> Obtaining Joint Distribution from Conditional with Rectilinear Restrictions</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html"><i class="fa fa-check"></i><b>10</b> Tables and Graphs</a>
@@ -346,7 +357,9 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="10.2" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#ggplot-line-related-plots"><i class="fa fa-check"></i><b>10.2</b> ggplot Line Related Plots</a>
 <ul>
-<li class="chapter" data-level="10.2.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#ggplot-line-plot"><i class="fa fa-check"></i><b>10.2.1</b> ggplot Line Plot</a></li>
+<li class="chapter" data-level="10.2.1" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#ggplot-line-plot-basics"><i class="fa fa-check"></i><b>10.2.1</b> ggplot Line Plot Basics</a></li>
+<li class="chapter" data-level="10.2.2" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#ggplot-line-advanced"><i class="fa fa-check"></i><b>10.2.2</b> ggplot Line Advanced</a></li>
+<li class="chapter" data-level="10.2.3" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#time-series-plots-with-shaded-areas"><i class="fa fa-check"></i><b>10.2.3</b> Time-series Plots with Shaded Areas</a></li>
 </ul></li>
 <li class="chapter" data-level="10.3" data-path="tables-and-graphs.html"><a href="tables-and-graphs.html#ggplot-scatter-related-plots"><i class="fa fa-check"></i><b>10.3</b> ggplot Scatter Related Plots</a>
 <ul>
@@ -365,21 +378,29 @@ div.csl-indent {
 <li class="chapter" data-level="11.1.1" data-path="get-data.html"><a href="get-data.html#ecmwf-era5-data"><i class="fa fa-check"></i><b>11.1.1</b> ECMWF ERA5 Data</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="code-and-development.html"><a href="code-and-development.html"><i class="fa fa-check"></i><b>12</b> Code and Development</a>
+<li class="chapter" data-level="12" data-path="coding-and-development.html"><a href="coding-and-development.html"><i class="fa fa-check"></i><b>12</b> Coding and Development</a>
 <ul>
-<li class="chapter" data-level="12.1" data-path="code-and-development.html"><a href="code-and-development.html#files-in-and-out"><i class="fa fa-check"></i><b>12.1</b> Files In and Out</a>
+<li class="chapter" data-level="12.1" data-path="coding-and-development.html"><a href="coding-and-development.html#installation-and-packages"><i class="fa fa-check"></i><b>12.1</b> Installation and Packages</a>
 <ul>
-<li class="chapter" data-level="12.1.1" data-path="code-and-development.html"><a href="code-and-development.html#file-path"><i class="fa fa-check"></i><b>12.1.1</b> File Path</a></li>
-<li class="chapter" data-level="12.1.2" data-path="code-and-development.html"><a href="code-and-development.html#text-to-file"><i class="fa fa-check"></i><b>12.1.2</b> Text to File</a></li>
-<li class="chapter" data-level="12.1.3" data-path="code-and-development.html"><a href="code-and-development.html#rmd-to-html"><i class="fa fa-check"></i><b>12.1.3</b> Rmd to HTML</a></li>
+<li class="chapter" data-level="12.1.1" data-path="coding-and-development.html"><a href="coding-and-development.html#r-installation-and-set-up"><i class="fa fa-check"></i><b>12.1.1</b> R Installation and Set-Up</a></li>
 </ul></li>
-<li class="chapter" data-level="12.2" data-path="code-and-development.html"><a href="code-and-development.html#python-with-r"><i class="fa fa-check"></i><b>12.2</b> Python with R</a>
+<li class="chapter" data-level="12.2" data-path="coding-and-development.html"><a href="coding-and-development.html#files-in-and-out"><i class="fa fa-check"></i><b>12.2</b> Files In and Out</a>
 <ul>
-<li class="chapter" data-level="12.2.1" data-path="code-and-development.html"><a href="code-and-development.html#reticulate-basics"><i class="fa fa-check"></i><b>12.2.1</b> Reticulate Basics</a></li>
+<li class="chapter" data-level="12.2.1" data-path="coding-and-development.html"><a href="coding-and-development.html#file-path"><i class="fa fa-check"></i><b>12.2.1</b> File Path</a></li>
+<li class="chapter" data-level="12.2.2" data-path="coding-and-development.html"><a href="coding-and-development.html#text-to-file"><i class="fa fa-check"></i><b>12.2.2</b> Text to File</a></li>
+<li class="chapter" data-level="12.2.3" data-path="coding-and-development.html"><a href="coding-and-development.html#rmd-to-html"><i class="fa fa-check"></i><b>12.2.3</b> Rmd to HTML</a></li>
 </ul></li>
-<li class="chapter" data-level="12.3" data-path="code-and-development.html"><a href="code-and-development.html#command-line"><i class="fa fa-check"></i><b>12.3</b> Command Line</a>
+<li class="chapter" data-level="12.3" data-path="coding-and-development.html"><a href="coding-and-development.html#python-with-r"><i class="fa fa-check"></i><b>12.3</b> Python with R</a>
 <ul>
-<li class="chapter" data-level="12.3.1" data-path="code-and-development.html"><a href="code-and-development.html#shell-and-system-commands"><i class="fa fa-check"></i><b>12.3.1</b> Shell and System Commands</a></li>
+<li class="chapter" data-level="12.3.1" data-path="coding-and-development.html"><a href="coding-and-development.html#reticulate-basics"><i class="fa fa-check"></i><b>12.3.1</b> Reticulate Basics</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="coding-and-development.html"><a href="coding-and-development.html#command-line"><i class="fa fa-check"></i><b>12.4</b> Command Line</a>
+<ul>
+<li class="chapter" data-level="12.4.1" data-path="coding-and-development.html"><a href="coding-and-development.html#shell-and-system-commands"><i class="fa fa-check"></i><b>12.4.1</b> Shell and System Commands</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="coding-and-development.html"><a href="coding-and-development.html#run-code-in-parallel-in-r"><i class="fa fa-check"></i><b>12.5</b> Run Code in Parallel in R</a>
+<ul>
+<li class="chapter" data-level="12.5.1" data-path="coding-and-development.html"><a href="coding-and-development.html#parallel-loop-in-r"><i class="fa fa-check"></i><b>12.5.1</b> Parallel Loop in R</a></li>
 </ul></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
@@ -387,74 +408,78 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="A.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#array-matrix-dataframe-links"><i class="fa fa-check"></i><b>A.1</b> Array, Matrix, Dataframe links</a>
 <ul>
-<li class="chapter" data-level="A.1.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.1-listlist-links"><i class="fa fa-check"></i><b>A.1.1</b> <span>Section 1.1 List</span> links</a></li>
-<li class="chapter" data-level="A.1.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.2-arrayarray-links"><i class="fa fa-check"></i><b>A.1.2</b> <span>Section 1.2 Array</span> links</a></li>
-<li class="chapter" data-level="A.1.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.3-matrixmatrix-links"><i class="fa fa-check"></i><b>A.1.3</b> <span>Section 1.3 Matrix</span> links</a></li>
-<li class="chapter" data-level="A.1.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.4-variables-in-dataframesvariables-in-dataframes-links"><i class="fa fa-check"></i><b>A.1.4</b> <span>Section 1.4 Variables in Dataframes</span> links</a></li>
+<li class="chapter" data-level="A.1.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.1-listlist-links"><i class="fa fa-check"></i><b>A.1.1</b> Section 1.1 List links</a></li>
+<li class="chapter" data-level="A.1.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.2-arrayarray-links"><i class="fa fa-check"></i><b>A.1.2</b> Section 1.2 Array links</a></li>
+<li class="chapter" data-level="A.1.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.3-matrixmatrix-links"><i class="fa fa-check"></i><b>A.1.3</b> Section 1.3 Matrix links</a></li>
+<li class="chapter" data-level="A.1.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-1.4-regular-expression-date-etc.regular-expression-date-etc.-links"><i class="fa fa-check"></i><b>A.1.4</b> Section 1.4 Regular Expression, Date, etc. links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#summarize-data-links"><i class="fa fa-check"></i><b>A.2</b> Summarize Data links</a>
+<li class="chapter" data-level="A.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#manipulate-and-summarize-dataframes-links"><i class="fa fa-check"></i><b>A.2</b> Manipulate and Summarize Dataframes links</a>
 <ul>
-<li class="chapter" data-level="A.2.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.1-counting-observationcounting-observation-links"><i class="fa fa-check"></i><b>A.2.1</b> <span>Section 2.1 Counting Observation</span> links</a></li>
-<li class="chapter" data-level="A.2.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.2-sorting-indexing-slicingsorting-indexing-slicing-links"><i class="fa fa-check"></i><b>A.2.2</b> <span>Section 2.2 Sorting, Indexing, Slicing</span> links</a></li>
-<li class="chapter" data-level="A.2.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.3-group-statisticsgroup-statistics-links"><i class="fa fa-check"></i><b>A.2.3</b> <span>Section 2.3 Group Statistics</span> links</a></li>
-<li class="chapter" data-level="A.2.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.4-distributional-statisticsdistributional-statistics-links"><i class="fa fa-check"></i><b>A.2.4</b> <span>Section 2.4 Distributional Statistics</span> links</a></li>
-<li class="chapter" data-level="A.2.5" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.5-summarize-multiple-variablessummarize-multiple-variables-links"><i class="fa fa-check"></i><b>A.2.5</b> <span>Section 2.5 Summarize Multiple Variables</span> links</a></li>
+<li class="chapter" data-level="A.2.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.1-variables-in-dataframesvariables-in-dataframes-links"><i class="fa fa-check"></i><b>A.2.1</b> Section 2.1 Variables in Dataframes links</a></li>
+<li class="chapter" data-level="A.2.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.2-counting-observationcounting-observation-links"><i class="fa fa-check"></i><b>A.2.2</b> Section 2.2 Counting Observation links</a></li>
+<li class="chapter" data-level="A.2.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.3-sorting-indexing-slicingsorting-indexing-slicing-links"><i class="fa fa-check"></i><b>A.2.3</b> Section 2.3 Sorting, Indexing, Slicing links</a></li>
+<li class="chapter" data-level="A.2.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.4-advanced-group-aggregationadvanced-group-aggregation-links"><i class="fa fa-check"></i><b>A.2.4</b> Section 2.4 Advanced Group Aggregation links</a></li>
+<li class="chapter" data-level="A.2.5" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.5-distributional-statisticsdistributional-statistics-links"><i class="fa fa-check"></i><b>A.2.5</b> Section 2.5 Distributional Statistics links</a></li>
+<li class="chapter" data-level="A.2.6" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-2.6-summarize-multiple-variablessummarize-multiple-variables-links"><i class="fa fa-check"></i><b>A.2.6</b> Section 2.6 Summarize Multiple Variables links</a></li>
 </ul></li>
 <li class="chapter" data-level="A.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#functions-links"><i class="fa fa-check"></i><b>A.3</b> Functions links</a>
 <ul>
-<li class="chapter" data-level="A.3.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.1-dataframe-mutatedataframe-mutate-links"><i class="fa fa-check"></i><b>A.3.1</b> <span>Section 3.1 Dataframe Mutate</span> links</a></li>
-<li class="chapter" data-level="A.3.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.2-dataframe-do-anythingdataframe-do-anything-links"><i class="fa fa-check"></i><b>A.3.2</b> <span>Section 3.2 Dataframe Do Anything</span> links</a></li>
-<li class="chapter" data-level="A.3.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.3-apply-and-pmapapply-and-pmap-links"><i class="fa fa-check"></i><b>A.3.3</b> <span>Section 3.3 Apply and pmap</span> links</a></li>
+<li class="chapter" data-level="A.3.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.1-dataframe-mutatedataframe-mutate-links"><i class="fa fa-check"></i><b>A.3.1</b> Section 3.1 Dataframe Mutate links</a></li>
+<li class="chapter" data-level="A.3.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.2-dataframe-do-anythingdataframe-do-anything-links"><i class="fa fa-check"></i><b>A.3.2</b> Section 3.2 Dataframe Do Anything links</a></li>
+<li class="chapter" data-level="A.3.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-3.3-apply-and-pmapapply-and-pmap-links"><i class="fa fa-check"></i><b>A.3.3</b> Section 3.3 Apply and pmap links</a></li>
 </ul></li>
 <li class="chapter" data-level="A.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#multi-dimensional-data-structures-links"><i class="fa fa-check"></i><b>A.4</b> Multi-dimensional Data Structures links</a>
 <ul>
-<li class="chapter" data-level="A.4.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.1-generate-gather-bind-and-joingenerate-gather-bind-and-join-links"><i class="fa fa-check"></i><b>A.4.1</b> <span>Section 4.1 Generate, Gather, Bind and Join</span> links</a></li>
-<li class="chapter" data-level="A.4.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.2-wide-and-longwide-and-long-links"><i class="fa fa-check"></i><b>A.4.2</b> <span>Section 4.2 Wide and Long</span> links</a></li>
-<li class="chapter" data-level="A.4.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.3-join-and-comparejoin-and-compare-links"><i class="fa fa-check"></i><b>A.4.3</b> <span>Section 4.3 Join and Compare</span> links</a></li>
+<li class="chapter" data-level="A.4.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.1-generate-gather-bind-and-joingenerate-gather-bind-and-join-links"><i class="fa fa-check"></i><b>A.4.1</b> Section 4.1 Generate, Gather, Bind and Join links</a></li>
+<li class="chapter" data-level="A.4.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.2-wide-and-longwide-and-long-links"><i class="fa fa-check"></i><b>A.4.2</b> Section 4.2 Wide and Long links</a></li>
+<li class="chapter" data-level="A.4.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.3-within-panel-comparisons-and-statisticswithin-panel-comparisons-and-statistics-links"><i class="fa fa-check"></i><b>A.4.3</b> Section 4.3 Within Panel Comparisons and Statistics links</a></li>
+<li class="chapter" data-level="A.4.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-4.4-join-and-merge-files-together-by-keysjoin-and-merge-files-together-by-keys-links"><i class="fa fa-check"></i><b>A.4.4</b> Section 4.4 Join and Merge Files Together by Keys links</a></li>
 </ul></li>
 <li class="chapter" data-level="A.5" data-path="index-and-code-links.html"><a href="index-and-code-links.html#linear-regression-links"><i class="fa fa-check"></i><b>A.5</b> Linear Regression links</a>
 <ul>
-<li class="chapter" data-level="A.5.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.1-polynomial-fittingpolynomial-fitting-links"><i class="fa fa-check"></i><b>A.5.1</b> <span>Section 5.1 Polynomial Fitting</span> links</a></li>
-<li class="chapter" data-level="A.5.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.2-ols-and-ivols-and-iv-links"><i class="fa fa-check"></i><b>A.5.2</b> <span>Section 5.2 OLS and IV</span> links</a></li>
-<li class="chapter" data-level="A.5.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.3-decompositiondecomposition-links"><i class="fa fa-check"></i><b>A.5.3</b> <span>Section 5.3 Decomposition</span> links</a></li>
+<li class="chapter" data-level="A.5.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.1-linear-and-polynomial-fittinglinear-and-polynomial-fitting-links"><i class="fa fa-check"></i><b>A.5.1</b> Section 5.1 Linear and Polynomial Fitting links</a></li>
+<li class="chapter" data-level="A.5.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.2-ols-and-ivols-and-iv-links"><i class="fa fa-check"></i><b>A.5.2</b> Section 5.2 OLS and IV links</a></li>
+<li class="chapter" data-level="A.5.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-5.3-decompositiondecomposition-links"><i class="fa fa-check"></i><b>A.5.3</b> Section 5.3 Decomposition links</a></li>
 </ul></li>
 <li class="chapter" data-level="A.6" data-path="index-and-code-links.html"><a href="index-and-code-links.html#nonlinear-and-other-regressions-links"><i class="fa fa-check"></i><b>A.6</b> Nonlinear and Other Regressions links</a>
 <ul>
-<li class="chapter" data-level="A.6.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-6.1-logit-regressionlogit-regression-links"><i class="fa fa-check"></i><b>A.6.1</b> <span>Section 6.1 Logit Regression</span> links</a></li>
-<li class="chapter" data-level="A.6.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-6.2-quantile-regressionquantile-regression-links"><i class="fa fa-check"></i><b>A.6.2</b> <span>Section 6.2 Quantile Regression</span> links</a></li>
+<li class="chapter" data-level="A.6.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-6.1-logit-regressionlogit-regression-links"><i class="fa fa-check"></i><b>A.6.1</b> Section 6.1 Logit Regression links</a></li>
+<li class="chapter" data-level="A.6.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-6.2-quantile-regressionquantile-regression-links"><i class="fa fa-check"></i><b>A.6.2</b> Section 6.2 Quantile Regression links</a></li>
 </ul></li>
 <li class="chapter" data-level="A.7" data-path="index-and-code-links.html"><a href="index-and-code-links.html#optimization-links"><i class="fa fa-check"></i><b>A.7</b> Optimization links</a>
 <ul>
-<li class="chapter" data-level="A.7.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-7.1-bisectionbisection-links"><i class="fa fa-check"></i><b>A.7.1</b> <span>Section 7.1 Bisection</span> links</a></li>
+<li class="chapter" data-level="A.7.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-7.1-grid-based-optimizationgrid-based-optimization-links"><i class="fa fa-check"></i><b>A.7.1</b> Section 7.1 Grid Based Optimization links</a></li>
 </ul></li>
 <li class="chapter" data-level="A.8" data-path="index-and-code-links.html"><a href="index-and-code-links.html#mathematics-links"><i class="fa fa-check"></i><b>A.8</b> Mathematics links</a>
 <ul>
-<li class="chapter" data-level="A.8.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.1-basicsbasics-links"><i class="fa fa-check"></i><b>A.8.1</b> <span>Section 8.1 Basics</span> links</a></li>
-<li class="chapter" data-level="A.8.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.2-production-functionproduction-function-links"><i class="fa fa-check"></i><b>A.8.2</b> <span>Section 8.2 Production Function</span> links</a></li>
-<li class="chapter" data-level="A.8.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.3-inequality-modelsinequality-models-links"><i class="fa fa-check"></i><b>A.8.3</b> <span>Section 8.3 Inequality Models</span> links</a></li>
+<li class="chapter" data-level="A.8.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.1-basicsbasics-links"><i class="fa fa-check"></i><b>A.8.1</b> Section 8.1 Basics links</a></li>
+<li class="chapter" data-level="A.8.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.2-production-functionsproduction-functions-links"><i class="fa fa-check"></i><b>A.8.2</b> Section 8.2 Production Functions links</a></li>
+<li class="chapter" data-level="A.8.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-8.3-inequality-modelsinequality-models-links"><i class="fa fa-check"></i><b>A.8.3</b> Section 8.3 Inequality Models links</a></li>
 </ul></li>
 <li class="chapter" data-level="A.9" data-path="index-and-code-links.html"><a href="index-and-code-links.html#statistics-links"><i class="fa fa-check"></i><b>A.9</b> Statistics links</a>
 <ul>
-<li class="chapter" data-level="A.9.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.1-random-drawsrandom-draws-links"><i class="fa fa-check"></i><b>A.9.1</b> <span>Section 9.1 Random Draws</span> links</a></li>
-<li class="chapter" data-level="A.9.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.2-distributionsdistributions-links"><i class="fa fa-check"></i><b>A.9.2</b> <span>Section 9.2 Distributions</span> links</a></li>
-<li class="chapter" data-level="A.9.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.3-discrete-random-variablediscrete-random-variable-links"><i class="fa fa-check"></i><b>A.9.3</b> <span>Section 9.3 Discrete Random Variable</span> links</a></li>
+<li class="chapter" data-level="A.9.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.1-random-drawsrandom-draws-links"><i class="fa fa-check"></i><b>A.9.1</b> Section 9.1 Random Draws links</a></li>
+<li class="chapter" data-level="A.9.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.2-distributionsdistributions-links"><i class="fa fa-check"></i><b>A.9.2</b> Section 9.2 Distributions links</a></li>
+<li class="chapter" data-level="A.9.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-9.3-discrete-random-variablediscrete-random-variable-links"><i class="fa fa-check"></i><b>A.9.3</b> Section 9.3 Discrete Random Variable links</a></li>
 </ul></li>
 <li class="chapter" data-level="A.10" data-path="index-and-code-links.html"><a href="index-and-code-links.html#tables-and-graphs-links"><i class="fa fa-check"></i><b>A.10</b> Tables and Graphs links</a>
 <ul>
-<li class="chapter" data-level="A.10.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.1-r-base-plotsr-base-plots-links"><i class="fa fa-check"></i><b>A.10.1</b> <span>Section 10.1 R Base Plots</span> links</a></li>
-<li class="chapter" data-level="A.10.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.2-ggplot-line-related-plotsggplot-line-related-plots-links"><i class="fa fa-check"></i><b>A.10.2</b> <span>Section 10.2 ggplot Line Related Plots</span> links</a></li>
-<li class="chapter" data-level="A.10.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.3-ggplot-scatter-related-plotsggplot-scatter-related-plots-links"><i class="fa fa-check"></i><b>A.10.3</b> <span>Section 10.3 ggplot Scatter Related Plots</span> links</a></li>
-<li class="chapter" data-level="A.10.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.4-write-and-read-plotswrite-and-read-plots-links"><i class="fa fa-check"></i><b>A.10.4</b> <span>Section 10.4 Write and Read Plots</span> links</a></li>
+<li class="chapter" data-level="A.10.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.1-r-base-plotsr-base-plots-links"><i class="fa fa-check"></i><b>A.10.1</b> Section 10.1 R Base Plots links</a></li>
+<li class="chapter" data-level="A.10.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.2-ggplot-line-related-plotsggplot-line-related-plots-links"><i class="fa fa-check"></i><b>A.10.2</b> Section 10.2 ggplot Line Related Plots links</a></li>
+<li class="chapter" data-level="A.10.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.3-ggplot-scatter-related-plotsggplot-scatter-related-plots-links"><i class="fa fa-check"></i><b>A.10.3</b> Section 10.3 ggplot Scatter Related Plots links</a></li>
+<li class="chapter" data-level="A.10.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-10.4-write-and-read-plotswrite-and-read-plots-links"><i class="fa fa-check"></i><b>A.10.4</b> Section 10.4 Write and Read Plots links</a></li>
 </ul></li>
 <li class="chapter" data-level="A.11" data-path="index-and-code-links.html"><a href="index-and-code-links.html#get-data-links"><i class="fa fa-check"></i><b>A.11</b> Get Data links</a>
 <ul>
-<li class="chapter" data-level="A.11.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-11.1-environmental-dataenvironmental-data-links"><i class="fa fa-check"></i><b>A.11.1</b> <span>Section 11.1 Environmental Data</span> links</a></li>
+<li class="chapter" data-level="A.11.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-11.1-environmental-dataenvironmental-data-links"><i class="fa fa-check"></i><b>A.11.1</b> Section 11.1 Environmental Data links</a></li>
 </ul></li>
-<li class="chapter" data-level="A.12" data-path="index-and-code-links.html"><a href="index-and-code-links.html#code-and-development-links"><i class="fa fa-check"></i><b>A.12</b> Code and Development links</a>
+<li class="chapter" data-level="A.12" data-path="index-and-code-links.html"><a href="index-and-code-links.html#coding-and-development-links"><i class="fa fa-check"></i><b>A.12</b> Coding and Development links</a>
 <ul>
-<li class="chapter" data-level="A.12.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.1-files-in-and-outfiles-in-and-out-links"><i class="fa fa-check"></i><b>A.12.1</b> <span>Section 12.1 Files In and Out</span> links</a></li>
-<li class="chapter" data-level="A.12.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.2-python-with-rpython-with-r-links"><i class="fa fa-check"></i><b>A.12.2</b> <span>Section 12.2 Python with R</span> links</a></li>
-<li class="chapter" data-level="A.12.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.3-command-linecommand-line-links"><i class="fa fa-check"></i><b>A.12.3</b> <span>Section 12.3 Command Line</span> links</a></li>
+<li class="chapter" data-level="A.12.1" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.1-installation-and-packagesinstallation-and-packages-links"><i class="fa fa-check"></i><b>A.12.1</b> Section 12.1 Installation and Packages links</a></li>
+<li class="chapter" data-level="A.12.2" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.2-files-in-and-outfiles-in-and-out-links"><i class="fa fa-check"></i><b>A.12.2</b> Section 12.2 Files In and Out links</a></li>
+<li class="chapter" data-level="A.12.3" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.3-python-with-rpython-with-r-links"><i class="fa fa-check"></i><b>A.12.3</b> Section 12.3 Python with R links</a></li>
+<li class="chapter" data-level="A.12.4" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.4-command-linecommand-line-links"><i class="fa fa-check"></i><b>A.12.4</b> Section 12.4 Command Line links</a></li>
+<li class="chapter" data-level="A.12.5" data-path="index-and-code-links.html"><a href="index-and-code-links.html#section-12.5-run-code-in-parallel-in-rrun-code-in-parallel-in-r-links"><i class="fa fa-check"></i><b>A.12.5</b> Section 12.5 Run Code in Parallel in R links</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -477,16 +502,162 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="optimization" class="section level1" number="7">
-<h1><span class="header-section-number">Chapter 7</span> Optimization</h1>
+<div id="optimization" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">Chapter 7</span> Optimization<a href="optimization.html#optimization" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 
-<div id="bisection" class="section level2" number="7.1">
-<h2><span class="header-section-number">7.1</span> Bisection</h2>
+<div id="grid-based-optimization" class="section level2 hasAnchor" number="7.1">
+<h2><span class="header-section-number">7.1</span> Grid Based Optimization<a href="optimization.html#grid-based-optimization" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 
-<div id="bisection-1" class="section level3" number="7.1.1">
-<h3><span class="header-section-number">7.1.1</span> Bisection</h3>
+<div id="find-maximum-by-iterating-over-grids" class="section level3 hasAnchor" number="7.1.1">
+<h3><span class="header-section-number">7.1.1</span> Find Maximum By Iterating Over Grids<a href="optimization.html#find-maximum-by-iterating-over-grids" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <blockquote>
-<p>Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> Package, <a href="https://fanwangecon.github.io/R4Econ/">R Code Examples</a> Repository (<a href="https://fanwangecon.github.io/R4Econ/bookdown">bookdown site</a>), or <a href="https://fanwangecon.github.io/Stat4Econ/">Intro Stats with R</a> Repository (<a href="https://fanwangecon.github.io/Stat4Econ/bookdown">bookdown site</a>).</p>
+<p>Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> research support package, <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> examples page, <a href="https://fanwangecon.github.io/PkgTestR/">PkgTestR</a> packaging guide, or <a href="https://fanwangecon.github.io/Stat4Econ/">Stat4Econ</a> course page.</p>
+</blockquote>
+<div id="single-parameter-optimization" class="section level4 hasAnchor" number="7.1.1.1">
+<h4><span class="header-section-number">7.1.1.1</span> Single Parameter Optimization<a href="optimization.html#single-parameter-optimization" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>We have a function <span class="math inline">\(f(\mu)\)</span>, we know that <span class="math inline">\(a\le \mu \le b\)</span>, and we want to find the value of <span class="math inline">\(\mu\)</span> that maximizes <span class="math inline">\(f(\mu)\)</span> within the bounds. The same idea here is used in various aspects of solving the dynamic equilibrium borrowing and savings problem in <a href="https://linkinghub.elsevier.com/retrieve/pii/S1094202521000648">Wang (2022)</a> (<a href="https://arxiv.org/pdf/2204.12374.pdf">preprint pdf</a>).</p>
+<p>First, we create a simple quadratic function. the minimum of the function is where <span class="math inline">\(\mu = -2\)</span></p>
+<div class="sourceCode" id="cb628"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb628-1"><a href="optimization.html#cb628-1" tabindex="-1"></a><span class="co"># Define Function</span></span>
+<span id="cb628-2"><a href="optimization.html#cb628-2" tabindex="-1"></a>ffi_quad_func <span class="ot">&lt;-</span> <span class="cf">function</span>(fl_mu) {</span>
+<span id="cb628-3"><a href="optimization.html#cb628-3" tabindex="-1"></a>  <span class="dv">1</span> <span class="sc">+</span> (fl_mu <span class="sc">+</span> <span class="dv">2</span>)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb628-4"><a href="optimization.html#cb628-4" tabindex="-1"></a>}</span>
+<span id="cb628-5"><a href="optimization.html#cb628-5" tabindex="-1"></a><span class="co"># Test Function</span></span>
+<span id="cb628-6"><a href="optimization.html#cb628-6" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;ffi_quad_func(-3)=&quot;</span>, <span class="fu">ffi_quad_func</span>(<span class="sc">-</span><span class="dv">3</span>)))</span></code></pre></div>
+<pre><code>## [1] &quot;ffi_quad_func(-3)=2&quot;</code></pre>
+<div class="sourceCode" id="cb630"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb630-1"><a href="optimization.html#cb630-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;ffi_quad_func(-2)=&quot;</span>, <span class="fu">ffi_quad_func</span>(<span class="sc">-</span><span class="dv">2</span>)))</span></code></pre></div>
+<pre><code>## [1] &quot;ffi_quad_func(-2)=1&quot;</code></pre>
+<div class="sourceCode" id="cb632"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb632-1"><a href="optimization.html#cb632-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;ffi_quad_func(-1)=&quot;</span>, <span class="fu">ffi_quad_func</span>(<span class="sc">-</span><span class="dv">1</span>)))</span></code></pre></div>
+<pre><code>## [1] &quot;ffi_quad_func(-1)=2&quot;</code></pre>
+<p>Second, we develop the maximizer function given grid.</p>
+<div class="sourceCode" id="cb634"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb634-1"><a href="optimization.html#cb634-1" tabindex="-1"></a><span class="co"># Function</span></span>
+<span id="cb634-2"><a href="optimization.html#cb634-2" tabindex="-1"></a>ffi_find_min <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">fl_min =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">fl_max =</span> <span class="dv">2</span>, <span class="at">it_grid_len =</span> <span class="dv">7</span>) {</span>
+<span id="cb634-3"><a href="optimization.html#cb634-3" tabindex="-1"></a></span>
+<span id="cb634-4"><a href="optimization.html#cb634-4" tabindex="-1"></a>  <span class="co"># Construct grid where to evaluate the function</span></span>
+<span id="cb634-5"><a href="optimization.html#cb634-5" tabindex="-1"></a>  ar_fl_mu <span class="ot">&lt;-</span> <span class="fu">seq</span>(fl_min, fl_max, <span class="at">length.out =</span> it_grid_len)</span>
+<span id="cb634-6"><a href="optimization.html#cb634-6" tabindex="-1"></a></span>
+<span id="cb634-7"><a href="optimization.html#cb634-7" tabindex="-1"></a>  <span class="co"># Evaluate likelihood</span></span>
+<span id="cb634-8"><a href="optimization.html#cb634-8" tabindex="-1"></a>  ar_obj <span class="ot">&lt;-</span> <span class="fu">sapply</span>(ar_fl_mu, ffi_quad_func)</span>
+<span id="cb634-9"><a href="optimization.html#cb634-9" tabindex="-1"></a></span>
+<span id="cb634-10"><a href="optimization.html#cb634-10" tabindex="-1"></a>  <span class="co"># Find min grid</span></span>
+<span id="cb634-11"><a href="optimization.html#cb634-11" tabindex="-1"></a>  it_min_idx <span class="ot">&lt;-</span> <span class="fu">which.min</span>(ar_obj)</span>
+<span id="cb634-12"><a href="optimization.html#cb634-12" tabindex="-1"></a>  fl_min_val <span class="ot">&lt;-</span> ar_obj[it_min_idx]</span>
+<span id="cb634-13"><a href="optimization.html#cb634-13" tabindex="-1"></a></span>
+<span id="cb634-14"><a href="optimization.html#cb634-14" tabindex="-1"></a>  <span class="co"># Find lower and upper bound</span></span>
+<span id="cb634-15"><a href="optimization.html#cb634-15" tabindex="-1"></a>  fl_min_new <span class="ot">&lt;-</span> ar_fl_mu[<span class="fu">max</span>(it_min_idx <span class="sc">-</span> <span class="dv">1</span>, <span class="dv">1</span>)]</span>
+<span id="cb634-16"><a href="optimization.html#cb634-16" tabindex="-1"></a>  fl_max_new <span class="ot">&lt;-</span> ar_fl_mu[<span class="fu">min</span>(it_min_idx <span class="sc">+</span> <span class="dv">1</span>, it_grid_len)]</span>
+<span id="cb634-17"><a href="optimization.html#cb634-17" tabindex="-1"></a></span>
+<span id="cb634-18"><a href="optimization.html#cb634-18" tabindex="-1"></a>  <span class="co"># return</span></span>
+<span id="cb634-19"><a href="optimization.html#cb634-19" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(</span>
+<span id="cb634-20"><a href="optimization.html#cb634-20" tabindex="-1"></a>    <span class="at">fl_min_val =</span> fl_min_val,</span>
+<span id="cb634-21"><a href="optimization.html#cb634-21" tabindex="-1"></a>    <span class="at">fl_min_new =</span> fl_min_new,</span>
+<span id="cb634-22"><a href="optimization.html#cb634-22" tabindex="-1"></a>    <span class="at">fl_max_new =</span> fl_max_new</span>
+<span id="cb634-23"><a href="optimization.html#cb634-23" tabindex="-1"></a>  ))</span>
+<span id="cb634-24"><a href="optimization.html#cb634-24" tabindex="-1"></a>}</span>
+<span id="cb634-25"><a href="optimization.html#cb634-25" tabindex="-1"></a><span class="co"># Test Function</span></span>
+<span id="cb634-26"><a href="optimization.html#cb634-26" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;ffi_find_min(-3,-1,10)&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;ffi_find_min(-3,-1,10)&quot;</code></pre>
+<div class="sourceCode" id="cb636"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb636-1"><a href="optimization.html#cb636-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">ffi_find_min</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">10</span>))</span></code></pre></div>
+<pre><code>## $fl_min_val
+## [1] 1.012346
+## 
+## $fl_min_new
+## [1] -2.333333
+## 
+## $fl_max_new
+## [1] -1.888889</code></pre>
+<div class="sourceCode" id="cb638"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb638-1"><a href="optimization.html#cb638-1" tabindex="-1"></a><span class="co"># Test function if lower bound is actual min</span></span>
+<span id="cb638-2"><a href="optimization.html#cb638-2" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;ffi_find_min(-2,-1,10)&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;ffi_find_min(-2,-1,10)&quot;</code></pre>
+<div class="sourceCode" id="cb640"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb640-1"><a href="optimization.html#cb640-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">ffi_find_min</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">10</span>))</span></code></pre></div>
+<pre><code>## $fl_min_val
+## [1] 1
+## 
+## $fl_min_new
+## [1] -2
+## 
+## $fl_max_new
+## [1] -1.888889</code></pre>
+<div class="sourceCode" id="cb642"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb642-1"><a href="optimization.html#cb642-1" tabindex="-1"></a><span class="co"># Test function if upper bound is actual min</span></span>
+<span id="cb642-2"><a href="optimization.html#cb642-2" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;ffi_find_min(-3,-2,10)&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;ffi_find_min(-3,-2,10)&quot;</code></pre>
+<div class="sourceCode" id="cb644"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb644-1"><a href="optimization.html#cb644-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">ffi_find_min</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="sc">-</span><span class="dv">2</span>, <span class="dv">10</span>))</span></code></pre></div>
+<pre><code>## $fl_min_val
+## [1] 1
+## 
+## $fl_min_new
+## [1] -2.111111
+## 
+## $fl_max_new
+## [1] -2</code></pre>
+<p>Third, we iterately zoom-in to ever finer grid around the point in the last grid where the objective function had the lowest value.</p>
+<div class="sourceCode" id="cb646"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb646-1"><a href="optimization.html#cb646-1" tabindex="-1"></a><span class="co"># Initialize min and max and tolerance criteria</span></span>
+<span id="cb646-2"><a href="optimization.html#cb646-2" tabindex="-1"></a>fl_min_cur <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">10</span></span>
+<span id="cb646-3"><a href="optimization.html#cb646-3" tabindex="-1"></a>fl_max_cur <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb646-4"><a href="optimization.html#cb646-4" tabindex="-1"></a>it_grid_len <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb646-5"><a href="optimization.html#cb646-5" tabindex="-1"></a>fl_tol <span class="ot">&lt;-</span> <span class="fl">1e-5</span></span>
+<span id="cb646-6"><a href="optimization.html#cb646-6" tabindex="-1"></a>it_max_iter <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb646-7"><a href="optimization.html#cb646-7" tabindex="-1"></a></span>
+<span id="cb646-8"><a href="optimization.html#cb646-8" tabindex="-1"></a><span class="co"># Initialize initial gaps etc</span></span>
+<span id="cb646-9"><a href="optimization.html#cb646-9" tabindex="-1"></a>fl_gap <span class="ot">&lt;-</span> <span class="fl">1e5</span></span>
+<span id="cb646-10"><a href="optimization.html#cb646-10" tabindex="-1"></a>fl_min_val_last <span class="ot">&lt;-</span> <span class="fl">1e5</span></span>
+<span id="cb646-11"><a href="optimization.html#cb646-11" tabindex="-1"></a>it_iter <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb646-12"><a href="optimization.html#cb646-12" tabindex="-1"></a></span>
+<span id="cb646-13"><a href="optimization.html#cb646-13" tabindex="-1"></a><span class="co"># Iteratively loop over grid to find the maximum by zooming in</span></span>
+<span id="cb646-14"><a href="optimization.html#cb646-14" tabindex="-1"></a><span class="cf">while</span> ((fl_gap <span class="sc">&gt;</span> fl_tol) <span class="sc">&amp;&amp;</span> it_iter <span class="sc">&lt;=</span> it_max_iter) {</span>
+<span id="cb646-15"><a href="optimization.html#cb646-15" tabindex="-1"></a></span>
+<span id="cb646-16"><a href="optimization.html#cb646-16" tabindex="-1"></a>  <span class="co"># Iterator counts up</span></span>
+<span id="cb646-17"><a href="optimization.html#cb646-17" tabindex="-1"></a>  it_iter <span class="ot">&lt;-</span> it_iter <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb646-18"><a href="optimization.html#cb646-18" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;it_iter=&quot;</span>, it_iter))</span>
+<span id="cb646-19"><a href="optimization.html#cb646-19" tabindex="-1"></a></span>
+<span id="cb646-20"><a href="optimization.html#cb646-20" tabindex="-1"></a>  <span class="co"># build array</span></span>
+<span id="cb646-21"><a href="optimization.html#cb646-21" tabindex="-1"></a>  ls_find_min <span class="ot">&lt;-</span> <span class="fu">ffi_find_min</span>(</span>
+<span id="cb646-22"><a href="optimization.html#cb646-22" tabindex="-1"></a>    <span class="at">fl_min =</span> fl_min_cur, <span class="at">fl_max =</span> fl_max_cur, <span class="at">it_grid_len =</span> it_grid_len</span>
+<span id="cb646-23"><a href="optimization.html#cb646-23" tabindex="-1"></a>  )</span>
+<span id="cb646-24"><a href="optimization.html#cb646-24" tabindex="-1"></a></span>
+<span id="cb646-25"><a href="optimization.html#cb646-25" tabindex="-1"></a>  <span class="co"># Min objective value current</span></span>
+<span id="cb646-26"><a href="optimization.html#cb646-26" tabindex="-1"></a>  fl_min_val <span class="ot">&lt;-</span> ls_find_min<span class="sc">$</span>fl_min_val</span>
+<span id="cb646-27"><a href="optimization.html#cb646-27" tabindex="-1"></a>  <span class="co"># Find new lower and upper bound</span></span>
+<span id="cb646-28"><a href="optimization.html#cb646-28" tabindex="-1"></a>  fl_min_cur <span class="ot">&lt;-</span> ls_find_min<span class="sc">$</span>fl_min_new</span>
+<span id="cb646-29"><a href="optimization.html#cb646-29" tabindex="-1"></a>  fl_max_cur <span class="ot">&lt;-</span> ls_find_min<span class="sc">$</span>fl_max_new</span>
+<span id="cb646-30"><a href="optimization.html#cb646-30" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;fl_min_cur=&quot;</span>, fl_min_cur))</span>
+<span id="cb646-31"><a href="optimization.html#cb646-31" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;fl_max_cur=&quot;</span>, fl_max_cur))</span>
+<span id="cb646-32"><a href="optimization.html#cb646-32" tabindex="-1"></a></span>
+<span id="cb646-33"><a href="optimization.html#cb646-33" tabindex="-1"></a>  <span class="co"># Compare</span></span>
+<span id="cb646-34"><a href="optimization.html#cb646-34" tabindex="-1"></a>  fl_gap <span class="ot">&lt;-</span> <span class="fu">abs</span>(fl_min_val <span class="sc">-</span> fl_min_val_last)</span>
+<span id="cb646-35"><a href="optimization.html#cb646-35" tabindex="-1"></a>  fl_min_val_last <span class="ot">&lt;-</span> fl_min_val</span>
+<span id="cb646-36"><a href="optimization.html#cb646-36" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;fl_gap=&quot;</span>, fl_gap))</span>
+<span id="cb646-37"><a href="optimization.html#cb646-37" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## [1] &quot;it_iter=1&quot;
+## [1] &quot;fl_min_cur=-3.33333333333333&quot;
+## [1] &quot;fl_max_cur=1.11111111111111&quot;
+## [1] &quot;fl_gap=99998.2098765432&quot;
+## [1] &quot;it_iter=2&quot;
+## [1] &quot;fl_min_cur=-2.34567901234568&quot;
+## [1] &quot;fl_max_cur=-1.35802469135802&quot;
+## [1] &quot;fl_gap=0.768175582990399&quot;
+## [1] &quot;it_iter=3&quot;
+## [1] &quot;fl_min_cur=-2.12620027434842&quot;
+## [1] &quot;fl_max_cur=-1.90672153635117&quot;
+## [1] &quot;fl_gap=0.0216769123947906&quot;
+## [1] &quot;it_iter=4&quot;
+## [1] &quot;fl_min_cur=-2.02865416857186&quot;
+## [1] &quot;fl_max_cur=-1.97988111568358&quot;
+## [1] &quot;fl_gap=0.00025274863560476&quot;
+## [1] &quot;it_iter=5&quot;
+## [1] &quot;fl_min_cur=-2.00697725617707&quot;
+## [1] &quot;fl_max_cur=-1.99613879997968&quot;
+## [1] &quot;fl_gap=1.57853178373024e-05&quot;
+## [1] &quot;it_iter=6&quot;
+## [1] &quot;fl_min_cur=-2.00095589162296&quot;
+## [1] &quot;fl_max_cur=-1.99854734580132&quot;
+## [1] &quot;fl_gap=2.36575822887275e-06&quot;</code></pre>
+
+</div>
+</div>
+<div id="bisection" class="section level3 hasAnchor" number="7.1.2">
+<h3><span class="header-section-number">7.1.2</span> Bisection<a href="optimization.html#bisection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<blockquote>
+<p>Go back to <a href="http://fanwangecon.github.io/">fan</a>’s <a href="https://fanwangecon.github.io/REconTools/">REconTools</a> research support package, <a href="https://fanwangecon.github.io/R4Econ/">R4Econ</a> examples page, <a href="https://fanwangecon.github.io/PkgTestR/">PkgTestR</a> packaging guide, or <a href="https://fanwangecon.github.io/Stat4Econ/">Stat4Econ</a> course page.</p>
 </blockquote>
 <p>See the <a href="https://fanwangecon.github.io/REconTools/reference/ff_opti_bisect_pmap_multi.html">ff_opti_bisect_pmap_multi</a> function from <a href="https://fanwangecon.github.io/">Fan</a>’s <em><a href="https://fanwangecon.github.io/REconTools/">REconTools</a></em> Package, which provides a resuable function based on the algorithm worked out here.</p>
 <p>The bisection specific code does not need to do much.</p>
@@ -504,130 +675,130 @@ div.csl-indent {
 <li>iteratre until convergence.</li>
 </ol>
 <p>Generate New columns of a and b as we iteratre, do not need to store p, p is temporary. Evaluate the function below which we have already tested, but now, in the dataframe before generating all permutations, <em>tb_states_choices</em>, now the <em>fl_N</em> element will be changing with each iteration, it will be row specific. <em>fl_N</em> are first min and max, then each subsequent ps.</p>
-<div id="initialize-matrix" class="section level4" number="7.1.1.1">
-<h4><span class="header-section-number">7.1.1.1</span> Initialize Matrix</h4>
+<div id="initialize-matrix" class="section level4 hasAnchor" number="7.1.2.1">
+<h4><span class="header-section-number">7.1.2.1</span> Initialize Matrix<a href="optimization.html#initialize-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Prepare Input Data:</p>
-<div class="sourceCode" id="cb506"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb506-1"><a href="optimization.html#cb506-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters</span></span>
-<span id="cb506-2"><a href="optimization.html#cb506-2" aria-hidden="true" tabindex="-1"></a>fl_rho <span class="ot">=</span> <span class="fl">0.20</span></span>
-<span id="cb506-3"><a href="optimization.html#cb506-3" aria-hidden="true" tabindex="-1"></a>svr_id_var <span class="ot">=</span> <span class="st">&#39;INDI_ID&#39;</span></span>
-<span id="cb506-4"><a href="optimization.html#cb506-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb506-5"><a href="optimization.html#cb506-5" aria-hidden="true" tabindex="-1"></a><span class="co"># P fixed parameters, nN is N dimensional, nP is P dimensional</span></span>
-<span id="cb506-6"><a href="optimization.html#cb506-6" aria-hidden="true" tabindex="-1"></a>ar_nN_A <span class="ot">=</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">4</span>)</span>
-<span id="cb506-7"><a href="optimization.html#cb506-7" aria-hidden="true" tabindex="-1"></a>ar_nN_alpha <span class="ot">=</span> <span class="fu">seq</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="at">length.out =</span> <span class="dv">4</span>)</span>
-<span id="cb506-8"><a href="optimization.html#cb506-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb506-9"><a href="optimization.html#cb506-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Choice Grid for nutritional feasible choices for each</span></span>
-<span id="cb506-10"><a href="optimization.html#cb506-10" aria-hidden="true" tabindex="-1"></a>fl_N_agg <span class="ot">=</span> <span class="dv">100</span></span>
-<span id="cb506-11"><a href="optimization.html#cb506-11" aria-hidden="true" tabindex="-1"></a>fl_N_min <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb506-12"><a href="optimization.html#cb506-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb506-13"><a href="optimization.html#cb506-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Mesh Expand</span></span>
-<span id="cb506-14"><a href="optimization.html#cb506-14" aria-hidden="true" tabindex="-1"></a>tb_states_choices <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">cbind</span>(ar_nN_A, ar_nN_alpha)) <span class="sc">%&gt;%</span> </span>
-<span id="cb506-15"><a href="optimization.html#cb506-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowid_to_column</span>(<span class="at">var=</span>svr_id_var)</span>
-<span id="cb506-16"><a href="optimization.html#cb506-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb506-17"><a href="optimization.html#cb506-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert Matrix to Tibble</span></span>
-<span id="cb506-18"><a href="optimization.html#cb506-18" aria-hidden="true" tabindex="-1"></a>ar_st_col_names <span class="ot">=</span> <span class="fu">c</span>(svr_id_var,<span class="st">&#39;fl_A&#39;</span>, <span class="st">&#39;fl_alpha&#39;</span>)</span>
-<span id="cb506-19"><a href="optimization.html#cb506-19" aria-hidden="true" tabindex="-1"></a>tb_states_choices <span class="ot">&lt;-</span> tb_states_choices <span class="sc">%&gt;%</span> <span class="fu">rename_all</span>(<span class="sc">~</span><span class="fu">c</span>(ar_st_col_names))</span></code></pre></div>
+<div class="sourceCode" id="cb648"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb648-1"><a href="optimization.html#cb648-1" tabindex="-1"></a><span class="co"># Parameters</span></span>
+<span id="cb648-2"><a href="optimization.html#cb648-2" tabindex="-1"></a>fl_rho <span class="ot">=</span> <span class="fl">0.20</span></span>
+<span id="cb648-3"><a href="optimization.html#cb648-3" tabindex="-1"></a>svr_id_var <span class="ot">=</span> <span class="st">&#39;INDI_ID&#39;</span></span>
+<span id="cb648-4"><a href="optimization.html#cb648-4" tabindex="-1"></a></span>
+<span id="cb648-5"><a href="optimization.html#cb648-5" tabindex="-1"></a><span class="co"># P fixed parameters, nN is N dimensional, nP is P dimensional</span></span>
+<span id="cb648-6"><a href="optimization.html#cb648-6" tabindex="-1"></a>ar_nN_A <span class="ot">=</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">4</span>)</span>
+<span id="cb648-7"><a href="optimization.html#cb648-7" tabindex="-1"></a>ar_nN_alpha <span class="ot">=</span> <span class="fu">seq</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="at">length.out =</span> <span class="dv">4</span>)</span>
+<span id="cb648-8"><a href="optimization.html#cb648-8" tabindex="-1"></a></span>
+<span id="cb648-9"><a href="optimization.html#cb648-9" tabindex="-1"></a><span class="co"># Choice Grid for nutritional feasible choices for each</span></span>
+<span id="cb648-10"><a href="optimization.html#cb648-10" tabindex="-1"></a>fl_N_agg <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb648-11"><a href="optimization.html#cb648-11" tabindex="-1"></a>fl_N_min <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb648-12"><a href="optimization.html#cb648-12" tabindex="-1"></a></span>
+<span id="cb648-13"><a href="optimization.html#cb648-13" tabindex="-1"></a><span class="co"># Mesh Expand</span></span>
+<span id="cb648-14"><a href="optimization.html#cb648-14" tabindex="-1"></a>tb_states_choices <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">cbind</span>(ar_nN_A, ar_nN_alpha)) <span class="sc">%&gt;%</span> </span>
+<span id="cb648-15"><a href="optimization.html#cb648-15" tabindex="-1"></a>  <span class="fu">rowid_to_column</span>(<span class="at">var=</span>svr_id_var)</span>
+<span id="cb648-16"><a href="optimization.html#cb648-16" tabindex="-1"></a></span>
+<span id="cb648-17"><a href="optimization.html#cb648-17" tabindex="-1"></a><span class="co"># Convert Matrix to Tibble</span></span>
+<span id="cb648-18"><a href="optimization.html#cb648-18" tabindex="-1"></a>ar_st_col_names <span class="ot">=</span> <span class="fu">c</span>(svr_id_var,<span class="st">&#39;fl_A&#39;</span>, <span class="st">&#39;fl_alpha&#39;</span>)</span>
+<span id="cb648-19"><a href="optimization.html#cb648-19" tabindex="-1"></a>tb_states_choices <span class="ot">&lt;-</span> tb_states_choices <span class="sc">%&gt;%</span> <span class="fu">rename_all</span>(<span class="sc">~</span><span class="fu">c</span>(ar_st_col_names))</span></code></pre></div>
 <p>Prepare Function:</p>
-<div class="sourceCode" id="cb507"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb507-1"><a href="optimization.html#cb507-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define Implicit Function</span></span>
-<span id="cb507-2"><a href="optimization.html#cb507-2" aria-hidden="true" tabindex="-1"></a>ffi_nonlin_dplyrdo <span class="ot">&lt;-</span> <span class="cf">function</span>(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, fl_rho){</span>
-<span id="cb507-3"><a href="optimization.html#cb507-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb507-4"><a href="optimization.html#cb507-4" aria-hidden="true" tabindex="-1"></a>  ar_p1_s1 <span class="ot">=</span> <span class="fu">exp</span>((fl_A <span class="sc">-</span> ar_A)<span class="sc">*</span>fl_rho)</span>
-<span id="cb507-5"><a href="optimization.html#cb507-5" aria-hidden="true" tabindex="-1"></a>  ar_p1_s2 <span class="ot">=</span> (fl_alpha<span class="sc">/</span>ar_alpha)</span>
-<span id="cb507-6"><a href="optimization.html#cb507-6" aria-hidden="true" tabindex="-1"></a>  ar_p1_s3 <span class="ot">=</span> (<span class="dv">1</span><span class="sc">/</span>(ar_alpha<span class="sc">*</span>fl_rho <span class="sc">-</span> <span class="dv">1</span>))</span>
-<span id="cb507-7"><a href="optimization.html#cb507-7" aria-hidden="true" tabindex="-1"></a>  ar_p1 <span class="ot">=</span> (ar_p1_s1<span class="sc">*</span>ar_p1_s2)<span class="sc">^</span>ar_p1_s3</span>
-<span id="cb507-8"><a href="optimization.html#cb507-8" aria-hidden="true" tabindex="-1"></a>  ar_p2 <span class="ot">=</span> fl_N<span class="sc">^</span>((fl_alpha<span class="sc">*</span>fl_rho<span class="dv">-1</span>)<span class="sc">/</span>(ar_alpha<span class="sc">*</span>fl_rho<span class="dv">-1</span>))</span>
-<span id="cb507-9"><a href="optimization.html#cb507-9" aria-hidden="true" tabindex="-1"></a>  ar_overall <span class="ot">=</span> ar_p1<span class="sc">*</span>ar_p2</span>
-<span id="cb507-10"><a href="optimization.html#cb507-10" aria-hidden="true" tabindex="-1"></a>  fl_overall <span class="ot">=</span> fl_N_agg <span class="sc">-</span> <span class="fu">sum</span>(ar_overall)</span>
-<span id="cb507-11"><a href="optimization.html#cb507-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb507-12"><a href="optimization.html#cb507-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(fl_overall)</span>
-<span id="cb507-13"><a href="optimization.html#cb507-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb649"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb649-1"><a href="optimization.html#cb649-1" tabindex="-1"></a><span class="co"># Define Implicit Function</span></span>
+<span id="cb649-2"><a href="optimization.html#cb649-2" tabindex="-1"></a>ffi_nonlin_dplyrdo <span class="ot">&lt;-</span> <span class="cf">function</span>(fl_A, fl_alpha, fl_N, ar_A, ar_alpha, fl_N_agg, fl_rho){</span>
+<span id="cb649-3"><a href="optimization.html#cb649-3" tabindex="-1"></a></span>
+<span id="cb649-4"><a href="optimization.html#cb649-4" tabindex="-1"></a>  ar_p1_s1 <span class="ot">=</span> <span class="fu">exp</span>((fl_A <span class="sc">-</span> ar_A)<span class="sc">*</span>fl_rho)</span>
+<span id="cb649-5"><a href="optimization.html#cb649-5" tabindex="-1"></a>  ar_p1_s2 <span class="ot">=</span> (fl_alpha<span class="sc">/</span>ar_alpha)</span>
+<span id="cb649-6"><a href="optimization.html#cb649-6" tabindex="-1"></a>  ar_p1_s3 <span class="ot">=</span> (<span class="dv">1</span><span class="sc">/</span>(ar_alpha<span class="sc">*</span>fl_rho <span class="sc">-</span> <span class="dv">1</span>))</span>
+<span id="cb649-7"><a href="optimization.html#cb649-7" tabindex="-1"></a>  ar_p1 <span class="ot">=</span> (ar_p1_s1<span class="sc">*</span>ar_p1_s2)<span class="sc">^</span>ar_p1_s3</span>
+<span id="cb649-8"><a href="optimization.html#cb649-8" tabindex="-1"></a>  ar_p2 <span class="ot">=</span> fl_N<span class="sc">^</span>((fl_alpha<span class="sc">*</span>fl_rho<span class="dv">-1</span>)<span class="sc">/</span>(ar_alpha<span class="sc">*</span>fl_rho<span class="dv">-1</span>))</span>
+<span id="cb649-9"><a href="optimization.html#cb649-9" tabindex="-1"></a>  ar_overall <span class="ot">=</span> ar_p1<span class="sc">*</span>ar_p2</span>
+<span id="cb649-10"><a href="optimization.html#cb649-10" tabindex="-1"></a>  fl_overall <span class="ot">=</span> fl_N_agg <span class="sc">-</span> <span class="fu">sum</span>(ar_overall)</span>
+<span id="cb649-11"><a href="optimization.html#cb649-11" tabindex="-1"></a></span>
+<span id="cb649-12"><a href="optimization.html#cb649-12" tabindex="-1"></a>  <span class="fu">return</span>(fl_overall)</span>
+<span id="cb649-13"><a href="optimization.html#cb649-13" tabindex="-1"></a>}</span></code></pre></div>
 <p>Initialize the matrix with <span class="math inline">\(a_0\)</span> and <span class="math inline">\(b_0\)</span>, the initial min and max points:</p>
-<div class="sourceCode" id="cb508"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb508-1"><a href="optimization.html#cb508-1" aria-hidden="true" tabindex="-1"></a><span class="co"># common prefix to make reshaping easier</span></span>
-<span id="cb508-2"><a href="optimization.html#cb508-2" aria-hidden="true" tabindex="-1"></a>st_bisec_prefix <span class="ot">&lt;-</span> <span class="st">&#39;bisec_&#39;</span></span>
-<span id="cb508-3"><a href="optimization.html#cb508-3" aria-hidden="true" tabindex="-1"></a>svr_a_lst <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;a_0&#39;</span>)</span>
-<span id="cb508-4"><a href="optimization.html#cb508-4" aria-hidden="true" tabindex="-1"></a>svr_b_lst <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;b_0&#39;</span>)</span>
-<span id="cb508-5"><a href="optimization.html#cb508-5" aria-hidden="true" tabindex="-1"></a>svr_fa_lst <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;fa_0&#39;</span>)</span>
-<span id="cb508-6"><a href="optimization.html#cb508-6" aria-hidden="true" tabindex="-1"></a>svr_fb_lst <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;fb_0&#39;</span>)</span>
-<span id="cb508-7"><a href="optimization.html#cb508-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb508-8"><a href="optimization.html#cb508-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Add initial a and b</span></span>
-<span id="cb508-9"><a href="optimization.html#cb508-9" aria-hidden="true" tabindex="-1"></a>tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices <span class="sc">%&gt;%</span></span>
-<span id="cb508-10"><a href="optimization.html#cb508-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_a_lst) <span class="sc">:</span><span class="er">=</span> fl_N_min, <span class="sc">!!</span><span class="fu">sym</span>(svr_b_lst) <span class="sc">:</span><span class="er">=</span> fl_N_agg)</span>
-<span id="cb508-11"><a href="optimization.html#cb508-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb508-12"><a href="optimization.html#cb508-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate function f(a_0) and f(b_0)</span></span>
-<span id="cb508-13"><a href="optimization.html#cb508-13" aria-hidden="true" tabindex="-1"></a>tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
-<span id="cb508-14"><a href="optimization.html#cb508-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb508-15"><a href="optimization.html#cb508-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_fa_lst) <span class="sc">:</span><span class="er">=</span> <span class="fu">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, <span class="sc">!!</span><span class="fu">sym</span>(svr_a_lst),</span>
-<span id="cb508-16"><a href="optimization.html#cb508-16" aria-hidden="true" tabindex="-1"></a>                                                ar_nN_A, ar_nN_alpha,</span>
-<span id="cb508-17"><a href="optimization.html#cb508-17" aria-hidden="true" tabindex="-1"></a>                                                fl_N_agg, fl_rho),</span>
-<span id="cb508-18"><a href="optimization.html#cb508-18" aria-hidden="true" tabindex="-1"></a>         <span class="sc">!!</span><span class="fu">sym</span>(svr_fb_lst) <span class="sc">:</span><span class="er">=</span> <span class="fu">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, <span class="sc">!!</span><span class="fu">sym</span>(svr_b_lst),</span>
-<span id="cb508-19"><a href="optimization.html#cb508-19" aria-hidden="true" tabindex="-1"></a>                                                ar_nN_A, ar_nN_alpha,</span>
-<span id="cb508-20"><a href="optimization.html#cb508-20" aria-hidden="true" tabindex="-1"></a>                                                fl_N_agg, fl_rho))</span>
-<span id="cb508-21"><a href="optimization.html#cb508-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize</span></span>
-<span id="cb508-22"><a href="optimization.html#cb508-22" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(tb_states_choices_bisec)</span></code></pre></div>
+<div class="sourceCode" id="cb650"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb650-1"><a href="optimization.html#cb650-1" tabindex="-1"></a><span class="co"># common prefix to make reshaping easier</span></span>
+<span id="cb650-2"><a href="optimization.html#cb650-2" tabindex="-1"></a>st_bisec_prefix <span class="ot">&lt;-</span> <span class="st">&#39;bisec_&#39;</span></span>
+<span id="cb650-3"><a href="optimization.html#cb650-3" tabindex="-1"></a>svr_a_lst <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;a_0&#39;</span>)</span>
+<span id="cb650-4"><a href="optimization.html#cb650-4" tabindex="-1"></a>svr_b_lst <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;b_0&#39;</span>)</span>
+<span id="cb650-5"><a href="optimization.html#cb650-5" tabindex="-1"></a>svr_fa_lst <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;fa_0&#39;</span>)</span>
+<span id="cb650-6"><a href="optimization.html#cb650-6" tabindex="-1"></a>svr_fb_lst <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;fb_0&#39;</span>)</span>
+<span id="cb650-7"><a href="optimization.html#cb650-7" tabindex="-1"></a></span>
+<span id="cb650-8"><a href="optimization.html#cb650-8" tabindex="-1"></a><span class="co"># Add initial a and b</span></span>
+<span id="cb650-9"><a href="optimization.html#cb650-9" tabindex="-1"></a>tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices <span class="sc">%&gt;%</span></span>
+<span id="cb650-10"><a href="optimization.html#cb650-10" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_a_lst) <span class="sc">:=</span> fl_N_min, <span class="sc">!!</span><span class="fu">sym</span>(svr_b_lst) <span class="sc">:=</span> fl_N_agg)</span>
+<span id="cb650-11"><a href="optimization.html#cb650-11" tabindex="-1"></a></span>
+<span id="cb650-12"><a href="optimization.html#cb650-12" tabindex="-1"></a><span class="co"># Evaluate function f(a_0) and f(b_0)</span></span>
+<span id="cb650-13"><a href="optimization.html#cb650-13" tabindex="-1"></a>tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
+<span id="cb650-14"><a href="optimization.html#cb650-14" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb650-15"><a href="optimization.html#cb650-15" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_fa_lst) <span class="sc">:=</span> <span class="fu">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, <span class="sc">!!</span><span class="fu">sym</span>(svr_a_lst),</span>
+<span id="cb650-16"><a href="optimization.html#cb650-16" tabindex="-1"></a>                                                ar_nN_A, ar_nN_alpha,</span>
+<span id="cb650-17"><a href="optimization.html#cb650-17" tabindex="-1"></a>                                                fl_N_agg, fl_rho),</span>
+<span id="cb650-18"><a href="optimization.html#cb650-18" tabindex="-1"></a>         <span class="sc">!!</span><span class="fu">sym</span>(svr_fb_lst) <span class="sc">:=</span> <span class="fu">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, <span class="sc">!!</span><span class="fu">sym</span>(svr_b_lst),</span>
+<span id="cb650-19"><a href="optimization.html#cb650-19" tabindex="-1"></a>                                                ar_nN_A, ar_nN_alpha,</span>
+<span id="cb650-20"><a href="optimization.html#cb650-20" tabindex="-1"></a>                                                fl_N_agg, fl_rho))</span>
+<span id="cb650-21"><a href="optimization.html#cb650-21" tabindex="-1"></a><span class="co"># Summarize</span></span>
+<span id="cb650-22"><a href="optimization.html#cb650-22" tabindex="-1"></a><span class="fu">dim</span>(tb_states_choices_bisec)</span></code></pre></div>
 <pre><code>## [1] 4 7</code></pre>
-<div class="sourceCode" id="cb510"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb510-1"><a href="optimization.html#cb510-1" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(tb_states_choices_bisec)</span></span></code></pre></div>
+<div class="sourceCode" id="cb652"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb652-1"><a href="optimization.html#cb652-1" tabindex="-1"></a><span class="co"># summary(tb_states_choices_bisec)</span></span></code></pre></div>
 </div>
-<div id="iterate-and-solve-for-fp-update-fa-and-fb" class="section level4" number="7.1.1.2">
-<h4><span class="header-section-number">7.1.1.2</span> Iterate and Solve for f(p), update f(a) and f(b)</h4>
+<div id="iterate-and-solve-for-fp-update-fa-and-fb" class="section level4 hasAnchor" number="7.1.2.2">
+<h4><span class="header-section-number">7.1.2.2</span> Iterate and Solve for f(p), update f(a) and f(b)<a href="optimization.html#iterate-and-solve-for-fp-update-fa-and-fb" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Implement the DPLYR based Concurrent bisection algorithm.</p>
-<div class="sourceCode" id="cb511"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb511-1"><a href="optimization.html#cb511-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fl_tol = float tolerance criteria</span></span>
-<span id="cb511-2"><a href="optimization.html#cb511-2" aria-hidden="true" tabindex="-1"></a><span class="co"># it_tol = number of interations to allow at most</span></span>
-<span id="cb511-3"><a href="optimization.html#cb511-3" aria-hidden="true" tabindex="-1"></a>fl_tol <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">^-</span><span class="dv">2</span></span>
-<span id="cb511-4"><a href="optimization.html#cb511-4" aria-hidden="true" tabindex="-1"></a>it_tol <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb511-5"><a href="optimization.html#cb511-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb511-6"><a href="optimization.html#cb511-6" aria-hidden="true" tabindex="-1"></a><span class="co"># fl_p_dist2zr = distance to zero to initalize</span></span>
-<span id="cb511-7"><a href="optimization.html#cb511-7" aria-hidden="true" tabindex="-1"></a>fl_p_dist2zr <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb511-8"><a href="optimization.html#cb511-8" aria-hidden="true" tabindex="-1"></a>it_cur <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb511-9"><a href="optimization.html#cb511-9" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (it_cur <span class="sc">&lt;=</span> it_tol <span class="sc">&amp;&amp;</span> fl_p_dist2zr <span class="sc">&gt;=</span> fl_tol ) {</span>
-<span id="cb511-10"><a href="optimization.html#cb511-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb511-11"><a href="optimization.html#cb511-11" aria-hidden="true" tabindex="-1"></a>  it_cur <span class="ot">&lt;-</span> it_cur <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb511-12"><a href="optimization.html#cb511-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb511-13"><a href="optimization.html#cb511-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># New Variables</span></span>
-<span id="cb511-14"><a href="optimization.html#cb511-14" aria-hidden="true" tabindex="-1"></a>  svr_a_cur <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;a_&#39;</span>, it_cur)</span>
-<span id="cb511-15"><a href="optimization.html#cb511-15" aria-hidden="true" tabindex="-1"></a>  svr_b_cur <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;b_&#39;</span>, it_cur)</span>
-<span id="cb511-16"><a href="optimization.html#cb511-16" aria-hidden="true" tabindex="-1"></a>  svr_fa_cur <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;fa_&#39;</span>, it_cur)</span>
-<span id="cb511-17"><a href="optimization.html#cb511-17" aria-hidden="true" tabindex="-1"></a>  svr_fb_cur <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;fb_&#39;</span>, it_cur)</span>
-<span id="cb511-18"><a href="optimization.html#cb511-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb511-19"><a href="optimization.html#cb511-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Evaluate function f(a_0) and f(b_0)</span></span>
-<span id="cb511-20"><a href="optimization.html#cb511-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. generate p</span></span>
-<span id="cb511-21"><a href="optimization.html#cb511-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. generate f_p</span></span>
-<span id="cb511-22"><a href="optimization.html#cb511-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. generate f_p*f_a</span></span>
-<span id="cb511-23"><a href="optimization.html#cb511-23" aria-hidden="true" tabindex="-1"></a>  tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
-<span id="cb511-24"><a href="optimization.html#cb511-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb511-25"><a href="optimization.html#cb511-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">p =</span> ((<span class="sc">!!</span><span class="fu">sym</span>(svr_a_lst) <span class="sc">+</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_b_lst))<span class="sc">/</span><span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb511-26"><a href="optimization.html#cb511-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">f_p =</span> <span class="fu">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, p,</span>
-<span id="cb511-27"><a href="optimization.html#cb511-27" aria-hidden="true" tabindex="-1"></a>                                    ar_nN_A, ar_nN_alpha,</span>
-<span id="cb511-28"><a href="optimization.html#cb511-28" aria-hidden="true" tabindex="-1"></a>                                    fl_N_agg, fl_rho)) <span class="sc">%&gt;%</span></span>
-<span id="cb511-29"><a href="optimization.html#cb511-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">f_p_t_f_a =</span> f_p<span class="sc">*!!</span><span class="fu">sym</span>(svr_fa_lst))</span>
-<span id="cb511-30"><a href="optimization.html#cb511-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># fl_p_dist2zr = sum(abs(p))</span></span>
-<span id="cb511-31"><a href="optimization.html#cb511-31" aria-hidden="true" tabindex="-1"></a>  fl_p_dist2zr <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(tb_states_choices_bisec <span class="sc">%&gt;%</span> <span class="fu">pull</span>(f_p)))</span>
-<span id="cb511-32"><a href="optimization.html#cb511-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb511-33"><a href="optimization.html#cb511-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Update a and b</span></span>
-<span id="cb511-34"><a href="optimization.html#cb511-34" aria-hidden="true" tabindex="-1"></a>  tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
-<span id="cb511-35"><a href="optimization.html#cb511-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_a_cur) <span class="sc">:</span><span class="er">=</span></span>
-<span id="cb511-36"><a href="optimization.html#cb511-36" aria-hidden="true" tabindex="-1"></a>             <span class="fu">case_when</span>(f_p_t_f_a <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_a_lst),</span>
-<span id="cb511-37"><a href="optimization.html#cb511-37" aria-hidden="true" tabindex="-1"></a>                       <span class="cn">TRUE</span> <span class="sc">~</span> p)) <span class="sc">%&gt;%</span></span>
-<span id="cb511-38"><a href="optimization.html#cb511-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_b_cur) <span class="sc">:</span><span class="er">=</span></span>
-<span id="cb511-39"><a href="optimization.html#cb511-39" aria-hidden="true" tabindex="-1"></a>             <span class="fu">case_when</span>(f_p_t_f_a <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> p,</span>
-<span id="cb511-40"><a href="optimization.html#cb511-40" aria-hidden="true" tabindex="-1"></a>                       <span class="cn">TRUE</span> <span class="sc">~</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_b_lst)))</span>
-<span id="cb511-41"><a href="optimization.html#cb511-41" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Update f(a) and f(b)</span></span>
-<span id="cb511-42"><a href="optimization.html#cb511-42" aria-hidden="true" tabindex="-1"></a>  tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
-<span id="cb511-43"><a href="optimization.html#cb511-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_fa_cur) <span class="sc">:</span><span class="er">=</span></span>
-<span id="cb511-44"><a href="optimization.html#cb511-44" aria-hidden="true" tabindex="-1"></a>             <span class="fu">case_when</span>(f_p_t_f_a <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_fa_lst),</span>
-<span id="cb511-45"><a href="optimization.html#cb511-45" aria-hidden="true" tabindex="-1"></a>                       <span class="cn">TRUE</span> <span class="sc">~</span> f_p)) <span class="sc">%&gt;%</span></span>
-<span id="cb511-46"><a href="optimization.html#cb511-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_fb_cur) <span class="sc">:</span><span class="er">=</span></span>
-<span id="cb511-47"><a href="optimization.html#cb511-47" aria-hidden="true" tabindex="-1"></a>             <span class="fu">case_when</span>(f_p_t_f_a <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> f_p,</span>
-<span id="cb511-48"><a href="optimization.html#cb511-48" aria-hidden="true" tabindex="-1"></a>                       <span class="cn">TRUE</span> <span class="sc">~</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_fb_lst)))</span>
-<span id="cb511-49"><a href="optimization.html#cb511-49" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Save from last</span></span>
-<span id="cb511-50"><a href="optimization.html#cb511-50" aria-hidden="true" tabindex="-1"></a>  svr_a_lst <span class="ot">&lt;-</span> svr_a_cur</span>
-<span id="cb511-51"><a href="optimization.html#cb511-51" aria-hidden="true" tabindex="-1"></a>  svr_b_lst <span class="ot">&lt;-</span> svr_b_cur</span>
-<span id="cb511-52"><a href="optimization.html#cb511-52" aria-hidden="true" tabindex="-1"></a>  svr_fa_lst <span class="ot">&lt;-</span> svr_fa_cur</span>
-<span id="cb511-53"><a href="optimization.html#cb511-53" aria-hidden="true" tabindex="-1"></a>  svr_fb_lst <span class="ot">&lt;-</span> svr_fb_cur</span>
-<span id="cb511-54"><a href="optimization.html#cb511-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb511-55"><a href="optimization.html#cb511-55" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Summar current round</span></span>
-<span id="cb511-56"><a href="optimization.html#cb511-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&#39;it_cur:&#39;</span>, it_cur, <span class="st">&#39;, fl_p_dist2zr:&#39;</span>, fl_p_dist2zr))</span>
-<span id="cb511-57"><a href="optimization.html#cb511-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
-<span id="cb511-58"><a href="optimization.html#cb511-58" aria-hidden="true" tabindex="-1"></a>            <span class="fu">select</span>(<span class="fu">one_of</span>(svr_a_cur, svr_b_cur, svr_fa_cur, svr_fb_cur)))</span>
-<span id="cb511-59"><a href="optimization.html#cb511-59" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb653"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb653-1"><a href="optimization.html#cb653-1" tabindex="-1"></a><span class="co"># fl_tol = float tolerance criteria</span></span>
+<span id="cb653-2"><a href="optimization.html#cb653-2" tabindex="-1"></a><span class="co"># it_tol = number of interations to allow at most</span></span>
+<span id="cb653-3"><a href="optimization.html#cb653-3" tabindex="-1"></a>fl_tol <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">^-</span><span class="dv">2</span></span>
+<span id="cb653-4"><a href="optimization.html#cb653-4" tabindex="-1"></a>it_tol <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb653-5"><a href="optimization.html#cb653-5" tabindex="-1"></a></span>
+<span id="cb653-6"><a href="optimization.html#cb653-6" tabindex="-1"></a><span class="co"># fl_p_dist2zr = distance to zero to initalize</span></span>
+<span id="cb653-7"><a href="optimization.html#cb653-7" tabindex="-1"></a>fl_p_dist2zr <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb653-8"><a href="optimization.html#cb653-8" tabindex="-1"></a>it_cur <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb653-9"><a href="optimization.html#cb653-9" tabindex="-1"></a><span class="cf">while</span> (it_cur <span class="sc">&lt;=</span> it_tol <span class="sc">&amp;&amp;</span> fl_p_dist2zr <span class="sc">&gt;=</span> fl_tol ) {</span>
+<span id="cb653-10"><a href="optimization.html#cb653-10" tabindex="-1"></a></span>
+<span id="cb653-11"><a href="optimization.html#cb653-11" tabindex="-1"></a>  it_cur <span class="ot">&lt;-</span> it_cur <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb653-12"><a href="optimization.html#cb653-12" tabindex="-1"></a></span>
+<span id="cb653-13"><a href="optimization.html#cb653-13" tabindex="-1"></a>  <span class="co"># New Variables</span></span>
+<span id="cb653-14"><a href="optimization.html#cb653-14" tabindex="-1"></a>  svr_a_cur <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;a_&#39;</span>, it_cur)</span>
+<span id="cb653-15"><a href="optimization.html#cb653-15" tabindex="-1"></a>  svr_b_cur <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;b_&#39;</span>, it_cur)</span>
+<span id="cb653-16"><a href="optimization.html#cb653-16" tabindex="-1"></a>  svr_fa_cur <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;fa_&#39;</span>, it_cur)</span>
+<span id="cb653-17"><a href="optimization.html#cb653-17" tabindex="-1"></a>  svr_fb_cur <span class="ot">&lt;-</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&#39;fb_&#39;</span>, it_cur)</span>
+<span id="cb653-18"><a href="optimization.html#cb653-18" tabindex="-1"></a></span>
+<span id="cb653-19"><a href="optimization.html#cb653-19" tabindex="-1"></a>  <span class="co"># Evaluate function f(a_0) and f(b_0)</span></span>
+<span id="cb653-20"><a href="optimization.html#cb653-20" tabindex="-1"></a>  <span class="co"># 1. generate p</span></span>
+<span id="cb653-21"><a href="optimization.html#cb653-21" tabindex="-1"></a>  <span class="co"># 2. generate f_p</span></span>
+<span id="cb653-22"><a href="optimization.html#cb653-22" tabindex="-1"></a>  <span class="co"># 3. generate f_p*f_a</span></span>
+<span id="cb653-23"><a href="optimization.html#cb653-23" tabindex="-1"></a>  tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
+<span id="cb653-24"><a href="optimization.html#cb653-24" tabindex="-1"></a>    <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb653-25"><a href="optimization.html#cb653-25" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">p =</span> ((<span class="sc">!!</span><span class="fu">sym</span>(svr_a_lst) <span class="sc">+</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_b_lst))<span class="sc">/</span><span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb653-26"><a href="optimization.html#cb653-26" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">f_p =</span> <span class="fu">ffi_nonlin_dplyrdo</span>(fl_A, fl_alpha, p,</span>
+<span id="cb653-27"><a href="optimization.html#cb653-27" tabindex="-1"></a>                                    ar_nN_A, ar_nN_alpha,</span>
+<span id="cb653-28"><a href="optimization.html#cb653-28" tabindex="-1"></a>                                    fl_N_agg, fl_rho)) <span class="sc">%&gt;%</span></span>
+<span id="cb653-29"><a href="optimization.html#cb653-29" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">f_p_t_f_a =</span> f_p<span class="sc">*!!</span><span class="fu">sym</span>(svr_fa_lst))</span>
+<span id="cb653-30"><a href="optimization.html#cb653-30" tabindex="-1"></a>  <span class="co"># fl_p_dist2zr = sum(abs(p))</span></span>
+<span id="cb653-31"><a href="optimization.html#cb653-31" tabindex="-1"></a>  fl_p_dist2zr <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(tb_states_choices_bisec <span class="sc">%&gt;%</span> <span class="fu">pull</span>(f_p)))</span>
+<span id="cb653-32"><a href="optimization.html#cb653-32" tabindex="-1"></a></span>
+<span id="cb653-33"><a href="optimization.html#cb653-33" tabindex="-1"></a>  <span class="co"># Update a and b</span></span>
+<span id="cb653-34"><a href="optimization.html#cb653-34" tabindex="-1"></a>  tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
+<span id="cb653-35"><a href="optimization.html#cb653-35" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_a_cur) <span class="sc">:=</span></span>
+<span id="cb653-36"><a href="optimization.html#cb653-36" tabindex="-1"></a>             <span class="fu">case_when</span>(f_p_t_f_a <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_a_lst),</span>
+<span id="cb653-37"><a href="optimization.html#cb653-37" tabindex="-1"></a>                       <span class="cn">TRUE</span> <span class="sc">~</span> p)) <span class="sc">%&gt;%</span></span>
+<span id="cb653-38"><a href="optimization.html#cb653-38" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_b_cur) <span class="sc">:=</span></span>
+<span id="cb653-39"><a href="optimization.html#cb653-39" tabindex="-1"></a>             <span class="fu">case_when</span>(f_p_t_f_a <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> p,</span>
+<span id="cb653-40"><a href="optimization.html#cb653-40" tabindex="-1"></a>                       <span class="cn">TRUE</span> <span class="sc">~</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_b_lst)))</span>
+<span id="cb653-41"><a href="optimization.html#cb653-41" tabindex="-1"></a>  <span class="co"># Update f(a) and f(b)</span></span>
+<span id="cb653-42"><a href="optimization.html#cb653-42" tabindex="-1"></a>  tb_states_choices_bisec <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
+<span id="cb653-43"><a href="optimization.html#cb653-43" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_fa_cur) <span class="sc">:=</span></span>
+<span id="cb653-44"><a href="optimization.html#cb653-44" tabindex="-1"></a>             <span class="fu">case_when</span>(f_p_t_f_a <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_fa_lst),</span>
+<span id="cb653-45"><a href="optimization.html#cb653-45" tabindex="-1"></a>                       <span class="cn">TRUE</span> <span class="sc">~</span> f_p)) <span class="sc">%&gt;%</span></span>
+<span id="cb653-46"><a href="optimization.html#cb653-46" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_fb_cur) <span class="sc">:=</span></span>
+<span id="cb653-47"><a href="optimization.html#cb653-47" tabindex="-1"></a>             <span class="fu">case_when</span>(f_p_t_f_a <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> f_p,</span>
+<span id="cb653-48"><a href="optimization.html#cb653-48" tabindex="-1"></a>                       <span class="cn">TRUE</span> <span class="sc">~</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_fb_lst)))</span>
+<span id="cb653-49"><a href="optimization.html#cb653-49" tabindex="-1"></a>  <span class="co"># Save from last</span></span>
+<span id="cb653-50"><a href="optimization.html#cb653-50" tabindex="-1"></a>  svr_a_lst <span class="ot">&lt;-</span> svr_a_cur</span>
+<span id="cb653-51"><a href="optimization.html#cb653-51" tabindex="-1"></a>  svr_b_lst <span class="ot">&lt;-</span> svr_b_cur</span>
+<span id="cb653-52"><a href="optimization.html#cb653-52" tabindex="-1"></a>  svr_fa_lst <span class="ot">&lt;-</span> svr_fa_cur</span>
+<span id="cb653-53"><a href="optimization.html#cb653-53" tabindex="-1"></a>  svr_fb_lst <span class="ot">&lt;-</span> svr_fb_cur</span>
+<span id="cb653-54"><a href="optimization.html#cb653-54" tabindex="-1"></a></span>
+<span id="cb653-55"><a href="optimization.html#cb653-55" tabindex="-1"></a>  <span class="co"># Summar current round</span></span>
+<span id="cb653-56"><a href="optimization.html#cb653-56" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&#39;it_cur:&#39;</span>, it_cur, <span class="st">&#39;, fl_p_dist2zr:&#39;</span>, fl_p_dist2zr))</span>
+<span id="cb653-57"><a href="optimization.html#cb653-57" tabindex="-1"></a>  <span class="fu">summary</span>(tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
+<span id="cb653-58"><a href="optimization.html#cb653-58" tabindex="-1"></a>            <span class="fu">select</span>(<span class="fu">one_of</span>(svr_a_cur, svr_b_cur, svr_fa_cur, svr_fb_cur)))</span>
+<span id="cb653-59"><a href="optimization.html#cb653-59" tabindex="-1"></a>}</span></code></pre></div>
 <pre><code>## [1] &quot;it_cur:1, fl_p_dist2zr:1597.93916362849&quot;
 ## [1] &quot;it_cur:2, fl_p_dist2zr:676.06602535902&quot;
 ## [1] &quot;it_cur:3, fl_p_dist2zr:286.850590132782&quot;
@@ -646,16 +817,16 @@ div.csl-indent {
 ## [1] &quot;it_cur:16, fl_p_dist2zr:0.0191152349149135&quot;
 ## [1] &quot;it_cur:17, fl_p_dist2zr:0.00385372194545752&quot;</code></pre>
 </div>
-<div id="reshape-wide-to-long-to-wide" class="section level4" number="7.1.1.3">
-<h4><span class="header-section-number">7.1.1.3</span> Reshape Wide to long to Wide</h4>
+<div id="reshape-wide-to-long-to-wide" class="section level4 hasAnchor" number="7.1.2.3">
+<h4><span class="header-section-number">7.1.2.3</span> Reshape Wide to long to Wide<a href="optimization.html#reshape-wide-to-long-to-wide" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>To view results easily, how iterations improved to help us find the roots, convert table from wide to long. Pivot twice. This allows us to easily graph out how bisection is working out iterationby iteration.</p>
 <p>Here, we will first show what the raw table looks like, the wide only table, and then show the long version, and finally the version that is medium wide.</p>
-<div id="table-onevery-wide" class="section level5" number="7.1.1.3.1">
-<h5><span class="header-section-number">7.1.1.3.1</span> Table One–Very Wide</h5>
+<div id="table-onevery-wide" class="section level5 hasAnchor" number="7.1.2.3.1">
+<h5><span class="header-section-number">7.1.2.3.1</span> Table One–Very Wide<a href="optimization.html#table-onevery-wide" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <p>Show what the <em>tb_states_choices_bisec</em> looks like.</p>
 <p>Variables are formatted like: <em>bisec_xx_yy</em>, where yy is the iteration indicator, and xx is either a, b, fa, or fb.</p>
-<div class="sourceCode" id="cb513"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb513-1"><a href="optimization.html#cb513-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(<span class="fu">t</span>(tb_states_choices_bisec), <span class="dv">25</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb513-2"><a href="optimization.html#cb513-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb655"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb655-1"><a href="optimization.html#cb655-1" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(<span class="fu">t</span>(tb_states_choices_bisec), <span class="dv">25</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb655-2"><a href="optimization.html#cb655-2" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <tbody>
 <tr>
@@ -1085,32 +1256,32 @@ bisec_fa_4
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb514"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb514-1"><a href="optimization.html#cb514-1" aria-hidden="true" tabindex="-1"></a><span class="co"># str(tb_states_choices_bisec)</span></span></code></pre></div>
+<div class="sourceCode" id="cb656"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb656-1"><a href="optimization.html#cb656-1" tabindex="-1"></a><span class="co"># str(tb_states_choices_bisec)</span></span></code></pre></div>
 </div>
-<div id="table-twovery-wide-to-very-long" class="section level5" number="7.1.1.3.2">
-<h5><span class="header-section-number">7.1.1.3.2</span> Table Two–Very Wide to Very Long</h5>
+<div id="table-twovery-wide-to-very-long" class="section level5 hasAnchor" number="7.1.2.3.2">
+<h5><span class="header-section-number">7.1.2.3.2</span> Table Two–Very Wide to Very Long<a href="optimization.html#table-twovery-wide-to-very-long" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <p>We want to treat the iteration count information that is the suffix of variable names as a variable by itself. Additionally, we want to treat the a,b,fa,fb as a variable. Structuring the data very long like this allows for easy graphing and other types of analysis. Rather than dealing with many many variables, we have only 3 core variables that store bisection iteration information.</p>
 <p>Here we use the very nice <em>pivot_longer</em> function. Note that to achieve this, we put a common prefix in front of the variables we wanted to convert to long. THis is helpful, because we can easily identify which variables need to be reshaped.</p>
-<div class="sourceCode" id="cb515"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb515-1"><a href="optimization.html#cb515-1" aria-hidden="true" tabindex="-1"></a><span class="co"># New variables</span></span>
-<span id="cb515-2"><a href="optimization.html#cb515-2" aria-hidden="true" tabindex="-1"></a>svr_bisect_iter <span class="ot">&lt;-</span> <span class="st">&#39;biseciter&#39;</span></span>
-<span id="cb515-3"><a href="optimization.html#cb515-3" aria-hidden="true" tabindex="-1"></a>svr_abfafb_long_name <span class="ot">&lt;-</span> <span class="st">&#39;varname&#39;</span></span>
-<span id="cb515-4"><a href="optimization.html#cb515-4" aria-hidden="true" tabindex="-1"></a>svr_number_col <span class="ot">&lt;-</span> <span class="st">&#39;value&#39;</span></span>
-<span id="cb515-5"><a href="optimization.html#cb515-5" aria-hidden="true" tabindex="-1"></a>svr_id_bisect_iter <span class="ot">&lt;-</span> <span class="fu">paste0</span>(svr_id_var, <span class="st">&#39;_bisect_ier&#39;</span>)</span>
-<span id="cb515-6"><a href="optimization.html#cb515-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb515-7"><a href="optimization.html#cb515-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Pivot wide to very long</span></span>
-<span id="cb515-8"><a href="optimization.html#cb515-8" aria-hidden="true" tabindex="-1"></a>tb_states_choices_bisec_long <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
-<span id="cb515-9"><a href="optimization.html#cb515-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
-<span id="cb515-10"><a href="optimization.html#cb515-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">starts_with</span>(st_bisec_prefix),</span>
-<span id="cb515-11"><a href="optimization.html#cb515-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(svr_abfafb_long_name, svr_bisect_iter),</span>
-<span id="cb515-12"><a href="optimization.html#cb515-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_pattern =</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&quot;(.*)_(.*)&quot;</span>),</span>
-<span id="cb515-13"><a href="optimization.html#cb515-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> svr_number_col</span>
-<span id="cb515-14"><a href="optimization.html#cb515-14" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb515-15"><a href="optimization.html#cb515-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb515-16"><a href="optimization.html#cb515-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Print</span></span>
-<span id="cb515-17"><a href="optimization.html#cb515-17" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(tb_states_choices_bisec_long)</span></span>
-<span id="cb515-18"><a href="optimization.html#cb515-18" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(tb_states_choices_bisec_long <span class="sc">%&gt;%</span> </span>
-<span id="cb515-19"><a href="optimization.html#cb515-19" aria-hidden="true" tabindex="-1"></a>             <span class="fu">select</span>(<span class="sc">-</span><span class="fu">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">15</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb515-20"><a href="optimization.html#cb515-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb657"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb657-1"><a href="optimization.html#cb657-1" tabindex="-1"></a><span class="co"># New variables</span></span>
+<span id="cb657-2"><a href="optimization.html#cb657-2" tabindex="-1"></a>svr_bisect_iter <span class="ot">&lt;-</span> <span class="st">&#39;biseciter&#39;</span></span>
+<span id="cb657-3"><a href="optimization.html#cb657-3" tabindex="-1"></a>svr_abfafb_long_name <span class="ot">&lt;-</span> <span class="st">&#39;varname&#39;</span></span>
+<span id="cb657-4"><a href="optimization.html#cb657-4" tabindex="-1"></a>svr_number_col <span class="ot">&lt;-</span> <span class="st">&#39;value&#39;</span></span>
+<span id="cb657-5"><a href="optimization.html#cb657-5" tabindex="-1"></a>svr_id_bisect_iter <span class="ot">&lt;-</span> <span class="fu">paste0</span>(svr_id_var, <span class="st">&#39;_bisect_ier&#39;</span>)</span>
+<span id="cb657-6"><a href="optimization.html#cb657-6" tabindex="-1"></a></span>
+<span id="cb657-7"><a href="optimization.html#cb657-7" tabindex="-1"></a><span class="co"># Pivot wide to very long</span></span>
+<span id="cb657-8"><a href="optimization.html#cb657-8" tabindex="-1"></a>tb_states_choices_bisec_long <span class="ot">&lt;-</span> tb_states_choices_bisec <span class="sc">%&gt;%</span></span>
+<span id="cb657-9"><a href="optimization.html#cb657-9" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb657-10"><a href="optimization.html#cb657-10" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">starts_with</span>(st_bisec_prefix),</span>
+<span id="cb657-11"><a href="optimization.html#cb657-11" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(svr_abfafb_long_name, svr_bisect_iter),</span>
+<span id="cb657-12"><a href="optimization.html#cb657-12" tabindex="-1"></a>    <span class="at">names_pattern =</span> <span class="fu">paste0</span>(st_bisec_prefix, <span class="st">&quot;(.*)_(.*)&quot;</span>),</span>
+<span id="cb657-13"><a href="optimization.html#cb657-13" tabindex="-1"></a>    <span class="at">values_to =</span> svr_number_col</span>
+<span id="cb657-14"><a href="optimization.html#cb657-14" tabindex="-1"></a>  )</span>
+<span id="cb657-15"><a href="optimization.html#cb657-15" tabindex="-1"></a></span>
+<span id="cb657-16"><a href="optimization.html#cb657-16" tabindex="-1"></a><span class="co"># Print</span></span>
+<span id="cb657-17"><a href="optimization.html#cb657-17" tabindex="-1"></a><span class="co"># summary(tb_states_choices_bisec_long)</span></span>
+<span id="cb657-18"><a href="optimization.html#cb657-18" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(tb_states_choices_bisec_long <span class="sc">%&gt;%</span> </span>
+<span id="cb657-19"><a href="optimization.html#cb657-19" tabindex="-1"></a>             <span class="fu">select</span>(<span class="sc">-</span><span class="fu">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">15</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb657-20"><a href="optimization.html#cb657-20" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1437,9 +1608,9 @@ fa
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb516"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb516-1"><a href="optimization.html#cb516-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">tail</span>(tb_states_choices_bisec_long <span class="sc">%&gt;%</span> </span>
-<span id="cb516-2"><a href="optimization.html#cb516-2" aria-hidden="true" tabindex="-1"></a>             <span class="fu">select</span>(<span class="sc">-</span><span class="fu">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">15</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb516-3"><a href="optimization.html#cb516-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb658"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb658-1"><a href="optimization.html#cb658-1" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">tail</span>(tb_states_choices_bisec_long <span class="sc">%&gt;%</span> </span>
+<span id="cb658-2"><a href="optimization.html#cb658-2" tabindex="-1"></a>             <span class="fu">select</span>(<span class="sc">-</span><span class="fu">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">15</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb658-3"><a href="optimization.html#cb658-3" tabindex="-1"></a>  <span class="fu">kable_styling_fc</span>()</span></code></pre></div>
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1767,21 +1938,21 @@ fb
 </tbody>
 </table>
 </div>
-<div id="table-twovery-very-long-to-wider-again" class="section level5" number="7.1.1.3.3">
-<h5><span class="header-section-number">7.1.1.3.3</span> Table Two–Very Very Long to Wider Again</h5>
+<div id="table-twovery-very-long-to-wider-again" class="section level5 hasAnchor" number="7.1.2.3.3">
+<h5><span class="header-section-number">7.1.2.3.3</span> Table Two–Very Very Long to Wider Again<a href="optimization.html#table-twovery-very-long-to-wider-again" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <p>But the previous results are too long, with the a, b, fa, and fb all in one column as different categories, they are really not different categories, they are in fact different types of variables. So we want to spread those four categories of this variable into four columns, each one representing the a, b, fa, and fb values. The rows would then be uniquly identified by the iteration counter and individual ID.</p>
-<div class="sourceCode" id="cb517"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb517-1"><a href="optimization.html#cb517-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pivot wide to very long to a little wide</span></span>
-<span id="cb517-2"><a href="optimization.html#cb517-2" aria-hidden="true" tabindex="-1"></a>tb_states_choices_bisec_wider <span class="ot">&lt;-</span> tb_states_choices_bisec_long <span class="sc">%&gt;%</span></span>
-<span id="cb517-3"><a href="optimization.html#cb517-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
-<span id="cb517-4"><a href="optimization.html#cb517-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name),</span>
-<span id="cb517-5"><a href="optimization.html#cb517-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> svr_number_col</span>
-<span id="cb517-6"><a href="optimization.html#cb517-6" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb517-7"><a href="optimization.html#cb517-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb517-8"><a href="optimization.html#cb517-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Print</span></span>
-<span id="cb517-9"><a href="optimization.html#cb517-9" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(tb_states_choices_bisec_wider)</span></span>
-<span id="cb517-10"><a href="optimization.html#cb517-10" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(tb_states_choices_bisec_wider <span class="sc">%&gt;%</span> </span>
-<span id="cb517-11"><a href="optimization.html#cb517-11" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(<span class="sc">-</span><span class="fu">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">10</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb517-12"><a href="optimization.html#cb517-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc_wide</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb659"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb659-1"><a href="optimization.html#cb659-1" tabindex="-1"></a><span class="co"># Pivot wide to very long to a little wide</span></span>
+<span id="cb659-2"><a href="optimization.html#cb659-2" tabindex="-1"></a>tb_states_choices_bisec_wider <span class="ot">&lt;-</span> tb_states_choices_bisec_long <span class="sc">%&gt;%</span></span>
+<span id="cb659-3"><a href="optimization.html#cb659-3" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb659-4"><a href="optimization.html#cb659-4" tabindex="-1"></a>    <span class="at">names_from =</span> <span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name),</span>
+<span id="cb659-5"><a href="optimization.html#cb659-5" tabindex="-1"></a>    <span class="at">values_from =</span> svr_number_col</span>
+<span id="cb659-6"><a href="optimization.html#cb659-6" tabindex="-1"></a>  )</span>
+<span id="cb659-7"><a href="optimization.html#cb659-7" tabindex="-1"></a></span>
+<span id="cb659-8"><a href="optimization.html#cb659-8" tabindex="-1"></a><span class="co"># Print</span></span>
+<span id="cb659-9"><a href="optimization.html#cb659-9" tabindex="-1"></a><span class="co"># summary(tb_states_choices_bisec_wider)</span></span>
+<span id="cb659-10"><a href="optimization.html#cb659-10" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(tb_states_choices_bisec_wider <span class="sc">%&gt;%</span> </span>
+<span id="cb659-11"><a href="optimization.html#cb659-11" tabindex="-1"></a>              <span class="fu">select</span>(<span class="sc">-</span><span class="fu">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">10</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb659-12"><a href="optimization.html#cb659-12" tabindex="-1"></a>  <span class="fu">kable_styling_fc_wide</span>()</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -2076,9 +2247,9 @@ fb
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb518"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb518-1"><a href="optimization.html#cb518-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(tb_states_choices_bisec_wider <span class="sc">%&gt;%</span> </span>
-<span id="cb518-2"><a href="optimization.html#cb518-2" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(<span class="sc">-</span><span class="fu">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">10</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb518-3"><a href="optimization.html#cb518-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling_fc_wide</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb660"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb660-1"><a href="optimization.html#cb660-1" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(tb_states_choices_bisec_wider <span class="sc">%&gt;%</span> </span>
+<span id="cb660-2"><a href="optimization.html#cb660-2" tabindex="-1"></a>              <span class="fu">select</span>(<span class="sc">-</span><span class="fu">one_of</span>(<span class="st">&#39;p&#39;</span>,<span class="st">&#39;f_p&#39;</span>,<span class="st">&#39;f_p_t_f_a&#39;</span>)), <span class="dv">10</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb660-3"><a href="optimization.html#cb660-3" tabindex="-1"></a>  <span class="fu">kable_styling_fc_wide</span>()</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:875px; ">
 <table class="table table-striped table-hover table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -2375,26 +2546,26 @@ fb
 </div>
 </div>
 </div>
-<div id="graph-bisection-iteration-results" class="section level4" number="7.1.1.4">
-<h4><span class="header-section-number">7.1.1.4</span> Graph Bisection Iteration Results</h4>
+<div id="graph-bisection-iteration-results" class="section level4 hasAnchor" number="7.1.2.4">
+<h4><span class="header-section-number">7.1.2.4</span> Graph Bisection Iteration Results<a href="optimization.html#graph-bisection-iteration-results" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Actually we want to graph based on the long results, not the wider. Wider easier to view in table.</p>
-<div class="sourceCode" id="cb519"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb519-1"><a href="optimization.html#cb519-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph results</span></span>
-<span id="cb519-2"><a href="optimization.html#cb519-2" aria-hidden="true" tabindex="-1"></a>lineplot <span class="ot">&lt;-</span> tb_states_choices_bisec_long <span class="sc">%&gt;%</span></span>
-<span id="cb519-3"><a href="optimization.html#cb519-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_bisect_iter) <span class="sc">:</span><span class="er">=</span> <span class="fu">as.numeric</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_bisect_iter))) <span class="sc">%&gt;%</span></span>
-<span id="cb519-4"><a href="optimization.html#cb519-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb519-5"><a href="optimization.html#cb519-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_bisect_iter), <span class="at">y=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_number_col),</span>
-<span id="cb519-6"><a href="optimization.html#cb519-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">colour=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name),</span>
-<span id="cb519-7"><a href="optimization.html#cb519-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">linetype=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name),</span>
-<span id="cb519-8"><a href="optimization.html#cb519-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">shape=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name))) <span class="sc">+</span></span>
-<span id="cb519-9"><a href="optimization.html#cb519-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">facet_wrap</span>( <span class="sc">~</span> INDI_ID) <span class="sc">+</span></span>
-<span id="cb519-10"><a href="optimization.html#cb519-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb519-11"><a href="optimization.html#cb519-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb519-12"><a href="optimization.html#cb519-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&#39;Bisection Iteration over individuals Until Convergence&#39;</span>,</span>
-<span id="cb519-13"><a href="optimization.html#cb519-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> <span class="st">&#39;Bisection Iteration&#39;</span>,</span>
-<span id="cb519-14"><a href="optimization.html#cb519-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> <span class="st">&#39;a (left side point) and b (right side point) values&#39;</span>,</span>
-<span id="cb519-15"><a href="optimization.html#cb519-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption =</span> <span class="st">&#39;DPLYR concurrent bisection nonlinear multple individuals&#39;</span>) <span class="sc">+</span></span>
-<span id="cb519-16"><a href="optimization.html#cb519-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
-<span id="cb519-17"><a href="optimization.html#cb519-17" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(lineplot)</span></code></pre></div>
+<div class="sourceCode" id="cb661"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb661-1"><a href="optimization.html#cb661-1" tabindex="-1"></a><span class="co"># Graph results</span></span>
+<span id="cb661-2"><a href="optimization.html#cb661-2" tabindex="-1"></a>lineplot <span class="ot">&lt;-</span> tb_states_choices_bisec_long <span class="sc">%&gt;%</span></span>
+<span id="cb661-3"><a href="optimization.html#cb661-3" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_bisect_iter) <span class="sc">:=</span> <span class="fu">as.numeric</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_bisect_iter))) <span class="sc">%&gt;%</span></span>
+<span id="cb661-4"><a href="optimization.html#cb661-4" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb661-5"><a href="optimization.html#cb661-5" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_bisect_iter), <span class="at">y=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_number_col),</span>
+<span id="cb661-6"><a href="optimization.html#cb661-6" tabindex="-1"></a>               <span class="at">colour=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name),</span>
+<span id="cb661-7"><a href="optimization.html#cb661-7" tabindex="-1"></a>               <span class="at">linetype=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name),</span>
+<span id="cb661-8"><a href="optimization.html#cb661-8" tabindex="-1"></a>               <span class="at">shape=</span><span class="sc">!!</span><span class="fu">sym</span>(svr_abfafb_long_name))) <span class="sc">+</span></span>
+<span id="cb661-9"><a href="optimization.html#cb661-9" tabindex="-1"></a>        <span class="fu">facet_wrap</span>( <span class="sc">~</span> INDI_ID) <span class="sc">+</span></span>
+<span id="cb661-10"><a href="optimization.html#cb661-10" tabindex="-1"></a>        <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb661-11"><a href="optimization.html#cb661-11" tabindex="-1"></a>        <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb661-12"><a href="optimization.html#cb661-12" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&#39;Bisection Iteration over individuals Until Convergence&#39;</span>,</span>
+<span id="cb661-13"><a href="optimization.html#cb661-13" tabindex="-1"></a>             <span class="at">x =</span> <span class="st">&#39;Bisection Iteration&#39;</span>,</span>
+<span id="cb661-14"><a href="optimization.html#cb661-14" tabindex="-1"></a>             <span class="at">y =</span> <span class="st">&#39;a (left side point) and b (right side point) values&#39;</span>,</span>
+<span id="cb661-15"><a href="optimization.html#cb661-15" tabindex="-1"></a>             <span class="at">caption =</span> <span class="st">&#39;DPLYR concurrent bisection nonlinear multple individuals&#39;</span>) <span class="sc">+</span></span>
+<span id="cb661-16"><a href="optimization.html#cb661-16" tabindex="-1"></a>      <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb661-17"><a href="optimization.html#cb661-17" tabindex="-1"></a><span class="fu">print</span>(lineplot)</span></code></pre></div>
 <p><img src="Panel-Data-and-Optimization-with-R_files/figure-html/reshape%20solution%20for%20graphing-1.png" width="672" style="display: block; margin: auto;" /></p>
 
 </div>
@@ -2411,7 +2582,6 @@ fb
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -2452,7 +2622,7 @@ gitbook.start({
 },
 "download": [["Panel-Data-and-Optimization-with-R.pdf", "PDF"]],
 "search": {
-"engine": "lunr",
+"engine": "fuse",
 "options": null
 },
 "toc": {
@@ -2468,7 +2638,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');
